@@ -23,7 +23,6 @@ public class RootStage extends Stage {
     scene.setFill(Color.WHITESMOKE);
     this.initStyle(StageStyle.DECORATED);
     this.setScene(scene);
-    this.setTitle("SIARD Suite");
     this.show();
   }
 }
