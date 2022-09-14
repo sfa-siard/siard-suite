@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ControllerTest {
 
     @Test
-    void name() {
+    void shouldCreateController() {
         // given
 
 
