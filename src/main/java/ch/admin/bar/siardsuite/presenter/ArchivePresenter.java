@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.I18n;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -10,13 +11,15 @@ import javafx.stage.Stage;
 
 public class ArchivePresenter implements Presenter {
 
+  private Model model;
+
   public AnchorPane rootPane;
   private Controller controller;
 
   private Stage stage;
 
-  public void init(Controller controller, Stage stage) {
-
+  public void init(Controller controller, Model model, Stage stage) {
+    this.model = model;
     this.controller = controller;
     this.stage = stage;
 
@@ -24,15 +27,4 @@ public class ArchivePresenter implements Presenter {
 
   }
 
-  private void navigate() {
-		Platform.runLater(() -> {
-
-      boolean loaded;
-			loaded = controller.navigateSomewhere();
-
-				if (loaded) {
-					this.stage.close();
-				}
-		});
-	}
 }

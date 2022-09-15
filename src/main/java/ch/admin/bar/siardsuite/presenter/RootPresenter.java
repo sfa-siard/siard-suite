@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.I18n;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -15,22 +16,16 @@ import java.util.Locale;
 public class RootPresenter implements Presenter {
 
   private Controller controller;
+
+  private Model model;
   private Stage stage;
 
   private double xOffset;
   private double yOffset;
   @FXML
   public HBox windowHeader;
-  @FXML
-  private Button archive;
-  @FXML
-  private Button upload;
-  @FXML
-  private Button export;
-  @FXML
-  private Button open;
 
-  public void init(Controller controller, Stage stage) {
+  public void init(Controller controller, Model model, Stage stage) {
 
     this.controller = controller;
     this.stage = stage;
@@ -46,21 +41,6 @@ public class RootPresenter implements Presenter {
 
     this.stage.titleProperty().bind(I18n.createStringBinding("window.title"));
 
-    this.archive.setOnAction(event -> navigate());
-    this.upload.setOnAction(event -> System.out.println("uplaod button pressed"));
-    this.export.setOnAction(event -> System.out.println("export button pressed"));
-    this.open.setOnAction(event -> System.out.println("open button pressed"));
-  }
 
-  private void navigate() {
-    Platform.runLater(() -> {
-
-      boolean loaded;
-      loaded = controller.navigateSomewhere();
-
-      if (loaded) {
-        this.stage.close();
-      }
-    });
   }
 }
