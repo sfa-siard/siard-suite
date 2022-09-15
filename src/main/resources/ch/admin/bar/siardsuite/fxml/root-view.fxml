@@ -84,7 +84,7 @@
                            <Image url="@../icons/siard-file-poc.png" />
                         </image>
                      </ImageView>
-                     <MFXButton style="-fx-background-color: #006699;" text="Öffnen" textFill="WHITE">
+                     <MFXButton fx:id="open" style="-fx-background-color: #006699;" text="Öffnen" textFill="WHITE">
                         <font>
                            <Font size="16.0" />
                         </font>
@@ -100,7 +100,7 @@
                      <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
                         <children>
                            <Line endX="185.5" startX="-100.0" stroke="#9aa5b1" strokeWidth="3.0" />
-                           <MFXButton style="-fx-background-color: #006699;" text="Hochladen" textFill="WHITE">
+                           <MFXButton fx:id="upload" style="-fx-background-color: #006699;" text="Hochladen" textFill="WHITE">
                               <font>
                                  <Font size="16.0" />
                               </font>
@@ -125,7 +125,7 @@
                      <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
                         <children>
                            <Line endX="179.5" startX="-100.0" stroke="#9aa5b1" strokeWidth="3.0" />
-                           <MFXButton style="-fx-background-color: #006699;" text="Exportieren" textFill="WHITE">
+                           <MFXButton fx:id="export" style="-fx-background-color: #006699;" text="Exportieren" textFill="WHITE">
                               <font>
                                  <Font size="16.0" />
                               </font>

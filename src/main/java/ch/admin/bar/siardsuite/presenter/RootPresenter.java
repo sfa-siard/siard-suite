@@ -17,13 +17,27 @@ public class RootPresenter implements Presenter {
 
   private Stage stage;
 
+  @FXML
+  private Button archive;
 
+  @FXML
+  private Button upload;
 
+  @FXML
+  private Button export;
+
+  @FXML
+  private Button open;
   public void init(Controller controller, Stage stage) {
 
     this.controller = controller;
     this.stage = stage;
 
     this.stage.titleProperty().bind(I18n.createStringBinding("window.title"));
+
+    this.archive.setOnAction(event -> System.out.println("archive button pressed"));
+    this.upload.setOnAction(event -> System.out.println("uplaod button pressed"));
+    this.export.setOnAction(event -> System.out.println("export button pressed"));
+    this.open.setOnAction(event -> System.out.println("open button pressed"));
   }
 }
