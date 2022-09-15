@@ -27,5 +27,5 @@ jobs:
       - name: Archive packaged jar
         uses: actions/upload-artifact@v3
         with:
-          name: siard suite jar
+          name: siard-suite
           path: target/siard-suite-1.0-SNAPSHOT.jar
