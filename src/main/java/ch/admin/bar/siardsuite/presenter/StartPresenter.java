@@ -3,19 +3,15 @@ package ch.admin.bar.siardsuite.presenter;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.View;
+import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public class StartPresenter implements Presenter {
+public class StartPresenter extends Presenter {
 
-  private Model model;
-  private Controller controller;
-  private Stage stage;
-  @FXML
-  public HBox windowHeader;
   @FXML
   private Button archive;
   @FXML
@@ -34,17 +30,5 @@ public class StartPresenter implements Presenter {
     this.upload.setOnAction(event -> System.out.println("uplaod button pressed"));
     this.export.setOnAction(event -> System.out.println("export button pressed"));
     this.open.setOnAction(event -> System.out.println("open button pressed"));
-  }
-
-  private void navigate(String view) {
-    Platform.runLater(() -> {
-
-      boolean loaded;
-      loaded = controller.navigate(view);
-
-      if (loaded) {
-        this.stage.close();
-      }
-    });
   }
 }

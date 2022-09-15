@@ -42,7 +42,7 @@ public class RootStage extends Stage {
     this.show();
   }
 
-  private void loadView(String viewName) throws IOException {
+  public void loadView(String viewName) throws IOException {
     FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
     Parent container = loader.load();
     rootPane.setCenter(container);

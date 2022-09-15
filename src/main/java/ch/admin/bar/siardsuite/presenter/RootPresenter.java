@@ -13,20 +13,16 @@ import javafx.stage.Stage;
 
 import java.util.Locale;
 
-public class RootPresenter implements Presenter {
-
-  private Controller controller;
-
-  private Model model;
-  private Stage stage;
+public class RootPresenter extends Presenter {
 
   private double xOffset;
   private double yOffset;
+
   @FXML
   public HBox windowHeader;
 
   public void init(Controller controller, Model model, Stage stage) {
-
+    this.model = model;
     this.controller = controller;
     this.stage = stage;
 
@@ -34,13 +30,12 @@ public class RootPresenter implements Presenter {
       xOffset = stage.getX() - event.getScreenX();
       yOffset = stage.getY() - event.getScreenY();
     });
+
     windowHeader.setOnMouseDragged(event -> {
       stage.setX(event.getScreenX() + xOffset);
       stage.setY(event.getScreenY() + yOffset);
     });
 
     this.stage.titleProperty().bind(I18n.createStringBinding("window.title"));
-
-
   }
 }
