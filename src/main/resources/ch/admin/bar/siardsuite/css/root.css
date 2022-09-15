@@ -21,15 +21,15 @@
     -fx-padding: 0 0.5em 0 0.5em;
 }
 
-.header-help-button {
+.help-icon {
     -fx-graphic: url(../icons/baseline_help_outline_white_24dp.png);
 }
 
-.header-menu-button {
+.menu-icon {
     -fx-graphic: url(../icons/baseline_menu_white_24dp.png);
 }
 
-.header-help-button:hover {
+.help-icon:hover {
     -fx-background-color: transparent;
     -fx-graphic: url(../icons/baseline_help_black_24dp.png);
 }

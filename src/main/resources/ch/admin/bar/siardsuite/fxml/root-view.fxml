@@ -25,7 +25,7 @@
               <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS" />
               <MFXButton alignment="CENTER" rippleAnimateBackground="false">
                   <styleClass>
-                      <String fx:value="header-help-button" />
+                      <String fx:value="help-icon" />
                       <String fx:value="header-button" />
                   </styleClass>
                   <cursor>
@@ -34,7 +34,7 @@
               </MFXButton>
               <MFXButton rippleAnimateBackground="false">
                   <styleClass>
-                      <String fx:value="header-menu-button" />
+                      <String fx:value="menu-icon" />
                       <String fx:value="header-button" />
                   </styleClass>
                   <cursor>
