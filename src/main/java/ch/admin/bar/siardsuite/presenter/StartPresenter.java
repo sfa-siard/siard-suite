@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.View;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,7 +30,7 @@ public class StartPresenter implements Presenter {
     this.controller = controller;
     this.stage = stage;
 
-    this.archive.setOnAction(event -> navigate("archive-view.fxml"));
+    this.archive.setOnAction(event -> navigate(View.ARCHIVE.getName()));
     this.upload.setOnAction(event -> System.out.println("uplaod button pressed"));
     this.export.setOnAction(event -> System.out.println("export button pressed"));
     this.open.setOnAction(event -> System.out.println("open button pressed"));

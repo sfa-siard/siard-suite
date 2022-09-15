@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.presenter.RootPresenter;
+import ch.admin.bar.siardsuite.util.View;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,7 +28,7 @@ public class RootStage extends Stage {
     this.model = model;
     this.controller = controller;
 
-    FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource("fxml/root-view.fxml"));
+    FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(View.ROOT.getName()));
     rootPane = loader.load();
     loader.<RootPresenter>getController().init(controller, this.model,this);
 
@@ -42,7 +43,7 @@ public class RootStage extends Stage {
   }
 
   private void loadView(String viewName) throws IOException {
-    FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource("fxml/" + viewName));
+    FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
     Parent container = loader.load();
     rootPane.setCenter(container);
     loader.<Presenter>getController().init(this.controller, this.model, this);
