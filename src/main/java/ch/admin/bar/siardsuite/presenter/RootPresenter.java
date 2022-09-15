@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -13,26 +14,35 @@ import java.util.Locale;
 
 public class RootPresenter implements Presenter {
 
-  public AnchorPane rootPane;
   private Controller controller;
-
   private Stage stage;
 
+  private double xOffset;
+  private double yOffset;
+  @FXML
+  public HBox windowHeader;
   @FXML
   private Button archive;
-
   @FXML
   private Button upload;
-
   @FXML
   private Button export;
-
   @FXML
   private Button open;
+
   public void init(Controller controller, Stage stage) {
 
     this.controller = controller;
     this.stage = stage;
+
+    windowHeader.setOnMousePressed(event -> {
+      xOffset = stage.getX() - event.getScreenX();
+      yOffset = stage.getY() - event.getScreenY();
+    });
+    windowHeader.setOnMouseDragged(event -> {
+      stage.setX(event.getScreenX() + xOffset);
+      stage.setY(event.getScreenY() + yOffset);
+    });
 
     this.stage.titleProperty().bind(I18n.createStringBinding("window.title"));
 
@@ -43,14 +53,14 @@ public class RootPresenter implements Presenter {
   }
 
   private void navigate() {
-		Platform.runLater(() -> {
+    Platform.runLater(() -> {
 
       boolean loaded;
-			loaded = controller.navigateSomewhere();
+      loaded = controller.navigateSomewhere();
 
-				if (loaded) {
-					this.stage.close();
-				}
-		});
-	}
+      if (loaded) {
+        this.stage.close();
+      }
+    });
+  }
 }
