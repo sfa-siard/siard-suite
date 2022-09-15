@@ -28,8 +28,6 @@
     -fx-graphic: url(../icons/baseline_help_black_24dp.png);
 }
 
-
-
 .header-menu-label {
     -fx-graphic: url(../icons/baseline_menu_white_24dp.png);
     -fx-max-height: 24;

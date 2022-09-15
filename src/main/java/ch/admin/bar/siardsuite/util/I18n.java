@@ -38,7 +38,7 @@ public class I18n {
   }
 
   public static List<Locale> getSupportedLocales() {
-    return new ArrayList<>(Arrays.asList(Locale.ENGLISH, Locale.GERMAN, Locale.FRENCH, Locale.ITALIAN));
+    return List.of(Locale.ENGLISH, Locale.GERMAN, Locale.FRENCH, Locale.ITALIAN);
   }
 
   private static final String BASE_NAME = "ch/admin/bar/siardsuite/i18n/messages";
