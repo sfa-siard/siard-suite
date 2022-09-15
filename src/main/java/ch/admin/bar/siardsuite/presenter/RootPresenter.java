@@ -13,14 +13,11 @@ import java.util.Locale;
 public class RootPresenter implements Presenter {
 
   public AnchorPane rootPane;
-  public Button buttonGerman;
-  public Button buttonEnglish;
   private Controller controller;
 
   private Stage stage;
 
-  @FXML
-  private Text welcomeText;
+
 
   public void init(Controller controller, Stage stage) {
 
@@ -28,12 +25,5 @@ public class RootPresenter implements Presenter {
     this.stage = stage;
 
     this.stage.titleProperty().bind(I18n.createStringBinding("window.title"));
-    welcomeText.textProperty().bind(I18n.createStringBinding("welcome.text"));
-    
-    buttonEnglish.textProperty().bind(I18n.createStringBinding("language.en"));
-    buttonGerman.textProperty().bind(I18n.createStringBinding("language.de"));
-    buttonEnglish.setOnAction((evt) -> I18n.setLocale(Locale.ENGLISH));
-    buttonGerman.setOnAction((evt) -> I18n.setLocale(Locale.GERMAN));
-
   }
 }
