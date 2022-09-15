@@ -61,7 +61,7 @@
                      <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
                         <children>
                            <Line endX="132.5" startX="-100.0" stroke="#9aa5b1" strokeWidth="3.0" />
-                           <MFXButton style="-fx-background-color: #006699;" text="Archivieren" textFill="WHITE">
+                           <MFXButton fx:id="archive" style="-fx-background-color: #006699;" text="Archivieren" textFill="WHITE">
                               <font>
                                  <Font size="16.0" />
                               </font>
@@ -88,6 +88,9 @@
                         <font>
                            <Font size="16.0" />
                         </font>
+                        <cursor>
+                           <Cursor fx:constant="HAND" />
+                        </cursor>
                      </MFXButton>
                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei anzeigen" wrappingWidth="249.19677734375" x="100.0" />
                   </children>
@@ -101,6 +104,9 @@
                               <font>
                                  <Font size="16.0" />
                               </font>
+                              <cursor>
+                                 <Cursor fx:constant="HAND" />
+                              </cursor>
                            </MFXButton>
                         </children>
                         <opaqueInsets>
@@ -123,6 +129,9 @@
                               <font>
                                  <Font size="16.0" />
                               </font>
+                              <cursor>
+                                 <Cursor fx:constant="HAND" />
+                              </cursor>
                            </MFXButton>
                         </children>
                         <opaqueInsets>
