@@ -21,7 +21,7 @@ public class RootStage extends Stage {
 
     Scene scene = new Scene(root);
     scene.setFill(Color.WHITESMOKE);
-    this.initStyle(StageStyle.DECORATED);
+    this.initStyle(StageStyle.UNDECORATED);
     this.setScene(scene);
     this.show();
   }

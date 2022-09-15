@@ -17,13 +17,30 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
-<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" styleClass="rootPane" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
-   <BorderPane prefHeight="726.0" prefWidth="1286.0">
+<?import java.lang.String?>
+<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" styleClass="root-pane" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
+    <BorderPane maxWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <top>
-      
-          <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="header-left" BorderPane.alignment="CENTER">
-              <Label styleClass="header-app-label" text="SIARD Suite" />
+          <HBox alignment="CENTER" minWidth="-Infinity" spacing="10.0" styleClass="header" BorderPane.alignment="CENTER">
+              <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS" />
+              <MFXButton alignment="CENTER" rippleAnimateBackground="false">
+                  <styleClass>
+                      <String fx:value="header-help-button" />
+                      <String fx:value="header-button" />
+                  </styleClass>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+              </MFXButton>
+              <MFXButton rippleAnimateBackground="false">
+                  <styleClass>
+                      <String fx:value="header-menu-button" />
+                      <String fx:value="header-button" />
+                  </styleClass>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+              </MFXButton>
           </HBox>
       </top>
       <center>
