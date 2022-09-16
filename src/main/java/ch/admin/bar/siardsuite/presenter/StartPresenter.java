@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import static ch.admin.bar.siardsuite.util.I18n.createStringBinding;
@@ -23,6 +24,12 @@ public class StartPresenter extends Presenter {
   private Button export;
   @FXML
   private Button open;
+  @FXML
+  private Text openHint;
+  @FXML
+  private Text archiveHint;
+  @FXML
+  private Text uploadHint;
 
   public void init(Controller controller, Model model, Stage stage) {
     this.model = model;
@@ -38,5 +45,9 @@ public class StartPresenter extends Presenter {
     this.upload.textProperty().bind(createStringBinding("button.upload"));
     this.export.textProperty().bind(createStringBinding("button.export"));
     this.open.textProperty().bind(createStringBinding("button.open"));
+
+    this.openHint.textProperty().bind(createStringBinding("text.open.hint"));
+    this.archiveHint.textProperty().bind(createStringBinding("text.archive.hint"));
+    this.uploadHint.textProperty().bind(createStringBinding("text.upload.hint"));
   }
 }

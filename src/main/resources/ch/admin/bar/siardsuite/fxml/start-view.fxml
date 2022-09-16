@@ -38,7 +38,7 @@
     <children>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-              <Text lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datenbank archivieren und im SIARD-Format abspeichern" wrappingWidth="301.19677734375" x="100.0">
+              <Text fx:id="archiveHint" lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datenbank archivieren und im SIARD-Format abspeichern" wrappingWidth="301.19677734375" x="100.0">
                <font>
                   <Font size="16.0" />
                </font>
@@ -92,7 +92,7 @@
                 </MFXButton>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei anzeigen" wrappingWidth="233.19677734375" x="100.0" />
+                      <Text fx:id="openHint" strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei anzeigen" wrappingWidth="233.19677734375" x="100.0" />
                   <Separator prefHeight="23.0" prefWidth="207.0">
                      <padding>
                         <Insets top="5.0" />
@@ -154,7 +154,7 @@
         </HBox>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="1">
          <children>
-            <Text lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei in eine Datenbank hochladen oder Daten in eine Tabelle exportieren." wrappingWidth="421.19677734375" x="100.0">
+            <Text fx:id="uploadHint" lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei in eine Datenbank hochladen oder Daten in eine Tabelle exportieren." wrappingWidth="421.19677734375" x="100.0">
                <font>
                   <Font size="16.0" />
                </font>
