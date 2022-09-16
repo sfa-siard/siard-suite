@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite;
 
+import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.application.Application;
@@ -12,10 +13,10 @@ public class SiardApplication extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
+    Model model = new Model();
+    Controller controller = new Controller(model);
 
-    Controller controller = new Controller();
-
-    new RootStage(controller);
+    new RootStage(model, controller);
   }
 
   public static void main(String[] args) {

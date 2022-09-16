@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<AnchorPane fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" styleClass="rootPane" stylesheets="@../css/root.css"
-            xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
 
-    <HBox alignment="CENTER_LEFT" layoutY="6.0" styleClass="header-left"
-          spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Label styleClass="header-app-label" text="SIARD Suite"/>
-    </HBox>
-
-    <HBox alignment="CENTER_RIGHT" layoutY="6.0"  styleClass="header-right"
-          spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Label  styleClass="header-help-label" text="Help"/>
-        <Label  styleClass="header-menu-label" text="Menu"/>
-    </HBox>
-
-    <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" styleClass="box" AnchorPane.bottomAnchor="0.0"
-          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <HBox alignment="CENTER" spacing="25.0">
-            <Text fx:id="welcomeText"/>
-            <Button fx:id="buttonGerman" />
-            <Button fx:id="buttonEnglish" />
-
+<BorderPane fx:id="rootPane" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
+    <top>
+        <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" spacing="10.0" styleClass="header" BorderPane.alignment="CENTER">
+            <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS" />
+            <MFXButton alignment="CENTER" rippleAnimateBackground="false">
+                <styleClass>
+                    <String fx:value="help-icon" />
+                    <String fx:value="header-button" />
+                </styleClass>
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </MFXButton>
+            <MFXButton rippleAnimateBackground="false">
+                <styleClass>
+                    <String fx:value="menu-icon" />
+                    <String fx:value="header-button" />
+                </styleClass>
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </MFXButton>
         </HBox>
-    </VBox>
-</AnchorPane>
+    </top>
+    <center>
+    </center>
+</BorderPane>

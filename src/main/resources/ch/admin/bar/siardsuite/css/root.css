@@ -1,35 +1,40 @@
-.header-left {
+.header {
     -fx-background-color: #323f4b;
     -fx-max-height: 3em;
     -fx-pref-height: 3em;
 }
 
-.header-right {
-    -fx-max-height: 3em;
-    -fx-pref-height: 3em;
-    -fx-padding: 0 1em 0 0;
-}
-
 .header-app-label {
     -fx-graphic: url(../icons/u10_m.png);
     -fx-max-height: 24;
+    -fx-max-width: infinity;
     -fx-font-size: 14;
     -fx-text-fill: #ffffff;
     -fx-label-padding: 0 0 0 1.5em ;
     -fx-graphic-text-gap: 0.8em;
 }
 
-.header-help-label {
-    -fx-graphic: url(../icons/baseline_help_outline_white_24dp.png);
+.header-button {
+    -fx-background-color: transparent;
     -fx-max-height: 24;
     -fx-content-display: graphic-only;
+    -fx-padding: 0 0.5em 0 0.5em;
 }
-.header-help-label:focused {
+
+.help-icon {
+    -fx-graphic: url(../icons/baseline_help_outline_white_24dp.png);
+}
+
+.menu-icon {
+    -fx-graphic: url(../icons/baseline_menu_white_24dp.png);
+}
+
+.help-icon:hover {
+    -fx-background-color: transparent;
     -fx-graphic: url(../icons/baseline_help_black_24dp.png);
 }
 
-.header-menu-label {
-    -fx-graphic: url(../icons/baseline_menu_white_24dp.png);
-    -fx-max-height: 24;
-    -fx-content-display: graphic-only;
+.container {
+    -fx-max-width: infinity;
+    -fx-max-height: infinity;
 }

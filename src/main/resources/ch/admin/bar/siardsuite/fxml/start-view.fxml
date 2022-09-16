@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.StartPresenter">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="50.0" prefWidth="150.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="633.0" minWidth="10.0" prefWidth="302.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="629.0" minWidth="10.0" prefWidth="74.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="557.0" minWidth="10.0" prefWidth="171.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="557.0" minWidth="10.0" prefWidth="104.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="557.0" minWidth="10.0" prefWidth="280.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="10.0" prefWidth="55.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="249.0" minWidth="10.0" prefWidth="223.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="229.0" minHeight="10.0" prefHeight="87.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="316.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="265.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="532.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="306.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+              <Text fx:id="archiveHint" lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datenbank archivieren und im SIARD-Format abspeichern" wrappingWidth="301.19677734375" x="100.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+              </Text>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </Separator>
+         </children>
+      </VBox>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2">
+            <children>
+            <ImageView fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/siard-db.png" />
+               </image>
+            </ImageView>
+                <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Line endX="132.5" startX="-100.0" stroke="#9aa5b1" strokeWidth="3.0" />
+                        <MFXButton fx:id="archive" style="-fx-background-color: #006699;" text="Archivieren" textFill="WHITE">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </MFXButton>
+                    </children>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </StackPane>
+            </children>
+        </HBox>
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.rowSpan="4">
+            <children>
+                <ImageView fitHeight="301.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../icons/siard-file-poc.png" />
+                    </image>
+                </ImageView>
+                <MFXButton fx:id="open" style="-fx-background-color: #006699;" text="Öffnen" textFill="WHITE">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </MFXButton>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                      <Text fx:id="openHint" strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei anzeigen" wrappingWidth="233.19677734375" x="100.0" />
+                  <Separator prefHeight="23.0" prefWidth="207.0">
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Separator>
+               </children>
+            </VBox>
+            </children>
+        </VBox>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3">
+            <children>
+                <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Line endX="185.5" startX="-76.18380737304688" startY="0.12129449844360352" stroke="#9aa5b1" strokeWidth="3.0" />
+                        <MFXButton fx:id="upload" style="-fx-background-color: #006699;" text="Hochladen" textFill="WHITE">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </MFXButton>
+                    </children>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </StackPane>
+            <ImageView fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/siard-db.png" />
+               </image>
+            </ImageView>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="4">
+            <children>
+                <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Line endX="179.5" startX="-100.0" stroke="#9aa5b1" strokeWidth="3.0" />
+                        <MFXButton fx:id="export" style="-fx-background-color: #006699;" text="Exportieren" textFill="WHITE">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </MFXButton>
+                    </children>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </StackPane>
+                <ImageView fitHeight="75.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../icons/siard-export-poc.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </HBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="1">
+         <children>
+            <Text fx:id="uploadHint" lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei in eine Datenbank hochladen oder Daten in eine Tabelle exportieren." wrappingWidth="421.19677734375" x="100.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </Separator>
+         </children>
+      </VBox>
+    </children>
+</GridPane>
