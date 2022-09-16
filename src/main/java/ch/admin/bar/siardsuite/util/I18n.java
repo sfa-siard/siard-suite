@@ -51,4 +51,5 @@ public class I18n {
   public static StringBinding createStringBinding(final String key, Object... args) {
     return Bindings.createStringBinding(() -> get(key, args), locale);
   }
+
 }

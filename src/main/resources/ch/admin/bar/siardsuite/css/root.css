@@ -1,5 +1,9 @@
+* {
+    -fx-header-background-color: #323f4b;
+}
+
 .header {
-    -fx-background-color: #323f4b;
+    -fx-background-color: -fx-header-background-color;
     -fx-max-height: 3em;
     -fx-pref-height: 3em;
 }
@@ -10,7 +14,7 @@
     -fx-max-width: infinity;
     -fx-font-size: 14;
     -fx-text-fill: #ffffff;
-    -fx-label-padding: 0 0 0 1.5em ;
+    -fx-label-padding: 0 0 0 1.5em;
     -fx-graphic-text-gap: 0.8em;
 }
 
@@ -21,16 +25,51 @@
     -fx-padding: 0 0.5em 0 0.5em;
 }
 
+.menu-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 0 1em 0 0;
+    -fx-border-color: transparent;
+}
+
+.menu-button {
+    -fx-background-image: url(../icons/baseline_menu_white_24dp.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+    -fx-background-position: left center;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-start-margin: -5em;
+}
+
+.context-menu {
+    -fx-padding: .4em 0 0 0 ;
+    -fx-start-margin: -5em;
+    -fx-background-color: -fx-header-background-color;
+
+}
+
+.menu-item {
+    -fx-padding: 5 20 5 20;
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #c5c4c4 transparent; /* dirty hack to prevent elements moving around without border*/
+    -fx-border-width: 0.1em;
+}
+
+.menu-item:hover, .menu-item:focused {
+    -fx-background-color: #c5c4c4;
+    -fx-border-color: #b0afaf;
+    -fx-border-width: 1 1 1 1;
+}
+
+.menu-item .label {
+    -fx-text-fill: #000000;
+}
+
 .help-icon {
     -fx-graphic: url(../icons/baseline_help_outline_white_24dp.png);
 }
 
-.menu-icon {
-    -fx-graphic: url(../icons/baseline_menu_white_24dp.png);
-}
-
 .help-icon:hover {
-    -fx-background-color: transparent;
     -fx-graphic: url(../icons/baseline_help_black_24dp.png);
 }
 
