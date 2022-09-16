@@ -38,10 +38,3 @@
     -fx-max-width: infinity;
     -fx-max-height: infinity;
 }
-
-.db-icon {
-    -fx-background-color: transparent;
-    -fx-content-display: graphic-only;
-    -fx-padding: 0 0.5em 0 0.5em;
-    -fx-graphic: url(../icons/siard-db.png);
-}

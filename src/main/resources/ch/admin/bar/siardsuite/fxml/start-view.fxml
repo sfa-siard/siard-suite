@@ -41,7 +41,11 @@
         </Text>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="2">
             <children>
-            <MFXButton maxHeight="241.0" prefHeight="241.0" prefWidth="192.0" rippleAnimateBackground="false" rippleAnimationSpeed="0.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" styleClass="db-icon" />
+            <ImageView fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/siard-db.png" />
+               </image>
+            </ImageView>
                 <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
                     <children>
                         <Line endX="132.5" startX="-100.0" stroke="#9aa5b1" strokeWidth="3.0" />
@@ -97,7 +101,11 @@
                         <Insets />
                     </opaqueInsets>
                 </StackPane>
-            <MFXButton maxHeight="241.0" prefHeight="85.0" prefWidth="100.0" rippleAnimateBackground="false" rippleAnimationSpeed="0.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" styleClass="db-icon" />
+            <ImageView fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/siard-db.png" />
+               </image>
+            </ImageView>
             </children>
         </HBox>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3">
