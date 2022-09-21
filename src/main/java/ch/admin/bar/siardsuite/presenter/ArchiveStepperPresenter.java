@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.ArchiveViewSteps;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.view.skins.CustomMFXStepperSkin;
+import ch.admin.bar.siardsuite.view.skins.CustomStepperSkin;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -39,7 +39,7 @@ public class ArchiveStepperPresenter extends Presenter {
     List<MFXStepperToggle> stepperToggles = createSteps();
 
     stepper.getStepperToggles().addAll(stepperToggles);
-    stepper.setSkin(new CustomMFXStepperSkin(stepper));
+    stepper.setSkin(new CustomStepperSkin(stepper));
 
   }
 

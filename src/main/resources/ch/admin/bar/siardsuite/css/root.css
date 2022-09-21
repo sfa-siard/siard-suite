@@ -1,6 +1,6 @@
 * {
     -fx-header-background-color: #323f4b;
-    /*-fx-font-family: Roboto;*/
+    -fx-my-font-family: 'Roboto';
 }
 
 .header {
@@ -79,10 +79,17 @@
     -fx-max-height: infinity;
 }
 
+/*Button*/
+
+.mfx-button {
+    -mfx-button-type: FLAT;
+}
+
+.mfx-button .mfx-ripple-generator {
+    -mfx-ripple-radius: 5.0;
+}
 
 /*Dialog*/
-
-
 
 .dialog-title {
     -fx-font-weight: bold;
@@ -93,10 +100,13 @@
  -fx-wrap-text: break-word;
 }
 
+
 /*Stepper*/
 .mfx-stepper {
-
-
+    -fx-background-color: #e4e7eb;
+    -mfx-base-color: #e4e7eb;
+    -mfx-spacing: 90.0;
+    -mfx-alignment: center, left;
 }
 
 .mfx-stepper .content-pane {
@@ -104,13 +114,14 @@
 }
 
 .mfx-stepper .track {
-    -mfx-bar-background: grey;
-
+    -mfx-bar-background: #9aa5b1;
 }
 
 .mfx-stepper .bar {
-    -mfx-progress-color: grey;
+    -mfx-progress-color: #9aa5b1;
+
 }
+
 
 .stepper-btn {
     -fx-background-size: 22px;
@@ -137,3 +148,24 @@
     -fx-padding: 0 0.5em 0 0.5em;
     -fx-graphic: url(../icons/bubble_checked.png);
 }
+
+.mfx-stepper .btn-box .button {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-font-family: -fx-my-font-family;
+    -fx-font-size: 14px;
+}
+
+
+.primary {
+    -fx-background-color: black;
+    -fx-border-color: black;
+    -fx-text-fill: white;
+}
+
+.secondary {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-text-fill: black;
+}
+

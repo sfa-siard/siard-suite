@@ -1,12 +1,15 @@
 package ch.admin.bar.siardsuite.view.skins;
 
+import ch.admin.bar.siardsuite.util.I18n;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
 import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
 import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
-import io.github.palexdev.materialfx.i18n.I18N;
+
+
+
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
 import javafx.animation.Animation;
@@ -33,33 +36,27 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
 
-public class CustomMFXStepperSkin extends SkinBase<MFXStepper> {
+public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final StackPane contentPane;
   private final HBox stepperBar;
   private final HBox buttonsBox;
   private final MFXButton nextButton;
   private final MFXButton previousButton;
   private final Group progressBarGroup;
-  private final double height = 7.0;
+  private final double height = 2.0;
   private final Rectangle bar;
   private final Rectangle track = this.buildRectangle("track");
   private Timeline progressAnimation;
   private boolean buttonWasPressed = false;
 
-  public CustomMFXStepperSkin(MFXStepper stepper) {
+  public CustomStepperSkin(MFXStepper stepper) {
     super(stepper);
-    this.track.setHeight(7.0);
+    this.track.setHeight(2.0);
     this.track.widthProperty().bind(stepper.widthProperty());
     this.bar = this.buildRectangle("bar");
-    this.bar.setHeight(7.0);
-    Rectangle clip = new Rectangle();
-    clip.setHeight(7.0);
-    clip.widthProperty().bind(stepper.widthProperty());
-    clip.arcHeightProperty().bind(stepper.progressBarBorderRadiusProperty());
-    clip.arcWidthProperty().bind(stepper.progressBarBorderRadiusProperty());
+    this.bar.setHeight(2.0);
     this.progressBarGroup = new Group(new Node[]{this.track, this.bar});
     this.progressBarGroup.setManaged(false);
-    this.progressBarGroup.setClip(clip);
     this.progressAnimation = new Timeline();
     this.progressAnimation.setOnFinished((event) -> {
       this.buttonWasPressed = false;
@@ -68,25 +65,23 @@ public class CustomMFXStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar.spacingProperty().bind(stepper.spacingProperty());
     this.stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
     this.stepperBar.getChildren().addAll(stepper.getStepperToggles());
-    this.stepperBar.setMinHeight(100.0);
-    this.stepperBar.setPrefSize(-1.0, -1.0);
+    this.stepperBar.setMaxHeight(53.0);
+    this.stepperBar.setPrefSize(-1.0, 53.0);
     this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() -> {
       return this.snapPositionY(this.stepperBar.getHeight() / 2.0 - 3.5);
     }, new Observable[]{this.stepperBar.heightProperty()}));
-    this.nextButton = new MFXButton(I18N.getOrDefault("stepper.next", new Object[0]));
+    this.nextButton = new MFXButton();
+    this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
+    this.nextButton.getStyleClass().setAll("button", "primary");
     this.nextButton.setManaged(false);
-    this.nextButton.getRippleGenerator().setClipSupplier(() -> {
-      return (new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE, 34.0, 34.0)).build(this.nextButton);
-    });
-    this.previousButton = new MFXButton(I18N.getOrDefault("stepper.previous", new Object[0]));
+    this.previousButton = new MFXButton();
+    this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
+    this.previousButton.getStyleClass().setAll("button", "secondary");
     this.previousButton.setManaged(false);
-    this.previousButton.getRippleGenerator().setClipSupplier(() -> {
-      return (new RippleClipTypeFactory(RippleClipType.ROUNDED_RECTANGLE, 34.0, 34.0)).build(this.previousButton);
-    });
-    this.buttonsBox = new HBox(64.0, new Node[]{this.previousButton, this.nextButton});
-    this.buttonsBox.getStyleClass().setAll(new String[]{"buttons-box"});
-    this.buttonsBox.setAlignment(Pos.CENTER);
-    this.buttonsBox.setMinHeight(50.0);
+    this.buttonsBox = new HBox(20.0, new Node[]{this.previousButton, this.nextButton});
+    this.buttonsBox.getStyleClass().setAll(new String[]{"btn-box"});
+    this.buttonsBox.setAlignment(Pos.CENTER_LEFT);
+    this.buttonsBox.setMinHeight(70.0);
     this.contentPane = new StackPane();
     this.contentPane.getStyleClass().setAll(new String[]{"content-pane"});
     BorderPane container = new BorderPane();
@@ -198,7 +193,6 @@ public class CustomMFXStepperSkin extends SkinBase<MFXStepper> {
   }
 
   protected Rectangle buildRectangle(String styleClass) {
-    MFXStepper stepper = (MFXStepper) this.getSkinnable();
     Rectangle rectangle = new Rectangle();
     rectangle.getStyleClass().setAll(new String[]{styleClass});
     rectangle.setStroke(Color.TRANSPARENT);
@@ -206,8 +200,6 @@ public class CustomMFXStepperSkin extends SkinBase<MFXStepper> {
     rectangle.setStrokeLineJoin(StrokeLineJoin.ROUND);
     rectangle.setStrokeType(StrokeType.INSIDE);
     rectangle.setStrokeWidth(0.0);
-    rectangle.arcHeightProperty().bind(stepper.progressBarBorderRadiusProperty());
-    rectangle.arcWidthProperty().bind(stepper.progressBarBorderRadiusProperty());
     return rectangle;
   }
 
@@ -238,11 +230,11 @@ public class CustomMFXStepperSkin extends SkinBase<MFXStepper> {
 
   protected void layoutChildren(double x, double y, double w, double h) {
     super.layoutChildren(x, y, w, h);
-    this.progressBarGroup.resize(w, 7.0);
-    double bw = 125.0;
-    double bh = 34.0;
+    this.progressBarGroup.resize(w, 2.0);
+    double bw = 148;
+    double bh = 42.0;
     double pbx = this.snapPositionX(15.0);
-    double nbx = this.snapPositionX(w - bw - 15.0);
+    double nbx = this.snapPositionX(bw + 30.0);
     double by = this.snapPositionY(this.buttonsBox.getHeight() / 2.0 - bh / 2.0);
     this.previousButton.resizeRelocate(pbx, by, bw, bh);
     this.nextButton.resizeRelocate(nbx, by, bw, bh);
