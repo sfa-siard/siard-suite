@@ -79,7 +79,7 @@
             <children>
                 <ImageView fitHeight="301.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../icons/siard-file-poc.png" />
+                        <Image url="@../icons/archive.png" />
                     </image>
                 </ImageView>
                 <MFXButton fx:id="open" style="-fx-background-color: #006699;" text="Öffnen" textFill="WHITE">
@@ -147,7 +147,7 @@
                 </StackPane>
                 <ImageView fitHeight="75.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../icons/siard-export-poc.png" />
+                        <Image url="@../icons/export.png" />
                     </image>
                 </ImageView>
             </children>
