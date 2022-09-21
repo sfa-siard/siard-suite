@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.model;
 
-import ch.admin.bar.siardsuite.util.View;
 
 public class Model {
 

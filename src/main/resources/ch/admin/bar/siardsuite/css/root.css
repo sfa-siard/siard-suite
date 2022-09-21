@@ -1,5 +1,6 @@
 * {
     -fx-header-background-color: #323f4b;
+    /*-fx-font-family: Roboto;*/
 }
 
 .header {
@@ -76,4 +77,63 @@
 .container {
     -fx-max-width: infinity;
     -fx-max-height: infinity;
+}
+
+
+/*Dialog*/
+
+
+
+.dialog-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+.dialog-text {
+ -fx-wrap-text: break-word;
+}
+
+/*Stepper*/
+.mfx-stepper {
+
+
+}
+
+.mfx-stepper .content-pane {
+    -fx-background-color: #ffffff;
+}
+
+.mfx-stepper .track {
+    -mfx-bar-background: grey;
+
+}
+
+.mfx-stepper .bar {
+    -mfx-progress-color: grey;
+}
+
+.stepper-btn {
+    -fx-background-size: 22px;
+    -fx-alignment: center;
+    -fx-min-width: 22px;
+    -fx-min-height: 22px;
+}
+
+.number-btn {
+    -fx-shape: "M 159 96  C 165.16 96  170 100.84  170 107  C 170 113.16  165.16 118  159 118  C 152.84 118  148 113.16  148 107  C 148 100.84  152.84 96  159 96  Z ";
+    -fx-background-color: #9aa5b1;
+    -fx-text-fill: #000000 ;
+    -fx-font-size: 10px;
+}
+
+.number-btn:disabled {
+    -fx-opacity: 0.7;
+}
+
+.valid-btn {
+    -fx-content-display: graphic-only;
+    -fx-background-color: transparent;
+    -fx-max-height: 24;
+    -fx-padding: 0 0.5em 0 0.5em;
+    -fx-graphic: url(../icons/bubble_checked.png);
 }
