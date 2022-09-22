@@ -4,19 +4,9 @@ import ch.admin.bar.siardsuite.util.I18n;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
-import io.github.palexdev.materialfx.effects.ripple.RippleClipType;
-import io.github.palexdev.materialfx.factories.MFXAnimationFactory;
-import io.github.palexdev.materialfx.factories.RippleClipTypeFactory;
-
-
-
 import io.github.palexdev.materialfx.utils.AnimationUtils;
 import io.github.palexdev.materialfx.utils.NodeUtils;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.beans.Observable;
+import io.github.palexdev.materialfx.utils.TextUtils;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Bounds;
@@ -34,7 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import javafx.util.Duration;
+import javafx.scene.text.Font;
 
 public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final StackPane contentPane;
@@ -46,30 +36,32 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final double height = 2.0;
   private final Rectangle bar;
   private final Rectangle track = this.buildRectangle("track");
-  private Timeline progressAnimation;
   private boolean buttonWasPressed = false;
 
   public CustomStepperSkin(MFXStepper stepper) {
     super(stepper);
     this.track.setHeight(2.0);
-    this.track.widthProperty().bind(stepper.widthProperty());
     this.bar = this.buildRectangle("bar");
     this.bar.setHeight(2.0);
-    this.progressBarGroup = new Group(new Node[]{this.track, this.bar});
+    this.progressBarGroup = new Group(this.track, this.bar);
     this.progressBarGroup.setManaged(false);
-    this.progressAnimation = new Timeline();
-    this.progressAnimation.setOnFinished((event) -> {
-      this.buttonWasPressed = false;
-    });
-    this.stepperBar = new HBox(new Node[]{this.progressBarGroup});
+    this.stepperBar = new HBox(this.progressBarGroup);
     this.stepperBar.spacingProperty().bind(stepper.spacingProperty());
     this.stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
     this.stepperBar.getChildren().addAll(stepper.getStepperToggles());
-    this.stepperBar.setMaxHeight(53.0);
-    this.stepperBar.setPrefSize(-1.0, 53.0);
+    this.stepperBar.setMaxHeight(50.0);
+    this.stepperBar.setMinHeight(50.0);
+    Double toggleWidth = stepper.getStepperToggles()
+            .stream()
+            .mapToDouble(
+                    t -> this.stepperBar.spacingProperty().get() / 2 + (TextUtils.computeTextWidth(Font.font("System", 13.0), I18n.get(t.textProperty().get())) + (t.getLabelTextGap() * 2))
+            ).sum();
+    this.bar.setWidth(toggleWidth);
+    this.track.setWidth(toggleWidth);
+    this.stepperBar.setMaxSize(stepper.getPrefWidth(), 50.0);
     this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() -> {
-      return this.snapPositionY(this.stepperBar.getHeight() / 2.0 - 3.5);
-    }, new Observable[]{this.stepperBar.heightProperty()}));
+      return this.snapPositionY(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2));
+    }, this.stepperBar.heightProperty()));
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
     this.nextButton.getStyleClass().setAll("button", "primary");
@@ -78,14 +70,14 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
     this.previousButton.getStyleClass().setAll("button", "secondary");
     this.previousButton.setManaged(false);
-    this.buttonsBox = new HBox(20.0, new Node[]{this.previousButton, this.nextButton});
-    this.buttonsBox.getStyleClass().setAll(new String[]{"btn-box"});
+    this.buttonsBox = new HBox(20.0, this.previousButton, this.nextButton);
+    this.buttonsBox.getStyleClass().setAll("btn-box");
     this.buttonsBox.setAlignment(Pos.CENTER_LEFT);
     this.buttonsBox.setMinHeight(70.0);
     this.contentPane = new StackPane();
-    this.contentPane.getStyleClass().setAll(new String[]{"content-pane"});
+    this.contentPane.getStyleClass().setAll("content-pane");
     BorderPane container = new BorderPane();
-    container.getStylesheets().setAll(new String[]{stepper.getUserAgentStylesheet()});
+    container.getStylesheets().setAll(stepper.getUserAgentStylesheet());
     container.setTop(this.stepperBar);
     container.setCenter(this.contentPane);
     container.setBottom(this.buttonsBox);
@@ -164,33 +156,18 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private void computeProgress() {
     MFXStepper stepper = (MFXStepper) this.getSkinnable();
     if (stepper.isLastToggle()) {
-      this.updateProgressBar(stepper.getWidth());
     } else {
       MFXStepperToggle stepperToggle = stepper.getCurrentStepperNode();
       if (stepperToggle != null) {
         Bounds bounds = stepperToggle.getGraphicBounds();
         if (bounds != null) {
           double minX = this.snapSizeX(stepperToggle.localToParent(bounds).getMinX());
-          this.updateProgressBar(minX + 10.0);
+
         }
-      } else {
-        this.updateProgressBar(0.0);
       }
-
     }
   }
 
-  private void updateProgressBar(double width) {
-    MFXStepper stepper = (MFXStepper) this.getSkinnable();
-    if (stepper.isAnimated() && this.buttonWasPressed) {
-      KeyFrame kf = new KeyFrame(Duration.millis(stepper.getAnimationDuration()), new KeyValue[]{new KeyValue(this.bar.widthProperty(), width, MFXAnimationFactory.INTERPOLATOR_V2)});
-      this.progressAnimation.getKeyFrames().setAll(new KeyFrame[]{kf});
-      this.progressAnimation.playFromStart();
-    } else {
-      this.bar.setWidth(width);
-      this.buttonWasPressed = false;
-    }
-  }
 
   protected Rectangle buildRectangle(String styleClass) {
     Rectangle rectangle = new Rectangle();
@@ -221,11 +198,6 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
 
   public void dispose() {
     super.dispose();
-    if (this.progressAnimation.getStatus() != Animation.Status.STOPPED) {
-      this.progressAnimation.stop();
-    }
-
-    this.progressAnimation = null;
   }
 
   protected void layoutChildren(double x, double y, double w, double h) {

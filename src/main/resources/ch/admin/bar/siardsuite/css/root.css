@@ -1,6 +1,22 @@
+
+@font-face {
+    font-family: 'Roboto Medium';
+    font-weight: 500px;
+    font-style: normal;
+    font-display: swap;
+    src: url('../fonts/Roboto/Roboto-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto Regular';
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+}
+
 * {
     -fx-header-background-color: #323f4b;
-    -fx-my-font-family: 'Roboto';
 }
 
 .header {
@@ -105,8 +121,9 @@
 .mfx-stepper {
     -fx-background-color: #e4e7eb;
     -mfx-base-color: #e4e7eb;
-    -mfx-spacing: 90.0;
-    -mfx-alignment: center, left;
+    -mfx-spacing: 40.0;
+    -mfx-extra-spacing: 0;
+    -mfx-alignment: BASELINE_LEFT;
 }
 
 .mfx-stepper .content-pane {
@@ -119,9 +136,7 @@
 
 .mfx-stepper .bar {
     -mfx-progress-color: #9aa5b1;
-
 }
-
 
 .stepper-btn {
     -fx-background-size: 22px;
@@ -135,11 +150,46 @@
     -fx-background-color: #9aa5b1;
     -fx-text-fill: #000000 ;
     -fx-font-size: 10px;
+    -fx-opacity: 0.7;
+    -fx-font-weight: 700;
 }
 
-.number-btn:disabled {
-    -fx-opacity: 0.7;
+.mfx-stepper-toggle,
+.custom-stepper-toggle {
+    -fx-padding: 0 0.5em 0 0.5em;
+    -fx-background-color: #e4e7eb;
+    -fx-pref-height: 53;
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #000000 ;
+    -mfx-label-text-gap: 15.0;
 }
+
+.mfx-stepper-toggle .mfx-text-field,
+.custom-stepper-toggle .mfx-text-field {
+    -fx-padding: 0 -0.2em 0 0;
+    -fx-background-color: #e4e7eb;
+    -mfx-float-mode: disabled;
+    -fx-font-size: 10px;
+}
+
+.mfx-text-field,
+.mfx-text-field .text-field,
+.custom-stepper-toggle .mfx-text-field .text-field {
+    -fx-text-fill: #000000;
+    -fx-opacity: 0.7;
+    -fx-font-width: 700;
+    -fx-alignment: BASELINE_CENTER;
+    -fx-font-family: "Roboto Regular";
+    -fx-border-color: transparent;
+}
+
+.mfx-stepper-toggle:selected .number-btn,
+.mfx-stepper-toggle:selected .mfx-text-field,
+.custom-stepper-toggle:selected .mfx-text-field {
+    -fx-opacity: 1;
+    -fx-text-fill: #000000 ;
+}
+
 
 .valid-btn {
     -fx-content-display: graphic-only;

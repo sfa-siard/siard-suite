@@ -6,7 +6,6 @@ import ch.admin.bar.siardsuite.model.ArchiveViewSteps;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperSkin;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import javafx.fxml.FXML;
@@ -22,13 +21,7 @@ import java.util.stream.Collectors;
 public class ArchiveStepperPresenter extends Presenter {
 
   @FXML
-  private MFXButton unlock;
-
-  @FXML
   private MFXStepper stepper;
-
-
-
 
 
   public void init(Controller controller, Model model, Stage stage) {
@@ -56,9 +49,6 @@ public class ArchiveStepperPresenter extends Presenter {
   private MFXStepperToggle createCustomStepperToggle(String key, Integer pos, Node content) {
     Button btn = new Button();
     btn.getStyleClass().setAll("stepper-btn", "number-btn");
-    if (pos > 1) {
-      btn.setDisable(true);
-    }
     btn.setText(String.valueOf(pos));
     // passing the key is kind of a hack to bind it in the CustomStepperToggleSkin
     MFXStepperToggle toggle =  new MFXStepperToggle(key, btn, content);
