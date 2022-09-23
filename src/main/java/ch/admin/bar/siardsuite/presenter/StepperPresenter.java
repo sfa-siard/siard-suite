@@ -1,14 +1,20 @@
 package ch.admin.bar.siardsuite.presenter;
 
+import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
-import ch.admin.bar.siardsuite.model.ViewStep;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.Step;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,10 +22,12 @@ import java.util.stream.Collectors;
 
 public abstract class StepperPresenter extends Presenter {
 
-  public List<MFXStepperToggle> createSteps(List<ViewStep> steps) {
+ public abstract void init(Controller controller, Model model, Stage stage, MFXStepper stepper);
+
+  protected List<MFXStepperToggle> createSteps(List<Step> steps, MFXStepper stepper) {
 
     return  steps.stream()
-            .map((step) -> createCustomStepperToggle(step.getKey(), step.getPosition(), loadView(step.getContentView())))
+            .map((step) -> createCustomStepperToggle(step.getKey(), step.getPosition(), loadView(step.getContentView(), stepper)))
             .collect(Collectors.toList());
 //    step1.getValidator().dependsOn(loginField.getValidator()).dependsOn(passwordField.getValidator());
   }
@@ -34,15 +42,30 @@ public abstract class StepperPresenter extends Presenter {
     return toggle;
   }
 
-  private Node loadView(String viewName) {
+  private Node loadView(String viewName, MFXStepper stepper) {
     try {
       FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
       Node container = loader.load();
-      loader.<Presenter>getController().init(this.controller, this.model, this.stage);
+      loader.<ArchiveDbPresenter>getController().init(this.controller, this.model, this.stage, stepper);
       return container;
     } catch (IOException e) {
       System.out.println(e);
     }
     return null;
+  }
+
+  protected void showDialog(String s) {
+    try {
+      FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(View.ARCHIVE_DB_DIALOG.getName()));
+      Parent container = loader.load();
+      Stage dialog = new Stage();
+      dialog.initStyle(StageStyle.UNDECORATED);
+      loader.<ArchiveDbDialogPresenter>getController().init(this.controller, this.model, this.stage, dialog);
+      Scene scene = new Scene(container);
+      dialog.setScene(scene);
+      dialog.show();
+    } catch (IOException e) {
+      System.out.println(e);
+    }
   }
 }

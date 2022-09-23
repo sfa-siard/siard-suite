@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.view.skins;
 
 import ch.admin.bar.siardsuite.util.I18n;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
@@ -10,7 +9,6 @@ import io.github.palexdev.materialfx.utils.TextUtils;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -29,10 +27,6 @@ import javafx.scene.text.Font;
 public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final StackPane contentPane;
   private final HBox stepperBar;
-  private final HBox buttonsBox;
-  private final MFXButton nextButton;
-  private final MFXButton previousButton;
-  private final MFXButton cancelButton;
   private final Group progressBarGroup;
   private final double height = 2.0;
   private final Rectangle bar;
@@ -64,28 +58,12 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() -> {
       return this.snapPositionY(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2));
     }, this.stepperBar.heightProperty()));
-    this.nextButton = new MFXButton();
-    this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
-    this.nextButton.getStyleClass().setAll("button", "primary");
-    this.nextButton.setManaged(true);
-    this.previousButton = new MFXButton();
-    this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
-    this.previousButton.getStyleClass().setAll("button", "secondary");
-    this.previousButton.setManaged(true);
-    this.cancelButton = new MFXButton();
-    this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
-    this.cancelButton.getStyleClass().setAll("button", "secondary");
-    this.cancelButton.setManaged(true);
-    this.buttonsBox = new HBox(20.0, this.previousButton, this.cancelButton, this.nextButton);
-    this.buttonsBox.getStyleClass().setAll("btn-box");
     this.contentPane = new StackPane();
     this.contentPane.getStyleClass().setAll("content-pane");
     BorderPane container = new BorderPane();
     container.getStylesheets().setAll(stepper.getUserAgentStylesheet());
     container.setTop(this.stepperBar);
     container.setCenter(this.contentPane);
-    BorderPane.setMargin(this.contentPane, new Insets(50, 50, 50, 50));
-    container.setBottom(this.buttonsBox);
     this.getChildren().add(container);
     this.setListeners();
   }
@@ -125,18 +103,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
       }
 
     });
-    this.nextButton.setOnAction((event) -> {
-      this.buttonWasPressed = true;
-      stepper.next();
-    });
-    this.previousButton.setOnAction((event) -> {
-      this.buttonWasPressed = true;
-      stepper.previous();
-    });
-    this.cancelButton.setOnAction((event) -> {
-      this.buttonWasPressed = true;
- //TODO stepper.cancel();
-    });
+
     this.manageScene();
   }
 
@@ -194,7 +161,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   }
 
   protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-    return topInset + this.stepperBar.getHeight() + this.buttonsBox.getHeight() + bottomInset;
+    return topInset + this.stepperBar.getHeight() + bottomInset;
   }
 
   protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -212,12 +179,5 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   protected void layoutChildren(double x, double y, double w, double h) {
     super.layoutChildren(x, y, w, h);
     this.progressBarGroup.resize(w, 2.0);
-    double bw = 148;
-    double bh = 42.0;
-    double pbx = this.snapPositionX(15.0);
-    double nbx = this.snapPositionX(bw + 30.0);
-    double by = this.snapPositionY(this.buttonsBox.getHeight() / 2.0 - bh / 2.0);
-    this.previousButton.resizeRelocate(pbx, by, bw, bh);
-    this.nextButton.resizeRelocate(nbx, by, bw, bh);
   }
 }

@@ -1,10 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.ArchiveDbPresenter">
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.ArchivePresenter">
-   <children>
-      <Text fill="#c3aeae" strokeType="OUTSIDE" strokeWidth="0.0" text="Datenbank-Management-System auswählen" wrappingWidth="316.7294921875" />
-   </children>
-</AnchorPane>
+    <center>
+        <VBox BorderPane.alignment="TOP_LEFT">
+            <children>
+                <Text fx:id="title" styleClass="title" strokeType="OUTSIDE" strokeWidth="0.0"/>
+                <Text fx:id="text" styleClass="view-text" strokeType="OUTSIDE" lineSpacing="8.0" strokeWidth="0.0" wrappingWidth="420.0">
+                    <VBox.margin>
+                        <Insets bottom="25.0" top="25.0"/>
+                    </VBox.margin>
+                </Text>
+                <HBox prefHeight="100.0" prefWidth="600.0">
+                    <children>
+                        <VBox fx:id="leftVBox" prefHeight="200.0" prefWidth="300.0">
+                        </VBox>
+                        <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="300.0">
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
+            </BorderPane.margin>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox fx:id="buttonsBox" styleClass="btn-box" minWidth="-Infinity" maxHeight="1.7976931348623157E308"
+              maxWidth="1.7976931348623157E308" spacing="20.0">
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -240,3 +240,30 @@
 .dialog-text {
     -fx-wrap-text: break-word;
 }
+
+/* Views */
+
+.title {
+    -fx-font-weight: bold;
+    -fx-font-size: 22.0;
+    -fx-font-family: "Roboto Medium";
+}
+
+.view-text {
+    -fx-font-family: -fx-my-font-family;
+    -fx-font-size: 14.0;
+    -fx-spacing: 8.0 ;
+}
+
+.radio-button {
+    -fx-font-family: -fx-my-font-family;
+    -fx-font-size: 18.0;
+}
+
+.radio-button .dot {
+    -fx-fill: #1F2933;
+}
+
+.radio-button:selected .radio {
+	-fx-stroke: #1F2933;
+}

@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.ArchiveViewSteps;
+import ch.admin.bar.siardsuite.model.ArchiveSteps;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -21,11 +21,11 @@ public class ArchiveStepperPresenter extends StepperPresenter {
     this.controller = controller;
     this.stage = stage;
 
-    List<MFXStepperToggle> stepperToggles = createSteps(ArchiveViewSteps.getSteps());
+    List<MFXStepperToggle> stepperToggles = createSteps(ArchiveSteps.getSteps(), stepper);
     stepper.getStepperToggles().addAll(stepperToggles);
-    CustomStepperSkin skin = new CustomStepperSkin(stepper);
-// TODO button setup for each ViewStep - how to ?
-    stepper.setSkin(skin);
-
+    stepper.setSkin(new CustomStepperSkin(stepper));
   }
+
+  @Override
+  public void init(Controller controller, Model model, Stage stage, MFXStepper stepper) { }
 }
