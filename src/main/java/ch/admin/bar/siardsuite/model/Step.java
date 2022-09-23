@@ -4,15 +4,12 @@ public class Step {
 
   private String key;
   private String contentView;
-
-  private StepButton[] buttons;
   private Integer position;
 
-  public Step(String key, String contentView, Integer position, StepButton... buttons) {
+  public Step(String key, String contentView, Integer position) {
     this.key = key;
     this.contentView = contentView;
     this.position = position;
-    this.buttons = buttons;
   }
 
   public String getKey() {
@@ -23,9 +20,6 @@ public class Step {
     return contentView;
   }
 
-  public StepButton[] getButtons() {
-    return buttons;
-  }
   public Integer getPosition() {
     return position;
   }

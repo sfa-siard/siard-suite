@@ -4,12 +4,6 @@ import java.util.List;
 
 public class ArchiveSteps {
 
-  private static final List<StepButton> defaultButtons = List.of(
-          new StepButton("button.back", "secondary"),
-          new StepButton("button.cancel", "secondary"),
-          new StepButton("button.next", "primary"));
-
-
   private static final List<Step> steps = List.of(
           new Step("archive.step.name.dbms", View.ARCHIVE.getName(), 1 ),
           new Step("archive.step.name.connection", View.ARCHIVE.getName(), 2),
