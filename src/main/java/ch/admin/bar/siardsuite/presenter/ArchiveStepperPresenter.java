@@ -16,7 +16,6 @@ public class ArchiveStepperPresenter extends StepperPresenter {
   @FXML
   private MFXStepper stepper;
 
-
   public void init(Controller controller, Model model, Stage stage) {
     this.model = model;
     this.controller = controller;
@@ -24,8 +23,9 @@ public class ArchiveStepperPresenter extends StepperPresenter {
 
     List<MFXStepperToggle> stepperToggles = createSteps(ArchiveViewSteps.getSteps());
     stepper.getStepperToggles().addAll(stepperToggles);
-    stepper.setSkin(new CustomStepperSkin(stepper));
+    CustomStepperSkin skin = new CustomStepperSkin(stepper);
+// TODO button setup for each ViewStep - how to ?
+    stepper.setSkin(skin);
 
   }
-
 }

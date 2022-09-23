@@ -11,13 +11,11 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -34,6 +32,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final HBox buttonsBox;
   private final MFXButton nextButton;
   private final MFXButton previousButton;
+  private final MFXButton cancelButton;
   private final Group progressBarGroup;
   private final double height = 2.0;
   private final Rectangle bar;
@@ -73,10 +72,12 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
     this.previousButton.getStyleClass().setAll("button", "secondary");
     this.previousButton.setManaged(true);
-    this.buttonsBox = new HBox(20.0, this.previousButton, this.nextButton);
+    this.cancelButton = new MFXButton();
+    this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
+    this.cancelButton.getStyleClass().setAll("button", "secondary");
+    this.cancelButton.setManaged(true);
+    this.buttonsBox = new HBox(20.0, this.previousButton, this.cancelButton, this.nextButton);
     this.buttonsBox.getStyleClass().setAll("btn-box");
-//    this.buttonsBox.setAlignment(Pos.CENTER_LEFT);
-//    this.buttonsBox.setPadding(new Insets(25.0, 50.0, 25.0, 50.0));
     this.contentPane = new StackPane();
     this.contentPane.getStyleClass().setAll("content-pane");
     BorderPane container = new BorderPane();
@@ -131,6 +132,10 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.previousButton.setOnAction((event) -> {
       this.buttonWasPressed = true;
       stepper.previous();
+    });
+    this.cancelButton.setOnAction((event) -> {
+      this.buttonWasPressed = true;
+ //TODO stepper.cancel();
     });
     this.manageScene();
   }
