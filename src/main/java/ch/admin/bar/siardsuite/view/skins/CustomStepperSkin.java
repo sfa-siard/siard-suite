@@ -10,12 +10,14 @@ import io.github.palexdev.materialfx.utils.TextUtils;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SkinBase;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -49,37 +51,39 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar.spacingProperty().bind(stepper.spacingProperty());
     this.stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
     this.stepperBar.getChildren().addAll(stepper.getStepperToggles());
-    this.stepperBar.setMaxHeight(50.0);
-    this.stepperBar.setMinHeight(50.0);
+    this.stepperBar.getStyleClass().setAll("stepper-bar");
+    this.stepperBar.setMaxHeight(52.0);
+    this.stepperBar.setMinHeight(52.0);
     Double toggleWidth = stepper.getStepperToggles()
             .stream()
             .mapToDouble(
-                    t -> this.stepperBar.spacingProperty().get() / 2 + (TextUtils.computeTextWidth(Font.font("System", 13.0), I18n.get(t.textProperty().get())) + (t.getLabelTextGap() * 2))
+                    t -> this.stepperBar.spacingProperty().get() / 2 + (TextUtils.computeTextWidth(Font.font("Roboto Regular", 13.0), I18n.get(t.textProperty().get())) + (t.getLabelTextGap() + 22))
             ).sum();
     this.bar.setWidth(toggleWidth);
     this.track.setWidth(toggleWidth);
-    this.stepperBar.setMaxSize(stepper.getPrefWidth(), 50.0);
+    this.stepperBar.setMaxSize(stepper.getPrefWidth(), 52.0);
     this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() -> {
       return this.snapPositionY(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2));
     }, this.stepperBar.heightProperty()));
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
     this.nextButton.getStyleClass().setAll("button", "primary");
-    this.nextButton.setManaged(false);
+    this.nextButton.setManaged(true);
     this.previousButton = new MFXButton();
     this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
     this.previousButton.getStyleClass().setAll("button", "secondary");
-    this.previousButton.setManaged(false);
+    this.previousButton.setManaged(true);
     this.buttonsBox = new HBox(20.0, this.previousButton, this.nextButton);
     this.buttonsBox.getStyleClass().setAll("btn-box");
-    this.buttonsBox.setAlignment(Pos.CENTER_LEFT);
-    this.buttonsBox.setMinHeight(70.0);
+//    this.buttonsBox.setAlignment(Pos.CENTER_LEFT);
+//    this.buttonsBox.setPadding(new Insets(25.0, 50.0, 25.0, 50.0));
     this.contentPane = new StackPane();
     this.contentPane.getStyleClass().setAll("content-pane");
     BorderPane container = new BorderPane();
     container.getStylesheets().setAll(stepper.getUserAgentStylesheet());
     container.setTop(this.stepperBar);
     container.setCenter(this.contentPane);
+    BorderPane.setMargin(this.contentPane, new Insets(50, 50, 50, 50));
     container.setBottom(this.buttonsBox);
     this.getChildren().add(container);
     this.setListeners();

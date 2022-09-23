@@ -19,10 +19,10 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
     super(stepperToggle);
 
     this.label = MFXTextField.asLabel();
-//    this.label.getStyleClass().setAll("label");
     this.label.textProperty().bind(I18n.createStringBinding(stepperToggle.getText()));
     this.label.setManaged(false);
     this.icon = (Button) stepperToggle.getIcon();
+    this.icon.setMaxWidth(22);
     this.container = new HBox(stepperToggle.getIcon(), this.label);
     this.container.getStyleClass().setAll("custom-stepper-toggle");
 
@@ -38,22 +38,22 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   }
 
   protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-    return topInset + this.container.prefHeight(-1.0) + bottomInset;
+    return topInset + this.container.prefHeight(0.0) + bottomInset;
   }
 
   protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-    return leftInset + this.icon.getWidth() + TextUtils.computeTextWidth(this.label.getFont(), this.label.getText()) + ((MFXStepperToggle) this.getSkinnable()).getLabelTextGap() * 2.0 + rightInset;
+    return leftInset + this.icon.getMaxWidth() + TextUtils.computeTextWidth(this.label.getFont(), this.label.getText()) + ((MFXStepperToggle) this.getSkinnable()).getLabelTextGap() * 2.0 + rightInset;
   }
 
   protected void layoutChildren(double x, double y, double w, double h) {
     super.layoutChildren(x, y, w, h);
     MFXStepperToggle stepperToggle = (MFXStepperToggle) this.getSkinnable();
-    double lw = this.snapSizeX(w - this.icon.getWidth() - ((MFXStepperToggle) this.getSkinnable()).getLabelTextGap());
+    double lw = this.snapSizeX(w - this.icon.getMaxWidth() - ((MFXStepperToggle) this.getSkinnable()).getLabelTextGap());
     double lh = this.snapSizeY(h);
     double lx = 0.0;
     double ly = this.snapPositionY(this.container.getBoundsInParent().getCenterY() - lh / 2.0 + 1);
     this.label.setTranslateX(0.0);
-    lx = this.snapPositionX(this.icon.getWidth() + stepperToggle.getLabelTextGap());
+    lx = this.snapPositionX(this.icon.getMaxWidth() + stepperToggle.getLabelTextGap());
     this.label.resizeRelocate(lx, ly, lw, lh);
   }
 }

@@ -17,8 +17,10 @@
 
 * {
     -fx-header-background-color: #323f4b;
+    -fx-my-font-family: 'Roboto Regular'
 }
 
+/* Header */
 .header {
     -fx-background-color: -fx-header-background-color;
     -fx-max-height: 3em;
@@ -95,6 +97,129 @@
     -fx-max-height: infinity;
 }
 
+/*Stepper*/
+.mfx-stepper {
+    -fx-background-color: white;
+    -mfx-base-color: #e4e7eb;
+    -mfx-spacing: 40.0;
+    -mfx-extra-spacing: 0;
+    -mfx-alignment: BASELINE_LEFT;
+}
+
+.stepper-bar {
+    -fx-background-color: #e4e7eb;
+}
+
+.mfx-stepper .content-pane {
+    -fx-background-color: #ffffff;
+}
+
+.mfx-stepper .track {
+    -mfx-bar-background: #9aa5b1;
+}
+
+.mfx-stepper .bar {
+    -mfx-progress-color: #9aa5b1;
+}
+
+.mfx-stepper-toggle,
+.custom-stepper-toggle {
+    -fx-padding: 0 0.5em 0 0.5em;
+    -fx-background-color: #e4e7eb;
+    -fx-pref-height: 52;
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #000000 ;
+    -mfx-label-text-gap: 12.0;
+}
+
+.stepper-btn {
+    -fx-background-size: 22px;
+    -fx-alignment: center;
+    -fx-min-width: 22px;
+    -fx-min-height: 22px;
+}
+
+.number-btn {
+    -fx-shape: "M 159 96  C 165.16 96  170 100.84  170 107  C 170 113.16  165.16 118  159 118  C 152.84 118  148 113.16  148 107  C 148 100.84  152.84 96  159 96  Z ";
+    -fx-background-color: #9aa5b1;
+    -fx-text-fill: #000000 ;
+    -fx-font-size: 11px;
+    -fx-opacity: 0.5;
+    -fx-font-family: "Roboto Medium";
+    -fx-font-weight: 500;
+}
+
+.mfx-stepper-toggle:completed .number-btn {
+    -fx-content-display: graphic-only;
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+    -fx-max-height: 22;
+    -fx-graphic: url(../icons/bubble_checked.png);
+}
+
+.mfx-stepper-toggle .mfx-text-field,
+.custom-stepper-toggle .mfx-text-field {
+    -fx-padding: 0 0 0 0;
+    -fx-background-color: #e4e7eb;
+    -mfx-float-mode: disabled;
+}
+
+.mfx-text-field,
+.mfx-text-field .text-field,
+.custom-stepper-toggle .mfx-text-field .text-field {
+    -fx-text-fill: #000000;
+    -fx-opacity: 0.7;
+    -fx-font-width: 500;
+    -fx-alignment: BASELINE_CENTER;
+    -fx-font-family: "Roboto Medium";
+    -fx-font-size: 16px;
+    -fx-border-color: transparent;
+}
+
+.mfx-stepper-toggle:selected .number-btn,
+.mfx-stepper-toggle:selected .mfx-text-field,
+.custom-stepper-toggle:selected .mfx-text-field,
+.mfx-stepper-toggle:completed .mfx-text-field,
+.custom-stepper-toggle:completed .mfx-text-field {
+    -fx-opacity: 1;
+    -fx-text-fill: #000000 ;
+}
+
+/* vertical alignment of label is wrong with .png vs .svg */
+.mfx-stepper-toggle:completed .mfx-text-field,
+.custom-stepper-toggle:completed .mfx-text-field {
+    -fx-padding: -4 0 0 0;
+}
+
+.mfx-stepper .btn-box {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 25 50 25 50;
+    -fx-background-color: white;
+    -fx-border-color: #e4e7eb;
+    -fx-border-width: 2 0 0 0 ;
+}
+
+.mfx-stepper .btn-box .button {
+    -fx-min-width: 148px;
+    -fx-min-height: 42px;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-font-family: -fx-my-font-family;
+    -fx-font-size: 14px;
+}
+
+.primary {
+    -fx-background-color: black;
+    -fx-border-color: black;
+    -fx-text-fill: white;
+}
+
+.secondary {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-text-fill: black;
+}
+
 /*Button*/
 
 .mfx-button {
@@ -113,109 +238,5 @@
 }
 
 .dialog-text {
- -fx-wrap-text: break-word;
+    -fx-wrap-text: break-word;
 }
-
-
-/*Stepper*/
-.mfx-stepper {
-    -fx-background-color: #e4e7eb;
-    -mfx-base-color: #e4e7eb;
-    -mfx-spacing: 40.0;
-    -mfx-extra-spacing: 0;
-    -mfx-alignment: BASELINE_LEFT;
-}
-
-.mfx-stepper .content-pane {
-    -fx-background-color: #ffffff;
-}
-
-.mfx-stepper .track {
-    -mfx-bar-background: #9aa5b1;
-}
-
-.mfx-stepper .bar {
-    -mfx-progress-color: #9aa5b1;
-}
-
-.stepper-btn {
-    -fx-background-size: 22px;
-    -fx-alignment: center;
-    -fx-min-width: 22px;
-    -fx-min-height: 22px;
-}
-
-.number-btn {
-    -fx-shape: "M 159 96  C 165.16 96  170 100.84  170 107  C 170 113.16  165.16 118  159 118  C 152.84 118  148 113.16  148 107  C 148 100.84  152.84 96  159 96  Z ";
-    -fx-background-color: #9aa5b1;
-    -fx-text-fill: #000000 ;
-    -fx-font-size: 10px;
-    -fx-opacity: 0.7;
-    -fx-font-weight: 700;
-}
-
-.mfx-stepper-toggle,
-.custom-stepper-toggle {
-    -fx-padding: 0 0.5em 0 0.5em;
-    -fx-background-color: #e4e7eb;
-    -fx-pref-height: 53;
-    -fx-alignment: CENTER_LEFT;
-    -fx-text-fill: #000000 ;
-    -mfx-label-text-gap: 15.0;
-}
-
-.mfx-stepper-toggle .mfx-text-field,
-.custom-stepper-toggle .mfx-text-field {
-    -fx-padding: 0 -0.2em 0 0;
-    -fx-background-color: #e4e7eb;
-    -mfx-float-mode: disabled;
-    -fx-font-size: 10px;
-}
-
-.mfx-text-field,
-.mfx-text-field .text-field,
-.custom-stepper-toggle .mfx-text-field .text-field {
-    -fx-text-fill: #000000;
-    -fx-opacity: 0.7;
-    -fx-font-width: 700;
-    -fx-alignment: BASELINE_CENTER;
-    -fx-font-family: "Roboto Regular";
-    -fx-border-color: transparent;
-}
-
-.mfx-stepper-toggle:selected .number-btn,
-.mfx-stepper-toggle:selected .mfx-text-field,
-.custom-stepper-toggle:selected .mfx-text-field {
-    -fx-opacity: 1;
-    -fx-text-fill: #000000 ;
-}
-
-
-.valid-btn {
-    -fx-content-display: graphic-only;
-    -fx-background-color: transparent;
-    -fx-max-height: 24;
-    -fx-padding: 0 0.5em 0 0.5em;
-    -fx-graphic: url(../icons/bubble_checked.png);
-}
-
-.mfx-stepper .btn-box .button {
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
-    -fx-font-family: -fx-my-font-family;
-    -fx-font-size: 14px;
-}
-
-
-.primary {
-    -fx-background-color: black;
-    -fx-border-color: black;
-    -fx-text-fill: white;
-}
-
-.secondary {
-    -fx-background-color: white;
-    -fx-border-color: black;
-    -fx-text-fill: black;
-}
-

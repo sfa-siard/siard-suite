@@ -5,6 +5,6 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.ArchivePresenter">
    <children>
-      <Text fill="#c3aeae" layoutX="43.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datenbank-Management-System auswählen" wrappingWidth="316.7294921875" />
+      <Text fill="#c3aeae" strokeType="OUTSIDE" strokeWidth="0.0" text="Datenbank-Management-System auswählen" wrappingWidth="316.7294921875" />
    </children>
 </AnchorPane>
