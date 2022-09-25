@@ -185,12 +185,6 @@
     -fx-text-fill: #000000 ;
 }
 
-/* vertical alignment of label is wrong with .png vs .svg */
-.mfx-stepper-toggle:completed .mfx-text-field,
-.custom-stepper-toggle:completed .mfx-text-field {
-    -fx-padding: -4 0 0 0;
-}
-
 .mfx-stepper .btn-box {
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 25 50 25 50;
@@ -253,6 +247,13 @@
     -fx-font-family: -fx-my-font-family;
     -fx-font-size: 14.0;
     -fx-spacing: 8.0 ;
+}
+
+.error-text {
+    -fx-font-family: -fx-my-font-family;
+    -fx-font-size: 12.0;
+    -fx-text-fill: red;
+    /*-fx-text-fill: #D9001B;*/
 }
 
 .radio-button {

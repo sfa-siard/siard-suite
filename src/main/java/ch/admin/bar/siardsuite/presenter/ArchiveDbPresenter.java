@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -18,7 +19,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class ArchiveDbPresenter extends StepperPresenter {
-@FXML
+  @FXML
   public BorderPane borderPane;
   @FXML
   public Text title;
@@ -29,13 +30,15 @@ public class ArchiveDbPresenter extends StepperPresenter {
   @FXML
   public VBox rightVBox;
   @FXML
+  public Label errorMessage;
+  @FXML
   private MFXButton nextButton;
   @FXML
   private MFXButton previousButton;
   @FXML
   private MFXButton cancelButton;
   @FXML
-   private HBox buttonsBox;
+  private HBox buttonsBox;
 
   private final ToggleGroup toggleGroup = new ToggleGroup();
 
@@ -45,6 +48,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
     this.controller = controller;
     this.stage = stage;
   }
+
   @Override
   public void init(Controller controller, Model model, Stage stage, MFXStepper stepper) {
     this.model = model;
@@ -53,9 +57,11 @@ public class ArchiveDbPresenter extends StepperPresenter {
 
     this.title.textProperty().bind(I18n.createStringBinding("archiveDb.view.title"));
     this.text.textProperty().bind(I18n.createStringBinding("archiveDb.view.text"));
+    this.errorMessage.setVisible(false);
+    this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveDb.view.error"));
 
-    List.of("MS Access","DB/2","H2 Database","MySQL" ).forEach(s -> createRadioToVBox(s, leftVBox));
-    List.of("Oracle","PostgreSQL","Microsoft SQL Server" ).forEach(s -> createRadioToVBox(s, rightVBox));
+    List.of("MS Access", "DB/2", "H2 Database", "MySQL").forEach(s -> createRadioToVBox(s, leftVBox));
+    List.of("Oracle", "PostgreSQL", "Microsoft SQL Server").forEach(s -> createRadioToVBox(s, rightVBox));
 
 
     this.nextButton = new MFXButton();
@@ -84,7 +90,14 @@ public class ArchiveDbPresenter extends StepperPresenter {
 
   private void setListeners(MFXStepper stepper) {
     this.nextButton.setOnAction((event) -> {
-      stepper.next();
+      MFXRadioButton selected = (MFXRadioButton) toggleGroup.getSelectedToggle();
+      if (selected != null) {
+        controller.setDatabaseType(selected.getText());
+        this.errorMessage.setVisible(false);
+        stepper.next();
+      } else {
+        this.errorMessage.setVisible(true);
+      }
     });
     this.previousButton.setOnAction((event) -> {
       stepper.previous();
@@ -93,8 +106,6 @@ public class ArchiveDbPresenter extends StepperPresenter {
       showDialog("archive-db-dialog.fxml");
     });
   }
-
-
 
 
 }

@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
             stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -25,6 +26,11 @@
                         </VBox>
                     </children>
                 </HBox>
+                <Label fx:id="errorMessage" styleClass="error-text">
+                    <VBox.margin>
+                        <Insets bottom="25.0" top="25.0"/>
+                    </VBox.margin>
+                </Label>
             </children>
             <BorderPane.margin>
                 <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>

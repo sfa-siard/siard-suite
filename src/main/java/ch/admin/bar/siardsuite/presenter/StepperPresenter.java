@@ -29,7 +29,6 @@ public abstract class StepperPresenter extends Presenter {
     return  steps.stream()
             .map((step) -> createCustomStepperToggle(step.getKey(), step.getPosition(), loadView(step.getContentView(), stepper)))
             .collect(Collectors.toList());
-//    step1.getValidator().dependsOn(loginField.getValidator()).dependsOn(passwordField.getValidator());
   }
 
   private MFXStepperToggle createCustomStepperToggle(String key, Integer pos, Node content) {

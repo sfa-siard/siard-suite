@@ -23,4 +23,8 @@ public class Controller {
       model.setCurrentView(currentView);
     }
   }
+
+  public void setDatabaseType(String databaseType) {
+    model.setDatabaseType(databaseType);
+  }
 }

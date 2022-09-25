@@ -5,6 +5,7 @@ public class Model {
 
   private String currentView = View.START.getName();
 
+  private SiardArchive archive;
   public Model() {
 
   }
@@ -16,6 +17,10 @@ public class Model {
     this.currentView = currentView;
   }
 
-
-
+  public void setDatabaseType(String databaseType) {
+    if (this.archive == null) {
+      this.archive = new SiardArchive();
+    }
+    this.archive.setDatabaseProduct(databaseType);
+  }
 }
