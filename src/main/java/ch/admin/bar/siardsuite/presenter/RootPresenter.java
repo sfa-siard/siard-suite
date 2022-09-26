@@ -58,7 +58,6 @@ public class RootPresenter extends Presenter {
       this.menuItemLanguage.getItems().add(item);
       item.setOnAction(event -> {
         CheckMenuItem cmi = (CheckMenuItem) event.getSource();
-        System.out.println(cmi.getId());
         I18n.setLocale(new Locale(cmi.getId()));
       });
     });

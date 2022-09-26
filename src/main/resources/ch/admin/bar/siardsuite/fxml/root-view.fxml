@@ -6,41 +6,39 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import java.lang.String?>
-<BorderPane fx:id="rootPane" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0"
+<BorderPane fx:id="rootPane" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1440.0"
             stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
     <top>
-        <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" spacing="10.0" styleClass="header"
-              BorderPane.alignment="CENTER">
-            <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS"/>
+        <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" prefHeight="40.0" spacing="10.0" styleClass="header" BorderPane.alignment="CENTER">
+            <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS" />
             <MFXButton alignment="CENTER" rippleAnimateBackground="false">
                 <styleClass>
-                    <String fx:value="help-icon"/>
-                    <String fx:value="header-button"/>
+                    <String fx:value="help-icon" />
+                    <String fx:value="header-button" />
                 </styleClass>
                 <cursor>
-                    <Cursor fx:constant="HAND"/>
+                    <Cursor fx:constant="HAND" />
                 </cursor>
             </MFXButton>
             <MenuBar styleClass="menu-bar" stylesheets="@../css/root.css">
                 <cursor>
-                    <Cursor fx:constant="HAND"/>
+                    <Cursor fx:constant="HAND" />
                 </cursor>
                 <menus>
                     <Menu mnemonicParsing="false" styleClass="menu-button">
                         <items>
-                            <Menu fx:id="menuItemLanguage"
-                                  mnemonicParsing="false">
+                            <Menu fx:id="menuItemLanguage" mnemonicParsing="false">
 
                             </Menu>
                             <MenuItem fx:id="menuItemOptions" mnemonicParsing="false" />
                             <MenuItem fx:id="menuItemInfo" mnemonicParsing="false" />
-                            <MenuItem fx:id="menuItemClose" mnemonicParsing="false"/>
+                            <MenuItem fx:id="menuItemClose" mnemonicParsing="false" />
                         </items>
                     </Menu>
                 </menus>
                 <cursor>
-                    <Cursor fx:constant="HAND"/>
+                    <Cursor fx:constant="HAND" />
                 </cursor>
             </MenuBar>
         </HBox>

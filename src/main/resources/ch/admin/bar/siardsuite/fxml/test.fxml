@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXRadioButton?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="rootPane" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1440.0" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
+    <top>
+        <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" prefHeight="40.0" spacing="10.0" styleClass="header" BorderPane.alignment="CENTER">
+            <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS" />
+            <MFXButton alignment="CENTER" rippleAnimateBackground="false">
+                <styleClass>
+                    <String fx:value="help-icon" />
+                    <String fx:value="header-button" />
+                </styleClass>
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </MFXButton>
+            <MenuBar styleClass="menu-bar" stylesheets="@../css/root.css">
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+                <menus>
+                    <Menu mnemonicParsing="false" styleClass="menu-button">
+                        <items>
+                            <Menu fx:id="menuItemLanguage" mnemonicParsing="false">
+
+                            </Menu>
+                            <MenuItem fx:id="menuItemOptions" mnemonicParsing="false" />
+                            <MenuItem fx:id="menuItemInfo" mnemonicParsing="false" />
+                            <MenuItem fx:id="menuItemClose" mnemonicParsing="false" />
+                        </items>
+                    </Menu>
+                </menus>
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </MenuBar>
+        </HBox>
+    </top>
+    <center>
+    </center>
+    <center>
+
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <bottom>
+                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" spacing="20.0" BorderPane.alignment="CENTER">
+                    <padding>
+                        <Insets bottom="25.0" left="50.0" right="50.0" top="25.0" />
+                    </padding>
+                    <children>
+                        <MFXButton />
+                        <MFXButton />
+                    </children>
+                </HBox>
+            </bottom>
+         <center>
+            <VBox BorderPane.alignment="TOP_LEFT">
+               <children>
+                      <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Datenbank-Management-System auswählen">
+                     <font>
+                        <Font name="Roboto Medium" size="22.0" />
+                     </font></Text>
+                  <Text id="description" lineSpacing="8.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sie möchten eine Datenbank archivieren. Bitte geben Sie das zugehörige Datenbank-Management-System an." wrappingWidth="420.0">
+                     <VBox.margin>
+                        <Insets bottom="25.0" top="25.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Roboto" size="16.0" />
+                     </font>
+                  </Text>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="300.0">
+                           <children>
+                              <MFXRadioButton text="MS Access">
+                                 <padding>
+                                    <Insets bottom="25.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="Roboto" size="18.0" />
+                                 </font>
+                              </MFXRadioButton>
+                              <MFXRadioButton text="DB/2" />
+                              <MFXRadioButton text="H2 Database" />
+                              <MFXRadioButton text="MySQL" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="300.0">
+                           <children>
+                              <MFXRadioButton text="Oracle" />
+                              <MFXRadioButton text="PostgreSQL" />
+                              <MFXRadioButton text="Microsoft SQL Server" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+               </BorderPane.margin>
+            </VBox>
+         </center>
+        </BorderPane>
+
+    </center>
+</BorderPane>
