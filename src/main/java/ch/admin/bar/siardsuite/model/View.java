@@ -9,7 +9,7 @@ public enum View {
   DIALOG("fxml/dialog-view.fxml"),
   ARCHIVE_DB_DIALOG("fxml/archive-db-dialog-view.fxml");
 
-  private String viewName;
+  private final String viewName;
 
   View(String v) {
     this.viewName = v;

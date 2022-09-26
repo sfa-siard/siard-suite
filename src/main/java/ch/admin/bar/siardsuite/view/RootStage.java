@@ -26,7 +26,6 @@ public class RootStage extends Stage {
   private final BorderPane rootPane;
   @FXML
   private final BorderPane dialogPane;
-  private final StackPane stackPane;
 
   public RootStage(Model model, Controller controller) throws IOException {
     this.model = model;
@@ -37,7 +36,7 @@ public class RootStage extends Stage {
     loader.<RootPresenter>getController().init(controller, this.model,this);
 
     // load start view
-    loadView(model.getCurrentView());
+    navigate(model.getCurrentView());
 
     // prepare for dialogs
     loader = new FXMLLoader(SiardApplication.class.getResource(View.DIALOG.getName()));
@@ -46,7 +45,7 @@ public class RootStage extends Stage {
     dialogPane.setVisible(false);
 
     // set overall stack pane
-    stackPane = new StackPane(rootPane, dialogPane);
+    StackPane stackPane = new StackPane(rootPane, dialogPane);
 
     Scene scene = new Scene(stackPane);
     scene.setFill(Color.WHITESMOKE);
@@ -55,16 +54,22 @@ public class RootStage extends Stage {
     this.show();
   }
 
-  public void loadView(String viewName) throws IOException {
+  private void setCenter(BorderPane borderPane, String viewName) {
     FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
-    rootPane.setCenter(loader.load());
-    loader.<Presenter>getController().init(this.controller, this.model, this);
+    try {
+      borderPane.setCenter(loader.load());
+      loader.<Presenter>getController().init(this.controller, this.model, this);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
-  public void openDialog(String viewName) throws IOException {
-    FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
-    dialogPane.setCenter(loader.load());
-    loader.<Presenter>getController().init(this.controller, this.model, this);
+  public void navigate(String viewName) {
+    setCenter(rootPane, viewName);
+  }
+
+  public void openDialog(String viewName) {
+    setCenter(dialogPane, viewName);
     dialogPane.setVisible(true);
   }
 

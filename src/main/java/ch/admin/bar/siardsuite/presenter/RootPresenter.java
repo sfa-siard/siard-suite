@@ -9,7 +9,6 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 
 import java.util.Locale;
 
@@ -19,8 +18,6 @@ public class RootPresenter extends Presenter {
   public Menu menuItemLanguage;
   @FXML
   public MenuItem menuItemOptions, menuItemInfo, menuItemClose;
-  private double xOffset;
-  private double yOffset;
 
   @FXML
   public HBox windowHeader;
@@ -30,15 +27,7 @@ public class RootPresenter extends Presenter {
     this.controller = controller;
     this.stage = stage;
 
-    windowHeader.setOnMousePressed(event -> {
-      xOffset = stage.getX() - event.getScreenX();
-      yOffset = stage.getY() - event.getScreenY();
-    });
-
-    windowHeader.setOnMouseDragged(event -> {
-      stage.setX(event.getScreenX() + xOffset);
-      stage.setY(event.getScreenY() + yOffset);
-    });
+    allowStageRepositioning(windowHeader);
 
     this.stage.titleProperty().bind(I18n.createStringBinding("window.title"));
 
@@ -66,4 +55,5 @@ public class RootPresenter extends Presenter {
     this.menuItemClose.setOnAction(event -> this.stage.close());
 
   }
+
 }

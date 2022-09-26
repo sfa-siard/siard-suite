@@ -1,22 +1,14 @@
 package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.Model;
-
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.view.RootStage;
+import static ch.admin.bar.siardsuite.util.I18n.createStringBinding;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import java.io.IOException;
-
-import static ch.admin.bar.siardsuite.util.I18n.createStringBinding;
 
 public class StartPresenter extends Presenter {
 
@@ -40,13 +32,7 @@ public class StartPresenter extends Presenter {
     this.controller = controller;
     this.stage = stage;
 
-    this.archive.setOnAction(event -> {
-      try {
-        stage.openDialog(View.ARCHIVE_DB_DIALOG.getName());
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    });
+    this.archive.setOnAction(event -> stage.openDialog(View.ARCHIVE_DB_DIALOG.getName()));
     this.upload.setOnAction(event -> System.out.println("uplaod button pressed"));
     this.export.setOnAction(event -> System.out.println("export button pressed"));
     this.open.setOnAction(event -> System.out.println("open button pressed"));

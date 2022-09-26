@@ -10,15 +10,13 @@ import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.util.List;
 
 public class ArchiveDbPresenter extends StepperPresenter {
@@ -46,14 +44,14 @@ public class ArchiveDbPresenter extends StepperPresenter {
   private final ToggleGroup toggleGroup = new ToggleGroup();
 
   @Override
-  public void init(Controller controller, Model model, Stage stage) {
+  public void init(Controller controller, Model model, RootStage stage) {
     this.model = model;
     this.controller = controller;
     this.stage = stage;
   }
 
   @Override
-  public void init(Controller controller, Model model, Stage stage, MFXStepper stepper) {
+  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
     this.model = model;
     this.controller = controller;
     this.stage = stage;
@@ -65,7 +63,6 @@ public class ArchiveDbPresenter extends StepperPresenter {
 
     List.of("MS Access", "DB/2", "H2 Database", "MySQL").forEach(s -> createRadioToVBox(s, leftVBox));
     List.of("Oracle", "PostgreSQL", "Microsoft SQL Server").forEach(s -> createRadioToVBox(s, rightVBox));
-
 
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
@@ -102,17 +99,8 @@ public class ArchiveDbPresenter extends StepperPresenter {
         this.errorMessage.setVisible(true);
       }
     });
-    this.previousButton.setOnAction((event) -> {
-      stepper.previous();
-    });
-    this.cancelButton.setOnAction((event) -> {
-      try {
-        ((RootStage) stage).loadView(View.START.getName());
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    });
+    this.previousButton.setOnAction(event -> stepper.previous());
+    this.cancelButton.setOnAction(event -> stage.navigate(View.START.getName()));
   }
-
 
 }
