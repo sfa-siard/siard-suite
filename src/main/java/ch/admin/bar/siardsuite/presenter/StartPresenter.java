@@ -35,14 +35,14 @@ public class StartPresenter extends Presenter {
   @FXML
   private Text uploadHint;
 
-  public void init(Controller controller, Model model, Stage stage) {
+  public void init(Controller controller, Model model, RootStage stage) {
     this.model = model;
     this.controller = controller;
     this.stage = stage;
 
     this.archive.setOnAction(event -> {
       try {
-        showDialog("archive-db-dialog.fxml");
+        stage.openDialog(View.ARCHIVE_DB_DIALOG.getName());
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -61,14 +61,4 @@ public class StartPresenter extends Presenter {
     this.uploadHint.textProperty().bind(createStringBinding("text.upload.hint"));
   }
 
-  private void showDialog(String s) throws IOException {
-    FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(View.ARCHIVE_DB_DIALOG.getName()));
-    Parent container = loader.load();
-    Stage dialog = new Stage();
-    dialog.initStyle(StageStyle.UNDECORATED);
-    loader.<ArchiveDbDialogPresenter>getController().init(this.controller, this.model, this.stage, dialog);
-    Scene scene = new Scene(container);
-    dialog.setScene(scene);
-    dialog.show();
-  }
 }

@@ -4,49 +4,38 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class ArchiveDbDialogPresenter extends Presenter {
 
     @FXML
-    public Text dialogText;
-    @FXML
     public Text dialogTitle;
     @FXML
-    private Button close;
-
+    public Text dialogText;
     @FXML
     private Button cancel;
-
     @FXML
     private Button createNewConnection;
 
-    private Stage dialog;
-
     @Override
-    public void init(Controller controller, Model model, Stage stage) {
+    public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
         this.controller = controller;
         this.stage = stage;
-    }
 
-    public void init(Controller controller, Model model, Stage stage, Stage dialog) {
-        this.init(controller, model,stage);
-        this.dialog = dialog;
+        dialogTitle.textProperty().bind(I18n.createStringBinding("archiveDbDialog.title"));
+        dialogText.textProperty().bind(I18n.createStringBinding("archiveDbDialog.text"));
+        createNewConnection.textProperty().bind(I18n.createStringBinding("archiveDbDialog.btnNewConnection"));
+        cancel.textProperty().bind(I18n.createStringBinding("button.cancel"));
 
-        this.dialogTitle.textProperty().bind(I18n.createStringBinding("archiveDbDialog.title"));
-        this.dialogText.textProperty().bind(I18n.createStringBinding("archiveDbDialog.text"));
-        this.createNewConnection.textProperty().bind((I18n.createStringBinding("archiveDbDialog.btnNewConnection")));
-        this.cancel.textProperty().bind(I18n.createStringBinding("button.cancel"));
-
-        this.close.setOnAction(event -> this.dialog.close());
-        this.cancel.setOnAction(event -> this.dialog.close());
-        this.createNewConnection.setOnAction(event -> {
-            this.dialog.close();
-            this.navigate(View.ARCHIVE_STEPPER.getName());
+        cancel.setOnAction(event -> stage.closeDialog());
+        createNewConnection.setOnAction(event -> {
+            stage.closeDialog();
+            stage.loadView(View.ARCHIVE_STEPPER.getName());
         });
     }
+
 }

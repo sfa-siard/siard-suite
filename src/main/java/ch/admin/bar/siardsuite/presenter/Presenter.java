@@ -6,17 +6,15 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public abstract class Presenter {
 
   protected Model model;
   protected Controller controller;
-  protected Stage stage;
+  protected RootStage stage;
 
-  public abstract void init(Controller controller, Model model, Stage stage);
+  public abstract void init(Controller controller, Model model, RootStage stage);
 
-  public void navigate(String view) {
-    Platform.runLater(() -> {
-      controller.navigate(view, (RootStage) this.stage);
-    });
-  }
+
 }
