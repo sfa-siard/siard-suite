@@ -2,7 +2,9 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -16,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ArchiveDbPresenter extends StepperPresenter {
@@ -103,7 +106,11 @@ public class ArchiveDbPresenter extends StepperPresenter {
       stepper.previous();
     });
     this.cancelButton.setOnAction((event) -> {
-      showDialog("archive-db-dialog.fxml");
+      try {
+        ((RootStage) stage).loadView(View.START.getName());
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     });
   }
 
