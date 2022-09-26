@@ -13,7 +13,6 @@
     <content>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
         <Button fx:id="cancel">
-            Abbrechen
         </Button>
     </content>
 </DialogPane>

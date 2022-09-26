@@ -16,5 +16,4 @@ public abstract class Presenter {
 
   public abstract void init(Controller controller, Model model, RootStage stage);
 
-
 }
