@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane fx:id="dialogPane" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1281.0"
+            style="-fx-background-color: #00000044;" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.DialogPresenter">
+    <top>
+        <HBox fx:id="windowHeader" style="-fx-pref-height: 3em; -fx-max-height: 3em">
+        </HBox>
+    </top>
+    <center>
+    </center>
+</BorderPane>

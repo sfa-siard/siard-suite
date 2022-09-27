@@ -29,7 +29,6 @@
                     <Menu mnemonicParsing="false" styleClass="menu-button">
                         <items>
                             <Menu fx:id="menuItemLanguage" mnemonicParsing="false">
-
                             </Menu>
                             <MenuItem fx:id="menuItemOptions" mnemonicParsing="false" />
                             <MenuItem fx:id="menuItemInfo" mnemonicParsing="false" />

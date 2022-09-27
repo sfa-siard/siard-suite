@@ -3,20 +3,29 @@ package ch.admin.bar.siardsuite.presenter;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.view.RootStage;
-import javafx.application.Platform;
-import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 public abstract class Presenter {
 
   protected Model model;
   protected Controller controller;
-  protected Stage stage;
+  protected RootStage stage;
 
-  public abstract void init(Controller controller, Model model, Stage stage);
+  private double xOffset;
+  private double yOffset;
 
-  public void navigate(String view) {
-    Platform.runLater(() -> {
-      controller.navigate(view, (RootStage) this.stage);
+  public abstract void init(Controller controller, Model model, RootStage stage);
+
+  public void allowStageRepositioning(Pane pane) {
+    pane.setOnMousePressed(event -> {
+      xOffset = stage.getX() - event.getScreenX();
+      yOffset = stage.getY() - event.getScreenY();
+    });
+    pane.setOnMouseDragged(event -> {
+      stage.setX(event.getScreenX() + xOffset);
+      stage.setY(event.getScreenY() + yOffset);
     });
   }
+
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.ArchiveDbDialogPresenter">
+    <BorderPane>
+        <top>
+            <Text fx:id="dialogTitle" styleClass="dialog-title">
+            </Text>
+        </top>
+        <center>
+            <Text fx:id="dialogText" styleClass="dialog-text">
+            </Text>
+            <Button fx:id="createNewConnection">
+            </Button>
+        </center>
+        <bottom>
+            <Button fx:id="cancel">
+            </Button>
+        </bottom>
+    </BorderPane>
+</AnchorPane>
