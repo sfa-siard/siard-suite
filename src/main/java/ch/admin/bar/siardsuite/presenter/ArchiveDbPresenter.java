@@ -17,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
 import java.util.List;
 
 public class ArchiveDbPresenter extends StepperPresenter {
@@ -100,12 +101,8 @@ public class ArchiveDbPresenter extends StepperPresenter {
         this.errorMessage.setVisible(true);
       }
     });
-    this.previousButton.setOnAction((event) -> {
-      stage.openDialog(View.ARCHIVE_DB_DIALOG.getName());
-    });
-    this.cancelButton.setOnAction((event) -> {
-      stage.openDialog((View.ARCHIVE_ABORT_DIALOG.getName());
-    });
+    this.previousButton.setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG.getName()));
+    this.cancelButton.setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
   }
 
 }
