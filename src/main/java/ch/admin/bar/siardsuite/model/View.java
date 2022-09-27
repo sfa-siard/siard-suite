@@ -8,6 +8,7 @@ public enum View {
   ARCHIVE_STEPPER("fxml/archive-stepper-view.fxml"),
   DIALOG("fxml/dialog-view.fxml"),
   ARCHIVE_DB_DIALOG("fxml/archive-db-dialog-view.fxml");
+  ARCHIVE_ABORT_DIALOG("fxml/archive-abort-dialog-view.fxml");
 
   private final String viewName;
 
@@ -18,5 +19,4 @@ public enum View {
   public String getName() {
     return viewName;
   }
-
 }

@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.scene.Node;
@@ -27,5 +28,4 @@ public abstract class Presenter {
       stage.setY(event.getScreenY() + yOffset);
     });
   }
-
 }

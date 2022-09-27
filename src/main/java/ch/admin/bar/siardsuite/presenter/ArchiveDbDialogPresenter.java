@@ -10,7 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
-public class ArchiveDbDialogPresenter extends Presenter {
+public class ArchiveDbDialogPresenter extends DialogPresenter {
 
     @FXML
     public Text dialogTitle;

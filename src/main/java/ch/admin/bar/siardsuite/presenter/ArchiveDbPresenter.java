@@ -64,6 +64,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
     List.of("MS Access", "DB/2", "H2 Database", "MySQL").forEach(s -> createRadioToVBox(s, leftVBox));
     List.of("Oracle", "PostgreSQL", "Microsoft SQL Server").forEach(s -> createRadioToVBox(s, rightVBox));
 
+
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
     this.nextButton.getStyleClass().setAll("button", "primary");
@@ -99,8 +100,12 @@ public class ArchiveDbPresenter extends StepperPresenter {
         this.errorMessage.setVisible(true);
       }
     });
-    this.previousButton.setOnAction(event -> stepper.previous());
-    this.cancelButton.setOnAction(event -> stage.navigate(View.START.getName()));
+    this.previousButton.setOnAction((event) -> {
+      stage.openDialog(View.ARCHIVE_DB_DIALOG.getName());
+    });
+    this.cancelButton.setOnAction((event) -> {
+      stage.openDialog((View.ARCHIVE_ABORT_DIALOG.getName());
+    });
   }
 
 }
