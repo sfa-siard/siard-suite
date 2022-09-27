@@ -4,11 +4,11 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.view.RootStage;
-import static ch.admin.bar.siardsuite.util.I18n.createStringBinding;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+
+import static ch.admin.bar.siardsuite.util.I18n.createStringBinding;
 
 public class StartPresenter extends Presenter {
 

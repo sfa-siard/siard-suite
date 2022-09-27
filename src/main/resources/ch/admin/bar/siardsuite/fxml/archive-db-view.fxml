@@ -11,9 +11,13 @@
 
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
+            <BorderPane.margin>
+                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
+            </BorderPane.margin>
             <children>
                 <Text fx:id="title" styleClass="title" strokeType="OUTSIDE" strokeWidth="0.0"/>
-                <Text fx:id="text" styleClass="view-text" strokeType="OUTSIDE" lineSpacing="8.0" strokeWidth="0.0" wrappingWidth="420.0">
+                <Text fx:id="text" styleClass="view-text" strokeType="OUTSIDE" lineSpacing="8.0" strokeWidth="0.0"
+                      wrappingWidth="420.0">
                     <VBox.margin>
                         <Insets bottom="25.0" top="25.0"/>
                     </VBox.margin>
@@ -32,9 +36,6 @@
                     </VBox.margin>
                 </Label>
             </children>
-            <BorderPane.margin>
-                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
-            </BorderPane.margin>
         </VBox>
     </center>
     <bottom>

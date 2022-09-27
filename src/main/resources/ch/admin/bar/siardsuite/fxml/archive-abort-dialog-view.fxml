@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="300.0" prefWidth="480.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/root.css"
+            styleClass="dialog"
+            fx:controller="ch.admin.bar.siardsuite.presenter.ArchiveAbortDialogPresenter">
+        <top>
+            <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0"
+                        BorderPane.alignment="CENTER">
+                <left>
+                    <VBox prefHeight="61.0" prefWidth="330.0" BorderPane.alignment="CENTER">
+                        <children>
+                            <Text fx:id="dialogTitle" styleClass="dialog-title">
+                            </Text>
+                            <Text fx:id="dialogText" styleClass="dialog-text"
+                                  textOrigin="BOTTOM" wrappingWidth="329.943359375"/>
+                        </children>
+                    </VBox>
+                </left>
+                <right>
+                    <MFXButton fx:id="close" prefHeight="26.0" prefWidth="37.0" text="x"
+                               BorderPane.alignment="TOP_RIGHT"/>
+                </right>
+            </BorderPane>
+        </top>
+        <bottom>
+            <HBox fx:id="buttonsBox" styleClass="btn-box" minWidth="-Infinity" maxHeight="1.7976931348623157E308"
+                  maxWidth="1.7976931348623157E308" spacing="20.0">
+            </HBox>
+        </bottom>
+
+</BorderPane>

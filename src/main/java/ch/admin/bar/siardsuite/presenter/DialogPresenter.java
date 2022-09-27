@@ -4,7 +4,6 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 
 public class DialogPresenter extends Presenter {

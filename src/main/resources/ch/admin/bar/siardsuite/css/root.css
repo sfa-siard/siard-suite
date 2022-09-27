@@ -226,6 +226,26 @@
 
 /*Dialog*/
 
+.dialog {
+    -fx-background-color: WHITE;
+}
+
+
+.dialog .btn-box {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 25 50 25 50;
+}
+
+.dialog .btn-box .button {
+    -fx-min-width: 148px;
+    -fx-min-height: 42px;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-font-family: -fx-my-font-family;
+    -fx-font-size: 14px;
+}
+
+
 .dialog-title {
     -fx-font-weight: bold;
     -fx-font-size: 16px;
