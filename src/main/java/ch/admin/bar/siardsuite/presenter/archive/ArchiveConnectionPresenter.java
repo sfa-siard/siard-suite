@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
@@ -25,14 +26,14 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   private HBox buttonsBox;
 
   @Override
-  public void init(Controller controller, Model model, Stage stage) {
+  public void init(Controller controller, Model model, RootStage stage) {
     this.model = model;
     this.controller = controller;
     this.stage = stage;
   }
 
   @Override
-  public void init(Controller controller, Model model, Stage stage, MFXStepper stepper) {
+  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
     this.model = model;
     this.controller = controller;
     this.stage = stage;

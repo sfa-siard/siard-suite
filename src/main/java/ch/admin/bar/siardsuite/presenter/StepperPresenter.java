@@ -4,7 +4,6 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.Step;
-import ch.admin.bar.siardsuite.presenter.archive.ArchiveDbPresenter;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -42,7 +41,7 @@ public abstract class StepperPresenter extends Presenter {
     try {
       FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
       Node container = loader.load();
-      loader.<ArchiveDbPresenter>getController().init(this.controller, this.model, this.stage, stepper);
+      loader.<StepperPresenter>getController().init(this.controller, this.model, this.stage, stepper);
       return container;
     } catch (IOException e) {
       throw new RuntimeException(e);
