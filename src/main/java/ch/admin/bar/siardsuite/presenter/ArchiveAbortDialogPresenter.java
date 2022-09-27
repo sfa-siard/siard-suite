@@ -7,48 +7,42 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 public class ArchiveAbortDialogPresenter extends DialogPresenter {
 
   @FXML
-  public Text dialogText;
+  public Text text;
   @FXML
-  public Text dialogTitle;
+  public MFXButton closeButton; // seems redundant
   @FXML
-  public HBox buttonsBox;
-  @FXML
-  private Button close;
-
-  @FXML
-  private MFXButton proceedButton;
-  @FXML
-  private MFXButton cancelButton;
+  public HBox buttonBox;
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
+    this.model = model;
+    this.controller = controller;
+    this.stage = stage;
 
-    this.dialogTitle.textProperty().bind(I18n.createStringBinding("archiveAbortDialog.title"));
-    this.dialogText.textProperty().bind(I18n.createStringBinding("archiveAbortDialog.text"));
+    setTitle("archiveAbortDialog.title");
+    this.text.textProperty().bind(I18n.createStringBinding("archiveAbortDialog.text"));
 
-    this.proceedButton = new MFXButton();
-    this.proceedButton.textProperty().bind(I18n.createStringBinding("button.proceed"));
-    this.proceedButton.getStyleClass().setAll("button", "secondary");
-    this.proceedButton.setManaged(true);
-    this.cancelButton = new MFXButton();
-    this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancelArchive"));
-    this.cancelButton.getStyleClass().setAll("button", "primary");
-    this.cancelButton.setManaged(true);
+    final MFXButton cancelArchiveButton = new MFXButton();
+    cancelArchiveButton.textProperty().bind(I18n.createStringBinding("button.cancel.archive"));
+    cancelArchiveButton.getStyleClass().setAll("button", "primary");
+    cancelArchiveButton.setManaged(true);
 
-    this.buttonsBox.getChildren().addAll(this.proceedButton, this.cancelButton);
-
-    this.close.setOnAction(event -> stage.closeDialog());
-    this.cancelButton.setOnAction(event -> {
+    cancelArchiveButton.setOnAction(event -> {
       stage.closeDialog();
       stage.navigate(View.START.getName());
     });
-    this.proceedButton.setOnAction(event -> stage.closeDialog());
+
+    closeButton.setOnAction(event -> stage.closeDialog());
+
+    final MFXButton proceedArchiveButton = getCancelButton();
+    proceedArchiveButton.textProperty().bind(I18n.createStringBinding("button.proceed.archive"));
+
+    buttonBox.getChildren().addAll(proceedArchiveButton, cancelArchiveButton);
   }
 }
