@@ -32,6 +32,14 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   public VBox rightVBox;
   @FXML
   public TextFlow textFlow;
+  @FXML
+  public Label subtitleLeft;
+  @FXML
+  public Label subtitleRight;
+  @FXML
+  public Text textLeft;
+  @FXML
+  public Text textRight;
 
   @FXML
   private MFXButton nextButton;
@@ -55,8 +63,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.controller = controller;
     this.stage = stage;
 
-    title.textProperty().bind(I18n.createStringBinding("archiveConnection.view.title"));
-
     addTextWithStyles();
 
     this.nextButton = new MFXButton();
@@ -77,10 +83,15 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   }
 
   private void addTextWithStyles() {
+    this.title.textProperty().bind(I18n.createStringBinding("archiveConnection.view.title"));
+    this.subtitleLeft.textProperty().bind(I18n.createStringBinding("archiveConnection.view.subtitleLeft"));
+    this.subtitleRight.textProperty().bind(I18n.createStringBinding("archiveConnection.view.subtitleRight"));
+    this.textLeft.textProperty().bind(I18n.createStringBinding("archiveConnection.view.textLeft"));
+    this.textRight.textProperty().bind(I18n.createStringBinding("archiveConnection.view.textRight"));
+
     for (int i = 0; i < textFlow.getChildren().size(); i++) {
       Text text = (Text) textFlow.getChildren().get(i);
       text.textProperty().bind(I18n.createStringBinding("archiveConnection.view.text" + i));
-      text.getStyleClass().addAll("view-text");
     }
     text1.getStyleClass().add("bold");
     text3.getStyleClass().add("bold");

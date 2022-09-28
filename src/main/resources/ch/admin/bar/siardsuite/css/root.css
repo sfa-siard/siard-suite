@@ -20,6 +20,18 @@
     -fx-my-font-family: 'Roboto Regular';
 }
 
+.h2 {
+    -fx-font-weight: bold;
+    -fx-font-size: 22.0;
+    -fx-font-family: "Roboto Medium";
+}
+
+.h3 {
+    -fx-font-weight: bold;
+    -fx-font-size: 18.0;
+    -fx-font-family: "Roboto Medium";
+}
+
 /* Header */
 .header {
     -fx-background-color: -fx-header-background-color;
@@ -257,18 +269,6 @@
 
 /* Views */
 
-.h2 {
-    -fx-font-weight: bold;
-    -fx-font-size: 22.0;
-    -fx-font-family: "Roboto Medium";
-}
-
-.h3 {
-    -fx-font-weight: bold;
-    -fx-font-size: 18.0;
-    -fx-font-family: "Roboto Medium";
-}
-
 .view-text {
     -fx-font-family: -fx-my-font-family;
     -fx-font-size: 14.0;
@@ -296,4 +296,20 @@
 
 .radio-button:selected .radio {
 	-fx-stroke: #1F2933;
+}
+
+.label-icon {
+    -fx-max-height: 24;
+    -fx-max-width: infinity;
+    -fx-label-padding: 0 0 0 0;
+    -fx-graphic-text-gap: 1.2em;
+    -fx-content-display: RIGHT;
+}
+
+.server-icon {
+    -fx-graphic: url(../icons/server.png);
+}
+
+.user-icon {
+    -fx-graphic: url(../icons/user.png);
 }
