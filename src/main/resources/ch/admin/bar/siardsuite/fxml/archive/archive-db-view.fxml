@@ -5,9 +5,9 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.Label?>
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18"
+            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.ArchiveDbPresenter">
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveDbPresenter">
 
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">

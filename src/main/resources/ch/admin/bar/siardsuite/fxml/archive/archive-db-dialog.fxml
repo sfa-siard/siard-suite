@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="346.0" prefWidth="418.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../css/root.css"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveDbDialogPresenter">
+    <BorderPane maxHeight="1.7976931348623157E308" prefHeight="408.0" prefWidth="418.0">
+        <top>
+            <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0"
+                        BorderPane.alignment="CENTER">
+                <left>
+                    <VBox prefHeight="61.0" prefWidth="330.0" BorderPane.alignment="CENTER">
+                        <children>
+                            <Text fx:id="dialogTitle" styleClass="dialog-title">
+                            </Text>
+                            <Text fx:id="dialogText" styleClass="dialog-text"
+                                  textOrigin="BOTTOM" wrappingWidth="329.943359375"/>
+                        </children>
+                    </VBox>
+                </left>
+                <right>
+                    <MFXButton fx:id="close" prefHeight="26.0" prefWidth="37.0" text="x"
+                               BorderPane.alignment="TOP_RIGHT"/>
+                </right>
+            </BorderPane>
+        </top>
+        <center>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <top>
+                    <MFXButton fx:id="createNewConnection" BorderPane.alignment="CENTER"/>
+                </top>
+            </BorderPane>
+        </center>
+        <bottom>
+            <MFXButton fx:id="cancel"  BorderPane.alignment="CENTER_LEFT"/>
+        </bottom>
+    </BorderPane>
+</AnchorPane>
