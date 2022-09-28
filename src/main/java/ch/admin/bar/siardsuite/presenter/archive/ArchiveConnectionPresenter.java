@@ -10,12 +10,15 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
 
   @FXML
   public Label errorMessage;
+  public Text title;
+  public Text text;
   @FXML
   private MFXButton nextButton;
   @FXML
@@ -37,6 +40,9 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.model = model;
     this.controller = controller;
     this.stage = stage;
+
+    title.textProperty().bind(I18n.createStringBinding("archiveConnection.view.title"));
+    text.textProperty().bind(I18n.createStringBinding("archiveConnection.view.text"));
 
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));

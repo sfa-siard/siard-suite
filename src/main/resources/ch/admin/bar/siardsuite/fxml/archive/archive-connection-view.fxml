@@ -13,7 +13,7 @@
         <VBox BorderPane.alignment="TOP_LEFT">
             <children>
                 <Text fx:id="title" styleClass="title" strokeType="OUTSIDE" strokeWidth="0.0"/>
-                <Text fx:id="text" styleClass="view-text" strokeType="OUTSIDE" lineSpacing="8.0" strokeWidth="0.0" wrappingWidth="420.0">
+                <Text fx:id="text" styleClass="view-text" strokeType="OUTSIDE" lineSpacing="8.0" strokeWidth="0.0">
                     <VBox.margin>
                         <Insets bottom="25.0" top="25.0"/>
                     </VBox.margin>
