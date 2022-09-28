@@ -7,8 +7,8 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="300.0" prefWidth="480.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18"
-            xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/root.css" styleClass="dialog"
-            fx:controller="ch.admin.bar.siardsuite.presenter.ArchiveAbortDialogPresenter">
+            xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../css/root.css" styleClass="dialog"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveAbortDialogPresenter">
     <center>
         <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0"
                     BorderPane.alignment="CENTER">

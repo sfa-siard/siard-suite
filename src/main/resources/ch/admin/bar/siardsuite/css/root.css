@@ -9,7 +9,7 @@
 
 @font-face {
     font-family: 'Roboto Regular';
-    font-weight: normal;
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
     src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
@@ -17,7 +17,7 @@
 
 * {
     -fx-header-background-color: #323f4b;
-    -fx-my-font-family: 'Roboto Regular'
+    -fx-my-font-family: 'Roboto Regular';
 }
 
 /* Header */
@@ -28,7 +28,7 @@
 }
 
 .header-app-label {
-    -fx-graphic: url(../icons/u10_m.png);
+    -fx-graphic: url(../icons/logo.png);
     -fx-max-height: 24;
     -fx-max-width: infinity;
     -fx-font-size: 14;
@@ -257,28 +257,37 @@
 
 /* Views */
 
-.title {
+.h2 {
     -fx-font-weight: bold;
     -fx-font-size: 22.0;
+    -fx-font-family: "Roboto Medium";
+}
+
+.h3 {
+    -fx-font-weight: bold;
+    -fx-font-size: 18.0;
     -fx-font-family: "Roboto Medium";
 }
 
 .view-text {
     -fx-font-family: -fx-my-font-family;
     -fx-font-size: 14.0;
-    -fx-spacing: 8.0 ;
+    -fx-fill: #52606D;
+}
+
+.bold {
+    -fx-font-weight: bold;
 }
 
 .error-text {
     -fx-font-family: -fx-my-font-family;
     -fx-font-size: 12.0;
-    -fx-text-fill: red;
-    /*-fx-text-fill: #D9001B;*/
+    -fx-text-fill: #D9001B;
 }
 
 .radio-button {
     -fx-font-family: -fx-my-font-family;
-    -fx-font-size: 18.0;
+    -fx-font-size: 16.0;
 }
 
 .radio-button .dot {

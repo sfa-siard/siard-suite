@@ -10,15 +10,29 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
 
   @FXML
   public Label errorMessage;
+  @FXML
   public Text title;
-  public Text text;
+  @FXML
+  public Text text1;
+  @FXML
+  public Text text3;
+
+  @FXML
+  public VBox leftVBox;
+  @FXML
+  public VBox rightVBox;
+  @FXML
+  public TextFlow textFlow;
+
   @FXML
   private MFXButton nextButton;
   @FXML
@@ -42,7 +56,8 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.stage = stage;
 
     title.textProperty().bind(I18n.createStringBinding("archiveConnection.view.title"));
-    text.textProperty().bind(I18n.createStringBinding("archiveConnection.view.text"));
+
+    addTextWithStyles();
 
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
@@ -59,6 +74,16 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     this.buttonsBox.getChildren().addAll(this.previousButton, this.cancelButton, this.nextButton);
     this.setListeners(stepper);
+  }
+
+  private void addTextWithStyles() {
+    for (int i = 0; i < textFlow.getChildren().size(); i++) {
+      Text text = (Text) textFlow.getChildren().get(i);
+      text.textProperty().bind(I18n.createStringBinding("archiveConnection.view.text" + i));
+      text.getStyleClass().addAll("view-text");
+    }
+    text1.getStyleClass().add("bold");
+    text3.getStyleClass().add("bold");
   }
 
   private void setListeners(MFXStepper stepper) {
