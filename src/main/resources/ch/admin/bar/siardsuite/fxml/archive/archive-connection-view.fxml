@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -9,73 +11,146 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveConnectionPresenter">
-
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveConnectionPresenter">
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
             <children>
-                <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2"/>
-                <TextFlow fx:id="textFlow" lineSpacing="8.0">
-                    <Text fx:id="text0" styleClass="view-text"/>
-                    <Text fx:id="text1" styleClass="view-text"/>
-                    <Text fx:id="text2" styleClass="view-text"/>
-                    <Text fx:id="text3" styleClass="view-text"/>
-                    <Text fx:id="text4" styleClass="view-text"/>
-                    <VBox.margin>
-                        <Insets bottom="25.0" top="25.0"/>
-                    </VBox.margin>
-                </TextFlow>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                      <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" />
+                      <TextFlow fx:id="textFlow" lineSpacing="8.0">
+                          <Text fx:id="text0" styleClass="view-text" />
+                          <Text fx:id="text1" styleClass="view-text" />
+                          <Text fx:id="text2" styleClass="view-text" />
+                          <Text fx:id="text3" styleClass="view-text" />
+                          <Text fx:id="text4" styleClass="view-text" />
+                          <VBox.margin>
+                              <Insets bottom="25.0" top="25.0" />
+                          </VBox.margin>
+                      </TextFlow>
+               </children>
+               <VBox.margin>
+                  <Insets left="25.0" right="25.0" />
+               </VBox.margin>
+            </VBox>
                 <HBox prefHeight="100.0" prefWidth="600.0">
                     <children>
-                        <VBox fx:id="leftVBox" prefHeight="200.0" prefWidth="680.0">
+                        <VBox fx:id="leftVBox" prefHeight="200.0" prefWidth="700.0">
                             <Label fx:id="subtitleLeft">
                                 <styleClass>
-                                    <String fx:value="h3"/>
-                                    <String fx:value="label-icon"/>
-                                    <String fx:value="server-icon"/>
+                                    <String fx:value="h3" />
+                                    <String fx:value="label-icon" />
+                                    <String fx:value="server-icon" />
                                 </styleClass>
                             </Label>
                             <Text fx:id="textLeft" lineSpacing="8.0" styleClass="view-text">
                                 <VBox.margin>
-                                    <Insets bottom="25.0" top="25.0"/>
+                                    <Insets bottom="25.0" top="25.0" />
                                 </VBox.margin>
                             </Text>
                         </VBox>
                         <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="450.0">
                             <Label fx:id="subtitleRight">
                                 <styleClass>
-                                    <String fx:value="h3"/>
-                                    <String fx:value="label-icon"/>
-                                    <String fx:value="user-icon"/>
+                                    <String fx:value="h3" />
+                                    <String fx:value="label-icon" />
+                                    <String fx:value="user-icon" />
                                 </styleClass>
                             </Label>
                             <Text fx:id="textRight" lineSpacing="8.0" styleClass="view-text">
                                 <VBox.margin>
-                                    <Insets bottom="25.0" top="25.0"/>
+                                    <Insets bottom="25.0" top="25.0" />
                                 </VBox.margin>
                             </Text>
                         </VBox>
                     </children>
                     <VBox.margin>
-                        <Insets top="25.0"/>
+                        <Insets left="25.0" right="25.0" top="25.0" />
                     </VBox.margin>
                 </HBox>
+            <HBox styleClass="form-box">
+               <children>
+                  <VBox>
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <MFXTextField styleClass="form-field" floatingText="Datenbank-Server" maxWidth="458.0"  minWidth="458.0" promptText="dbserver.organisation.org">
+                                 <HBox.margin>
+                                    <Insets right="25.0" />
+                                 </HBox.margin>
+                              </MFXTextField>
+                              <MFXTextField floatMode="ABOVE" floatingText="Port-Nummer" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="96.0" measureUnitGap="59.0" minHeight="50.0" minWidth="-Infinity" prefColumnCount="0" promptText="1433" text="1433" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <MFXTextField floatMode="ABOVE" floatingText="Datenbank-Name" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="458.0" measureUnitGap="59.0" minHeight="50.0" nodeOrientation="LEFT_TO_RIGHT" prefColumnCount="16">
+                           <padding>
+                              <Insets bottom="2.0" left="-2.0" right="2.0" top="2.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </MFXTextField>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="50.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <MFXTextField floatMode="ABOVE" floatingText="Benutzername" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="458.0" measureUnitGap="59.0" minHeight="50.0" nodeOrientation="LEFT_TO_RIGHT" prefColumnCount="16" promptText="dbserver.organisation.org">
+                           <padding>
+                              <Insets bottom="2.0" left="-2.0" right="2.0" top="2.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </MFXTextField>
+                        <MFXPasswordField floatMode="ABOVE" floatingText="Passwort" maxHeight="50.0" maxWidth="444.0" minHeight="50.0">
+                           <VBox.margin>
+                              <Insets top="60.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                           </padding>
+                        </MFXPasswordField>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="50.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox styleClass="form-box">
+               <children>
+                  <MFXTextField floatMode="ABOVE" floatingText="Connection URL" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="1.7976931348623157E308" measureUnitGap="59.0" minHeight="50.0" nodeOrientation="LEFT_TO_RIGHT" prefColumnCount="16" promptText="jdbc:{server}://{db-server}:{port};databaseName={dbName}" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="2.0" left="-2.0" right="2.0" top="2.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="50.0" />
+                     </HBox.margin>
+                  </MFXTextField>
+               </children>
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
+            </HBox>
                 <Label fx:id="errorMessage" styleClass="error-text">
                     <VBox.margin>
-                        <Insets bottom="25.0" top="25.0"/>
+                        <Insets bottom="25.0" top="25.0" />
                     </VBox.margin>
                 </Label>
             </children>
             <BorderPane.margin>
-                <Insets left="50.0" right="50.0" top="50.0"/>
+                <Insets left="25.0" right="25.0" top="50.0" />
             </BorderPane.margin>
         </VBox>
     </center>
     <bottom>
-        <HBox fx:id="buttonsBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-              minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
+        <HBox fx:id="buttonsBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
         </HBox>
     </bottom>
 </BorderPane>

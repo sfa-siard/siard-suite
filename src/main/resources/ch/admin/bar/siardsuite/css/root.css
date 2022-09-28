@@ -313,3 +313,28 @@
 .user-icon {
     -fx-graphic: url(../icons/user.png);
 }
+
+.form-box {
+    -fx-background-color: #f5f7fa;
+}
+
+.form-field {
+    -fx-padding: 2 2 2 -2;
+    -mfx-float-mode: ABOVE;
+    -fx-max-height: 50;
+    -fx-min-height: 50;
+    -fx-border-color: #b0afaf;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-radius: 0;
+    -fx-text-fill: black;
+}
+
+.mfx-text-field .floating-text {
+    -fx-padding: 0 0 8 -12;
+    -fx-text-fill: #52606D;
+    -fx-background-color: transparent;
+    -fx-font-family: -fx-my-font-family;
+    -fx-font-size: 14.0;
+}
+
+

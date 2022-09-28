@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import java.lang.String?>
-<BorderPane fx:id="rootPane" maxWidth="1.7976931348623157E308" prefHeight="-Infinity" prefWidth="1440.0"
+<BorderPane fx:id="rootPane" maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"  prefWidth="1440.0"
             stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
     <top>
