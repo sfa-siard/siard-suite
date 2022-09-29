@@ -176,8 +176,8 @@
     -mfx-float-mode: disabled;
 }
 
-.mfx-text-field,
-.mfx-text-field .text-field,
+.mfx-stepper-toggle .mfx-text-field,
+.mfx-stepper-toggle .mfx-text-field .text-field,
 .custom-stepper-toggle .mfx-text-field .text-field {
     -fx-text-fill: #000000;
     -fx-opacity: 0.7;
@@ -316,6 +316,8 @@
 
 .form-box {
     -fx-background-color: #f5f7fa;
+    -fx-font-family: -fx-my-font-family;
+    -fx-font-size: 14.0;
 }
 
 .form-field {
@@ -324,17 +326,27 @@
     -fx-max-height: 50;
     -fx-min-height: 50;
     -fx-border-color: #b0afaf;
-    -fx-border-width: 1 1 1 1;
+    -fx-border-width: 1;
     -fx-border-radius: 0;
     -fx-text-fill: black;
 }
 
-.mfx-text-field .floating-text {
+.form-box .mfx-text-field .text-field {
+    /*-fx-highlight-fill: #ECE0FD; !* Selected text highlight *!*/
+    -fx-prompt-text-fill: #9aa5b1; /* Prompt text color */
+    -fx-padding: 0 0 0 17;
+}
+
+.form-box .mfx-text-field .floating-text {
     -fx-padding: 0 0 8 -12;
     -fx-text-fill: #52606D;
     -fx-background-color: transparent;
-    -fx-font-family: -fx-my-font-family;
-    -fx-font-size: 14.0;
 }
 
+.mfx-text-field:focus-within {
+    -fx-background-insets: 0;
+    -fx-border-color: #b0afaf;
+    -fx-border-width: 1;
+    -fx-border-insets: 0;
+}
 

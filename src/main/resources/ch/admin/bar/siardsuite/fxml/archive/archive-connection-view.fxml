@@ -15,7 +15,7 @@
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
             <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefWidth="100.0">
                <children>
                       <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" />
                       <TextFlow fx:id="textFlow" lineSpacing="8.0">
@@ -35,7 +35,7 @@
             </VBox>
                 <HBox prefHeight="100.0" prefWidth="600.0">
                     <children>
-                        <VBox fx:id="leftVBox" prefHeight="200.0" prefWidth="700.0">
+                        <VBox fx:id="leftVBox" prefWidth="690.0">
                             <Label fx:id="subtitleLeft">
                                 <styleClass>
                                     <String fx:value="h3" />
@@ -49,7 +49,7 @@
                                 </VBox.margin>
                             </Text>
                         </VBox>
-                        <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="450.0">
+                        <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="470.0">
                             <Label fx:id="subtitleRight">
                                 <styleClass>
                                     <String fx:value="h3" />
@@ -65,27 +65,27 @@
                         </VBox>
                     </children>
                     <VBox.margin>
-                        <Insets left="25.0" right="25.0" top="25.0" />
+                        <Insets bottom="15.0" left="25.0" right="25.0" top="25.0" />
                     </VBox.margin>
                 </HBox>
             <HBox styleClass="form-box">
                <children>
-                  <VBox>
+                  <VBox prefWidth="670.0">
                      <children>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <MFXTextField styleClass="form-field" floatingText="Datenbank-Server" maxWidth="458.0"  minWidth="458.0" promptText="dbserver.organisation.org">
+                              <MFXTextField fx:id="dbServerField" maxWidth="458.0" minWidth="458.0" styleClass="form-field">
                                  <HBox.margin>
                                     <Insets right="25.0" />
                                  </HBox.margin>
                               </MFXTextField>
-                              <MFXTextField floatMode="ABOVE" floatingText="Port-Nummer" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="96.0" measureUnitGap="59.0" minHeight="50.0" minWidth="-Infinity" prefColumnCount="0" promptText="1433" text="1433" />
+                              <MFXTextField fx:id="portField" minWidth="-Infinity" prefWidth="96.0" styleClass="form-field" />
                            </children>
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                         </HBox>
-                        <MFXTextField floatMode="ABOVE" floatingText="Datenbank-Name" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="458.0" measureUnitGap="59.0" minHeight="50.0" nodeOrientation="LEFT_TO_RIGHT" prefColumnCount="16">
+                        <MFXTextField fx:id="dbNameField" maxWidth="578.0" styleClass="form-field">
                            <padding>
                               <Insets bottom="2.0" left="-2.0" right="2.0" top="2.0" />
                            </padding>
@@ -95,12 +95,15 @@
                         </MFXTextField>
                      </children>
                      <HBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="50.0" />
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="60.0" />
                      </HBox.margin>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
                   </VBox>
-                  <VBox>
+                  <VBox prefWidth="470.0">
                      <children>
-                        <MFXTextField floatMode="ABOVE" floatingText="Benutzername" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="458.0" measureUnitGap="59.0" minHeight="50.0" nodeOrientation="LEFT_TO_RIGHT" prefColumnCount="16" promptText="dbserver.organisation.org">
+                        <MFXTextField fx:id="usernameField" floatMode="ABOVE" floatingText="Benutzername" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="1.7976931348623157E308" measureUnitGap="59.0" minHeight="50.0" nodeOrientation="LEFT_TO_RIGHT" prefColumnCount="16" promptText="dbserver.organisation.org" styleClass="form-field">
                            <padding>
                               <Insets bottom="2.0" left="-2.0" right="2.0" top="2.0" />
                            </padding>
@@ -108,7 +111,7 @@
                               <Insets />
                            </VBox.margin>
                         </MFXTextField>
-                        <MFXPasswordField floatMode="ABOVE" floatingText="Passwort" maxHeight="50.0" maxWidth="444.0" minHeight="50.0">
+                        <MFXPasswordField fx:id="passwordField" floatMode="ABOVE" floatingText="Passwort" maxHeight="50.0" maxWidth="1.7976931348623157E308" minHeight="50.0" styleClass="form-field">
                            <VBox.margin>
                               <Insets top="60.0" />
                            </VBox.margin>
@@ -118,19 +121,19 @@
                         </MFXPasswordField>
                      </children>
                      <HBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="50.0" />
+                        <Insets bottom="25.0" right="25.0" top="60.0" />
                      </HBox.margin>
                   </VBox>
                </children>
             </HBox>
             <HBox styleClass="form-box">
                <children>
-                  <MFXTextField floatMode="ABOVE" floatingText="Connection URL" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="1.7976931348623157E308" measureUnitGap="59.0" minHeight="50.0" nodeOrientation="LEFT_TO_RIGHT" prefColumnCount="16" promptText="jdbc:{server}://{db-server}:{port};databaseName={dbName}" HBox.hgrow="ALWAYS">
+                  <MFXTextField fx:id="urlField" floatMode="ABOVE" floatingText="Connection URL" floatingTextGap="8.0" graphicTextGap="0.0" maxHeight="50.0" maxWidth="1.7976931348623157E308" measureUnitGap="0.0" minHeight="50.0" nodeOrientation="LEFT_TO_RIGHT" prefColumnCount="16" promptText="jdbc:{server}://{db-server}:{port};databaseName={dbName}" styleClass="form-field" HBox.hgrow="ALWAYS">
                      <padding>
                         <Insets bottom="2.0" left="-2.0" right="2.0" top="2.0" />
                      </padding>
                      <HBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="50.0" />
+                        <Insets bottom="25.0" left="25.0" right="25.0" top="60.0" />
                      </HBox.margin>
                   </MFXTextField>
                </children>

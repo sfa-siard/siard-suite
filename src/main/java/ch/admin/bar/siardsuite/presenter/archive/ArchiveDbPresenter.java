@@ -98,6 +98,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
       if (selected != null) {
         controller.setDatabaseType(selected.getText());
         this.errorMessage.setVisible(false);
+        this.stage.setHeight(1000.00);
         stepper.next();
       } else {
         this.errorMessage.setVisible(true);

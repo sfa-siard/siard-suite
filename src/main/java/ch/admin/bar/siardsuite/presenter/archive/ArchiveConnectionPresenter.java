@@ -6,14 +6,15 @@ import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
 
@@ -40,6 +41,18 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   public Text textLeft;
   @FXML
   public Text textRight;
+  @FXML
+  public MFXTextField dbServerField;
+  @FXML
+  public MFXTextField dbNameField;
+  @FXML
+  public MFXTextField usernameField;
+  @FXML
+  public MFXTextField urlField;
+  @FXML
+  public MFXPasswordField passwordField;
+  @FXML
+  public MFXTextField portField;
 
   @FXML
   private MFXButton nextButton;
@@ -64,6 +77,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.stage = stage;
 
     addTextWithStyles();
+    addFormText();
 
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
@@ -97,6 +111,15 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     text3.getStyleClass().add("bold");
   }
 
+  private void addFormText() {
+    dbServerField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbServer.label"));
+    dbServerField.promptTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbServer.prompt"));
+    portField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.port.label"));
+    portField.setText("1433");
+    portField.setPromptText("1433");
+    dbNameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbName.label"));
+  }
+
   private void setListeners(MFXStepper stepper) {
     this.nextButton.setOnAction((event) -> {
 //        controller.setDatabaseType(selected.getText());
@@ -104,6 +127,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 //        stepper.next();
     });
     this.previousButton.setOnAction((event) -> {
+      this.stage.setHeight(700.00);
       stepper.previous();
     });
     this.cancelButton.setOnAction((event) -> {
