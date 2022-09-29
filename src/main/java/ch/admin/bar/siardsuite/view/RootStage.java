@@ -65,6 +65,7 @@ public class RootStage extends Stage {
   }
 
   public void navigate(String viewName) {
+    model.setCurrentView(viewName);
     setCenter(rootPane, viewName);
   }
 

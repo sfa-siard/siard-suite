@@ -228,23 +228,21 @@
 
 .dialog {
     -fx-background-color: WHITE;
+    -fx-font-family: -fx-my-font-family;
+    -fx-padding: 25 25 25 25;
 }
-
 
 .dialog .btn-box {
     -fx-alignment: CENTER_LEFT;
-    -fx-padding: 25 50 25 50;
 }
 
-.dialog .btn-box .button {
+.dialog .button {
     -fx-min-width: 148px;
     -fx-min-height: 42px;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
-    -fx-font-family: -fx-my-font-family;
     -fx-font-size: 14px;
 }
-
 
 .dialog-title {
     -fx-font-weight: bold;
@@ -253,6 +251,8 @@
 
 .dialog-text {
     -fx-wrap-text: break-word;
+    -fx-font-size: 14px;
+    -fx-line-spacing: 8.0;
 }
 
 /* Views */
