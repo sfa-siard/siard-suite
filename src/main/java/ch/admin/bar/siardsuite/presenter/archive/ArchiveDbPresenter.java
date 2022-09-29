@@ -64,6 +64,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
     this.errorMessage.setVisible(false);
     this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveDb.view.error"));
 
+    //TODO replace values with existing types from siard-cmd/SiardConnection.java
     List.of("MS Access", "DB/2", "H2 Database", "MySQL").forEach(s -> createRadioToVBox(s, leftVBox));
     List.of("Oracle", "PostgreSQL", "Microsoft SQL Server").forEach(s -> createRadioToVBox(s, rightVBox));
 
@@ -98,8 +99,9 @@ public class ArchiveDbPresenter extends StepperPresenter {
       if (selected != null) {
         controller.setDatabaseType(selected.getText());
         this.errorMessage.setVisible(false);
-        this.stage.setHeight(1000.00);
+        this.stage.setHeight(1280.00);
         stepper.next();
+        //fire event
       } else {
         this.errorMessage.setVisible(true);
       }

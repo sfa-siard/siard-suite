@@ -5,12 +5,10 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXPasswordField;
-import io.github.palexdev.materialfx.controls.MFXStepper;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -26,7 +24,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   public Text text1;
   @FXML
   public Text text3;
-
   @FXML
   public VBox leftVBox;
   @FXML
@@ -53,7 +50,12 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   public MFXPasswordField passwordField;
   @FXML
   public MFXTextField portField;
-
+  @FXML
+  public MFXTextField connectionName;
+  @FXML
+  public MFXToggleButton toggleSave;
+  @FXML
+  public BorderPane borderPane;
   @FXML
   private MFXButton nextButton;
   @FXML
@@ -78,7 +80,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     addTextWithStyles();
     addFormText();
-
+    this.errorMessage.setVisible(false);
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
     this.nextButton.getStyleClass().setAll("button", "primary");
@@ -102,6 +104,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.subtitleRight.textProperty().bind(I18n.createStringBinding("archiveConnection.view.subtitleRight"));
     this.textLeft.textProperty().bind(I18n.createStringBinding("archiveConnection.view.textLeft"));
     this.textRight.textProperty().bind(I18n.createStringBinding("archiveConnection.view.textRight"));
+    this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error"));
 
     for (int i = 0; i < textFlow.getChildren().size(); i++) {
       Text text = (Text) textFlow.getChildren().get(i);
@@ -118,20 +121,39 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     portField.setText("1433");
     portField.setPromptText("1433");
     dbNameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbName.label"));
+    usernameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.username.label"));
+    passwordField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.password.label"));
+    urlField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.url.label"));
+//    urlField.setPromptText("jdbc:" + model.getDatabaseDriver() + "://dbserver.organisation.org:1433;databaseName=test-db");
+    toggleSave.textProperty().bind(I18n.createStringBinding("archiveConnection.view.toggleSave"));
+    connectionName.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.connectionName.label"));
   }
 
+
+
   private void setListeners(MFXStepper stepper) {
+
+
+    toggleSave.setOnAction(event -> {
+      this.connectionName.setVisible(!this.connectionName.isVisible());
+    });
+
     this.nextButton.setOnAction((event) -> {
-//        controller.setDatabaseType(selected.getText());
+      if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
+        this.errorMessage.setVisible(true);
+      } else {
+        //        controller.setDatabaseType(selected.getText());
 //        this.errorMessage.setVisible(false);
 //        stepper.next();
+      }
+
     });
     this.previousButton.setOnAction((event) -> {
       this.stage.setHeight(700.00);
       stepper.previous();
     });
     this.cancelButton.setOnAction((event) -> {
-        // AbortDialog
+      // AbortDialog
     });
   }
 }

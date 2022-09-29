@@ -5,7 +5,7 @@ public class Model {
 
   private String currentView = View.START.getName();
 
-  private SiardArchive archive;
+  private SiardArchive archive = new SiardArchive();
   public Model() {
 
   }
@@ -22,5 +22,9 @@ public class Model {
       this.archive = new SiardArchive();
     }
     this.archive.setDatabaseProduct(databaseType);
+  }
+
+  public String getDatabaseDriver() {
+    return this.archive.getDatabaseProduct();
   }
 }

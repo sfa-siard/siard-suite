@@ -17,7 +17,12 @@
 
 * {
     -fx-header-background-color: #323f4b;
-    -fx-my-font-family: 'Roboto Regular';
+    siard-font-family: 'Roboto Regular';
+    siard-text-color: #52606D;
+}
+
+.root-center {
+    -fx-background-color: #f5f7fa;
 }
 
 .h2 {
@@ -44,12 +49,12 @@
     -fx-max-height: 24;
     -fx-max-width: infinity;
     -fx-font-size: 14;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: white;
     -fx-label-padding: 0 0 0 1.5em;
     -fx-graphic-text-gap: 0.8em;
 }
 
-.header-button {
+.icon-button {
     -fx-background-color: transparent;
     -fx-max-height: 24;
     -fx-content-display: graphic-only;
@@ -93,7 +98,7 @@
 }
 
 .menu-item .label {
-    -fx-text-fill: #000000;
+    -fx-text-fill: black;
 }
 
 .help-icon {
@@ -123,7 +128,7 @@
 }
 
 .mfx-stepper .content-pane {
-    -fx-background-color: #ffffff;
+    -fx-background-color: white;
 }
 
 .mfx-stepper .track {
@@ -140,7 +145,7 @@
     -fx-background-color: #e4e7eb;
     -fx-pref-height: 52;
     -fx-alignment: CENTER_LEFT;
-    -fx-text-fill: #000000 ;
+    -fx-text-fill: black ;
     -mfx-label-text-gap: 12.0;
 }
 
@@ -154,7 +159,7 @@
 .number-btn {
     -fx-shape: "M 159 96  C 165.16 96  170 100.84  170 107  C 170 113.16  165.16 118  159 118  C 152.84 118  148 113.16  148 107  C 148 100.84  152.84 96  159 96  Z ";
     -fx-background-color: #9aa5b1;
-    -fx-text-fill: #000000 ;
+    -fx-text-fill: black ;
     -fx-font-size: 11px;
     -fx-opacity: 0.5;
     -fx-font-family: "Roboto Medium";
@@ -179,7 +184,7 @@
 .mfx-stepper-toggle .mfx-text-field,
 .mfx-stepper-toggle .mfx-text-field .text-field,
 .custom-stepper-toggle .mfx-text-field .text-field {
-    -fx-text-fill: #000000;
+    -fx-text-fill: black;
     -fx-opacity: 0.7;
     -fx-font-width: 500;
     -fx-alignment: BASELINE_CENTER;
@@ -194,7 +199,7 @@
 .mfx-stepper-toggle:completed .mfx-text-field,
 .custom-stepper-toggle:completed .mfx-text-field {
     -fx-opacity: 1;
-    -fx-text-fill: #000000 ;
+    -fx-text-fill: black ;
 }
 
 .mfx-stepper .btn-box {
@@ -210,7 +215,7 @@
     -fx-min-height: 42px;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-font-size: 14px;
 }
 
@@ -240,7 +245,7 @@
 
 .dialog {
     -fx-background-color: WHITE;
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-padding: 25 25 25 25;
 }
 
@@ -270,9 +275,9 @@
 /* Views */
 
 .view-text {
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-font-size: 14.0;
-    -fx-fill: #52606D;
+    -fx-fill: siard-text-color;
 }
 
 .bold {
@@ -280,13 +285,13 @@
 }
 
 .error-text {
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-font-size: 12.0;
     -fx-text-fill: #D9001B;
 }
 
 .radio-button {
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-font-size: 16.0;
 }
 
@@ -300,7 +305,6 @@
 
 .label-icon {
     -fx-max-height: 24;
-    -fx-max-width: infinity;
     -fx-label-padding: 0 0 0 0;
     -fx-graphic-text-gap: 1.2em;
     -fx-content-display: RIGHT;
@@ -314,10 +318,14 @@
     -fx-graphic: url(../icons/user.png);
 }
 
-.form-box {
+.form-container {
     -fx-background-color: #f5f7fa;
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-font-size: 14.0;
+}
+
+.form-container-white {
+    -fx-background-color: white;
 }
 
 .form-field {
@@ -331,22 +339,42 @@
     -fx-text-fill: black;
 }
 
-.form-box .mfx-text-field .text-field {
+.form-container .mfx-text-field .text-field {
     /*-fx-highlight-fill: #ECE0FD; !* Selected text highlight *!*/
     -fx-prompt-text-fill: #9aa5b1; /* Prompt text color */
     -fx-padding: 0 0 0 17;
 }
 
-.form-box .mfx-text-field .floating-text {
+.form-container .mfx-text-field .floating-text {
     -fx-padding: 0 0 8 -12;
-    -fx-text-fill: #52606D;
+    -fx-text-fill: siard-text-color;
     -fx-background-color: transparent;
 }
 
-.mfx-text-field:focus-within {
+.form-container .mfx-text-field:focus-within {
     -fx-background-insets: 0;
     -fx-border-color: #b0afaf;
     -fx-border-width: 1;
     -fx-border-insets: 0;
+}
+
+.form-container .toggle-button {
+    -mfx-gap: 15.0;
+    -fx-padding: 0 0 0 -1;
+}
+
+.mfx-toggle-button {
+    -mfx-main: siard-text-color;
+    -mfx-secondary: #9aa5b1;
+    -fx-background-color: transparent;
+    -fx-text-fill: siard-text-color;
+}
+
+.info-icon {
+    -fx-graphic: url(../icons/info.png);
+}
+
+.form-container .info-icon:hover {
+    -fx-background-image: url(../icons/archive.png);
 }
 
