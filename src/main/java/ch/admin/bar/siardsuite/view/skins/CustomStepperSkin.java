@@ -43,12 +43,13 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar = new HBox(this.progressBarGroup);
     this.stepperBar.spacingProperty().bind(stepper.spacingProperty());
     this.stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
-    this.stepperBar.getChildren().addAll(stepper.getStepperToggles());
+    this.stepperBar.getChildren().addAll(stepper.getStepperToggles().stream().filter(Node::isVisible).toList());
     this.stepperBar.getStyleClass().setAll("stepper-bar");
     this.stepperBar.setMaxHeight(52.0);
     this.stepperBar.setMinHeight(52.0);
     Double toggleWidth = stepper.getStepperToggles()
             .stream()
+            .filter(Node::isVisible)
             .mapToDouble(
                     t -> this.stepperBar.spacingProperty().get() / 2 + (TextUtils.computeTextWidth(Font.font("Roboto Regular", 13.0), I18n.get(t.textProperty().get())) + (t.getLabelTextGap() + 22))
             ).sum();

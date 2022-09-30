@@ -14,8 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-
-public class ArchivePreviewPresenter extends StepperPresenter {
+public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
   @FXML
   public Label title;
   @FXML
@@ -52,11 +51,12 @@ public class ArchivePreviewPresenter extends StepperPresenter {
   private void setListeners(MFXStepper stepper) {
 
     this.buttonsBox.next().setOnAction((event) -> {
-        stepper.next();
+      stepper.next();
+      this.stage.setHeight(950);
     });
     this.buttonsBox.previous().setOnAction((event) -> {
       stepper.previous();
-      this.stage.setHeight(950);
+      this.stage.setHeight(1080.00);
     });
     this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
   }

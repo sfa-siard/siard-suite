@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css"
             xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchivePreviewPresenter">
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveLoadingPreviewPresenter">
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
             <children>

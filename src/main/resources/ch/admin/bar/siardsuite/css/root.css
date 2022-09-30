@@ -324,6 +324,14 @@
     -fx-graphic: url(../icons/user.png);
 }
 
+.info-icon {
+    -fx-graphic: url(../icons/info.png);
+}
+
+.loading-icon {
+    -fx-graphic: url(../icons/loading.png);
+}
+
 .form-container {
     -fx-background-color: #f5f7fa;
     -fx-font-family: siard-font-family;
@@ -374,10 +382,6 @@
     -mfx-secondary: #9aa5b1;
     -fx-background-color: transparent;
     -fx-text-fill: siard-text-color;
-}
-
-.info-icon {
-    -fx-graphic: url(../icons/info.png);
 }
 
 .form-container .info-tooltip {
