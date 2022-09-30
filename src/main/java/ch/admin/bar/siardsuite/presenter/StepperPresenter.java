@@ -21,13 +21,15 @@ import java.util.stream.Collectors;
 
 public abstract class StepperPresenter extends Presenter {
 
-  Event updateEvent = new SiardEvent(SiardEvent.UPDATE_STEPPER_CONTENT_EVENT);
+  public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);
 
- public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);
+  public Event getUpdateEvent() {
+    return new SiardEvent(SiardEvent.UPDATE_STEPPER_CONTENT_EVENT);
+  }
 
   protected List<MFXStepperToggle> createSteps(List<Step> steps, MFXStepper stepper) {
 
-    return  steps.stream()
+    return steps.stream()
             .map((step) -> createCustomStepperToggle(step.key(), step.position(), loadView(step.contentView(), stepper)))
             .collect(Collectors.toList());
   }
@@ -37,7 +39,7 @@ public abstract class StepperPresenter extends Presenter {
     btn.getStyleClass().setAll("stepper-btn", "number-btn");
     btn.setText(String.valueOf(pos));
     // passing the key is kind of a hack to bind it in the CustomStepperToggleSkin
-    MFXStepperToggle toggle =  new MFXStepperToggle(key, btn, content);
+    MFXStepperToggle toggle = new MFXStepperToggle(key, btn, content);
     toggle.setSkin(new CustomStepperToggleSkin(toggle));
     return toggle;
   }

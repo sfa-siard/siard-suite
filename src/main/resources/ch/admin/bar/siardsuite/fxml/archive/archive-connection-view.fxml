@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import io.github.palexdev.materialfx.controls.MFXToggleButton?>
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
-
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveConnectionPresenter">
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
@@ -27,7 +20,7 @@
                             <Text fx:id="text3" styleClass="view-text" />
                             <Text fx:id="text4" styleClass="view-text" />
                             <VBox.margin>
-                                <Insets bottom="25.0" top="25.0" />
+                                <Insets bottom="24.0" top="15.0" />
                             </VBox.margin>
                         </TextFlow>
                     </children>
@@ -47,7 +40,7 @@
                             </Label>
                             <Text fx:id="textLeft" lineSpacing="8.0" styleClass="view-text">
                                 <VBox.margin>
-                                    <Insets bottom="25.0" top="25.0" />
+                                    <Insets bottom="15.0" top="24.0" />
                                 </VBox.margin>
                             </Text>
                         </VBox>
@@ -61,13 +54,13 @@
                             </Label>
                             <Text fx:id="textRight" lineSpacing="8.0" styleClass="view-text">
                                 <VBox.margin>
-                                    <Insets bottom="25.0" top="25.0" />
+                                    <Insets bottom="15.0" top="24.0" />
                                 </VBox.margin>
                             </Text>
                         </VBox>
                     </children>
                     <VBox.margin>
-                        <Insets bottom="15.0" left="25.0" right="25.0" top="25.0" />
+                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />
                     </VBox.margin>
                 </HBox>
                 <HBox styleClass="form-container">
@@ -94,7 +87,7 @@
                                 </MFXTextField>
                             </children>
                             <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="60.0" />
+                                <Insets bottom="24.0" left="25.0" right="25.0" top="60.0" />
                             </HBox.margin>
                             <padding>
                                 <Insets right="50.0" />
@@ -123,17 +116,17 @@
                     <children>
                         <MFXTextField fx:id="urlField" maxWidth="1.7976931348623157E308" styleClass="form-field" HBox.hgrow="ALWAYS">
                             <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="60.0" />
+                                <Insets bottom="24.0" left="25.0" right="25.0" top="60.0" />
                             </HBox.margin>
                         </MFXTextField>
                     </children>
                     <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="24.0" />
                     </VBox.margin>
                 </HBox>
                 <VBox>
                     <VBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                        <Insets bottom="24.0" left="25.0" right="25.0" top="24.0" />
                     </VBox.margin>
                     <styleClass>
                         <String fx:value="form-container" />
@@ -142,24 +135,24 @@
                     <children>
                         <HBox>
                             <children>
-                                <MFXToggleButton fx:id="toggleSave" prefHeight="50.0" selected="true" styleClass="toggle-button" />
-                                <MFXButton alignment="CENTER" rippleAnimateBackground="false">
+                                <MFXToggleButton fx:id="toggleSave" prefHeight="48.0" selected="true" styleClass="toggle-button" />
+                                <MFXButton fx:id="infoButton" alignment="CENTER" rippleAnimateBackground="false">
                                     <styleClass>
                                         <String fx:value="info-icon" />
                                         <String fx:value="icon-button" />
                                     </styleClass>
                                     <HBox.margin>
-                                        <Insets top="12.0" />
+                                        <Insets left="10.0" top="4.0" />
                                     </HBox.margin>
                                 </MFXButton>
                             </children>
                             <VBox.margin>
-                                <Insets bottom="15.0" top="10.0" />
+                                <Insets bottom="24.0" top="10.0" />
                             </VBox.margin>
                         </HBox>
                         <MFXTextField fx:id="connectionName" maxWidth="1.7976931348623157E308" styleClass="form-field">
                             <VBox.margin>
-                                <Insets bottom="10.0" top="25.0" />
+                                <Insets bottom="10.0" top="24.0" />
                             </VBox.margin>
                         </MFXTextField>
                         <Label fx:id="errorMessage" styleClass="error-text">
@@ -173,7 +166,7 @@
 
             </children>
             <BorderPane.margin>
-                <Insets left="25.0" right="25.0" top="50.0" />
+                <Insets left="25.0" right="25.0" top="48.0" />
             </BorderPane.margin>
         </VBox>
     </center>

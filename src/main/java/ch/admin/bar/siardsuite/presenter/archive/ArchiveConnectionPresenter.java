@@ -2,20 +2,33 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
-
+  private static final String DATABASE_NAME_STRING = "databaseName=";
+  private static final String USERNAME_STRING = "username=";
+  private static final String JDBC = "jdbc:";
+  private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
+  private static final String PORT_STRING = "1433";
+  private static final String TEST_DB = "test-db";
+  private static final String MY_USER = "MyUser";
+  private String dbTypeString;
   @FXML
   public Label errorMessage;
   @FXML
@@ -64,6 +77,10 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   private MFXButton cancelButton;
   @FXML
   private HBox buttonsBox;
+  @FXML
+  public MFXButton infoButton;
+  @FXML
+  private Tooltip tooltip;
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
@@ -80,6 +97,8 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     addTextWithStyles();
     addFormText();
+    makeTooltip();
+
     this.errorMessage.setVisible(false);
     this.nextButton = new MFXButton();
     this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
@@ -118,25 +137,48 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     dbServerField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbServer.label"));
     dbServerField.promptTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbServer.prompt"));
     portField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.port.label"));
-    portField.setText("1433");
-    portField.setPromptText("1433");
+    portField.setText(PORT_STRING);
+    portField.setPromptText(PORT_STRING);
     dbNameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbName.label"));
     usernameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.username.label"));
     passwordField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.password.label"));
     urlField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.url.label"));
-//    urlField.setPromptText("jdbc:" + model.getDatabaseDriver() + "://dbserver.organisation.org:1433;databaseName=test-db");
     toggleSave.textProperty().bind(I18n.createStringBinding("archiveConnection.view.toggleSave"));
     connectionName.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.connectionName.label"));
   }
 
-
+  private void makeTooltip() {
+    tooltip = new Tooltip();
+    tooltip.setPrefSize(328.0, 162);
+    tooltip.setShowDelay(Duration.millis(1));
+    tooltip.setAutoHide(true);
+    tooltip.getStyleClass().add("info-tooltip");
+    tooltip.textProperty().bind(I18n.createStringBinding("archiveConnection.view.tooltip"));
+  }
 
   private void setListeners(MFXStepper stepper) {
+    stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_CONTENT_EVENT, event -> {
+      this.dbTypeString = JDBC + model.getDatabaseDriver() + "://";
+      urlField.setPromptText(dbTypeString + DBSERVER_ORGANISATION_ORG + ":" + PORT_STRING + ";" + DATABASE_NAME_STRING + TEST_DB + ";" + USERNAME_STRING + MY_USER);
+    });
 
+    dbServerField.setOnKeyReleased(this::handleKeyEvent);
+    dbNameField.setOnKeyReleased(this::handleKeyEvent);
+    portField.setOnKeyReleased(this::handleKeyEvent);
+    usernameField.setOnKeyReleased(this::handleKeyEvent);
 
     toggleSave.setOnAction(event -> {
       this.connectionName.setVisible(!this.connectionName.isVisible());
     });
+
+    infoButton.setOnMouseMoved(event -> {
+      Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
+      tooltip.show(infoButton,
+              (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
+              boundsInScreen.getMaxY()  - boundsInScreen.getHeight() - tooltip.getHeight() );
+    });
+
+    infoButton.setOnMouseExited(event -> tooltip.hide());
 
     this.nextButton.setOnAction((event) -> {
       if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
@@ -152,8 +194,20 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       this.stage.setHeight(700.00);
       stepper.previous();
     });
-    this.cancelButton.setOnAction((event) -> {
-      // AbortDialog
-    });
+    this.cancelButton.setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
+  }
+
+  private void handleKeyEvent(KeyEvent event) {
+    String inputText = event.getText();
+    if (inputText != null) {
+      String server = dbServerField.getText().isEmpty() ? DBSERVER_ORGANISATION_ORG : dbServerField.getText();
+      String dbname = dbNameField.getText().isEmpty() ? TEST_DB : dbNameField.getText();
+      String port = portField.getText().isEmpty() ? PORT_STRING : portField.getText();
+      String user = usernameField.getText().isEmpty() ? MY_USER : usernameField.getText();
+
+      urlField.setText(String.format(dbTypeString + "%s:%s;" + DATABASE_NAME_STRING + "%s;" + USERNAME_STRING + "%s",
+              server, port, dbname, user));
+    }
+    event.consume();
   }
 }

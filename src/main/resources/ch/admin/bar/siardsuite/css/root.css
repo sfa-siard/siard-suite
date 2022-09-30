@@ -21,9 +21,14 @@
     siard-text-color: #52606D;
 }
 
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+
 .root-center {
     -fx-background-color: #f5f7fa;
 }
+
 
 .h2 {
     -fx-font-weight: bold;
@@ -40,8 +45,9 @@
 /* Header */
 .header {
     -fx-background-color: -fx-header-background-color;
-    -fx-max-height: 3em;
-    -fx-pref-height: 3em;
+    -fx-max-height: 40.0;
+    -fx-pref-height: 40.0;
+    -fx-spacing: 10.0;
 }
 
 .header-app-label {
@@ -331,8 +337,8 @@
 .form-field {
     -fx-padding: 2 2 2 -2;
     -mfx-float-mode: ABOVE;
-    -fx-max-height: 50;
-    -fx-min-height: 50;
+    -fx-max-height: 48;
+    -fx-min-height: 48;
     -fx-border-color: #b0afaf;
     -fx-border-width: 1;
     -fx-border-radius: 0;
@@ -374,7 +380,15 @@
     -fx-graphic: url(../icons/info.png);
 }
 
-.form-container .info-icon:hover {
-    -fx-background-image: url(../icons/archive.png);
+.form-container .info-tooltip {
+    -fx-background-image: url(../icons/tooltip_banner.png);
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-background: rgba(0, 0, 0, 0);
+    -fx-fill: transparent;
+    -fx-text-fill: black;
+    -fx-alignment: top-center;
+    -fx-text-alignment: center;
+    -fx-font-size: 13;
+    -fx-padding: 2.5em 0 0 0;
 }
 
