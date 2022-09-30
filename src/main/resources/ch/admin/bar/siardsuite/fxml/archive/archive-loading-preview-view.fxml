@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css"
-            xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveLoadingPreviewPresenter">
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
             <children>
                 <VBox>
                     <children>
-                        <Label fx:id="title">
-                            <styleClass>
-                                <String fx:value="h2" />
-                                <String fx:value="label-icon" />
-                                <String fx:value="loading-icon" />
-                            </styleClass>
+                        <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2" text="Preview">
+                            <graphic>
+                                <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
+                                    <styleClass>
+                                        <String fx:value="loading-icon"/>
+                                        <String fx:value="icon-button"/>
+                                    </styleClass>
+                                    <image>
+                                        <Image url="@../../icons/loading.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
                         </Label>
                         <Text fx:id="text" styleClass="view-text">
                             <VBox.margin>
@@ -35,12 +45,12 @@
                     <children>
                         <Label fx:id="subtitleLeft">
                             <styleClass>
-                                <String fx:value="h3" />
+                                <String fx:value="h3"/>
                             </styleClass>
                         </Label>
                         <Text fx:id="textLeft" lineSpacing="8.0" styleClass="view-text">
                             <VBox.margin>
-                                <Insets bottom="15.0" top="24.0" />
+                                <Insets bottom="15.0" top="24.0"/>
                             </VBox.margin>
                         </Text>
                     </children>
