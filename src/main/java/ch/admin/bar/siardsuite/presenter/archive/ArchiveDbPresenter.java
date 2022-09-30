@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -36,13 +37,9 @@ public class ArchiveDbPresenter extends StepperPresenter {
   @FXML
   public Label errorMessage;
   @FXML
-  private MFXButton nextButton;
+  public BorderPane borderPane;
   @FXML
-  private MFXButton previousButton;
-  @FXML
-  private MFXButton cancelButton;
-  @FXML
-  private HBox buttonsBox;
+  private StepperButtonBox buttonsBox;
 
   private final ToggleGroup toggleGroup = new ToggleGroup();
 
@@ -68,21 +65,8 @@ public class ArchiveDbPresenter extends StepperPresenter {
     List.of("MS Access", "DB/2", "H2 Database", "MySQL").forEach(s -> createRadioToVBox(s, leftVBox));
     List.of("Oracle", "PostgreSQL", "Microsoft SQL Server").forEach(s -> createRadioToVBox(s, rightVBox));
 
-
-    this.nextButton = new MFXButton();
-    this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
-    this.nextButton.getStyleClass().setAll("button", "primary");
-    this.nextButton.setManaged(true);
-    this.previousButton = new MFXButton();
-    this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
-    this.previousButton.getStyleClass().setAll("button", "secondary");
-    this.previousButton.setManaged(true);
-    this.cancelButton = new MFXButton();
-    this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
-    this.cancelButton.getStyleClass().setAll("button", "secondary");
-    this.cancelButton.setManaged(true);
-
-    this.buttonsBox.getChildren().addAll(this.previousButton, this.cancelButton, this.nextButton);
+    this.buttonsBox = new StepperButtonBox();
+    this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }
 
@@ -94,7 +78,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
   }
 
   private void setListeners(MFXStepper stepper) {
-    this.nextButton.setOnAction((event) -> {
+    this.buttonsBox.next().setOnAction((event) -> {
       MFXRadioButton selected = (MFXRadioButton) toggleGroup.getSelectedToggle();
       if (selected != null) {
         controller.setDatabaseType(selected.getText());
@@ -107,8 +91,8 @@ public class ArchiveDbPresenter extends StepperPresenter {
         this.errorMessage.setVisible(true);
       }
     });
-    this.previousButton.setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG.getName()));
-    this.cancelButton.setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
+    this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG.getName()));
+    this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
   }
 
 }

@@ -45,8 +45,5 @@
         </VBox>
     </center>
     <bottom>
-        <HBox fx:id="buttonsBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-              minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
-        </HBox>
     </bottom>
 </BorderPane>

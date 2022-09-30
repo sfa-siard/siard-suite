@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -14,8 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
@@ -38,10 +37,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   public Text text1;
   @FXML
   public Text text3;
-  @FXML
-  public VBox leftVBox;
-  @FXML
-  public VBox rightVBox;
   @FXML
   public TextFlow textFlow;
   @FXML
@@ -71,13 +66,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   @FXML
   public BorderPane borderPane;
   @FXML
-  private MFXButton nextButton;
-  @FXML
-  private MFXButton previousButton;
-  @FXML
-  private MFXButton cancelButton;
-  @FXML
-  private HBox buttonsBox;
+  private StepperButtonBox buttonsBox;
   @FXML
   public MFXButton infoButton;
   @FXML
@@ -101,20 +90,8 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     makeTooltip();
 
     this.errorMessage.setVisible(false);
-    this.nextButton = new MFXButton();
-    this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
-    this.nextButton.getStyleClass().setAll("button", "primary");
-    this.nextButton.setManaged(true);
-    this.previousButton = new MFXButton();
-    this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
-    this.previousButton.getStyleClass().setAll("button", "secondary");
-    this.previousButton.setManaged(true);
-    this.cancelButton = new MFXButton();
-    this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
-    this.cancelButton.getStyleClass().setAll("button", "secondary");
-    this.cancelButton.setManaged(true);
-
-    this.buttonsBox.getChildren().addAll(this.previousButton, this.cancelButton, this.nextButton);
+    this.buttonsBox = new StepperButtonBox();
+    this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }
 
@@ -169,9 +146,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     portField.setOnKeyReleased(this::handleKeyEvent);
     usernameField.setOnKeyReleased(this::handleKeyEvent);
 
-    toggleSave.setOnAction(event -> {
-      this.connectionName.setVisible(!this.connectionName.isVisible());
-    });
+    toggleSave.setOnAction(event -> this.connectionName.setVisible(!this.connectionName.isVisible()));
 
     infoButton.setOnMouseMoved(event -> {
       Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
@@ -182,21 +157,22 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     infoButton.setOnMouseExited(event -> tooltip.hide());
 
-    this.nextButton.setOnAction((event) -> {
+    this.buttonsBox.next().setOnAction((event) -> {
       if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
         this.errorMessage.setVisible(true);
       } else {
         controller.setConnectionUrl(this.urlField.getText() + ";password=" + this.passwordField.getText());
         this.errorMessage.setVisible(false);
         stepper.next();
+        this.stage.setHeight(950);
       }
 
     });
-    this.previousButton.setOnAction((event) -> {
-      this.stage.setHeight(700.00);
+    this.buttonsBox.previous().setOnAction((event) -> {
       stepper.previous();
+      this.stage.setHeight(700.00);
     });
-    this.cancelButton.setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
+    this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
   }
 
   private void handleKeyEvent(KeyEvent event) {
