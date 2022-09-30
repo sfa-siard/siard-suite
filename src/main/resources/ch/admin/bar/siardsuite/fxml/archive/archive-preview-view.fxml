@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css"
+            xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchivePreviewPresenter">
+    <center>
+        <VBox BorderPane.alignment="TOP_LEFT">
+            <children>
+                <VBox>
+                    <children>
+                        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2"/>
+                        <Text fx:id="text" styleClass="view-text">
+                            <VBox.margin>
+                                <Insets bottom="24.0" top="15.0"/>
+                            </VBox.margin>
+                        </Text>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="25.0" right="25.0"/>
+                    </VBox.margin>
+                </VBox>
+                <VBox prefWidth="365.0">
+                    <children>
+                        <Label fx:id="subtitleLeft">
+                            <styleClass>
+                                <String fx:value="h3" />
+                            </styleClass>
+                        </Label>
+                        <Text fx:id="textLeft" lineSpacing="8.0" styleClass="view-text">
+                            <VBox.margin>
+                                <Insets bottom="15.0" top="24.0" />
+                            </VBox.margin>
+                        </Text>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
+                    </VBox.margin>
+                </VBox>
+                <HBox>
+                    <children>
+                        <VBox fx:id="leftTreeBox" prefWidth="365.0">
+
+                        </VBox>
+                        <VBox fx:id="rightTableBox" prefWidth="715.0">
+
+                        </VBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
+                    </VBox.margin>
+                </HBox>
+            </children>
+            <BorderPane.margin>
+                <Insets left="25.0" right="25.0" top="48.0"/>
+            </BorderPane.margin>
+        </VBox>
+    </center>
+    <bottom>
+    </bottom>
+</BorderPane>
