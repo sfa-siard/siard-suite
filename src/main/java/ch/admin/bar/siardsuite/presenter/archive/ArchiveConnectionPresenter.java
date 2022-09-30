@@ -25,9 +25,10 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   private static final String USERNAME_STRING = "username=";
   private static final String JDBC = "jdbc:";
   private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
-  private static final String PORT_STRING = "1433";
   private static final String TEST_DB = "test-db";
   private static final String MY_USER = "MyUser";
+
+  private String portString;
   private String dbTypeString;
   @FXML
   public Label errorMessage;
@@ -137,8 +138,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     dbServerField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbServer.label"));
     dbServerField.promptTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbServer.prompt"));
     portField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.port.label"));
-    portField.setText(PORT_STRING);
-    portField.setPromptText(PORT_STRING);
     dbNameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbName.label"));
     usernameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.username.label"));
     passwordField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.password.label"));
@@ -158,8 +157,11 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
   private void setListeners(MFXStepper stepper) {
     stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_CONTENT_EVENT, event -> {
-      this.dbTypeString = JDBC + model.getDatabaseDriver() + "://";
-      urlField.setPromptText(dbTypeString + DBSERVER_ORGANISATION_ORG + ":" + PORT_STRING + ";" + DATABASE_NAME_STRING + TEST_DB + ";" + USERNAME_STRING + MY_USER);
+      this.dbTypeString = JDBC + model.getDatabaseDriver().get(0) + "://";
+      this.portString = (String) model.getDatabaseDriver().get(1);
+      portField.setText(portString);
+      portField.setPromptText(portString);
+      urlField.setPromptText(dbTypeString + DBSERVER_ORGANISATION_ORG + ":" + portString + ";" + DATABASE_NAME_STRING + TEST_DB + ";" + USERNAME_STRING + MY_USER);
     });
 
     dbServerField.setOnKeyReleased(this::handleKeyEvent);
@@ -184,9 +186,9 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
         this.errorMessage.setVisible(true);
       } else {
-        //        controller.setDatabaseType(selected.getText());
-//        this.errorMessage.setVisible(false);
-//        stepper.next();
+        controller.setConnectionUrl(this.urlField.getText() + ";password=" + this.passwordField.getText());
+        this.errorMessage.setVisible(false);
+        stepper.next();
       }
 
     });
@@ -202,7 +204,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     if (inputText != null) {
       String server = dbServerField.getText().isEmpty() ? DBSERVER_ORGANISATION_ORG : dbServerField.getText();
       String dbname = dbNameField.getText().isEmpty() ? TEST_DB : dbNameField.getText();
-      String port = portField.getText().isEmpty() ? PORT_STRING : portField.getText();
+      String port = portField.getText().isEmpty() ? portString : portField.getText();
       String user = usernameField.getText().isEmpty() ? MY_USER : usernameField.getText();
 
       urlField.setText(String.format(dbTypeString + "%s:%s;" + DATABASE_NAME_STRING + "%s;" + USERNAME_STRING + "%s",
