@@ -133,7 +133,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   }
 
   private void setListeners(MFXStepper stepper) {
-    stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_CONTENT_EVENT, event -> {
+    stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
       this.dbTypeString = JDBC + model.getDatabaseDriver().get(0) + "://";
       this.portString = (String) model.getDatabaseDriver().get(1);
       portField.setText(portString);
@@ -164,6 +164,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         controller.setConnectionUrl(this.urlField.getText() + ";password=" + this.passwordField.getText());
         this.errorMessage.setVisible(false);
         stepper.next();
+        stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT));
         this.stage.setHeight(950);
       }
 

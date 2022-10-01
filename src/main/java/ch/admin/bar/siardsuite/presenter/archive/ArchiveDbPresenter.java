@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
@@ -85,7 +86,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
         this.errorMessage.setVisible(false);
         this.stage.setHeight(1080.00);
         stepper.next();
-        stepper.fireEvent(getUpdateEvent());
+        stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT));
         //fire event
       } else {
         this.errorMessage.setVisible(true);

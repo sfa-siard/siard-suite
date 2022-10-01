@@ -10,6 +10,7 @@ import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -23,8 +24,8 @@ public abstract class StepperPresenter extends Presenter {
 
   public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);
 
-  public Event getUpdateEvent() {
-    return new SiardEvent(SiardEvent.UPDATE_STEPPER_CONTENT_EVENT);
+  public Event getUpdateEvent(EventType<SiardEvent> eventType) {
+    return new SiardEvent(eventType);
   }
 
   protected List<MFXStepperToggle> createSteps(List<Step> steps, MFXStepper stepper) {

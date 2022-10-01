@@ -42,6 +42,12 @@
     -fx-font-family: "Roboto Medium";
 }
 
+.h4 {
+    -fx-font-weight: bold;
+    -fx-font-size: 14.0;
+    -fx-font-family: "Roboto Medium";
+}
+
 /* Header */
 .header {
     -fx-background-color: -fx-header-background-color;

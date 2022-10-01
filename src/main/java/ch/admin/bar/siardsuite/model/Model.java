@@ -35,4 +35,7 @@ public class Model {
   }
 
 
+  public void loadData() {
+    // load data for archive.connectionUrl
+  }
 }

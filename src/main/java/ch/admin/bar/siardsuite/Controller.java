@@ -17,4 +17,8 @@ public class Controller {
   public void setConnectionUrl(String connectionUrl) {
     model.setConnectionUrl(connectionUrl);
   }
+
+  public void loadData() {
+    model.loadData();
+  }
 }

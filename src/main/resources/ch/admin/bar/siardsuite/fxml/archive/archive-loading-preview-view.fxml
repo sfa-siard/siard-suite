@@ -18,7 +18,7 @@
             <children>
                 <VBox>
                     <children>
-                        <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2" text="Preview">
+                        <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2">
                             <graphic>
                                 <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
                                     <styleClass>
@@ -41,36 +41,15 @@
                         <Insets left="25.0" right="25.0"/>
                     </VBox.margin>
                 </VBox>
-                <VBox prefWidth="365.0">
+                <VBox fx:id="leftVBox" prefWidth="365.0">
                     <children>
-                        <Label fx:id="subtitleLeft">
-                            <styleClass>
-                                <String fx:value="h3"/>
-                            </styleClass>
+                        <Label fx:id="subtitle" styleClass="h4">
                         </Label>
-                        <Text fx:id="textLeft" lineSpacing="8.0" styleClass="view-text">
-                            <VBox.margin>
-                                <Insets bottom="15.0" top="24.0"/>
-                            </VBox.margin>
-                        </Text>
                     </children>
                     <VBox.margin>
                         <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
                     </VBox.margin>
                 </VBox>
-                <HBox>
-                    <children>
-                        <VBox fx:id="leftTreeBox" prefWidth="365.0">
-
-                        </VBox>
-                        <VBox fx:id="rightTableBox" prefWidth="715.0">
-
-                        </VBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
-                    </VBox.margin>
-                </HBox>
             </children>
             <BorderPane.margin>
                 <Insets left="25.0" right="25.0" top="48.0"/>
