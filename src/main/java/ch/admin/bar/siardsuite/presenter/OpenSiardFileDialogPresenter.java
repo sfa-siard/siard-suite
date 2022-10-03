@@ -1,0 +1,50 @@
+package ch.admin.bar.siardsuite.presenter;
+
+import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.view.RootStage;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.fxml.FXML;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+
+import javax.swing.*;
+
+public class OpenSiardFileDialogPresenter extends DialogPresenter {
+
+    @FXML
+    public Text text;
+    @FXML
+    protected MFXButton closeButton; // seems redundant
+    @FXML
+    public MFXButton newConnectionButton;
+    @FXML
+    protected HBox buttonBox;
+
+    @Override
+    public void init(Controller controller, Model model, RootStage stage) {
+        this.model = model;
+        this.controller = controller;
+        this.stage = stage;
+
+        setTitle("open.siard.file.dialog.title");
+        text.textProperty().bind(I18n.createStringBinding("open.siard.file.dialog.text"));
+
+        newConnectionButton.textProperty().bind(I18n.createStringBinding("archiveDbDialog.btnNewConnection"));
+        newConnectionButton.getStyleClass().setAll("button", "primary");
+
+        newConnectionButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Test");
+            fileChooser.showOpenDialog(stage);
+        });
+
+        closeButton.setOnAction(event -> stage.closeDialog());
+
+        buttonBox.getChildren().add(getCancelButton());
+    }
+
+}
