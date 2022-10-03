@@ -1,11 +1,13 @@
 package ch.admin.bar.siardsuite.model;
 
 
+import java.util.List;
+
 public class Model {
 
   private String currentView = View.START.getName();
 
-  private SiardArchive archive;
+  private SiardArchive archive = new SiardArchive();
   public Model() {
 
   }
@@ -23,4 +25,14 @@ public class Model {
     }
     this.archive.setDatabaseProduct(databaseType);
   }
+
+  public void setConnectionUrl(String connectionUrl) {
+    this.archive.setConnectionUrl(connectionUrl);
+  }
+
+  public List getDatabaseDriver() {
+    return this.archive.getDatabaseProduct();
+  }
+
+
 }

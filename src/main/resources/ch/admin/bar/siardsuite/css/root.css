@@ -9,7 +9,7 @@
 
 @font-face {
     font-family: 'Roboto Regular';
-    font-weight: normal;
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
     src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
@@ -17,27 +17,50 @@
 
 * {
     -fx-header-background-color: #323f4b;
-    -fx-my-font-family: 'Roboto Regular'
+    siard-font-family: 'Roboto Regular';
+    siard-text-color: #52606D;
+}
+
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+
+.root-center {
+    -fx-background-color: #f5f7fa;
+}
+
+
+.h2 {
+    -fx-font-weight: bold;
+    -fx-font-size: 22.0;
+    -fx-font-family: "Roboto Medium";
+}
+
+.h3 {
+    -fx-font-weight: bold;
+    -fx-font-size: 18.0;
+    -fx-font-family: "Roboto Medium";
 }
 
 /* Header */
 .header {
     -fx-background-color: -fx-header-background-color;
-    -fx-max-height: 3em;
-    -fx-pref-height: 3em;
+    -fx-max-height: 40.0;
+    -fx-pref-height: 40.0;
+    -fx-spacing: 10.0;
 }
 
 .header-app-label {
-    -fx-graphic: url(../icons/u10_m.png);
+    -fx-graphic: url(../icons/logo.png);
     -fx-max-height: 24;
     -fx-max-width: infinity;
     -fx-font-size: 14;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: white;
     -fx-label-padding: 0 0 0 1.5em;
     -fx-graphic-text-gap: 0.8em;
 }
 
-.header-button {
+.icon-button {
     -fx-background-color: transparent;
     -fx-max-height: 24;
     -fx-content-display: graphic-only;
@@ -81,7 +104,7 @@
 }
 
 .menu-item .label {
-    -fx-text-fill: #000000;
+    -fx-text-fill: black;
 }
 
 .help-icon {
@@ -111,7 +134,7 @@
 }
 
 .mfx-stepper .content-pane {
-    -fx-background-color: #ffffff;
+    -fx-background-color: white;
 }
 
 .mfx-stepper .track {
@@ -128,7 +151,7 @@
     -fx-background-color: #e4e7eb;
     -fx-pref-height: 52;
     -fx-alignment: CENTER_LEFT;
-    -fx-text-fill: #000000 ;
+    -fx-text-fill: black ;
     -mfx-label-text-gap: 12.0;
 }
 
@@ -142,7 +165,7 @@
 .number-btn {
     -fx-shape: "M 159 96  C 165.16 96  170 100.84  170 107  C 170 113.16  165.16 118  159 118  C 152.84 118  148 113.16  148 107  C 148 100.84  152.84 96  159 96  Z ";
     -fx-background-color: #9aa5b1;
-    -fx-text-fill: #000000 ;
+    -fx-text-fill: black ;
     -fx-font-size: 11px;
     -fx-opacity: 0.5;
     -fx-font-family: "Roboto Medium";
@@ -164,10 +187,10 @@
     -mfx-float-mode: disabled;
 }
 
-.mfx-text-field,
-.mfx-text-field .text-field,
+.mfx-stepper-toggle .mfx-text-field,
+.mfx-stepper-toggle .mfx-text-field .text-field,
 .custom-stepper-toggle .mfx-text-field .text-field {
-    -fx-text-fill: #000000;
+    -fx-text-fill: black;
     -fx-opacity: 0.7;
     -fx-font-width: 500;
     -fx-alignment: BASELINE_CENTER;
@@ -182,7 +205,7 @@
 .mfx-stepper-toggle:completed .mfx-text-field,
 .custom-stepper-toggle:completed .mfx-text-field {
     -fx-opacity: 1;
-    -fx-text-fill: #000000 ;
+    -fx-text-fill: black ;
 }
 
 .mfx-stepper .btn-box {
@@ -198,7 +221,7 @@
     -fx-min-height: 42px;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-font-size: 14px;
 }
 
@@ -228,7 +251,7 @@
 
 .dialog {
     -fx-background-color: WHITE;
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-padding: 25 25 25 25;
 }
 
@@ -257,28 +280,25 @@
 
 /* Views */
 
-.title {
-    -fx-font-weight: bold;
-    -fx-font-size: 22.0;
-    -fx-font-family: "Roboto Medium";
+.view-text {
+    -fx-font-family: siard-font-family;
+    -fx-font-size: 14.0;
+    -fx-fill: siard-text-color;
 }
 
-.view-text {
-    -fx-font-family: -fx-my-font-family;
-    -fx-font-size: 14.0;
-    -fx-spacing: 8.0 ;
+.bold {
+    -fx-font-weight: bold;
 }
 
 .error-text {
-    -fx-font-family: -fx-my-font-family;
+    -fx-font-family: siard-font-family;
     -fx-font-size: 12.0;
-    -fx-text-fill: red;
-    /*-fx-text-fill: #D9001B;*/
+    -fx-text-fill: #D9001B;
 }
 
 .radio-button {
-    -fx-font-family: -fx-my-font-family;
-    -fx-font-size: 18.0;
+    -fx-font-family: siard-font-family;
+    -fx-font-size: 16.0;
 }
 
 .radio-button .dot {
@@ -288,3 +308,87 @@
 .radio-button:selected .radio {
 	-fx-stroke: #1F2933;
 }
+
+.label-icon {
+    -fx-max-height: 24;
+    -fx-label-padding: 0 0 0 0;
+    -fx-graphic-text-gap: 1.2em;
+    -fx-content-display: RIGHT;
+}
+
+.server-icon {
+    -fx-graphic: url(../icons/server.png);
+}
+
+.user-icon {
+    -fx-graphic: url(../icons/user.png);
+}
+
+.form-container {
+    -fx-background-color: #f5f7fa;
+    -fx-font-family: siard-font-family;
+    -fx-font-size: 14.0;
+}
+
+.form-container-white {
+    -fx-background-color: white;
+}
+
+.form-field {
+    -fx-padding: 2 2 2 -2;
+    -mfx-float-mode: ABOVE;
+    -fx-max-height: 48;
+    -fx-min-height: 48;
+    -fx-border-color: #b0afaf;
+    -fx-border-width: 1;
+    -fx-border-radius: 0;
+    -fx-text-fill: black;
+}
+
+.form-container .mfx-text-field .text-field {
+    /*-fx-highlight-fill: #ECE0FD; !* Selected text highlight *!*/
+    -fx-prompt-text-fill: #9aa5b1; /* Prompt text color */
+    -fx-padding: 0 0 0 17;
+}
+
+.form-container .mfx-text-field .floating-text {
+    -fx-padding: 0 0 8 -12;
+    -fx-text-fill: siard-text-color;
+    -fx-background-color: transparent;
+}
+
+.form-container .mfx-text-field:focus-within {
+    -fx-background-insets: 0;
+    -fx-border-color: #b0afaf;
+    -fx-border-width: 1;
+    -fx-border-insets: 0;
+}
+
+.form-container .toggle-button {
+    -mfx-gap: 15.0;
+    -fx-padding: 0 0 0 -1;
+}
+
+.mfx-toggle-button {
+    -mfx-main: siard-text-color;
+    -mfx-secondary: #9aa5b1;
+    -fx-background-color: transparent;
+    -fx-text-fill: siard-text-color;
+}
+
+.info-icon {
+    -fx-graphic: url(../icons/info.png);
+}
+
+.form-container .info-tooltip {
+    -fx-background-image: url(../icons/tooltip_banner.png);
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-background: rgba(0, 0, 0, 0);
+    -fx-fill: transparent;
+    -fx-text-fill: black;
+    -fx-alignment: top-center;
+    -fx-text-alignment: center;
+    -fx-font-size: 13;
+    -fx-padding: 2.5em 0 0 0;
+}
+

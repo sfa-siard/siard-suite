@@ -14,4 +14,7 @@ public class Controller {
     model.setDatabaseType(databaseType);
   }
 
+  public void setConnectionUrl(String connectionUrl) {
+    model.setConnectionUrl(connectionUrl);
+  }
 }

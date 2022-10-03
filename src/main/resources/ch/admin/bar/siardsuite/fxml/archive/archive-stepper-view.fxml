@@ -3,8 +3,8 @@
 <?import io.github.palexdev.materialfx.controls.MFXStepper?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.ArchiveStepperPresenter">
+<AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveStepperPresenter">
     <MFXStepper fx:id="stepper" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                 AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0"
                 AnchorPane.topAnchor="40.0"/>

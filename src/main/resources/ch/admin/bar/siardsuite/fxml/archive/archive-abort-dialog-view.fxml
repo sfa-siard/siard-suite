@@ -6,9 +6,9 @@
 <?import javafx.geometry.Insets?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="500.0" prefWidth="480.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18"
-            xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/root.css"
-            styleClass="dialog" fx:controller="ch.admin.bar.siardsuite.presenter.ArchiveDbDialogPresenter">
+            prefHeight="300.0" prefWidth="480.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../css/root.css" styleClass="dialog"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveAbortDialogPresenter">
     <center>
         <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0"
                     BorderPane.alignment="CENTER">
@@ -21,24 +21,13 @@
                             </VBox.margin>
                         </Text>
                         <Text fx:id="text" styleClass="dialog-text"
-                              textOrigin="BOTTOM" wrappingWidth="329.943359375">
-                            <VBox.margin>
-                                <Insets bottom="25.0" />
-                            </VBox.margin>
-                        </Text>
-                        <MFXButton fx:id="newConnectionButton">
-                            <VBox.margin>
-                                <Insets bottom="25.0" />
-                            </VBox.margin>
-                        </MFXButton>
+                              textOrigin="BOTTOM" wrappingWidth="329.943359375"/>
                     </children>
                 </VBox>
             </left>
             <right>
-                <VBox>
-                    <MFXButton fx:id="closeButton" prefHeight="26.0" prefWidth="37.0" text="X"
-                            BorderPane.alignment="TOP_RIGHT"/>
-                </VBox>
+                <MFXButton fx:id="closeButton" prefHeight="26.0" prefWidth="37.0" text="X"
+                           BorderPane.alignment="TOP_RIGHT"/>
             </right>
         </BorderPane>
     </center>
