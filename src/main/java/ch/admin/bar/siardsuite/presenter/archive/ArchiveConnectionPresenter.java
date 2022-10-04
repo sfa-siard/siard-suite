@@ -90,7 +90,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     makeTooltip();
 
     this.errorMessage.setVisible(false);
-    this.buttonsBox = new StepperButtonBox();
+    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }

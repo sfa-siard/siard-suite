@@ -68,7 +68,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     this.loader.setImage(loading);
     addLoaderTransition(this.loader);
 
-    this.buttonsBox = new StepperButtonBox("cancel");
+    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.CANCEL);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }

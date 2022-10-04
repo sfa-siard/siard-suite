@@ -66,7 +66,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
     List.of("MS Access", "DB/2", "H2 Database", "MySQL").forEach(s -> createRadioToVBox(s, leftVBox));
     List.of("Oracle", "PostgreSQL", "Microsoft SQL Server").forEach(s -> createRadioToVBox(s, rightVBox));
 
-    this.buttonsBox = new StepperButtonBox();
+    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }
