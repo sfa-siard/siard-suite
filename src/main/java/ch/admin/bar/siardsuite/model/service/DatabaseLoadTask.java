@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.service;
+package ch.admin.bar.siardsuite.model.service;
 
 import ch.admin.bar.siardsuite.model.DataTable;
 import javafx.collections.FXCollections;

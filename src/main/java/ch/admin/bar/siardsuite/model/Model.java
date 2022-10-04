@@ -1,6 +1,10 @@
 package ch.admin.bar.siardsuite.model;
 
 
+import ch.admin.bar.siardsuite.model.service.DatabaseLoadService;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.collections.ObservableList;
+
 import java.util.List;
 
 public class Model {
@@ -8,6 +12,7 @@ public class Model {
   private String currentView = View.START.getName();
 
   private SiardArchive archive = new SiardArchive();
+
   public Model() {
 
   }
@@ -35,7 +40,8 @@ public class Model {
   }
 
 
-  public void loadData() {
-    // load data for archive.connectionUrl
+
+  public void setDatabaseData(ReadOnlyObjectProperty<ObservableList<DataTable>> valueProperty) {
+
   }
 }

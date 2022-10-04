@@ -7,7 +7,7 @@ import ch.admin.bar.siardsuite.model.DataTable;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
-import ch.admin.bar.siardsuite.service.DatabaseLoadService;
+import ch.admin.bar.siardsuite.model.service.DatabaseLoadService;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -102,9 +102,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
   private void setListeners(MFXStepper stepper) {
     stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
-      controller.loadData();
-      DatabaseLoadService databaseLoadService = new DatabaseLoadService();
-
+      DatabaseLoadService databaseLoadService = controller.loadDatabase();
 
       databaseLoadService.valueProperty().addListener((o, oldValue, newValue)  ->  {
         AtomicInteger pos = new AtomicInteger();
@@ -115,7 +113,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         Label label = (Label) leftVBox.getChildren().get((int) pos);
         label.setGraphic(getImageView(newValue.intValue(), ok));
       });
-      databaseLoadService.start();
 
       databaseLoadService.setOnSucceeded(e -> {
         stepper.next();
