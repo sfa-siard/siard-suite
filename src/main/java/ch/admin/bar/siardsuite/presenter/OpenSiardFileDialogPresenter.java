@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 
@@ -10,10 +9,9 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -26,7 +24,6 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.List;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class OpenSiardFileDialogPresenter extends DialogPresenter {
@@ -43,6 +40,12 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
     protected Label recentFilesHeaderDate;
     @FXML
     protected VBox recentFilesBox;
+    @FXML
+    protected Label dropFileTextTop;
+    @FXML
+    protected Label dropFileTextMiddle;
+    @FXML
+    protected VBox dropFileBox;
     @FXML
     protected MFXButton chooseFileButton;
     @FXML
@@ -74,6 +77,12 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
             recentFilesBox.setVisible(true);
         }
 
+        dropFileTextTop.textProperty().bind(I18n.createStringBinding("open.siard.file.drop.file.text.top"));
+        dropFileTextMiddle.textProperty().bind(I18n.createStringBinding("open.siard.file.drop.file.text.middle"));
+
+        dropFileBox.setOnDragOver(this::handleDragOver);
+        dropFileBox.setOnDragDropped(this::handleDragDropped);
+
         chooseFileButton.textProperty().bind(I18n.createStringBinding("open.siard.file.choose.file.button"));
         chooseFileButton.getStyleClass().setAll("button", "secondary");
 
@@ -88,6 +97,31 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
         closeButton.setOnAction(event -> stage.closeDialog());
 
         buttonBox.getChildren().add(getCancelButton());
+    }
+
+    private void handleDragOver(DragEvent event) {
+        if (event.getDragboard().hasFiles()) {
+            event.acceptTransferModes(TransferMode.COPY);
+        } else {
+            event.consume();
+        }
+    }
+
+    private void handleDragDropped(DragEvent event) {
+        boolean completed = false;
+        if (event.getDragboard().hasFiles()) {
+            completed = true;
+            if (event.getDragboard().getFiles().size() == 1) {
+                final File file = event.getDragboard().getFiles().get(0);
+                final String filePath = file.getAbsolutePath();
+                final int dotIndex = filePath.lastIndexOf(".");
+                if (dotIndex > -1 && filePath.substring(dotIndex + 1).equalsIgnoreCase("siard")) {
+                    readArchive(file);
+                }
+            }
+        }
+        event.setDropCompleted(completed);
+        event.consume();
     }
 
     private void readArchive(File file) {
@@ -142,6 +176,8 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
             recentFileBox.getChildren().addAll(imageLabel, nameLabel, dateLabel);
             recentFileBox.getStyleClass().add("file-hbox");
             VBox.setMargin(recentFileBox, new Insets(5, 0, 5, 0));
+
+            recentFileBox.setOnMouseClicked(event -> readArchive(recentFile));
         }
 
         return recentFileBox;
