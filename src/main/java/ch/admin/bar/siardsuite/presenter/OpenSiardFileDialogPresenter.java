@@ -2,15 +2,28 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
+
 import io.github.palexdev.materialfx.controls.MFXButton;
+
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -20,6 +33,12 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
     protected Text text;
     @FXML
     protected MFXButton closeButton; // seems redundant
+    @FXML
+    protected Label recentFilesHeaderName;
+    @FXML
+    protected Label recentFilesHeaderDate;
+    @FXML
+    protected VBox recentFilesBox;
     @FXML
     protected MFXButton chooseFileButton;
     @FXML
@@ -35,6 +54,17 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
 
         setTitle("open.siard.file.dialog.title");
         text.textProperty().bind(I18n.createStringBinding("open.siard.file.dialog.text"));
+
+        recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.file.recent.files.header.name"));
+        recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("open.siard.file.recent.files.header.date"));
+
+        for (String filePath : getRecentFilePaths()) {
+            try {
+                recentFilesBox.getChildren().add(getRecentFileBox(filePath));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         chooseFileButton.textProperty().bind(I18n.createStringBinding("open.siard.file.choose.file.button"));
         chooseFileButton.getStyleClass().setAll("button", "secondary");
@@ -54,35 +84,59 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
 
     private void readArchive(File file) {
         if (file != null) {
-            addRecentFile(file);
+            addRecentFilePath(file);
         }
     }
 
-    private void addRecentFile(File file) {
-        final int max_recent_files = 30;
-        final String[] recentFiles = new String[max_recent_files];
-        for (int i = 0; i < max_recent_files; i++) {
-            recentFiles[i] = preferences.get(String.valueOf(i), "");
+    private void addRecentFilePath(File file) {
+        final int max_recent_file_paths = 30;
+        final String[] recentFilePaths = new String[max_recent_file_paths];
+        for (int i = 0; i < max_recent_file_paths; i++) {
+            recentFilePaths[i] = preferences.get(String.valueOf(i), "");
         }
 
-        final int k = List.of(recentFiles).indexOf(file.getAbsolutePath());
-        final int l = (k < 0) ? max_recent_files - 1 : k;
+        final int k = List.of(recentFilePaths).indexOf(file.getAbsolutePath());
+        final int l = (k < 0) ? max_recent_file_paths - 1 : k;
 
         if (l > 0) {
             for (int j = 0; j < l; j++) {
-                preferences.put(String.valueOf(j+1), recentFiles[j]);
+                preferences.put(String.valueOf(j+1), recentFilePaths[j]);
             }
         }
         preferences.put("0", file.getAbsolutePath());
     }
 
-    private String[] getRecentFiles() {
-        final int num_recent_files = 3;
-        final String[] recentFiles = new String[num_recent_files];
-        for (int i = 0; i < num_recent_files; i++) {
-            recentFiles[i] = preferences.get(String.valueOf(i), "");
+    private String[] getRecentFilePaths() {
+        final int num_recent_file_paths = 3;
+        final String[] recentFilePaths = new String[num_recent_file_paths];
+        for (int i = 0; i < num_recent_file_paths; i++) {
+            recentFilePaths[i] = preferences.get(String.valueOf(i), "");
         }
-        return recentFiles;
+        return recentFilePaths;
+    }
+
+    private HBox getRecentFileBox(String filePath) throws IOException {
+        final HBox recentFileBox = new HBox();
+
+        if (!filePath.isEmpty()) {
+            final File recentFile = new File(filePath);
+            final BasicFileAttributes recentFileAttributes = Files.readAttributes(Paths.get(filePath), BasicFileAttributes.class);
+
+            final Label imageLabel = new Label();
+            imageLabel.getStyleClass().add("icon-label");
+            final Label nameLabel = new Label(recentFile.getName());
+            nameLabel.getStyleClass().add("name-label");
+
+            final String localeDate = I18n.getLocaleDate(recentFileAttributes.lastModifiedTime().toString().split("T")[0]);
+            final Label dateLabel = new Label(localeDate);
+            dateLabel.getStyleClass().add("date-label");
+
+            recentFileBox.getChildren().addAll(imageLabel, nameLabel, dateLabel);
+            recentFileBox.getStyleClass().add("file-hbox");
+            VBox.setMargin(recentFileBox, new Insets(5, 0, 5, 0));
+        }
+
+        return recentFileBox;
     }
 
 }

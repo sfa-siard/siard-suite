@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="500.0" prefWidth="480.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18"
-            xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/root.css"
-            styleClass="dialog" fx:controller="ch.admin.bar.siardsuite.presenter.OpenSiardFileDialogPresenter">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="480.0" styleClass="dialog" stylesheets="@../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.OpenSiardFileDialogPresenter">
     <center>
-        <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0"
-                    BorderPane.alignment="CENTER">
+        <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0" BorderPane.alignment="CENTER">
             <left>
                 <VBox prefHeight="61.0" prefWidth="330.0" BorderPane.alignment="TOP_LEFT">
                     <children>
@@ -20,12 +19,18 @@
                                 <Insets bottom="25.0" />
                             </VBox.margin>
                         </Text>
-                        <Text fx:id="text" styleClass="dialog-text"
-                              textOrigin="BOTTOM" wrappingWidth="329.943359375">
+                        <Text fx:id="text" styleClass="dialog-text" textOrigin="BOTTOM" wrappingWidth="329.943359375">
                             <VBox.margin>
                                 <Insets bottom="25.0" />
                             </VBox.margin>
                         </Text>
+                        <HBox prefHeight="40.0" prefWidth="330.0">
+                             <children>
+                                <Label fx:id="recentFilesHeaderName" prefHeight="40.0" prefWidth="220.0" styleClass="files-vbox-header-name"/>
+                                <Label fx:id="recentFilesHeaderDate" prefHeight="40.0" prefWidth="110.0" styleClass="files-vbox-header-date"/>
+                             </children>
+                        </HBox>
+                        <VBox fx:id="recentFilesBox" prefHeight="200.0" prefWidth="100.0" styleClass="files-vbox"/>
                         <MFXButton fx:id="chooseFileButton">
                             <VBox.margin>
                                 <Insets bottom="25.0" />
@@ -36,15 +41,13 @@
             </left>
             <right>
                 <VBox>
-                    <MFXButton fx:id="closeButton" prefHeight="26.0" prefWidth="37.0" text="X"
-                            BorderPane.alignment="TOP_RIGHT"/>
+                    <MFXButton fx:id="closeButton" prefHeight="26.0" prefWidth="37.0" text="X" BorderPane.alignment="TOP_RIGHT" />
                 </VBox>
             </right>
         </BorderPane>
     </center>
     <bottom>
-        <HBox fx:id="buttonBox" styleClass="btn-box" minWidth="-Infinity" maxHeight="1.7976931348623157E308"
-              maxWidth="1.7976931348623157E308" spacing="20.0">
+        <HBox fx:id="buttonBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
         </HBox>
     </bottom>
 </BorderPane>

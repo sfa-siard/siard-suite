@@ -1,3 +1,4 @@
+
 @font-face {
     font-family: 'Roboto Medium';
     font-weight: 500px;
@@ -504,4 +505,51 @@
     -fx-background-color: transparent;
     -fx-font-size: 10;
 
+}
+
+/* Select/Drop Files */
+
+.files-vbox-header-name {
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+}
+
+.files-vbox-header-date {
+    -fx-font-size: 10;
+    -fx-alignment: center-right;
+}
+
+.files-vbox {
+    -fx-pref-width: 330.0;
+}
+
+.files-vbox .file-hbox {
+    -fx-border-color: #d3d3d3;
+    -fx-border-width: 2 2 2 2;
+    -fx-padding: 5 10 5 10;
+}
+
+.files-vbox .file-hbox:hover {
+    -fx-background-color: #eceaea82;
+}
+
+.files-vbox .file-hbox .icon-label {
+    -fx-graphic: url(../icons/file.png);
+    -fx-pref-width: 40.0;
+    -fx-pref-height: 40.0;
+}
+
+.files-vbox .file-hbox .name-label {
+    -fx-pref-width: 180.0;
+    -fx-pref-height: 40.0;
+    -fx-font-size: 15;
+    -fx-alignment: center-left;
+}
+
+.files-vbox .file-hbox .date-label {
+    -fx-pref-width: 110.0;
+    -fx-pref-height: 40.0;
+    -fx-alignment: center-right;
+    -fx-text-fill: #1a1a1aa8;
 }
