@@ -12,7 +12,7 @@
     <center>
         <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0" BorderPane.alignment="CENTER">
             <left>
-                <VBox prefHeight="61.0" prefWidth="330.0" BorderPane.alignment="TOP_LEFT">
+                <VBox prefHeight="64.0" prefWidth="330.0" BorderPane.alignment="TOP_LEFT">
                     <children>
                         <Text fx:id="title" styleClass="dialog-title" textOrigin="BOTTOM">
                             <VBox.margin>
@@ -24,13 +24,13 @@
                                 <Insets bottom="25.0" />
                             </VBox.margin>
                         </Text>
-                        <HBox prefHeight="40.0" prefWidth="330.0">
+                        <HBox fx:id="recentFilesHeader" prefHeight="40.0" prefWidth="330.0" visible="false">
                              <children>
                                 <Label fx:id="recentFilesHeaderName" prefHeight="40.0" prefWidth="220.0" styleClass="files-vbox-header-name"/>
                                 <Label fx:id="recentFilesHeaderDate" prefHeight="40.0" prefWidth="110.0" styleClass="files-vbox-header-date"/>
                              </children>
                         </HBox>
-                        <VBox fx:id="recentFilesBox" prefHeight="200.0" prefWidth="100.0" styleClass="files-vbox"/>
+                        <VBox fx:id="recentFilesBox" prefHeight="200.0" prefWidth="330.0" styleClass="files-vbox" visible="false"/>
                         <MFXButton fx:id="chooseFileButton">
                             <VBox.margin>
                                 <Insets bottom="25.0" />

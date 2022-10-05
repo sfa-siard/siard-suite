@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.List;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class OpenSiardFileDialogPresenter extends DialogPresenter {
@@ -33,6 +35,8 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
     protected Text text;
     @FXML
     protected MFXButton closeButton; // seems redundant
+    @FXML
+    protected HBox recentFilesHeader;
     @FXML
     protected Label recentFilesHeaderName;
     @FXML
@@ -55,15 +59,19 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
         setTitle("open.siard.file.dialog.title");
         text.textProperty().bind(I18n.createStringBinding("open.siard.file.dialog.text"));
 
-        recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.file.recent.files.header.name"));
-        recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("open.siard.file.recent.files.header.date"));
+        if (Arrays.stream(getRecentFilePaths()).anyMatch(path -> !path.isEmpty())) {
+            recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.file.recent.files.header.name"));
+            recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("open.siard.file.recent.files.header.date"));
+            recentFilesHeader.setVisible(true);
 
-        for (String filePath : getRecentFilePaths()) {
-            try {
-                recentFilesBox.getChildren().add(getRecentFileBox(filePath));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            for (String filePath : getRecentFilePaths()) {
+                try {
+                    recentFilesBox.getChildren().add(getRecentFileBox(filePath));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+            recentFilesBox.setVisible(true);
         }
 
         chooseFileButton.textProperty().bind(I18n.createStringBinding("open.siard.file.choose.file.button"));
