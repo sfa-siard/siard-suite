@@ -152,7 +152,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
       tooltip.show(infoButton,
               (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-              boundsInScreen.getMaxY()  - boundsInScreen.getHeight() - tooltip.getHeight() );
+              boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
     });
 
     infoButton.setOnMouseExited(event -> tooltip.hide());
@@ -161,7 +161,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
         this.errorMessage.setVisible(true);
       } else {
-        controller.setConnectionUrl(this.urlField.getText() + ";password=" + this.passwordField.getText());
+        controller.updateConnectionData(this.urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
         this.errorMessage.setVisible(false);
         stepper.next();
         stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT));

@@ -16,14 +16,18 @@ public class Controller {
     model.setDatabaseType(databaseType);
   }
 
-  public void setConnectionUrl(String connectionUrl) {
-    model.setConnectionUrl(connectionUrl);
-  }
 
   public DatabaseLoadService loadDatabase() {
     databaseLoadService = new DatabaseLoadService();
     databaseLoadService.start();
     databaseLoadService.setOnSucceeded(event -> model.setDatabaseData(databaseLoadService.valueProperty()));
     return databaseLoadService;
+  }
+
+  public void updateConnectionData(String connectionUrl, String username, String databaseName, String password) {
+    this.model.setConnectionUrl(connectionUrl);
+    this.model.setDatabaseName(databaseName);
+    this.model.setUsername(username);
+    this.model.setPassword(password);
   }
 }

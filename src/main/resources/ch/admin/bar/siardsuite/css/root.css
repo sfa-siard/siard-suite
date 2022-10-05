@@ -464,10 +464,44 @@
 .table-container-label {
     -fx-font-size: 12;
     -fx-text-fill: siard-text-color;
+    -fx-max-width: infinity;
 }
 
 .table-container-text {
     -fx-font-size: 14;
     -fx-text-fill: black;
     -fx-label-padding: 6 0 14 0;
+    -fx-max-width: infinity;
+}
+
+.table-container-label-small {
+    -fx-font-size: 12;
+    -fx-text-fill: black;
+    -fx-max-width: infinity;
+    -fx-text-alignment: RIGHT;
+    -fx-label-padding: 6 0 6 0;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.table-container-text-small{
+    -fx-font-size: 12;
+    -fx-text-fill: black;
+    -fx-label-padding: 6 0 6 0;
+    -fx-max-width: infinity;
+}
+
+.tree-table-view {
+    -fx-max-width: 490;
+}
+
+.tree-table-view .column-header-background{
+    -fx-background-color: #e4e7eb;
+    -fx-padding: 5 0 5 0;
+
+}
+
+.tree-table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-font-size: 10;
+
 }

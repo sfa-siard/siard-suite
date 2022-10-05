@@ -9,6 +9,9 @@ public class DatabaseLoadTask extends Task<ObservableList<DataTable>> {
   @Override
   protected ObservableList<DataTable> call() throws Exception {
 
+    // TODO buildup Model with Database-Data
+    // Metadata, Schema, Tables and Columns -> no
+
     ObservableList<DataTable> data = FXCollections.observableArrayList();
     data.add(new DataTable("BONUS"));
     data.add(new DataTable("DEPT"));
