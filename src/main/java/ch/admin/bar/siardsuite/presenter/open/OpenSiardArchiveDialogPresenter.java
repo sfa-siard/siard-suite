@@ -8,6 +8,7 @@ import ch.admin.bar.siardsuite.view.RootStage;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -87,13 +88,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         chooseFileButton.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.choose.file.button"));
         chooseFileButton.getStyleClass().setAll("button", "secondary");
 
-        chooseFileButton.setOnAction(event -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle(I18n.get("open.siard.archive.dialog.choose.file.title"));
-            FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
-            fileChooser.getExtensionFilters().add(extensionFilter);
-            readArchive(fileChooser.showOpenDialog(stage));
-        });
+        chooseFileButton.setOnAction(this::handleChooseFile);
 
         closeButton.setOnAction(event -> stage.closeDialog());
 
@@ -114,15 +109,20 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             completed = true;
             if (event.getDragboard().getFiles().size() == 1) {
                 final File file = event.getDragboard().getFiles().get(0);
-                final String filePath = file.getAbsolutePath();
-                final int dotIndex = filePath.lastIndexOf(".");
-                if (dotIndex > -1 && filePath.substring(dotIndex + 1).equalsIgnoreCase("siard")) {
-                    readArchive(file);
-                }
+                readArchive(file);
             }
         }
         event.setDropCompleted(completed);
         event.consume();
+    }
+
+    private void handleChooseFile(ActionEvent event) {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(I18n.get("open.siard.archive.dialog.choose.file.title"));
+        final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        final File file = fileChooser.showOpenDialog(stage);
+        readArchive(file);
     }
 
     private void showNoRecentFiles() {
@@ -185,8 +185,14 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         return recentFileBox;
     }
 
+    private boolean isSiardArchive(File file) {
+        final String filePath = file.getAbsolutePath();
+        final int dotIndex = filePath.lastIndexOf(".");
+        return dotIndex > -1 && filePath.substring(dotIndex + 1).equalsIgnoreCase("siard");
+    }
+
     private void readArchive(File file) {
-        if (file != null) {
+        if (file != null && isSiardArchive(file)) {
             addRecentFilePath(file);
         }
     }
