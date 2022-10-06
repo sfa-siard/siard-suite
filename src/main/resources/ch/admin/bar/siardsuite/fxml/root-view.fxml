@@ -17,14 +17,8 @@
                     <String fx:value="help-icon" />
                     <String fx:value="icon-button" />
                 </styleClass>
-                <cursor>
-                    <Cursor fx:constant="HAND" />
-                </cursor>
             </MFXButton>
             <MenuBar styleClass="menu-bar" stylesheets="@../css/root.css">
-                <cursor>
-                    <Cursor fx:constant="HAND" />
-                </cursor>
                 <menus>
                     <Menu mnemonicParsing="false" styleClass="menu-button">
                         <items>

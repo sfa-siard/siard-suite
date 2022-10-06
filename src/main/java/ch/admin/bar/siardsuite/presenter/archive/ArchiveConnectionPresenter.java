@@ -90,7 +90,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     makeTooltip();
 
     this.errorMessage.setVisible(false);
-    this.buttonsBox = new StepperButtonBox();
+    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }
@@ -133,7 +133,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   }
 
   private void setListeners(MFXStepper stepper) {
-    stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_CONTENT_EVENT, event -> {
+    stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
       this.dbTypeString = JDBC + model.getDatabaseDriver().get(0) + "://";
       this.portString = (String) model.getDatabaseDriver().get(1);
       portField.setText(portString);
@@ -152,7 +152,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
       tooltip.show(infoButton,
               (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-              boundsInScreen.getMaxY()  - boundsInScreen.getHeight() - tooltip.getHeight() );
+              boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
     });
 
     infoButton.setOnMouseExited(event -> tooltip.hide());
@@ -161,9 +161,10 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
         this.errorMessage.setVisible(true);
       } else {
-        controller.setConnectionUrl(this.urlField.getText() + ";password=" + this.passwordField.getText());
+        controller.updateConnectionData(this.urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
         this.errorMessage.setVisible(false);
         stepper.next();
+        stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT));
         this.stage.setHeight(950);
       }
 

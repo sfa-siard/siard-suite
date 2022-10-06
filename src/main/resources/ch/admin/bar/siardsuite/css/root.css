@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'Roboto Medium';
     font-weight: 500px;
@@ -42,6 +41,12 @@
     -fx-font-family: "Roboto Medium";
 }
 
+.h4 {
+    -fx-font-weight: bold;
+    -fx-font-size: 14.0;
+    -fx-font-family: "Roboto Medium";
+}
+
 /* Header */
 .header {
     -fx-background-color: -fx-header-background-color;
@@ -65,12 +70,14 @@
     -fx-max-height: 24;
     -fx-content-display: graphic-only;
     -fx-padding: 0 0.5em 0 0.5em;
+    -fx-cursor: HAND;
 }
 
 .menu-bar {
     -fx-background-color: transparent;
     -fx-padding: 0 1em 0 0;
     -fx-border-color: transparent;
+    -fx-cursor: HAND;
 }
 
 .menu-button {
@@ -84,7 +91,7 @@
 }
 
 .context-menu {
-    -fx-padding: .4em 0 0 0 ;
+    -fx-padding: .4em 0 0 0;
     -fx-start-margin: -5em;
     -fx-background-color: -fx-header-background-color;
 
@@ -151,7 +158,7 @@
     -fx-background-color: #e4e7eb;
     -fx-pref-height: 52;
     -fx-alignment: CENTER_LEFT;
-    -fx-text-fill: black ;
+    -fx-text-fill: black;
     -mfx-label-text-gap: 12.0;
 }
 
@@ -165,7 +172,7 @@
 .number-btn {
     -fx-shape: "M 159 96  C 165.16 96  170 100.84  170 107  C 170 113.16  165.16 118  159 118  C 152.84 118  148 113.16  148 107  C 148 100.84  152.84 96  159 96  Z ";
     -fx-background-color: #9aa5b1;
-    -fx-text-fill: black ;
+    -fx-text-fill: black;
     -fx-font-size: 11px;
     -fx-opacity: 0.5;
     -fx-font-family: "Roboto Medium";
@@ -205,7 +212,7 @@
 .mfx-stepper-toggle:completed .mfx-text-field,
 .custom-stepper-toggle:completed .mfx-text-field {
     -fx-opacity: 1;
-    -fx-text-fill: black ;
+    -fx-text-fill: black;
 }
 
 .mfx-stepper .btn-box {
@@ -213,7 +220,7 @@
     -fx-padding: 25 50 25 50;
     -fx-background-color: white;
     -fx-border-color: #e4e7eb;
-    -fx-border-width: 2 0 0 0 ;
+    -fx-border-width: 2 0 0 0;
 }
 
 .mfx-stepper .btn-box .button {
@@ -306,7 +313,7 @@
 }
 
 .radio-button:selected .radio {
-	-fx-stroke: #1F2933;
+    -fx-stroke: #1F2933;
 }
 
 .label-icon {
@@ -322,6 +329,18 @@
 
 .user-icon {
     -fx-graphic: url(../icons/user.png);
+}
+
+.info-icon {
+    -fx-graphic: url(../icons/info.png);
+}
+
+.loading-icon {
+    -fx-graphic: url(../icons/loading.png);
+}
+
+.search-icon {
+    -fx-graphic: url(../icons/search.png);
 }
 
 .form-container {
@@ -376,10 +395,6 @@
     -fx-text-fill: siard-text-color;
 }
 
-.info-icon {
-    -fx-graphic: url(../icons/info.png);
-}
-
 .form-container .info-tooltip {
     -fx-background-image: url(../icons/tooltip_banner.png);
     -fx-background-color: rgba(0, 0, 0, 0);
@@ -392,3 +407,101 @@
     -fx-padding: 2.5em 0 0 0;
 }
 
+/* Tree view*/
+
+.tree-view {
+    -fx-background-color: white;
+    -fx-border-color: #e4e7eb;
+}
+
+.tree-view .tree-cell {
+    -fx-text-fill: black;
+    -fx-font-size: 14;
+}
+
+.tree-view .tree-cell:selected {
+    -fx-font-weight: bold;
+    -fx-background-color: white;
+}
+
+.tree-view .tree-cell:hover {
+    -fx-cursor: HAND;
+}
+
+.tree-view .tree-cell > .tree-disclosure-node > .arrow  {
+    -fx-background-color: #1f2933;
+}
+
+/* Table stuff */
+
+.table-container {
+    -fx-background-color: #f5f7fa;
+}
+
+.table-container-header {
+    -fx-padding: 25 25 20 25;
+    -fx-border-color: #e4e7eb;
+    -fx-border-width: 0 0 2 0;
+}
+
+.icon-text-button {
+    -fx-background-color: transparent;
+    -fx-max-height: 18;
+    -fx-padding: 0 10 0 32;
+    -fx-cursor: HAND;
+    -fx-content-display: LEFT;
+    -fx-label-padding: 0 0 0 0;
+    -fx-graphic-text-gap: 1.2em;
+    -fx-text-fill: black;
+    -fx-font-size: 14;
+}
+
+.table-container-title {
+    -fx-max-width: infinity;
+    -fx-padding: 0 0 50 0;
+}
+
+.table-container-label {
+    -fx-font-size: 12;
+    -fx-text-fill: siard-text-color;
+    -fx-max-width: infinity;
+}
+
+.table-container-text {
+    -fx-font-size: 14;
+    -fx-text-fill: black;
+    -fx-label-padding: 6 0 14 0;
+    -fx-max-width: infinity;
+}
+
+.table-container-label-small {
+    -fx-font-size: 12;
+    -fx-text-fill: black;
+    -fx-max-width: infinity;
+    -fx-text-alignment: RIGHT;
+    -fx-label-padding: 6 0 6 0;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.table-container-text-small{
+    -fx-font-size: 12;
+    -fx-text-fill: black;
+    -fx-label-padding: 6 0 6 0;
+    -fx-max-width: infinity;
+}
+
+.tree-table-view {
+    -fx-max-width: 490;
+}
+
+.tree-table-view .column-header-background{
+    -fx-background-color: #e4e7eb;
+    -fx-padding: 5 0 5 0;
+
+}
+
+.tree-table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-font-size: 10;
+
+}

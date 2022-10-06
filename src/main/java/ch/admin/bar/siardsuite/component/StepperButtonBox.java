@@ -10,31 +10,28 @@ import java.util.Objects;
 
 public class StepperButtonBox extends HBox {
 
+  public static final String DEFAULT = "default";
+  public static final String CANCEL = "cancel";
   @FXML
-  private final MFXButton nextButton;
+  final MFXButton nextButton = new MFXButton();
   @FXML
-  private final MFXButton previousButton;
+  final MFXButton previousButton = new MFXButton();
   @FXML
-  private final MFXButton cancelButton;
+  final MFXButton cancelButton = new MFXButton();
 
-  public StepperButtonBox() {
-    this.nextButton = new MFXButton();
-    this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
-    this.nextButton.getStyleClass().setAll("button", "primary");
-    this.nextButton.setManaged(true);
-    this.previousButton = new MFXButton();
-    this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
-    this.previousButton.getStyleClass().setAll("button", "secondary");
-    this.previousButton.setManaged(true);
-    this.cancelButton = new MFXButton();
-    this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
-    this.cancelButton.getStyleClass().setAll("button", "secondary");
-    this.cancelButton.setManaged(true);
-    this.getChildren().addAll(this.previousButton, this.cancelButton, this.nextButton);
-    this.initialize();
+  public StepperButtonBox make(String type) {
+    if (type.equals(CANCEL)) {
+      return new CancelButtonBox();
+    } else {
+      return new DefaultButtonBox();
+    }
   }
 
-  private void initialize() {
+//  public StepperButtonBox() {
+//    new DefaultButtonBox();
+//  }
+
+  void initialize() {
     this.getStylesheets().add((Objects.requireNonNull(SiardApplication.class.getResource("css/root.css")).toString()));
     this.getStyleClass().add("btn-box");
     this.setSpacing(20.0);
@@ -55,4 +52,30 @@ public class StepperButtonBox extends HBox {
     return cancelButton;
   }
 
+  public static class CancelButtonBox extends StepperButtonBox {
+
+    public CancelButtonBox() {
+      this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
+      this.cancelButton.getStyleClass().setAll("button", "secondary");
+      this.cancelButton.setManaged(true);
+      this.getChildren().addAll(this.cancelButton);
+      this.initialize();
+    }
+  }
+
+  public static class DefaultButtonBox extends StepperButtonBox {
+    public DefaultButtonBox() {
+      this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
+      this.nextButton.getStyleClass().setAll("button", "primary");
+      this.nextButton.setManaged(true);
+      this.previousButton.textProperty().bind(I18n.createStringBinding("button.back"));
+      this.previousButton.getStyleClass().setAll("button", "secondary");
+      this.previousButton.setManaged(true);
+      this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
+      this.cancelButton.getStyleClass().setAll("button", "secondary");
+      this.cancelButton.setManaged(true);
+      this.getChildren().addAll(this.previousButton, this.cancelButton, this.nextButton);
+      this.initialize();
+    }
+  }
 }

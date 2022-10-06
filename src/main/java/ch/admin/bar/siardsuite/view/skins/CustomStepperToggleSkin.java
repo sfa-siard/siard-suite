@@ -15,19 +15,27 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   private final MFXTextField label;
   private final Button icon;
 
-  public CustomStepperToggleSkin(MFXStepperToggle stepperToggle) {
+  private Boolean visible;
+
+  public CustomStepperToggleSkin(MFXStepperToggle stepperToggle, Boolean visible) {
     super(stepperToggle);
+      this.visible = visible;
+      this.label = MFXTextField.asLabel();
+      this.icon = (Button) stepperToggle.getIcon();
 
-    this.label = MFXTextField.asLabel();
-    this.label.textProperty().bind(I18n.createStringBinding(stepperToggle.getText()));
-    this.label.setManaged(false);
-    this.icon = (Button) stepperToggle.getIcon();
-    this.icon.setMaxWidth(22);
-    this.container = new HBox(stepperToggle.getIcon(), this.label);
-    this.container.getStyleClass().setAll("custom-stepper-toggle");
+      if (visible) {
+        this.container = new HBox(stepperToggle.getIcon(), this.label);
+        this.label.textProperty().bind(I18n.createStringBinding(stepperToggle.getText()));
+        this.label.setManaged(false);
+        this.icon.setMaxWidth(22);
+        this.container.getStyleClass().setAll("custom-stepper-toggle");
+        this.getChildren().addAll(new Node[]{this.container});
+        this.setListeners();
+      } else {
+        this.icon.setMaxWidth(0);
+        this.container = new HBox();
+      }
 
-    this.getChildren().addAll(new Node[]{this.container});
-    this.setListeners();
   }
 
   private void setListeners() {
@@ -42,7 +50,9 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   }
 
   protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-    return leftInset + this.icon.getMaxWidth() + TextUtils.computeTextWidth(this.label.getFont(), this.label.getText()) + ((MFXStepperToggle) this.getSkinnable()).getLabelTextGap() * 2.0 + rightInset;
+    if (this.visible) {
+      return leftInset + this.icon.getMaxWidth() + TextUtils.computeTextWidth(this.label.getFont(), this.label.getText()) + ((MFXStepperToggle) this.getSkinnable()).getLabelTextGap() * 2.0 + rightInset;
+    } else return 0;
   }
 
   protected void layoutChildren(double x, double y, double w, double h) {

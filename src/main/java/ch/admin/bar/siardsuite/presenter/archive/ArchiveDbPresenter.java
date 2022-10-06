@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
@@ -65,7 +66,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
     List.of("MS Access", "DB/2", "H2 Database", "MySQL").forEach(s -> createRadioToVBox(s, leftVBox));
     List.of("Oracle", "PostgreSQL", "Microsoft SQL Server").forEach(s -> createRadioToVBox(s, rightVBox));
 
-    this.buttonsBox = new StepperButtonBox();
+    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }
@@ -85,7 +86,7 @@ public class ArchiveDbPresenter extends StepperPresenter {
         this.errorMessage.setVisible(false);
         this.stage.setHeight(1080.00);
         stepper.next();
-        stepper.fireEvent(getUpdateEvent());
+        stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT));
         //fire event
       } else {
         this.errorMessage.setVisible(true);
