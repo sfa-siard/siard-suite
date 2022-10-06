@@ -1,7 +1,8 @@
-package ch.admin.bar.siardsuite.presenter;
+package ch.admin.bar.siardsuite.presenter.open;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 
@@ -26,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.prefs.Preferences;
 
-public class OpenSiardFileDialogPresenter extends DialogPresenter {
+public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
 
     @FXML
     protected Text text;
@@ -59,14 +60,13 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        setTitle("open.siard.file.dialog.title");
-        text.textProperty().bind(I18n.createStringBinding("open.siard.file.dialog.text"));
+        setTitle("open.siard.archive.dialog.title");
+        text.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.text"));
+
+        recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.name"));
+        recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.date"));
 
         if (Arrays.stream(getRecentFilePaths()).anyMatch(path -> !path.isEmpty())) {
-            recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.file.recent.files.header.name"));
-            recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("open.siard.file.recent.files.header.date"));
-            recentFilesHeader.setVisible(true);
-
             for (String filePath : getRecentFilePaths()) {
                 try {
                     recentFilesBox.getChildren().add(getRecentFileBox(filePath));
@@ -74,21 +74,22 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
                     throw new RuntimeException(e);
                 }
             }
-            recentFilesBox.setVisible(true);
+        } else {
+            showNoRecentFiles();
         }
 
-        dropFileTextTop.textProperty().bind(I18n.createStringBinding("open.siard.file.drop.file.text.top"));
-        dropFileTextMiddle.textProperty().bind(I18n.createStringBinding("open.siard.file.drop.file.text.middle"));
+        dropFileTextTop.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.drop.file.text.top"));
+        dropFileTextMiddle.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.drop.file.text.middle"));
 
         dropFileBox.setOnDragOver(this::handleDragOver);
         dropFileBox.setOnDragDropped(this::handleDragDropped);
 
-        chooseFileButton.textProperty().bind(I18n.createStringBinding("open.siard.file.choose.file.button"));
+        chooseFileButton.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.choose.file.button"));
         chooseFileButton.getStyleClass().setAll("button", "secondary");
 
         chooseFileButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle(I18n.get("open.siard.file.choose.file.title"));
+            fileChooser.setTitle(I18n.get("open.siard.archive.dialog.choose.file.title"));
             FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
             fileChooser.getExtensionFilters().add(extensionFilter);
             readArchive(fileChooser.showOpenDialog(stage));
@@ -124,10 +125,11 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
         event.consume();
     }
 
-    private void readArchive(File file) {
-        if (file != null) {
-            addRecentFilePath(file);
-        }
+    private void showNoRecentFiles() {
+        recentFilesBox.setStyle("-fx-background-color: #f8f6f69e; -fx-alignment: center");
+        final Label label = new Label(I18n.get("open.siard.archive.dialog.recent.files.nodata"));
+        recentFilesBox.getChildren().add(label);
+        label.setStyle("-fx-text-fill: #2a2a2a82");
     }
 
     private void addRecentFilePath(File file) {
@@ -181,6 +183,12 @@ public class OpenSiardFileDialogPresenter extends DialogPresenter {
         }
 
         return recentFileBox;
+    }
+
+    private void readArchive(File file) {
+        if (file != null) {
+            addRecentFilePath(file);
+        }
     }
 
 }

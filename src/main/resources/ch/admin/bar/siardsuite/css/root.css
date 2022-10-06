@@ -275,10 +275,6 @@
     -fx-font-size: 14px;
 }
 
-.dialog .button:hover {
-    -fx-background-color: rgba(245, 245, 245, 0.68);
-}
-
 .dialog-title {
     -fx-font-weight: bold;
     -fx-font-size: 16px;

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="585.0" prefWidth="480.0" styleClass="dialog" stylesheets="@../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.OpenSiardFileDialogPresenter">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="585.0" prefWidth="480.0" styleClass="dialog" stylesheets="@../../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.open.OpenSiardArchiveDialogPresenter">
     <center>
         <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0" BorderPane.alignment="CENTER">
             <left>
@@ -24,7 +24,7 @@
                                 <Insets bottom="25.0" />
                             </VBox.margin>
                         </Text>
-                        <HBox fx:id="recentFilesHeader" prefHeight="40.0" prefWidth="330.0" visible="false">
+                        <HBox fx:id="recentFilesHeader" prefHeight="40.0" prefWidth="330.0">
                              <children>
                                 <Label fx:id="recentFilesHeaderName" prefHeight="40.0" prefWidth="220.0" styleClass="files-vbox-header-name" />
                                 <Label fx:id="recentFilesHeaderDate" prefHeight="40.0" prefWidth="110.0" styleClass="files-vbox-header-date" />
@@ -33,7 +33,7 @@
                                 <Insets bottom="10.0" />
                             </VBox.margin>
                         </HBox>
-                        <VBox fx:id="recentFilesBox" prefHeight="200.0" prefWidth="330.0" styleClass="files-vbox-list" visible="false">
+                        <VBox fx:id="recentFilesBox" prefHeight="200.0" prefWidth="330.0" styleClass="files-vbox-list">
                             <VBox.margin>
                                 <Insets bottom="25.0" />
                             </VBox.margin>
