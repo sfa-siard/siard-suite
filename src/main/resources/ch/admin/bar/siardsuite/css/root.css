@@ -79,23 +79,34 @@
     -fx-padding: 0 1em 0 0;
     -fx-border-color: transparent;
     -fx-cursor: HAND;
+    -fx-background-image: url(../icons/baseline_menu_white_24dp.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left center;
+    -fx-focus-color: transparent;
+}
+
+/* menu container */
+.menu-bar .container {
+    -fx-translate-x: -100;
+    -fx-focus-color: transparent;
 }
 
 .menu-button {
-    -fx-background-image: url(../icons/baseline_menu_white_24dp.png);
-    -fx-background-repeat: no-repeat;
     -fx-background-color: transparent;
-    -fx-background-position: left center;
     -fx-border-color: transparent;
     -fx-focus-color: transparent;
     -fx-start-margin: -5em;
 }
 
+/* background container of menu*/
 .context-menu {
     -fx-padding: .4em 0 0 0;
     -fx-start-margin: -5em;
     -fx-background-color: -fx-header-background-color;
+}
 
+.sub-menu .context-menu {
+    -fx-padding: 0 0 0 0;
 }
 
 .menu-item {
@@ -113,6 +124,10 @@
 
 .menu-item .label {
     -fx-text-fill: black;
+}
+
+.sub-menu {
+
 }
 
 .help-icon {

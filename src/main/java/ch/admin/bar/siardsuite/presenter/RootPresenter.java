@@ -20,6 +20,10 @@ public class RootPresenter extends Presenter {
 
   @FXML
   public HBox windowHeader;
+  @FXML
+  public MenuBar menuBar;
+  @FXML
+  public Menu menuContainer;
 
   public void init(Controller controller, Model model, RootStage stage) {
     this.model = model;
@@ -34,6 +38,8 @@ public class RootPresenter extends Presenter {
   }
 
   private void initMenu() {
+    this.menuBar.setOnMouseClicked(event -> this.menuContainer.show());
+
     this.menuItemLanguage.textProperty().bind(I18n.createStringBinding("menu.item.language"));
     this.menuItemOptions.textProperty().bind(I18n.createStringBinding("menu.item.options"));
     this.menuItemInfo.textProperty().bind(I18n.createStringBinding("menu.item.info"));
@@ -55,6 +61,7 @@ public class RootPresenter extends Presenter {
     });
 
     this.menuItemClose.setOnAction(event -> this.stage.close());
+
 
   }
 
