@@ -283,6 +283,7 @@
 
 .dialog-close-button {
     -fx-font-weight: bold;
+    -fx-cursor: HAND;
 }
 
 .dialog-text {

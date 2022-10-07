@@ -17,6 +17,9 @@
                   <Label fx:id="title" prefHeight="42.0" styleClass="dialog-title" text="Label" HBox.hgrow="ALWAYS" />
                    <MFXButton fx:id="closeButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" styleClass="dialog-close-button" text="X" HBox.hgrow="NEVER" />
                </children>
+               <BorderPane.margin>
+                  <Insets bottom="15.0" />
+               </BorderPane.margin>
             </HBox>
          </top>
          <center>
@@ -30,7 +33,10 @@
                         <HBox fx:id="recentFilesHeader" prefHeight="40.0">
                              <children>
                                 <Label fx:id="recentFilesHeaderName" prefHeight="40.0" styleClass="files-vbox-header-name" HBox.hgrow="ALWAYS" />
-                                <Label fx:id="recentFilesHeaderDate" prefHeight="40.0" prefWidth="110.0" styleClass="files-vbox-header-date" />
+                                <Label fx:id="recentFilesHeaderDate" prefHeight="40.0" prefWidth="110.0" styleClass="files-vbox-header-date">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin></Label>
                              </children>
                             <VBox.margin>
                                 <Insets bottom="10.0" />
