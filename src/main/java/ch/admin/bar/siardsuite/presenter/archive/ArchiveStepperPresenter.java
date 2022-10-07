@@ -25,7 +25,7 @@ public class ArchiveStepperPresenter extends StepperPresenter {
 
     List<MFXStepperToggle> stepperToggles = createSteps(ArchiveSteps.getSteps(), stepper);
     stepper.getStepperToggles().addAll(stepperToggles);
-    stepper.setSkin(new CustomStepperSkin(stepper));
+    stepper.setSkin(new CustomStepperSkin(stepper, stage));
   }
 
   @Override

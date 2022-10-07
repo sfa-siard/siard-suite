@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.view.skins;
 
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
@@ -23,6 +24,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final StackPane contentPane;
@@ -33,7 +35,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final Rectangle track = this.buildRectangle("track");
   private boolean buttonWasPressed = false;
 
-  public CustomStepperSkin(MFXStepper stepper) {
+  public CustomStepperSkin(MFXStepper stepper, Stage stage) {
     super(stepper);
     this.track.setHeight(2.0);
     this.bar = this.buildRectangle("bar");
@@ -41,20 +43,13 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.progressBarGroup = new Group(this.track, this.bar);
     this.progressBarGroup.setManaged(false);
     this.stepperBar = new HBox(this.progressBarGroup);
-    this.stepperBar.spacingProperty().bind(stepper.spacingProperty());
+    this.stepperBar.setSpacing(40.0);
     this.stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
     this.stepperBar.getChildren().addAll(stepper.getStepperToggles().stream().filter(Node::isVisible).toList());
     this.stepperBar.getStyleClass().setAll("stepper-bar");
     this.stepperBar.setMaxHeight(52.0);
     this.stepperBar.setMinHeight(52.0);
-    Double toggleWidth = stepper.getStepperToggles()
-            .stream()
-            .filter(Node::isVisible)
-            .mapToDouble(
-                    t -> this.stepperBar.spacingProperty().get() / 2 + (TextUtils.computeTextWidth(Font.font("Roboto Regular", 13.0), I18n.get(t.textProperty().get())) + (t.getLabelTextGap() + 22))
-            ).sum();
-    this.bar.setWidth(toggleWidth);
-    this.track.setWidth(toggleWidth);
+    layoutWidth(stepper);
     this.stepperBar.setMaxSize(stepper.getPrefWidth(), 52.0);
     this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() -> {
       return this.snapPositionY(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2));
@@ -66,11 +61,28 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     container.setTop(this.stepperBar);
     container.setCenter(this.contentPane);
     this.getChildren().add(container);
-    this.setListeners();
+    this.setListeners(stage);
   }
 
-  private void setListeners() {
+  private void layoutWidth(MFXStepper stepper) {
+    double toggleWidth = stepper.getStepperToggles()
+            .stream()
+            .filter(Node::isVisible)
+            .mapToDouble(
+                    t -> this.stepperBar.spacingProperty().get() + (TextUtils.computeTextWidth(Font.font("Roboto Regular", 13.0), I18n.get(t.textProperty().get())) + (t.getLabelTextGap() + 22))
+            ).sum();
+    this.bar.setWidth(toggleWidth);
+    this.track.setWidth(toggleWidth);
+  }
+
+  private void setListeners(Stage stage) {
     MFXStepper stepper = (MFXStepper) this.getSkinnable();
+
+    stage.addEventHandler(SiardEvent.UPDATE_LANGUAGE_EVENT, event -> {
+      stepper.requestLayout();
+      layoutWidth(stepper);
+    });
+
     stepper.addEventFilter(MFXStepper.MFXStepperEvent.FORCE_LAYOUT_UPDATE_EVENT, (event) -> {
       stepper.requestLayout();
       this.computeProgress();

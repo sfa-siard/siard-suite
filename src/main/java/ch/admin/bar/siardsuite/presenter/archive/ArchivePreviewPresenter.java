@@ -132,9 +132,9 @@ public class ArchivePreviewPresenter extends StepperPresenter {
       stepper.next();
     });
     this.buttonsBox.previous().setOnAction((event) -> {
+      stepper.previous(); // Step over hidden loading step
       stepper.previous();
-      stepper.previous();
-      this.stage.setHeight(950);
+      this.stage.setHeight(1080.00);
     });
     this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
   }

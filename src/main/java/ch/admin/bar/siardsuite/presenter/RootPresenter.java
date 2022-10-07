@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckMenuItem;
@@ -49,6 +50,7 @@ public class RootPresenter extends Presenter {
       item.setOnAction(event -> {
         CheckMenuItem cmi = (CheckMenuItem) event.getSource();
         I18n.setLocale(new Locale(cmi.getId()));
+        stage.fireEvent(new SiardEvent(SiardEvent.UPDATE_LANGUAGE_EVENT));
       });
     });
 

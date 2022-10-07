@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.view.skins;
 
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.TextUtils;
@@ -9,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.SkinBase;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   private final HBox container;
@@ -17,7 +19,7 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
 
   private Boolean visible;
 
-  public CustomStepperToggleSkin(MFXStepperToggle stepperToggle, Boolean visible) {
+  public CustomStepperToggleSkin(MFXStepperToggle stepperToggle, Boolean visible, Stage stage) {
     super(stepperToggle);
       this.visible = visible;
       this.label = MFXTextField.asLabel();
@@ -30,7 +32,7 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
         this.icon.setMaxWidth(22);
         this.container.getStyleClass().setAll("custom-stepper-toggle");
         this.getChildren().addAll(new Node[]{this.container});
-        this.setListeners();
+        this.setListeners(stage);
       } else {
         this.icon.setMaxWidth(0);
         this.container = new HBox();
@@ -38,11 +40,15 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
 
   }
 
-  private void setListeners() {
+  private void setListeners(Stage stage) {
     MFXStepperToggle stepperToggle = (MFXStepperToggle) this.getSkinnable();
     MFXValidator validator = stepperToggle.getValidator();
 
     this.label.visibleProperty().bind(stepperToggle.textProperty().isEmpty().not());
+
+    stage.addEventHandler(SiardEvent.UPDATE_LANGUAGE_EVENT, event -> {
+      layoutChildren(0,0,0,0);
+    });
   }
 
   protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {

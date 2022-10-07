@@ -41,7 +41,7 @@ public abstract class StepperPresenter extends Presenter {
     btn.setText(String.valueOf(pos));
     // passing the key is kind of a hack to bind it in the CustomStepperToggleSkin
     MFXStepperToggle toggle = new MFXStepperToggle(key, btn, content);
-    toggle.setSkin(new CustomStepperToggleSkin(toggle, visible));
+    toggle.setSkin(new CustomStepperToggleSkin(toggle, visible, stage));
     toggle.setVisible(visible);
     return toggle;
 
