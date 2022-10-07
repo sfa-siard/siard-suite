@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.List;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
@@ -72,7 +73,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
                 try {
                     recentFilesBox.getChildren().add(getRecentFileBox(filePath));
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    removeRecentFilePath(filePath);
                 }
             }
         } else {
@@ -148,6 +149,19 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             }
         }
         preferences.put("0", file.getAbsolutePath());
+    }
+
+    private void removeRecentFilePath(String file)  {
+        try {
+            String[] keys = preferences.keys();
+            for (String key : keys) {
+                if (preferences.get(key, "").equals(file)) {
+                    preferences.remove(key);
+                }
+            }
+        } catch (BackingStoreException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String[] getRecentFilePaths() {
