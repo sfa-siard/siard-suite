@@ -1,14 +1,34 @@
 package ch.admin.bar.siardsuite.model.service;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.DataTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import ch.admin.bar.siard2.cmd.*;
+import ch.enterag.utils.background.*;
 
-public class DatabaseLoadTask extends Task<ObservableList<DataTable>> {
+import java.sql.Connection;
+
+public class DatabaseLoadTask extends Task<ObservableList<DataTable>> implements Progress {
+
+  private Connection connection;
+  private Archive archive;
+  public DatabaseLoadTask(Connection connection, Archive archive) {
+    this.connection = connection;
+    this.archive = archive;
+  }
+
   @Override
   protected ObservableList<DataTable> call() throws Exception {
 
+
+    MetaDataFromDb mdfd = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
+    mdfd.download(true, false, this);
+
+    updateProgress(0,100);
+    PrimaryDataFromDb pdfd = PrimaryDataFromDb.newInstance(connection, archive);
+    pdfd.download(this);
     // TODO buildup Model with Database-Data
     // Metadata, Schema, Tables and Columns -> no
 
@@ -32,5 +52,15 @@ public class DatabaseLoadTask extends Task<ObservableList<DataTable>> {
 
 
     return data;
+  }
+
+  @Override
+  public boolean cancelRequested() {
+    return false;
+  }
+
+  @Override
+  public void notifyProgress(int i) {
+    updateProgress(i,100);
   }
 }

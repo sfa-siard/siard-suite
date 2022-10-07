@@ -19,6 +19,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
+import java.util.Arrays;
+
 public class ArchiveConnectionPresenter extends StepperPresenter {
   private static final String DATABASE_NAME_STRING = "databaseName=";
   private static final String USERNAME_STRING = "username=";
@@ -138,7 +140,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       this.portString = (String) model.getDatabaseDriver().get(1);
       portField.setText(portString);
       portField.setPromptText(portString);
-      urlField.setPromptText(dbTypeString + DBSERVER_ORGANISATION_ORG + ":" + portString + ";" + DATABASE_NAME_STRING + TEST_DB + ";" + USERNAME_STRING + MY_USER);
+      urlField.setPromptText(dbTypeString + DBSERVER_ORGANISATION_ORG + ":" + portString + "/" + DATABASE_NAME_STRING + TEST_DB + ";" + USERNAME_STRING + MY_USER);
     });
 
     dbServerField.setOnKeyReleased(this::handleKeyEvent);
@@ -161,7 +163,8 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
         this.errorMessage.setVisible(true);
       } else {
-        controller.updateConnectionData(this.urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
+        String connectionUrl = Arrays.stream(this.urlField.getText().split(";")).findFirst().get();
+        controller.updateConnectionData(connectionUrl, this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
         this.errorMessage.setVisible(false);
         stepper.next();
         stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT));
@@ -184,7 +187,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       String port = portField.getText().isEmpty() ? portString : portField.getText();
       String user = usernameField.getText().isEmpty() ? MY_USER : usernameField.getText();
 
-      urlField.setText(String.format(dbTypeString + "%s:%s;" + DATABASE_NAME_STRING + "%s;" + USERNAME_STRING + "%s",
+      urlField.setText(String.format(dbTypeString + "%s:%s/" + DATABASE_NAME_STRING + "%s;" + USERNAME_STRING + "%s",
               server, port, dbname, user));
     }
     event.consume();

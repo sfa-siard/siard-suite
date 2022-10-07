@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 import java.util.List;
 import java.util.Map;
 
-public class SiardArchive {
+public class DatabaseConnectionProperties {
 
   private StringProperty databaseName = new SimpleStringProperty();
   private StringProperty databaseProduct = new SimpleStringProperty();
@@ -22,7 +22,7 @@ public class SiardArchive {
   private StringProperty databaseUsername = new SimpleStringProperty();
   private String password;
 
-  public SiardArchive() {}
+  public DatabaseConnectionProperties() {}
 
   public List getDatabaseProductInfo() {
     if (databaseProduct != null) {
@@ -62,5 +62,9 @@ public class SiardArchive {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public String getPassword() {
+    return this.password;
   }
 }

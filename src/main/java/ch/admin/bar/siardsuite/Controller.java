@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite;
 
+import java.sql.*;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.service.DatabaseLoadService;
 
@@ -18,7 +19,13 @@ public class Controller {
 
 
   public DatabaseLoadService loadDatabase() {
-    databaseLoadService = new DatabaseLoadService();
+    Connection connection = null;
+    try {
+      connection = DriverManager.getConnection(model.getConnectionUrl().get(), model.getDatabaseUsername().get(), model.getDatabasePassword());
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    databaseLoadService = new DatabaseLoadService(connection, model.getArchiveImpl());
     databaseLoadService.start();
     databaseLoadService.setOnSucceeded(event -> model.setDatabaseData(databaseLoadService.valueProperty()));
     return databaseLoadService;

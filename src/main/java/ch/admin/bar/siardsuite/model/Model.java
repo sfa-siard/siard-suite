@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite.model;
 
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -12,7 +14,17 @@ public class Model {
 
   private String currentView = View.START.getName();
 
-  private SiardArchive archive = new SiardArchive();
+  private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
+
+  public Archive getArchiveImpl() {
+    return archiveImpl;
+  }
+
+  public void setArchiveImpl(Archive archiveImpl) {
+    this.archiveImpl = archiveImpl;
+  }
+
+  Archive archiveImpl = ArchiveImpl.newInstance();
 
   private StringProperty siardVersion = new SimpleStringProperty("2.1");
 
@@ -28,18 +40,18 @@ public class Model {
   }
 
   public void setDatabaseType(String databaseType) {
-    if (this.archive == null) {
-      this.archive = new SiardArchive();
+    if (this.dbConnectionProps == null) {
+      this.dbConnectionProps = new DatabaseConnectionProperties();
     }
-    this.archive.setDatabaseProduct(databaseType);
+    this.dbConnectionProps.setDatabaseProduct(databaseType);
   }
 
   public void setConnectionUrl(String connectionUrl) {
-    this.archive.setConnectionUrl(connectionUrl);
+    this.dbConnectionProps.setConnectionUrl(connectionUrl);
   }
 
   public List getDatabaseDriver() {
-    return this.archive.getDatabaseProductInfo();
+    return this.dbConnectionProps.getDatabaseProductInfo();
   }
 
 
@@ -53,30 +65,34 @@ public class Model {
   }
 
   public StringProperty getDatabaseName() {
-    return this.archive.getDatabaseName();
+    return this.dbConnectionProps.getDatabaseName();
   }
 
   public StringProperty getDatabaseProduct() {
-    return this.archive.getDatabaseProduct();
+    return this.dbConnectionProps.getDatabaseProduct();
   }
 
   public StringProperty getConnectionUrl() {
-    return this.archive.getConnectionUrl();
+    return this.dbConnectionProps.getConnectionUrl();
   }
 
   public StringProperty getDatabaseUsername() {
-    return this.archive.getDatabaseUsername();
+    return this.dbConnectionProps.getDatabaseUsername();
   }
 
   public void setDatabaseName(String databaseName) {
-    this.archive.setDatabaseName(databaseName);
+    this.dbConnectionProps.setDatabaseName(databaseName);
   }
 
   public void setUsername(String username) {
-    this.archive.setDatabaseUsername(username);
+    this.dbConnectionProps.setDatabaseUsername(username);
   }
 
   public void setPassword(String password) {
-    this.archive.setPassword(password);
+    this.dbConnectionProps.setPassword(password);
+  }
+
+  public String getDatabasePassword() {
+    return this.dbConnectionProps.getPassword();
   }
 }
