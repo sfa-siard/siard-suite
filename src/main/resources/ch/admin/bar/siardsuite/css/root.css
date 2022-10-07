@@ -278,6 +278,11 @@
 .dialog-title {
     -fx-font-weight: bold;
     -fx-font-size: 16px;
+    -fx-max-width: infinity;
+}
+
+.dialog-close-button {
+    -fx-font-weight: bold;
 }
 
 .dialog-text {
@@ -514,11 +519,13 @@
     -fx-font-size: 15;
     -fx-font-weight: bold;
     -fx-alignment: center-left;
+    -fx-max-width: infinity;
 }
 
 .files-vbox-header-date {
     -fx-font-size: 10;
     -fx-alignment: center-right;
+
 }
 
 .files-vbox-list {
@@ -542,7 +549,7 @@
 }
 
 .files-vbox-list .file-hbox .name-label {
-    -fx-pref-width: 180.0;
+    -fx-pref-width: 260.0;
     -fx-pref-height: 40.0;
     -fx-font-size: 15;
     -fx-alignment: center-left;
@@ -566,3 +573,5 @@
 .files-vbox-drop .button:hover {
     -fx-background-color: #0e0e0e82;
 }
+
+
