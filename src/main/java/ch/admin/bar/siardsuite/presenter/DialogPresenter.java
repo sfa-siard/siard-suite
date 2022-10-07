@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -15,7 +16,7 @@ public class DialogPresenter extends Presenter {
   @FXML
   protected HBox windowHeader;
   @FXML
-  protected Text title;
+  protected Label title;
 
   public void init(Controller controller, Model model, RootStage stage) {
     this.model = model;

@@ -11,7 +11,8 @@ public enum View {
   ARCHIVE_DB_DIALOG("fxml/archive/archive-db-dialog-view.fxml"),
   ARCHIVE_ABORT_DIALOG("fxml/archive/archive-abort-dialog-view.fxml"),
   ARCHIVE_PREVIEW("fxml/archive/archive-preview-view.fxml"),
-  ARCHIVE_LOADING_PREVIEW("fxml/archive/archive-loading-preview-view.fxml");
+  ARCHIVE_LOADING_PREVIEW("fxml/archive/archive-loading-preview-view.fxml"),
+  OPEN_SIARD_ARCHIVE_DIALOG("fxml/open/open-siard-archive-dialog-view.fxml");
 
   private final String viewName;
 

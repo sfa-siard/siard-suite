@@ -35,7 +35,7 @@ public class StartPresenter extends Presenter {
     this.archive.setOnAction(event -> stage.openDialog(View.ARCHIVE_DB_DIALOG.getName()));
     this.upload.setOnAction(event -> System.out.println("uplaod button pressed"));
     this.export.setOnAction(event -> System.out.println("export button pressed"));
-    this.open.setOnAction(event -> System.out.println("open button pressed"));
+    this.open.setOnAction(event -> stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG.getName()));
 
     this.archive.textProperty().bind(createStringBinding("button.archive"));
     this.upload.textProperty().bind(createStringBinding("button.upload"));

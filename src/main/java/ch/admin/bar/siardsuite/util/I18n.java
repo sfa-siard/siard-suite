@@ -6,9 +6,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.text.MessageFormat;
-import java.util.*
-        ;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class I18n {
 
@@ -50,6 +50,17 @@ public class I18n {
 
   public static StringBinding createStringBinding(final String key, Object... args) {
     return Bindings.createStringBinding(() -> get(key, args), locale);
+  }
+
+  public static String getLocaleDate(String yyyy_mm_dd) {
+    final LocalDate date = LocalDate.parse(yyyy_mm_dd);
+    final String pattern;
+    if (getLocale().equals(Locale.ENGLISH)) {
+      pattern = "dd MMM yyyy";
+    } else {
+      pattern = "dd. MMM yyyy";
+    }
+    return date.format(DateTimeFormatter.ofPattern(pattern, getLocale()));
   }
 
 }

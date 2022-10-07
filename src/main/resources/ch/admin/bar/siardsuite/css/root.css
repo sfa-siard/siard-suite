@@ -1,3 +1,4 @@
+
 @font-face {
     font-family: 'Roboto Medium';
     font-weight: 500px;
@@ -277,12 +278,19 @@
 .dialog-title {
     -fx-font-weight: bold;
     -fx-font-size: 16px;
+    -fx-max-width: infinity;
+}
+
+.dialog-close-button {
+    -fx-font-weight: bold;
+    -fx-cursor: HAND;
 }
 
 .dialog-text {
     -fx-wrap-text: break-word;
     -fx-font-size: 14px;
     -fx-line-spacing: 8.0;
+    -fx-fill: #111111b5;
 }
 
 /* Views */
@@ -505,3 +513,66 @@
     -fx-font-size: 10;
 
 }
+
+/* Select/Drop Files */
+
+.files-vbox-header-name {
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+    -fx-max-width: infinity;
+}
+
+.files-vbox-header-date {
+    -fx-font-size: 10;
+    -fx-alignment: center-right;
+
+}
+
+.files-vbox-list {
+    -fx-pref-width: 330.0;
+}
+
+.files-vbox-list .file-hbox {
+    -fx-border-color: #d3d3d3;
+    -fx-border-width: 2 2 2 2;
+    -fx-padding: 5 10 5 10;
+}
+
+.files-vbox-list .file-hbox:hover {
+    -fx-background-color: #eceaea82;
+}
+
+.files-vbox-list .file-hbox .icon-label {
+    -fx-graphic: url(../icons/file.png);
+    -fx-pref-width: 40.0;
+    -fx-pref-height: 40.0;
+}
+
+.files-vbox-list .file-hbox .name-label {
+    -fx-pref-width: 260.0;
+    -fx-pref-height: 40.0;
+    -fx-font-size: 15;
+    -fx-alignment: center-left;
+}
+
+.files-vbox-list .file-hbox .date-label {
+    -fx-pref-width: 110.0;
+    -fx-pref-height: 40.0;
+    -fx-alignment: center-right;
+    -fx-text-fill: #1a1a1aa8;
+}
+
+.files-vbox-drop {
+    -fx-padding: 20 20 20 20;
+    -fx-border-style: dashed;
+    -fx-border-width: 2 2 2 2;
+    -fx-border-color: #d3d3d3;
+    -fx-alignment: center;
+}
+
+.files-vbox-drop .button:hover {
+    -fx-background-color: #0e0e0e82;
+}
+
+
