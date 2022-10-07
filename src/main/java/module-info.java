@@ -7,6 +7,8 @@ module ch.admin.bar.siardsuite {
   requires siardcmd;
   requires enterutils;
   requires java.sql;
+  requires antlr.runtime;
+
 
   opens ch.admin.bar.siardsuite.presenter to javafx.fxml;
   exports ch.admin.bar.siardsuite;

@@ -13,14 +13,18 @@ public class DatabaseConnectionProperties {
   private StringProperty databaseUsername = new SimpleStringProperty();
   private String password;
   private StringProperty connectionUrl = new SimpleStringProperty();
-  private static final Map<String, DatabaseProperties> dbTypes = Map.of(
-          "MS Access", new DatabaseProperties("access", "", "jdbc:{product}:D:\\Projekte\\SIARD2\\JdbcAccess\\testfiles\\dbfile.mdb"),
-          "DB/2",   new DatabaseProperties("db2", "50000", "jdbc:{product}:{host}:{port}/{dbName}"),
-          "H2 Database",  new DatabaseProperties( "h2", "8082", "jdbc:{product}:tcp://{host}:{port}/{dbName}"),
-          "MySQL",   new DatabaseProperties("mysql", "3306", "jdbc:{product}://{host}:{port}/{dbName}"),
-          "Oracle",   new DatabaseProperties("oracle", "1521", "jdbc:{product}:thin:@{host}:{port}:{dbName}"),
-          "PostgreSQL",   new DatabaseProperties("postgresql", "5432", "jdbc:{product}://{host}:{port}/{dbName}"),
-          "Microsoft SQL Server",   new DatabaseProperties("sqlserver", "1433", "jdbc:{product}://{host}:{port};databaseName={dbName}"));
+  public static final String PRODUCT = "{product}";
+  public static final String HOST = "{host}";
+  public static final String PORT = "{port}";
+  public static final String DB_NAME = "{dbName}";
+  public static final Map<String, DatabaseProperties> dbTypes = Map.of(
+          "MS Access", new DatabaseProperties("access", "", "jdbc:" + PRODUCT + ":D:\\Projekte\\SIARD2\\JdbcAccess\\testfiles\\dbfile.mdb"),
+          "DB/2",   new DatabaseProperties("db2", "50000", "jdbc:" + PRODUCT + ":" + HOST + ":" + PORT + "/" + DB_NAME),
+          "H2 Database",  new DatabaseProperties( "h2", "8082", "jdbc:" + PRODUCT + ":tcp://" + HOST + ":" + PORT + "/" + DB_NAME),
+          "MySQL",   new DatabaseProperties("mysql", "3306", "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + "/" + DB_NAME),
+          "Oracle",   new DatabaseProperties("oracle", "1521", "jdbc:" + PRODUCT + ":thin:@" + HOST + ":" + PORT + ":" + DB_NAME),
+          "PostgreSQL",   new DatabaseProperties("postgresql", "5432", "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + "/" + DB_NAME),
+          "Microsoft SQL Server",   new DatabaseProperties("sqlserver", "1433", "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + ";databaseName=" + DB_NAME));
 
 
   public DatabaseConnectionProperties() {}

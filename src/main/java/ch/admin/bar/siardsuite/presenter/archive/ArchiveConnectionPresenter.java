@@ -1,10 +1,10 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -20,12 +20,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
-import java.util.Arrays;
+import static ch.admin.bar.siardsuite.model.DatabaseConnectionProperties.*;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
-  private static final String DATABASE_NAME_STRING = "databaseName=";
-  private static final String USERNAME_STRING = "username=";
-  private static final String JDBC = "jdbc:";
+
   private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
   private static final String TEST_DB = "test-db";
   private static final String MY_USER = "MyUser";
@@ -138,11 +136,12 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   private void setListeners(MFXStepper stepper) {
     stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
       DatabaseConnectionProperties.DatabaseProperties props = model.getDatabaseProps();
+      this.dbTypeString = props.defaultUrl().replace(PRODUCT, props.product());
       this.portString = props.port();
-      String url = props.defaultUrl().replace("{product}", props.product())
-              .replace("{host}", DBSERVER_ORGANISATION_ORG)
-              .replace("{port}", portString)
-              .replace("{dbName}", TEST_DB);
+      String url = this.dbTypeString
+              .replace(HOST, DBSERVER_ORGANISATION_ORG)
+              .replace(PORT, portString)
+              .replace(DB_NAME, TEST_DB );
 
       portField.setText(portString);
       portField.setPromptText(portString);
@@ -170,8 +169,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
         this.errorMessage.setVisible(true);
       } else {
-        String connectionUrl = Arrays.stream(this.urlField.getText().split(";")).findFirst().get();
-        controller.updateConnectionData(connectionUrl, this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
+        controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
         this.errorMessage.setVisible(false);
         this.stage.setHeight(950);
         stepper.next();
@@ -192,10 +190,13 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       String server = dbServerField.getText().isEmpty() ? DBSERVER_ORGANISATION_ORG : dbServerField.getText();
       String dbname = dbNameField.getText().isEmpty() ? TEST_DB : dbNameField.getText();
       String port = portField.getText().isEmpty() ? portString : portField.getText();
-      String user = usernameField.getText().isEmpty() ? MY_USER : usernameField.getText();
 
-      urlField.setText(String.format(dbTypeString + "%s:%s/" + DATABASE_NAME_STRING + "%s;" + USERNAME_STRING + "%s",
-              server, port, dbname, user));
+      String url = dbTypeString
+              .replace(HOST, server)
+              .replace(PORT, port)
+              .replace(DB_NAME, dbname);
+
+      urlField.setText(url);
     }
     event.consume();
   }
