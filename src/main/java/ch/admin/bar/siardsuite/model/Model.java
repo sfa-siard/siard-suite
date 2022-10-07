@@ -8,8 +8,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
-import java.util.List;
-
 public class Model {
 
   private String currentView = View.START.getName();
@@ -50,8 +48,8 @@ public class Model {
     this.dbConnectionProps.setConnectionUrl(connectionUrl);
   }
 
-  public List getDatabaseDriver() {
-    return this.dbConnectionProps.getDatabaseProductInfo();
+  public DatabaseConnectionProperties.DatabaseProperties getDatabaseProps() {
+    return this.dbConnectionProps.getDatabaseProps();
   }
 
 

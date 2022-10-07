@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.model.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
@@ -136,11 +137,17 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
   private void setListeners(MFXStepper stepper) {
     stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
-      this.dbTypeString = JDBC + model.getDatabaseDriver().get(0) + "://";
-      this.portString = (String) model.getDatabaseDriver().get(1);
+      DatabaseConnectionProperties.DatabaseProperties props = model.getDatabaseProps();
+      this.portString = props.port();
+      String url = props.defaultUrl().replace("{product}", props.product())
+              .replace("{host}", DBSERVER_ORGANISATION_ORG)
+              .replace("{port}", portString)
+              .replace("{dbName}", TEST_DB);
+
       portField.setText(portString);
       portField.setPromptText(portString);
-      urlField.setPromptText(dbTypeString + DBSERVER_ORGANISATION_ORG + ":" + portString + "/" + DATABASE_NAME_STRING + TEST_DB + ";" + USERNAME_STRING + MY_USER);
+
+      urlField.setPromptText(url);
     });
 
     dbServerField.setOnKeyReleased(this::handleKeyEvent);
@@ -166,9 +173,9 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         String connectionUrl = Arrays.stream(this.urlField.getText().split(";")).findFirst().get();
         controller.updateConnectionData(connectionUrl, this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
         this.errorMessage.setVisible(false);
+        this.stage.setHeight(950);
         stepper.next();
         stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT));
-        this.stage.setHeight(950);
       }
 
     });

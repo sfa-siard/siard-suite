@@ -3,28 +3,29 @@ package ch.admin.bar.siardsuite.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.List;
 import java.util.Map;
 
 public class DatabaseConnectionProperties {
 
   private StringProperty databaseName = new SimpleStringProperty();
   private StringProperty databaseProduct = new SimpleStringProperty();
-  private StringProperty connectionUrl = new SimpleStringProperty();
-  private static final Map<String, List> dbTypes = Map.of(
-          "MS Access", List.of("access", ""),
-          "DB/2",  List.of("db2", "50000"),
-          "H2 Database", List.of( "h2", "8082"),
-          "MySQL",  List.of("mysql", "3306"),
-          "Oracle",  List.of("oracle", "1521"),
-          "PostgreSQL",  List.of("postgresql", "5432"),
-          "Microsoft SQL Server",  List.of("sqlserver", "1433"));
+  private StringProperty databasePort = new SimpleStringProperty();
   private StringProperty databaseUsername = new SimpleStringProperty();
   private String password;
+  private StringProperty connectionUrl = new SimpleStringProperty();
+  private static final Map<String, DatabaseProperties> dbTypes = Map.of(
+          "MS Access", new DatabaseProperties("access", "", "jdbc:{product}:D:\\Projekte\\SIARD2\\JdbcAccess\\testfiles\\dbfile.mdb"),
+          "DB/2",   new DatabaseProperties("db2", "50000", "jdbc:{product}:{host}:{port}/{dbName}"),
+          "H2 Database",  new DatabaseProperties( "h2", "8082", "jdbc:{product}:tcp://{host}:{port}/{dbName}"),
+          "MySQL",   new DatabaseProperties("mysql", "3306", "jdbc:{product}://{host}:{port}/{dbName}"),
+          "Oracle",   new DatabaseProperties("oracle", "1521", "jdbc:{product}:thin:@{host}:{port}:{dbName}"),
+          "PostgreSQL",   new DatabaseProperties("postgresql", "5432", "jdbc:{product}://{host}:{port}/{dbName}"),
+          "Microsoft SQL Server",   new DatabaseProperties("sqlserver", "1433", "jdbc:{product}://{host}:{port};databaseName={dbName}"));
+
 
   public DatabaseConnectionProperties() {}
 
-  public List getDatabaseProductInfo() {
+  public DatabaseProperties getDatabaseProps() {
     if (databaseProduct != null) {
       return dbTypes.get(databaseProduct.getValue());
     }
@@ -66,5 +67,8 @@ public class DatabaseConnectionProperties {
 
   public String getPassword() {
     return this.password;
+  }
+
+  public record DatabaseProperties(String product, String port, String defaultUrl) {
   }
 }
