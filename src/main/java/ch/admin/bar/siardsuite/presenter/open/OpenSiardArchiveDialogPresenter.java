@@ -1,5 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.open;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
@@ -208,6 +210,15 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
     private void readArchive(File file) {
         if (file != null && isSiardArchive(file)) {
             addRecentFilePath(file);
+
+            Archive archive = ArchiveImpl.newInstance();
+            try {
+                archive.open(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("Archive opened");
+
         }
     }
 
