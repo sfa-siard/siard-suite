@@ -23,6 +23,7 @@ public class DatabaseLoadTask extends Task<ObservableList<DataTable>> implements
   @Override
   protected ObservableList<DataTable> call() throws Exception {
 
+    connection.setAutoCommit(false);
     MetaDataFromDb mdfd = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
     mdfd.download(true, false, this);
 

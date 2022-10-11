@@ -30,13 +30,16 @@ public class Model {
 
   private Archive initArchive() {
     File fileArchive = new File("sample.siard");
+    if (fileArchive.exists())
+      fileArchive.delete();
     this.archiveImpl = ArchiveImpl.newInstance();
     try {
       archiveImpl.create(fileArchive);
+
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return ArchiveImpl.newInstance();
+    return archiveImpl;
   }
 
   private StringProperty siardVersion = new SimpleStringProperty("2.1");

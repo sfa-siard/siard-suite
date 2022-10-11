@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite;
 
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.enterag.utils.ProgramInfo;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -12,6 +13,13 @@ public class SiardApplication extends Application {
   public void start(Stage stage) throws IOException {
     Model model = new Model();
     Controller controller = new Controller(model);
+
+    ProgramInfo programInfo = ProgramInfo.getProgramInfo(
+            "SIARD Suite","0",
+            "SiardGui","0",
+            "Program to download, view, upload database content and database edit meta data in a .siard file",
+            "Swiss Federal Archives, Berne, Switzerland, 2007-2022");
+
 
     new RootStage(model, controller);
   }
