@@ -1,12 +1,13 @@
 package ch.admin.bar.siardsuite.model.service;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.cmd.MetaDataFromDb;
+import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.DataTable;
+import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import ch.admin.bar.siard2.cmd.*;
-import ch.enterag.utils.background.*;
 
 import java.sql.Connection;
 
@@ -21,7 +22,6 @@ public class DatabaseLoadTask extends Task<ObservableList<DataTable>> implements
 
   @Override
   protected ObservableList<DataTable> call() throws Exception {
-
 
     MetaDataFromDb mdfd = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
     mdfd.download(true, false, this);

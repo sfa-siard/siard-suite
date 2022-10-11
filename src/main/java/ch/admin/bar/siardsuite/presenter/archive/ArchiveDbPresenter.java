@@ -8,22 +8,15 @@ import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-
-import java.util.List;
 
 public class ArchiveDbPresenter extends StepperPresenter {
 
@@ -44,6 +37,8 @@ public class ArchiveDbPresenter extends StepperPresenter {
 
   private final ToggleGroup toggleGroup = new ToggleGroup();
 
+  private boolean next = true;
+
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
     this.model = model;
@@ -62,16 +57,17 @@ public class ArchiveDbPresenter extends StepperPresenter {
     this.errorMessage.setVisible(false);
     this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveDb.view.error"));
 
-    //TODO replace values with existing types from siard-cmd/SiardConnection.java
-    List.of("MS Access", "DB/2", "H2 Database", "MySQL").forEach(s -> createRadioToVBox(s, leftVBox));
-    List.of("Oracle", "PostgreSQL", "Microsoft SQL Server").forEach(s -> createRadioToVBox(s, rightVBox));
+
+    this.model.getDatabaseTypes().forEach(type -> createRadioToVBox(type));
 
     this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }
 
-  private void createRadioToVBox(String s, VBox vBox) {
+  private void createRadioToVBox(String s) {
+    VBox vBox = next ? leftVBox : rightVBox;
+    next = !next;
     MFXRadioButton radioButton = new MFXRadioButton(s);
     radioButton.setToggleGroup(toggleGroup);
     vBox.getChildren().add(radioButton);

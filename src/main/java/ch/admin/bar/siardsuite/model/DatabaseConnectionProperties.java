@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.List;
 import java.util.Map;
 
 public class DatabaseConnectionProperties {
@@ -34,6 +35,10 @@ public class DatabaseConnectionProperties {
       return dbTypes.get(databaseProduct.getValue());
     }
     return null;
+  }
+
+  public List<String> getDatabaseTypes() {
+    return dbTypes.keySet().stream().toList();
   }
 
   public StringProperty getDatabaseProduct() {

@@ -8,6 +8,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 public class Model {
 
   private String currentView = View.START.getName();
@@ -22,13 +26,25 @@ public class Model {
     this.archiveImpl = archiveImpl;
   }
 
-  Archive archiveImpl = ArchiveImpl.newInstance();
+  Archive archiveImpl = initArchive();
+
+  private Archive initArchive() {
+    File fileArchive = new File("sample.siard");
+    this.archiveImpl = ArchiveImpl.newInstance();
+    try {
+      archiveImpl.create(fileArchive);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return ArchiveImpl.newInstance();
+  }
 
   private StringProperty siardVersion = new SimpleStringProperty("2.1");
 
   public Model() {
 
   }
+
   public String getCurrentView() {
     return currentView;
   }
@@ -52,6 +68,9 @@ public class Model {
     return this.dbConnectionProps.getDatabaseProps();
   }
 
+  public List<String> getDatabaseTypes() {
+    return this.dbConnectionProps.getDatabaseTypes();
+  }
 
 
   public void setDatabaseData(ReadOnlyObjectProperty<ObservableList<DataTable>> valueProperty) {
