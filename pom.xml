@@ -62,6 +62,7 @@
                     <compilerArgs>
                         <arg>
                             --add-opens java.xml/com.sun.org.apache.xerces.internal.jaxp=siardapi
+                            --add-opens java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=siardapi
                         </arg>
                     </compilerArgs>
                     <source>18</source>

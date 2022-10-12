@@ -41,7 +41,6 @@ public class DatabaseLoadTask extends Task<ObservableList<DataTable>> implements
     PrimaryDataFromDb data = PrimaryDataFromDb.newInstance(connection, archive);
     // TODO PrimaryDataFromDB needs extension show progress per table - CR #459
     data.download(this);
-    // TODO buildup Model with Database-Data
 
     return progressData;
   }
