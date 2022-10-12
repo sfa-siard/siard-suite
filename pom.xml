@@ -59,10 +59,12 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
                 <configuration>
+
                     <compilerArgs>
+                        <arg>-J--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=siardapi</arg>
+
                         <arg>
-                            --add-opens java.xml/com.sun.org.apache.xerces.internal.jaxp=siardapi
-                            --add-opens java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=siardapi
+                            -J--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=siardapi
                         </arg>
                     </compilerArgs>
                     <source>18</source>
