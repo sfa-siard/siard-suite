@@ -3,10 +3,10 @@ package ch.admin.bar.siardsuite.model;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import javafx.beans.property.ReadOnlyObjectProperty;
+import ch.admin.bar.siardsuite.db.DatabaseLoadService;
+import ch.admin.bar.siardsuite.db.DbConnectionFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,28 +18,25 @@ public class Model {
 
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
 
-  public Archive getArchiveImpl() {
-    return archiveImpl;
-  }
+  private DatabaseLoadService databaseLoadService;
+  private Archive archive;
 
-  public void setArchiveImpl(Archive archiveImpl) {
-    this.archiveImpl = archiveImpl;
+  public Archive getArchive() {
+    return archive;
   }
-
-  Archive archiveImpl = initArchive();
 
   private Archive initArchive() {
     File fileArchive = new File("sample.siard");
     if (fileArchive.exists())
       fileArchive.delete();
-    this.archiveImpl = ArchiveImpl.newInstance();
+    this.archive = ArchiveImpl.newInstance();
     try {
-      archiveImpl.create(fileArchive);
+      archive.create(fileArchive);
 
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return archiveImpl;
+    return archive;
   }
 
   private StringProperty siardVersion = new SimpleStringProperty("2.1");
@@ -76,10 +73,6 @@ public class Model {
   }
 
 
-  public void setDatabaseData(ReadOnlyObjectProperty<ObservableList<DataTable>> valueProperty) {
-
-  }
-
   public StringProperty getSiardFormat() {
     return siardVersion;
   }
@@ -115,4 +108,22 @@ public class Model {
   public String getDatabasePassword() {
     return this.dbConnectionProps.getPassword();
   }
+
+  public DatabaseLoadService getDatabaseLoadService() {
+    return databaseLoadService;
+  }
+
+
+  public void loadDatabase() {
+    this.archive = initArchive();
+    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader();
+    databaseLoadService.start();
+  }
+
+  public void closeDbConnection() {
+
+    DbConnectionFactory.disconnect();
+  }
+
+
 }

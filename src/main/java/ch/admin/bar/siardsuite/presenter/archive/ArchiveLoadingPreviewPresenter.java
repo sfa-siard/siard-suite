@@ -7,7 +7,6 @@ import ch.admin.bar.siardsuite.model.DataTable;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
-import ch.admin.bar.siardsuite.model.service.DatabaseLoadService;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -41,6 +40,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
   public ImageView loader;
   @FXML
   public Label subtitle;
+  @FXML
+  public VBox scrollBox;
   @FXML
   private StepperButtonBox buttonsBox;
 
@@ -80,7 +81,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     ImageView imageView = getImageView(pos, loading);
     addLoaderTransition(imageView);
     label.setGraphic(imageView);
-    leftVBox.getChildren().add(label);
+    scrollBox.getChildren().add(label);
   }
 
   private ImageView getImageView(Integer pos, Image image) {
@@ -102,27 +103,38 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
   private void setListeners(MFXStepper stepper) {
     stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
-      DatabaseLoadService databaseLoadService = controller.loadDatabase();
+      scrollBox.getChildren().clear();
+      controller.loadDatabase();
 
-      databaseLoadService.valueProperty().addListener((o, oldValue, newValue)  ->  {
+      model.getDatabaseLoadService().valueProperty().addListener((o, oldValue, newValue)  ->  {
         AtomicInteger pos = new AtomicInteger();
         newValue.forEach(t -> addTableData(t.table(), pos.getAndIncrement()));
       });
-      databaseLoadService.progressProperty().addListener((o, oldValue, newValue) -> {
-        double pos = newValue.doubleValue() * (leftVBox.getChildren().size()-1);
-        Label label = (Label) leftVBox.getChildren().get((int) pos);
-        label.setGraphic(getImageView(newValue.intValue(), ok));
+      model.getDatabaseLoadService().progressProperty().addListener((o, oldValue, newValue) -> {
+        double pos = newValue.doubleValue() * (scrollBox.getChildren().size()-1);
+        if (pos >= 1) {
+          Label label = (Label) scrollBox.getChildren().get((int) pos);
+          label.setGraphic(getImageView(newValue.intValue(), ok));
+        }
       });
 
-      databaseLoadService.setOnSucceeded(e -> {
+      model.getDatabaseLoadService().setOnSucceeded(e -> {
+        controller.closeDbConnection();
         stepper.next();
         this.stage.setHeight(950);
+      });
+
+      model.getDatabaseLoadService().setOnFailed(e -> {
+        controller.closeDbConnection();
+        stepper.previous();
+        this.stage.setHeight(1080.00);
       });
 
     });
 
 
     this.buttonsBox.previous().setOnAction((event) -> {
+      controller.closeDbConnection();
       stepper.previous();
       this.data.clear();
       this.stage.setHeight(1080.00);

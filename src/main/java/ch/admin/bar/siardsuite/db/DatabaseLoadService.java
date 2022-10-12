@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.model.service;
+package ch.admin.bar.siardsuite.db;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.DataTable;
