@@ -27,11 +27,4 @@ public class DatabaseSchema {
         return tables;
     }
 
-    public int getNumberOfDescendants() {
-        return tables.stream()
-                .map(DatabaseTable::getColumns)
-                .mapToInt(List::size)
-                .sum();
-    }
-
 }

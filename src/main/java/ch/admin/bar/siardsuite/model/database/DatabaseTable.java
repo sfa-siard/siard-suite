@@ -31,8 +31,4 @@ public class DatabaseTable {
         return columns;
     }
 
-    public int getNumberOfDescendants() {
-        return columns.size();
-    }
-
 }

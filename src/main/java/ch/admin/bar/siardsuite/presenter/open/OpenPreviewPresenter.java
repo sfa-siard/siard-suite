@@ -14,11 +14,11 @@ import javafx.scene.text.Text;
 public class OpenPreviewPresenter extends PreviewPresenter {
 
   @FXML
-  public Label title;
+  protected Label title;
   @FXML
-  public Text text;
+  protected Text text;
   @FXML
-  private StepperButtonBox buttonsBox;
+  protected StepperButtonBox buttonsBox;
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {

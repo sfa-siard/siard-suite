@@ -33,15 +33,15 @@ public class PreviewPresenter extends Presenter {
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
 
   @FXML
-  public BorderPane borderPane;
+  protected BorderPane borderPane;
   @FXML
-  public TreeView<TreeAttributeWrapper> treeView;
+  protected TreeView<TreeAttributeWrapper> treeView;
   @FXML
-  public MFXButton tableSearchButton;
+  protected MFXButton tableSearchButton;
   @FXML
-  public MFXButton metaSearchButton;
+  protected MFXButton metaSearchButton;
   @FXML
-  public VBox tableContainerContent;
+  protected VBox tableContainerContent;
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
@@ -82,7 +82,7 @@ public class PreviewPresenter extends Presenter {
     return r;
   }
 
-  private void initTreeView() {
+  protected void initTreeView() {
     final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archive.getArchiveName().get(), pair(0, 0), TreeContentView.ROOT), db);
 
     final List<DatabaseSchema> schemas = archive.getSchemas();
@@ -124,7 +124,6 @@ public class PreviewPresenter extends Presenter {
     }
 
     rootItem.getChildren().add(schemasItem);
-
     treeView.setRoot(rootItem);
 
     expandChildren(rootItem);
@@ -132,7 +131,7 @@ public class PreviewPresenter extends Presenter {
     updateTableContainerContent(rootItem.getValue());
   }
 
-  private void expandChildren(TreeItem<TreeAttributeWrapper> root) {
+  protected void expandChildren(TreeItem<TreeAttributeWrapper> root) {
     root.setExpanded(true);
     for (TreeItem<TreeAttributeWrapper> child : root.getChildren()) {
       child.setExpanded(true);
@@ -140,12 +139,12 @@ public class PreviewPresenter extends Presenter {
     }
   }
 
-  private void setListeners() {
+  protected void setListeners() {
     MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
     selection.selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateTableContainerContent(newValue.getValue())));
   }
 
-  private void updateTableContainerContent(TreeAttributeWrapper wrapper) {
+  protected void updateTableContainerContent(TreeAttributeWrapper wrapper) {
     try {
       FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.type().getName()));
       Node container = loader.load();
