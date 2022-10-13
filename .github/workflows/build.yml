@@ -21,11 +21,12 @@ jobs:
         with:
           java-version: '18'
           distribution: 'zulu'
-          cache: maven
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-      - name: Archive packaged jar
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Execute Gradle build
+        run: ./gradlew build
+      - name: Prepare build artifacts  for download
         uses: actions/upload-artifact@v3
         with:
           name: siard-suite
-          path: target/siard-suite-1.0-SNAPSHOT.jar
+          path: build/distributions/*
