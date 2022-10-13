@@ -19,6 +19,8 @@ dependencies {
     implementation 'org.openjfx:javafx-fxml:18'
     implementation 'io.github.palexdev:materialfx:11.13.5'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+
+    implementation fileTree(include: ['*.jar'], dir: 'lib')
 }
 
 group = 'ch.admin.bar'
