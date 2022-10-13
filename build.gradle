@@ -1,4 +1,5 @@
 plugins {
+    id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
 }
@@ -9,6 +10,11 @@ repositories {
         url = uri('https://repo.maven.apache.org/maven2/')
     }
 }
+
+configurations {
+    resolvableImplementation.extendsFrom implementation
+}
+
 
 group = 'ch.admin.bar'
 version = '1.0-SNAPSHOT'
@@ -31,13 +37,24 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+// task to create an exectutable jar file with all necessary dependencies included and sigrnature files removed.
+task fatJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes "Main-Class": "ch.admin.bar.siardsuite.SiardApplication"
+    }
+    from { (configurations.runtimeClasspath).collect { it.isDirectory() ? it : zipTree(it) } } {
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    }
+    with jar
+}
+
 test {
     useJUnitPlatform()
 }
 
 javafx {
     version = "19"
-    modules = [ 'javafx.controls' ]
+    modules = ['javafx.controls']
 }
-
-
