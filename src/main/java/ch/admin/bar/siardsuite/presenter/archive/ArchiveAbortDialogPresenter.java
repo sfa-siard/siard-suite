@@ -8,17 +8,20 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 public class ArchiveAbortDialogPresenter extends DialogPresenter {
 
   @FXML
-  public Text text;
+  protected Label title;
   @FXML
-  public MFXButton closeButton; // seems redundant
+  protected Text text;
   @FXML
-  public HBox buttonBox;
+  protected MFXButton closeButton; // seems redundant
+  @FXML
+  protected HBox buttonBox;
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
@@ -26,7 +29,7 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
     this.controller = controller;
     this.stage = stage;
 
-    setTitle("archiveAbortDialog.title");
+    this.title.textProperty().bind(I18n.createStringBinding("archiveAbortDialog.title"));
     this.text.textProperty().bind(I18n.createStringBinding("archiveAbortDialog.text"));
 
     final MFXButton cancelArchiveButton = new MFXButton();

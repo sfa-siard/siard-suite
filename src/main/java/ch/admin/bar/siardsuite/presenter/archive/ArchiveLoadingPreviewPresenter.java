@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
-import ch.admin.bar.siardsuite.model.DataTable;
+import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -45,7 +45,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
   @FXML
   private StepperButtonBox buttonsBox;
 
-  List<DataTable> data;
+  List<DatabaseTable> data;
 
   private final Image loading = new Image(String.valueOf(SiardApplication.class.getResource("icons/loading.png")));
   private  Image ok = new Image(String.valueOf(SiardApplication.class.getResource("icons/ok_check.png")));
@@ -108,7 +108,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
       model.getDatabaseLoadService().valueProperty().addListener((o, oldValue, newValue)  ->  {
         AtomicInteger pos = new AtomicInteger();
-        newValue.forEach(t -> addTableData(t.table(), pos.getAndIncrement()));
+        newValue.forEach(t -> addTableData(t.getName().get(), pos.getAndIncrement()));
       });
       model.getDatabaseLoadService().progressProperty().addListener((o, oldValue, newValue) -> {
         double pos = newValue.doubleValue() * (scrollBox.getChildren().size()-1);

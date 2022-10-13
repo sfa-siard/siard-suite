@@ -59,13 +59,6 @@ public class ArchivePreviewPresenter extends StepperPresenter {
     this.model = model;
     this.controller = controller;
     this.stage = stage;
-  }
-
-  @Override
-  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-    this.model = model;
-    this.controller = controller;
-    this.stage = stage;
 
     this.title.textProperty().bind(I18n.createStringBinding("archivePreview.view.title"));
     this.text.textProperty().bind(I18n.createStringBinding("archivePreview.view.text"));
@@ -76,6 +69,10 @@ public class ArchivePreviewPresenter extends StepperPresenter {
 
     this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
     this.borderPane.setBottom(buttonsBox);
+  }
+
+  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
+    init(controller, model, stage);
     this.setListeners(stepper);
   }
 
