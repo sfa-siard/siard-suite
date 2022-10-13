@@ -5,18 +5,13 @@
 Run the application from the command line:
 
 ```shell
-./mvnw clean javafx:run
+./gradlew run
 ```
 
 Run tests and build the package
 
 ```shell
-./mvnw clean test package
+./gradlew build
 ```
 
-Run the application jar from the cli
-```shell
-java -jar ./target/siard-suite-1.0-SNAPSHOT.jar
-``` 
-
-*Note: you need Java 18 with JavaFX to run the jar file*
+the build task creates a distribution in `build/distributions` that contains an archive with the necessary executable scripts.
