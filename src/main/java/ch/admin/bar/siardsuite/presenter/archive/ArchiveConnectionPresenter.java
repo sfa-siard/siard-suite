@@ -1,9 +1,10 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.StepperButtonBox;
+import ch.admin.bar.siardsuite.model.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -19,10 +20,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
+import static ch.admin.bar.siardsuite.model.DatabaseConnectionProperties.*;
+
 public class ArchiveConnectionPresenter extends StepperPresenter {
-  private static final String DATABASE_NAME_STRING = "databaseName=";
-  private static final String USERNAME_STRING = "username=";
-  private static final String JDBC = "jdbc:";
+
   private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
   private static final String TEST_DB = "test-db";
   private static final String MY_USER = "MyUser";
@@ -134,11 +135,19 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
   private void setListeners(MFXStepper stepper) {
     stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
-      this.dbTypeString = JDBC + model.getDatabaseDriver().get(0) + "://";
-      this.portString = (String) model.getDatabaseDriver().get(1);
+      // TODO MSAccess-DB needs different Fields for selecting File- #CR457
+      DatabaseConnectionProperties.DatabaseProperties props = model.getDatabaseProps();
+      this.dbTypeString = props.defaultUrl().replace(PRODUCT, props.product());
+      this.portString = props.port();
+      String url = this.dbTypeString
+              .replace(HOST, DBSERVER_ORGANISATION_ORG)
+              .replace(PORT, portString)
+              .replace(DB_NAME, TEST_DB );
+
       portField.setText(portString);
       portField.setPromptText(portString);
-      urlField.setPromptText(dbTypeString + DBSERVER_ORGANISATION_ORG + ":" + portString + ";" + DATABASE_NAME_STRING + TEST_DB + ";" + USERNAME_STRING + MY_USER);
+
+      urlField.setPromptText(url);
     });
 
     dbServerField.setOnKeyReleased(this::handleKeyEvent);
@@ -161,11 +170,11 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
         this.errorMessage.setVisible(true);
       } else {
-        controller.updateConnectionData(this.urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
+        controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
         this.errorMessage.setVisible(false);
+        this.stage.setHeight(950);
         stepper.next();
         stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT));
-        this.stage.setHeight(950);
       }
 
     });
@@ -182,10 +191,13 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       String server = dbServerField.getText().isEmpty() ? DBSERVER_ORGANISATION_ORG : dbServerField.getText();
       String dbname = dbNameField.getText().isEmpty() ? TEST_DB : dbNameField.getText();
       String port = portField.getText().isEmpty() ? portString : portField.getText();
-      String user = usernameField.getText().isEmpty() ? MY_USER : usernameField.getText();
 
-      urlField.setText(String.format(dbTypeString + "%s:%s;" + DATABASE_NAME_STRING + "%s;" + USERNAME_STRING + "%s",
-              server, port, dbname, user));
+      String url = dbTypeString
+              .replace(HOST, server)
+              .replace(PORT, port)
+              .replace(DB_NAME, dbname);
+
+      urlField.setText(url);
     }
     event.consume();
   }

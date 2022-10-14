@@ -430,6 +430,16 @@
     -fx-padding: 2.5em 0 0 0;
 }
 
+.scroll-box,
+.scroll-box .label {
+    -fx-background-color: transparent;
+    -fx-background: rgba(0, 0, 0, 0);
+    -fx-text-fill: siard-text-color;
+    -fx-fill: siard-text-color;
+    -fx-font-family: siard-font-family;
+    -fx-font-size: 14px;
+}
+
 /* Tree view*/
 
 .tree-view {
