@@ -1,10 +1,8 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.Schema;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +13,7 @@ public class DatabaseArchive {
   private StringProperty databaseName = new SimpleStringProperty();
   private StringProperty databaseProduct = new SimpleStringProperty();
   private StringProperty connectionUrl = new SimpleStringProperty();
-  private static final Map<String, List> dbTypes = Map.of(
+  private static final Map<String, List<String>> dbTypes = Map.of(
           "MS Access", List.of("access", ""),
           "DB/2",  List.of("db2", "50000"),
           "H2 Database", List.of( "h2", "8082"),
@@ -43,7 +41,7 @@ public class DatabaseArchive {
     return archiveName;
   }
 
-  public List getDatabaseProductInfo() {
+  public List<String> getDatabaseProductInfo() {
     if (databaseProduct != null) {
       return dbTypes.get(databaseProduct.getValue());
     }

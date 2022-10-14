@@ -66,7 +66,7 @@ public class PreviewPresenter extends Presenter {
     return (int) (0.5 * (a + b) * (a + b + 1) + b);
   }
 
-  /* Cantor's unpairing function */
+  /* Cantor's unpairing function: unpair(pair(a, b), 0) = a and unpair(pair(a, b), 1) = b */
   private int unpair(final int c, final int i) {
     if (c < 0 || i < 0 || i > 1) {
       throw new IllegalArgumentException("Unpairing is defined only for natural numbers as codes of pairs and for coordinates 0 and 1.");
@@ -86,7 +86,8 @@ public class PreviewPresenter extends Presenter {
     final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archive.getArchiveName().get(), pair(0, 0), TreeContentView.ROOT), db);
 
     final List<DatabaseSchema> schemas = archive.getSchemas();
-    final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>(new TreeAttributeWrapper(String.format("Schemas (%d)", schemas.size()), pair(1, 0), TreeContentView.SCHEMAS));
+    final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
+    schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.schemas", pair(1, 0), TreeContentView.SCHEMAS, schemas.size()));
     TreeItem<TreeAttributeWrapper> schemaItem;
 
     List<DatabaseTable> tables;
@@ -101,13 +102,15 @@ public class PreviewPresenter extends Presenter {
       schemaItem = new TreeItem<>(new TreeAttributeWrapper(schema.getName().get(), pair(2, schemas.indexOf(schema)), TreeContentView.SCHEMA_TABLE));
 
       tables = schema.getTables();
-      tablesItem = new TreeItem<>(new TreeAttributeWrapper(String.format("Tables (%d)", tables.size()), pair(3, 0), TreeContentView.TABLES));
+      tablesItem = new TreeItem<>();
+      tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.tables", pair(3, 0), TreeContentView.TABLES, tables.size()));
 
       for (DatabaseTable table : tables) {
         tableItem = new TreeItem<>(new TreeAttributeWrapper(table.getName().get(), pair(4, tables.indexOf(table)), TreeContentView.TABLE));
 
         columns = table.getColumns();
-        columnsItem = new TreeItem<>(new TreeAttributeWrapper(String.format("Columns (%d)", columns.size()), pair(5, 0), TreeContentView.COLUMNS));
+        columnsItem = new TreeItem<>();
+        columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.columns", pair(5, 0), TreeContentView.COLUMNS, columns.size()));
 
         for (DatabaseColumn column : columns) {
           columnItem = new TreeItem<>(new TreeAttributeWrapper(column.getName().get(), pair(6, columns.indexOf(column)), TreeContentView.COLUMN));
@@ -146,11 +149,11 @@ public class PreviewPresenter extends Presenter {
 
   protected void updateTableContainerContent(TreeAttributeWrapper wrapper) {
     try {
-      FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.type().getName()));
+      FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.getType().getName()));
       Node container = loader.load();
       tableContainerContent.getChildren().setAll(container);
 
-      loader.<TreePresenter>getController().init(this.controller, new TreeContentViewModel(wrapper.type().getTitle(),
+      loader.<TreePresenter>getController().init(this.controller, new TreeContentViewModel(wrapper.getType().getTitle(),
               this.model), this.stage);
 
     } catch (IOException e) {

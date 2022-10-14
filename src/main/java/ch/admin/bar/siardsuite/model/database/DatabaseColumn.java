@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaColumn;
-import ch.admin.bar.siard2.api.Table;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

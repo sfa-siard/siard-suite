@@ -1,11 +1,13 @@
 package ch.admin.bar.siardsuite.util;
 
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.model.TreeContentView;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -18,7 +20,7 @@ public class I18n {
     return locale.get();
   }
 
-  public static void setLocale(Locale locale) {
+  public static void setLocale(final Locale locale) {
     localeProperty().set(locale);
     Locale.setDefault(locale);
   }
@@ -45,14 +47,18 @@ public class I18n {
 
   public static String get(final String key, final Object... args) {
     ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, getLocale());
-    return MessageFormat.format(bundle.getString(key), args);
+    return String.format(bundle.getString(key), args);
   }
 
-  public static StringBinding createStringBinding(final String key, Object... args) {
+  public static StringBinding createStringBinding(final String key, final Object... args) {
     return Bindings.createStringBinding(() -> get(key, args), locale);
   }
 
-  public static String getLocaleDate(String yyyy_mm_dd) {
+  public static ObjectBinding<TreeAttributeWrapper> createTreeAtributeWrapperBinding(final String key, final int id, final TreeContentView type, final Object... args) {
+    return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(get(key, args), id, type), locale);
+  }
+
+  public static String getLocaleDate(final String yyyy_mm_dd) {
     final LocalDate date = LocalDate.parse(yyyy_mm_dd);
     final String pattern;
     if (getLocale().equals(Locale.ENGLISH)) {
