@@ -7,6 +7,7 @@ public class SiardEvent extends Event {
   public static final EventType<SiardEvent> UPDATE_STEPPER_DBTYPE_EVENT;
   public static final EventType<SiardEvent> UPDATE_STEPPER_DBLOAD_EVENT;
   public static final EventType<SiardEvent> UPDATE_LANGUAGE_EVENT;
+  public static final EventType<SiardEvent> UPDATE_ARCHIVE_TREE_EVENT;
 
   public SiardEvent(EventType<? extends Event> eventType) {
     super(eventType);
@@ -16,5 +17,6 @@ public class SiardEvent extends Event {
     UPDATE_STEPPER_DBTYPE_EVENT = new EventType(ANY, "UPDATE_STEPPER_DBTYPE_EVENT");
     UPDATE_STEPPER_DBLOAD_EVENT = new EventType(ANY, "UPDATE_STEPPER_DBLOAD_EVENT");
     UPDATE_LANGUAGE_EVENT = new EventType(ANY, "UPDATE_LANGUAGE_EVENT");
+    UPDATE_ARCHIVE_TREE_EVENT = new EventType(ANY, "UPDATE_ARCHIVE_TREE_EVENT");
   }
 }

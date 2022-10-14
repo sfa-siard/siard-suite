@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.*;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
@@ -26,8 +27,6 @@ public class ArchivePreviewPresenter extends StepperPresenter {
     this.title.textProperty().bind(I18n.createStringBinding("archivePreview.view.title"));
     this.text.textProperty().bind(I18n.createStringBinding("archivePreview.view.text"));
 
-    initTreeView();
-
     this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
     this.borderPane.setBottom(buttonsBox);
   }
@@ -39,6 +38,8 @@ public class ArchivePreviewPresenter extends StepperPresenter {
 
   protected void setListeners(MFXStepper stepper) {
     setListeners();
+
+    stepper.addEventHandler(SiardEvent.UPDATE_ARCHIVE_TREE_EVENT, event -> initTreeView());
 
     this.buttonsBox.next().setOnAction((event) -> stepper.next());
     this.buttonsBox.previous().setOnAction((event) -> {

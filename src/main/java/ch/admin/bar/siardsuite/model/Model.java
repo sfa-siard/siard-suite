@@ -3,9 +3,8 @@ package ch.admin.bar.siardsuite.model;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.db.DatabaseLoadService;
-import ch.admin.bar.siardsuite.db.DbConnectionFactory;
-import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.database.DatabaseLoadService;
+import ch.admin.bar.siardsuite.database.DbConnectionFactory;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -13,6 +12,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class Model {
@@ -33,6 +34,20 @@ public class Model {
 
   public void setCurrentView(String currentView) {
     this.currentView = currentView;
+  }
+
+  private Archive initArchive() {
+    final File fileArchive = new File("sample.siard");
+    if (fileArchive.exists()) {
+      fileArchive.delete();
+    }
+    final Archive archive = ArchiveImpl.newInstance();
+    try {
+      archive.create(fileArchive);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return archive;
   }
 
   public void setArchive(String name, Archive archive) {
@@ -104,15 +119,13 @@ public class Model {
     return databaseLoadService;
   }
 
-
   public void loadDatabase() {
-    this.archive = initArchive();
-    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader();
+    final Archive archive = initArchive();
+    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader(archive);
     databaseLoadService.start();
   }
 
   public void closeDbConnection() {
-
     DbConnectionFactory.disconnect();
   }
 

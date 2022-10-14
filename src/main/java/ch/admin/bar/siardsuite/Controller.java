@@ -14,7 +14,6 @@ public class Controller {
     model.setDatabaseType(databaseType);
   }
 
-
   public void loadDatabase() {
     model.loadDatabase();
   }

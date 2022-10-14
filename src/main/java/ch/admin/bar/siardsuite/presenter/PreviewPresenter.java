@@ -46,7 +46,6 @@ public class PreviewPresenter extends Presenter {
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
     this.model = model;
-    archive = model.getArchive();
     this.controller = controller;
     this.stage = stage;
 
@@ -83,6 +82,8 @@ public class PreviewPresenter extends Presenter {
   }
 
   protected void initTreeView() {
+    archive = model.getArchive();
+
     final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archive.getArchiveName().get(), pair(0, 0), TreeContentView.ROOT), db);
 
     final List<DatabaseSchema> schemas = archive.getSchemas();
