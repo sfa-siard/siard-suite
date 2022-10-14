@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+configurations {
+    resolvableImplementation.extendsFrom implementation
+}
+
+
+group = 'ch.admin.bar'
+version = '1.0-SNAPSHOT'
+description = 'SIARD Suite'
+java.sourceCompatibility = JavaVersion.VERSION_18
+mainClassName = "ch.admin.bar.siardsuite.SiardApplication"
+
+
+dependencies {
+    implementation 'org.openjfx:javafx-controls:18'
+    implementation 'org.openjfx:javafx-fxml:18'
+    implementation 'io.github.palexdev:materialfx:11.13.5'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+
+    // legacy: add all dependencies from lib folder
+    implementation fileTree(include: ['*.jar'], dir: 'lib')
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+// task to create an exectutable jar file with all necessary dependencies included and sigrnature files removed.
+task fatJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes "Main-Class": "ch.admin.bar.siardsuite.SiardApplication"
+    }
+    from { (configurations.runtimeClasspath).collect { it.isDirectory() ? it : zipTree(it) } } {
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    }
+    with jar
+}
+
+test {
+    useJUnitPlatform()
+}
+
+javafx {
+    version = "19"
+    modules = ['javafx.controls']
+}
