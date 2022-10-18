@@ -37,6 +37,10 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+tasks.withType(JavaExec) {
+    jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED")
+}
+
 // task to create an exectutable jar file with all necessary dependencies included and sigrnature files removed.
 task fatJar(type: Jar) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -57,4 +61,8 @@ test {
 javafx {
     version = "19"
     modules = ['javafx.controls']
+}
+
+application {
+    applicationDefaultJvmArgs = ['--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED', '--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED']
 }
