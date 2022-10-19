@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataPresenter">
+    <center>
+        <VBox BorderPane.alignment="TOP_LEFT">
+            <children>
+                <VBox prefWidth="100.0">
+                    <children>
+                        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" />
+                    </children>
+                    <VBox.margin>
+                        <Insets left="25.0" right="25.0" />
+                    </VBox.margin>
+                </VBox>
+            </children>
+            <BorderPane.margin>
+                <Insets left="25.0" right="25.0" top="48.0" />
+            </BorderPane.margin>
+        </VBox>
+    </center>
+    <bottom>
+    </bottom>
+</BorderPane>
