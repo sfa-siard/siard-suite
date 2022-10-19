@@ -1,5 +1,6 @@
-package ch.admin.bar.siardsuite.db;
+package ch.admin.bar.siardsuite.database;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.Model;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class DbConnectionFactory {
 
   private DbConnectionFactory(Model model) {
     DbConnectionFactory.model = model;
-    loadDriver(model.getDatabaseProps().product());
+    loadDriver(DbConnectionFactory.model.getDatabaseProps().product());
     try {
       connection = DriverManager.getConnection(model.getConnectionUrl().get(),
               model.getDatabaseUsername().get(), model.getDatabasePassword());
@@ -37,8 +38,8 @@ public class DbConnectionFactory {
     return instance;
   }
 
-  public DatabaseLoadService createDatabaseLoader() {
-    return new DatabaseLoadService(connection, model.getArchive());
+  public DatabaseLoadService createDatabaseLoader(final Archive archive) {
+    return new DatabaseLoadService(connection, model, archive);
   }
 
   public static void disconnect() {

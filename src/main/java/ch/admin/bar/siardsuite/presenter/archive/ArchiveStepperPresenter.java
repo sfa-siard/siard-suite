@@ -9,7 +9,6 @@ import ch.admin.bar.siardsuite.view.skins.CustomStepperSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 
 import java.util.List;
 

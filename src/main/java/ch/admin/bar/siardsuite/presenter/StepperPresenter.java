@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class StepperPresenter extends Presenter {
+public abstract class StepperPresenter extends PreviewPresenter {
 
 
   public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);

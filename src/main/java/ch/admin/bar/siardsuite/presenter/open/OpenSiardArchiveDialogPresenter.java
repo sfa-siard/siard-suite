@@ -1,7 +1,10 @@
 package ch.admin.bar.siardsuite.presenter.open;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -31,6 +34,8 @@ import java.util.prefs.Preferences;
 
 public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
 
+    @FXML
+    protected Label title;
     @FXML
     protected Text text;
     @FXML
@@ -62,7 +67,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        setTitle("open.siard.archive.dialog.title");
+        title.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.title"));
         text.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.text"));
 
         recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.name"));
@@ -207,6 +212,15 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
 
     private void readArchive(File file) {
         if (file != null && isSiardArchive(file)) {
+            try {
+                final Archive archive = ArchiveImpl.newInstance();
+                archive.open(file);
+                model.setArchive(file.getName(), archive);
+                stage.closeDialog();
+                stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW.getName());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             addRecentFilePath(file);
         }
     }
