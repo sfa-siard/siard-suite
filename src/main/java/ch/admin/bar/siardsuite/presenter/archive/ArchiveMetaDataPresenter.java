@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -16,7 +17,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 public class ArchiveMetaDataPresenter extends StepperPresenter implements ArchiveMetaDataVisitor {
 
@@ -57,11 +57,9 @@ public class ArchiveMetaDataPresenter extends StepperPresenter implements Archiv
 
         this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
         this.borderPane.setBottom(buttonsBox);
+        this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
         this.bindTexts();
-        makeTooltip();
     }
-
-
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         this.init(controller, model, stage);
@@ -102,9 +100,7 @@ public class ArchiveMetaDataPresenter extends StepperPresenter implements Archiv
                 stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
             }
         });
-        this.buttonsBox.previous().setOnAction((event) -> {
-            stepper.previous();
-        });
+        this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
 
         infoButton.setOnMouseMoved(event -> {
@@ -125,16 +121,6 @@ public class ArchiveMetaDataPresenter extends StepperPresenter implements Archiv
             this.controller.provideArchiveMetaData(this);
         }
     }
-
-    private void makeTooltip() {
-        tooltip = new Tooltip();
-        tooltip.setPrefSize(328.0, 162);
-        tooltip.setShowDelay(Duration.millis(1));
-        tooltip.setAutoHide(true);
-        tooltip.getStyleClass().add("info-tooltip");
-        tooltip.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.tooltip"));
-    }
-
     @Override
     public void visit(String description, String owner, String timeOfOrigin,
                       String archiverName, String archiverContact) {
