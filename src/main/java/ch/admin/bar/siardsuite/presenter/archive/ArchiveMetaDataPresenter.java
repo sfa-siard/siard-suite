@@ -8,13 +8,16 @@ import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class ArchiveMetaDataPresenter extends StepperPresenter {
-
 
     @FXML
     Text title;
@@ -38,6 +41,10 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
     MFXTextField archiverContact;
     @FXML
     protected StepperButtonBox buttonsBox;
+    @FXML
+    public MFXButton infoButton;
+    @FXML
+    private Tooltip tooltip;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -48,7 +55,9 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
         this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
         this.borderPane.setBottom(buttonsBox);
         this.bindTexts();
+        makeTooltip();
     }
+
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
@@ -78,10 +87,30 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
         });
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
 
+        infoButton.setOnMouseMoved(event -> {
+            Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
+            tooltip.show(infoButton,
+                         (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
+                         boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
+        });
+
+        infoButton.setOnMouseExited(event -> tooltip.hide());
+
         stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initFields());
     }
 
     private void initFields() {
         this.databaseName.setText(this.model.getDatabaseName().getValue());
+
     }
+
+    private void makeTooltip() {
+        tooltip = new Tooltip();
+        tooltip.setPrefSize(328.0, 162);
+        tooltip.setShowDelay(Duration.millis(1));
+        tooltip.setAutoHide(true);
+        tooltip.getStyleClass().add("info-tooltip");
+        tooltip.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.tooltip"));
+    }
+
 }
