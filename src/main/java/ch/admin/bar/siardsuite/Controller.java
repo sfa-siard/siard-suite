@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite;
 
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
 
 public class Controller {

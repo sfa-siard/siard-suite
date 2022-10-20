@@ -18,24 +18,24 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 
-public class ArchiveMetaDataPresenter extends StepperPresenter implements ArchiveMetaDataVisitor {
+public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements ArchiveMetaDataVisitor {
 
     @FXML
-    Text title;
+    Text titleText;
     @FXML
-    Text description;
+    Text descriptionText;
     @FXML
     Text titleWhat;
     @FXML
     Text titleWho;
     @FXML
-    MFXTextField databaseName;
+    MFXTextField name;
     @FXML
-    MFXTextField databaseDescription;
+    MFXTextField description;
     @FXML
-    MFXTextField dbDeliveringOffice;
+    MFXTextField owner;
     @FXML
-    MFXTextField dbTimeOfOrigin;
+    MFXTextField timeOfOrigin;
     @FXML
     MFXTextField archiverName;
     @FXML
@@ -67,18 +67,18 @@ public class ArchiveMetaDataPresenter extends StepperPresenter implements Archiv
     }
 
     private void bindTexts() {
-        this.title.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.title"));
-        this.description.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.description"));
+        this.titleText.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.title"));
+        this.descriptionText.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.description"));
         this.titleWhat.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.titleWhat"));
         this.titleWho.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.titleWho"));
 
-        this.databaseName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseName"));
+        this.name.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseName"));
 
-        this.databaseDescription.floatingTextProperty()
-                                .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
-        this.dbDeliveringOffice.floatingTextProperty()
-                               .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
-        this.dbTimeOfOrigin.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.timeOfOrigin"));
+        this.description.floatingTextProperty()
+                        .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
+        this.owner.floatingTextProperty()
+                  .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
+        this.timeOfOrigin.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.timeOfOrigin"));
         this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
         this.archiverContact.floatingTextProperty()
                             .bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
@@ -87,13 +87,13 @@ public class ArchiveMetaDataPresenter extends StepperPresenter implements Archiv
 
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
-            if (this.dbDeliveringOffice.getText().isBlank() || this.dbTimeOfOrigin.getText().isBlank()) {
+            if (this.owner.getText().isBlank() || this.timeOfOrigin.getText().isBlank()) {
                 this.errorMessage.setVisible(true);
             } else {
                 this.errorMessage.setVisible(false);
-                this.controller.updateArchiveMetaData(this.description.getText(),
-                                                      this.dbDeliveringOffice.getText(),
-                                                      this.dbTimeOfOrigin.getText(),
+                this.controller.updateArchiveMetaData(this.descriptionText.getText(),
+                                                      this.owner.getText(),
+                                                      this.timeOfOrigin.getText(),
                                                       this.archiverName.getText(),
                                                       this.archiverContact.getText());
                 stepper.next();
@@ -116,7 +116,7 @@ public class ArchiveMetaDataPresenter extends StepperPresenter implements Archiv
     }
 
     private void initFields() {
-        this.databaseName.setText(this.model.getDatabaseName().getValue());
+        this.name.setText(this.model.getDatabaseName().getValue());
         if(this.model.getArchive().hasArchiveMetaData()) {
             this.controller.provideArchiveMetaData(this);
         }
@@ -124,9 +124,9 @@ public class ArchiveMetaDataPresenter extends StepperPresenter implements Archiv
     @Override
     public void visit(String description, String owner, String timeOfOrigin,
                       String archiverName, String archiverContact) {
-        this.description.setText(description);
-        this.dbDeliveringOffice.setText(owner);
-        this.dbTimeOfOrigin.setText(timeOfOrigin);
+        this.descriptionText.setText(description);
+        this.owner.setText(owner);
+        this.timeOfOrigin.setText(timeOfOrigin);
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
     }
