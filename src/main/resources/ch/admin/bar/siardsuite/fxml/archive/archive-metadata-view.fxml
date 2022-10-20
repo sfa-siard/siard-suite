@@ -69,14 +69,13 @@
                             <children>
                                 <Text fx:id="titleWho" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h3"
                                       text="Wer hat archiviert?"/>
-                                <MFXTextField fx:id="archiverName" editable="false" floatingText="Ihr Name (Optional)"
+                                <MFXTextField fx:id="archiverName" floatingText="Ihr Name (Optional)"
                                               maxWidth="1.7976931348623157E308" styleClass="form-field">
                                     <VBox.margin>
                                         <Insets bottom="24.0" left="25.0" right="25.0" top="60.0"/>
                                     </VBox.margin>
                                 </MFXTextField>
-                                <MFXTextField fx:id="archiverContact" editable="false"
-                                              floatingText="Ihre Kontaktangaben (z.B. E-Mail, Telefonnummer)"
+                                <MFXTextField fx:id="archiverContact" floatingText="Ihre Kontaktangaben (z.B. E-Mail, Telefonnummer)"
                                               maxWidth="1.7976931348623157E308" styleClass="form-field">
                                     <VBox.margin>
                                         <Insets bottom="24.0" left="25.0" right="25.0" top="60.0"/>
