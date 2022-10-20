@@ -78,5 +78,7 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
             stepper.previous();
         });
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
+
+
     }
 }
