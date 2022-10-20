@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite;
 
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
 
 public class Controller {
 
@@ -29,7 +31,12 @@ public class Controller {
     this.model.setPassword(password);
   }
 
+  // TODO: maybe use some sort of visitor or provider or...
   public void updateArchiveMetaData(String description, String owner, String timeOfOrigin, String archiverName, String archiverContact) {
     this.model.getArchive().addArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact);
+  }
+
+  public void provideArchiveMetaData(ArchiveMetaDataVisitor visitor) {
+    this.model.getArchive().getArchiveMetaData().accept(visitor);
   }
 }

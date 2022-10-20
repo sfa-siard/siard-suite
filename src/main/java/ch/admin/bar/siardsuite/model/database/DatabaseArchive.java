@@ -46,6 +46,10 @@ public class DatabaseArchive {
         this.archiveMetaData = new ArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact);
     }
 
+    // TODO: remove getters!
+    public ArchiveMetaData getArchiveMetaData() {
+        return this.archiveMetaData;
+    }
     public StringProperty getArchiveName() {
         return archiveName;
     }
@@ -97,4 +101,7 @@ public class DatabaseArchive {
         return schemas;
     }
 
+    public boolean hasArchiveMetaData() {
+        return this.archiveMetaData != null;
+    }
 }

@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -18,5 +19,9 @@ public class ArchiveMetaData {
         this.timeOfOrigin = new SimpleStringProperty(timeOfOrigin);
         this.archiverName = new SimpleStringProperty(archiverName);
         this.archiverContact = new SimpleStringProperty(archiverContact);
+    }
+
+    public void accept(ArchiveMetaDataVisitor visitor) {
+        visitor.visit(this.description.getValue(), this.owner.getValue(), this.timeOfOrigin.getValue(), this.archiverName.getValue(), this.archiverContact.getValue());
     }
 }

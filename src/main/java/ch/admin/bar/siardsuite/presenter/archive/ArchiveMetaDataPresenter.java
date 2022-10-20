@@ -18,7 +18,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-public class ArchiveMetaDataPresenter extends StepperPresenter {
+public class ArchiveMetaDataPresenter extends StepperPresenter implements ArchiveMetaDataVisitor {
 
     @FXML
     Text title;
@@ -121,7 +121,9 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
 
     private void initFields() {
         this.databaseName.setText(this.model.getDatabaseName().getValue());
-
+        if(this.model.getArchive().hasArchiveMetaData()) {
+            this.controller.provideArchiveMetaData(this);
+        }
     }
 
     private void makeTooltip() {
@@ -133,4 +135,13 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
         tooltip.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.tooltip"));
     }
 
+    @Override
+    public void visit(String description, String owner, String timeOfOrigin,
+                      String archiverName, String archiverContact) {
+        this.description.setText(description);
+        this.dbDeliveringOffice.setText(owner);
+        this.dbTimeOfOrigin.setText(timeOfOrigin);
+        this.archiverName.setText(archiverName);
+        this.archiverContact.setText(archiverContact);
+    }
 }
