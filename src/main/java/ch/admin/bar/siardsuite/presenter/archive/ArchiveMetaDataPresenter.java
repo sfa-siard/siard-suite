@@ -12,22 +12,29 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
-public class ArchiveMetaDataPresenter  extends StepperPresenter {
+public class ArchiveMetaDataPresenter extends StepperPresenter {
+
 
     @FXML
-    public Text title;
-
-    @FXML Text description;
-
+    Text title;
+    @FXML
+    Text description;
     @FXML
     Text titleWhat;
-
     @FXML
     Text titleWho;
-
     @FXML
-    MFXTextField dbNameField;
-
+    MFXTextField databaseName;
+    @FXML
+    MFXTextField databaseDescription;
+    @FXML
+    MFXTextField dbDeliveringOffice;
+    @FXML
+    MFXTextField dbTimeOfOrigin;
+    @FXML
+    MFXTextField archiverName;
+    @FXML
+    MFXTextField archiverContact;
     @FXML
     protected StepperButtonBox buttonsBox;
 
@@ -54,7 +61,15 @@ public class ArchiveMetaDataPresenter  extends StepperPresenter {
         this.titleWhat.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.titleWhat"));
         this.titleWho.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.titleWho"));
 
-        this.dbNameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbName.label"));    }
+        this.databaseName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseName"));
+
+        this.databaseDescription.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
+        this.dbDeliveringOffice.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
+        this.dbTimeOfOrigin.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.timeOfOrigin"));
+        this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
+        this.archiverContact.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
+
+    }
 
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> stepper.next());
