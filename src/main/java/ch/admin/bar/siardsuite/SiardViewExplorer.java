@@ -24,10 +24,12 @@ public class SiardViewExplorer extends Application {
 
 
         RootStage rootStage = new RootStage(model, controller);
+        rootStage.setResizable(true);
+        rootStage.setHeight(1200);
+        rootStage.setWidth(1800);
         // change the view that you want to see. note: the stepper is not yet supported
         rootStage.navigate(View.ARCHIVE_METADATA.getName());
     }
-
     public static void main(String[] args) {
         launch();
     }
