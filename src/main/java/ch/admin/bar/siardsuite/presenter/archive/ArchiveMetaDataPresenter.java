@@ -47,6 +47,7 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
         this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
         this.borderPane.setBottom(buttonsBox);
         this.bindTexts();
+        this.databaseName.setText(this.model.getDatabaseName().getValue());
     }
 
     @Override
