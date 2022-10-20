@@ -13,6 +13,7 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -45,6 +46,8 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
     public MFXButton infoButton;
     @FXML
     private Tooltip tooltip;
+    @FXML
+    public Label errorMessage;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -73,20 +76,31 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
 
         this.databaseName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseName"));
 
-        this.databaseDescription.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
-        this.dbDeliveringOffice.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
+        this.databaseDescription.floatingTextProperty()
+                                .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
+        this.dbDeliveringOffice.floatingTextProperty()
+                               .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
         this.dbTimeOfOrigin.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.timeOfOrigin"));
         this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
-        this.archiverContact.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
+        this.archiverContact.floatingTextProperty()
+                            .bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
+        this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.error"));
     }
 
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
-            this.controller.updateArchiveMetaData(this.description.getText(), this.dbDeliveringOffice.getText(), this.dbTimeOfOrigin.getText(),
-                                                  this.archiverName.getText(), this.archiverContact.getText());
-
-            stepper.next();
-            stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
+            if (this.dbDeliveringOffice.getText().isBlank() || this.dbTimeOfOrigin.getText().isBlank()) {
+                this.errorMessage.setVisible(true);
+            } else {
+                this.errorMessage.setVisible(false);
+                this.controller.updateArchiveMetaData(this.description.getText(),
+                                                      this.dbDeliveringOffice.getText(),
+                                                      this.dbTimeOfOrigin.getText(),
+                                                      this.archiverName.getText(),
+                                                      this.archiverContact.getText());
+                stepper.next();
+                stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
+            }
         });
         this.buttonsBox.previous().setOnAction((event) -> {
             stepper.previous();
