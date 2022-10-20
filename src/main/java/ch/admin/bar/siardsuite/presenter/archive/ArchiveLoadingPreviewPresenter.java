@@ -121,7 +121,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
       model.getDatabaseLoadService().setOnSucceeded(e -> {
         controller.closeDbConnection();
         stepper.next();
-        stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_ARCHIVE_TREE_EVENT));
+        stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_LOADED));
         this.stage.setHeight(950);
       });
 

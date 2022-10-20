@@ -39,7 +39,7 @@ public class ArchivePreviewPresenter extends StepperPresenter {
   protected void setListeners(MFXStepper stepper) {
     setListeners();
 
-    stepper.addEventHandler(SiardEvent.UPDATE_ARCHIVE_TREE_EVENT, event -> initTreeView());
+    stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initTreeView());
 
     this.buttonsBox.next().setOnAction((event) -> stepper.next());
     this.buttonsBox.previous().setOnAction((event) -> {

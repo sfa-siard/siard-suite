@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -47,7 +48,6 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
         this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
         this.borderPane.setBottom(buttonsBox);
         this.bindTexts();
-        this.databaseName.setText(this.model.getDatabaseName().getValue());
     }
 
     @Override
@@ -69,7 +69,6 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
         this.dbTimeOfOrigin.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.timeOfOrigin"));
         this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
         this.archiverContact.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
-
     }
 
     private void setListeners(MFXStepper stepper) {
@@ -79,6 +78,10 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
         });
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
 
+        stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initFields());
+    }
 
+    private void initFields() {
+        this.databaseName.setText(this.model.getDatabaseName().getValue());
     }
 }
