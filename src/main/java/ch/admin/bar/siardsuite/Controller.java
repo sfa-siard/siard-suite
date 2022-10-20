@@ -28,4 +28,8 @@ public class Controller {
     this.model.setUsername(username);
     this.model.setPassword(password);
   }
+
+  public void updateArchiveMetaData(String description, String owner, String timeOfOrigin, String archiverName, String archiverContact) {
+    this.model.getArchive().addArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact);
+  }
 }

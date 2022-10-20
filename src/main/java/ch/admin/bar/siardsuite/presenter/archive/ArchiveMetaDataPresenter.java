@@ -81,7 +81,13 @@ public class ArchiveMetaDataPresenter extends StepperPresenter {
     }
 
     private void setListeners(MFXStepper stepper) {
-        this.buttonsBox.next().setOnAction((event) -> stepper.next());
+        this.buttonsBox.next().setOnAction((event) -> {
+            this.controller.updateArchiveMetaData(this.description.getText(), this.dbDeliveringOffice.getText(), this.dbTimeOfOrigin.getText(),
+                                                  this.archiverName.getText(), this.archiverContact.getText());
+
+            stepper.next();
+            stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
+        });
         this.buttonsBox.previous().setOnAction((event) -> {
             stepper.previous();
         });
