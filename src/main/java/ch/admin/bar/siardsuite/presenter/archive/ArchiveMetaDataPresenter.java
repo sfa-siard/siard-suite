@@ -39,13 +39,13 @@ public class ArchiveMetaDataPresenter  extends StepperPresenter {
 
         this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
         this.borderPane.setBottom(buttonsBox);
+        this.bindTexts();
     }
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         this.init(controller, model, stage);
         this.setListeners(stepper);
-        this.bindTexts();
     }
 
     private void bindTexts() {
