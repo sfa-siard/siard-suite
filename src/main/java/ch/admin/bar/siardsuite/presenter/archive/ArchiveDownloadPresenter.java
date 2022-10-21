@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -44,6 +45,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     }
 
     private void createListeners(MFXStepper stepper) {
+        this.buttonsBox.next().setOnAction(event -> this.stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW.getName()));
+        this.buttonsBox.cancel().setOnAction(event -> this.stage.navigate(View.START.getName()));
         stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, event -> {
 
             controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
