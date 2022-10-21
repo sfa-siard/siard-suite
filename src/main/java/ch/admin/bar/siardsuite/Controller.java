@@ -1,5 +1,8 @@
 package ch.admin.bar.siardsuite;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.database.DatabaseLoadService;
+import ch.admin.bar.siardsuite.database.DbConnectionFactory;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
 
@@ -8,6 +11,8 @@ import java.io.File;
 public class Controller {
 
   private final Model model;
+
+  private DatabaseLoadService databaseLoadService;
 
   public Controller(Model model) {
     this.model = model;
@@ -18,10 +23,14 @@ public class Controller {
   }
 
   public void loadDatabase(boolean onlyMetaData) {
-    model.loadDatabase(onlyMetaData);
+    final Archive archive = model.initArchive();
+    this.databaseLoadService = DbConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
+    this.databaseLoadService.start();
   }
   public void loadDatabase(File target, boolean onlyMetaData) {
-    model.loadDatabase(target, onlyMetaData);
+    final Archive archive = model.initArchive(target);
+    this.databaseLoadService = DbConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
+    this.databaseLoadService.start();
   }
 
   public void closeDbConnection() {
@@ -43,5 +52,9 @@ public class Controller {
 
   public void provideArchiveMetaData(ArchiveMetaDataVisitor visitor) {
     this.model.getArchive().getArchiveMetaData().accept(visitor);
+  }
+
+  public DatabaseLoadService getDatabaseLoadService() {
+    return databaseLoadService;
   }
 }

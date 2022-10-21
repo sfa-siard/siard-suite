@@ -108,11 +108,11 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
       scrollBox.getChildren().clear();
       controller.loadDatabase(true);
 
-      model.getDatabaseLoadService().valueProperty().addListener((o, oldValue, newValue)  ->  {
+      controller.getDatabaseLoadService().valueProperty().addListener((o, oldValue, newValue)  ->  {
         AtomicInteger pos = new AtomicInteger();
         newValue.forEach(t -> addTableData(t.getName().get(), pos.getAndIncrement()));
       });
-      model.getDatabaseLoadService().progressProperty().addListener((o, oldValue, newValue) -> {
+      controller.getDatabaseLoadService().progressProperty().addListener((o, oldValue, newValue) -> {
         double pos = newValue.doubleValue() * (scrollBox.getChildren().size()-1);
         if (pos >= 1) {
           Label label = (Label) scrollBox.getChildren().get((int) pos);
@@ -120,14 +120,14 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         }
       });
 
-      model.getDatabaseLoadService().setOnSucceeded(e -> {
+      controller.getDatabaseLoadService().setOnSucceeded(e -> {
         controller.closeDbConnection();
         stepper.next();
         stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_LOADED));
         this.stage.setHeight(950);
       });
 
-      model.getDatabaseLoadService().setOnFailed(e -> {
+      controller.getDatabaseLoadService().setOnFailed(e -> {
         controller.closeDbConnection();
         stepper.previous();
         this.stage.setHeight(1080.00);

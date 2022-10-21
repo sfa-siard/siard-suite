@@ -52,14 +52,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
             controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
                                     false); // TODO: way to many chainings
 
-            model.getDatabaseLoadService().setOnSucceeded(e -> {
+            controller.getDatabaseLoadService().setOnSucceeded(e -> {
                 System.out.println("download of database successful...");
                 controller.closeDbConnection();
                 stepper.next();
                 stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
             });
 
-            model.getDatabaseLoadService().setOnFailed(e -> {
+            controller.getDatabaseLoadService().setOnFailed(e -> {
                 System.out.println("download of database failed...");
                 controller.closeDbConnection();
                 stepper.previous();

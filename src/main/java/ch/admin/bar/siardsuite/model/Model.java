@@ -20,7 +20,6 @@ public class Model {
 
   private View currentView = View.START;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
-  private DatabaseLoadService databaseLoadService;
   private DatabaseArchive archive = new DatabaseArchive();
   private final StringProperty siardVersion = new SimpleStringProperty("2.1");
 
@@ -36,11 +35,11 @@ public class Model {
     this.currentView = view;
   }
 
-  private Archive initArchive() {
+  public Archive initArchive() {
     return this.initArchive(new File("sample.siard"));
   }
 
-  private Archive initArchive(File fileArchive) {
+  public Archive initArchive(File fileArchive) {
     if (fileArchive.exists()) {
       fileArchive.delete();
     }
@@ -118,23 +117,10 @@ public class Model {
     return this.dbConnectionProps.getPassword();
   }
 
-  public DatabaseLoadService getDatabaseLoadService() {
-    return databaseLoadService;
-  }
+
 
   // TODO: check if this is correctly placed in the model. I think the model should just represent the state of the application
   // loading the database is not a state... it's an effect
-  public void loadDatabase(boolean onlyMetaData) {
-    final Archive archive = initArchive();
-    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader(archive, onlyMetaData);
-    databaseLoadService.start();
-  }
-
-  public void loadDatabase(File target, boolean onlyMetaData) {
-    final Archive archive = initArchive(target);
-    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader(archive, onlyMetaData);
-    databaseLoadService.start();
-  }
 
   public void closeDbConnection() {
     DbConnectionFactory.disconnect();
