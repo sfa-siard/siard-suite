@@ -1,20 +1,17 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.ui.Icon;
+import ch.admin.bar.siardsuite.ui.Transitions;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
-import javafx.animation.Animation;
-import javafx.animation.Interpolator;
-import javafx.animation.RotateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -23,7 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -70,7 +66,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         this.text.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.text"));
         this.subtitle.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.subtitle"));
         this.loader.setImage(loading);
-        addLoaderTransition(this.loader);
+        new Transitions(this.loader).rotate();
 
         this.buttonsBox = new StepperButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
@@ -82,7 +78,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         label.getStyleClass().add("view-text");
         label.setContentDisplay(ContentDisplay.RIGHT);
         ImageView imageView = getImageView(pos, loading);
-        addLoaderTransition(imageView);
+        new Transitions(imageView).rotate();
         label.setGraphic(imageView);
         scrollBox.getChildren().add(label);
     }
@@ -94,14 +90,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         imageView.getStyleClass().addAll("loading-icon", "icon-button");
         imageView.setId("dataLoader" + pos);
         return imageView;
-    }
-
-    private void addLoaderTransition(ImageView loader) {
-        RotateTransition rt = new RotateTransition(Duration.millis(1000), loader);
-        rt.setByAngle(360);
-        rt.setCycleCount(Animation.INDEFINITE);
-        rt.setInterpolator(Interpolator.LINEAR);
-        rt.play();
     }
 
     private void setListeners(MFXStepper stepper) {
