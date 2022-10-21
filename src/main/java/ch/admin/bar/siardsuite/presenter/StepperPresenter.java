@@ -11,17 +11,20 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import javafx.event.Event;
 import javafx.event.EventType;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class StepperPresenter extends PreviewPresenter {
+public abstract class StepperPresenter extends Presenter {
 
-
+  @FXML
+  protected BorderPane borderPane;
   public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);
 
   public Event getUpdateEvent(EventType<SiardEvent> eventType) {
