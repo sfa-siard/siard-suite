@@ -18,7 +18,6 @@ public class DatabaseArchive {
     private static final Map<String, List<String>> dbTypes = Map.of(
             "MS Access", List.of("access", ""),
             "DB/2", List.of("db2", "50000"),
-            "H2 Database", List.of("h2", "8082"),
             "MySQL", List.of("mysql", "3306"),
             "Oracle", List.of("oracle", "1521"),
             "PostgreSQL", List.of("postgresql", "5432"),
