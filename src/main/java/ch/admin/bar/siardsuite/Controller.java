@@ -4,7 +4,10 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DbConnectionFactory;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 
@@ -56,14 +59,19 @@ public class Controller {
     this.model.getArchive().getArchiveMetaData().accept(visitor);
   }
 
-  public DatabaseLoadService getDatabaseLoadService() {
-    return databaseLoadService;
-  }
   public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
     this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
   }
 
   public void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
     this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
+  }
+
+  public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<DatabaseTable>> listener) {
+    this.databaseLoadService.valueProperty().addListener(listener);
+  }
+
+  public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener )  {
+    this.databaseLoadService.progressProperty().addListener(listener);
   }
 }
