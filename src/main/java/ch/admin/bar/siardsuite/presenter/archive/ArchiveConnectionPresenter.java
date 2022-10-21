@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.model.DatabaseConnectionProperties.*;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
@@ -88,7 +89,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     addFormText();
 
     this.errorMessage.setVisible(false);
-    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
+    this.buttonsBox = new StepperButtonBox().make(DEFAULT);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }

@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -11,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
+import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
+
 public class ArchiveDownloadPresenter extends StepperPresenter {
 
     @FXML
@@ -19,11 +22,17 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     @FXML
     public ImageView loader;
 
+    @FXML
+    private StepperButtonBox buttonsBox;
+
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
         this.controller = controller;
         this.model = model;
         this.stage = stage;
+
+        this.buttonsBox = new StepperButtonBox().make(DOWNLOAD_FINISHED);
+        this.borderPane.setBottom(buttonsBox);
 
         this.bindTexts();
     }

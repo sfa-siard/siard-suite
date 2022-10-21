@@ -18,6 +18,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+
 public class ArchiveChooseDbmsPresenter extends StepperPresenter {
 
   @FXML
@@ -60,7 +62,7 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
 
     this.model.getDatabaseTypes().forEach(type -> createRadioToVBox(type));
 
-    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
+    this.buttonsBox = new StepperButtonBox().make(DEFAULT);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }

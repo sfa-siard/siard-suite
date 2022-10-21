@@ -27,6 +27,8 @@ import javafx.util.Duration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.CANCEL;
+
 public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
   @FXML
   public Label title;
@@ -69,7 +71,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     this.loader.setImage(loading);
     addLoaderTransition(this.loader);
 
-    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.CANCEL);
+    this.buttonsBox = new StepperButtonBox().make(CANCEL);
     this.borderPane.setBottom(buttonsBox);
     this.setListeners(stepper);
   }
