@@ -3,8 +3,10 @@ package ch.admin.bar.siardsuite.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class DatabaseConnectionProperties {
 
@@ -18,14 +20,23 @@ public class DatabaseConnectionProperties {
   public static final String HOST = "{host}";
   public static final String PORT = "{port}";
   public static final String DB_NAME = "{dbName}";
-  public static final Map<String, DatabaseProperties> dbTypes = Map.of(
-          "MS Access", new DatabaseProperties("access", "", "jdbc:" + PRODUCT + ":D:\\Projekte\\SIARD2\\JdbcAccess\\testfiles\\dbfile.mdb"),
-          "DB/2",   new DatabaseProperties("db2", "50000", "jdbc:" + PRODUCT + ":" + HOST + ":" + PORT + "/" + DB_NAME),
-          "H2 Database",  new DatabaseProperties( "h2", "8082", "jdbc:" + PRODUCT + ":tcp://" + HOST + ":" + PORT + "/" + DB_NAME),
-          "MySQL",   new DatabaseProperties("mysql", "3306", "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + "/" + DB_NAME),
-          "Oracle",   new DatabaseProperties("oracle", "1521", "jdbc:" + PRODUCT + ":thin:@" + HOST + ":" + PORT + ":" + DB_NAME),
-          "PostgreSQL",   new DatabaseProperties("postgresql", "5432", "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + "/" + DB_NAME),
-          "Microsoft SQL Server",   new DatabaseProperties("sqlserver", "1433", "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + ";databaseName=" + DB_NAME));
+  public static final Map<String, DatabaseProperties> dbTypes = new TreeMap<>(Map.of(
+          "MS Access",
+          new DatabaseProperties("access",
+                                 "",
+                                 "jdbc:" + PRODUCT + ":D:\\Projekte\\SIARD2\\JdbcAccess\\testfiles\\dbfile.mdb"),
+          "DB/2",
+          new DatabaseProperties("db2", "50000", "jdbc:" + PRODUCT + ":" + HOST + ":" + PORT + "/" + DB_NAME),
+          "MySQL",
+          new DatabaseProperties("mysql", "3306", "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + "/" + DB_NAME),
+          "Oracle",
+          new DatabaseProperties("oracle", "1521", "jdbc:" + PRODUCT + ":thin:@" + HOST + ":" + PORT + ":" + DB_NAME),
+          "PostgreSQL",
+          new DatabaseProperties("postgresql", "5432", "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + "/" + DB_NAME),
+          "Microsoft SQL Server",
+          new DatabaseProperties("sqlserver",
+                                 "1433",
+                                 "jdbc:" + PRODUCT + "://" + HOST + ":" + PORT + ";databaseName=" + DB_NAME)));
 
 
   public DatabaseConnectionProperties() {}
