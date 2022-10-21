@@ -47,19 +47,22 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     private void createListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction(event -> this.stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW));
         this.buttonsBox.cancel().setOnAction(event -> this.stage.navigate(View.START));
+
         stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, event -> {
 
             controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
                                     false); // TODO: way to many chainings
 
-            controller.getDatabaseLoadService().setOnSucceeded(e -> {
+
+            controller.onDatabaseLoadSuccess(e -> {
                 System.out.println("download of database successful...");
                 controller.closeDbConnection();
                 stepper.next();
                 stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
             });
 
-            controller.getDatabaseLoadService().setOnFailed(e -> {
+
+            controller.onDatabaseLoadFailed(e -> {
                 System.out.println("download of database failed...");
                 controller.closeDbConnection();
                 stepper.previous();

@@ -120,14 +120,14 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         }
       });
 
-      controller.getDatabaseLoadService().setOnSucceeded(e -> {
+      controller.onDatabaseLoadSuccess(e -> {
         controller.closeDbConnection();
         stepper.next();
         stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_LOADED));
         this.stage.setHeight(950);
       });
 
-      controller.getDatabaseLoadService().setOnFailed(e -> {
+      controller.onDatabaseLoadFailed(e -> {
         controller.closeDbConnection();
         stepper.previous();
         this.stage.setHeight(1080.00);

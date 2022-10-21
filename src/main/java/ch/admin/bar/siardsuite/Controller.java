@@ -5,6 +5,8 @@ import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DbConnectionFactory;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 
 import java.io.File;
 
@@ -56,5 +58,12 @@ public class Controller {
 
   public DatabaseLoadService getDatabaseLoadService() {
     return databaseLoadService;
+  }
+  public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
+  }
+
+  public void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
   }
 }
