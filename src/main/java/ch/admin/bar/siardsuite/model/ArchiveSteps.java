@@ -10,7 +10,7 @@ public class ArchiveSteps {
           new Step("", View.ARCHIVE_LOADING_PREVIEW.getName(), 3, false),
           new Step("archive.step.name.preview", View.ARCHIVE_PREVIEW.getName(), 3, true),
           new Step("archive.step.name.metadata", View.ARCHIVE_METADATA_EDITOR.getName(), 4, true),
-          new Step("archive.step.name.download", View.ARCHIVE_DB.getName(), 5, true)
+          new Step("archive.step.name.download", View.ARCHIVE_DOWNLOAD.getName(), 5, true)
   );
 
   public static List<Step> getSteps() {

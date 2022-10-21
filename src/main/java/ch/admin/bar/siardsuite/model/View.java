@@ -13,6 +13,7 @@ public enum View {
   ARCHIVE_PREVIEW("fxml/archive/archive-preview-view.fxml"),
   ARCHIVE_LOADING_PREVIEW("fxml/archive/archive-loading-preview-view.fxml"),
   ARCHIVE_METADATA_EDITOR("fxml/archive/archive-metadata-editor-view.fxml"),
+  ARCHIVE_DOWNLOAD("fxml/archive/archive-download-view.fxml"),
   OPEN_SIARD_ARCHIVE_DIALOG("fxml/open/open-siard-archive-dialog-view.fxml"),
   OPEN_SIARD_ARCHIVE_PREVIEW("fxml/open/open-preview-view.fxml");
 
