@@ -12,7 +12,6 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
@@ -89,9 +88,10 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.error"));
     }
 
-    private File showFileChoserToSelectTargetArchive() {
+    private File showFileChoserToSelectTargetArchive(String databaseName) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(I18n.get("open.siard.archive.dialog.choose.file.title"));
+        fileChooser.setInitialFileName(databaseName + ".siard");
         final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
         fileChooser.getExtensionFilters().add(extensionFilter);
         return fileChooser.showSaveDialog(stage);
@@ -103,7 +103,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 this.errorMessage.setVisible(true);
             } else {
                 this.errorMessage.setVisible(false);
-                File targetArchive = this.showFileChoserToSelectTargetArchive();
+                File targetArchive = this.showFileChoserToSelectTargetArchive(this.name.getText());
                 this.controller.updateArchiveMetaData(this.descriptionText.getText(),
                                                       this.owner.getText(),
                                                       this.timeOfOrigin.getText(),
