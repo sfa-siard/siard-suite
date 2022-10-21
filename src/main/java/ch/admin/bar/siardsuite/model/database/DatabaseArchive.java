@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.Archive;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +43,8 @@ public class DatabaseArchive {
     }
 
     public void addArchiveMetaData(String description, String owner, String timeOfOrigin, String archiverName,
-                                   String archiverContact) {
-        this.archiveMetaData = new ArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact);
+                                   String archiverContact, File targetArchive) {
+        this.archiveMetaData = new ArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact, targetArchive);
     }
 
     // TODO: remove getters!

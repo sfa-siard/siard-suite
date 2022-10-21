@@ -12,11 +12,15 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements ArchiveMetaDataVisitor {
 
@@ -85,17 +89,27 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.error"));
     }
 
+    private File showFileChoserToSelectTargetArchive() {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(I18n.get("open.siard.archive.dialog.choose.file.title"));
+        final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        return fileChooser.showSaveDialog(stage);
+
+    }
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
             if (this.owner.getText().isBlank() || this.timeOfOrigin.getText().isBlank()) {
                 this.errorMessage.setVisible(true);
             } else {
                 this.errorMessage.setVisible(false);
+                File targetArchive = this.showFileChoserToSelectTargetArchive();
                 this.controller.updateArchiveMetaData(this.descriptionText.getText(),
                                                       this.owner.getText(),
                                                       this.timeOfOrigin.getText(),
                                                       this.archiverName.getText(),
-                                                      this.archiverContact.getText());
+                                                      this.archiverContact.getText(),
+                                                      targetArchive);
                 stepper.next();
                 stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
             }

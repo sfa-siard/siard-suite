@@ -3,6 +3,8 @@ package ch.admin.bar.siardsuite;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
 
+import java.io.File;
+
 public class Controller {
 
   private final Model model;
@@ -31,8 +33,9 @@ public class Controller {
   }
 
   // TODO: maybe use some sort of visitor or provider or...
-  public void updateArchiveMetaData(String description, String owner, String timeOfOrigin, String archiverName, String archiverContact) {
-    this.model.getArchive().addArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact);
+  public void updateArchiveMetaData(String description, String owner, String timeOfOrigin, String archiverName, String archiverContact,
+                                    File targetArchive) {
+    this.model.getArchive().addArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact, targetArchive);
   }
 
   public void provideArchiveMetaData(ArchiveMetaDataVisitor visitor) {
