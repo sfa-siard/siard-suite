@@ -7,7 +7,7 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.ui.Icon;
-import ch.admin.bar.siardsuite.ui.Transitions;
+import ch.admin.bar.siardsuite.ui.Spinner;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -66,7 +66,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         this.text.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.text"));
         this.subtitle.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.subtitle"));
         this.loader.setImage(loading);
-        new Transitions(this.loader).rotate();
+        new Spinner(this.loader).play();
 
         this.buttonsBox = new StepperButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
@@ -78,7 +78,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         label.getStyleClass().add("view-text");
         label.setContentDisplay(ContentDisplay.RIGHT);
         ImageView imageView = getImageView(pos, loading);
-        new Transitions(imageView).rotate();
+        new Spinner(imageView).play();
         label.setGraphic(imageView);
         scrollBox.getChildren().add(label);
     }
