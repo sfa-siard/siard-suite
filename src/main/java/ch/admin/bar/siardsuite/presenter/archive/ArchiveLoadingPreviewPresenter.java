@@ -104,7 +104,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
   private void setListeners(MFXStepper stepper) {
     stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
       scrollBox.getChildren().clear();
-      controller.loadDatabase();
+      controller.loadDatabase(true);
 
       model.getDatabaseLoadService().valueProperty().addListener((o, oldValue, newValue)  ->  {
         AtomicInteger pos = new AtomicInteger();

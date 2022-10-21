@@ -9,6 +9,7 @@ public class SiardEvent extends Event {
     public static final EventType<SiardEvent> UPDATE_LANGUAGE_EVENT;
     public static final EventType<SiardEvent> ARCHIVE_LOADED;
     public static final EventType<SiardEvent> ARCHIVE_METADATA_UPDATED;
+    public static final EventType<SiardEvent> DATABASE_DOWNLOADED;
 
     public SiardEvent(EventType<? extends Event> eventType) {
         super(eventType);
@@ -20,5 +21,6 @@ public class SiardEvent extends Event {
         UPDATE_LANGUAGE_EVENT = new EventType(ANY, "UPDATE_LANGUAGE_EVENT");
         ARCHIVE_LOADED = new EventType(ANY, "UPDATE_ARCHIVE_TREE_EVENT");
         ARCHIVE_METADATA_UPDATED = new EventType("ARCHIVE_METADATA_UPDATED");
+        DATABASE_DOWNLOADED = new EventType("DATABASE_DOWNLOADED");
     }
 }

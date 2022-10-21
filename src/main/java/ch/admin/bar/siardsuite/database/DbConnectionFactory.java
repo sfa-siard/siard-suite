@@ -38,8 +38,8 @@ public class DbConnectionFactory {
     return instance;
   }
 
-  public DatabaseLoadService createDatabaseLoader(final Archive archive) {
-    return new DatabaseLoadService(connection, model, archive);
+  public DatabaseLoadService createDatabaseLoader(final Archive archive, boolean onlyMetaData) {
+    return new DatabaseLoadService(connection, model, archive, onlyMetaData);
   }
 
   public static void disconnect() {

@@ -37,7 +37,10 @@ public class Model {
   }
 
   private Archive initArchive() {
-    final File fileArchive = new File("sample.siard");
+    return this.initArchive(new File("sample.siard"));
+  }
+
+  private Archive initArchive(File fileArchive) {
     if (fileArchive.exists()) {
       fileArchive.delete();
     }
@@ -119,9 +122,17 @@ public class Model {
     return databaseLoadService;
   }
 
-  public void loadDatabase() {
+  // TODO: check if this is correctly placed in the model. I think the model should just represent the state of the application
+  // loading the database is not a state... it's an effect
+  public void loadDatabase(boolean onlyMetaData) {
     final Archive archive = initArchive();
-    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader(archive);
+    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader(archive, onlyMetaData);
+    databaseLoadService.start();
+  }
+
+  public void loadDatabase(File target, boolean onlyMetaData) {
+    final Archive archive = initArchive(target);
+    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader(archive, onlyMetaData);
     databaseLoadService.start();
   }
 
@@ -129,4 +140,5 @@ public class Model {
     DbConnectionFactory.disconnect();
   }
 
+  
 }

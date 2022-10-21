@@ -14,15 +14,17 @@ public class DatabaseLoadService extends Service<ObservableList<DatabaseTable>> 
   private Connection connection;
   private Model model;
   private Archive archive;
+  private boolean onlyMetaData;
 
-  public DatabaseLoadService(Connection connection, Model model, Archive archive) {
+  public DatabaseLoadService(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
     this.connection = connection;
     this.model = model;
     this.archive = archive;
+    this.onlyMetaData = onlyMetaData;
   }
 
   @Override
   protected Task<ObservableList<DatabaseTable>> createTask() {
-    return new DatabaseLoadTask(connection, model, archive);
+    return new DatabaseLoadTask(connection, model, archive, onlyMetaData);
   }
 }

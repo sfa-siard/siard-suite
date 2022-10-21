@@ -15,49 +15,54 @@ import java.sql.Connection;
 
 public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implements Progress {
 
-  private Connection connection;
-  private Model model;
-  private Archive archive;
+    private Connection connection;
+    private Model model;
+    private Archive archive;
+    private boolean onlyMetaData;
 
-  public DatabaseLoadTask(Connection connection, Model model, Archive archive) {
-    this.connection = connection;
-    this.model = model;
-    this.archive = archive;
-  }
-
-  @Override
-  protected ObservableList<DatabaseTable> call() throws Exception {
-
-    ObservableList<DatabaseTable> progressData = FXCollections.observableArrayList();
-    connection.setAutoCommit(false);
-    MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
-    metadata.download(true, false, this);
-    for (int i = 0; i < this.archive.getSchemas(); i++) {
-      Schema schema = this.archive.getSchema(i);
-      for (int y = 0; y < schema.getTables(); y++) {
-        progressData.add(new DatabaseTable(schema.getMetaSchema().getName() + "." + schema.getTable(y).getMetaTable().getName()));
-      }
+    public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
+        this.connection = connection;
+        this.model = model;
+        this.archive = archive;
+        this.onlyMetaData = onlyMetaData;
     }
-    updateValue(progressData);
-    updateProgress(0, progressData.size());
 
-//    PrimaryDataFromDb data = PrimaryDataFromDb.newInstance(connection, archive);
-    // TODO PrimaryDataFromDB needs extension show progress per table - CR #459
-//    data.download(this);
+    @Override
+    protected ObservableList<DatabaseTable> call() throws Exception {
 
-    // for test purposes:
-    model.setArchive("sample.siard", archive);
+        ObservableList<DatabaseTable> progressData = FXCollections.observableArrayList();
+        connection.setAutoCommit(false);
+        MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
+        metadata.download(true, false, this);
+        for (int i = 0; i < this.archive.getSchemas(); i++) {
+            Schema schema = this.archive.getSchema(i);
+            for (int y = 0; y < schema.getTables(); y++) {
+                progressData.add(new DatabaseTable(schema.getMetaSchema().getName() + "." + schema.getTable(y)
+                                                                                                  .getMetaTable()
+                                                                                                  .getName()));
+            }
+        }
+        updateValue(progressData);
+        updateProgress(0, progressData.size());
 
-    return progressData;
-  }
+        if (!onlyMetaData) {
+            // TODO PrimaryDataFromDB needs extension show progress per table -CR #459
+            PrimaryDataFromDb data = PrimaryDataFromDb.newInstance(connection, archive);
+            data.download(this);
+        }
 
-  @Override
-  public boolean cancelRequested() {
-    return false;
-  }
+        model.setArchive("sample.siard", archive);  //TODO: there should probably be different tasks for the preview and the full download
+        archive.close(); // maybe this is needed - but here?
+        return progressData;
+    }
 
-  @Override
-  public void notifyProgress(int i) {
-    updateProgress(i, 100);
-  }
+    @Override
+    public boolean cancelRequested() {
+        return false;
+    }
+
+    @Override
+    public void notifyProgress(int i) {
+        updateProgress(i, 100);
+    }
 }

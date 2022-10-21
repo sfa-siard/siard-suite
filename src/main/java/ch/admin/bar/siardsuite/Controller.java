@@ -17,8 +17,11 @@ public class Controller {
     model.setDatabaseType(databaseType);
   }
 
-  public void loadDatabase() {
-    model.loadDatabase();
+  public void loadDatabase(boolean onlyMetaData) {
+    model.loadDatabase(onlyMetaData);
+  }
+  public void loadDatabase(File target, boolean onlyMetaData) {
+    model.loadDatabase(target, onlyMetaData);
   }
 
   public void closeDbConnection() {

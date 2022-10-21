@@ -29,4 +29,8 @@ public class ArchiveMetaData {
     public void accept(ArchiveMetaDataVisitor visitor) {
         visitor.visit(this.description.getValue(), this.owner.getValue(), this.timeOfOrigin.getValue(), this.archiverName.getValue(), this.archiverContact.getValue());
     }
+
+    public File getTargetArchive() {
+        return this.targetArchive;
+    }
 }

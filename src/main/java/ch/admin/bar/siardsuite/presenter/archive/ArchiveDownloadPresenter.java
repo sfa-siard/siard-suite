@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
@@ -30,6 +31,29 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         this.init(controller, model, stage);
+        createListeners(stepper);
+    }
+
+    private void createListeners(MFXStepper stepper) {
+        stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, event -> {
+
+            controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
+                                    false); // TODO: way to many chainings
+
+            model.getDatabaseLoadService().setOnSucceeded(e -> {
+                System.out.println("download of database successful...");
+                controller.closeDbConnection();
+                stepper.next();
+                stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
+            });
+
+            model.getDatabaseLoadService().setOnFailed(e -> {
+                System.out.println("download of database failed...");
+                controller.closeDbConnection();
+                stepper.previous();
+                this.stage.setHeight(1080.00);
+            });
+        });
     }
 
     private void bindTexts() {
