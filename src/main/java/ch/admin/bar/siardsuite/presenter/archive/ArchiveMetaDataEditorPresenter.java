@@ -104,14 +104,16 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
             } else {
                 this.errorMessage.setVisible(false);
                 File targetArchive = this.showFileChoserToSelectTargetArchive(this.name.getText());
-                this.controller.updateArchiveMetaData(this.descriptionText.getText(),
-                                                      this.owner.getText(),
-                                                      this.timeOfOrigin.getText(),
-                                                      this.archiverName.getText(),
-                                                      this.archiverContact.getText(),
-                                                      targetArchive);
-                stepper.next();
-                stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
+                if (targetArchive != null) {
+                    this.controller.updateArchiveMetaData(this.descriptionText.getText(),
+                                                          this.owner.getText(),
+                                                          this.timeOfOrigin.getText(),
+                                                          this.archiverName.getText(),
+                                                          this.archiverContact.getText(),
+                                                          targetArchive);
+                    stepper.next();
+                    stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
+                }
             }
         });
         this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
