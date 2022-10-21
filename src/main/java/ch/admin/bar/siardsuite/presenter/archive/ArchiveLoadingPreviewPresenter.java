@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
+import ch.admin.bar.siardsuite.ui.Icon;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -49,8 +50,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
     List<DatabaseTable> data;
 
-    private final Image loading = new Image(String.valueOf(SiardApplication.class.getResource("icons/loading.png")));
-    private final Image ok = new Image(String.valueOf(SiardApplication.class.getResource("icons/ok_check.png")));
+    private final Image loading = Icon.loading;
+    private final Image ok = Icon.ok;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
