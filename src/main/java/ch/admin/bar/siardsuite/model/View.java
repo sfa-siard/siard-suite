@@ -4,7 +4,7 @@ public enum View {
 
   ROOT("fxml/root-view.fxml"),
   START("fxml/start-view.fxml"),
-  ARCHIVE_DB("fxml/archive/archive-db-view.fxml"),
+  ARCHIVE_DB("fxml/archive/archive-choose-dbms-view.fxml"),
   ARCHIVE_CONNECTION("fxml/archive/archive-connection-view.fxml"),
   ARCHIVE_STEPPER("fxml/archive/archive-stepper-view.fxml"),
   DIALOG("fxml/dialog-view.fxml"),
