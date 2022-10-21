@@ -61,6 +61,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
 
             controller.onDatabaseLoadSuccess(e -> {
+                this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
                 loadingSpinner.stop();
                 this.loader.setImage(Icon.ok);
                 controller.closeDbConnection();
@@ -78,7 +79,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     }
 
     private void bindTexts() {
-        this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title"));
+        this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.inProgress"));
     }
 
 }
