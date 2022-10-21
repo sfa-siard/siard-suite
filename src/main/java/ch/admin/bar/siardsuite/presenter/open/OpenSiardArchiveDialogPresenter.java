@@ -217,7 +217,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
                 archive.open(file);
                 model.setArchive(file.getName(), archive);
                 stage.closeDialog();
-                stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW.getName());
+                stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

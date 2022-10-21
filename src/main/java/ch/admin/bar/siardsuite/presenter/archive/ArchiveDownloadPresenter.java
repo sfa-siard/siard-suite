@@ -45,8 +45,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     }
 
     private void createListeners(MFXStepper stepper) {
-        this.buttonsBox.next().setOnAction(event -> this.stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW.getName()));
-        this.buttonsBox.cancel().setOnAction(event -> this.stage.navigate(View.START.getName()));
+        this.buttonsBox.next().setOnAction(event -> this.stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW));
+        this.buttonsBox.cancel().setOnAction(event -> this.stage.navigate(View.START));
         stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, event -> {
 
             controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),

@@ -18,22 +18,22 @@ import java.util.List;
 
 public class Model {
 
-  private String currentView = View.START.getName();
+  private View currentView = View.START;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private DatabaseLoadService databaseLoadService;
   private DatabaseArchive archive = new DatabaseArchive();
-  private StringProperty siardVersion = new SimpleStringProperty("2.1");
+  private final StringProperty siardVersion = new SimpleStringProperty("2.1");
 
   public Model() {
 
   }
 
-  public String getCurrentView() {
+  public View getCurrentView() {
     return currentView;
   }
 
-  public void setCurrentView(String currentView) {
-    this.currentView = currentView;
+  public void setCurrentView(View view) {
+    this.currentView = view;
   }
 
   private Archive initArchive() {
