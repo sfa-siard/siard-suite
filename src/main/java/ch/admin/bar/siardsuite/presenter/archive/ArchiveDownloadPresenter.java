@@ -12,9 +12,12 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 
@@ -52,6 +55,10 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
         this.buttonsBox = new StepperButtonBox().make(DOWNLOAD_FINISHED);
         this.borderPane.setBottom(buttonsBox);
 
+        this.buttonsBox.next().setOnAction(event -> this.stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW));
+        this.buttonsBox.cancel().setOnAction(event -> this.stage.navigate(View.START));
+        this.openLink.setOnMouseClicked(openArchiveDirectory());
+
         this.bindTexts();
     }
 
@@ -62,43 +69,50 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     }
 
     private void createListeners(MFXStepper stepper) {
-        this.buttonsBox.next().setOnAction(event -> this.stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW));
-        this.buttonsBox.cancel().setOnAction(event -> this.stage.navigate(View.START));
-
-        this.openLink.setOnMouseClicked(event -> {
-            try {
-                new SystemFileBrowser(model.getArchive().getArchiveMetaData().getTargetArchive()).show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, event -> {
-            loadingSpinner.play();
-            controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
-                                    false); // TODO: way to many chainings
-
-
-            controller.onDatabaseLoadSuccess(e -> {
-                this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
-                loadingSpinner.stop();
-                this.loader.setImage(Icon.ok);
-                controller.closeDbConnection();
-                stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
-            });
-
-
-            controller.onDatabaseLoadFailed(e -> {
-                System.out.println("download of database failed...");
-                controller.closeDbConnection();
-                stepper.previous();
-                this.stage.setHeight(1080.00);
-            });
-        });
+        stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, downloadAndArchiveDatabse(stepper));
     }
 
     private void bindTexts() {
         this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.inProgress"));
     }
 
+    private EventHandler<SiardEvent> downloadAndArchiveDatabse(MFXStepper stepper) {
+        return event -> {
+            loadingSpinner.play();
+            controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
+                                    false); // TODO: way to many chainings
+            controller.onDatabaseLoadSuccess(handleDownloadSuccess(stepper));
+            controller.onDatabaseLoadFailed(handleDownloadFailure(stepper));
+        };
+    }
+
+
+    private EventHandler<WorkerStateEvent> handleDownloadFailure(MFXStepper stepper) {
+        return e -> {
+            // TODO: show error page
+            System.out.println("download of database failed...");
+            controller.closeDbConnection();
+            stepper.previous();
+        };
+    }
+
+    private EventHandler<WorkerStateEvent> handleDownloadSuccess(MFXStepper stepper) {
+        return e -> {
+            this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
+            loadingSpinner.stop();
+            this.loader.setImage(Icon.ok);
+            controller.closeDbConnection();
+            stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
+        };
+    }
+
+    private EventHandler<MouseEvent> openArchiveDirectory() {
+        return event -> {
+            try {
+                new SystemFileBrowser(model.getArchive().getArchiveMetaData().getTargetArchive()).show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }
 }
