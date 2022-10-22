@@ -8,12 +8,15 @@ import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.ui.Icon;
 import ch.admin.bar.siardsuite.ui.Spinner;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+
+import java.io.IOException;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
 
@@ -24,6 +27,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
     @FXML
     public ImageView loader;
+    @FXML
+    public Label recordsLoaded;
+    @FXML
+    public Label filePath;
+    @FXML
+    public Label pathTitle;
+    @FXML
+    public Label openLink;
 
     @FXML
     private StepperButtonBox buttonsBox;
@@ -54,6 +65,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
         this.buttonsBox.next().setOnAction(event -> this.stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW));
         this.buttonsBox.cancel().setOnAction(event -> this.stage.navigate(View.START));
 
+        this.openLink.setOnMouseClicked(event -> {
+            try {
+                openFileBrowser();
+            } catch (IOException e) {
+                System.out.println("unable to open native file browser");
+            }
+        });
+
         stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, event -> {
             loadingSpinner.play();
             controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
@@ -77,6 +96,19 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
             });
         });
     }
+
+    // TODO: fix the deprecation warning and move to its own class
+    private void openFileBrowser() throws IOException {
+        if (OS.UNSUPPORTED) throw new UnsupportedOperationException("Open file browser is not supported on your OS");
+
+        // TODO: the archive is not set in the metadata...
+        //String filePath = this.model.getArchive().getArchiveMetaData().getTargetArchive().getAbsolutePath();
+        String filePath = "/home/mburri/projects/siard-suite/siard-suite/";
+        if (OS.IS_WINDOWS) Runtime.getRuntime().exec("explorer /select, "+ filePath);
+        if (OS.IS_UNIX) Runtime.getRuntime().exec("xdg-open "+ filePath);
+        if (OS.IS_MAC) Runtime.getRuntime().exec("open -R " + filePath);
+    }
+
 
     private void bindTexts() {
         this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.inProgress"));

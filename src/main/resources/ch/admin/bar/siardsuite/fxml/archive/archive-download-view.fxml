@@ -3,13 +3,11 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveDownloadPresenter">
     <center>
@@ -30,11 +28,29 @@
                                 </ImageView>
                             </graphic>
                         </Label>
-                        <Text fx:id="text" styleClass="view-text">
-                            <VBox.margin>
-                                <Insets bottom="24.0" top="15.0" />
-                            </VBox.margin>
-                        </Text>
+                        <Label fx:id="recordsLoaded" contentDisplay="RIGHT" styleClass="h2" text="1234 Datensätze heruntergeladen">
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                        </Label>
+                  <Label fx:id="pathTitle" contentDisplay="RIGHT" styleClass="h2" text="Speicherort">
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="filePath" contentDisplay="RIGHT" text="/home/user/postgfres.siard" />
+                        <Label fx:id="openLink" contentDisplay="RIGHT" text="Ordner öffnen" underline="true">
+                           <HBox.margin>
+                              <Insets left="25.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </HBox>
                     </children>
                     <VBox.margin>
                         <Insets left="25.0" right="25.0" />
