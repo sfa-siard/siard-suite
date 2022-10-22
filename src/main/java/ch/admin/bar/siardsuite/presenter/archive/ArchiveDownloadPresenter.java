@@ -7,8 +7,8 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.ui.Icon;
 import ch.admin.bar.siardsuite.ui.Spinner;
+import ch.admin.bar.siardsuite.ui.SystemFileBrowser;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -67,9 +67,9 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
         this.openLink.setOnMouseClicked(event -> {
             try {
-                openFileBrowser();
+                new SystemFileBrowser(model.getArchive().getArchiveMetaData().getTargetArchive()).show();
             } catch (IOException e) {
-                System.out.println("unable to open native file browser");
+                throw new RuntimeException(e);
             }
         });
 
@@ -96,19 +96,6 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
             });
         });
     }
-
-    // TODO: fix the deprecation warning and move to its own class
-    private void openFileBrowser() throws IOException {
-        if (OS.UNSUPPORTED) throw new UnsupportedOperationException("Open file browser is not supported on your OS");
-
-        // TODO: the archive is not set in the metadata...
-        //String filePath = this.model.getArchive().getArchiveMetaData().getTargetArchive().getAbsolutePath();
-        String filePath = "/home/mburri/projects/siard-suite/siard-suite/";
-        if (OS.IS_WINDOWS) Runtime.getRuntime().exec("explorer /select, "+ filePath);
-        if (OS.IS_UNIX) Runtime.getRuntime().exec("xdg-open "+ filePath);
-        if (OS.IS_MAC) Runtime.getRuntime().exec("open -R " + filePath);
-    }
-
 
     private void bindTexts() {
         this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.inProgress"));
