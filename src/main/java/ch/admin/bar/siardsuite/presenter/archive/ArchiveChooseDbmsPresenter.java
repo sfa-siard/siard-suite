@@ -18,7 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class ArchiveDbPresenter extends StepperPresenter {
+public class ArchiveChooseDbmsPresenter extends StepperPresenter {
 
   @FXML
   public Text title;

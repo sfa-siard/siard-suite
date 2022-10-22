@@ -14,6 +14,7 @@ import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -28,12 +29,10 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.List;
 
-public class PreviewPresenter extends Presenter {
+public class PreviewPresenter extends StepperPresenter {
   protected DatabaseArchive archive;
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
 
-  @FXML
-  protected BorderPane borderPane;
   @FXML
   protected TreeView<TreeAttributeWrapper> treeView;
   @FXML
@@ -55,6 +54,11 @@ public class PreviewPresenter extends Presenter {
     initTreeView();
 
     setListeners();
+  }
+
+  @Override
+  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
+    this.init(controller, model, stage);
   }
 
   /* Cantor's pairing function */
@@ -161,5 +165,6 @@ public class PreviewPresenter extends Presenter {
       throw new RuntimeException(e);
     }
   }
+
 
 }

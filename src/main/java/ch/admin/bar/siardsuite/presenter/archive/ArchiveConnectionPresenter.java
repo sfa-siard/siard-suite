@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
@@ -18,7 +19,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.util.Duration;
 
 import static ch.admin.bar.siardsuite.model.DatabaseConnectionProperties.*;
 
@@ -26,7 +26,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
   private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
   private static final String TEST_DB = "test-db";
-  private static final String MY_USER = "MyUser";
 
   private String portString;
   private String dbTypeString;
@@ -78,17 +77,15 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.model = model;
     this.controller = controller;
     this.stage = stage;
+
+    this.tooltip = new SiardTooltip("archiveConnection.view.tooltip");
   }
 
   @Override
   public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-    this.model = model;
-    this.controller = controller;
-    this.stage = stage;
-
+    this.init(controller, model, stage);
     addTextWithStyles();
     addFormText();
-    makeTooltip();
 
     this.errorMessage.setVisible(false);
     this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
@@ -122,15 +119,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     urlField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.url.label"));
     toggleSave.textProperty().bind(I18n.createStringBinding("archiveConnection.view.toggleSave"));
     connectionName.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.connectionName.label"));
-  }
-
-  private void makeTooltip() {
-    tooltip = new Tooltip();
-    tooltip.setPrefSize(328.0, 162);
-    tooltip.setShowDelay(Duration.millis(1));
-    tooltip.setAutoHide(true);
-    tooltip.getStyleClass().add("info-tooltip");
-    tooltip.textProperty().bind(I18n.createStringBinding("archiveConnection.view.tooltip"));
   }
 
   private void setListeners(MFXStepper stepper) {
