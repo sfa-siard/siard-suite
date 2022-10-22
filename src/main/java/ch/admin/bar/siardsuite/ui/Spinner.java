@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.ui;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
-import javafx.animation.Transition;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
