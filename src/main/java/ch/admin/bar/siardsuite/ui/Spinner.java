@@ -23,8 +23,8 @@ public class Spinner {
         this.transition.play();
     }
 
-    public void stop() {
+    public void hide() {
         this.transition.stop();
-        this.imageView.setRotate(0); // specific to rotational transitions
+        this.imageView.setVisible(false);
     }
 }

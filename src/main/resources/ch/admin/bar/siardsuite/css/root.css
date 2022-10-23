@@ -346,6 +346,10 @@
     -fx-content-display: RIGHT;
 }
 
+.label-icon-left {
+    -fx-content-display: LEFT;
+}
+
 .server-icon {
     -fx-graphic: url(../icons/server.png);
 }
@@ -599,5 +603,4 @@
 .files-vbox-drop .button:hover {
     -fx-background-color: #0e0e0e82;
 }
-
 

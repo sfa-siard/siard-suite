@@ -27,7 +27,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
     @FXML
     public Label title;
-
+    @FXML
+    public Label titleSuccess;
     @FXML
     public ImageView loader;
     @FXML
@@ -38,6 +39,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     public Label pathTitle;
     @FXML
     public Label openLink;
+
 
     @FXML
     private StepperButtonBox buttonsBox;
@@ -74,6 +76,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
     private void bindTexts() {
         this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.inProgress"));
+        this.titleSuccess.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
     }
 
     private EventHandler<SiardEvent> downloadAndArchiveDatabse(MFXStepper stepper) {
@@ -98,9 +101,9 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
     private EventHandler<WorkerStateEvent> handleDownloadSuccess(MFXStepper stepper) {
         return e -> {
-            this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
-            loadingSpinner.stop();
-            this.loader.setImage(Icon.ok);
+            this.title.setVisible(false);
+            this.titleSuccess.setVisible(true);
+            loadingSpinner.hide();
             controller.closeDbConnection();
             stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
         };
