@@ -16,9 +16,9 @@
                 <VBox>
                     <children>
                         <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2" />
-                        <Label fx:id="titleSuccess" styleClass="h2" textFill="#1BCB95" visible="false">
+                        <Label fx:id="resultTitle" styleClass="h2" textFill="#1BCB95" visible="false">
                             <graphic>
-                                <ImageView fx:id="success" fitHeight="24.0" fitWidth="24.0">
+                                <ImageView fx:id="resultIcon" fitHeight="24.0" fitWidth="24.0">
                                     <Image url="@../../icons/ok_check.png" />
                                 </ImageView>
                             </graphic>

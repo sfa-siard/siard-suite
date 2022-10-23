@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Paint;
 
 import java.io.IOException;
 
@@ -28,7 +29,9 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     @FXML
     public Label title;
     @FXML
-    public Label titleSuccess;
+    public Label resultTitle;
+    @FXML
+    public ImageView resultIcon;
     @FXML
     public ImageView loader;
     @FXML
@@ -39,6 +42,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     public Label pathTitle;
     @FXML
     public Label openLink;
+
 
 
     @FXML
@@ -76,7 +80,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
     private void bindTexts() {
         this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.inProgress"));
-        this.titleSuccess.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
+        this.resultTitle.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
     }
 
     private EventHandler<SiardEvent> downloadAndArchiveDatabse(MFXStepper stepper) {
@@ -85,24 +89,27 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
             controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
                                     false); // TODO: way to many chainings
             controller.onDatabaseLoadSuccess(handleDownloadSuccess(stepper));
-            controller.onDatabaseLoadFailed(handleDownloadFailure(stepper));
+            controller.onDatabaseLoadFailed(handleDownloadFailure());
         };
     }
 
 
-    private EventHandler<WorkerStateEvent> handleDownloadFailure(MFXStepper stepper) {
+    private EventHandler<WorkerStateEvent> handleDownloadFailure() {
         return e -> {
-            // TODO: show error page
-            System.out.println("download of database failed...");
+            this.title.setVisible(false);
+            loadingSpinner.hide();
+            this.resultTitle.setVisible(true);
+            this.resultTitle.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.failed"));
+            this.resultTitle.setTextFill(Paint.valueOf("#FF0000"));
+            this.resultIcon.setImage(Icon.error);
             controller.closeDbConnection();
-            stepper.previous();
         };
     }
 
     private EventHandler<WorkerStateEvent> handleDownloadSuccess(MFXStepper stepper) {
         return e -> {
             this.title.setVisible(false);
-            this.titleSuccess.setVisible(true);
+            this.resultTitle.setVisible(true);
             loadingSpinner.hide();
             controller.closeDbConnection();
             stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
