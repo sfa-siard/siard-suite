@@ -9,68 +9,64 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveDownloadPresenter">
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveDownloadPresenter">
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
             <children>
                 <VBox>
                     <children>
-                        <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2"/>
-                        <Label fx:id="titleSuccess" visible="false" styleClass="h2">
+                        <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2" />
+                        <Label fx:id="titleSuccess" styleClass="h2" textFill="#1BCB95" visible="false">
                             <graphic>
                                 <ImageView fx:id="success" fitHeight="24.0" fitWidth="24.0">
-                                    <styleClass>
-                                        <String fx:value="loading-icon"/>
-                                        <String fx:value="icon-button"/>
-                                    </styleClass>
-                                    <Image url="@../../icons/ok_check.png"/>
+                                    <Image url="@../../icons/ok_check.png" />
                                 </ImageView>
                             </graphic>
+                     <VBox.margin>
+                        <Insets top="-25.0" />
+                     </VBox.margin>
                         </Label>
 
-                        <Label fx:id="recordsLoaded" contentDisplay="RIGHT" styleClass="h2"
-                               text="1234 Datensätze heruntergeladen">
+                        <Label fx:id="recordsLoaded" contentDisplay="RIGHT" styleClass="h2" text="1234 Datensätze heruntergeladen">
                             <graphic>
                                 <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
                                     <styleClass>
-                                        <String fx:value="loading-icon"/>
-                                        <String fx:value="icon-button"/>
+                                        <String fx:value="loading-icon" />
+                                        <String fx:value="icon-button" />
                                     </styleClass>
-                                    <Image url="@../../icons/loading.png"/>
+                                    <Image url="@../../icons/loading.png" />
                                 </ImageView>
                             </graphic>
                             <VBox.margin>
-                                <Insets top="25.0"/>
+                                <Insets top="25.0" />
                             </VBox.margin>
                         </Label>
                         <Label fx:id="pathTitle" contentDisplay="RIGHT" styleClass="h2" text="Speicherort">
                             <VBox.margin>
-                                <Insets top="25.0"/>
+                                <Insets top="25.0" />
                             </VBox.margin>
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                             <children>
-                                <Label fx:id="filePath" contentDisplay="RIGHT" text="/home/user/postgfres.siard"/>
+                                <Label fx:id="filePath" contentDisplay="RIGHT" text="/home/user/postgfres.siard" />
                                 <Label fx:id="openLink" contentDisplay="RIGHT" text="Ordner öffnen" underline="true">
                                     <HBox.margin>
-                                        <Insets left="25.0"/>
+                                        <Insets left="25.0" />
                                     </HBox.margin>
                                 </Label>
                             </children>
                             <VBox.margin>
-                                <Insets top="25.0"/>
+                                <Insets top="25.0" />
                             </VBox.margin>
                         </HBox>
                     </children>
                     <VBox.margin>
-                        <Insets left="25.0" right="25.0"/>
+                        <Insets left="25.0" right="25.0" />
                     </VBox.margin>
                 </VBox>
             </children>
             <BorderPane.margin>
-                <Insets left="25.0" right="25.0" top="48.0"/>
+                <Insets left="25.0" right="25.0" top="48.0" />
             </BorderPane.margin>
         </VBox>
     </center>
