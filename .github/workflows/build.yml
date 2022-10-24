@@ -25,11 +25,8 @@ jobs:
           cache: "gradle"
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Install libgtk for TestFX
-        run: sudo apt-get install libgtk-3-0 icc-profiles-free java-wrappers libbatik-java libcommons-io-java \
-             libfontbox2-java libqdox-java libsaxon-java libxmlgraphics-commons-java \
       - name: Execute Gradle build
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
       - name: Prepare build artifacts (zip) for download
         uses: actions/upload-artifact@v3
         with:
