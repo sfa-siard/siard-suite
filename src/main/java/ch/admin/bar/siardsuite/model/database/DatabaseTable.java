@@ -1,21 +1,33 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siard2.api.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseTable {
 
-    private StringProperty name;
-    private List<DatabaseColumn> columns = new ArrayList<>();
+    private final StringProperty name;
+    private final List<DatabaseColumn> columns = new ArrayList<>();
+    private final List<DatabaseRow> rows = new ArrayList<>();
 
     public DatabaseTable(Table table) {
         name = new SimpleStringProperty(table.getMetaTable().getName());
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(table.getMetaTable().getMetaColumn(i)));
+        }
+        try {
+            int i = 0;
+            final RecordDispenser recordDispenser = table.openRecords();
+            while (i < table.getMetaTable().getRows()) {
+                rows.add(new DatabaseRow(recordDispenser.get()));
+                i++;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -29,6 +41,10 @@ public class DatabaseTable {
 
     public List<DatabaseColumn> getColumns() {
         return columns;
+    }
+
+    public List<DatabaseRow> getRows() {
+        return rows;
     }
 
 }

@@ -6,10 +6,7 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.TreeContentViewModel;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
-import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -23,7 +20,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -103,6 +99,9 @@ public class PreviewPresenter extends StepperPresenter {
     TreeItem<TreeAttributeWrapper> columnsItem;
     TreeItem<TreeAttributeWrapper> columnItem;
 
+    List<DatabaseRow> rows;
+    TreeItem<TreeAttributeWrapper> rowsItem;
+
     for (DatabaseSchema schema : schemas) {
       schemaItem = new TreeItem<>(new TreeAttributeWrapper(schema.getName().get(), pair(2, schemas.indexOf(schema)), TreeContentView.SCHEMA_TABLE));
 
@@ -119,10 +118,14 @@ public class PreviewPresenter extends StepperPresenter {
 
         for (DatabaseColumn column : columns) {
           columnItem = new TreeItem<>(new TreeAttributeWrapper(column.getName().get(), pair(6, columns.indexOf(column)), TreeContentView.COLUMN));
-            // more levels
           columnsItem.getChildren().add(columnItem);
         }
 
+        rows = table.getRows();
+        rowsItem = new TreeItem<>();
+        rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.rows", pair(7, 0), TreeContentView.DATA, rows.size()));
+
+        tableItem.getChildren().add(rowsItem);
         tableItem.getChildren().add(columnsItem);
         tablesItem.getChildren().add(tableItem);
       }
@@ -165,6 +168,5 @@ public class PreviewPresenter extends StepperPresenter {
       throw new RuntimeException(e);
     }
   }
-
 
 }
