@@ -31,6 +31,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testImplementation "org.testfx:testfx-core:4.0.16-alpha"
     testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
+    testImplementation 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
 
     // legacy: add all dependencies from lib folder
     implementation fileTree(include: ['*.jar'], dir: 'lib')
@@ -41,7 +42,7 @@ tasks.withType(JavaCompile) {
 }
 
 tasks.withType(JavaExec) {
-    jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED")
+    jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED")
 }
 
 // task to create an exectutable jar file with all necessary dependencies included and sigrnature files removed.
@@ -59,7 +60,8 @@ task fatJar(type: Jar) {
 
 test {
     useJUnitPlatform()
-    jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED")
+    // run tets in headless mode -for testFX
+    jvmArgs "-Djava.awt.headless=true", "-Dtestfx.headless=true", "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
 }
 
 javafx {
