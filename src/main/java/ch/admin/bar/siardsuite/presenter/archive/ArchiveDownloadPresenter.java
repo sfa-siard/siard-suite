@@ -72,7 +72,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     }
 
     private void createListeners(MFXStepper stepper) {
-        stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, downloadAndArchiveDatabse(stepper));
+        stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, downloadAndArchiveDatabase(stepper));
     }
 
     private void bindTexts() {
@@ -80,7 +80,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
         this.resultTitle.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
     }
 
-    private EventHandler<SiardEvent> downloadAndArchiveDatabse(MFXStepper stepper) {
+    private EventHandler<SiardEvent> downloadAndArchiveDatabase(MFXStepper stepper) {
         return event -> {
 
             loadingSpinner.play();
