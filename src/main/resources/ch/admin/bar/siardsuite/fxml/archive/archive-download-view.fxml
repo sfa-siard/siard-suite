@@ -48,7 +48,7 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                             <children>
-                                <Label fx:id="filePath" contentDisplay="RIGHT" text="/home/user/postgfres.siard" />
+                                <Label fx:id="archivePath" contentDisplay="RIGHT"/>
                                 <Label fx:id="openLink" contentDisplay="RIGHT" text="Ordner öffnen" underline="true">
                                     <HBox.margin>
                                         <Insets left="25.0" />

@@ -12,6 +12,8 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -95,7 +97,21 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     private void setListeners(MFXStepper stepper) {
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
             scrollBox.getChildren().clear();
-            controller.loadDatabase(true);
+
+            EventHandler<WorkerStateEvent> onSuccess = e -> {
+                controller.closeDbConnection();
+                stepper.next();
+                stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_LOADED));
+                this.stage.setHeight(950);
+            };
+
+            EventHandler<WorkerStateEvent> onFailure = e -> {
+                controller.closeDbConnection();
+                stepper.previous();
+                this.stage.setHeight(1080.00);
+            };
+
+            controller.loadDatabase(true, onSuccess, onFailure);
 
             controller.addDatabaseLoadingValuePropertyListener((o1, oldValue1, newValue1) -> {
                 AtomicInteger pos1 = new AtomicInteger();
@@ -110,18 +126,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                 }
             });
 
-            controller.onDatabaseLoadSuccess(e -> {
-                controller.closeDbConnection();
-                stepper.next();
-                stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_LOADED));
-                this.stage.setHeight(950);
-            });
 
-            controller.onDatabaseLoadFailed(e -> {
-                controller.closeDbConnection();
-                stepper.previous();
-                this.stage.setHeight(1080.00);
-            });
 
         });
 

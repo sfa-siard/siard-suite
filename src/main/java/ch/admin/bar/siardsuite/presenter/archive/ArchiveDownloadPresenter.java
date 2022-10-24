@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
 
+import java.io.File;
 import java.io.IOException;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
@@ -37,14 +38,11 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     @FXML
     public Label recordsLoaded;
     @FXML
-    public Label filePath;
+    public Label archivePath;
     @FXML
     public Label pathTitle;
     @FXML
     public Label openLink;
-
-
-
     @FXML
     private StepperButtonBox buttonsBox;
 
@@ -63,7 +61,6 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
         this.buttonsBox.next().setOnAction(event -> this.stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW));
         this.buttonsBox.cancel().setOnAction(event -> this.stage.navigate(View.START));
-        this.openLink.setOnMouseClicked(openArchiveDirectory());
 
         this.bindTexts();
     }
@@ -85,14 +82,15 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
     private EventHandler<SiardEvent> downloadAndArchiveDatabse(MFXStepper stepper) {
         return event -> {
+
             loadingSpinner.play();
-            controller.loadDatabase(this.model.getArchive().getArchiveMetaData().getTargetArchive(),
-                                    false); // TODO: way to many chainings
-            controller.onDatabaseLoadSuccess(handleDownloadSuccess(stepper));
-            controller.onDatabaseLoadFailed(handleDownloadFailure());
+            File targetArchive = this.model.getArchive().getArchiveMetaData().getTargetArchive();
+            this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
+            this.archivePath.setText(targetArchive.getAbsolutePath());
+            controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure());
+
         };
     }
-
 
     private EventHandler<WorkerStateEvent> handleDownloadFailure() {
         return e -> {
@@ -116,10 +114,10 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
         };
     }
 
-    private EventHandler<MouseEvent> openArchiveDirectory() {
+    private EventHandler<MouseEvent> openArchiveDirectory(File file) {
         return event -> {
             try {
-                new SystemFileBrowser(model.getArchive().getArchiveMetaData().getTargetArchive()).show();
+                new SystemFileBrowser(file).show();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

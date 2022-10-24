@@ -27,14 +27,22 @@ public class Controller {
     model.setDatabaseType(databaseType);
   }
 
-  public void loadDatabase(boolean onlyMetaData) {
+  public void loadDatabase(boolean onlyMetaData,EventHandler<WorkerStateEvent> onSuccess,
+                           EventHandler<WorkerStateEvent> onFailure
+                           ) {
     final Archive archive = model.initArchive();
     this.databaseLoadService = DbConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
+    this.onDatabaseLoadSuccess(onSuccess);
+    this.onDatabaseLoadFailed(onFailure);
     this.databaseLoadService.start();
+
   }
-  public void loadDatabase(File target, boolean onlyMetaData) {
+  public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
+                           EventHandler<WorkerStateEvent> onFailure) {
     final Archive archive = model.initArchive(target);
     this.databaseLoadService = DbConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
+    this.onDatabaseLoadSuccess(onSuccess);
+    this.onDatabaseLoadFailed(onFailure);
     this.databaseLoadService.start();
   }
 
