@@ -26,7 +26,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Install libgtk for TestFX
-        run: apt-get install libgtk-3-0)
+        run: apt-get install libgtk-3-0
       - name: Execute Gradle build
         run: ./gradlew build --no-daemon
       - name: Prepare build artifacts (zip) for download
