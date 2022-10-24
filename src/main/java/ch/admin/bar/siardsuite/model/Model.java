@@ -23,9 +23,7 @@ public class Model {
   private DatabaseArchive archive = new DatabaseArchive();
   private final StringProperty siardVersion = new SimpleStringProperty("2.1");
 
-  public Model() {
-
-  }
+  public Model() {}
 
   public View getCurrentView() {
     return currentView;
@@ -117,8 +115,6 @@ public class Model {
     return this.dbConnectionProps.getPassword();
   }
 
-
-
   // TODO: check if this is correctly placed in the model. I think the model should just represent the state of the application
   // loading the database is not a state... it's an effect
 
@@ -126,5 +122,4 @@ public class Model {
     DbConnectionFactory.disconnect();
   }
 
-  
 }

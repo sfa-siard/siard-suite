@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -23,7 +24,7 @@ import java.io.File;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 
-public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements ArchiveMetaDataVisitor {
+public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements DatabaseArchiveMetaDataVisitor {
 
     @FXML
     Text titleText;
@@ -107,12 +108,14 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 this.errorMessage.setVisible(false);
                 File targetArchive = this.showFileChoserToSelectTargetArchive(this.name.getText());
                 if (targetArchive != null) {
-                    this.controller.updateArchiveMetaData(this.descriptionText.getText(),
-                                                          this.owner.getText(),
-                                                          this.timeOfOrigin.getText(),
-                                                          this.archiverName.getText(),
-                                                          this.archiverContact.getText(),
-                                                          targetArchive);
+                    this.controller.updateArchiveMetaData(
+                            null,
+                            this.descriptionText.getText(),
+                            this.owner.getText(),
+                            this.timeOfOrigin.getText(),
+                            this.archiverName.getText(),
+                            this.archiverContact.getText(),
+                            targetArchive);
                     stepper.next();
                     stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
                 }
@@ -135,12 +138,10 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
 
     private void initFields() {
         this.name.setText(this.model.getDatabaseName().getValue());
-        if(this.model.getArchive().hasArchiveMetaData()) {
-            this.controller.provideArchiveMetaData(this);
-        }
+        this.controller.provideDatabaseArchiveMetaData(this);
     }
     @Override
-    public void visit(String description, String owner, String timeOfOrigin,
+    public void visit(String siardFormatVersion, String description, String owner, String timeOfOrigin,
                       String archiverName, String archiverContact) {
         this.descriptionText.setText(description);
         this.owner.setText(owner);
@@ -148,4 +149,5 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
     }
+
 }

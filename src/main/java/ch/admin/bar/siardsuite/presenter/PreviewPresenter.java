@@ -10,8 +10,10 @@ import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,8 +27,9 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.List;
 
-public class PreviewPresenter extends StepperPresenter {
-  protected DatabaseArchive archive;
+public class PreviewPresenter extends StepperPresenter implements DatabaseArchiveVisitor {
+  private StringProperty archiveName;
+  private List<DatabaseSchema> schemas;
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
 
   @FXML
@@ -82,11 +85,10 @@ public class PreviewPresenter extends StepperPresenter {
   }
 
   protected void initTreeView() {
-    archive = model.getArchive();
+    controller.provideDatabaseArchive(this);
 
-    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archive.getArchiveName().get(), pair(0, 0), TreeContentView.ROOT), db);
+    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), pair(0, 0), TreeContentView.ROOT), db);
 
-    final List<DatabaseSchema> schemas = archive.getSchemas();
     final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
     schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.schemas", pair(1, 0), TreeContentView.SCHEMAS, schemas.size()));
     TreeItem<TreeAttributeWrapper> schemaItem;
@@ -167,6 +169,12 @@ public class PreviewPresenter extends StepperPresenter {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public void visit(StringProperty archiveName, List<DatabaseSchema> schemas) {
+    this.archiveName = archiveName;
+    this.schemas = schemas;
   }
 
 }

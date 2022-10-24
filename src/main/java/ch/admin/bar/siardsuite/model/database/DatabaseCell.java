@@ -7,19 +7,18 @@ import java.io.IOException;
 
 public class DatabaseCell {
 
-    private LongProperty index;
+    private StringProperty index;
     private StringProperty name;
     private StringProperty type;
 
     public DatabaseCell(Cell cell) {
-        index = new SimpleLongProperty(cell.getMetaColumn().getPosition());
+        index = new SimpleStringProperty(String.valueOf(cell.getMetaColumn().getPosition()));
         name = new SimpleStringProperty(cell.getMetaColumn().getName());
         try {
             type = new SimpleStringProperty(cell.getMetaColumn().getType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(type.get());
     }
 
 

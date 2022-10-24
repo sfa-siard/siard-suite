@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -23,10 +25,8 @@ public class DatabaseArchive {
             "PostgreSQL", List.of("postgresql", "5432"),
             "Microsoft SQL Server", List.of("sqlserver", "1433"));
     private StringProperty databaseUsername = new SimpleStringProperty();
-    private String password;
     private List<DatabaseSchema> schemas = new ArrayList<>();
-
-    private ArchiveMetaData archiveMetaData;
+    private DatabaseArchiveMetaData metaData;
 
     public DatabaseArchive() {
     }
@@ -39,69 +39,20 @@ public class DatabaseArchive {
         for (int i = 0; i < archive.getSchemas(); i++) {
             schemas.add(new DatabaseSchema(archive.getSchema(i)));
         }
+        metaData = new DatabaseArchiveMetaData(archive.getMetaData());
     }
 
-    public void addArchiveMetaData(String description, String owner, String timeOfOrigin, String archiverName,
-                                   String archiverContact, File targetArchive) {
-        this.archiveMetaData = new ArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact, targetArchive);
+    public void addArchiveMetaData(String siardFormatVersion, String description, String owner, String timeOfOrigin,
+                                   String archiverName, String archiverContact, File targetArchive) {
+        this.metaData = new DatabaseArchiveMetaData(siardFormatVersion, description, owner, timeOfOrigin, archiverName, archiverContact, targetArchive);
     }
 
-    // TODO: remove getters!
-    public ArchiveMetaData getArchiveMetaData() {
-        return this.archiveMetaData;
-    }
-    public StringProperty getArchiveName() {
-        return archiveName;
+    public void accept(DatabaseArchiveVisitor visitor) {
+        visitor.visit(archiveName, schemas);
     }
 
-    public List<String> getDatabaseProductInfo() {
-        if (databaseProduct != null) {
-            return dbTypes.get(databaseProduct.getValue());
-        }
-        return null;
+    public void accept(DatabaseArchiveMetaDataVisitor visitor) {
+        metaData.accept(visitor);
     }
 
-    public StringProperty getDatabaseProduct() {
-        return databaseProduct;
-    }
-
-    public void setDatabaseProduct(String databaseProduct) {
-        this.databaseProduct.set(databaseProduct);
-    }
-
-    public void setConnectionUrl(String connectionUrl) {
-        this.connectionUrl.set(connectionUrl);
-    }
-
-    public void setDatabaseName(String name) {
-        this.databaseName.set(name);
-    }
-
-    public StringProperty getDatabaseName() {
-        return this.databaseName;
-    }
-
-    public StringProperty getConnectionUrl() {
-        return this.connectionUrl;
-    }
-
-    public StringProperty getDatabaseUsername() {
-        return this.databaseUsername;
-    }
-
-    public void setDatabaseUsername(String databaseUsername) {
-        this.databaseUsername.set(databaseUsername);
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<DatabaseSchema> getSchemas() {
-        return schemas;
-    }
-
-    public boolean hasArchiveMetaData() {
-        return this.archiveMetaData != null;
-    }
 }

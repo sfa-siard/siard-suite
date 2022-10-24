@@ -9,11 +9,11 @@ import java.util.List;
 
 public class DatabaseRow {
 
-    private final LongProperty index;
+    private final StringProperty index;
     private final List<DatabaseCell> cells = new ArrayList<>();
 
     public DatabaseRow(Record record) {
-        index = new SimpleLongProperty(record.getRecord());
+        index = new SimpleStringProperty(String.valueOf(record.getRecord()));
         try {
             for (int i = 0; i < record.getCells(); i++) {
                 cells.add(new DatabaseCell(record.getCell(i)));
