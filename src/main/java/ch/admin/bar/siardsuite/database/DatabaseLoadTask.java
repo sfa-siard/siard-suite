@@ -5,6 +5,7 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.database.ArchiveMetaData;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
@@ -15,10 +16,10 @@ import java.sql.Connection;
 
 public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implements Progress {
 
-    private Connection connection;
-    private Model model;
-    private Archive archive;
-    private boolean onlyMetaData;
+    private final Connection connection;
+    private final Model model;
+    private final Archive archive;
+    private final boolean onlyMetaData;
 
     public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
         this.connection = connection;
@@ -45,6 +46,14 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
         updateValue(progressData);
         updateProgress(0, progressData.size());
 
+
+        // TODO: make it nice and clean it up...
+        if (this.model.getArchive().hasArchiveMetaData()) {
+            ArchiveMetaData archiveMetaData = this.model.getArchive().getArchiveMetaData();
+            archiveMetaData.write(archive);
+        }
+
+        // TODO: replace the boolean flag with a strategy pattern
         if (!onlyMetaData) {
             // TODO PrimaryDataFromDB needs extension show progress per table -CR #459
             PrimaryDataFromDb data = PrimaryDataFromDb.newInstance(connection, archive);
