@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 
 import java.io.File;
@@ -43,6 +44,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     public Label pathTitle;
     @FXML
     public Label openLink;
+    @FXML
+    public VBox fileSystemBox;
     @FXML
     private StepperButtonBox buttonsBox;
 
@@ -108,6 +111,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
         return e -> {
             this.title.setVisible(false);
             this.resultTitle.setVisible(true);
+            this.fileSystemBox.setVisible(true);
             loadingSpinner.hide();
             controller.closeDbConnection();
             stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
