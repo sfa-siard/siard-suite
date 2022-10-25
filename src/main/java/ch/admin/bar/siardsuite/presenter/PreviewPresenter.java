@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements DatabaseArchiveVisitor {
-  private StringProperty archiveName = new SimpleStringProperty();
+  private final StringProperty archiveName = new SimpleStringProperty();
   private List<DatabaseSchema> schemas;
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
 
@@ -86,7 +86,7 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
   }
 
   protected void initTreeView() {
-    controller.provideDatabaseArchive(this);
+    model.provideDatabaseArchiveProperties(this);
 
     final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), pair(0, 0), TreeContentView.ROOT), db);
 

@@ -11,10 +11,10 @@ import java.sql.Connection;
 
 public class DatabaseLoadService extends Service<ObservableList<DatabaseTable>> {
 
-  private Connection connection;
-  private Model model;
-  private Archive archive;
-  private boolean onlyMetaData;
+  private final Connection connection;
+  private final Model model;
+  private final Archive archive;
+  private final boolean onlyMetaData;
 
   public DatabaseLoadService(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
     this.connection = connection;

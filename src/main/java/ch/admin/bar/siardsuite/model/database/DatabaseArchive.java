@@ -14,9 +14,6 @@ import java.util.Map;
 public class DatabaseArchive {
 
     private StringProperty archiveName = new SimpleStringProperty();
-    private StringProperty databaseName = new SimpleStringProperty();
-    private StringProperty databaseProduct = new SimpleStringProperty();
-    private StringProperty databaseConnectionUrl = new SimpleStringProperty();
     private static final Map<String, List<String>> dbTypes = Map.of(
             "MS Access", List.of("access", ""),
             "DB/2", List.of("db2", "50000"),
@@ -24,8 +21,7 @@ public class DatabaseArchive {
             "Oracle", List.of("oracle", "1521"),
             "PostgreSQL", List.of("postgresql", "5432"),
             "Microsoft SQL Server", List.of("sqlserver", "1433"));
-    private StringProperty databaseUsername = new SimpleStringProperty();
-    private List<DatabaseSchema> schemas = new ArrayList<>();
+    private final List<DatabaseSchema> schemas = new ArrayList<>();
     private DatabaseArchiveMetaData metaData;
 
     public DatabaseArchive() {
@@ -33,9 +29,6 @@ public class DatabaseArchive {
 
     public DatabaseArchive(String archiveName, Archive archive) {
         this.archiveName = new SimpleStringProperty(archiveName);
-        databaseName = new SimpleStringProperty(archive.getMetaData().getDbName());
-        databaseProduct = new SimpleStringProperty(archive.getMetaData().getDatabaseProduct());
-        databaseConnectionUrl = new SimpleStringProperty(archive.getMetaData().getConnection());
         for (int i = 0; i < archive.getSchemas(); i++) {
             schemas.add(new DatabaseSchema(archive.getSchema(i)));
         }
@@ -51,12 +44,20 @@ public class DatabaseArchive {
                 archivingDate, archiverName, archiverContact, targetArchive);
     }
 
-    public void accept(DatabaseArchiveVisitor visitor) {
+    public void shareProperties(DatabaseArchiveVisitor visitor) {
         visitor.visit(archiveName.getValue(), schemas);
     }
 
-    public void accept(DatabaseArchiveMetaDataVisitor visitor) {
-        metaData.accept(visitor);
+    public void shareProperties(DatabaseArchiveMetaDataVisitor visitor) {
+        if (metaData != null) {
+            metaData.shareProperties(visitor);
+        }
+    }
+
+    public void shareObject(DatabaseArchiveMetaDataVisitor visitor) {
+        if (metaData != null) {
+            metaData.shareObject(visitor);
+        }
     }
 
 }

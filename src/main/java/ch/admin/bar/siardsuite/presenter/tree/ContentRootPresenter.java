@@ -2,18 +2,18 @@ package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.TreeContentViewModel;
+import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-import java.time.LocalDate;
+import java.io.File;
 import java.util.List;
 
 public class ContentRootPresenter extends TreePresenter implements DatabaseArchiveVisitor, DatabaseArchiveMetaDataVisitor {
@@ -56,8 +56,8 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
 
     initLabels();
 
-    controller.provideDatabaseArchiveMetaData(this);
-    controller.provideDatabaseArchive(this);
+    this.model.provideDatabaseArchiveMetaDataProperties(this);
+    this.model.provideDatabaseArchiveProperties(this);
   }
 
   private void initLabels() {
@@ -74,7 +74,7 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   @Override
   public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                     String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
-                    String archivingDate, String archiverName, String archiverContact) {
+                    String archivingDate, String archiverName, String archiverContact, File targetArchive) {
     textFormat.setText(siardFormatVersion);
     textDb.setText(databaseName);
     textProduct.setText(databaseProduct);
@@ -86,7 +86,9 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
     textArchiveDate.setText(archivingDate);
     textArchiveUser.setText(archiverName);
     textContactArchiveUser.setText(archiverContact);
-
   }
+
+  @Override
+  public void visit(DatabaseArchiveMetaData metaData) {}
 
 }

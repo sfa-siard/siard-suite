@@ -5,20 +5,23 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.database.ArchiveMetaData;
+import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
+import java.io.File;
 import java.sql.Connection;
 
-public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implements Progress {
+public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implements Progress, DatabaseArchiveMetaDataVisitor {
 
     private final Connection connection;
     private final Model model;
     private final Archive archive;
+    private DatabaseArchiveMetaData metaData;
     private final boolean onlyMetaData;
 
     public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
@@ -43,15 +46,12 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
                                                                                                   .getName()));
             }
         }
+
         updateValue(progressData);
         updateProgress(0, progressData.size());
 
-
-        // TODO: make it nice and clean it up...
-        if (this.model.getArchive().hasArchiveMetaData()) {
-            ArchiveMetaData archiveMetaData = this.model.getArchive().getArchiveMetaData();
-            archiveMetaData.write(archive);
-        }
+        model.provideDatabaseArchiveMetaDataObject(this);
+        metaData.write(archive);
 
         // TODO: replace the boolean flag with a strategy pattern
         if (!onlyMetaData) {
@@ -74,4 +74,15 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
     public void notifyProgress(int i) {
         updateProgress(i, 100);
     }
+
+    @Override
+    public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
+                      String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
+                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {}
+
+    @Override
+    public void visit(DatabaseArchiveMetaData metaData) {
+        this.metaData = metaData;
+    }
+
 }

@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -27,25 +28,25 @@ import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements DatabaseArchiveMetaDataVisitor {
 
     @FXML
-    Text titleText;
+    Text titleText = new Text();
     @FXML
-    Text descriptionText;
+    Text descriptionText = new Text();
     @FXML
-    Text titleWhat;
+    Text titleWhat = new Text();
     @FXML
-    Text titleWho;
+    Text titleWho = new Text();
     @FXML
-    MFXTextField name;
+    MFXTextField name = new MFXTextField();
     @FXML
-    MFXTextField description;
+    MFXTextField description = new MFXTextField();
     @FXML
-    MFXTextField owner;
+    MFXTextField owner = new MFXTextField();
     @FXML
-    MFXTextField databaseCreationDate;
+    MFXTextField databaseCreationDate = new MFXTextField();
     @FXML
-    MFXTextField archiverName;
+    MFXTextField archiverName = new MFXTextField();
     @FXML
-    MFXTextField archiverContact;
+    MFXTextField archiverContact = new MFXTextField();
     @FXML
     protected StepperButtonBox buttonsBox;
     @FXML
@@ -108,7 +109,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 this.errorMessage.setVisible(false);
                 File targetArchive = this.showFileChoserToSelectTargetArchive(this.name.getText());
                 if (targetArchive != null) {
-                    this.controller.updateArchiveMetaData(
+                    this.model.updateArchiveMetaData(
                             null,
                             null,
                             null,
@@ -142,18 +143,21 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
 
     private void initFields() {
-        this.name.setText(this.model.getDatabaseName().getValue());
-        this.controller.provideDatabaseArchiveMetaData(this);
+        name.setText(this.model.getDatabaseName().getValue());
+        model.provideDatabaseArchiveMetaDataProperties(this);
     }
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
-                      String archivingDate, String archiverName, String archiverContact) {
-        this.descriptionText.setText(databaseDescription);
-        this.owner.setText(databseOwner);
-        this.databaseCreationDate.setText(archivingDate);
+                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+        description.setText(databaseDescription);
+        owner.setText(databseOwner);
+        this.databaseCreationDate.setText(databaseCreationDate);
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
     }
+
+    @Override
+    public void visit(DatabaseArchiveMetaData metaData) {}
 
 }

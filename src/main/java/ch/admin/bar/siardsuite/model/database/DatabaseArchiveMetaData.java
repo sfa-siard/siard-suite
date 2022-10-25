@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
@@ -55,10 +56,23 @@ public class DatabaseArchiveMetaData {
         archiverContact = new SimpleStringProperty(metaData.getArchiverContact());
     }
 
-    public void accept(DatabaseArchiveMetaDataVisitor visitor) {
+    public void shareProperties(DatabaseArchiveMetaDataVisitor visitor) {
         visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
                 databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
                 databaseOwner.getValue(), databaseCreationDate.getValue(), archivingDate.getValue(),
-                archiverName.getValue(), archiverContact.getValue());
+                archiverName.getValue(), archiverContact.getValue(), targetArchive);
     }
+
+    public void shareObject(DatabaseArchiveMetaDataVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    public void write(Archive archive) {
+        archive.getMetaData().setArchiver(this.archiverName.getValue());
+        archive.getMetaData().setArchiverContact(this.archiverContact.getValue());
+        archive.getMetaData().setDescription(this.databaseDescription.getValue());
+        archive.getMetaData().setDataOwner(this.databaseOwner.getValue());
+        archive.getMetaData().setDataOriginTimespan(this.databaseCreationDate.getValue());
+    }
+
 }

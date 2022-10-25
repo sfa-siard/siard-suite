@@ -4,8 +4,6 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DbConnectionFactory;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -36,7 +34,6 @@ public class Controller {
     this.onDatabaseLoadSuccess(onSuccess);
     this.onDatabaseLoadFailed(onFailure);
     this.databaseLoadService.start();
-
   }
   public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
                            EventHandler<WorkerStateEvent> onFailure) {
@@ -72,26 +69,6 @@ public class Controller {
 
   public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener )  {
     this.databaseLoadService.progressProperty().addListener(listener);
-  }
-
-  // TODO: maybe use some sort of visitor or provider or...
-  public void updateArchiveMetaData(String siardFormatVersion, String dbName, String dbProduct, String connection,
-                                    String dbUser, String description, String owner, String databaseCreationDate,
-                                    String archivingDate, String archiverName, String archiverContact, File targetArchive) {
-    this.model.getArchive().addArchiveMetaData(siardFormatVersion, dbName, dbProduct, connection, dbUser,
-            description, owner, databaseCreationDate, archivingDate, archiverName, archiverContact, targetArchive);
-  }
-
-  public void provideDatabaseArchive(DatabaseArchiveVisitor visitor) {
-    if (model.getArchive() != null) {
-      model.getArchive().accept(visitor);
-    }
-  }
-
-  public void provideDatabaseArchiveMetaData(DatabaseArchiveMetaDataVisitor visitor) {
-    if (model.getArchive() != null) {
-      model.getArchive().accept(visitor);
-    }
   }
 
 }
