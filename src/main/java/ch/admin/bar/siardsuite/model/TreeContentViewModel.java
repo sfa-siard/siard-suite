@@ -6,9 +6,9 @@ public class TreeContentViewModel {
   private Model model;
 
 
-  public TreeContentViewModel(String title, Model model  ) {
+  public TreeContentViewModel(String title, Model model) {
     this.title = title;
-    this.model =model;
+    this.model = model;
   }
 
   public String getTitle() {

@@ -16,7 +16,7 @@ public class DatabaseArchive {
     private StringProperty archiveName = new SimpleStringProperty();
     private StringProperty databaseName = new SimpleStringProperty();
     private StringProperty databaseProduct = new SimpleStringProperty();
-    private StringProperty connectionUrl = new SimpleStringProperty();
+    private StringProperty databaseConnectionUrl = new SimpleStringProperty();
     private static final Map<String, List<String>> dbTypes = Map.of(
             "MS Access", List.of("access", ""),
             "DB/2", List.of("db2", "50000"),
@@ -35,20 +35,24 @@ public class DatabaseArchive {
         this.archiveName = new SimpleStringProperty(archiveName);
         databaseName = new SimpleStringProperty(archive.getMetaData().getDbName());
         databaseProduct = new SimpleStringProperty(archive.getMetaData().getDatabaseProduct());
-        connectionUrl = new SimpleStringProperty(archive.getMetaData().getConnection());
+        databaseConnectionUrl = new SimpleStringProperty(archive.getMetaData().getConnection());
         for (int i = 0; i < archive.getSchemas(); i++) {
             schemas.add(new DatabaseSchema(archive.getSchema(i)));
         }
         metaData = new DatabaseArchiveMetaData(archive.getMetaData());
     }
 
-    public void addArchiveMetaData(String siardFormatVersion, String description, String owner, String timeOfOrigin,
+    public void addArchiveMetaData(String siardFormatVersion, String databaseName, String databaseProduct,
+                                   String databaseConnectionURL, String databaseUsername, String databaseDescription,
+                                   String databaseOwner, String databaseCreationDate, String archivingDate,
                                    String archiverName, String archiverContact, File targetArchive) {
-        this.metaData = new DatabaseArchiveMetaData(siardFormatVersion, description, owner, timeOfOrigin, archiverName, archiverContact, targetArchive);
+        this.metaData = new DatabaseArchiveMetaData(siardFormatVersion, databaseName, databaseProduct,
+                databaseConnectionURL, databaseUsername, databaseDescription, databaseOwner, databaseCreationDate,
+                archivingDate, archiverName, archiverContact, targetArchive);
     }
 
     public void accept(DatabaseArchiveVisitor visitor) {
-        visitor.visit(archiveName, schemas);
+        visitor.visit(archiveName.getValue(), schemas);
     }
 
     public void accept(DatabaseArchiveMetaDataVisitor visitor) {

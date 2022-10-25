@@ -13,6 +13,7 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +29,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements DatabaseArchiveVisitor {
-  private StringProperty archiveName;
+  private StringProperty archiveName = new SimpleStringProperty();
   private List<DatabaseSchema> schemas;
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
 
@@ -172,8 +173,8 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
   }
 
   @Override
-  public void visit(StringProperty archiveName, List<DatabaseSchema> schemas) {
-    this.archiveName = archiveName;
+  public void visit(String archiveName, List<DatabaseSchema> schemas) {
+    this.archiveName.setValue(archiveName);
     this.schemas = schemas;
   }
 

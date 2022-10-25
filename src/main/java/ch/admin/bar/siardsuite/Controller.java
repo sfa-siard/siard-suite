@@ -75,9 +75,11 @@ public class Controller {
   }
 
   // TODO: maybe use some sort of visitor or provider or...
-  public void updateArchiveMetaData(String siardFormatVersion, String description, String owner, String timeOfOrigin,
-                                    String archiverName, String archiverContact, File targetArchive) {
-    this.model.getArchive().addArchiveMetaData(siardFormatVersion, description, owner, timeOfOrigin, archiverName, archiverContact, targetArchive);
+  public void updateArchiveMetaData(String siardFormatVersion, String dbName, String dbProduct, String connection,
+                                    String dbUser, String description, String owner, String databaseCreationDate,
+                                    String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+    this.model.getArchive().addArchiveMetaData(siardFormatVersion, dbName, dbProduct, connection, dbUser,
+            description, owner, databaseCreationDate, archivingDate, archiverName, archiverContact, targetArchive);
   }
 
   public void provideDatabaseArchive(DatabaseArchiveVisitor visitor) {

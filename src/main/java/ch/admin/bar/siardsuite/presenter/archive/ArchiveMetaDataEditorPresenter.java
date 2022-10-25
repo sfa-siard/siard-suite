@@ -41,7 +41,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @FXML
     MFXTextField owner;
     @FXML
-    MFXTextField timeOfOrigin;
+    MFXTextField databaseCreationDate;
     @FXML
     MFXTextField archiverName;
     @FXML
@@ -84,7 +84,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                         .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
         this.owner.floatingTextProperty()
                   .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
-        this.timeOfOrigin.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.timeOfOrigin"));
+        this.databaseCreationDate.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseCreationDate"));
         this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
         this.archiverContact.floatingTextProperty()
                             .bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
@@ -102,7 +102,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
-            if (this.owner.getText().isBlank() || this.timeOfOrigin.getText().isBlank()) {
+            if (this.owner.getText().isBlank() || this.databaseCreationDate.getText().isBlank()) {
                 this.errorMessage.setVisible(true);
             } else {
                 this.errorMessage.setVisible(false);
@@ -110,9 +110,14 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 if (targetArchive != null) {
                     this.controller.updateArchiveMetaData(
                             null,
+                            null,
+                            null,
+                            null,
+                            null,
                             this.descriptionText.getText(),
                             this.owner.getText(),
-                            this.timeOfOrigin.getText(),
+                            null,
+                            this.databaseCreationDate.getText(),
                             this.archiverName.getText(),
                             this.archiverContact.getText(),
                             targetArchive);
@@ -141,11 +146,12 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.controller.provideDatabaseArchiveMetaData(this);
     }
     @Override
-    public void visit(String siardFormatVersion, String description, String owner, String timeOfOrigin,
-                      String archiverName, String archiverContact) {
-        this.descriptionText.setText(description);
-        this.owner.setText(owner);
-        this.timeOfOrigin.setText(timeOfOrigin);
+    public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
+                      String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
+                      String archivingDate, String archiverName, String archiverContact) {
+        this.descriptionText.setText(databaseDescription);
+        this.owner.setText(databseOwner);
+        this.databaseCreationDate.setText(archivingDate);
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
     }

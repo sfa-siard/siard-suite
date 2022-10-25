@@ -15,14 +15,6 @@ public class TreeAttributeWrapper {
     this.type = type;
   }
 
-  public StringProperty getName() {
-    return name;
-  }
-
-  public int getId() {
-    return id;
-  }
-
   public TreeContentView getType() {
     return type;
   }

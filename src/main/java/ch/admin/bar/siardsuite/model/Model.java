@@ -5,12 +5,8 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DbConnectionFactory;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +17,6 @@ public class Model {
   private View currentView = View.START;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private DatabaseArchive archive = new DatabaseArchive();
-  private final StringProperty siardVersion = new SimpleStringProperty("2.1");
 
   public Model() {}
 
@@ -73,14 +68,8 @@ public class Model {
     return this.dbConnectionProps.getDatabaseProps();
   }
 
-  public void setDatabaseData(ReadOnlyObjectProperty<ObservableList<DatabaseTable>> valueProperty) {}
-
   public List<String> getDatabaseTypes() {
     return this.dbConnectionProps.getDatabaseTypes();
-  }
-
-  public StringProperty getSiardFormat() {
-    return siardVersion;
   }
 
   public StringProperty getDatabaseName() {

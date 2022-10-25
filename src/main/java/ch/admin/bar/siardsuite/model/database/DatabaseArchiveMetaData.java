@@ -11,19 +11,31 @@ import java.io.File;
 public class DatabaseArchiveMetaData {
 
     private final StringProperty siardFormatVersion;
-    private final StringProperty description;
-    private final StringProperty owner;
-    private final StringProperty timeOfOrigin;
+    private final StringProperty databaseName;
+    private final StringProperty databaseProduct;
+    private final StringProperty databaseConnectionURL;
+    private final StringProperty databaseUsername;
+    private final StringProperty databaseDescription;
+    private final StringProperty databaseOwner;
+    private final StringProperty databaseCreationDate;
+    private final StringProperty archivingDate;
     private final StringProperty archiverName;
     private final StringProperty archiverContact;
     private File targetArchive; // not sure if this is the correct place here... maybe just use the model?
 
-    public DatabaseArchiveMetaData(String siardFormatVersion, String description, String owner, String timeOfOrigin,
+    public DatabaseArchiveMetaData(String siardFormatVersion, String databaseName, String databaseProduct,
+                                   String databaseConnectionURL, String databaseUsername, String databaseDescription,
+                                   String databaseOwner, String databaseCreationDate, String archivingDate,
                                    String archiverName, String archiverContact, File targetArchive) {
         this.siardFormatVersion = new SimpleStringProperty(siardFormatVersion);
-        this.description = new SimpleStringProperty(description);
-        this.owner = new SimpleStringProperty(owner);
-        this.timeOfOrigin = new SimpleStringProperty(timeOfOrigin);
+        this.databaseName = new SimpleStringProperty(databaseName);
+        this.databaseProduct = new SimpleStringProperty(databaseProduct);
+        this.databaseConnectionURL = new SimpleStringProperty(databaseConnectionURL);
+        this.databaseUsername = new SimpleStringProperty(databaseUsername);
+        this.databaseDescription = new SimpleStringProperty(databaseDescription);
+        this.databaseOwner = new SimpleStringProperty(databaseOwner);
+        this.databaseCreationDate = new SimpleStringProperty(databaseCreationDate);
+        this.archivingDate = new SimpleStringProperty(archivingDate);
         this.archiverName = new SimpleStringProperty(archiverName);
         this.archiverContact = new SimpleStringProperty(archiverContact);
         this.targetArchive = targetArchive;
@@ -31,14 +43,22 @@ public class DatabaseArchiveMetaData {
 
     public DatabaseArchiveMetaData(MetaData metaData) {
         siardFormatVersion = new SimpleStringProperty(metaData.getVersion());
-        description = new SimpleStringProperty(metaData.getDescription());
-        owner = new SimpleStringProperty(metaData.getDataOwner());
-        timeOfOrigin = new SimpleStringProperty(metaData.getDataOriginTimespan());
+        databaseName = new SimpleStringProperty(metaData.getDbName());
+        databaseProduct = new SimpleStringProperty(metaData.getDatabaseProduct());
+        databaseConnectionURL = new SimpleStringProperty(metaData.getConnection());
+        databaseUsername = new SimpleStringProperty(metaData.getDatabaseUser());
+        databaseDescription = new SimpleStringProperty(metaData.getDescription());
+        databaseOwner = new SimpleStringProperty(metaData.getDataOwner());
+        databaseCreationDate = new SimpleStringProperty(metaData.getDataOriginTimespan());
+        archivingDate = new SimpleStringProperty(metaData.getDataOriginTimespan());
         archiverName = new SimpleStringProperty(metaData.getArchiver());
         archiverContact = new SimpleStringProperty(metaData.getArchiverContact());
     }
 
     public void accept(DatabaseArchiveMetaDataVisitor visitor) {
-        visitor.visit(siardFormatVersion.getValue(), description.getValue(), owner.getValue(), timeOfOrigin.getValue(), archiverName.getValue(), archiverContact.getValue());
+        visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
+                databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
+                databaseOwner.getValue(), databaseCreationDate.getValue(), archivingDate.getValue(),
+                archiverName.getValue(), archiverContact.getValue());
     }
 }

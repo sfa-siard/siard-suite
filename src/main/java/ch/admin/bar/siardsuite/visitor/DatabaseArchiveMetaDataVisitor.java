@@ -4,6 +4,8 @@ import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
 
 public interface DatabaseArchiveMetaDataVisitor {
 
-    void visit(String siardFormatVersion, String description, String owner, String timeOfOrigin, String archiverName, String archiverContact);
+    void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
+               String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
+               String archivingDate, String archiverName, String archiverContact);
 
 }
