@@ -18,26 +18,28 @@ import java.util.List;
 
 public class Model {
 
-  private String currentView = View.START.getName();
+  private View currentView = View.START;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
-  private DatabaseLoadService databaseLoadService;
   private DatabaseArchive archive = new DatabaseArchive();
-  private StringProperty siardVersion = new SimpleStringProperty("2.1");
+  private final StringProperty siardVersion = new SimpleStringProperty("2.1");
 
   public Model() {
 
   }
 
-  public String getCurrentView() {
+  public View getCurrentView() {
     return currentView;
   }
 
-  public void setCurrentView(String currentView) {
-    this.currentView = currentView;
+  public void setCurrentView(View view) {
+    this.currentView = view;
   }
 
-  private Archive initArchive() {
-    final File fileArchive = new File("sample.siard");
+  public Archive initArchive() {
+    return this.initArchive(new File("sample.siard"));
+  }
+
+  public Archive initArchive(File fileArchive) {
     if (fileArchive.exists()) {
       fileArchive.delete();
     }
@@ -115,18 +117,14 @@ public class Model {
     return this.dbConnectionProps.getPassword();
   }
 
-  public DatabaseLoadService getDatabaseLoadService() {
-    return databaseLoadService;
-  }
 
-  public void loadDatabase() {
-    final Archive archive = initArchive();
-    this.databaseLoadService = DbConnectionFactory.getInstance(this).createDatabaseLoader(archive);
-    databaseLoadService.start();
-  }
+
+  // TODO: check if this is correctly placed in the model. I think the model should just represent the state of the application
+  // loading the database is not a state... it's an effect
 
   public void closeDbConnection() {
     DbConnectionFactory.disconnect();
   }
 
+  
 }

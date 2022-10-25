@@ -1,13 +1,23 @@
 package ch.admin.bar.siardsuite;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.database.DatabaseLoadService;
+import ch.admin.bar.siardsuite.database.DbConnectionFactory;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 
 import java.io.File;
 
 public class Controller {
 
   private final Model model;
+
+  private DatabaseLoadService databaseLoadService;
 
   public Controller(Model model) {
     this.model = model;
@@ -17,8 +27,23 @@ public class Controller {
     model.setDatabaseType(databaseType);
   }
 
-  public void loadDatabase() {
-    model.loadDatabase();
+  public void loadDatabase(boolean onlyMetaData,EventHandler<WorkerStateEvent> onSuccess,
+                           EventHandler<WorkerStateEvent> onFailure
+                           ) {
+    final Archive archive = model.initArchive();
+    this.databaseLoadService = DbConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
+    this.onDatabaseLoadSuccess(onSuccess);
+    this.onDatabaseLoadFailed(onFailure);
+    this.databaseLoadService.start();
+
+  }
+  public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
+                           EventHandler<WorkerStateEvent> onFailure) {
+    final Archive archive = model.initArchive(target);
+    this.databaseLoadService = DbConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
+    this.onDatabaseLoadSuccess(onSuccess);
+    this.onDatabaseLoadFailed(onFailure);
+    this.databaseLoadService.start();
   }
 
   public void closeDbConnection() {
@@ -40,5 +65,21 @@ public class Controller {
 
   public void provideArchiveMetaData(ArchiveMetaDataVisitor visitor) {
     this.model.getArchive().getArchiveMetaData().accept(visitor);
+  }
+
+  public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
+  }
+
+  public void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
+  }
+
+  public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<DatabaseTable>> listener) {
+    this.databaseLoadService.valueProperty().addListener(listener);
+  }
+
+  public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener )  {
+    this.databaseLoadService.progressProperty().addListener(listener);
   }
 }

@@ -39,7 +39,7 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
 
         newConnectionButton.setOnAction(event -> {
             stage.closeDialog();
-            stage.navigate(View.ARCHIVE_STEPPER.getName());
+            stage.navigate(View.ARCHIVE_STEPPER);
         });
 
         closeButton.setOnAction(event -> stage.closeDialog());

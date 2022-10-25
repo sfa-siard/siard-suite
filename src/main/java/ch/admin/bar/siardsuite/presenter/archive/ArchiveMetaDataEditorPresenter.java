@@ -21,6 +21,8 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
+import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements ArchiveMetaDataVisitor {
 
     @FXML
@@ -58,7 +60,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.controller = controller;
         this.stage = stage;
 
-        this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
+        this.buttonsBox = new StepperButtonBox().make(DEFAULT);
         this.borderPane.setBottom(buttonsBox);
         this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
         this.bindTexts();

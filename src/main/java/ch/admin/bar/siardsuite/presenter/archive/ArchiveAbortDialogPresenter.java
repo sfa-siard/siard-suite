@@ -39,7 +39,7 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
 
     cancelArchiveButton.setOnAction(event -> {
       stage.closeDialog();
-      stage.navigate(View.START.getName());
+      stage.navigate(View.START);
     });
 
     closeButton.setOnAction(event -> stage.closeDialog());
