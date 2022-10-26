@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface DatabaseArchiveVisitor {
 
-    void visit(String archiveName, List<DatabaseSchema> schemas);
+    void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas);
 
 }

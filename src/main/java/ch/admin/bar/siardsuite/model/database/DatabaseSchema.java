@@ -13,9 +13,15 @@ public class DatabaseSchema {
     private List<DatabaseTable> tables = new ArrayList<>();
 
     public DatabaseSchema(Schema schema) {
+        this(schema, false);
+    }
+
+    public DatabaseSchema(Schema schema, boolean onlyMetaData) {
         name = new SimpleStringProperty(schema.getMetaSchema().getName());
-        for (int i = 0; i < schema.getTables(); i++) {
-            tables.add(new DatabaseTable(schema.getTable(i)));
+        if (!onlyMetaData) {
+            for (int i = 0; i < schema.getTables(); i++) {
+                tables.add(new DatabaseTable(schema.getTable(i)));
+            }
         }
     }
 

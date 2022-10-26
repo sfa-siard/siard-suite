@@ -14,6 +14,7 @@ import java.util.Map;
 public class DatabaseArchive {
 
     private StringProperty archiveName = new SimpleStringProperty();
+    private boolean onlyMetaData = false;
     private static final Map<String, List<String>> dbTypes = Map.of(
             "MS Access", List.of("access", ""),
             "DB/2", List.of("db2", "50000"),
@@ -28,11 +29,16 @@ public class DatabaseArchive {
     }
 
     public DatabaseArchive(String archiveName, Archive archive) {
+        this(archiveName, archive, false);
+    }
+
+    public DatabaseArchive(String archiveName, Archive archive, boolean onlyMetaData) {
+        this.onlyMetaData = onlyMetaData;
         this.archiveName = new SimpleStringProperty(archiveName);
-        for (int i = 0; i < archive.getSchemas(); i++) {
-            schemas.add(new DatabaseSchema(archive.getSchema(i)));
-        }
         metaData = new DatabaseArchiveMetaData(archive.getMetaData());
+        for (int i = 0; i < archive.getSchemas(); i++) {
+            schemas.add(new DatabaseSchema(archive.getSchema(i), onlyMetaData));
+        }
     }
 
     public void addArchiveMetaData(String siardFormatVersion, String databaseName, String databaseProduct,
@@ -45,7 +51,7 @@ public class DatabaseArchive {
     }
 
     public void shareProperties(DatabaseArchiveVisitor visitor) {
-        visitor.visit(archiveName.getValue(), schemas);
+        visitor.visit(archiveName.getValue(), onlyMetaData, schemas);
     }
 
     public void shareProperties(DatabaseArchiveMetaDataVisitor visitor) {

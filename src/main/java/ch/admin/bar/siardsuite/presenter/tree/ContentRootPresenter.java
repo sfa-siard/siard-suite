@@ -69,7 +69,7 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   }
 
   @Override
-  public void visit(String archiveName, List<DatabaseSchema> schemas) {}
+  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {}
 
   @Override
   public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,

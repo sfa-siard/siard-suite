@@ -51,7 +51,9 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
         updateProgress(0, progressData.size());
 
         model.provideDatabaseArchiveMetaDataObject(this);
-        metaData.write(archive);
+        if (metaData != null) {
+            metaData.write(archive);
+        }
 
         // TODO: replace the boolean flag with a strategy pattern
         if (!onlyMetaData) {
@@ -60,7 +62,7 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
             data.download(this);
         }
 
-        model.setArchive("sample.siard", archive);  //TODO: there should probably be different tasks for the preview and the full download
+        model.setArchive("sample.siard", archive, onlyMetaData);
         archive.close(); // maybe this is needed - but here?
         return progressData;
     }

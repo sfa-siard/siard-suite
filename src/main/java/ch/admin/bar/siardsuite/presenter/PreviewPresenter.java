@@ -30,6 +30,7 @@ import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements DatabaseArchiveVisitor {
   private final StringProperty archiveName = new SimpleStringProperty();
+  private boolean onlyMetaData = false;
   private List<DatabaseSchema> schemas;
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
 
@@ -50,8 +51,6 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
 
     this.metaSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.metaSearchButton"));
     this.tableSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.tableSearchButton"));
-
-    initTreeView();
 
     setListeners();
   }
@@ -108,32 +107,35 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
     for (DatabaseSchema schema : schemas) {
       schemaItem = new TreeItem<>(new TreeAttributeWrapper(schema.getName().get(), pair(2, schemas.indexOf(schema)), TreeContentView.SCHEMA_TABLE));
 
-      tables = schema.getTables();
-      tablesItem = new TreeItem<>();
-      tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.tables", pair(3, 0), TreeContentView.TABLES, tables.size()));
+      if (!onlyMetaData) {
+        tables = schema.getTables();
+        tablesItem = new TreeItem<>();
+        tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.tables", pair(3, 0), TreeContentView.TABLES, tables.size()));
 
-      for (DatabaseTable table : tables) {
-        tableItem = new TreeItem<>(new TreeAttributeWrapper(table.getName().get(), pair(4, tables.indexOf(table)), TreeContentView.TABLE));
+        for (DatabaseTable table : tables) {
+          tableItem = new TreeItem<>(new TreeAttributeWrapper(table.getName().get(), pair(4, tables.indexOf(table)), TreeContentView.TABLE));
 
-        columns = table.getColumns();
-        columnsItem = new TreeItem<>();
-        columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.columns", pair(5, 0), TreeContentView.COLUMNS, columns.size()));
+          columns = table.getColumns();
+          columnsItem = new TreeItem<>();
+          columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.columns", pair(5, 0), TreeContentView.COLUMNS, columns.size()));
 
-        for (DatabaseColumn column : columns) {
-          columnItem = new TreeItem<>(new TreeAttributeWrapper(column.getName().get(), pair(6, columns.indexOf(column)), TreeContentView.COLUMN));
-          columnsItem.getChildren().add(columnItem);
+          for (DatabaseColumn column : columns) {
+            columnItem = new TreeItem<>(new TreeAttributeWrapper(column.getName().get(), pair(6, columns.indexOf(column)), TreeContentView.COLUMN));
+            columnsItem.getChildren().add(columnItem);
+          }
+
+          rows = table.getRows();
+          rowsItem = new TreeItem<>();
+          rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.rows", pair(7, 0), TreeContentView.DATA, rows.size()));
+
+          tableItem.getChildren().add(rowsItem);
+          tableItem.getChildren().add(columnsItem);
+          tablesItem.getChildren().add(tableItem);
         }
 
-        rows = table.getRows();
-        rowsItem = new TreeItem<>();
-        rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.rows", pair(7, 0), TreeContentView.DATA, rows.size()));
-
-        tableItem.getChildren().add(rowsItem);
-        tableItem.getChildren().add(columnsItem);
-        tablesItem.getChildren().add(tableItem);
+        schemaItem.getChildren().add(tablesItem);
       }
 
-      schemaItem.getChildren().add(tablesItem);
       schemasItem.getChildren().add(schemaItem);
     }
 
@@ -173,8 +175,9 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
   }
 
   @Override
-  public void visit(String archiveName, List<DatabaseSchema> schemas) {
+  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {
     this.archiveName.setValue(archiveName);
+    this.onlyMetaData = onlyMetaData;
     this.schemas = schemas;
   }
 

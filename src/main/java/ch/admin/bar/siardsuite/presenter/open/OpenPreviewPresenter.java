@@ -26,6 +26,8 @@ public class OpenPreviewPresenter extends PreviewPresenter {
 
     this.title.textProperty().bind(I18n.createStringBinding("open.siard.archive.preview.title"));
     this.text.textProperty().bind(I18n.createStringBinding("open.siard.archive.preview.text"));
+
+    initTreeView();
   }
 
 //    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);

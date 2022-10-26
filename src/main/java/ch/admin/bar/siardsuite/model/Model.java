@@ -47,7 +47,11 @@ public class Model {
   }
 
   public void setArchive(String name, Archive archive) {
-    this.archive = new DatabaseArchive(name, archive);
+    setArchive(name, archive, false);
+  }
+
+  public void setArchive(String name, Archive archive, boolean onlyMetaData) {
+    this.archive = new DatabaseArchive(name, archive, onlyMetaData);
   }
 
   public DatabaseArchive getArchive() {
