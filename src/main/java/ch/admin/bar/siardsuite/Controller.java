@@ -18,6 +18,8 @@ public class Controller {
 
   private DatabaseLoadService databaseLoadService;
 
+  private Workflow workflow;
+
   public String recentDatabaseConnection;
 
   public Controller(Model model) {
@@ -73,4 +75,11 @@ public class Controller {
     this.databaseLoadService.progressProperty().addListener(listener);
   }
 
+  public Workflow getWorkflow() {
+    return workflow;
+  }
+
+  public void setWorkflow(Workflow workflow) {
+    this.workflow = workflow;
+  }
 }
