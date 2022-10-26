@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.open;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
@@ -188,7 +189,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
                 archive.open(file);
                 model.setArchive(file.getName(), archive);
                 stage.closeDialog();
-                stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+                this.proceed();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -202,4 +203,13 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         }
     }
 
+    private void proceed() {
+        if (Workflow.OPEN.equals(controller.getWorkflow())) {
+            stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+        } else if (Workflow.EXPORT.equals(controller.getWorkflow())) {
+            stage.openDialog(View.EXPORT_SELECT_TABLES.getName());
+        } else {
+            throw new UnsupportedOperationException("I don't no what to show for workflow " + controller.getWorkflow());
+        }
+    }
 }
