@@ -6,20 +6,22 @@ import ch.admin.bar.siardsuite.model.*;
 import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.CANCEL;
+import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 
 public class OpenPreviewPresenter extends PreviewPresenter {
+
 
   @FXML
   protected Label title;
   @FXML
   protected Text text;
   @FXML
-  protected StepperButtonBox buttonsBox;
-
+  public MFXButton cancelButton;
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
     super.init(controller, model, stage);
@@ -29,10 +31,8 @@ public class OpenPreviewPresenter extends PreviewPresenter {
 
     initTreeView();
 
-    buttonsBox = new StepperButtonBox().make(CANCEL);
-    buttonsBox.cancel().setOnAction(event -> stage.navigate(View.START));
+    cancelButton.setOnAction(event -> this.stage.navigate(View.START));
+    cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
 
-    this.borderPane.setBottom(buttonsBox);
   }
-
 }

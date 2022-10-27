@@ -238,7 +238,7 @@
     -fx-border-color: #e4e7eb;
     -fx-border-width: 2 0 0 0;
 }
-
+.button,
 .mfx-stepper .btn-box .button {
     -fx-min-width: 148px;
     -fx-min-height: 42px;
