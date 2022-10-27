@@ -70,5 +70,5 @@ javafx {
 }
 
 application {
-    applicationDefaultJvmArgs = ['--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED', '--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED', '--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED']
+    applicationDefaultJvmArgs = ['--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED', '--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED', '--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED']
 }
