@@ -15,21 +15,28 @@ public class DatabaseTable {
     private final List<DatabaseRow> rows = new ArrayList<>();
 
     public DatabaseTable(Table table) {
+        this(table, false);
+    }
+
+    public DatabaseTable(Table table, boolean onlyMetaData) {
         name = new SimpleStringProperty(table.getMetaTable().getName());
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(table.getMetaTable().getMetaColumn(i)));
         }
-        try {
-            int i = 0;
-            final RecordDispenser recordDispenser = table.openRecords();
-            while (i < table.getMetaTable().getRows()) {
-                rows.add(new DatabaseRow(recordDispenser.get()));
-                i++;
+        if (!onlyMetaData) {
+            try {
+                int i = 0;
+                final RecordDispenser recordDispenser = table.openRecords();
+                while (i < table.getMetaTable().getRows()) {
+                    rows.add(new DatabaseRow(recordDispenser.get()));
+                    i++;
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
+
 
     public DatabaseTable(String name) {
         this.name = new SimpleStringProperty(name);

@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.open;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.*;
 import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -10,8 +9,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.CANCEL;
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 
 public class OpenPreviewPresenter extends PreviewPresenter {
 
