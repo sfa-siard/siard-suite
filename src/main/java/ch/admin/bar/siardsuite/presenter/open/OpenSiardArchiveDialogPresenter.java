@@ -27,9 +27,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Arrays;
 import java.util.List;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
@@ -60,6 +58,8 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
     protected HBox buttonBox;
 
     private final Preferences preferences = Preferences.userRoot().node(this.getClass().getName());
+    private final int max_recent_file_paths = 30;
+    private final String[] recentFilePaths = new String[max_recent_file_paths];
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -73,16 +73,24 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.name"));
         recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.date"));
 
-        if (Arrays.stream(getRecentFilePaths()).anyMatch(path -> !path.isEmpty())) {
-            for (String filePath : getRecentFilePaths()) {
+        for (int i = 0; i < max_recent_file_paths; i++) {
+            recentFilePaths[i] = preferences.get(String.valueOf(i), "");
+        }
+
+        for (String filePath : recentFilePaths) {
+            if (!filePath.isEmpty()) {
                 try {
                     recentFilesBox.getChildren().add(getRecentFileBox(filePath));
                 } catch (IOException e) {
                     removeRecentFilePath(filePath);
                 }
             }
-        } else {
+        }
+
+        if (recentFilesBox.getChildren().size() == 0) {
             showNoRecentFiles();
+        } else {
+            recentFilesBox.getChildren().removeIf(child -> recentFilesBox.getChildren().indexOf(child) > 2);
         }
 
         dropFileTextTop.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.drop.file.text.top"));
@@ -139,15 +147,8 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
     }
 
     private void addRecentFilePath(File file) {
-        final int max_recent_file_paths = 30;
-        final String[] recentFilePaths = new String[max_recent_file_paths];
-        for (int i = 0; i < max_recent_file_paths; i++) {
-            recentFilePaths[i] = preferences.get(String.valueOf(i), "");
-        }
-
         final int k = List.of(recentFilePaths).indexOf(file.getAbsolutePath());
         final int l = (k < 0) ? max_recent_file_paths - 1 : k;
-
         if (l > 0) {
             for (int j = 0; j < l; j++) {
                 preferences.put(String.valueOf(j+1), recentFilePaths[j]);
@@ -156,26 +157,14 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         preferences.put("0", file.getAbsolutePath());
     }
 
-    private void removeRecentFilePath(String file)  {
-        try {
-            String[] keys = preferences.keys();
-            for (String key : keys) {
-                if (preferences.get(key, "").equals(file)) {
-                    preferences.remove(key);
-                }
+    private void removeRecentFilePath(String filePath)  {
+        final int l = List.of(recentFilePaths).indexOf(filePath);
+        if (l >= 0) {
+            preferences.remove(String.valueOf(l));
+            for (int j = l + 1; j < max_recent_file_paths; j++) {
+                preferences.put(String.valueOf(j-1), recentFilePaths[j]);
             }
-        } catch (BackingStoreException e) {
-            throw new RuntimeException(e);
         }
-    }
-
-    private String[] getRecentFilePaths() {
-        final int num_recent_file_paths = 3;
-        final String[] recentFilePaths = new String[num_recent_file_paths];
-        for (int i = 0; i < num_recent_file_paths; i++) {
-            recentFilePaths[i] = preferences.get(String.valueOf(i), "");
-        }
-        return recentFilePaths;
     }
 
     private HBox getRecentFileBox(String filePath) throws IOException {
