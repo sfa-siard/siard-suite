@@ -31,5 +31,11 @@ public class OpenPreviewPresenter extends PreviewPresenter {
     cancelButton.setOnAction(event -> this.stage.navigate(View.START));
     cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
 
+    setListeners();
   }
+
+//  @Override
+//  protected void setListeners() {
+//    super.setListeners();
+//  }
 }

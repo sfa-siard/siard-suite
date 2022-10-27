@@ -25,6 +25,7 @@ import javafx.scene.paint.Paint;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
 
@@ -133,7 +134,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements Databa
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
-                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
         this.targetArchive = targetArchive;
     }
 

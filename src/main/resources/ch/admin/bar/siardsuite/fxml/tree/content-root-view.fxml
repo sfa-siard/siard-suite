@@ -35,7 +35,7 @@
     <Label fx:id="labelOwner" styleClass="table-container-label"/>
     <Label fx:id="textOwner" styleClass="table-container-text"/>
     <Label fx:id="labelCreationDate" styleClass="table-container-label"/>
-    <Label fx:id="textCreationDate" styleClass="table-container-text"/>
+    <Label fx:id="textDataOriginTimespan" styleClass="table-container-text"/>
     <Label fx:id="labelArchiveDate" styleClass="table-container-label"/>
     <Label fx:id="textArchiveDate" styleClass="table-container-text"/>
     <Label fx:id="labelArchiveUser" styleClass="table-container-label"/>

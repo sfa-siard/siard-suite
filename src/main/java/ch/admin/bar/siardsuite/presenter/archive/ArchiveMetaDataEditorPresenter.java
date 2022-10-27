@@ -22,6 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.time.LocalDate;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 
@@ -42,7 +43,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @FXML
     MFXTextField owner = new MFXTextField();
     @FXML
-    MFXTextField databaseCreationDate = new MFXTextField();
+    MFXTextField dataOriginTimespan = new MFXTextField();
     @FXML
     MFXTextField archiverName = new MFXTextField();
     @FXML
@@ -85,7 +86,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                         .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
         this.owner.floatingTextProperty()
                   .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
-        this.databaseCreationDate.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseCreationDate"));
+        this.dataOriginTimespan.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseCreationDate"));
         this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
         this.archiverContact.floatingTextProperty()
                             .bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
@@ -103,22 +104,16 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
-            if (this.owner.getText().isBlank() || this.databaseCreationDate.getText().isBlank()) {
+            if (this.owner.getText().isBlank() || this.dataOriginTimespan.getText().isBlank()) {
                 this.errorMessage.setVisible(true);
             } else {
                 this.errorMessage.setVisible(false);
                 File targetArchive = this.showFileChoserToSelectTargetArchive(this.name.getText());
                 if (targetArchive != null) {
                     this.model.updateArchiveMetaData(
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
                             this.descriptionText.getText(),
                             this.owner.getText(),
-                            null,
-                            this.databaseCreationDate.getText(),
+                            this.dataOriginTimespan.getText(),
                             this.archiverName.getText(),
                             this.archiverContact.getText(),
                             targetArchive);
@@ -149,10 +144,10 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
-                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
         description.setText(databaseDescription);
         owner.setText(databseOwner);
-        this.databaseCreationDate.setText(databaseCreationDate);
+        this.dataOriginTimespan.setText(databaseCreationDate);
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
     }

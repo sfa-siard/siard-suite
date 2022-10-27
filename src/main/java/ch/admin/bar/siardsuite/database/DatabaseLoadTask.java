@@ -15,6 +15,7 @@ import javafx.concurrent.Task;
 
 import java.io.File;
 import java.sql.Connection;
+import java.time.LocalDate;
 
 public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implements Progress, DatabaseArchiveMetaDataVisitor {
 
@@ -80,7 +81,7 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
-                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {}
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {}
 
     @Override
     public void visit(DatabaseArchiveMetaData metaData) {

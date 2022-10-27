@@ -58,8 +58,7 @@ public class I18n {
     return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(get(key, args), id, type), locale);
   }
 
-  public static String getLocaleDate(final String yyyy_mm_dd) {
-    final LocalDate date = LocalDate.parse(yyyy_mm_dd);
+  public static String getLocaleDate(final LocalDate date) {
     final String pattern;
     if (getLocale().equals(Locale.ENGLISH)) {
       pattern = "dd MMM yyyy";
@@ -67,6 +66,11 @@ public class I18n {
       pattern = "dd. MMM yyyy";
     }
     return date.format(DateTimeFormatter.ofPattern(pattern, getLocale()));
+  }
+
+  public static String getLocaleDate(final String yyyy_mm_dd) {
+    final LocalDate date = LocalDate.parse(yyyy_mm_dd);
+    return getLocaleDate(date);
   }
 
 }

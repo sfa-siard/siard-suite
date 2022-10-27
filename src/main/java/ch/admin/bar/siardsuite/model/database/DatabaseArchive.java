@@ -41,13 +41,10 @@ public class DatabaseArchive {
         }
     }
 
-    public void addArchiveMetaData(String siardFormatVersion, String databaseName, String databaseProduct,
-                                   String databaseConnectionURL, String databaseUsername, String databaseDescription,
-                                   String databaseOwner, String databaseCreationDate, String archivingDate,
+    public void addArchiveMetaData(String databaseDescription, String databaseOwner, String dataOriginTimespan,
                                    String archiverName, String archiverContact, File targetArchive) {
-        this.metaData = new DatabaseArchiveMetaData(siardFormatVersion, databaseName, databaseProduct,
-                databaseConnectionURL, databaseUsername, databaseDescription, databaseOwner, databaseCreationDate,
-                archivingDate, archiverName, archiverContact, targetArchive);
+        this.metaData = new DatabaseArchiveMetaData(databaseDescription, databaseOwner, dataOriginTimespan,
+                archiverName, archiverContact, targetArchive);
     }
 
     public void shareProperties(DatabaseArchiveVisitor visitor) {

@@ -2,11 +2,15 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
+import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 // understands additional metadata of the archive
 public class DatabaseArchiveMetaData {
@@ -17,26 +21,24 @@ public class DatabaseArchiveMetaData {
     private final StringProperty databaseConnectionURL;
     private final StringProperty databaseUsername;
     private final StringProperty databaseDescription;
-    private final StringProperty databaseOwner;
-    private final StringProperty databaseCreationDate;
-    private final StringProperty archivingDate;
+    private final StringProperty dataOwner;
+    private final StringProperty dataOriginTimespan;
+    private final LocalDate archivingDate;
     private final StringProperty archiverName;
     private final StringProperty archiverContact;
     private File targetArchive; // not sure if this is the correct place here... maybe just use the model?
 
-    public DatabaseArchiveMetaData(String siardFormatVersion, String databaseName, String databaseProduct,
-                                   String databaseConnectionURL, String databaseUsername, String databaseDescription,
-                                   String databaseOwner, String databaseCreationDate, String archivingDate,
+    public DatabaseArchiveMetaData(String databaseDescription, String dataOwner, String dataOriginTimespan,
                                    String archiverName, String archiverContact, File targetArchive) {
-        this.siardFormatVersion = new SimpleStringProperty(siardFormatVersion);
-        this.databaseName = new SimpleStringProperty(databaseName);
-        this.databaseProduct = new SimpleStringProperty(databaseProduct);
-        this.databaseConnectionURL = new SimpleStringProperty(databaseConnectionURL);
-        this.databaseUsername = new SimpleStringProperty(databaseUsername);
+        siardFormatVersion = new SimpleStringProperty();
+        databaseName = new SimpleStringProperty();
+        databaseProduct = new SimpleStringProperty();
+        databaseConnectionURL = new SimpleStringProperty();
+        databaseUsername = new SimpleStringProperty();
         this.databaseDescription = new SimpleStringProperty(databaseDescription);
-        this.databaseOwner = new SimpleStringProperty(databaseOwner);
-        this.databaseCreationDate = new SimpleStringProperty(databaseCreationDate);
-        this.archivingDate = new SimpleStringProperty(archivingDate);
+        this.dataOwner = new SimpleStringProperty(dataOwner);
+        this.dataOriginTimespan = new SimpleStringProperty(dataOriginTimespan);
+        archivingDate = null;
         this.archiverName = new SimpleStringProperty(archiverName);
         this.archiverContact = new SimpleStringProperty(archiverContact);
         this.targetArchive = targetArchive;
@@ -49,9 +51,10 @@ public class DatabaseArchiveMetaData {
         databaseConnectionURL = new SimpleStringProperty(metaData.getConnection());
         databaseUsername = new SimpleStringProperty(metaData.getDatabaseUser());
         databaseDescription = new SimpleStringProperty(metaData.getDescription());
-        databaseOwner = new SimpleStringProperty(metaData.getDataOwner());
-        databaseCreationDate = new SimpleStringProperty(metaData.getDataOriginTimespan());
-        archivingDate = new SimpleStringProperty(metaData.getDataOriginTimespan());
+        dataOwner = new SimpleStringProperty(metaData.getDataOwner());
+        dataOriginTimespan = new SimpleStringProperty(metaData.getDataOriginTimespan());
+        final Calendar calendar = metaData.getArchivalDate();
+        archivingDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
         archiverName = new SimpleStringProperty(metaData.getArchiver());
         archiverContact = new SimpleStringProperty(metaData.getArchiverContact());
     }
@@ -59,7 +62,7 @@ public class DatabaseArchiveMetaData {
     public void shareProperties(DatabaseArchiveMetaDataVisitor visitor) {
         visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
                 databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
-                databaseOwner.getValue(), databaseCreationDate.getValue(), archivingDate.getValue(),
+                dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,
                 archiverName.getValue(), archiverContact.getValue(), targetArchive);
     }
 
@@ -68,11 +71,11 @@ public class DatabaseArchiveMetaData {
     }
 
     public void write(Archive archive) {
-        archive.getMetaData().setArchiver(this.archiverName.getValue());
-        archive.getMetaData().setArchiverContact(this.archiverContact.getValue());
-        archive.getMetaData().setDescription(this.databaseDescription.getValue());
-        archive.getMetaData().setDataOwner(this.databaseOwner.getValue());
-        archive.getMetaData().setDataOriginTimespan(this.archivingDate.getValue());
+        archive.getMetaData().setArchiver(archiverName.getValue());
+        archive.getMetaData().setArchiverContact(archiverContact.getValue());
+        archive.getMetaData().setDescription(databaseDescription.getValue());
+        archive.getMetaData().setDataOwner(dataOwner.getValue());
+        archive.getMetaData().setDataOriginTimespan(dataOriginTimespan.getValue());
     }
 
 }
