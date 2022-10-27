@@ -34,9 +34,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         this.title.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.title"));
         this.text.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.text"));
 
-        this.closeButton.setOnAction(event -> {
-            this.stage.closeDialog();
-        });
+        this.closeButton.setOnAction(event -> this.stage.closeDialog());
 
         this.buttonBox.getChildren().add(new CloseDialogButton(this.stage));
     }
