@@ -38,20 +38,20 @@
                                         <Insets bottom="24.0" right="25.0" top="60.0"/>
                                     </VBox.margin>
                                 </MFXTextField>
-                                <MFXTextField fx:id="databaseDescription" floatingText="Beschreibung der Datenbank"
+                                <MFXTextField fx:id="description" floatingText="Beschreibung der Datenbank"
                                               maxWidth="1.7976931348623157E308" styleClass="form-field">
                                     <VBox.margin>
                                         <Insets bottom="24.0" right="25.0" top="60.0"/>
                                     </VBox.margin>
                                 </MFXTextField>
-                                <MFXTextField fx:id="databaseOwner"
+                                <MFXTextField fx:id="owner"
                                               floatingText="Abliefernde Stelle: Dateneigentümer vor Archivierung"
                                               maxWidth="1.7976931348623157E308" styleClass="form-field">
                                     <VBox.margin>
                                         <Insets bottom="24.0" right="25.0" top="60.0"/>
                                     </VBox.margin>
                                 </MFXTextField>
-                                <MFXTextField fx:id="archivingDate" floatingText="Entstehungszeit der Daten"
+                                <MFXTextField fx:id="dataOriginTimespan" floatingText="Entstehungszeit der Daten"
                                               maxWidth="1.7976931348623157E308" styleClass="form-field">
                                     <VBox.margin>
                                         <Insets bottom="24.0" right="25.0" top="60.0"/>
