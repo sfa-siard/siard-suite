@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
+import ch.admin.bar.siardsuite.ui.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -44,7 +45,7 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
 
     closeButton.setOnAction(event -> stage.closeDialog());
 
-    final MFXButton proceedArchiveButton = getCancelButton();
+      final MFXButton proceedArchiveButton = new CloseDialogButton(this.stage);
     proceedArchiveButton.textProperty().bind(I18n.createStringBinding("button.proceed.archive"));
 
     buttonBox.getChildren().addAll(proceedArchiveButton, cancelArchiveButton);

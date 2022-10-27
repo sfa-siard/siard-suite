@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.export;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
+import ch.admin.bar.siardsuite.ui.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -37,7 +38,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
             this.stage.closeDialog();
         });
 
-        this.buttonBox.getChildren().add(getCancelButton());
+        this.buttonBox.getChildren().add(new CloseDialogButton(this.stage));
     }
 }
 
