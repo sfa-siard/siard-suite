@@ -72,7 +72,7 @@ public class DatabaseArchiveMetaData {
         archive.getMetaData().setArchiverContact(this.archiverContact.getValue());
         archive.getMetaData().setDescription(this.databaseDescription.getValue());
         archive.getMetaData().setDataOwner(this.databaseOwner.getValue());
-        archive.getMetaData().setDataOriginTimespan(this.databaseCreationDate.getValue());
+        archive.getMetaData().setDataOriginTimespan(this.archivingDate.getValue());
     }
 
 }
