@@ -7,9 +7,9 @@ import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
-
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
+import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.CANCEL;
 
 public class OpenPreviewPresenter extends PreviewPresenter {
 
@@ -24,14 +24,15 @@ public class OpenPreviewPresenter extends PreviewPresenter {
   public void init(Controller controller, Model model, RootStage stage) {
     super.init(controller, model, stage);
 
-    this.title.textProperty().bind(I18n.createStringBinding("open.siard.archive.preview.title"));
-    this.text.textProperty().bind(I18n.createStringBinding("open.siard.archive.preview.text"));
+    title.textProperty().bind(I18n.createStringBinding("open.siard.archive.preview.title"));
+    text.textProperty().bind(I18n.createStringBinding("open.siard.archive.preview.text"));
 
     initTreeView();
-  }
 
-//    this.buttonsBox = new StepperButtonBox().make(StepperButtonBox.DEFAULT);
-//    this.borderPane.setBottom(buttonsBox);
-//    this.setListeners(stepper);
+    buttonsBox = new StepperButtonBox().make(CANCEL);
+    buttonsBox.cancel().setOnAction(event -> stage.navigate(View.START));
+
+    this.borderPane.setBottom(buttonsBox);
+  }
 
 }
