@@ -9,7 +9,7 @@ public enum TreeContentView {
   TABLE("fxml/tree/table-view.fxml", "tableContainer.title.table"),
   COLUMNS("fxml/tree/table-view.fxml", "tableContainer.title.columns"),
   COLUMN("fxml/tree/column-view.fxml", "tableContainer.title.column"),
-  DATA("fxml/tree/table-view.fxml", "tableContainer.title.data"),;
+  DATA("fxml/tree/table-view.fxml", "tableContainer.title.data");
 
   private final String viewName;
   private final String viewTitle;

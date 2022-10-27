@@ -114,7 +114,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     dbServerField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbServer.label"));
     dbServerField.promptTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbServer.prompt"));
     portField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.port.label"));
-    dbNameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.dbName.label"));
+    dbNameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.databaseName.label"));
     usernameField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.username.label"));
     passwordField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.password.label"));
     urlField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.url.label"));

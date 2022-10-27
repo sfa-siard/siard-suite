@@ -3,14 +3,11 @@ package ch.admin.bar.siardsuite.model;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DbConnectionFactory;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,11 +18,8 @@ public class Model {
   private View currentView = View.START;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private DatabaseArchive archive = new DatabaseArchive();
-  private final StringProperty siardVersion = new SimpleStringProperty("2.1");
 
-  public Model() {
-
-  }
+  public Model() {}
 
   public View getCurrentView() {
     return currentView;
@@ -53,7 +47,11 @@ public class Model {
   }
 
   public void setArchive(String name, Archive archive) {
-    this.archive = new DatabaseArchive(name, archive);
+    setArchive(name, archive, false);
+  }
+
+  public void setArchive(String name, Archive archive, boolean onlyMetaData) {
+    this.archive = new DatabaseArchive(name, archive, onlyMetaData);
   }
 
   public DatabaseArchive getArchive() {
@@ -75,14 +73,8 @@ public class Model {
     return this.dbConnectionProps.getDatabaseProps();
   }
 
-  public void setDatabaseData(ReadOnlyObjectProperty<ObservableList<DatabaseTable>> valueProperty) {}
-
   public List<String> getDatabaseTypes() {
     return this.dbConnectionProps.getDatabaseTypes();
-  }
-
-  public StringProperty getSiardFormat() {
-    return siardVersion;
   }
 
   public StringProperty getDatabaseName() {
@@ -117,8 +109,6 @@ public class Model {
     return this.dbConnectionProps.getPassword();
   }
 
-
-
   // TODO: check if this is correctly placed in the model. I think the model should just represent the state of the application
   // loading the database is not a state... it's an effect
 
@@ -126,5 +116,30 @@ public class Model {
     DbConnectionFactory.disconnect();
   }
 
-  
+  // TODO: maybe use some sort of visitor or provider or...
+  public void updateArchiveMetaData(String siardFormatVersion, String dbName, String dbProduct, String connection,
+                                    String dbUser, String description, String owner, String databaseCreationDate,
+                                    String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+    getArchive().addArchiveMetaData(siardFormatVersion, dbName, dbProduct, connection, dbUser,
+            description, owner, databaseCreationDate, archivingDate, archiverName, archiverContact, targetArchive);
+  }
+
+  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor) {
+    if (getArchive() != null) {
+      getArchive().shareProperties(visitor);
+    }
+  }
+
+  public void provideDatabaseArchiveMetaDataProperties(DatabaseArchiveMetaDataVisitor visitor) {
+    if (getArchive() != null) {
+      getArchive().shareProperties(visitor);
+    }
+  }
+
+  public void provideDatabaseArchiveMetaDataObject(DatabaseArchiveMetaDataVisitor visitor) {
+    if (getArchive() != null) {
+      getArchive().shareObject(visitor);
+    }
+  }
+
 }

@@ -5,6 +5,8 @@ import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -23,28 +25,28 @@ import java.io.File;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 
-public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements ArchiveMetaDataVisitor {
+public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements DatabaseArchiveMetaDataVisitor {
 
     @FXML
-    Text titleText;
+    Text titleText = new Text();
     @FXML
-    Text descriptionText;
+    Text descriptionText = new Text();
     @FXML
-    Text titleWhat;
+    Text titleWhat = new Text();
     @FXML
-    Text titleWho;
+    Text titleWho = new Text();
     @FXML
-    MFXTextField name;
+    MFXTextField name = new MFXTextField();
     @FXML
-    MFXTextField description;
+    MFXTextField description = new MFXTextField();
     @FXML
-    MFXTextField owner;
+    MFXTextField owner = new MFXTextField();
     @FXML
-    MFXTextField timeOfOrigin;
+    MFXTextField databaseCreationDate = new MFXTextField();
     @FXML
-    MFXTextField archiverName;
+    MFXTextField archiverName = new MFXTextField();
     @FXML
-    MFXTextField archiverContact;
+    MFXTextField archiverContact = new MFXTextField();
     @FXML
     protected StepperButtonBox buttonsBox;
     @FXML
@@ -83,7 +85,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                         .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
         this.owner.floatingTextProperty()
                   .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
-        this.timeOfOrigin.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.timeOfOrigin"));
+        this.databaseCreationDate.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseCreationDate"));
         this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
         this.archiverContact.floatingTextProperty()
                             .bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
@@ -101,18 +103,25 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
-            if (this.owner.getText().isBlank() || this.timeOfOrigin.getText().isBlank()) {
+            if (this.owner.getText().isBlank() || this.databaseCreationDate.getText().isBlank()) {
                 this.errorMessage.setVisible(true);
             } else {
                 this.errorMessage.setVisible(false);
                 File targetArchive = this.showFileChoserToSelectTargetArchive(this.name.getText());
                 if (targetArchive != null) {
-                    this.controller.updateArchiveMetaData(this.descriptionText.getText(),
-                                                          this.owner.getText(),
-                                                          this.timeOfOrigin.getText(),
-                                                          this.archiverName.getText(),
-                                                          this.archiverContact.getText(),
-                                                          targetArchive);
+                    this.model.updateArchiveMetaData(
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            this.descriptionText.getText(),
+                            this.owner.getText(),
+                            null,
+                            this.databaseCreationDate.getText(),
+                            this.archiverName.getText(),
+                            this.archiverContact.getText(),
+                            targetArchive);
                     stepper.next();
                     stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
                 }
@@ -134,18 +143,21 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
 
     private void initFields() {
-        this.name.setText(this.model.getDatabaseName().getValue());
-        if(this.model.getArchive().hasArchiveMetaData()) {
-            this.controller.provideArchiveMetaData(this);
-        }
+        name.setText(this.model.getDatabaseName().getValue());
+        model.provideDatabaseArchiveMetaDataProperties(this);
     }
     @Override
-    public void visit(String description, String owner, String timeOfOrigin,
-                      String archiverName, String archiverContact) {
-        this.descriptionText.setText(description);
-        this.owner.setText(owner);
-        this.timeOfOrigin.setText(timeOfOrigin);
+    public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
+                      String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
+                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+        description.setText(databaseDescription);
+        owner.setText(databseOwner);
+        this.databaseCreationDate.setText(databaseCreationDate);
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
     }
+
+    @Override
+    public void visit(DatabaseArchiveMetaData metaData) {}
+
 }

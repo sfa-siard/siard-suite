@@ -6,15 +6,15 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.TreeContentViewModel;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
-import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -23,14 +23,15 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.List;
 
-public class PreviewPresenter extends StepperPresenter {
-  protected DatabaseArchive archive;
+public class PreviewPresenter extends StepperPresenter implements DatabaseArchiveVisitor {
+  private final StringProperty archiveName = new SimpleStringProperty();
+  private boolean onlyMetaData = false;
+  private List<DatabaseSchema> schemas;
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
 
   @FXML
@@ -50,8 +51,6 @@ public class PreviewPresenter extends StepperPresenter {
 
     this.metaSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.metaSearchButton"));
     this.tableSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.tableSearchButton"));
-
-    initTreeView();
 
     setListeners();
   }
@@ -86,11 +85,10 @@ public class PreviewPresenter extends StepperPresenter {
   }
 
   protected void initTreeView() {
-    archive = model.getArchive();
+    model.provideDatabaseArchiveProperties(this);
 
-    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archive.getArchiveName().get(), pair(0, 0), TreeContentView.ROOT), db);
+    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), pair(0, 0), TreeContentView.ROOT), db);
 
-    final List<DatabaseSchema> schemas = archive.getSchemas();
     final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
     schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.schemas", pair(1, 0), TreeContentView.SCHEMAS, schemas.size()));
     TreeItem<TreeAttributeWrapper> schemaItem;
@@ -103,31 +101,41 @@ public class PreviewPresenter extends StepperPresenter {
     TreeItem<TreeAttributeWrapper> columnsItem;
     TreeItem<TreeAttributeWrapper> columnItem;
 
+    List<DatabaseRow> rows;
+    TreeItem<TreeAttributeWrapper> rowsItem;
+
     for (DatabaseSchema schema : schemas) {
       schemaItem = new TreeItem<>(new TreeAttributeWrapper(schema.getName().get(), pair(2, schemas.indexOf(schema)), TreeContentView.SCHEMA_TABLE));
 
-      tables = schema.getTables();
-      tablesItem = new TreeItem<>();
-      tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.tables", pair(3, 0), TreeContentView.TABLES, tables.size()));
+      if (!onlyMetaData) {
+        tables = schema.getTables();
+        tablesItem = new TreeItem<>();
+        tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.tables", pair(3, 0), TreeContentView.TABLES, tables.size()));
 
-      for (DatabaseTable table : tables) {
-        tableItem = new TreeItem<>(new TreeAttributeWrapper(table.getName().get(), pair(4, tables.indexOf(table)), TreeContentView.TABLE));
+        for (DatabaseTable table : tables) {
+          tableItem = new TreeItem<>(new TreeAttributeWrapper(table.getName().get(), pair(4, tables.indexOf(table)), TreeContentView.TABLE));
 
-        columns = table.getColumns();
-        columnsItem = new TreeItem<>();
-        columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.columns", pair(5, 0), TreeContentView.COLUMNS, columns.size()));
+          columns = table.getColumns();
+          columnsItem = new TreeItem<>();
+          columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.columns", pair(5, 0), TreeContentView.COLUMNS, columns.size()));
 
-        for (DatabaseColumn column : columns) {
-          columnItem = new TreeItem<>(new TreeAttributeWrapper(column.getName().get(), pair(6, columns.indexOf(column)), TreeContentView.COLUMN));
-            // more levels
-          columnsItem.getChildren().add(columnItem);
+          for (DatabaseColumn column : columns) {
+            columnItem = new TreeItem<>(new TreeAttributeWrapper(column.getName().get(), pair(6, columns.indexOf(column)), TreeContentView.COLUMN));
+            columnsItem.getChildren().add(columnItem);
+          }
+
+          rows = table.getRows();
+          rowsItem = new TreeItem<>();
+          rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.rows", pair(7, 0), TreeContentView.DATA, rows.size()));
+
+          tableItem.getChildren().add(rowsItem);
+          tableItem.getChildren().add(columnsItem);
+          tablesItem.getChildren().add(tableItem);
         }
 
-        tableItem.getChildren().add(columnsItem);
-        tablesItem.getChildren().add(tableItem);
+        schemaItem.getChildren().add(tablesItem);
       }
 
-      schemaItem.getChildren().add(tablesItem);
       schemasItem.getChildren().add(schemaItem);
     }
 
@@ -166,5 +174,11 @@ public class PreviewPresenter extends StepperPresenter {
     }
   }
 
+  @Override
+  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {
+    this.archiveName.setValue(archiveName);
+    this.onlyMetaData = onlyMetaData;
+    this.schemas = schemas;
+  }
 
 }

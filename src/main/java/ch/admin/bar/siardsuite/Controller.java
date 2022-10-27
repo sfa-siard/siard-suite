@@ -5,7 +5,6 @@ import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DbConnectionFactory;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
-import ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataVisitor;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
@@ -35,7 +34,6 @@ public class Controller {
     this.onDatabaseLoadSuccess(onSuccess);
     this.onDatabaseLoadFailed(onFailure);
     this.databaseLoadService.start();
-
   }
   public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
                            EventHandler<WorkerStateEvent> onFailure) {
@@ -57,16 +55,6 @@ public class Controller {
     this.model.setPassword(password);
   }
 
-  // TODO: maybe use some sort of visitor or provider or...
-  public void updateArchiveMetaData(String description, String owner, String timeOfOrigin, String archiverName, String archiverContact,
-                                    File targetArchive) {
-    this.model.getArchive().addArchiveMetaData(description, owner, timeOfOrigin, archiverName, archiverContact, targetArchive);
-  }
-
-  public void provideArchiveMetaData(ArchiveMetaDataVisitor visitor) {
-    this.model.getArchive().getArchiveMetaData().accept(visitor);
-  }
-
   public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
     this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
   }
@@ -82,4 +70,5 @@ public class Controller {
   public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener )  {
     this.databaseLoadService.progressProperty().addListener(listener);
   }
+
 }

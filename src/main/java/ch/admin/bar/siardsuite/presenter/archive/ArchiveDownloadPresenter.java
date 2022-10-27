@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.ui.Icon;
 import ch.admin.bar.siardsuite.ui.Spinner;
@@ -11,6 +12,7 @@ import ch.admin.bar.siardsuite.ui.SystemFileBrowser;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -26,7 +28,7 @@ import java.io.IOException;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
 
-public class ArchiveDownloadPresenter extends StepperPresenter {
+public class ArchiveDownloadPresenter extends StepperPresenter implements DatabaseArchiveMetaDataVisitor {
 
     @FXML
     public Label title;
@@ -50,6 +52,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
     private StepperButtonBox buttonsBox;
 
     private Spinner loadingSpinner;
+    private File targetArchive;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -85,9 +88,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
 
     private EventHandler<SiardEvent> downloadAndArchiveDatabase(MFXStepper stepper) {
         return event -> {
-
             loadingSpinner.play();
-            File targetArchive = this.model.getArchive().getArchiveMetaData().getTargetArchive();
+            model.provideDatabaseArchiveMetaDataProperties(this);
             this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
             this.archivePath.setText(targetArchive.getAbsolutePath());
             controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure());
@@ -127,4 +129,15 @@ public class ArchiveDownloadPresenter extends StepperPresenter {
             }
         };
     }
+
+    @Override
+    public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
+                      String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
+                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+        this.targetArchive = targetArchive;
+    }
+
+    @Override
+    public void visit(DatabaseArchiveMetaData metaData) {}
+
 }
