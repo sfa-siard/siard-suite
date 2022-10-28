@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
-import ch.admin.bar.siardsuite.model.DatabaseConnectionProperties;
+import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -21,7 +21,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
-import static ch.admin.bar.siardsuite.model.DatabaseConnectionProperties.*;
+import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
 

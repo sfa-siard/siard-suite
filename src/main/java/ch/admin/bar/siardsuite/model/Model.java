@@ -3,7 +3,8 @@ package ch.admin.bar.siardsuite.model;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.database.DbConnectionFactory;
+import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
+import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
@@ -113,7 +114,7 @@ public class Model {
   // loading the database is not a state... it's an effect
 
   public void closeDbConnection() {
-    DbConnectionFactory.disconnect();
+    DatabaseConnectionFactory.disconnect();
   }
 
   // TODO: maybe use some sort of visitor or provider or...

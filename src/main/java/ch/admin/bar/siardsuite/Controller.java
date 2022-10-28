@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
-import ch.admin.bar.siardsuite.database.DbConnectionFactory;
+import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +30,7 @@ public class Controller {
                            EventHandler<WorkerStateEvent> onFailure
                            ) {
     final Archive archive = model.initArchive();
-    this.databaseLoadService = DbConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
+    this.databaseLoadService = DatabaseConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
     this.onDatabaseLoadSuccess(onSuccess);
     this.onDatabaseLoadFailed(onFailure);
     this.databaseLoadService.start();
@@ -38,7 +38,7 @@ public class Controller {
   public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
                            EventHandler<WorkerStateEvent> onFailure) {
     final Archive archive = model.initArchive(target);
-    this.databaseLoadService = DbConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
+    this.databaseLoadService = DatabaseConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
     this.onDatabaseLoadSuccess(onSuccess);
     this.onDatabaseLoadFailed(onFailure);
     this.databaseLoadService.start();

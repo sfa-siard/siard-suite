@@ -10,14 +10,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DbConnectionFactory {
-  private static DbConnectionFactory instance;
+public class DatabaseConnectionFactory {
+  private static DatabaseConnectionFactory instance;
   private static Connection connection;
   private static Model model;
 
-  private DbConnectionFactory(Model model) {
-    DbConnectionFactory.model = model;
-    loadDriver(DbConnectionFactory.model.getDatabaseProps().product());
+  private DatabaseConnectionFactory(Model model) {
+    DatabaseConnectionFactory.model = model;
+    loadDriver(DatabaseConnectionFactory.model.getDatabaseProps().product());
     try {
       connection = DriverManager.getConnection(model.getConnectionUrl().get(),
               model.getDatabaseUsername().get(), model.getDatabasePassword());
@@ -27,10 +27,10 @@ public class DbConnectionFactory {
     }
   }
 
-  public static DbConnectionFactory getInstance(Model model) {
+  public static DatabaseConnectionFactory getInstance(Model model) {
     try {
       if (instance == null || connection.isClosed()) {
-        instance = new DbConnectionFactory(model);
+        instance = new DatabaseConnectionFactory(model);
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);

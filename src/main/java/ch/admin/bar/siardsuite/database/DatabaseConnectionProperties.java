@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.model;
+package ch.admin.bar.siardsuite.database;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
