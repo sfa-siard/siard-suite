@@ -63,7 +63,7 @@ public class Controller {
     this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
   }
 
-  public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<DatabaseTable>> listener) {
+  public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<String>> listener) {
     this.databaseLoadService.valueProperty().addListener(listener);
   }
 

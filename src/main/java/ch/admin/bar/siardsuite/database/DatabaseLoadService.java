@@ -9,7 +9,7 @@ import javafx.concurrent.Task;
 
 import java.sql.Connection;
 
-public class DatabaseLoadService extends Service<ObservableList<DatabaseTable>> {
+public class DatabaseLoadService extends Service<ObservableList<String>> {
 
   private final Connection connection;
   private final Model model;
@@ -24,7 +24,7 @@ public class DatabaseLoadService extends Service<ObservableList<DatabaseTable>> 
   }
 
   @Override
-  protected Task<ObservableList<DatabaseTable>> createTask() {
+  protected Task<ObservableList<String>> createTask() {
     return new DatabaseLoadTask(connection, model, archive, onlyMetaData);
   }
 }

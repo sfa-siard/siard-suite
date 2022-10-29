@@ -1,18 +1,12 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.*;
-import javafx.beans.Observable;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DatabaseTable {
 
@@ -70,16 +64,6 @@ public class DatabaseTable {
 //        col1.textProperty().bind(I18n.createStringBinding());
         col2.setCellValueFactory(new PropertyValueFactory<>("tableView"));
         tableViewRow.getColumns().add(col2);
-    }
-
-    public DatabaseTable(String name) {
-        this.archive = null;
-        this.schema = null;
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 
 }

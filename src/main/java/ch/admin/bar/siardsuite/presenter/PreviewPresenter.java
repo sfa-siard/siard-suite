@@ -25,9 +25,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-
 import java.io.IOException;
-import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements DatabaseArchiveVisitor {
 

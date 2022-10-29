@@ -2,8 +2,6 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Record;
 import javafx.beans.property.*;
-import javafx.scene.control.TableView;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +13,6 @@ public class DatabaseRow {
     protected final DatabaseTable table;
     protected final StringProperty index;
     protected final List<DatabaseCell> cells = new ArrayList<>();
-    protected TableView<DatabaseCell> tableView;
 
     protected DatabaseRow(DatabaseArchive archive, DatabaseSchema schema, DatabaseTable table, Record record) {
         this.archive = archive;

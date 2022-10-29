@@ -17,7 +17,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.time.LocalDate;
 
-public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implements Progress, DatabaseArchiveMetaDataVisitor {
+public class DatabaseLoadTask extends Task<ObservableList<String>> implements Progress, DatabaseArchiveMetaDataVisitor {
 
     private final Connection connection;
     private final Model model;
@@ -33,18 +33,16 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
     }
 
     @Override
-    protected ObservableList<DatabaseTable> call() throws Exception {
+    protected ObservableList<String> call() throws Exception {
 
-        ObservableList<DatabaseTable> progressData = FXCollections.observableArrayList();
+        ObservableList<String> progressData = FXCollections.observableArrayList();
         connection.setAutoCommit(false);
         MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
         metadata.download(true, false, this);
         for (int i = 0; i < this.archive.getSchemas(); i++) {
             Schema schema = this.archive.getSchema(i);
             for (int y = 0; y < schema.getTables(); y++) {
-                progressData.add(new DatabaseTable(schema.getMetaSchema().getName() + "." + schema.getTable(y)
-                                                                                                  .getMetaTable()
-                                                                                                  .getName()));
+                progressData.add(schema.getMetaSchema().getName() + "." + schema.getTable(y).getMetaTable().getName());
             }
         }
 
