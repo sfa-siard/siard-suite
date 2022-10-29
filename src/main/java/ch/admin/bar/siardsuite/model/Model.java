@@ -129,6 +129,12 @@ public class Model {
     }
   }
 
+  public void provideDatabaseArchiveObject(DatabaseArchiveVisitor visitor) {
+    if (getArchive() != null) {
+      getArchive().shareObject(visitor);
+    }
+  }
+
   public void provideDatabaseArchiveMetaDataProperties(DatabaseArchiveMetaDataVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareProperties(visitor);

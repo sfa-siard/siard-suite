@@ -6,14 +6,16 @@ import javafx.beans.property.StringProperty;
 
 public class DatabaseColumn {
 
-    private StringProperty name;
+    protected final DatabaseArchive archive;
+    protected final DatabaseSchema schema;
+    protected final DatabaseTable table;
+    protected final String name;
 
-    public DatabaseColumn(MetaColumn column) {
-        name = new SimpleStringProperty(column.getName());
-    }
-
-    public StringProperty getName() {
-        return name;
+    protected DatabaseColumn(DatabaseArchive archive, DatabaseSchema schema, DatabaseTable table, MetaColumn column) {
+        this.archive = archive;
+        this.schema = schema;
+        this.table = table;
+        name = column.getName();
     }
 
 }

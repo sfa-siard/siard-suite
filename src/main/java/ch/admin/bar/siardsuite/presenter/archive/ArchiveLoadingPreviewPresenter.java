@@ -115,7 +115,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
             controller.addDatabaseLoadingValuePropertyListener((o1, oldValue1, newValue1) -> {
                 AtomicInteger pos1 = new AtomicInteger();
-                newValue1.forEach(t -> addTableData(t.getName().get(), pos1.getAndIncrement()));
+                newValue1.forEach(t -> addTableData(t.getName(), pos1.getAndIncrement()));
             });
 
             controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {

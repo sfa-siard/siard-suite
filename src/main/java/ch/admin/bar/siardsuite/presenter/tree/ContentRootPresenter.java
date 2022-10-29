@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.TreeContentViewModel;
+import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
 import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -13,6 +14,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
@@ -78,7 +80,10 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   }
 
   @Override
-  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {}
+  public void visit(String archiveName, boolean onlyMetaData) {}
+
+  @Override
+  public void visit(DatabaseArchive archive) {}
 
   @Override
   public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
