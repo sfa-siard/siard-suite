@@ -2,10 +2,7 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
-import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.model.TreeContentViewModel;
+import ch.admin.bar.siardsuite.model.*;
 import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -19,17 +16,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
+import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements DatabaseArchiveVisitor {
 
-  private DatabaseArchive archive;
+  private SiardArchive archive;
   private final StringProperty archiveName = new SimpleStringProperty();
   private boolean onlyMetaData = false;
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
@@ -88,47 +85,46 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
     model.provideDatabaseArchiveObject(this);
     model.provideDatabaseArchiveProperties(this);
 
-    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), pair(0, 0), TreeContentView.ROOT), db);
+    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), pair(0, 0), TreeContentView.ROOT, null), db);
 
-    final TableView<DatabaseSchema> schemas = archive.tableView();
     final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
-    schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.schemas", pair(1, 0), TreeContentView.SCHEMAS, schemas.getItems().size()));
+    schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.schemas", pair(1, 0), TreeContentView.SCHEMAS, null, archive.schemas().size()));
     TreeItem<TreeAttributeWrapper> schemaItem;
 
-    TableView<DatabaseTable> tables;
+    List<DatabaseTable> tables;
     TreeItem<TreeAttributeWrapper> tablesItem;
     TreeItem<TreeAttributeWrapper> tableItem;
 
-    TableView<DatabaseColumn> columns;
+    List<DatabaseColumn> columns;
     TreeItem<TreeAttributeWrapper> columnsItem;
     TreeItem<TreeAttributeWrapper> columnItem;
 
-    TableView<DatabaseRow> rows;
+    List<DatabaseRow> rows;
     TreeItem<TreeAttributeWrapper> rowsItem;
 
-    for (DatabaseSchema schema : schemas.getItems()) {
-      schemaItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(schema), pair(2, schemas.getItems().indexOf(schema)), TreeContentView.SCHEMA_TABLE));
+    for (DatabaseSchema schema : archive.schemas()) {
+      schemaItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(schema), pair(2, archive.schemas().indexOf(schema)), TreeContentView.SCHEMA, schema));
 
-      tables = archive.tableView(schema);
+      tables = archive.tables(schema);
       tablesItem = new TreeItem<>();
-      tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.tables", pair(3, 0), TreeContentView.TABLES, tables.getItems().size()));
+      tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.tables", pair(3, 0), TreeContentView.TABLES, schema, tables.size()));
 
-      for (DatabaseTable table : tables.getItems()) {
-        tableItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(table), pair(4, tables.getItems().indexOf(table)), TreeContentView.TABLE));
+      for (DatabaseTable table : tables) {
+        tableItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(table), pair(4, tables.indexOf(table)), TreeContentView.TABLE, table));
 
-        columns = archive.tableViewCol(table);
+        columns = archive.columns(table);
         columnsItem = new TreeItem<>();
-        columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.columns", pair(5, 0), TreeContentView.COLUMNS, columns.getItems().size()));
+        columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.columns", pair(5, 0), TreeContentView.COLUMNS, table, columns.size()));
 
-        for (DatabaseColumn column : columns.getItems()) {
-          columnItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(column), pair(6, columns.getItems().indexOf(column)), TreeContentView.COLUMN));
+        for (DatabaseColumn column : columns) {
+          columnItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(column), pair(6, columns.indexOf(column)), TreeContentView.COLUMN, table));
           columnsItem.getChildren().add(columnItem);
         }
 
         if (!onlyMetaData) {
-          rows = archive.tableViewRow(table);
+          rows = archive.rows(table);
           rowsItem = new TreeItem<>();
-          rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.rows", pair(7, 0), TreeContentView.DATA, rows.getItems().size()));
+          rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.rows", pair(7, 0), TreeContentView.ROWS, table, rows.size()));
 
           tableItem.getChildren().add(rowsItem);
         }
@@ -167,9 +163,8 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
       FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.getType().getName()));
       Node container = loader.load();
       tableContainerContent.getChildren().setAll(container);
-
-      loader.<TreePresenter>getController().init(this.controller, new TreeContentViewModel(wrapper.getType().getTitle(),
-              this.model), this.stage);
+      model.setArchive(archive);
+      loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
 
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -183,7 +178,7 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
   }
 
   @Override
-  public void visit(DatabaseArchive archive) {
+  public void visit(SiardArchive archive) {
     this.archive = archive;
   }
 

@@ -1,12 +1,11 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.TreeContentViewModel;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
+import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
@@ -14,12 +13,9 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
-
 import java.io.File;
 import java.time.LocalDate;
-import java.util.List;
 
 public class ContentRootPresenter extends TreePresenter implements DatabaseArchiveVisitor, DatabaseArchiveMetaDataVisitor {
 
@@ -52,12 +48,12 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   public Label textContactArchiveUser;
 
   @Override
-  public void init(Controller controller, TreeContentViewModel model, RootStage stage) {
-    this.model = model.getModel();
+  public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
+    this.model = model;
     this.controller = controller;
     this.stage = stage;
 
-    titleTableContainer.textProperty().bind(I18n.createStringBinding(model.getTitle()));
+    titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getTitle()));
 
     initLabels();
 
@@ -83,7 +79,7 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   public void visit(String archiveName, boolean onlyMetaData) {}
 
   @Override
-  public void visit(DatabaseArchive archive) {}
+  public void visit(SiardArchive archive) {}
 
   @Override
   public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
@@ -103,6 +99,6 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   }
 
   @Override
-  public void visit(DatabaseArchiveMetaData metaData) {}
+  public void visit(SiardArchiveMetaData metaData) {}
 
 }

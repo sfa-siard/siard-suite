@@ -5,7 +5,7 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import javafx.beans.property.StringProperty;
@@ -18,7 +18,7 @@ public class Model {
 
   private View currentView = View.START;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
-  private DatabaseArchive archive = new DatabaseArchive();
+  private SiardArchive archive = new SiardArchive();
 
   public Model() {}
 
@@ -47,15 +47,19 @@ public class Model {
     return archive;
   }
 
+  public void setArchive(SiardArchive archive) {
+    this.archive = archive;
+  }
+
   public void setArchive(String name, Archive archive) {
     setArchive(name, archive, false);
   }
 
   public void setArchive(String name, Archive archive, boolean onlyMetaData) {
-    this.archive = new DatabaseArchive(name, archive, onlyMetaData);
+    this.archive = new SiardArchive(name, archive, onlyMetaData);
   }
 
-  public DatabaseArchive getArchive() {
+  public SiardArchive getArchive() {
     return archive;
   }
 

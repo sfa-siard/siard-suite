@@ -1,24 +1,28 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Record;
-import javafx.beans.property.*;
+import ch.admin.bar.siardsuite.model.TreeContentView;
+import javafx.scene.control.TableView;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseRow {
+public class DatabaseRow extends DatabaseObject {
 
-    protected final DatabaseArchive archive;
+    protected final SiardArchive archive;
     protected final DatabaseSchema schema;
     protected final DatabaseTable table;
-    protected final StringProperty index;
+    protected final String index;
+    protected final String name;
     protected final List<DatabaseCell> cells = new ArrayList<>();
 
-    protected DatabaseRow(DatabaseArchive archive, DatabaseSchema schema, DatabaseTable table, Record record) {
+    protected DatabaseRow(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, Record record) {
         this.archive = archive;
         this.schema = schema;
         this.table = table;
-        index = new SimpleStringProperty(String.valueOf(record.getRecord()));
+        index = String.valueOf(record.getRecord());
+        name = "Row " + index;
         try {
             for (int i = 0; i < record.getCells(); i++) {
                 cells.add(new DatabaseCell(record.getCell(i)));
@@ -27,5 +31,8 @@ public class DatabaseRow {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    protected void populate(TableView tableView, TreeContentView type) {}
 
 }

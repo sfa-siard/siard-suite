@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.visitor;
 
-import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
+import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -11,6 +11,6 @@ public interface DatabaseArchiveMetaDataVisitor {
                String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
                LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive);
 
-    void visit(DatabaseArchiveMetaData metaData);
+    void visit(SiardArchiveMetaData metaData);
 
 }

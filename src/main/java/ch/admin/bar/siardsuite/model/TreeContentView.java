@@ -4,12 +4,12 @@ public enum TreeContentView {
 
   ROOT("fxml/tree/content-root-view.fxml", "tableContainer.title.siardFile"),
   SCHEMAS("fxml/tree/content-root-view.fxml", "tableContainer.title.schemas"),
-  SCHEMA_TABLE("fxml/tree/table-view.fxml", "tableContainer.title.schema"),
+  SCHEMA("fxml/tree/table-view.fxml", "tableContainer.title.schema"),
   TABLES("fxml/tree/table-view.fxml", "tableContainer.title.tables"),
   TABLE("fxml/tree/table-view.fxml", "tableContainer.title.table"),
   COLUMNS("fxml/tree/table-view.fxml", "tableContainer.title.columns"),
   COLUMN("fxml/tree/column-view.fxml", "tableContainer.title.column"),
-  DATA("fxml/tree/table-view.fxml", "tableContainer.title.data");
+  ROWS("fxml/tree/table-view.fxml", "tableContainer.title.data");
 
   private final String viewName;
   private final String viewTitle;

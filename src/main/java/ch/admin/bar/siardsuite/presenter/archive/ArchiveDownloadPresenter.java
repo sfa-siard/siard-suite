@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
+import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.ui.Icon;
 import ch.admin.bar.siardsuite.ui.Spinner;
@@ -139,6 +139,6 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements Databa
     }
 
     @Override
-    public void visit(DatabaseArchiveMetaData metaData) {}
+    public void visit(SiardArchiveMetaData metaData) {}
 
 }

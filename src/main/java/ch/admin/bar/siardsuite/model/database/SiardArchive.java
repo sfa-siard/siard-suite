@@ -1,19 +1,14 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-public class DatabaseArchive {
+public class SiardArchive {
 
     private String archiveName;
     private boolean onlyMetaData = false;
@@ -24,32 +19,27 @@ public class DatabaseArchive {
             "Oracle", List.of("oracle", "1521"),
             "PostgreSQL", List.of("postgresql", "5432"),
             "Microsoft SQL Server", List.of("sqlserver", "1433"));
-    protected final ObservableList<DatabaseSchema> schemas = FXCollections.observableArrayList();
-    protected TableView<DatabaseSchema> tableView;
-    private DatabaseArchiveMetaData metaData;
+    private final List<DatabaseSchema> schemas = new ArrayList<>();
+    private SiardArchiveMetaData metaData;
 
-    public DatabaseArchive() {
-    }
+    public SiardArchive() {}
 
-    public DatabaseArchive(String archiveName, Archive archive) {
+    public SiardArchive(String archiveName, Archive archive) {
         this(archiveName, archive, false);
     }
 
-    public DatabaseArchive(String archiveName, Archive archive, boolean onlyMetaData) {
-        initTableView();
+    public SiardArchive(String archiveName, Archive archive, boolean onlyMetaData) {
         this.onlyMetaData = onlyMetaData;
         this.archiveName = archiveName;
-        metaData = new DatabaseArchiveMetaData(archive.getMetaData());
+        metaData = new SiardArchiveMetaData(archive.getMetaData());
         for (int i = 0; i < archive.getSchemas(); i++) {
             schemas.add(new DatabaseSchema(this, archive.getSchema(i), onlyMetaData));
         }
-        tableView.setItems(schemas);
-        System.out.println("archive created");
     }
 
     public void addArchiveMetaData(String databaseDescription, String databaseOwner, String dataOriginTimespan,
                                    String archiverName, String archiverContact, File targetArchive) {
-        this.metaData = new DatabaseArchiveMetaData(databaseDescription, databaseOwner, dataOriginTimespan,
+        this.metaData = new SiardArchiveMetaData(databaseDescription, databaseOwner, dataOriginTimespan,
                 archiverName, archiverContact, targetArchive);
     }
 
@@ -73,47 +63,35 @@ public class DatabaseArchive {
         }
     }
 
-    private void initTableView() {
-        tableView = new TableView<>();
-        TableColumn<DatabaseSchema, String> col1 = new TableColumn<>();
-//        col1.textProperty().bind(I18n.createStringBinding());
-        col1.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<DatabaseSchema, String> col2 = new TableColumn<>();
-//        col2.textProperty().bind(I18n.createStringBinding());
-        col2.setCellValueFactory(new PropertyValueFactory<>("tableView"));
-        tableView.getColumns().add(col1);
-        tableView.getColumns().add(col2);
+    public List<DatabaseSchema> schemas() {
+        return schemas;
     }
 
-    public TableView<DatabaseSchema> tableView() {
-        return tableView;
-    }
-
-    public TableView<DatabaseTable> tableView(DatabaseSchema schema) {
-        TableView<DatabaseTable> v = new TableView<>();
+    public List<DatabaseTable> tables(DatabaseSchema schema) {
+        List<DatabaseTable> l = new ArrayList<>();
         Optional<DatabaseSchema> o = schemas.stream().filter(s -> s.equals(schema)).findFirst();
         if (o.isPresent()) {
-            v = o.get().tableView;
+            l = o.get().tables;
         }
-        return v;
+        return l;
     }
 
-    public TableView<DatabaseColumn> tableViewCol(DatabaseTable table) {
-        TableView<DatabaseColumn> v = new TableView<>();
+    public List<DatabaseColumn> columns(DatabaseTable table) {
+        List<DatabaseColumn> l = new ArrayList<>();
         Optional<DatabaseTable> o = schemas.stream().flatMap(s -> s.tables.stream()).filter(t -> t.equals(table)).findFirst();
         if (o.isPresent()) {
-            v = o.get().tableViewCol;
+            l = o.get().columns;
         }
-        return v;
+        return l;
     }
 
-    public TableView<DatabaseRow> tableViewRow(DatabaseTable table) {
-        TableView<DatabaseRow> v = new TableView<>();
+    public List<DatabaseRow> rows(DatabaseTable table) {
+        List<DatabaseRow> l = new ArrayList<>();
         Optional<DatabaseTable> o = schemas.stream().flatMap(s -> s.tables.stream()).filter(t -> t.equals(table)).findFirst();
         if (o.isPresent()) {
-            v = o.get().tableViewRow;
+            l = o.get().rows;
         }
-        return v;
+        return l;
     }
 
     public String name(DatabaseSchema schema) {
@@ -141,6 +119,10 @@ public class DatabaseArchive {
             n = o.get().name;
         }
         return n;
+    }
+
+    public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
+        databaseObject.populate(tableView, type);
     }
 
 }

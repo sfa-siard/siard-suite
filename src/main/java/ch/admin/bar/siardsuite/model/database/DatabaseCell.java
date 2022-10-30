@@ -1,24 +1,27 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Cell;
-import javafx.beans.property.*;
-
+import ch.admin.bar.siardsuite.model.TreeContentView;
+import javafx.scene.control.TableView;
 import java.io.IOException;
 
-public class DatabaseCell {
+public class DatabaseCell extends DatabaseObject {
 
-    protected StringProperty index;
-    protected StringProperty name;
-    protected StringProperty type;
+    protected final String index;
+    protected final String name;
+    protected final String type;
 
     protected DatabaseCell(Cell cell) {
-        index = new SimpleStringProperty(String.valueOf(cell.getMetaColumn().getPosition()));
-        name = new SimpleStringProperty(cell.getMetaColumn().getName());
+        index = String.valueOf(cell.getMetaColumn().getPosition());
+        name = cell.getMetaColumn().getName();
         try {
-            type = new SimpleStringProperty(cell.getMetaColumn().getType());
+            type = cell.getMetaColumn().getType();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    protected void populate(TableView tableView, TreeContentView type) {}
 
 }

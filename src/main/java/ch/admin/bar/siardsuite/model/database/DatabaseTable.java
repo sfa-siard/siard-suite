@@ -1,38 +1,38 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.*;
+import ch.admin.bar.siardsuite.model.TreeContentView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.MapValueFactory;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class DatabaseTable {
+public class DatabaseTable extends DatabaseObject {
 
-    protected final DatabaseArchive archive;
+    protected final SiardArchive archive;
     protected final DatabaseSchema schema;
     protected final String name;
-    protected final ObservableList<DatabaseColumn> columns =  FXCollections.observableArrayList();
-    protected TableView<DatabaseColumn> tableViewCol;
-    protected final ObservableList<DatabaseRow> rows = FXCollections.observableArrayList();
-    protected TableView<DatabaseRow> tableViewRow;
+    protected final List<DatabaseColumn> columns = new ArrayList<>();
+    protected final List<DatabaseRow> rows = new ArrayList<>();
 
-    protected DatabaseTable(DatabaseArchive archive, DatabaseSchema schema, Table table) {
+    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
         this(archive, schema, table, false);
     }
 
-    protected DatabaseTable(DatabaseArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
-        initTableViewCol();
+    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
         this.archive = archive;
         this.schema = schema;
         name = table.getMetaTable().getName();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
         }
-        tableViewCol.setItems(columns);
         if (!onlyMetaData) {
-            initTableViewRow();
             try {
                 int i = 0;
                 final RecordDispenser recordDispenser = table.openRecords();
@@ -43,27 +43,33 @@ public class DatabaseTable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            tableViewRow.setItems(rows);
         }
     }
 
-    private void initTableViewCol() {
-        tableViewCol = new TableView<>();
-        TableColumn<DatabaseColumn, String> col1 = new TableColumn<>();
-//        col1.textProperty().bind(I18n.createStringBinding());
-        col1.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tableViewCol.getColumns().add(col1);
+    @Override
+    protected void populate(TableView<Map> tableView, TreeContentView type) {
+        final TableColumn<Map, String> col0 = new TableColumn<>("Name");
+        col0.setCellValueFactory(new MapValueFactory<>("name"));
+        tableView.setItems(rows(type));
+        tableView.getColumns().add(col0);
     }
 
-    private void initTableViewRow() {
-        tableViewRow = new TableView<>();
-        TableColumn<DatabaseRow, String> col1 = new TableColumn<>();
-//        col1.textProperty().bind(I18n.createStringBinding());
-        col1.setCellValueFactory(new PropertyValueFactory<>("index"));
-        TableColumn<DatabaseRow, String> col2 = new TableColumn<>();
-//        col1.textProperty().bind(I18n.createStringBinding());
-        col2.setCellValueFactory(new PropertyValueFactory<>("tableView"));
-        tableViewRow.getColumns().add(col2);
+    private ObservableList<Map> rows(TreeContentView type) {
+        final ObservableList<Map> rows = FXCollections.observableArrayList();
+        if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
+            for (DatabaseColumn c : columns) {
+                Map<String, String> row = new HashMap<>();
+                row.put("name", c.name);
+                rows.add(row);
+            }
+        } else if (TreeContentView.ROWS.equals(type)) {
+            for (DatabaseRow r : this.rows) {
+                Map<String, String> row = new HashMap<>();
+                row.put("name", r.name);
+                rows.add(row);
+            }
+        }
+        return rows;
     }
 
 }

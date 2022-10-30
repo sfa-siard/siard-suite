@@ -1,47 +1,51 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Schema;
+import ch.admin.bar.siardsuite.model.TreeContentView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.MapValueFactory;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class DatabaseSchema {
+public class DatabaseSchema extends DatabaseObject {
 
-    protected final DatabaseArchive archive;
+    protected final SiardArchive archive;
     protected final String name;
-    protected final ObservableList<DatabaseTable> tables = FXCollections.observableArrayList();
-    protected TableView<DatabaseTable> tableView;
+    protected final List<DatabaseTable> tables = new ArrayList<>();
 
-    protected DatabaseSchema(DatabaseArchive archive, Schema schema) {
+    protected DatabaseSchema(SiardArchive archive, Schema schema) {
         this(archive, schema, false);
     }
 
-    protected DatabaseSchema(DatabaseArchive archive, Schema schema, boolean onlyMetaData) {
-        initTableView();
+    protected DatabaseSchema(SiardArchive archive, Schema schema, boolean onlyMetaData) {
         this.archive = archive;
         name = schema.getMetaSchema().getName();
         for (int i = 0; i < schema.getTables(); i++) {
             tables.add(new DatabaseTable(archive, this, schema.getTable(i), onlyMetaData));
         }
-        tableView.setItems(tables);
     }
 
-    private void initTableView() {
-        tableView = new TableView<>();
-        TableColumn<DatabaseTable, String> col1 = new TableColumn<>();
-//        col1.textProperty().bind(I18n.createStringBinding());
-        col1.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<DatabaseTable, String> col2 = new TableColumn<>();
-//        col2.textProperty().bind(I18n.createStringBinding());
-        col2.setCellValueFactory(new PropertyValueFactory<>("tableViewCol"));
-        TableColumn<DatabaseTable, String> col3 = new TableColumn<>();
-//        col2.textProperty().bind(I18n.createStringBinding());
-        col3.setCellValueFactory(new PropertyValueFactory<>("tableViewRow"));
-        tableView.getColumns().add(col1);
-        tableView.getColumns().add(col2);
-        tableView.getColumns().add(col3);
+    @Override
+    protected void populate(TableView<Map> tableView, TreeContentView type) {
+        final TableColumn<Map, String> col0 = new TableColumn<>("Name");
+        col0.setCellValueFactory(new MapValueFactory<>("name"));
+        tableView.setItems(rows());
+        tableView.getColumns().add(col0);
+    }
+
+    private ObservableList<Map> rows() {
+        final ObservableList<Map> rows = FXCollections.observableArrayList();
+        for (DatabaseTable t : tables) {
+            Map<String, String> row = new HashMap<>();
+            row.put("name", t.name);
+            rows.add(row);
+        }
+        return rows;
     }
 
 }

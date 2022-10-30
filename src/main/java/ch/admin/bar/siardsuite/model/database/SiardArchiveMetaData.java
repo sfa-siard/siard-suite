@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -10,10 +9,9 @@ import javafx.beans.property.StringProperty;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 
 // understands additional metadata of the archive
-public class DatabaseArchiveMetaData {
+public class SiardArchiveMetaData {
 
     private final StringProperty siardFormatVersion;
     private final StringProperty databaseName;
@@ -28,8 +26,8 @@ public class DatabaseArchiveMetaData {
     private final StringProperty archiverContact;
     private File targetArchive; // not sure if this is the correct place here... maybe just use the model?
 
-    public DatabaseArchiveMetaData(String databaseDescription, String dataOwner, String dataOriginTimespan,
-                                   String archiverName, String archiverContact, File targetArchive) {
+    public SiardArchiveMetaData(String databaseDescription, String dataOwner, String dataOriginTimespan,
+                                String archiverName, String archiverContact, File targetArchive) {
         siardFormatVersion = new SimpleStringProperty();
         databaseName = new SimpleStringProperty();
         databaseProduct = new SimpleStringProperty();
@@ -44,7 +42,7 @@ public class DatabaseArchiveMetaData {
         this.targetArchive = targetArchive;
     }
 
-    public DatabaseArchiveMetaData(MetaData metaData) {
+    public SiardArchiveMetaData(MetaData metaData) {
         siardFormatVersion = new SimpleStringProperty(metaData.getVersion());
         databaseName = new SimpleStringProperty(metaData.getDbName());
         databaseProduct = new SimpleStringProperty(metaData.getDatabaseProduct());
