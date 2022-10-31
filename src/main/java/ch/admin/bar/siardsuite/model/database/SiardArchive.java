@@ -47,16 +47,8 @@ public class SiardArchive {
         visitor.visit(archiveName, onlyMetaData, schemas);
     }
 
-    public void shareProperties (DatabaseArchiveVisitor visitor, DatabaseSchema schema) {
-        schema.shareProperties(visitor);
-    }
-
-    public void shareProperties(DatabaseArchiveVisitor visitor, DatabaseTable table) {
-        table.shareProperties(visitor);
-    }
-
-    public void shareProperties(DatabaseArchiveVisitor visitor, DatabaseColumn column) {
-        column.shareProperties(visitor);
+    public void shareProperties (DatabaseArchiveVisitor visitor, DatabaseObject databaseObject) {
+        databaseObject.shareProperties(visitor);
     }
 
     public void shareObject(DatabaseArchiveVisitor visitor) {
