@@ -5,6 +5,9 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
+import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
+import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
+import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
@@ -130,6 +133,24 @@ public class Model {
   public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareProperties(visitor);
+    }
+  }
+
+  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor, DatabaseSchema schema) {
+    if (getArchive() != null) {
+      getArchive().shareProperties(visitor, schema);
+    }
+  }
+
+  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor, DatabaseTable table) {
+    if (getArchive() != null) {
+      getArchive().shareProperties(visitor, table);
+    }
+  }
+
+  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor, DatabaseColumn column) {
+    if (getArchive() != null) {
+      getArchive().shareProperties(visitor, column);
     }
   }
 

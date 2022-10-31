@@ -44,7 +44,40 @@ public class SiardArchive {
     }
 
     public void shareProperties(DatabaseArchiveVisitor visitor) {
-        visitor.visit(archiveName, onlyMetaData);
+        visitor.visit(archiveName, onlyMetaData, schemas);
+    }
+
+    public void shareProperties (DatabaseArchiveVisitor visitor, DatabaseSchema schema) {
+        String n = "";
+        List<DatabaseTable> t = new ArrayList<>();
+        Optional<DatabaseSchema> o = schemas.stream().filter(s -> s.equals(schema)).findFirst();
+        if (o.isPresent()) {
+            n = o.get().name;
+            t = o.get().tables;
+        }
+        visitor.visit(n, t);
+    }
+
+    public void shareProperties(DatabaseArchiveVisitor visitor, DatabaseTable table) {
+        String n = "";
+        List<DatabaseColumn> c = new ArrayList<>();
+        List<DatabaseRow> r = new ArrayList<>();
+        Optional<DatabaseTable> o = schemas.stream().flatMap(s -> s.tables.stream()).filter(t -> t.equals(table)).findFirst();
+        if (o.isPresent()) {
+            n = o.get().name;
+            c = o.get().columns;
+            r = o.get().rows;
+        }
+        visitor.visit(n, c, r);
+    }
+
+    public void shareProperties(DatabaseArchiveVisitor visitor, DatabaseColumn column) {
+        String n = "";
+        Optional<DatabaseColumn> o = schemas.stream().flatMap(s -> s.tables.stream().flatMap(t -> t.columns.stream())).filter(c -> c.equals(column)).findFirst();
+        if (o.isPresent()) {
+            n = o.get().name;
+        }
+        visitor.visit(n);
     }
 
     public void shareObject(DatabaseArchiveVisitor visitor) {
@@ -61,64 +94,6 @@ public class SiardArchive {
         if (metaData != null) {
             metaData.shareObject(visitor);
         }
-    }
-
-    public List<DatabaseSchema> schemas() {
-        return schemas;
-    }
-
-    public List<DatabaseTable> tables(DatabaseSchema schema) {
-        List<DatabaseTable> l = new ArrayList<>();
-        Optional<DatabaseSchema> o = schemas.stream().filter(s -> s.equals(schema)).findFirst();
-        if (o.isPresent()) {
-            l = o.get().tables;
-        }
-        return l;
-    }
-
-    public List<DatabaseColumn> columns(DatabaseTable table) {
-        List<DatabaseColumn> l = new ArrayList<>();
-        Optional<DatabaseTable> o = schemas.stream().flatMap(s -> s.tables.stream()).filter(t -> t.equals(table)).findFirst();
-        if (o.isPresent()) {
-            l = o.get().columns;
-        }
-        return l;
-    }
-
-    public List<DatabaseRow> rows(DatabaseTable table) {
-        List<DatabaseRow> l = new ArrayList<>();
-        Optional<DatabaseTable> o = schemas.stream().flatMap(s -> s.tables.stream()).filter(t -> t.equals(table)).findFirst();
-        if (o.isPresent()) {
-            l = o.get().rows;
-        }
-        return l;
-    }
-
-    public String name(DatabaseSchema schema) {
-        String n = "";
-        Optional<DatabaseSchema> o = schemas.stream().filter(s -> s.equals(schema)).findFirst();
-        if (o.isPresent()) {
-            n = o.get().name;
-        }
-        return n;
-    }
-
-    public String name(DatabaseTable table) {
-        String n = "";
-        Optional<DatabaseTable> o = schemas.stream().flatMap(s -> s.tables.stream()).filter(t -> t.equals(table)).findFirst();
-        if (o.isPresent()) {
-            n = o.get().name;
-        }
-        return n;
-    }
-
-    public String name(DatabaseColumn column) {
-        String n = "";
-        Optional<DatabaseColumn> o = schemas.stream().flatMap(s -> s.tables.stream().flatMap(t -> t.columns.stream())).filter(c -> c.equals(column)).findFirst();
-        if (o.isPresent()) {
-            n = o.get().name;
-        }
-        return n;
     }
 
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {

@@ -22,15 +22,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements DatabaseArchiveVisitor {
 
-  private SiardArchive archive;
   private final StringProperty archiveName = new SimpleStringProperty();
   private boolean onlyMetaData = false;
+  private List<DatabaseSchema> schemas = new ArrayList<>();
+  private String schemaName = "";
+  private List<DatabaseTable> tables = new ArrayList<>();
+  private String tableName = "";
+  private List<DatabaseColumn> columns = new ArrayList<>();
+  private String columnName = "";
+  private List<DatabaseRow> rows = new ArrayList<>();
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
-
   @FXML
   protected TreeView<TreeAttributeWrapper> treeView;
   @FXML
@@ -88,41 +94,41 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
     final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), pair(0, 0), TreeContentView.ROOT, null), db);
 
     final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
-    schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.schemas", pair(1, 0), TreeContentView.SCHEMAS, null, archive.schemas().size()));
+    schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.schemas", pair(1, 0), TreeContentView.SCHEMAS, null, schemas.size()));
     TreeItem<TreeAttributeWrapper> schemaItem;
 
-    List<DatabaseTable> tables;
     TreeItem<TreeAttributeWrapper> tablesItem;
     TreeItem<TreeAttributeWrapper> tableItem;
 
-    List<DatabaseColumn> columns;
     TreeItem<TreeAttributeWrapper> columnsItem;
     TreeItem<TreeAttributeWrapper> columnItem;
 
-    List<DatabaseRow> rows;
     TreeItem<TreeAttributeWrapper> rowsItem;
 
-    for (DatabaseSchema schema : archive.schemas()) {
-      schemaItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(schema), pair(2, archive.schemas().indexOf(schema)), TreeContentView.SCHEMA, schema));
+    for (DatabaseSchema schema : schemas) {
+      model.provideDatabaseArchiveProperties(this, schema);
 
-      tables = archive.tables(schema);
+      schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, pair(2, schemas.indexOf(schema)), TreeContentView.SCHEMA, schema));
+
       tablesItem = new TreeItem<>();
       tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.tables", pair(3, 0), TreeContentView.TABLES, schema, tables.size()));
 
       for (DatabaseTable table : tables) {
-        tableItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(table), pair(4, tables.indexOf(table)), TreeContentView.TABLE, table));
+        model.provideDatabaseArchiveProperties(this, table);
 
-        columns = archive.columns(table);
+        tableItem = new TreeItem<>(new TreeAttributeWrapper(tableName, pair(4, tables.indexOf(table)), TreeContentView.TABLE, table));
+
         columnsItem = new TreeItem<>();
         columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.columns", pair(5, 0), TreeContentView.COLUMNS, table, columns.size()));
 
         for (DatabaseColumn column : columns) {
-          columnItem = new TreeItem<>(new TreeAttributeWrapper(archive.name(column), pair(6, columns.indexOf(column)), TreeContentView.COLUMN, table));
+          model.provideDatabaseArchiveProperties(this, column);
+
+          columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, pair(6, columns.indexOf(column)), TreeContentView.COLUMN, table));
           columnsItem.getChildren().add(columnItem);
         }
 
         if (!onlyMetaData) {
-          rows = archive.rows(table);
           rowsItem = new TreeItem<>();
           rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("preview.view.tree.rows", pair(7, 0), TreeContentView.ROWS, table, rows.size()));
 
@@ -163,7 +169,6 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
       FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.getType().getName()));
       Node container = loader.load();
       tableContainerContent.getChildren().setAll(container);
-      model.setArchive(archive);
       loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
 
     } catch (IOException e) {
@@ -172,14 +177,31 @@ public class PreviewPresenter extends StepperPresenter implements DatabaseArchiv
   }
 
   @Override
-  public void visit(String archiveName, boolean onlyMetaData) {
+  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {
     this.archiveName.setValue(archiveName);
     this.onlyMetaData = onlyMetaData;
+    this.schemas = schemas;
   }
 
   @Override
-  public void visit(SiardArchive archive) {
-    this.archive = archive;
+  public void visit(String schemaName, List<DatabaseTable> tables) {
+    this.schemaName = schemaName;
+    this.tables = tables;
   }
+
+  @Override
+  public void visit(String tableName, List<DatabaseColumn> columns, List<DatabaseRow> rows) {
+    this.tableName = tableName;
+    this.columns = columns;
+    this.rows = rows;
+  }
+
+  @Override
+  public void visit(String columnName) {
+    this.columnName = columnName;
+  }
+
+  @Override
+  public void visit(SiardArchive archive) {}
 
 }
