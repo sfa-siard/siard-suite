@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.File;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Calendar;
 
@@ -36,7 +37,8 @@ public class SiardArchiveMetaData {
         this.databaseDescription = new SimpleStringProperty(databaseDescription);
         this.dataOwner = new SimpleStringProperty(dataOwner);
         this.dataOriginTimespan = new SimpleStringProperty(dataOriginTimespan);
-        archivingDate = null;
+        // TODO: What shall we do if some nonsense for archivingDate is written in the meta data?
+        archivingDate = LocalDate.now();
         this.archiverName = new SimpleStringProperty(archiverName);
         this.archiverContact = new SimpleStringProperty(archiverContact);
         this.targetArchive = targetArchive;
@@ -52,9 +54,14 @@ public class SiardArchiveMetaData {
         dataOwner = new SimpleStringProperty(metaData.getDataOwner());
         dataOriginTimespan = new SimpleStringProperty(metaData.getDataOriginTimespan());
         final Calendar calendar = metaData.getArchivalDate();
-        // TODO: Treat this date correctly
-        // archivingDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
-        archivingDate = LocalDate.now();
+        // TODO: What shall we do if some nonsense for archivingDate is written in the meta data?
+        LocalDate date;
+        try {
+            date = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+        } catch (DateTimeException e) {
+            date = LocalDate.now();
+        }
+        archivingDate = date;
         archiverName = new SimpleStringProperty(metaData.getArchiver());
         archiverContact = new SimpleStringProperty(metaData.getArchiverContact());
     }
