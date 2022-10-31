@@ -16,6 +16,7 @@ import java.util.*;
 public class DatabaseSchema extends DatabaseObject {
 
     protected final SiardArchive archive;
+    protected final boolean onlyMetaData;
     protected final String name;
     protected final String description;
     protected final List<DatabaseTable> tables = new ArrayList<>();
@@ -26,6 +27,7 @@ public class DatabaseSchema extends DatabaseObject {
 
     protected DatabaseSchema(SiardArchive archive, Schema schema, boolean onlyMetaData) {
         this.archive = archive;
+        this.onlyMetaData = onlyMetaData;
         name = schema.getMetaSchema().getName();
         description = schema.getMetaSchema().getDescription();
         for (int i = 0; i < schema.getTables(); i++) {
@@ -42,27 +44,29 @@ public class DatabaseSchema extends DatabaseObject {
         final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
         final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
         final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-        final TableColumn<Map, StringProperty> col3 = new TableColumn<>();
         col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
         col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.tableName"));
         col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfColumns"));
-        col3.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfRows"));
         col0.setMinWidth(125);
         col1.setMinWidth(285);
         col2.setMinWidth(125);
-        col3.setMinWidth(125);
         col0.setStyle("-fx-alignment: CENTER_RIGHT");
         col1.setStyle("-fx-alignment: CENTER_LEFT");
         col2.setStyle("-fx-alignment: CENTER_RIGHT");
-        col3.setStyle("-fx-alignment: CENTER_RIGHT");
         col0.setCellValueFactory(new MapValueFactory<>("index"));
         col1.setCellValueFactory(new MapValueFactory<>("name"));
         col2.setCellValueFactory(new MapValueFactory<>("numberOfColumns"));
-        col3.setCellValueFactory(new MapValueFactory<>("numberOfRows"));
         tableView.getColumns().add(col0);
         tableView.getColumns().add(col1);
         tableView.getColumns().add(col2);
-        tableView.getColumns().add(col3);
+        if (!onlyMetaData) {
+            final TableColumn<Map, StringProperty> col3 = new TableColumn<>();
+            col3.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfRows"));
+            col3.setMinWidth(125);
+            col3.setStyle("-fx-alignment: CENTER_RIGHT");
+            col3.setCellValueFactory(new MapValueFactory<>("numberOfRows"));
+            tableView.getColumns().add(col3);
+        }
         tableView.setItems(items());
         tableView.setMinWidth(590);
         tableView.setMaxWidth(590);
