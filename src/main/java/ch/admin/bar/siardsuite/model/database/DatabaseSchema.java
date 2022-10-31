@@ -2,15 +2,14 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 public class DatabaseSchema extends DatabaseObject {
 
@@ -28,6 +27,10 @@ public class DatabaseSchema extends DatabaseObject {
         for (int i = 0; i < schema.getTables(); i++) {
             tables.add(new DatabaseTable(archive, this, schema.getTable(i), onlyMetaData));
         }
+    }
+
+    protected void shareProperties(DatabaseArchiveVisitor visitor) {
+        visitor.visit(name, tables);
     }
 
     @Override

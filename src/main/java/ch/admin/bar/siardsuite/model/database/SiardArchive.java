@@ -48,36 +48,15 @@ public class SiardArchive {
     }
 
     public void shareProperties (DatabaseArchiveVisitor visitor, DatabaseSchema schema) {
-        String n = "";
-        List<DatabaseTable> t = new ArrayList<>();
-        Optional<DatabaseSchema> o = schemas.stream().filter(s -> s.equals(schema)).findFirst();
-        if (o.isPresent()) {
-            n = o.get().name;
-            t = o.get().tables;
-        }
-        visitor.visit(n, t);
+        schema.shareProperties(visitor);
     }
 
     public void shareProperties(DatabaseArchiveVisitor visitor, DatabaseTable table) {
-        String n = "";
-        List<DatabaseColumn> c = new ArrayList<>();
-        List<DatabaseRow> r = new ArrayList<>();
-        Optional<DatabaseTable> o = schemas.stream().flatMap(s -> s.tables.stream()).filter(t -> t.equals(table)).findFirst();
-        if (o.isPresent()) {
-            n = o.get().name;
-            c = o.get().columns;
-            r = o.get().rows;
-        }
-        visitor.visit(n, c, r);
+        table.shareProperties(visitor);
     }
 
     public void shareProperties(DatabaseArchiveVisitor visitor, DatabaseColumn column) {
-        String n = "";
-        Optional<DatabaseColumn> o = schemas.stream().flatMap(s -> s.tables.stream().flatMap(t -> t.columns.stream())).filter(c -> c.equals(column)).findFirst();
-        if (o.isPresent()) {
-            n = o.get().name;
-        }
-        visitor.visit(n);
+        column.shareProperties(visitor);
     }
 
     public void shareObject(DatabaseArchiveVisitor visitor) {

@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.*;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -44,6 +45,10 @@ public class DatabaseTable extends DatabaseObject {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    protected void shareProperties(DatabaseArchiveVisitor visitor) {
+        visitor.visit(name, columns, rows);
     }
 
     @Override
