@@ -6,7 +6,7 @@ import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +16,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.time.LocalDate;
 
-public class DatabaseLoadTask extends Task<ObservableList<String>> implements Progress, DatabaseArchiveMetaDataVisitor {
+public class SiardLoadTask extends Task<ObservableList<String>> implements Progress, SiardArchiveMetaDataVisitor {
 
     private final Connection connection;
     private final Model model;
@@ -24,7 +24,7 @@ public class DatabaseLoadTask extends Task<ObservableList<String>> implements Pr
     private SiardArchiveMetaData metaData;
     private final boolean onlyMetaData;
 
-    public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
+    public SiardLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
         this.connection = connection;
         this.model = model;
         this.archive = archive;

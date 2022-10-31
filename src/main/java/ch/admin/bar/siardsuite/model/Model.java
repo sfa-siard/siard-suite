@@ -5,17 +5,16 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
-import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
-import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
+import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.TableView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class Model {
 
@@ -130,43 +129,37 @@ public class Model {
     getArchive().addArchiveMetaData(description, owner, dataOriginTimespan, archiverName, archiverContact, targetArchive);
   }
 
-  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor) {
+  public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareProperties(visitor);
     }
   }
 
-  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor, DatabaseSchema schema) {
+  public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
     if (getArchive() != null) {
-      getArchive().shareProperties(visitor, schema);
+      getArchive().shareProperties(visitor, databaseObject);
     }
   }
 
-  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor, DatabaseTable table) {
-    if (getArchive() != null) {
-      getArchive().shareProperties(visitor, table);
-    }
-  }
-
-  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor, DatabaseColumn column) {
-    if (getArchive() != null) {
-      getArchive().shareProperties(visitor, column);
-    }
-  }
-
-  public void provideDatabaseArchiveObject(DatabaseArchiveVisitor visitor) {
+  public void provideDatabaseArchiveObject(SiardArchiveVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareObject(visitor);
     }
   }
 
-  public void provideDatabaseArchiveMetaDataProperties(DatabaseArchiveMetaDataVisitor visitor) {
+  public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
+    if (getArchive() != null) {
+      getArchive().populate(tableView, databaseObject, type);
+    }
+  }
+
+  public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareProperties(visitor);
     }
   }
 
-  public void provideDatabaseArchiveMetaDataObject(DatabaseArchiveMetaDataVisitor visitor) {
+  public void provideDatabaseArchiveMetaDataObject(SiardArchiveMetaDataVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareObject(visitor);
     }

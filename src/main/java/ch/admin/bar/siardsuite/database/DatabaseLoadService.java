@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.database;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -25,6 +24,6 @@ public class DatabaseLoadService extends Service<ObservableList<String>> {
 
   @Override
   protected Task<ObservableList<String>> createTask() {
-    return new DatabaseLoadTask(connection, model, archive, onlyMetaData);
+    return new SiardLoadTask(connection, model, archive, onlyMetaData);
   }
 }

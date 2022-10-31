@@ -5,7 +5,7 @@ import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import java.io.File;
 import java.time.LocalDate;
 
-public interface DatabaseArchiveMetaDataVisitor {
+public interface SiardArchiveMetaDataVisitor {
 
     void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,

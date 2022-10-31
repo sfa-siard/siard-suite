@@ -26,7 +26,7 @@ public class ColumnPresenter extends TreePresenter {
     this.controller = controller;
     this.stage = stage;
 
-    this.titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getTitle()));
+    this.titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
     initLabels();
 
 

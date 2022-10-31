@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.TableView;
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class DatabaseCell extends DatabaseObject {
     }
 
     @Override
-    protected void shareProperties(DatabaseArchiveVisitor visitor) {}
+    protected void shareProperties(SiardArchiveVisitor visitor) {}
 
     @Override
     protected void populate(TableView tableView, TreeContentView type) {}

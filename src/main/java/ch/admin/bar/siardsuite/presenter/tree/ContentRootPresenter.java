@@ -6,8 +6,8 @@ import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -17,7 +17,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ContentRootPresenter extends TreePresenter implements DatabaseArchiveVisitor, DatabaseArchiveMetaDataVisitor {
+public class ContentRootPresenter extends TreePresenter implements SiardArchiveVisitor, SiardArchiveMetaDataVisitor {
 
   @FXML
   public VBox container;
@@ -53,7 +53,7 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
     this.controller = controller;
     this.stage = stage;
 
-    titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getTitle()));
+    titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
 
     initLabels();
 
@@ -79,10 +79,10 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {}
 
   @Override
-  public void visit(String schemaName, List<DatabaseTable> tables) {}
+  public void visit(String schemaName, String schemaDescription, List<DatabaseTable> tables) {}
 
   @Override
-  public void visit(String tableName, List<DatabaseColumn> columns, List<DatabaseRow> rows) {}
+  public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) {}
 
   @Override
   public void visit(String columnName) {}

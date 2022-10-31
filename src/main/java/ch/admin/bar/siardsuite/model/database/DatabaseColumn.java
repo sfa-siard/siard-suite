@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaColumn;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.TableView;
 
 public class DatabaseColumn extends DatabaseObject {
@@ -19,7 +19,7 @@ public class DatabaseColumn extends DatabaseObject {
         name = column.getName();
     }
 
-    protected void shareProperties(DatabaseArchiveVisitor visitor) {
+    protected void shareProperties(SiardArchiveVisitor visitor) {
         visitor.visit(name);
     }
 

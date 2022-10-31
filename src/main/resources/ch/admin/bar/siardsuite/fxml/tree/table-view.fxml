@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
 <VBox fx:id="container" stylesheets="@../../css/root.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.tree.TablePresenter">
     <Label fx:id="titleTableContainer">
         <styleClass>
@@ -14,10 +15,11 @@
             <String fx:value="table-container-title" />
         </styleClass>
     </Label>
-    <Label fx:id="label1" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-label" />
-    <Label fx:id="text1" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-text" />
-    <Label fx:id="label2" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-label" />
-    <Label fx:id="text2" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-text" />
-    <TableView fx:id="tableView" styleClass="tree-table-view"/>
-
+    <Label fx:id="nameLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-label" />
+    <Label fx:id="nameText" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-text" />
+    <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-label" />
+    <Label fx:id="infoText" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-text" />
+    <HBox alignment="CENTER">
+        <TableView fx:id="tableView" styleClass="tree-table-view"/>
+    </HBox>
 </VBox>

@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.*;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -20,8 +20,9 @@ public class DatabaseTable extends DatabaseObject {
     protected final DatabaseSchema schema;
     protected final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
+    protected final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
-
+    protected final String numberOfRows;
     protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
         this(archive, schema, table, false);
     }
@@ -33,6 +34,8 @@ public class DatabaseTable extends DatabaseObject {
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
         }
+        numberOfColumns = String.valueOf(columns.size());
+        String n = "";
         if (!onlyMetaData) {
             try {
                 int i = 0;
@@ -41,14 +44,16 @@ public class DatabaseTable extends DatabaseObject {
                     rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
                     i++;
                 }
+                n = String.valueOf(rows.size());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+        numberOfRows = n;
     }
 
-    protected void shareProperties(DatabaseArchiveVisitor visitor) {
-        visitor.visit(name, columns, rows);
+    protected void shareProperties(SiardArchiveVisitor visitor) {
+        visitor.visit(name, numberOfRows, columns, rows);
     }
 
     @Override

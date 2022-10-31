@@ -12,7 +12,7 @@ import ch.admin.bar.siardsuite.ui.SystemFileBrowser;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -29,7 +29,7 @@ import java.time.LocalDate;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
 
-public class ArchiveDownloadPresenter extends StepperPresenter implements DatabaseArchiveMetaDataVisitor {
+public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
 
     @FXML
     public Label title;
