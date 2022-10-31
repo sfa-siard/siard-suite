@@ -48,7 +48,7 @@ public class DatabaseSchema extends DatabaseObject {
         col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfColumns"));
         col3.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfRows"));
         col0.setMinWidth(125);
-        col1.setMinWidth(250);
+        col1.setMinWidth(285);
         col2.setMinWidth(125);
         col3.setMinWidth(125);
         col0.setStyle("-fx-alignment: CENTER_RIGHT");
@@ -63,21 +63,21 @@ public class DatabaseSchema extends DatabaseObject {
         tableView.getColumns().add(col1);
         tableView.getColumns().add(col2);
         tableView.getColumns().add(col3);
-        tableView.setItems(rows());
+        tableView.setItems(items());
         tableView.setMaxWidth(590);
     }
 
-    private ObservableList<Map> rows() {
-        final ObservableList<Map> rows = FXCollections.observableArrayList();
+    private ObservableList<Map> items() {
+        final ObservableList<Map> items = FXCollections.observableArrayList();
         for (DatabaseTable t : tables) {
-            Map<String, String> row = new HashMap<>();
-            row.put("index", String.valueOf(tables.indexOf(t) + 1));
-            row.put("name", t.name);
-            row.put("numberOfColumns", t.numberOfColumns);
-            row.put("numberOfRows", t.numberOfRows);
-            rows.add(row);
+            Map<String, String> item = new HashMap<>();
+            item.put("index", String.valueOf(tables.indexOf(t) + 1));
+            item.put("name", t.name);
+            item.put("numberOfColumns", t.numberOfColumns);
+            item.put("numberOfRows", t.numberOfRows);
+            items.add(item);
         }
-        return rows;
+        return items;
     }
 
 }
