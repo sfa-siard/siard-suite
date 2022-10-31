@@ -80,19 +80,35 @@ public class DatabaseTable extends DatabaseObject {
             tableView.getColumns().add(col1);
             tableView.getColumns().add(col2);
             tableView.setItems(colItems());
-            tableView.setMaxWidth(590);
         } else if (TreeContentView.ROWS.equals(type)) {
-
+            final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
+            col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
+            col0.setMinWidth(125);
+            col0.setStyle("-fx-alignment: CENTER_RIGHT");
+            col0.setCellValueFactory(new MapValueFactory<>("index"));
+            tableView.getColumns().add(col0);
+            TableColumn<Map, StringProperty> col;
+            for (DatabaseColumn column : columns) {
+                col = new TableColumn<>();
+                col.setText(column.name);
+                col.setMinWidth(125);
+                col.setStyle("-fx-alignment: CENTER_RIGHT");
+                col.setCellValueFactory(new MapValueFactory<>(String.valueOf(columns.indexOf(column) + 1)));
+                tableView.getColumns().add(col);
+            }
+            tableView.setItems(rowItems());
         }
+        tableView.setMinWidth(590);
+        tableView.setMaxWidth(590);
     }
 
     private ObservableList<Map> colItems() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseColumn c : columns) {
+        for (DatabaseColumn column : columns) {
             Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(columns.indexOf(c) + 1));
-            item.put("name", c.name);
-            item.put("type", c.type);
+            item.put("index", String.valueOf(columns.indexOf(column) + 1));
+            item.put("name", column.name);
+            item.put("type", column.type);
             items.add(item);
         }
         return items;
@@ -100,9 +116,12 @@ public class DatabaseTable extends DatabaseObject {
 
     private ObservableList<Map> rowItems() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseRow r : rows) {
+        for (DatabaseRow row : rows) {
             Map<String, String> item = new HashMap<>();
-            item.put("name", r.name);
+            item.put("index", String.valueOf(rows.indexOf(row) + 1));
+            for (DatabaseColumn column : columns) {
+                item.put(String.valueOf(columns.indexOf(column) + 1), String.valueOf(columns.indexOf(column) + 1));
+            }
             items.add(item);
         }
         return items;

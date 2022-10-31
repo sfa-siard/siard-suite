@@ -64,17 +64,18 @@ public class DatabaseSchema extends DatabaseObject {
         tableView.getColumns().add(col2);
         tableView.getColumns().add(col3);
         tableView.setItems(items());
+        tableView.setMinWidth(590);
         tableView.setMaxWidth(590);
     }
 
     private ObservableList<Map> items() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseTable t : tables) {
+        for (DatabaseTable table : tables) {
             Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(tables.indexOf(t) + 1));
-            item.put("name", t.name);
-            item.put("numberOfColumns", t.numberOfColumns);
-            item.put("numberOfRows", t.numberOfRows);
+            item.put("index", String.valueOf(tables.indexOf(table) + 1));
+            item.put("name", table.name);
+            item.put("numberOfColumns", table.numberOfColumns);
+            item.put("numberOfRows", table.numberOfRows);
             items.add(item);
         }
         return items;
