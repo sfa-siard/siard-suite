@@ -16,7 +16,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.time.LocalDate;
 
-public class SiardLoadTask extends Task<ObservableList<String>> implements Progress, SiardArchiveMetaDataVisitor {
+public class DatabaseLoadTask extends Task<ObservableList<String>> implements Progress, SiardArchiveMetaDataVisitor {
 
     private final Connection connection;
     private final Model model;
@@ -24,7 +24,7 @@ public class SiardLoadTask extends Task<ObservableList<String>> implements Progr
     private SiardArchiveMetaData metaData;
     private final boolean onlyMetaData;
 
-    public SiardLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
+    public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
         this.connection = connection;
         this.model = model;
         this.archive = archive;

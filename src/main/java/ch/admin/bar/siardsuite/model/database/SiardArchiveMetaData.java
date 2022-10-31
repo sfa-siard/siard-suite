@@ -52,7 +52,9 @@ public class SiardArchiveMetaData {
         dataOwner = new SimpleStringProperty(metaData.getDataOwner());
         dataOriginTimespan = new SimpleStringProperty(metaData.getDataOriginTimespan());
         final Calendar calendar = metaData.getArchivalDate();
-        archivingDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+        // TODO: Treat this date correctly
+        // archivingDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+        archivingDate = LocalDate.now();
         archiverName = new SimpleStringProperty(metaData.getArchiver());
         archiverContact = new SimpleStringProperty(metaData.getArchiverContact());
     }

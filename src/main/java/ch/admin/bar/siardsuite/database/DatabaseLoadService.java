@@ -24,6 +24,6 @@ public class DatabaseLoadService extends Service<ObservableList<String>> {
 
   @Override
   protected Task<ObservableList<String>> createTask() {
-    return new SiardLoadTask(connection, model, archive, onlyMetaData);
+    return new DatabaseLoadTask(connection, model, archive, onlyMetaData);
   }
 }
