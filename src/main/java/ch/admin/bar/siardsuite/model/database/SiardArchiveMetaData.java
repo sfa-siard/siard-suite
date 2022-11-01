@@ -37,7 +37,6 @@ public class SiardArchiveMetaData {
         this.databaseDescription = new SimpleStringProperty(databaseDescription);
         this.dataOwner = new SimpleStringProperty(dataOwner);
         this.dataOriginTimespan = new SimpleStringProperty(dataOriginTimespan);
-        // TODO: What shall we do if some nonsense for archivingDate is written in the meta data?
         archivingDate = LocalDate.now();
         this.archiverName = new SimpleStringProperty(archiverName);
         this.archiverContact = new SimpleStringProperty(archiverContact);
@@ -54,10 +53,9 @@ public class SiardArchiveMetaData {
         dataOwner = new SimpleStringProperty(metaData.getDataOwner());
         dataOriginTimespan = new SimpleStringProperty(metaData.getDataOriginTimespan());
         final Calendar calendar = metaData.getArchivalDate();
-        // TODO: What shall we do if some nonsense for archivingDate is written in the meta data?
         LocalDate date;
         try {
-            date = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+            date = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE));
         } catch (DateTimeException e) {
             date = LocalDate.now();
         }
