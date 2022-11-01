@@ -119,12 +119,8 @@ public class DatabaseTable extends DatabaseObject {
         for (DatabaseRow row : rows) {
             Map<String, String> item = new HashMap<>();
             item.put("index", String.valueOf(rows.indexOf(row) + 1));
-            for (DatabaseColumn column : columns) {
-                for (DatabaseCell cell : row.cells) {
-                    if (column.index.equals(cell.index)) {
-                        item.put(column.index, cell.value);
-                    }
-                }
+            for (DatabaseCell cell : row.cells) {
+                item.put(cell.index, cell.value);
             }
             items.add(item);
         }
