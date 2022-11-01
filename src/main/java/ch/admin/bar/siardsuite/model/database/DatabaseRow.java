@@ -26,7 +26,7 @@ public class DatabaseRow extends DatabaseObject {
         name = "Row " + index;
         try {
             for (int i = 0; i < record.getCells(); i++) {
-                cells.add(new DatabaseCell(record.getCell(i)));
+                cells.add(new DatabaseCell(archive, schema, table, this, record.getCell(i)));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

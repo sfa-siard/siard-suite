@@ -92,8 +92,8 @@ public class DatabaseTable extends DatabaseObject {
                 col = new TableColumn<>();
                 col.setText(column.name);
                 col.setMinWidth(125);
-                col.setStyle("-fx-alignment: CENTER_RIGHT");
-                col.setCellValueFactory(new MapValueFactory<>(String.valueOf(columns.indexOf(column) + 1)));
+                col.setStyle("-fx-alignment: CENTER_LEFT");
+                col.setCellValueFactory(new MapValueFactory<>(column.index));
                 tableView.getColumns().add(col);
             }
             tableView.setItems(rowItems());
@@ -120,7 +120,11 @@ public class DatabaseTable extends DatabaseObject {
             Map<String, String> item = new HashMap<>();
             item.put("index", String.valueOf(rows.indexOf(row) + 1));
             for (DatabaseColumn column : columns) {
-                item.put(String.valueOf(columns.indexOf(column) + 1), String.valueOf(columns.indexOf(column) + 1));
+                for (DatabaseCell cell : row.cells) {
+                    if (column.index.equals(cell.index)) {
+                        item.put(column.index, cell.value);
+                    }
+                }
             }
             items.add(item);
         }
