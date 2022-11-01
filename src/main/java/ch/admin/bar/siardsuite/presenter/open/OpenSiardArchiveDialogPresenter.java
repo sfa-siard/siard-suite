@@ -7,10 +7,9 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.Preferences;
 import ch.admin.bar.siardsuite.view.RootStage;
-
 import io.github.palexdev.materialfx.controls.MFXButton;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -21,14 +20,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
-import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
+
+import static ch.admin.bar.siardsuite.util.Preferences.PreferencesNode.RECENT_FILES;
 
 public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
 
@@ -57,7 +57,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
     @FXML
     protected HBox buttonBox;
 
-    private final Preferences preferences = Preferences.userRoot().node(this.getClass().getName());
+    private final java.util.prefs.Preferences preferences = Preferences.get(RECENT_FILES);
     private final int max_recent_file_paths = 30;
     private final String[] recentFilePaths = new String[max_recent_file_paths];
 
