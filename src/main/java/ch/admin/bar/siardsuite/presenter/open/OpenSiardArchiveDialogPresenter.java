@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
 
 import static ch.admin.bar.siardsuite.util.Preferences.PreferencesNode.RECENT_FILES;
 
@@ -56,10 +55,6 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
     @FXML
     protected HBox buttonBox;
 
-    private final java.util.prefs.Preferences preferences = Preferences.get(RECENT_FILES);
-    private final int max_recent_file_paths = 30;
-    private final String[] recentFilePaths = new String[max_recent_file_paths];
-
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
@@ -72,16 +67,16 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.name"));
         recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.date"));
 
-        for (int i = 0; i < max_recent_file_paths; i++) {
-            recentFilePaths[i] = preferences.get(String.valueOf(i), "");
+        for (int i = 0; i < Preferences.max_cache_size; i++) {
+            Preferences.cache[i] = Preferences.get(RECENT_FILES).get(String.valueOf(i), "");
         }
 
-        for (String filePath : recentFilePaths) {
+        for (String filePath : Preferences.cache) {
             if (!filePath.isEmpty()) {
                 try {
                     recentFilesBox.getChildren().add(getRecentFileBox(filePath));
                 } catch (IOException e) {
-                    removeRecentFilePath(filePath);
+                    Preferences.remove(RECENT_FILES, filePath);
                 }
             }
         }
@@ -145,27 +140,6 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         label.setStyle("-fx-text-fill: #2a2a2a82");
     }
 
-    private void addRecentFilePath(File file) {
-        final int k = List.of(recentFilePaths).indexOf(file.getAbsolutePath());
-        final int l = (k < 0) ? max_recent_file_paths - 1 : k;
-        if (l > 0) {
-            for (int j = 0; j < l; j++) {
-                preferences.put(String.valueOf(j+1), recentFilePaths[j]);
-            }
-        }
-        preferences.put("0", file.getAbsolutePath());
-    }
-
-    private void removeRecentFilePath(String filePath)  {
-        final int l = List.of(recentFilePaths).indexOf(filePath);
-        if (l >= 0) {
-            preferences.remove(String.valueOf(l));
-            for (int j = l + 1; j < max_recent_file_paths; j++) {
-                preferences.put(String.valueOf(j-1), recentFilePaths[j]);
-            }
-        }
-    }
-
     private HBox getRecentFileBox(String filePath) throws IOException {
         final HBox recentFileBox = new HBox();
 
@@ -209,7 +183,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            addRecentFilePath(file);
+            Preferences.add(RECENT_FILES, file.getAbsolutePath());
         }
     }
 

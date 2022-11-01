@@ -173,6 +173,8 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       } else if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
         this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.connection.name"));
         this.errorMessage.setVisible(true);
+      } else if (toggleSave.isSelected()) {
+
       } else {
         controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
         this.errorMessage.setVisible(false);
