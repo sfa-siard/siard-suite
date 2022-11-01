@@ -26,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
-import java.util.prefs.BackingStoreException;
 
 import static ch.admin.bar.siardsuite.util.Preferences.PreferencesNode.RECENT_FILES;
 

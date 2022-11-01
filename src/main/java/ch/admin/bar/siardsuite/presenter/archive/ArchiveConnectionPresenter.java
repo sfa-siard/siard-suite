@@ -100,7 +100,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.subtitleRight.textProperty().bind(I18n.createStringBinding("archiveConnection.view.subtitleRight"));
     this.textLeft.textProperty().bind(I18n.createStringBinding("archiveConnection.view.textLeft"));
     this.textRight.textProperty().bind(I18n.createStringBinding("archiveConnection.view.textRight"));
-    this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error"));
 
     for (int i = 0; i < textFlow.getChildren().size(); i++) {
       Text text = (Text) textFlow.getChildren().get(i);
@@ -156,7 +155,23 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     infoButton.setOnMouseExited(event -> tooltip.hide());
 
     this.buttonsBox.next().setOnAction((event) -> {
-      if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
+      if (dbServerField.getText().isEmpty()) {
+        this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.database.server"));
+        this.errorMessage.setVisible(true);
+      } else if (dbNameField.getText().isEmpty()) {
+        this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.database.name"));
+        this.errorMessage.setVisible(true);
+      } else if (usernameField.getText().isEmpty()) {
+        this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.user.name"));
+        this.errorMessage.setVisible(true);
+      } else if (passwordField.getText().isEmpty()) {
+        this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.user.password"));
+        this.errorMessage.setVisible(true);
+      } else if (urlField.getText().isEmpty()) {
+        this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.connection.url"));
+        this.errorMessage.setVisible(true);
+      } else if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
+        this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.connection.name"));
         this.errorMessage.setVisible(true);
       } else {
         controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());

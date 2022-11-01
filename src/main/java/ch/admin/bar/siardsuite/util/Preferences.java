@@ -17,7 +17,8 @@ public class Preferences {
     }
 
     public enum PreferencesNode {
-        RECENT_FILES("recent_files");
+        RECENT_FILES("recent_files"),
+        DATABASE_CONNECTION("database_connection");
 
         private final String name;
 
