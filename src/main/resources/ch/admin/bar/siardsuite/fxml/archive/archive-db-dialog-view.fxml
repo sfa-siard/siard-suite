@@ -15,30 +15,45 @@
                     BorderPane.alignment="CENTER">
             <top>
                 <HBox BorderPane.alignment="CENTER_LEFT">
-                    <children>
-                        <Label fx:id="title" prefHeight="42.0" styleClass="dialog-title" text="Label" HBox.hgrow="ALWAYS" />
-                        <MFXButton fx:id="closeButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" styleClass="dialog-close-button" text="X" HBox.hgrow="NEVER" />
-                    </children>
                     <BorderPane.margin>
-                        <Insets bottom="15.0" />
+                        <Insets bottom="15.0"/>
                     </BorderPane.margin>
+                    <Label fx:id="title" prefHeight="42.0" styleClass="dialog-title" text="Label" HBox.hgrow="ALWAYS"/>
+                    <MFXButton fx:id="closeButton" alignment="CENTER_RIGHT" contentDisplay="CENTER"
+                               styleClass="dialog-close-button" text="X" HBox.hgrow="NEVER"/>
                 </HBox>
             </top>
             <center>
                 <VBox prefHeight="61.0" prefWidth="330.0" BorderPane.alignment="TOP_LEFT">
-                    <children>
-                        <Text fx:id="text" styleClass="dialog-text"
-                              textOrigin="BOTTOM" wrappingWidth="329.943359375">
-                            <VBox.margin>
-                                <Insets bottom="25.0" />
-                            </VBox.margin>
-                        </Text>
-                        <MFXButton fx:id="newConnectionButton">
-                            <VBox.margin>
-                                <Insets bottom="25.0" />
-                            </VBox.margin>
-                        </MFXButton>
-                    </children>
+                    <Text fx:id="text" styleClass="dialog-text"
+                          textOrigin="BOTTOM" wrappingWidth="329.943359375">
+                        <VBox.margin>
+                            <Insets bottom="25.0"/>
+                        </VBox.margin>
+                    </Text>
+                    <MFXButton fx:id="newConnectionButton">
+                        <VBox.margin>
+                            <Insets bottom="25.0"/>
+                        </VBox.margin>
+                    </MFXButton>
+                    <HBox fx:id="recentConnectionsHeader" prefHeight="40.0">
+                        <VBox.margin>
+                            <Insets bottom="10.0"/>
+                        </VBox.margin>
+                        <Label fx:id="recentConnectionsHeaderName" prefHeight="40.0"
+                               styleClass="files-vbox-header-name" HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="recentConnectionsHeaderDate" prefHeight="40.0" prefWidth="110.0"
+                               styleClass="files-vbox-header-date">
+                            <HBox.margin>
+                                <Insets right="10.0"/>
+                            </HBox.margin>
+                        </Label>
+                    </HBox>
+                    <VBox fx:id="recentConnectionsBox" prefHeight="200.0" styleClass="connections-vbox-list">
+                        <VBox.margin>
+                            <Insets bottom="25.0"/>
+                        </VBox.margin>
+                    </VBox>
                 </VBox>
             </center>
         </BorderPane>

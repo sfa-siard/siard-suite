@@ -48,7 +48,9 @@ public class SiardArchive {
     }
 
     public void shareProperties (SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
-        databaseObject.shareProperties(visitor);
+        if (databaseObject != null) {
+            databaseObject.shareProperties(visitor);
+        }
     }
 
     public void shareObject(SiardArchiveVisitor visitor) {
@@ -68,7 +70,9 @@ public class SiardArchive {
     }
 
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
-        databaseObject.populate(tableView, type);
+        if (databaseObject != null) {
+            databaseObject.populate(tableView, type);
+        }
     }
 
 }

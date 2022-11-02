@@ -60,46 +60,48 @@ public class DatabaseTable extends DatabaseObject {
 
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
-        if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
-            final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-            col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.position"));
-            col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnName"));
-            col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnType"));
-            col0.setMinWidth(125);
-            col1.setMinWidth(250);
-            col2.setMinWidth(250);
-            col0.setStyle("-fx-alignment: CENTER_RIGHT");
-            col1.setStyle("-fx-alignment: CENTER_LEFT");
-            col2.setStyle("-fx-alignment: CENTER_LEFT");
-            col0.setCellValueFactory(new MapValueFactory<>("index"));
-            col1.setCellValueFactory(new MapValueFactory<>("name"));
-            col2.setCellValueFactory(new MapValueFactory<>("type"));
-            tableView.getColumns().add(col0);
-            tableView.getColumns().add(col1);
-            tableView.getColumns().add(col2);
-            tableView.setItems(colItems());
-        } else if (TreeContentView.ROWS.equals(type)) {
-            final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-            col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
-            col0.setMinWidth(125);
-            col0.setStyle("-fx-alignment: CENTER_RIGHT");
-            col0.setCellValueFactory(new MapValueFactory<>("index"));
-            tableView.getColumns().add(col0);
-            TableColumn<Map, StringProperty> col;
-            for (DatabaseColumn column : columns) {
-                col = new TableColumn<>();
-                col.setText(column.name);
-                col.setMinWidth(125);
-                col.setStyle("-fx-alignment: CENTER_LEFT");
-                col.setCellValueFactory(new MapValueFactory<>(column.index));
-                tableView.getColumns().add(col);
+        if (tableView != null) {
+            if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
+                final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
+                final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
+                final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
+                col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.position"));
+                col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnName"));
+                col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnType"));
+                col0.setMinWidth(125);
+                col1.setMinWidth(250);
+                col2.setMinWidth(250);
+                col0.setStyle("-fx-alignment: CENTER_RIGHT");
+                col1.setStyle("-fx-alignment: CENTER_LEFT");
+                col2.setStyle("-fx-alignment: CENTER_LEFT");
+                col0.setCellValueFactory(new MapValueFactory<>("index"));
+                col1.setCellValueFactory(new MapValueFactory<>("name"));
+                col2.setCellValueFactory(new MapValueFactory<>("type"));
+                tableView.getColumns().add(col0);
+                tableView.getColumns().add(col1);
+                tableView.getColumns().add(col2);
+                tableView.setItems(colItems());
+            } else if (TreeContentView.ROWS.equals(type)) {
+                final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
+                col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
+                col0.setMinWidth(125);
+                col0.setStyle("-fx-alignment: CENTER_RIGHT");
+                col0.setCellValueFactory(new MapValueFactory<>("index"));
+                tableView.getColumns().add(col0);
+                TableColumn<Map, StringProperty> col;
+                for (DatabaseColumn column : columns) {
+                    col = new TableColumn<>();
+                    col.setText(column.name);
+                    col.setMinWidth(125);
+                    col.setStyle("-fx-alignment: CENTER_LEFT");
+                    col.setCellValueFactory(new MapValueFactory<>(column.index));
+                    tableView.getColumns().add(col);
+                }
+                tableView.setItems(rowItems());
             }
-            tableView.setItems(rowItems());
+            tableView.setMinWidth(590);
+            tableView.setMaxWidth(590);
         }
-        tableView.setMinWidth(590);
-        tableView.setMaxWidth(590);
     }
 
     private ObservableList<Map> colItems() {
