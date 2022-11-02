@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter.export;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.ui.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -62,7 +63,15 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         directoryChooser.setTitle(I18n.get("export.file-chooser.title"));
         File file = directoryChooser.showDialog(stage);
         if (Objects.nonNull(file)) {
-            this.model.getArchive().export(file);
+            try {
+                this.model.getArchive().export(file);
+                this.stage.openDialog(View.EXPORT_SUCCESS);
+            } catch (Exception e) {
+                // TODO: show failure message
+                e.printStackTrace();
+            } finally {
+                this.stage.closeDialog();
+            }
         }
     }
 }

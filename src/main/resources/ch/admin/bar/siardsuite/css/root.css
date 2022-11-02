@@ -613,6 +613,10 @@
     -fx-background-color: #0e0e0e82;
 }
 
+.bg-green {
+    -fx-background-color: rgba(27, 204, 150, 1);
+
+}
 /* Select Connections */
 
 .connections-vbox-header-name {
@@ -659,4 +663,12 @@
     -fx-pref-height: 40.0;
     -fx-alignment: center-right;
     -fx-text-fill: #1a1a1aa8;
+}
+
+.text-white {
+    -fx-text-fill: white;
+}
+
+.text-center {
+    -fx-text-alignment: center;
 }
