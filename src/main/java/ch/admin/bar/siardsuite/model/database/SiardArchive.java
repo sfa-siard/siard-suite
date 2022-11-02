@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -14,6 +15,7 @@ public class SiardArchive {
     private boolean onlyMetaData = false;
     private final List<DatabaseSchema> schemas = new ArrayList<>();
     private SiardArchiveMetaData metaData;
+    private Archive archive;
 
     public SiardArchive() {}
 
@@ -24,6 +26,7 @@ public class SiardArchive {
     public SiardArchive(String archiveName, Archive archive, boolean onlyMetaData) {
         this.onlyMetaData = onlyMetaData;
         this.archiveName = archiveName;
+        this.archive = archive;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         for (int i = 0; i < archive.getSchemas(); i++) {
             schemas.add(new DatabaseSchema(this, archive.getSchema(i), onlyMetaData));
