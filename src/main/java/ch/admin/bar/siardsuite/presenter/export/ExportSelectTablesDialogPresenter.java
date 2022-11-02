@@ -13,7 +13,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class ExportSelectTablesDialogPresenter extends DialogPresenter {
@@ -52,7 +56,17 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     }
 
     private void handleSaveClicked(ActionEvent actionEvent) {
-        System.out.println("TODO: select folder where table data should be exported");
+        // TODO: extract to object/ class or somewhere similar
+        final DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle(I18n.get("export.file-chooser.title"));
+        File file = directoryChooser.showDialog(stage);
+        if (Objects.nonNull(file)) {
+            System.out.println("selected destination: " + file.getAbsolutePath());
+            System.out.println("is a directory" + file.isDirectory());
+
+        } else {
+            System.out.println("nothing selected... try again");
+        }
     }
 }
 
