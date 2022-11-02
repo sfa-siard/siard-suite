@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -11,6 +12,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class DatabaseSchema extends DatabaseObject {
@@ -20,18 +24,20 @@ public class DatabaseSchema extends DatabaseObject {
     protected final String name;
     protected final String description;
     protected final List<DatabaseTable> tables = new ArrayList<>();
+    private final Archive legacyArchive;
 
-    protected DatabaseSchema(SiardArchive archive, Schema schema) {
-        this(archive, schema, false);
+    protected DatabaseSchema(SiardArchive archive, Archive legacyArchive, Schema schema) {
+        this(archive, legacyArchive, schema, false);
     }
 
-    protected DatabaseSchema(SiardArchive archive, Schema schema, boolean onlyMetaData) {
+    protected DatabaseSchema(SiardArchive archive, Archive legacyArchive, Schema schema, boolean onlyMetaData) {
         this.archive = archive;
+        this.legacyArchive = legacyArchive;
         this.onlyMetaData = onlyMetaData;
         name = schema.getMetaSchema().getName();
         description = schema.getMetaSchema().getDescription();
         for (int i = 0; i < schema.getTables(); i++) {
-            tables.add(new DatabaseTable(archive, this, schema.getTable(i), onlyMetaData));
+            tables.add(new DatabaseTable(archive, this, schema.getTable(i), legacyArchive, onlyMetaData));
         }
     }
 
@@ -87,4 +93,16 @@ public class DatabaseSchema extends DatabaseObject {
         return items;
     }
 
+    public void export(List<String> tablesToExport, File directory) {
+        this.tables.stream()
+                   .filter(databaseTable -> tablesToExport.contains(databaseTable.name))
+                   .forEach(databaseTable -> {
+                       try {
+                           databaseTable.export(directory);
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                           throw new RuntimeException(e);
+                       }
+                   });
+    }
 }

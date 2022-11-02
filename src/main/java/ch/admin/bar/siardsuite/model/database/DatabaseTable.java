@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.*;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -10,7 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,13 +27,15 @@ public class DatabaseTable extends DatabaseObject {
     protected final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
     protected final String numberOfRows;
-    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
-        this(archive, schema, table, false);
+    private final Archive legacyArchive;
+    protected DatabaseTable(SiardArchive archive, Archive legacyArchive, DatabaseSchema schema, Table table) {
+        this(archive, schema, table,  legacyArchive, false);
     }
 
-    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
+    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, Archive legacyArchive, boolean onlyMetaData) {
         this.archive = archive;
         this.schema = schema;
+        this.legacyArchive = legacyArchive;
         name = table.getMetaTable().getName();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
@@ -129,4 +133,11 @@ public class DatabaseTable extends DatabaseObject {
         return items;
     }
 
+    protected void export(File directory) throws IOException {
+        File destination = new File(directory.getAbsolutePath(), this.name + ".html");
+        File lobFolder = new File(destination, "lobs/"); //TODO: was taken from the user properties in the original GUI
+        OutputStream outPutStream = new FileOutputStream(destination);
+        this.legacyArchive.getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
+        outPutStream.close();
+    }
 }

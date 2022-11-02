@@ -17,6 +17,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -61,11 +62,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         directoryChooser.setTitle(I18n.get("export.file-chooser.title"));
         File file = directoryChooser.showDialog(stage);
         if (Objects.nonNull(file)) {
-            System.out.println("selected destination: " + file.getAbsolutePath());
-            System.out.println("is a directory" + file.isDirectory());
-
-        } else {
-            System.out.println("nothing selected... try again");
+            this.model.getArchive().export(file);
         }
     }
 }
