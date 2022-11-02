@@ -92,8 +92,13 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   @Override
   public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
     this.init(controller, model, stage);
+
     addTextWithStyles();
     addFormText();
+
+    if (controller.recentDatabaseConnection != null) {
+      addRecentDatabaseConnection();
+    }
 
     this.errorMessage.setVisible(false);
     this.buttonsBox = new StepperButtonBox().make(DEFAULT);
@@ -126,6 +131,16 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     urlField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.url.label"));
     toggleSave.textProperty().bind(I18n.createStringBinding("archiveConnection.view.toggleSave"));
     connectionName.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.connectionName.label"));
+  }
+
+  private void addRecentDatabaseConnection() {
+    Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection);
+    dbServerField.setText(preferences.get(DATABASE_SERVER.index(), ""));
+    dbNameField.setText(preferences.get(DATABASE_NAME.index(), ""));
+    usernameField.setText(preferences.get(USER_NAME.index(), ""));
+    urlField.setText(preferences.get(CONNECTION_URL.index(), ""));
+    connectionName.setText(controller.recentDatabaseConnection);
+    controller.recentDatabaseConnection = null;
   }
 
   private void setListeners(MFXStepper stepper) {

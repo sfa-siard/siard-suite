@@ -110,10 +110,16 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
             recentConnectionsBox.getStyleClass().add("connections-hbox");
             VBox.setMargin(recentConnectionsBox, new Insets(5, 0, 5, 0));
 
-            recentConnectionsBox.setOnMouseClicked(event -> {});
+            recentConnectionsBox.setOnMouseClicked(event -> showRecentConnection(connectionName));
         }
 
         return recentConnectionsBox;
+    }
+
+    private void showRecentConnection(String connectionName) {
+        controller.recentDatabaseConnection = connectionName;
+        stage.closeDialog();
+        stage.navigate(View.ARCHIVE_STEPPER);
     }
 
 }

@@ -18,6 +18,8 @@ public class Controller {
 
   private DatabaseLoadService databaseLoadService;
 
+  public String recentDatabaseConnection;
+
   public Controller(Model model) {
     this.model = model;
   }
