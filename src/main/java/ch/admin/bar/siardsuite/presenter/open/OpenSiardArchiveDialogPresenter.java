@@ -90,7 +90,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         if (recentFilesBox.getChildren().size() == 0) {
             showNoRecentFiles();
         } else {
-            recentFilesBox.getChildren().removeIf(child -> recentFilesBox.getChildren().indexOf(child) > 3);
+            recentFilesBox.getChildren().removeIf(child -> recentFilesBox.getChildren().indexOf(child) > 2);
         }
 
         dropFileTextTop.textProperty().bind(I18n.createStringBinding("dialog.drop.file.text.top"));

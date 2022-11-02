@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class UserPreferences {
 
-    private static final int max_stack_size = 4;
+    private static final int max_stack_size = 30;
 
     public static Preferences node(NodePath nodePath) {
         return Preferences.userRoot().node(nodePath.path());
