@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
@@ -62,6 +63,14 @@
     </center>
     <bottom>
         <HBox fx:id="buttonBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
-        </HBox>
+         <children>
+            <MFXButton fx:id="cancelButton" text="Cancel">
+               <styleClass>
+                  <String fx:value="button" />
+                  <String fx:value="secondary" />
+               </styleClass>
+            </MFXButton>
+            <MFXButton fx:id="saveButton" styleClass="primary" text="Choose directory" />
+         </children></HBox>
     </bottom>
 </BorderPane>

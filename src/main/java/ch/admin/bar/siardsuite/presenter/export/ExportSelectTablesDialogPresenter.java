@@ -7,10 +7,14 @@ import ch.admin.bar.siardsuite.ui.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+
+import java.util.logging.Logger;
 
 public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     @FXML
@@ -25,6 +29,12 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     @FXML
     public HBox buttonBox;
 
+    @FXML
+    public MFXButton cancelButton;
+
+    @FXML
+    public MFXButton saveButton;
+
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
@@ -34,9 +44,15 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         this.title.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.title"));
         this.text.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.text"));
 
-        this.closeButton.setOnAction(event -> this.stage.closeDialog());
+        EventHandler<ActionEvent> closeEvent = event -> this.stage.closeDialog();
+        this.closeButton.setOnAction(closeEvent);
+        this.cancelButton.setOnAction(closeEvent);
 
-        this.buttonBox.getChildren().add(new CloseDialogButton(this.stage));
+        this.saveButton.setOnAction(this::handleSaveClicked);
+    }
+
+    private void handleSaveClicked(ActionEvent actionEvent) {
+        System.out.println("TODO: select folder where table data should be exported");
     }
 }
 
