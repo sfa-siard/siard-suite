@@ -12,13 +12,6 @@ public class SiardArchive {
 
     private String archiveName;
     private boolean onlyMetaData = false;
-    private static final Map<String, List<String>> dbTypes = Map.of(
-            "MS Access", List.of("access", ""),
-            "DB/2", List.of("db2", "50000"),
-            "MySQL", List.of("mysql", "3306"),
-            "Oracle", List.of("oracle", "1521"),
-            "PostgreSQL", List.of("postgresql", "5432"),
-            "Microsoft SQL Server", List.of("sqlserver", "1433"));
     private final List<DatabaseSchema> schemas = new ArrayList<>();
     private SiardArchiveMetaData metaData;
 
