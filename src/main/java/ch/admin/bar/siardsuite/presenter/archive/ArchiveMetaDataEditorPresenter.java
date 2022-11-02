@@ -123,7 +123,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
             }
         });
         this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
-        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
+        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
 
         infoButton.setOnMouseMoved(event -> {
             Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());

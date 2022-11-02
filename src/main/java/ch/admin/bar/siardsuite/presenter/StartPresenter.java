@@ -35,7 +35,7 @@ public class StartPresenter extends Presenter {
 
         this.archive.setOnAction(event -> {
             this.controller.setWorkflow(ARCHIVE);
-            stage.openDialog(View.ARCHIVE_DB_DIALOG.getName());
+            stage.openDialog(View.ARCHIVE_DB_DIALOG);
         });
         this.upload.setOnAction(event -> {
             this.controller.setWorkflow(UPLOAD);
@@ -43,12 +43,12 @@ public class StartPresenter extends Presenter {
         });
         this.export.setOnAction(event -> {
             this.controller.setWorkflow(EXPORT);
-            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG.getName());
+            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
 
         });
         this.open.setOnAction(event -> {
             this.controller.setWorkflow(OPEN);
-            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG.getName());
+            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
         });
 
         this.archive.textProperty().bind(createStringBinding("button.archive"));

@@ -225,7 +225,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
       stepper.previous();
       this.stage.setHeight(700.00);
     });
-    this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
+    this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
   }
 
   private void handleKeyEvent(KeyEvent event) {

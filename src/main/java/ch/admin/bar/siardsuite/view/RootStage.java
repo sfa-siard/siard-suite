@@ -71,11 +71,6 @@ public class RootStage extends Stage {
     setCenter(rootPane, view.getName());
   }
 
-  @Deprecated
-  public void openDialog(String viewName) {
-    setCenter(dialogPane, viewName);
-    dialogPane.setVisible(true);
-  }
   public void openDialog(View view) {
     setCenter(dialogPane, view.getName());
     dialogPane.setVisible(true);

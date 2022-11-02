@@ -208,7 +208,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         if (Workflow.OPEN.equals(controller.getWorkflow())) {
             stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
         } else if (Workflow.EXPORT.equals(controller.getWorkflow())) {
-            stage.openDialog(View.EXPORT_SELECT_TABLES.getName());
+            stage.openDialog(View.EXPORT_SELECT_TABLES);
         } else {
             throw new UnsupportedOperationException("I don't no what to show for workflow " + controller.getWorkflow());
         }
