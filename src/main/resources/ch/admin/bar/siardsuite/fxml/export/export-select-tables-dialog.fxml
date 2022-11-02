@@ -4,6 +4,7 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -31,31 +32,7 @@
                                 <Insets bottom="25.0" />
                             </VBox.margin>
                         </Text>
-                  <!--      <HBox fx:id="recentFilesHeader" prefHeight="40.0">
-                             <children>
-                                <Label fx:id="recentFilesHeaderName" prefHeight="40.0" styleClass="files-vbox-header-name" HBox.hgrow="ALWAYS" />
-                                <Label fx:id="recentFilesHeaderDate" prefHeight="40.0" prefWidth="110.0" styleClass="files-vbox-header-date">
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin></Label>
-                             </children>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </HBox>
-                        <VBox fx:id="recentFilesBox" prefHeight="200.0" styleClass="files-vbox-list">
-                            <VBox.margin>
-                                <Insets bottom="25.0" />
-                            </VBox.margin>
-                        </VBox>
-                        <VBox fx:id="dropFileBox" prefHeight="144.0" styleClass="files-vbox-drop" VBox.vgrow="ALWAYS">
-                            <Label fx:id="dropFileTextTop" prefHeight="20.0" prefWidth="330.0" style="-fx-alignment: center" />
-                            <Label fx:id="dropFileTextMiddle" prefHeight="20.0" prefWidth="330.0" style="-fx-alignment: center; -fx-padding: 10 0 12 0" />
-                            <MFXButton fx:id="chooseFileButton" />
-                            <VBox.margin>
-                                <Insets bottom="30.0" />
-                            </VBox.margin>
-                        </VBox>-->
+                  <TreeView fx:id="tableSelector" prefHeight="200.0" prefWidth="200.0" />
                     </children>
                 </VBox>
          </center>
@@ -71,6 +48,9 @@
                </styleClass>
             </MFXButton>
             <MFXButton fx:id="saveButton" styleClass="primary" text="Choose directory" />
-         </children></HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets top="25.0" />
+         </BorderPane.margin></HBox>
     </bottom>
 </BorderPane>

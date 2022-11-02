@@ -8,14 +8,18 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
 
@@ -24,15 +28,9 @@ public class DatabaseSchema extends DatabaseObject {
     protected final String name;
     protected final String description;
     protected final List<DatabaseTable> tables = new ArrayList<>();
-    private final Archive legacyArchive;
-
-    protected DatabaseSchema(SiardArchive archive, Archive legacyArchive, Schema schema) {
-        this(archive, legacyArchive, schema, false);
-    }
 
     protected DatabaseSchema(SiardArchive archive, Archive legacyArchive, Schema schema, boolean onlyMetaData) {
         this.archive = archive;
-        this.legacyArchive = legacyArchive;
         this.onlyMetaData = onlyMetaData;
         name = schema.getMetaSchema().getName();
         description = schema.getMetaSchema().getDescription();
@@ -104,5 +102,12 @@ public class DatabaseSchema extends DatabaseObject {
                            throw new RuntimeException(e);
                        }
                    });
+    }
+
+    public void populate(CheckBoxTreeItem<String> schemaItem) {
+        List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.tables.stream()
+                                            .map(table -> new CheckBoxTreeItem<>(table.name))
+                                            .collect(Collectors.toList());
+        schemaItem.getChildren().setAll(checkBoxTreeItems);
     }
 }

@@ -1,11 +1,13 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +18,6 @@ public class SiardArchive {
     private boolean onlyMetaData = false;
     private final List<DatabaseSchema> schemas = new ArrayList<>();
     private SiardArchiveMetaData metaData;
-    private Archive archive;
 
     public SiardArchive() {}
 
@@ -27,7 +28,6 @@ public class SiardArchive {
     public SiardArchive(String archiveName, Archive archive, boolean onlyMetaData) {
         this.onlyMetaData = onlyMetaData;
         this.archiveName = archiveName;
-        this.archive = archive;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         for (int i = 0; i < archive.getSchemas(); i++) {
             schemas.add(new DatabaseSchema(this, archive, archive.getSchema(i), onlyMetaData));
@@ -82,5 +82,16 @@ public class SiardArchive {
     }
     public void export(List<String> tablesToExport, File directory) {
         this.schemas.forEach(schema -> schema.export(tablesToExport, directory));
+    }
+
+    public void populate(TreeItem root) {
+        List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.schemas.stream().map(schema -> {
+            CheckBoxTreeItem<String> schemaItem = new CheckBoxTreeItem<>(schema.name);
+            schemaItem.setExpanded(true);
+            schema.populate(schemaItem);
+
+            return schemaItem;
+        }).toList();
+        root.getChildren().setAll(checkBoxTreeItems);
     }
 }

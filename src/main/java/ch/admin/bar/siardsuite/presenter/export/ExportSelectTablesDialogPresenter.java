@@ -4,7 +4,6 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.ui.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -12,15 +11,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
 import java.io.File;
-import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     @FXML
@@ -41,6 +42,9 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     @FXML
     public MFXButton saveButton;
 
+    @FXML
+    public TreeView tableSelector;
+
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
@@ -55,6 +59,15 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         this.cancelButton.setOnAction(closeEvent);
 
         this.saveButton.setOnAction(this::handleSaveClicked);
+
+        TreeItem root = new TreeItem();
+        this.model.populate(root);
+        root.setExpanded(true);
+
+        this.tableSelector.setRoot(root);
+        this.tableSelector.setShowRoot(false);
+        tableSelector.setCellFactory((Callback<TreeView<String>, TreeCell<String>>) param -> new CheckBoxTreeCell<>());
+
     }
 
     private void handleSaveClicked(ActionEvent actionEvent) {

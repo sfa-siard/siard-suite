@@ -10,6 +10,7 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
 
 import java.io.File;
 import java.io.IOException;
@@ -153,6 +154,10 @@ public class Model {
     }
   }
 
+  public void populate(TreeItem root) {
+    getArchive().populate(root);
+  }
+
   public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareProperties(visitor);
@@ -164,5 +169,6 @@ public class Model {
       getArchive().shareObject(visitor);
     }
   }
+
 
 }
