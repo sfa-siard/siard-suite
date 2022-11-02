@@ -65,12 +65,11 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         if (Objects.nonNull(file)) {
             try {
                 this.model.getArchive().export(file);
+                this.stage.closeDialog();
                 this.stage.openDialog(View.EXPORT_SUCCESS);
             } catch (Exception e) {
                 // TODO: show failure message
                 e.printStackTrace();
-            } finally {
-                this.stage.closeDialog();
             }
         }
     }
