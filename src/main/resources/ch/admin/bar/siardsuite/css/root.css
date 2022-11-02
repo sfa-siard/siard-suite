@@ -527,10 +527,6 @@
     -fx-max-width: infinity;
 }
 
-.tree-table-view {
-    -fx-max-width: 490;
-}
-
 .tree-table-view .column-header-background{
     -fx-background-color: #e4e7eb;
     -fx-padding: 5 0 5 0;
@@ -539,8 +535,22 @@
 
 .tree-table-view .column-header {
     -fx-background-color: transparent;
-    -fx-font-size: 10;
+}
 
+.tree-table-view .column-header .label {
+    -fx-font-size: 10;
+    -fx-alignment: center_left;
+}
+
+.tree-table-view .column-header .cell {
+    -fx-cell-size: 30;
+    -fx-padding: 0 5 0 5;
+}
+
+.tree-table-view .cell {
+    -fx-font-size: 10;
+    -fx-cell-size: 30;
+    -fx-padding: 0 10 0 10;
 }
 
 /* Select/Drop Files */
@@ -555,7 +565,6 @@
 .files-vbox-header-date {
     -fx-font-size: 10;
     -fx-alignment: center-right;
-
 }
 
 .files-vbox-list {

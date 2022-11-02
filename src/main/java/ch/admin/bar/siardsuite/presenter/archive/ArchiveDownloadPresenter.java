@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
+import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.ui.Icon;
 import ch.admin.bar.siardsuite.ui.Spinner;
@@ -12,7 +12,7 @@ import ch.admin.bar.siardsuite.ui.SystemFileBrowser;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -25,10 +25,11 @@ import javafx.scene.paint.Paint;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
 
-public class ArchiveDownloadPresenter extends StepperPresenter implements DatabaseArchiveMetaDataVisitor {
+public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
 
     @FXML
     public Label title;
@@ -133,11 +134,11 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements Databa
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
-                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
         this.targetArchive = targetArchive;
     }
 
     @Override
-    public void visit(DatabaseArchiveMetaData metaData) {}
+    public void visit(SiardArchiveMetaData metaData) {}
 
 }

@@ -2,12 +2,12 @@ package ch.admin.bar.siardsuite.util;
 
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -54,12 +54,11 @@ public class I18n {
     return Bindings.createStringBinding(() -> get(key, args), locale);
   }
 
-  public static ObjectBinding<TreeAttributeWrapper> createTreeAtributeWrapperBinding(final String key, final int id, final TreeContentView type, final Object... args) {
-    return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(get(key, args), id, type), locale);
+  public static ObjectBinding<TreeAttributeWrapper> createTreeAtributeWrapperBinding(final String key, final int id, final TreeContentView type, DatabaseObject databaseObject, final Object... args) {
+    return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(get(key, args), id, type, databaseObject), locale);
   }
 
-  public static String getLocaleDate(final String yyyy_mm_dd) {
-    final LocalDate date = LocalDate.parse(yyyy_mm_dd);
+  public static String getLocaleDate(final LocalDate date) {
     final String pattern;
     if (getLocale().equals(Locale.ENGLISH)) {
       pattern = "dd MMM yyyy";
@@ -67,6 +66,11 @@ public class I18n {
       pattern = "dd. MMM yyyy";
     }
     return date.format(DateTimeFormatter.ofPattern(pattern, getLocale()));
+  }
+
+  public static String getLocaleDate(final String yyyy_mm_dd) {
+    final LocalDate date = LocalDate.parse(yyyy_mm_dd);
+    return getLocaleDate(date);
   }
 
 }

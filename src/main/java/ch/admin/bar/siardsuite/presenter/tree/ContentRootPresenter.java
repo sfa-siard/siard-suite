@@ -1,22 +1,23 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.TreeContentViewModel;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-
 import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 
-public class ContentRootPresenter extends TreePresenter implements DatabaseArchiveVisitor, DatabaseArchiveMetaDataVisitor {
+public class ContentRootPresenter extends TreePresenter implements SiardArchiveVisitor, SiardArchiveMetaDataVisitor {
 
   @FXML
   public VBox container;
@@ -38,7 +39,7 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   @FXML
   public Label textOwner;
   @FXML
-  public Label textCreationDate;
+  public Label textDataOriginTimespan;
   @FXML
   public Label textArchiveDate;
   @FXML
@@ -47,17 +48,19 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
   public Label textContactArchiveUser;
 
   @Override
-  public void init(Controller controller, TreeContentViewModel model, RootStage stage) {
-    this.model = model.getModel();
+  public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
+    this.model = model;
     this.controller = controller;
     this.stage = stage;
 
-    this.titleTableContainer.textProperty().bind(I18n.createStringBinding(model.getTitle()));
+    titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
 
     initLabels();
 
     this.model.provideDatabaseArchiveMetaDataProperties(this);
     this.model.provideDatabaseArchiveProperties(this);
+
+    setListeners();
   }
 
   private void initLabels() {
@@ -68,13 +71,29 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
     }
   }
 
+  protected void setListeners() {
+
+  }
+
   @Override
   public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {}
 
   @Override
+  public void visit(String schemaName, String schemaDescription, List<DatabaseTable> tables) {}
+
+  @Override
+  public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) {}
+
+  @Override
+  public void visit(String columnName) {}
+
+  @Override
+  public void visit(SiardArchive archive) {}
+
+  @Override
   public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                     String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
-                    String archivingDate, String archiverName, String archiverContact, File targetArchive) {
+                    LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
     textFormat.setText(siardFormatVersion);
     textDb.setText(databaseName);
     textProduct.setText(databaseProduct);
@@ -82,13 +101,13 @@ public class ContentRootPresenter extends TreePresenter implements DatabaseArchi
     textUsername.setText(databaseUsername);
     textDesc.setText(databaseDescription);
     textOwner.setText(databaseOwner);
-    textCreationDate.setText(databaseCreationDate);
-    textArchiveDate.setText(archivingDate);
+    textDataOriginTimespan.setText(databaseCreationDate);
+    textArchiveDate.textProperty().bind(Bindings.createStringBinding(() -> I18n.getLocaleDate(archivingDate), I18n.localeProperty()));
     textArchiveUser.setText(archiverName);
     textContactArchiveUser.setText(archiverContact);
   }
 
   @Override
-  public void visit(DatabaseArchiveMetaData metaData) {}
+  public void visit(SiardArchiveMetaData metaData) {}
 
 }

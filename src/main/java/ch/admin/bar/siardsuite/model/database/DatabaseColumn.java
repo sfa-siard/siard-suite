@@ -1,19 +1,38 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaColumn;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import javafx.scene.control.TableView;
+import java.io.IOException;
 
-public class DatabaseColumn {
+public class DatabaseColumn extends DatabaseObject {
 
-    private StringProperty name;
+    protected final SiardArchive archive;
+    protected final DatabaseSchema schema;
+    protected final DatabaseTable table;
+    protected final String index;
+    protected final String name;
+    protected final String type;
 
-    public DatabaseColumn(MetaColumn column) {
-        name = new SimpleStringProperty(column.getName());
+    protected DatabaseColumn(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, MetaColumn column) {
+        this.archive = archive;
+        this.schema = schema;
+        this.table = table;
+        this.index = String.valueOf(column.getPosition());
+        name = column.getName();
+        try {
+            type = column.getType();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public StringProperty getName() {
-        return name;
+    protected void shareProperties(SiardArchiveVisitor visitor) {
+        visitor.visit(name);
     }
+
+    @Override
+    protected void populate(TableView tableView, TreeContentView type) {}
 
 }

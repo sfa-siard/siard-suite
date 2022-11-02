@@ -3,21 +3,24 @@ package ch.admin.bar.siardsuite.model;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.database.DbConnectionFactory;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchive;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveVisitor;
+import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
+import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
+import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.TableView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class Model {
 
   private View currentView = View.START;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
-  private DatabaseArchive archive = new DatabaseArchive();
+  private SiardArchive archive = new SiardArchive();
 
   public Model() {}
 
@@ -46,15 +49,19 @@ public class Model {
     return archive;
   }
 
+  public void setArchive(SiardArchive archive) {
+    this.archive = archive;
+  }
+
   public void setArchive(String name, Archive archive) {
     setArchive(name, archive, false);
   }
 
   public void setArchive(String name, Archive archive, boolean onlyMetaData) {
-    this.archive = new DatabaseArchive(name, archive, onlyMetaData);
+    this.archive = new SiardArchive(name, archive, onlyMetaData);
   }
 
-  public DatabaseArchive getArchive() {
+  public SiardArchive getArchive() {
     return archive;
   }
 
@@ -113,30 +120,46 @@ public class Model {
   // loading the database is not a state... it's an effect
 
   public void closeDbConnection() {
-    DbConnectionFactory.disconnect();
+    DatabaseConnectionFactory.disconnect();
   }
 
   // TODO: maybe use some sort of visitor or provider or...
-  public void updateArchiveMetaData(String siardFormatVersion, String dbName, String dbProduct, String connection,
-                                    String dbUser, String description, String owner, String databaseCreationDate,
-                                    String archivingDate, String archiverName, String archiverContact, File targetArchive) {
-    getArchive().addArchiveMetaData(siardFormatVersion, dbName, dbProduct, connection, dbUser,
-            description, owner, databaseCreationDate, archivingDate, archiverName, archiverContact, targetArchive);
+  public void updateArchiveMetaData(String description, String owner, String dataOriginTimespan, String archiverName,
+                                    String archiverContact, File targetArchive) {
+    getArchive().addArchiveMetaData(description, owner, dataOriginTimespan, archiverName, archiverContact, targetArchive);
   }
 
-  public void provideDatabaseArchiveProperties(DatabaseArchiveVisitor visitor) {
+  public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareProperties(visitor);
     }
   }
 
-  public void provideDatabaseArchiveMetaDataProperties(DatabaseArchiveMetaDataVisitor visitor) {
+  public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
+    if (getArchive() != null) {
+      getArchive().shareProperties(visitor, databaseObject);
+    }
+  }
+
+  public void provideDatabaseArchiveObject(SiardArchiveVisitor visitor) {
+    if (getArchive() != null) {
+      getArchive().shareObject(visitor);
+    }
+  }
+
+  public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
+    if (getArchive() != null) {
+      getArchive().populate(tableView, databaseObject, type);
+    }
+  }
+
+  public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareProperties(visitor);
     }
   }
 
-  public void provideDatabaseArchiveMetaDataObject(DatabaseArchiveMetaDataVisitor visitor) {
+  public void provideDatabaseArchiveMetaDataObject(SiardArchiveMetaDataVisitor visitor) {
     if (getArchive() != null) {
       getArchive().shareObject(visitor);
     }

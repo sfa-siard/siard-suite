@@ -5,9 +5,8 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.database.DatabaseArchiveMetaData;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
-import ch.admin.bar.siardsuite.visitor.DatabaseArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,13 +14,14 @@ import javafx.concurrent.Task;
 
 import java.io.File;
 import java.sql.Connection;
+import java.time.LocalDate;
 
-public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implements Progress, DatabaseArchiveMetaDataVisitor {
+public class DatabaseLoadTask extends Task<ObservableList<String>> implements Progress, SiardArchiveMetaDataVisitor {
 
     private final Connection connection;
     private final Model model;
     private final Archive archive;
-    private DatabaseArchiveMetaData metaData;
+    private SiardArchiveMetaData metaData;
     private final boolean onlyMetaData;
 
     public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
@@ -32,18 +32,16 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
     }
 
     @Override
-    protected ObservableList<DatabaseTable> call() throws Exception {
+    protected ObservableList<String> call() throws Exception {
 
-        ObservableList<DatabaseTable> progressData = FXCollections.observableArrayList();
+        ObservableList<String> progressData = FXCollections.observableArrayList();
         connection.setAutoCommit(false);
         MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
         metadata.download(true, false, this);
         for (int i = 0; i < this.archive.getSchemas(); i++) {
             Schema schema = this.archive.getSchema(i);
             for (int y = 0; y < schema.getTables(); y++) {
-                progressData.add(new DatabaseTable(schema.getMetaSchema().getName() + "." + schema.getTable(y)
-                                                                                                  .getMetaTable()
-                                                                                                  .getName()));
+                progressData.add(schema.getMetaSchema().getName() + "." + schema.getTable(y).getMetaTable().getName());
             }
         }
 
@@ -80,10 +78,10 @@ public class DatabaseLoadTask extends Task<ObservableList<DatabaseTable>> implem
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
-                      String archivingDate, String archiverName, String archiverContact, File targetArchive) {}
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {}
 
     @Override
-    public void visit(DatabaseArchiveMetaData metaData) {
+    public void visit(SiardArchiveMetaData metaData) {
         this.metaData = metaData;
     }
 

@@ -1,15 +1,14 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.TreeContentViewModel;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-
-import java.time.LocalDate;
 
 public class ColumnPresenter extends TreePresenter {
 
@@ -22,12 +21,12 @@ public class ColumnPresenter extends TreePresenter {
 
 
   @Override
-  public void init(Controller controller, TreeContentViewModel model, RootStage stage) {
-    this.model = model.getModel();
+  public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
+    this.model = model;
     this.controller = controller;
     this.stage = stage;
 
-    this.titleTableContainer.textProperty().bind(I18n.createStringBinding(model.getTitle()));
+    this.titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
     initLabels();
 
 
