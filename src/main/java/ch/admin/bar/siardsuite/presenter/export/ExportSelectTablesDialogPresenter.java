@@ -7,7 +7,6 @@ import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -56,9 +55,12 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
 
         EventHandler<ActionEvent> closeEvent = event -> this.stage.closeDialog();
         this.closeButton.setOnAction(closeEvent);
+
         this.cancelButton.setOnAction(closeEvent);
+        this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
 
         this.saveButton.setOnAction(this::handleSaveClicked);
+        this.saveButton.textProperty().bind(I18n.createStringBinding("export.choose-location.text"));
 
         TreeItem root = new CheckBoxTreeItem("root");
         this.model.populate(root);
@@ -71,9 +73,8 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     }
 
     private void handleSaveClicked(ActionEvent actionEvent) {
-        // TODO: extract to object/ class or somewhere similar
         final DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle(I18n.get("export.file-chooser.title"));
+        directoryChooser.setTitle(I18n.get("export.choose-location.text"));
         File file = directoryChooser.showDialog(stage);
         if (Objects.nonNull(file)) {
             try {
