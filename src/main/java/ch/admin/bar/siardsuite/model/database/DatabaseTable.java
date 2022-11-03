@@ -135,7 +135,7 @@ public class DatabaseTable extends DatabaseObject {
 
     protected void export(File directory) throws IOException {
         File destination = new File(directory.getAbsolutePath(), this.name + ".html");
-        File lobFolder = new File(destination, "lobs/"); //TODO: was taken from the user properties in the original GUI
+        File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
         OutputStream outPutStream = new FileOutputStream(destination);
         this.legacyArchive.getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
