@@ -4,21 +4,18 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SiardArchive {
 
     private String archiveName;
     private boolean onlyMetaData = false;
-    private static final Map<String, List<String>> dbTypes = Map.of(
-            "MS Access", List.of("access", ""),
-            "DB/2", List.of("db2", "50000"),
-            "MySQL", List.of("mysql", "3306"),
-            "Oracle", List.of("oracle", "1521"),
-            "PostgreSQL", List.of("postgresql", "5432"),
-            "Microsoft SQL Server", List.of("sqlserver", "1433"));
     private final List<DatabaseSchema> schemas = new ArrayList<>();
     private SiardArchiveMetaData metaData;
 
@@ -33,7 +30,7 @@ public class SiardArchive {
         this.archiveName = archiveName;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         for (int i = 0; i < archive.getSchemas(); i++) {
-            schemas.add(new DatabaseSchema(this, archive.getSchema(i), onlyMetaData));
+            schemas.add(new DatabaseSchema(this, archive, archive.getSchema(i), onlyMetaData));
         }
     }
 
@@ -75,4 +72,26 @@ public class SiardArchive {
         }
     }
 
+    public void export(File directory) {
+        List<String> allTables = this.schemas.stream()
+                                           .flatMap(schema -> schema.tables.stream())
+                                           .map(databaseTable -> databaseTable.name)
+                                           .collect(
+                                                   Collectors.toList());
+        this.export(allTables, directory);
+    }
+    public void export(List<String> tablesToExport, File directory) {
+        this.schemas.forEach(schema -> schema.export(tablesToExport, directory));
+    }
+
+    public void populate(TreeItem root) {
+        List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.schemas.stream().map(schema -> {
+            CheckBoxTreeItem<String> schemaItem = new CheckBoxTreeItem<>(schema.name);
+            schemaItem.setExpanded(true);
+            schema.populate(schemaItem);
+
+            return schemaItem;
+        }).toList();
+        root.getChildren().setAll(checkBoxTreeItems);
+    }
 }

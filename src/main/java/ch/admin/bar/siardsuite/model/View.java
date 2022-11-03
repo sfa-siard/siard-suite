@@ -15,7 +15,9 @@ public enum View {
   ARCHIVE_METADATA_EDITOR("fxml/archive/archive-metadata-editor-view.fxml"),
   ARCHIVE_DOWNLOAD("fxml/archive/archive-download-view.fxml"),
   OPEN_SIARD_ARCHIVE_DIALOG("fxml/open/open-siard-archive-dialog-view.fxml"),
-  OPEN_SIARD_ARCHIVE_PREVIEW("fxml/open/open-preview-view.fxml");
+  OPEN_SIARD_ARCHIVE_PREVIEW("fxml/open/open-preview-view.fxml"),
+  EXPORT_SELECT_TABLES("fxml/export/export-select-tables-dialog.fxml"),
+  EXPORT_SUCCESS("fxml/export/export-success-dialog.fxml");
 
   private final String viewName;
 

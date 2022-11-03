@@ -71,13 +71,15 @@ public class RootStage extends Stage {
     setCenter(rootPane, view.getName());
   }
 
-  public void openDialog(String viewName) {
-    setCenter(dialogPane, viewName);
+  public void openDialog(View view) {
+    setCenter(dialogPane, view.getName());
     dialogPane.setVisible(true);
   }
+
 
   public void closeDialog() {
     dialogPane.setVisible(false);
   }
+
 
 }

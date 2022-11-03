@@ -60,7 +60,7 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
     this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveDb.view.error"));
 
 
-    this.model.getDatabaseTypes().forEach(type -> createRadioToVBox(type));
+    this.model.getDatabaseTypes().forEach(this::createRadioToVBox);
 
     this.buttonsBox = new StepperButtonBox().make(DEFAULT);
     this.borderPane.setBottom(buttonsBox);
@@ -90,8 +90,8 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
         this.errorMessage.setVisible(true);
       }
     });
-    this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG.getName()));
-    this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
+    this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG));
+    this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
   }
 
 }

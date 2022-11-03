@@ -13,12 +13,16 @@ import javafx.scene.text.Text;
 public class OpenPreviewPresenter extends PreviewPresenter {
 
 
+  
   @FXML
   protected Label title;
   @FXML
   protected Text text;
   @FXML
   public MFXButton cancelButton;
+
+  @FXML
+  public MFXButton exportButton;
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
     super.init(controller, model, stage);
@@ -31,11 +35,8 @@ public class OpenPreviewPresenter extends PreviewPresenter {
     cancelButton.setOnAction(event -> this.stage.navigate(View.START));
     cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
 
+    exportButton.setOnAction(event -> this.stage.openDialog(View.EXPORT_SELECT_TABLES));
+    exportButton.textProperty().bind(I18n.createStringBinding("button.export"));
     setListeners();
   }
-
-//  @Override
-//  protected void setListeners() {
-//    super.setListeners();
-//  }
 }

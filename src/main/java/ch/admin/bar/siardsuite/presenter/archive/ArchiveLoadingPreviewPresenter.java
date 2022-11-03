@@ -136,6 +136,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
             this.data.clear();
             this.stage.setHeight(1080.00);
         });
-        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG.getName()));
+        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
 }
