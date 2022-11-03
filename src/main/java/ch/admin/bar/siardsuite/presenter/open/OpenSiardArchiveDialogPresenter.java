@@ -7,10 +7,9 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
-
 import io.github.palexdev.materialfx.controls.MFXButton;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -21,14 +20,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.Clock;
+import java.util.Comparator;
 import java.util.List;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.ABSOLUTE_PATH;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.RECENT_FILES;
+import static ch.admin.bar.siardsuite.util.UserPreferences.sortedChildrenNames;
 
 public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
 
@@ -57,10 +62,6 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
     @FXML
     protected HBox buttonBox;
 
-    private final Preferences preferences = Preferences.userRoot().node(this.getClass().getName());
-    private final int max_recent_file_paths = 30;
-    private final String[] recentFilePaths = new String[max_recent_file_paths];
-
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
@@ -70,21 +71,20 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         title.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.title"));
         text.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.text"));
 
-        recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.name"));
-        recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.recent.files.header.date"));
+        recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("dialog.recent.files.header.name"));
+        recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("dialog.recent.files.header.date"));
 
-        for (int i = 0; i < max_recent_file_paths; i++) {
-            recentFilePaths[i] = preferences.get(String.valueOf(i), "");
-        }
-
-        for (String filePath : recentFilePaths) {
-            if (!filePath.isEmpty()) {
+        try {
+            List<String> fileHashCodes = sortedChildrenNames(RECENT_FILES, TIMESTAMP, Comparator.reverseOrder());
+            for (String fileHashCode : fileHashCodes) {
                 try {
-                    recentFilesBox.getChildren().add(getRecentFileBox(filePath));
+                    recentFilesBox.getChildren().add(getRecentFileBox(fileHashCode));
                 } catch (IOException e) {
-                    removeRecentFilePath(filePath);
+                    UserPreferences.remove(RECENT_FILES, fileHashCode);
                 }
             }
+        } catch (BackingStoreException e) {
+            throw new RuntimeException(e);
         }
 
         if (recentFilesBox.getChildren().size() == 0) {
@@ -93,8 +93,8 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             recentFilesBox.getChildren().removeIf(child -> recentFilesBox.getChildren().indexOf(child) > 2);
         }
 
-        dropFileTextTop.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.drop.file.text.top"));
-        dropFileTextMiddle.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.drop.file.text.middle"));
+        dropFileTextTop.textProperty().bind(I18n.createStringBinding("dialog.drop.file.text.top"));
+        dropFileTextMiddle.textProperty().bind(I18n.createStringBinding("dialog.drop.file.text.middle"));
 
         dropFileBox.setOnDragOver(this::handleDragOver);
         dropFileBox.setOnDragDropped(this::handleDragDropped);
@@ -141,36 +141,18 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
 
     private void showNoRecentFiles() {
         recentFilesBox.setStyle("-fx-background-color: #f8f6f69e; -fx-alignment: center");
-        final Label label = new Label(I18n.get("open.siard.archive.dialog.recent.files.nodata"));
+        final Label label = new Label(I18n.get("dialog.recent.files.nodata"));
         recentFilesBox.getChildren().add(label);
         label.setStyle("-fx-text-fill: #2a2a2a82");
     }
 
-    private void addRecentFilePath(File file) {
-        final int k = List.of(recentFilePaths).indexOf(file.getAbsolutePath());
-        final int l = (k < 0) ? max_recent_file_paths - 1 : k;
-        if (l > 0) {
-            for (int j = 0; j < l; j++) {
-                preferences.put(String.valueOf(j+1), recentFilePaths[j]);
-            }
-        }
-        preferences.put("0", file.getAbsolutePath());
-    }
-
-    private void removeRecentFilePath(String filePath)  {
-        final int l = List.of(recentFilePaths).indexOf(filePath);
-        if (l >= 0) {
-            preferences.remove(String.valueOf(l));
-            for (int j = l + 1; j < max_recent_file_paths; j++) {
-                preferences.put(String.valueOf(j-1), recentFilePaths[j]);
-            }
-        }
-    }
-
-    private HBox getRecentFileBox(String filePath) throws IOException {
+    private HBox getRecentFileBox(String fileHashCode) throws IOException {
         final HBox recentFileBox = new HBox();
 
-        if (!filePath.isEmpty()) {
+        if (!fileHashCode.isEmpty()) {
+            final Preferences preferences = UserPreferences.node(RECENT_FILES).node(fileHashCode);
+
+            final String filePath = preferences.get(ABSOLUTE_PATH.index(), "");
             final File recentFile = new File(filePath);
             final BasicFileAttributes recentFileAttributes = Files.readAttributes(Paths.get(filePath), BasicFileAttributes.class);
 
@@ -210,7 +192,13 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            addRecentFilePath(file);
+            try {
+                final Preferences preferences = UserPreferences.push(RECENT_FILES, TIMESTAMP, Comparator.reverseOrder(), String.valueOf(file.hashCode()));
+                preferences.put(ABSOLUTE_PATH.index(), file.getAbsolutePath());
+                preferences.put(TIMESTAMP.index(), String.valueOf(Clock.systemDefaultZone().millis()));
+            } catch (BackingStoreException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

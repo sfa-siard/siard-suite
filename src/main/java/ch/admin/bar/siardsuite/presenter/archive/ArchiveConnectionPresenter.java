@@ -9,6 +9,7 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
+import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.fxml.FXML;
@@ -19,9 +20,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-
+import java.time.Clock;
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
 
@@ -85,8 +92,13 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
   @Override
   public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
     this.init(controller, model, stage);
+
     addTextWithStyles();
     addFormText();
+
+    if (controller.recentDatabaseConnection != null) {
+      addRecentDatabaseConnection();
+    }
 
     this.errorMessage.setVisible(false);
     this.buttonsBox = new StepperButtonBox().make(DEFAULT);
@@ -100,7 +112,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.subtitleRight.textProperty().bind(I18n.createStringBinding("archiveConnection.view.subtitleRight"));
     this.textLeft.textProperty().bind(I18n.createStringBinding("archiveConnection.view.textLeft"));
     this.textRight.textProperty().bind(I18n.createStringBinding("archiveConnection.view.textRight"));
-    this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error"));
 
     for (int i = 0; i < textFlow.getChildren().size(); i++) {
       Text text = (Text) textFlow.getChildren().get(i);
@@ -120,6 +131,16 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     urlField.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.url.label"));
     toggleSave.textProperty().bind(I18n.createStringBinding("archiveConnection.view.toggleSave"));
     connectionName.floatingTextProperty().bind(I18n.createStringBinding("archiveConnection.view.connectionName.label"));
+  }
+
+  private void addRecentDatabaseConnection() {
+    Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection);
+    dbServerField.setText(preferences.get(DATABASE_SERVER.index(), ""));
+    dbNameField.setText(preferences.get(DATABASE_NAME.index(), ""));
+    usernameField.setText(preferences.get(USER_NAME.index(), ""));
+    urlField.setText(preferences.get(CONNECTION_URL.index(), ""));
+    connectionName.setText(controller.recentDatabaseConnection);
+    controller.recentDatabaseConnection = null;
   }
 
   private void setListeners(MFXStepper stepper) {
@@ -155,13 +176,46 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     infoButton.setOnMouseExited(event -> tooltip.hide());
 
-    this.buttonsBox.next().setOnAction((event) -> {
-      if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
-        this.errorMessage.setVisible(true);
+    buttonsBox.next().setOnAction((event) -> {
+      if (dbServerField.getText().isEmpty()) {
+        errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.database.server"));
+        errorMessage.setVisible(true);
+      } else if (dbNameField.getText().isEmpty()) {
+        errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.database.name"));
+        errorMessage.setVisible(true);
+      } else if (usernameField.getText().isEmpty()) {
+        errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.user.name"));
+        errorMessage.setVisible(true);
+      } else if (passwordField.getText().isEmpty()) {
+        errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.user.password"));
+        errorMessage.setVisible(true);
+      } else if (urlField.getText().isEmpty()) {
+        errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.connection.url"));
+        errorMessage.setVisible(true);
+      } else if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
+        errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.connection.name"));
+        errorMessage.setVisible(true);
+      } else if (toggleSave.isSelected() && connectionName.getText().contains("/")) {
+        errorMessage.textProperty().bind(I18n.createStringBinding("archiveConnection.view.error.connection.name.symbol"));
+        errorMessage.setVisible(true);
       } else {
+        if (toggleSave.isSelected()) {
+          try {
+            final Preferences preferences = UserPreferences.push(DATABASE_CONNECTION, TIMESTAMP, Comparator.reverseOrder(), connectionName.getText());
+            preferences.put(DATABASE_SERVER.index(), dbServerField.getText());
+            preferences.put(DATABASE_NAME.index(), dbNameField.getText());
+            preferences.put(USER_NAME.index(), usernameField.getText());
+            preferences.put(USER_PASSWORD.index(), passwordField.getText());
+            preferences.put(CONNECTION_URL.index(), urlField.getText());
+            preferences.put(STORAGE_DATE.index(), I18n.getLocaleDate(LocalDate.now().toString()));
+            preferences.put(TIMESTAMP.index(), String.valueOf(Clock.systemDefaultZone().millis()));
+          } catch (BackingStoreException e) {
+            throw new RuntimeException(e);
+          }
+        }
         controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
-        this.errorMessage.setVisible(false);
-        this.stage.setHeight(950);
+        errorMessage.setVisible(false);
+        stage.setHeight(950);
         stepper.next();
         stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT));
       }

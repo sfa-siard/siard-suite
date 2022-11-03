@@ -613,3 +613,50 @@
     -fx-background-color: #0e0e0e82;
 }
 
+/* Select Connections */
+
+.connections-vbox-header-name {
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+    -fx-max-width: infinity;
+}
+
+.connections-vbox-header-date {
+    -fx-font-size: 10;
+    -fx-alignment: center-right;
+}
+
+.connections-vbox-list {
+    -fx-pref-width: 330.0;
+}
+
+.connections-vbox-list .connections-hbox {
+    -fx-border-color: #d3d3d3;
+    -fx-border-width: 2 2 2 2;
+    -fx-padding: 5 10 5 10;
+}
+
+.connections-vbox-list .connections-hbox:hover {
+    -fx-background-color: #eceaea82;
+}
+
+.connections-vbox-list .connections-hbox .icon-label {
+    -fx-graphic: url(../icons/file.png);
+    -fx-pref-width: 40.0;
+    -fx-pref-height: 40.0;
+}
+
+.connections-vbox-list .connections-hbox .name-label {
+    -fx-pref-width: 260.0;
+    -fx-pref-height: 40.0;
+    -fx-font-size: 15;
+    -fx-alignment: center-left;
+}
+
+.connections-vbox-list .connections-hbox .date-label {
+    -fx-pref-width: 110.0;
+    -fx-pref-height: 40.0;
+    -fx-alignment: center-right;
+    -fx-text-fill: #1a1a1aa8;
+}
