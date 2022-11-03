@@ -12,8 +12,6 @@ import javafx.scene.text.Text;
 
 public class OpenPreviewPresenter extends PreviewPresenter {
 
-
-  
   @FXML
   protected Label title;
   @FXML
@@ -39,4 +37,5 @@ public class OpenPreviewPresenter extends PreviewPresenter {
     exportButton.textProperty().bind(I18n.createStringBinding("button.export"));
     setListeners();
   }
+
 }

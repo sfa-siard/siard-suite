@@ -60,8 +60,8 @@ public class I18n {
     stringProperty.bind(I18n.createStringBinding(key, args));
   }
 
-  public static ObjectBinding<TreeAttributeWrapper> createTreeAtributeWrapperBinding(final String key, final int id, final TreeContentView type, DatabaseObject databaseObject, final Object... args) {
-    return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(get(key, args), id, type, databaseObject), locale);
+  public static ObjectBinding<TreeAttributeWrapper> createTreeAtributeWrapperBinding(final String key, final TreeContentView type, DatabaseObject databaseObject, final Object... args) {
+    return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(get(key, args), type, databaseObject), locale);
   }
 
   public static String getLocaleDate(final LocalDate date) {

@@ -63,38 +63,14 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     this.init(controller, model, stage);
   }
 
-  /* Cantor's pairing function */
-  private int pair(final int a, final int b) {
-    if (a < 0 || b < 0) {
-      throw new IllegalArgumentException("Pairing is defined only for natural numbers.");
-    }
-    return (int) (0.5 * (a + b) * (a + b + 1) + b);
-  }
-
-  /* Cantor's unpairing function: unpair(pair(a, b), 0) = a and unpair(pair(a, b), 1) = b */
-  private int unpair(final int c, final int i) {
-    if (c < 0 || i < 0 || i > 1) {
-      throw new IllegalArgumentException("Unpairing is defined only for natural numbers as codes of pairs and for coordinates 0 and 1.");
-    }
-    final int u = (int) Math.floor(0.5 * (Math.sqrt(8 * c + 1) - 1));
-    final int v = (int) (0.5 * (Math.pow(u, 2) + u));
-    int r;
-    if (i == 1) {
-      r = c - v;
-    } else {
-      r = u - (c - v);
-    }
-    return r;
-  }
-
   protected void initTreeView() {
     model.provideDatabaseArchiveObject(this);
     model.provideDatabaseArchiveProperties(this);
 
-    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), pair(0, 0), TreeContentView.ROOT, null), db);
+    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), TreeContentView.ROOT, null), db);
 
     final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
-    schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.schemas", pair(1, 0), TreeContentView.SCHEMAS, null, schemas.size()));
+    schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.schemas", TreeContentView.SCHEMAS, null, schemas.size()));
     TreeItem<TreeAttributeWrapper> schemaItem;
 
     TreeItem<TreeAttributeWrapper> tablesItem;
@@ -108,29 +84,29 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     for (DatabaseSchema schema : schemas) {
       model.provideDatabaseArchiveProperties(this, schema);
 
-      schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, pair(2, schemas.indexOf(schema)), TreeContentView.SCHEMA, schema));
+      schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, TreeContentView.SCHEMA, schema));
 
       tablesItem = new TreeItem<>();
-      tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.tables", pair(3, 0), TreeContentView.TABLES, schema, tables.size()));
+      tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.tables", TreeContentView.TABLES, schema, tables.size()));
 
       for (DatabaseTable table : tables) {
         model.provideDatabaseArchiveProperties(this, table);
 
-        tableItem = new TreeItem<>(new TreeAttributeWrapper(tableName, pair(4, tables.indexOf(table)), TreeContentView.TABLE, table));
+        tableItem = new TreeItem<>(new TreeAttributeWrapper(tableName, TreeContentView.TABLE, table));
 
         columnsItem = new TreeItem<>();
-        columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns", pair(5, 0), TreeContentView.COLUMNS, table, columns.size()));
+        columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns", TreeContentView.COLUMNS, table, columns.size()));
 
         for (DatabaseColumn column : columns) {
           model.provideDatabaseArchiveProperties(this, column);
 
-          columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, pair(6, columns.indexOf(column)), TreeContentView.COLUMN, table));
+          columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, table));
           columnsItem.getChildren().add(columnItem);
         }
 
         if (!onlyMetaData) {
           rowsItem = new TreeItem<>();
-          rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.rows", pair(7, 0), TreeContentView.ROWS, table, rows.size()));
+          rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.rows", TreeContentView.ROWS, table, rows.size()));
 
           tableItem.getChildren().add(rowsItem);
         }

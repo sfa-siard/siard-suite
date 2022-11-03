@@ -7,13 +7,13 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
-
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SiardArchive {
 
+    private Archive archive;
     private String archiveName;
     private boolean onlyMetaData = false;
     private final List<DatabaseSchema> schemas = new ArrayList<>();
@@ -26,6 +26,7 @@ public class SiardArchive {
     }
 
     public SiardArchive(String archiveName, Archive archive, boolean onlyMetaData) {
+        this.archive = archive;
         this.onlyMetaData = onlyMetaData;
         this.archiveName = archiveName;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
