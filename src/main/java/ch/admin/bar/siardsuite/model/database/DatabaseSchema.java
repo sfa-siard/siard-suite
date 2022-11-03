@@ -23,19 +23,21 @@ import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
 
-    protected final SiardArchive archive;
+    protected final SiardArchive siardArchive;
+    protected final Archive archive;
     protected final boolean onlyMetaData;
     protected final String name;
     protected final String description;
     protected final List<DatabaseTable> tables = new ArrayList<>();
 
-    protected DatabaseSchema(SiardArchive archive, Archive legacyArchive, Schema schema, boolean onlyMetaData) {
+    protected DatabaseSchema(SiardArchive siardArchive, Archive archive, Schema schema, boolean onlyMetaData) {
+        this.siardArchive = siardArchive;
         this.archive = archive;
         this.onlyMetaData = onlyMetaData;
         name = schema.getMetaSchema().getName();
         description = schema.getMetaSchema().getDescription();
         for (int i = 0; i < schema.getTables(); i++) {
-            tables.add(new DatabaseTable(archive, this, schema.getTable(i), legacyArchive, onlyMetaData));
+            tables.add(new DatabaseTable(siardArchive, archive, this, schema.getTable(i), onlyMetaData));
         }
     }
 

@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.*;
-import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -20,25 +19,25 @@ import java.util.Map;
 
 public class DatabaseTable extends DatabaseObject {
 
-    protected final SiardArchive archive;
+    protected final SiardArchive siardArchive;
+    protected final Archive archive;
     protected final DatabaseSchema schema;
     protected final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     protected final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
     protected final String numberOfRows;
-    private final Archive legacyArchive;
-    protected DatabaseTable(SiardArchive archive, Archive legacyArchive, DatabaseSchema schema, Table table) {
-        this(archive, schema, table,  legacyArchive, false);
+    protected DatabaseTable(SiardArchive siardArchive, Archive archive, DatabaseSchema schema, Table table) {
+        this(siardArchive, archive, schema, table, false);
     }
 
-    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, Archive legacyArchive, boolean onlyMetaData) {
-        this.archive = archive;
+    protected DatabaseTable(SiardArchive siardArchive, Archive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
+        this.siardArchive = siardArchive;
         this.schema = schema;
-        this.legacyArchive = legacyArchive;
+        this.archive = archive;
         name = table.getMetaTable().getName();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
+            columns.add(new DatabaseColumn(siardArchive, archive, schema, this, table.getMetaTable().getMetaColumn(i)));
         }
         numberOfColumns = String.valueOf(columns.size());
         String n = "";
@@ -47,7 +46,7 @@ public class DatabaseTable extends DatabaseObject {
                 int i = 0;
                 final RecordDispenser recordDispenser = table.openRecords();
                 while (i < table.getMetaTable().getRows()) {
-                    rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
+                    rows.add(new DatabaseRow(siardArchive, archive, schema, this, recordDispenser.get()));
                     i++;
                 }
                 n = String.valueOf(rows.size());
@@ -137,7 +136,7 @@ public class DatabaseTable extends DatabaseObject {
         File destination = new File(directory.getAbsolutePath(), this.name + ".html");
         File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
         OutputStream outPutStream = new FileOutputStream(destination);
-        this.legacyArchive.getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
+        this.archive.getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
     }
 }

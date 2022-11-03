@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -9,7 +10,8 @@ import java.sql.Types;
 
 public class DatabaseCell extends DatabaseObject {
 
-    protected final SiardArchive archive;
+    protected final SiardArchive siardArchive;
+    protected final Archive archive;
     protected final DatabaseSchema schema;
     protected final DatabaseTable table;
     protected final DatabaseColumn column;
@@ -19,11 +21,12 @@ public class DatabaseCell extends DatabaseObject {
     protected final String type;
     protected final String value;
 
-    protected DatabaseCell(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, DatabaseRow row, Cell cell) {
+    protected DatabaseCell(SiardArchive siardArchive, Archive archive, DatabaseSchema schema, DatabaseTable table, DatabaseRow row, Cell cell) {
+        this.siardArchive = siardArchive;
         this.archive = archive;
         this.schema = schema;
         this.table = table;
-        column = new DatabaseColumn(archive, schema, table, cell.getMetaColumn());
+        column = new DatabaseColumn(siardArchive, archive, schema, table, cell.getMetaColumn());
         this.row = row;
         index = String.valueOf(cell.getMetaColumn().getPosition());
         name = "Cell " + index;
