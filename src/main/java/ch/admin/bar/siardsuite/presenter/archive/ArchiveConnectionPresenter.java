@@ -86,6 +86,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     this.controller = controller;
     this.stage = stage;
 
+    this.stage.setHeight(1200);
     this.tooltip = new SiardTooltip("archiveConnection.view.tooltip");
   }
 
