@@ -136,13 +136,13 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
   private void addRecentDatabaseConnection() {
     Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection);
-    dbTypeString = preferences.get(DATABASE_SYSTEM.index(), "");
+    dbTypeString = preferences.get(DATABASE_SYSTEM.name(), "");
     controller.setDatabaseType(dbTypeString);
-    dbServerField.setText(preferences.get(DATABASE_SERVER.index(), ""));
-    portField.setText(preferences.get(PORT_NUMBER.index(), ""));
-    dbNameField.setText(preferences.get(DATABASE_NAME.index(), ""));
-    usernameField.setText(preferences.get(USER_NAME.index(), ""));
-    urlField.setText(preferences.get(CONNECTION_URL.index(), ""));
+    dbServerField.setText(preferences.get(DATABASE_SERVER.name(), ""));
+    portField.setText(preferences.get(PORT_NUMBER.name(), ""));
+    dbNameField.setText(preferences.get(DATABASE_NAME.name(), ""));
+    usernameField.setText(preferences.get(USER_NAME.name(), ""));
+    urlField.setText(preferences.get(CONNECTION_URL.name(), ""));
     connectionName.setText(controller.recentDatabaseConnection);
     controller.recentDatabaseConnection = null;
   }
@@ -207,15 +207,15 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         if (toggleSave.isSelected()) {
           try {
             final Preferences preferences = UserPreferences.push(DATABASE_CONNECTION, TIMESTAMP, Comparator.reverseOrder(), connectionName.getText());
-            preferences.put(DATABASE_SYSTEM.index(), model.getDatabaseProduct().get());
-            preferences.put(DATABASE_SERVER.index(), dbServerField.getText());
-            preferences.put(PORT_NUMBER.index(), portField.getText());
-            preferences.put(DATABASE_NAME.index(), dbNameField.getText());
-            preferences.put(USER_NAME.index(), usernameField.getText());
-            preferences.put(USER_PASSWORD.index(), passwordField.getText());
-            preferences.put(CONNECTION_URL.index(), urlField.getText());
-            preferences.put(STORAGE_DATE.index(), I18n.getLocaleDate(LocalDate.now().toString()));
-            preferences.put(TIMESTAMP.index(), String.valueOf(Clock.systemDefaultZone().millis()));
+            preferences.put(DATABASE_SYSTEM.name(), model.getDatabaseProduct().get());
+            preferences.put(DATABASE_SERVER.name(), dbServerField.getText());
+            preferences.put(PORT_NUMBER.name(), portField.getText());
+            preferences.put(DATABASE_NAME.name(), dbNameField.getText());
+            preferences.put(USER_NAME.name(), usernameField.getText());
+            preferences.put(USER_PASSWORD.name(), passwordField.getText());
+            preferences.put(CONNECTION_URL.name(), urlField.getText());
+            preferences.put(STORAGE_DATE.name(), I18n.getLocaleDate(LocalDate.now().toString()));
+            preferences.put(TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
           } catch (BackingStoreException e) {
             throw new RuntimeException(e);
           }
