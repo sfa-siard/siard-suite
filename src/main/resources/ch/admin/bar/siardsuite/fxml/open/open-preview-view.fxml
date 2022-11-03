@@ -88,7 +88,7 @@
     <bottom>
     </bottom>
    <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="100.0" prefWidth="200.0" styleClass="btn-box" BorderPane.alignment="CENTER">
          <children>
             <MFXButton fx:id="cancelButton">
                <styleClass>
@@ -96,6 +96,15 @@
                   <String fx:value="primary" />
                </styleClass>
             </MFXButton>
+             <MFXButton fx:id="exportButton">
+                 <styleClass>
+                     <String fx:value="button" />
+                     <String fx:value="secondary" />
+                 </styleClass>
+               <HBox.margin>
+                  <Insets left="25.0" />
+               </HBox.margin>
+             </MFXButton>
          </children>
          <BorderPane.margin>
             <Insets />
