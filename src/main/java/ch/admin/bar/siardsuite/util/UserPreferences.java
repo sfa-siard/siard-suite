@@ -71,7 +71,8 @@ public class UserPreferences {
         CONNECTION_URL("5"),
         STORAGE_DATE("6"),
         ABSOLUTE_PATH("7"),
-        TIMESTAMP("8");
+        TIMESTAMP("8"),
+        DATABASE_SYSTEM("9");;
 
         private final String index;
 

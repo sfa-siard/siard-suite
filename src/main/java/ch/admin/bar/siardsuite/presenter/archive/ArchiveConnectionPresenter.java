@@ -135,6 +135,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
   private void addRecentDatabaseConnection() {
     Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection);
+    dbTypeString = preferences.get(DATABASE_SYSTEM.index(), "");
     dbServerField.setText(preferences.get(DATABASE_SERVER.index(), ""));
     portField.setText(preferences.get(PORT_NUMBER.index(), ""));
     dbNameField.setText(preferences.get(DATABASE_NAME.index(), ""));
@@ -204,6 +205,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         if (toggleSave.isSelected()) {
           try {
             final Preferences preferences = UserPreferences.push(DATABASE_CONNECTION, TIMESTAMP, Comparator.reverseOrder(), connectionName.getText());
+            preferences.put(DATABASE_SYSTEM.index(), dbTypeString);
             preferences.put(DATABASE_SERVER.index(), dbServerField.getText());
             preferences.put(PORT_NUMBER.index(), portField.getText());
             preferences.put(DATABASE_NAME.index(), dbNameField.getText());
