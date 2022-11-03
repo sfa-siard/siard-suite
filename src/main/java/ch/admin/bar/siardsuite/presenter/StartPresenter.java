@@ -39,7 +39,7 @@ public class StartPresenter extends Presenter {
         });
         this.upload.setOnAction(event -> {
             this.controller.setWorkflow(UPLOAD);
-            System.out.println("uplaod button pressed");
+            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
         });
         this.export.setOnAction(event -> {
             this.controller.setWorkflow(EXPORT);
