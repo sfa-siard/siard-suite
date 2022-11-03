@@ -155,11 +155,9 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
               .replace(PORT, portString)
               .replace(DB_NAME, TEST_DB );
 
-      if (controller.recentDatabaseConnection == null) {
-        portField.setText(portString);
-        portField.setPromptText(portString);
-        urlField.setPromptText(url);
-      }
+      portField.setText(portString);
+      portField.setPromptText(portString);
+      urlField.setPromptText(url);
     });
 
     dbServerField.setOnKeyReleased(this::handleKeyEvent);
