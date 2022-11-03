@@ -9,15 +9,16 @@ import java.util.stream.Collectors;
 
 public class UserPreferences {
 
+    private static final Preferences root = Preferences.userRoot();
     private static final int max_stack_size = 30;
 
     public static Preferences node(NodePath nodePath) {
-        return Preferences.userRoot().node(nodePath.path());
+        return root.node(nodePath.path());
     }
 
     public static void clear() throws BackingStoreException {
-        for (String childName : Preferences.userRoot().childrenNames()) {
-            Preferences.userRoot().node(childName).removeNode();
+        for (String childName : root.childrenNames()) {
+            root.node(childName).removeNode();
         }
     }
 
@@ -63,13 +64,14 @@ public class UserPreferences {
 
     public enum KeyIndex {
         DATABASE_SERVER("0"),
-        DATABASE_NAME("1"),
-        USER_NAME("2"),
-        USER_PASSWORD("3"),
-        CONNECTION_URL("4"),
-        STORAGE_DATE("5"),
-        ABSOLUTE_PATH("6"),
-        TIMESTAMP("7");
+        PORT_NUMBER("1"),
+        DATABASE_NAME("2"),
+        USER_NAME("3"),
+        USER_PASSWORD("4"),
+        CONNECTION_URL("5"),
+        STORAGE_DATE("6"),
+        ABSOLUTE_PATH("7"),
+        TIMESTAMP("8");
 
         private final String index;
 
