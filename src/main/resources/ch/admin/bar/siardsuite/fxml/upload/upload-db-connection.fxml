@@ -156,11 +156,7 @@
                                 <Insets bottom="24.0" top="10.0" />
                             </VBox.margin>
                         </HBox>
-                        <MFXTextField fx:id="connectionName" maxWidth="1.7976931348623157E308" styleClass="form-field">
-                            <VBox.margin>
-                                <Insets bottom="10.0" top="24.0" />
-                            </VBox.margin>
-                        </MFXTextField>
+                  <HBox prefHeight="100.0" prefWidth="200.0" />
                         <Label fx:id="errorMessage" styleClass="error-text">
                             <VBox.margin>
                                 <Insets />

@@ -70,8 +70,6 @@ public class UploadConnectionPresenter extends StepperPresenter {
     @FXML
     public MFXTextField portField;
     @FXML
-    public MFXTextField connectionName;
-    @FXML
     public BorderPane borderPane;
     @FXML
     private StepperButtonBox buttonsBox;
@@ -133,7 +131,6 @@ public class UploadConnectionPresenter extends StepperPresenter {
         I18n.bind(usernameField.floatingTextProperty(), "archiveConnection.view.username.label");
         I18n.bind(passwordField.floatingTextProperty(), "archiveConnection.view.password.label");
         I18n.bind(urlField.floatingTextProperty(), "archiveConnection.view.url.label");
-        I18n.bind(connectionName.floatingTextProperty(), "archiveConnection.view.connectionName.label");
         I18n.bind(titleNewSchemaName.textProperty(), "uploadConnection.view.new.schema.name");
     }
 
@@ -146,7 +143,6 @@ public class UploadConnectionPresenter extends StepperPresenter {
         dbNameField.setText(preferences.get(DATABASE_NAME.name(), ""));
         usernameField.setText(preferences.get(USER_NAME.name(), ""));
         urlField.setText(preferences.get(CONNECTION_URL.name(), ""));
-        connectionName.setText(controller.recentDatabaseConnection);
         controller.recentDatabaseConnection = null;
     }
 
