@@ -125,9 +125,9 @@ public class Model {
   }
 
   // TODO: maybe use some sort of visitor or provider or...
-  public void updateArchiveMetaData(String description, String owner, String dataOriginTimespan, String archiverName,
+  public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan, String archiverName,
                                     String archiverContact, File targetArchive) {
-    getArchive().addArchiveMetaData(description, owner, dataOriginTimespan, archiverName, archiverContact, targetArchive);
+    getArchive().addArchiveMetaData(dbName, description, owner, dataOriginTimespan, archiverName, archiverContact, targetArchive);
   }
 
   public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {

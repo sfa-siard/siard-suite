@@ -34,9 +34,9 @@ public class SiardArchive {
         }
     }
 
-    public void addArchiveMetaData(String databaseDescription, String databaseOwner, String dataOriginTimespan,
+    public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner, String dataOriginTimespan,
                                    String archiverName, String archiverContact, File targetArchive) {
-        this.metaData = new SiardArchiveMetaData(databaseDescription, databaseOwner, dataOriginTimespan,
+        this.metaData = new SiardArchiveMetaData(dbName, databaseDescription, databaseOwner, dataOriginTimespan,
                 archiverName, archiverContact, targetArchive);
     }
 
