@@ -122,7 +122,7 @@ public class UploadDbDialogPresenter extends DialogPresenter {
     private void showRecentConnection(String connectionName) {
         controller.recentDatabaseConnection = connectionName;
         stage.closeDialog();
-        stage.navigate(View.ARCHIVE_STEPPER);
+        stage.navigate(View.UPLOAD_STEPPER);
     }
 
 }
