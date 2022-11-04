@@ -84,13 +84,13 @@ public class UploadChooseDbmsPresenter extends StepperPresenter {
                 this.errorMessage.setVisible(false);
                 this.stage.setHeight(1080.00);
                 stepper.next();
-                stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT));
+                stepper.fireEvent(getUpdateEvent(SiardEvent.UPLOAD_DBMS_SELECTED));
                 //fire event
             } else {
                 this.errorMessage.setVisible(true);
             }
         });
-        this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG));
-        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+        this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG));
+        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.UPLOAD_ABORT_DIALOG));
     }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" styleClass="dialog" stylesheets="@../../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadAbortDialogPresenter">
+    <center>
+        <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0" BorderPane.alignment="CENTER">
+            <top>
+                <HBox BorderPane.alignment="CENTER_LEFT">
+                    <children>
+                        <Label fx:id="title" prefHeight="42.0" styleClass="dialog-title" text="Label" HBox.hgrow="ALWAYS" />
+                        <MFXButton fx:id="closeButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" styleClass="dialog-close-button" text="X" HBox.hgrow="NEVER" />
+                    </children>
+                    <BorderPane.margin>
+                        <Insets bottom="25.0" />
+                    </BorderPane.margin>
+                </HBox>
+            </top>
+            <center>
+                <VBox prefHeight="61.0" prefWidth="330.0" BorderPane.alignment="TOP_LEFT">
+                    <children>
+                        <Text fx:id="text" styleClass="dialog-text" textOrigin="BOTTOM" />
+                    </children>
+                </VBox>
+            </center>
+        </BorderPane>
+    </center>
+    <bottom>
+        <HBox fx:id="buttonBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
+         <children>
+             <MFXButton fx:id="cancel">
+                 <styleClass>
+                     <String fx:value="button" />
+                     <String fx:value="secondary" />
+                 </styleClass>
+             </MFXButton>
+            <MFXButton fx:id="confirm">
+               <styleClass>
+                  <String fx:value="button" />
+                  <String fx:value="primary" />
+               </styleClass>
+            </MFXButton>
+         </children></HBox>
+    </bottom>
+</BorderPane>
