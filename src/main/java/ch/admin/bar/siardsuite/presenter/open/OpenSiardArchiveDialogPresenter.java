@@ -70,11 +70,11 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        title.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.title"));
-        text.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.text"));
+        I18n.bind(title.textProperty(),"open.siard.archive.dialog.title");
+        I18n.bind(text.textProperty(), "open.siard.archive.dialog.text");
 
-        recentFilesHeaderName.textProperty().bind(I18n.createStringBinding("dialog.recent.files.header.name"));
-        recentFilesHeaderDate.textProperty().bind(I18n.createStringBinding("dialog.recent.files.header.date"));
+        I18n.bind(recentFilesHeaderName.textProperty(),"dialog.recent.files.header.name");
+        I18n.bind(recentFilesHeaderDate.textProperty(),"dialog.recent.files.header.date");
 
         try {
             List<String> fileHashCodes = sortedChildrenNames(RECENT_FILES, TIMESTAMP, Comparator.reverseOrder());
@@ -95,13 +95,13 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             recentFilesBox.getChildren().removeIf(child -> recentFilesBox.getChildren().indexOf(child) > 2);
         }
 
-        dropFileTextTop.textProperty().bind(I18n.createStringBinding("dialog.drop.file.text.top"));
-        dropFileTextMiddle.textProperty().bind(I18n.createStringBinding("dialog.drop.file.text.middle"));
+        I18n.bind(dropFileTextTop.textProperty(),"dialog.drop.file.text.top");
+        I18n.bind(dropFileTextMiddle.textProperty(),"dialog.drop.file.text.middle");
 
         dropFileBox.setOnDragOver(this::handleDragOver);
         dropFileBox.setOnDragDropped(this::handleDragDropped);
 
-        chooseFileButton.textProperty().bind(I18n.createStringBinding("open.siard.archive.dialog.choose.file.button"));
+        I18n.bind(chooseFileButton.textProperty(), "open.siard.archive.dialog.choose.file.button");
         chooseFileButton.getStyleClass().setAll("button", "secondary");
 
         chooseFileButton.setOnAction(this::handleChooseFile);
@@ -210,7 +210,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         } else if (Workflow.EXPORT.equals(controller.getWorkflow())) {
             stage.openDialog(View.EXPORT_SELECT_TABLES);
         } else {
-            throw new UnsupportedOperationException("I don't no what to show for workflow " + controller.getWorkflow());
+            stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG);
         }
     }
 }
