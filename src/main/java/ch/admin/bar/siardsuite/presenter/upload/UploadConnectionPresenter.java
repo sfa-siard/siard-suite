@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.model.database.SiardArchiveDatabaseNameVisitor;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -31,7 +32,7 @@ import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
-public class UploadConnectionPresenter extends StepperPresenter {
+public class UploadConnectionPresenter extends StepperPresenter implements SiardArchiveDatabaseNameVisitor {
 
     private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
     private static final String TEST_DB = "test-db";
@@ -108,6 +109,7 @@ public class UploadConnectionPresenter extends StepperPresenter {
         errorMessage.setVisible(false);
         buttonsBox = new StepperButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
+        this.model.getArchive().databaseName(this);
         setListeners(stepper);
     }
 
@@ -231,5 +233,11 @@ public class UploadConnectionPresenter extends StepperPresenter {
             urlField.setText(url);
         }
         event.consume();
+    }
+
+    @Override
+    public void visit(String databaseName) {
+        this.currentName.setText(databaseName);
+        this.newName.setText(databaseName);
     }
 }

@@ -94,4 +94,8 @@ public class SiardArchive {
         }).toList();
         root.getChildren().setAll(checkBoxTreeItems);
     }
+
+    public void databaseName(SiardArchiveDatabaseNameVisitor visitor) {
+        this.metaData.accept(visitor);
+    }
 }

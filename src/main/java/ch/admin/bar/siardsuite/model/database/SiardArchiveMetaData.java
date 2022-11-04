@@ -72,6 +72,10 @@ public class SiardArchiveMetaData {
                 archiverName.getValue(), archiverContact.getValue(), targetArchive);
     }
 
+    public void accept(SiardArchiveDatabaseNameVisitor visitor) {
+        visitor.visit(databaseName.getValue());
+
+    }
     public void shareObject(SiardArchiveMetaDataVisitor visitor) {
         visitor.visit(this);
     }
