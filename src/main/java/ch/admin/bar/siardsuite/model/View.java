@@ -17,7 +17,11 @@ public enum View {
   OPEN_SIARD_ARCHIVE_DIALOG("fxml/open/open-siard-archive-dialog-view.fxml"),
   OPEN_SIARD_ARCHIVE_PREVIEW("fxml/open/open-preview-view.fxml"),
   EXPORT_SELECT_TABLES("fxml/export/export-select-tables-dialog.fxml"),
-  EXPORT_SUCCESS("fxml/export/export-success-dialog.fxml");
+  EXPORT_SUCCESS("fxml/export/export-success-dialog.fxml"),
+  UPLOAD_DB_CONNECTION_DIALOG("fxml/upload/upload-db-dialog.fxml"),
+  UPLOAD_STEPPER("fxml/upload/upload-stepper.fxml"),
+  UPLOAD_CHOOSE_DBMS("fxml/upload/upload-choose-dbms.fxml"),
+  UPLOAD_ABORT_DIALOG("fxml/upload/upload-abort-dialog.fxml");
 
   private final String viewName;
 

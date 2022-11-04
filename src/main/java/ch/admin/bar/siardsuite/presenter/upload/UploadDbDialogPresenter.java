@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.presenter.archive;
+package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
@@ -15,16 +15,18 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.STORAGE_DATE;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 import static ch.admin.bar.siardsuite.util.UserPreferences.sortedChildrenNames;
 
-public class ArchiveDbDialogPresenter extends DialogPresenter {
+public class UploadDbDialogPresenter extends DialogPresenter {
 
     @FXML
     protected Label title;
@@ -51,18 +53,17 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        title.textProperty().bind(I18n.createStringBinding("archiveDbDialog.title"));
-        text.textProperty().bind(I18n.createStringBinding("archiveDbDialog.text"));
-
-        newConnectionButton.textProperty().bind(I18n.createStringBinding("archiveDbDialog.btnNewConnection"));
+        I18n.bind(title.textProperty(), "uploadDbDialog.title");
+        I18n.bind(text.textProperty(), "uploadDbDialog.text");
+        I18n.bind(newConnectionButton.textProperty(),"archiveDbDialog.btnNewConnection");
 
         newConnectionButton.setOnAction(event -> {
             stage.closeDialog();
-            stage.navigate(View.ARCHIVE_STEPPER);
+            stage.navigate(View.UPLOAD_STEPPER);
         });
 
-        recentConnectionsHeaderName.textProperty().bind(I18n.createStringBinding("dialog.recent.connections.header.name"));
-        recentConnectionsHeaderDate.textProperty().bind(I18n.createStringBinding("dialog.recent.connections.header.date"));
+        I18n.bind(recentConnectionsHeaderName.textProperty(),"dialog.recent.connections.header.name");
+        I18n.bind(recentConnectionsHeaderDate.textProperty(), "dialog.recent.connections.header.date");
 
         try {
             List<String> connectionNames = sortedChildrenNames(DATABASE_CONNECTION, TIMESTAMP, Comparator.reverseOrder());
@@ -119,7 +120,7 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
     private void showRecentConnection(String connectionName) {
         controller.recentDatabaseConnection = connectionName;
         stage.closeDialog();
-        stage.navigate(View.ARCHIVE_STEPPER);
+        stage.navigate(View.UPLOAD_STEPPER);
     }
 
 }

@@ -8,6 +8,8 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -50,8 +52,12 @@ public class I18n {
     return String.format(bundle.getString(key), args);
   }
 
+  @Deprecated
   public static StringBinding createStringBinding(final String key, final Object... args) {
     return Bindings.createStringBinding(() -> get(key, args), locale);
+  }
+  public static void bind(StringProperty stringProperty, final String key, final Object... args) {
+    stringProperty.bind(I18n.createStringBinding(key, args));
   }
 
   public static ObjectBinding<TreeAttributeWrapper> createTreeAtributeWrapperBinding(final String key, final int id, final TreeContentView type, DatabaseObject databaseObject, final Object... args) {
@@ -72,5 +78,4 @@ public class I18n {
     final LocalDate date = LocalDate.parse(yyyy_mm_dd);
     return getLocaleDate(date);
   }
-
 }

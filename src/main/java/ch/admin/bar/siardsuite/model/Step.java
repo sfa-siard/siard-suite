@@ -1,5 +1,5 @@
 package ch.admin.bar.siardsuite.model;
 
-public record Step(String key, String contentView, Integer position, Boolean visible) {
+public record Step(String key, View contentView, Integer position, Boolean visible) {
 
 }
