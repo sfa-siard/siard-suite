@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.Step;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
@@ -50,9 +51,9 @@ public abstract class StepperPresenter extends Presenter {
 
   }
 
-  private Node loadView(String viewName, MFXStepper stepper) {
+  private Node loadView(View viewName, MFXStepper stepper) {
     try {
-      FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
+      FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName.getName()));
       Node container = loader.load();
       loader.<StepperPresenter>getController().init(this.controller, this.model, this.stage, stepper);
       return container;

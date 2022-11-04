@@ -19,7 +19,8 @@ public enum View {
   EXPORT_SELECT_TABLES("fxml/export/export-select-tables-dialog.fxml"),
   EXPORT_SUCCESS("fxml/export/export-success-dialog.fxml"),
   UPLOAD_DB_CONNECTION_DIALOG("fxml/upload/upload-db-dialog.fxml"),
-  UPLOAD_STEPPER("fxml/upload/upload-stepper.fxml");
+  UPLOAD_STEPPER("fxml/upload/upload-stepper.fxml"),
+  UPLOAD_CHOOSE_DBMS("fxml/upload/upload-choose-dbms.fxml");
 
   private final String viewName;
 
