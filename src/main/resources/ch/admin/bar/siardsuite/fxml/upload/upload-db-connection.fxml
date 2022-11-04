@@ -156,7 +156,18 @@
                                 <Insets bottom="24.0" top="10.0" />
                             </VBox.margin>
                         </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" />
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <MFXTextField fx:id="currentName" editable="false" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="277.0" selectable="false" styleClass="form-field">
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin></MFXTextField>
+                        <MFXTextField fx:id="newName" maxWidth="1.7976931348623157E308" prefWidth="277.0" styleClass="form-field">
+                           <HBox.margin>
+                              <Insets left="24.0" top="10.0" />
+                           </HBox.margin>
+                        </MFXTextField>
+                     </children></HBox>
                         <Label fx:id="errorMessage" styleClass="error-text">
                             <VBox.margin>
                                 <Insets />

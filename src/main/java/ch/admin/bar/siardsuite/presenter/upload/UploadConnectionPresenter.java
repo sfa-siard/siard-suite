@@ -36,7 +36,6 @@ public class UploadConnectionPresenter extends StepperPresenter {
     private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
     private static final String TEST_DB = "test-db";
 
-
     private String portString;
     private String dbTypeString;
     @FXML
@@ -79,6 +78,11 @@ public class UploadConnectionPresenter extends StepperPresenter {
     private Tooltip tooltip;
     @FXML
     public Label titleNewSchemaName;
+
+    @FXML
+    public MFXTextField currentName;
+    @FXML
+    public MFXTextField newName;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -132,6 +136,8 @@ public class UploadConnectionPresenter extends StepperPresenter {
         I18n.bind(passwordField.floatingTextProperty(), "archiveConnection.view.password.label");
         I18n.bind(urlField.floatingTextProperty(), "archiveConnection.view.url.label");
         I18n.bind(titleNewSchemaName.textProperty(), "uploadConnection.view.new.schema.name");
+        I18n.bind(currentName.floatingTextProperty(), "uploadConnection.view.current.name");
+        I18n.bind(newName.floatingTextProperty(), "uploadConnection.view.new.name");
     }
 
     private void addRecentDatabaseConnection() {
