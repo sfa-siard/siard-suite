@@ -111,6 +111,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 File targetArchive = this.showFileChoserToSelectTargetArchive(this.name.getText());
                 if (targetArchive != null) {
                     this.model.updateArchiveMetaData(
+                            this.name.getText(),
                             this.description.getText(),
                             this.owner.getText(),
                             this.dataOriginTimespan.getText(),

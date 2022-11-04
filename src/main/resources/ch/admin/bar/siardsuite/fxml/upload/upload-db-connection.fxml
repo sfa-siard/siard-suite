@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadConnectionPresenter">
+    <center>
+        <VBox BorderPane.alignment="TOP_LEFT">
+            <children>
+                <VBox prefWidth="100.0">
+                    <children>
+                        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" />
+                        <TextFlow fx:id="textFlow" lineSpacing="8.0">
+                            <Text fx:id="text0" styleClass="view-text" />
+                            <Text fx:id="text1" styleClass="view-text" />
+                            <Text fx:id="text2" styleClass="view-text" />
+                            <Text fx:id="text3" styleClass="view-text" />
+                            <Text fx:id="text4" styleClass="view-text" />
+                            <VBox.margin>
+                                <Insets bottom="24.0" top="15.0" />
+                            </VBox.margin>
+                        </TextFlow>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="25.0" right="25.0" />
+                    </VBox.margin>
+                </VBox>
+                <HBox prefHeight="100.0" prefWidth="600.0">
+                    <children>
+                        <VBox fx:id="leftVBox" prefWidth="690.0">
+                            <Label fx:id="subtitleLeft">
+                                <styleClass>
+                                    <String fx:value="h3" />
+                                    <String fx:value="label-icon" />
+                                    <String fx:value="server-icon" />
+                                </styleClass>
+                            </Label>
+                            <Text fx:id="textLeft" lineSpacing="8.0" styleClass="view-text">
+                                <VBox.margin>
+                                    <Insets bottom="15.0" top="24.0" />
+                                </VBox.margin>
+                            </Text>
+                        </VBox>
+                        <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="470.0">
+                            <Label fx:id="subtitleRight">
+                                <styleClass>
+                                    <String fx:value="h3" />
+                                    <String fx:value="label-icon" />
+                                    <String fx:value="user-icon" />
+                                </styleClass>
+                            </Label>
+                            <Text fx:id="textRight" lineSpacing="8.0" styleClass="view-text">
+                                <VBox.margin>
+                                    <Insets bottom="15.0" top="24.0" />
+                                </VBox.margin>
+                            </Text>
+                        </VBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox styleClass="form-container">
+                    <children>
+                        <VBox prefWidth="670.0">
+                            <children>
+                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                        <MFXTextField fx:id="dbServerField" maxWidth="458.0" minWidth="458.0" styleClass="form-field">
+                                            <HBox.margin>
+                                                <Insets right="25.0" />
+                                            </HBox.margin>
+                                        </MFXTextField>
+                                        <MFXTextField fx:id="portField" minWidth="-Infinity" prefWidth="96.0" styleClass="form-field" />
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                </HBox>
+                                <MFXTextField fx:id="dbNameField" maxWidth="578.0" styleClass="form-field">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </MFXTextField>
+                            </children>
+                            <HBox.margin>
+                                <Insets bottom="24.0" left="25.0" right="25.0" top="60.0" />
+                            </HBox.margin>
+                            <padding>
+                                <Insets right="50.0" />
+                            </padding>
+                        </VBox>
+                        <VBox prefWidth="470.0">
+                            <children>
+                                <MFXTextField fx:id="usernameField" maxWidth="1.7976931348623157E308" styleClass="form-field">
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                </MFXTextField>
+                                <MFXPasswordField fx:id="passwordField" maxWidth="1.7976931348623157E308" styleClass="form-field">
+                                    <VBox.margin>
+                                        <Insets top="60.0" />
+                                    </VBox.margin>
+                                </MFXPasswordField>
+                            </children>
+                            <HBox.margin>
+                                <Insets bottom="25.0" right="25.0" top="60.0" />
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+                <HBox styleClass="form-container">
+                    <children>
+                        <MFXTextField fx:id="urlField" maxWidth="1.7976931348623157E308" styleClass="form-field" HBox.hgrow="ALWAYS">
+                            <HBox.margin>
+                                <Insets bottom="24.0" left="25.0" right="25.0" top="60.0" />
+                            </HBox.margin>
+                        </MFXTextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="24.0" />
+                    </VBox.margin>
+                </HBox>
+                <VBox>
+                    <VBox.margin>
+                        <Insets bottom="24.0" left="25.0" right="25.0" top="24.0" />
+                    </VBox.margin>
+                    <styleClass>
+                        <String fx:value="form-container" />
+                        <String fx:value="form-container-white" />
+                    </styleClass>
+                    <children>
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                        <Label fx:id="titleNewSchemaName" styleClass="h3" text="Label" />
+                                <MFXButton fx:id="infoButton" alignment="CENTER" rippleAnimateBackground="false">
+                                    <styleClass>
+                                        <String fx:value="info-icon" />
+                                        <String fx:value="icon-button" />
+                                    </styleClass>
+                                    <HBox.margin>
+                                        <Insets left="10.0" top="4.0" />
+                                    </HBox.margin>
+                                </MFXButton>
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="24.0" top="10.0" />
+                            </VBox.margin>
+                        </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <MFXTextField fx:id="currentName" editable="false" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="277.0" selectable="false" styleClass="form-field">
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin></MFXTextField>
+                        <MFXTextField fx:id="newName" maxWidth="1.7976931348623157E308" prefWidth="277.0" styleClass="form-field">
+                           <HBox.margin>
+                              <Insets left="24.0" top="10.0" />
+                           </HBox.margin>
+                        </MFXTextField>
+                     </children></HBox>
+                        <Label fx:id="errorMessage" styleClass="error-text">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </Label>
+                    </children>
+
+                </VBox>
+
+            </children>
+            <BorderPane.margin>
+                <Insets left="25.0" right="25.0" top="48.0" />
+            </BorderPane.margin>
+        </VBox>
+    </center>
+    <bottom>
+    </bottom>
+</BorderPane>

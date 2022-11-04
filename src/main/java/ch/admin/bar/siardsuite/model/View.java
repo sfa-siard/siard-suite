@@ -21,7 +21,8 @@ public enum View {
   UPLOAD_DB_CONNECTION_DIALOG("fxml/upload/upload-db-dialog.fxml"),
   UPLOAD_STEPPER("fxml/upload/upload-stepper.fxml"),
   UPLOAD_CHOOSE_DBMS("fxml/upload/upload-choose-dbms.fxml"),
-  UPLOAD_ABORT_DIALOG("fxml/upload/upload-abort-dialog.fxml");
+  UPLOAD_ABORT_DIALOG("fxml/upload/upload-abort-dialog.fxml"),
+  UPLOAD_DB_CONNECTION("fxml/upload/upload-db-connection.fxml");
 
   private final String viewName;
 

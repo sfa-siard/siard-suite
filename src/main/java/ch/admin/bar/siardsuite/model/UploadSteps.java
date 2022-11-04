@@ -7,8 +7,12 @@ public class UploadSteps {
     public  static  final List<Step> savedConnectionSteps;
 
     private final static Step selectDbms = new Step("upload.step.name.dbms", View.UPLOAD_CHOOSE_DBMS, 1, true);
+    private final static Step dbConnection = new Step("upload.step.name.databaseConnection",
+                                                      View.UPLOAD_DB_CONNECTION,
+                                                      2,
+                                                      true);
     static {
-        steps = List.of(selectDbms);
-        savedConnectionSteps = List.of();
+        steps = List.of(selectDbms, dbConnection);
+        savedConnectionSteps = List.of(dbConnection);
     }
 }

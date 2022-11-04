@@ -27,10 +27,11 @@ public class SiardArchiveMetaData {
     private final StringProperty archiverContact;
     private File targetArchive; // not sure if this is the correct place here... maybe just use the model?
 
-    public SiardArchiveMetaData(String databaseDescription, String dataOwner, String dataOriginTimespan,
+    public SiardArchiveMetaData(String dbName, String databaseDescription, String dataOwner, String dataOriginTimespan,
                                 String archiverName, String archiverContact, File targetArchive) {
+
         siardFormatVersion = new SimpleStringProperty();
-        databaseName = new SimpleStringProperty();
+        databaseName = new SimpleStringProperty(dbName);
         databaseProduct = new SimpleStringProperty();
         databaseConnectionURL = new SimpleStringProperty();
         databaseUsername = new SimpleStringProperty();
@@ -71,11 +72,16 @@ public class SiardArchiveMetaData {
                 archiverName.getValue(), archiverContact.getValue(), targetArchive);
     }
 
+    public void accept(SiardArchiveDatabaseNameVisitor visitor) {
+        visitor.visit(databaseName.getValue());
+
+    }
     public void shareObject(SiardArchiveMetaDataVisitor visitor) {
         visitor.visit(this);
     }
 
     public void write(Archive archive) {
+        archive.getMetaData().setDbName(databaseName.getValue());
         archive.getMetaData().setArchiver(archiverName.getValue());
         archive.getMetaData().setArchiverContact(archiverContact.getValue());
         archive.getMetaData().setDescription(databaseDescription.getValue());
