@@ -96,7 +96,7 @@ public class UploadConnectionPresenter extends StepperPresenter {
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        this.init(controller, model, stage);
+        init(controller, model, stage);
 
         addTextWithStyles();
         addFormText();
@@ -105,10 +105,10 @@ public class UploadConnectionPresenter extends StepperPresenter {
             addRecentDatabaseConnection();
         }
 
-        this.errorMessage.setVisible(false);
-        this.buttonsBox = new StepperButtonBox().make(DEFAULT);
-        this.borderPane.setBottom(buttonsBox);
-        this.setListeners(stepper);
+        errorMessage.setVisible(false);
+        buttonsBox = new StepperButtonBox().make(DEFAULT);
+        borderPane.setBottom(buttonsBox);
+        setListeners(stepper);
     }
 
     private void addTextWithStyles() {
