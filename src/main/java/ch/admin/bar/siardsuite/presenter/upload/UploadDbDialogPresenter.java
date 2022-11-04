@@ -57,8 +57,6 @@ public class UploadDbDialogPresenter extends DialogPresenter {
         I18n.bind(text.textProperty(), "uploadDbDialog.text");
         I18n.bind(newConnectionButton.textProperty(),"archiveDbDialog.btnNewConnection");
 
-        newConnectionButton.getStyleClass().setAll("button", "primary");
-
         newConnectionButton.setOnAction(event -> {
             stage.closeDialog();
             stage.navigate(View.UPLOAD_STEPPER);

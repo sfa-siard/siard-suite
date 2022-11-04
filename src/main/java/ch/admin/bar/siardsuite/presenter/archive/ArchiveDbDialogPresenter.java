@@ -55,7 +55,6 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
         text.textProperty().bind(I18n.createStringBinding("archiveDbDialog.text"));
 
         newConnectionButton.textProperty().bind(I18n.createStringBinding("archiveDbDialog.btnNewConnection"));
-        newConnectionButton.getStyleClass().setAll("button", "primary");
 
         newConnectionButton.setOnAction(event -> {
             stage.closeDialog();
