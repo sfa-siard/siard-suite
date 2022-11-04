@@ -13,7 +13,7 @@ public class UserPreferences {
     private static final int max_stack_size = 30;
 
     public static Preferences node(NodePath nodePath) {
-        return root.node(nodePath.path());
+        return root.node(nodePath.name());
     }
 
     public static void clear() throws BackingStoreException {
@@ -41,47 +41,27 @@ public class UserPreferences {
     public static List<String> sortedChildrenNames(NodePath nodePath, KeyIndex comparisonKeyIndex, Comparator<String> comparator) throws BackingStoreException {
         return Arrays.stream(node(nodePath).childrenNames())
                 .sorted(Comparator.comparing(
-                        name -> node(nodePath).node(name).get(comparisonKeyIndex.index(), ""),
+                        name -> node(nodePath).node(name).get(comparisonKeyIndex.name(), ""),
                         comparator
                 ))
                 .collect(Collectors.toList());
     }
 
     public enum NodePath {
-        RECENT_FILES("0"),
-        DATABASE_CONNECTION("1");
-
-        private final String path;
-
-        NodePath(String path) {
-            this.path = path;
-        }
-
-        public String path() {
-            return path;
-        }
+        RECENT_FILES,
+        DATABASE_CONNECTION
     }
 
     public enum KeyIndex {
-        DATABASE_SERVER("0"),
-        PORT_NUMBER("1"),
-        DATABASE_NAME("2"),
-        USER_NAME("3"),
-        USER_PASSWORD("4"),
-        CONNECTION_URL("5"),
-        STORAGE_DATE("6"),
-        ABSOLUTE_PATH("7"),
-        TIMESTAMP("8");
-
-        private final String index;
-
-        KeyIndex(String index) {
-            this.index = index;
-        }
-
-        public String index() {
-            return index;
-        }
+        DATABASE_SERVER,
+        DATABASE_SYSTEM,
+        PORT_NUMBER,
+        DATABASE_NAME,
+        USER_NAME,
+        USER_PASSWORD,
+        CONNECTION_URL,
+        STORAGE_DATE,
+        ABSOLUTE_PATH,
+        TIMESTAMP
     }
-
 }

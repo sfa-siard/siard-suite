@@ -103,7 +103,7 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
             final Label nameLabel = new Label(connectionName);
             nameLabel.getStyleClass().add("name-label");
 
-            final String localeDate = preferences.get(STORAGE_DATE.index(), "");
+            final String localeDate = preferences.get(STORAGE_DATE.name(), "");
             final Label dateLabel = new Label(localeDate);
             dateLabel.getStyleClass().add("date-label");
 

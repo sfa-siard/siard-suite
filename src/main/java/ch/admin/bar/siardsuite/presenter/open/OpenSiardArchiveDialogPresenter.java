@@ -154,7 +154,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         if (!fileHashCode.isEmpty()) {
             final Preferences preferences = UserPreferences.node(RECENT_FILES).node(fileHashCode);
 
-            final String filePath = preferences.get(ABSOLUTE_PATH.index(), "");
+            final String filePath = preferences.get(ABSOLUTE_PATH.name(), "");
             final File recentFile = new File(filePath);
             final BasicFileAttributes recentFileAttributes = Files.readAttributes(Paths.get(filePath), BasicFileAttributes.class);
 
@@ -196,8 +196,8 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             }
             try {
                 final Preferences preferences = UserPreferences.push(RECENT_FILES, TIMESTAMP, Comparator.reverseOrder(), String.valueOf(file.hashCode()));
-                preferences.put(ABSOLUTE_PATH.index(), file.getAbsolutePath());
-                preferences.put(TIMESTAMP.index(), String.valueOf(Clock.systemDefaultZone().millis()));
+                preferences.put(ABSOLUTE_PATH.name(), file.getAbsolutePath());
+                preferences.put(TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
             } catch (BackingStoreException e) {
                 throw new RuntimeException(e);
             }
