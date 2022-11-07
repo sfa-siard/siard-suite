@@ -11,8 +11,9 @@ public class UploadSteps {
                                                       View.UPLOAD_DB_CONNECTION,
                                                       2,
                                                       true);
+    private final static Step uploadArchiveInProgress = new Step("upload.step.name.uploading", View.UPLOADING, 3, true);
     static {
-        steps = List.of(selectDbms, dbConnection);
-        savedConnectionSteps = List.of(dbConnection);
+        steps = List.of(selectDbms, dbConnection, uploadArchiveInProgress);
+        savedConnectionSteps = List.of(dbConnection, uploadArchiveInProgress);
     }
 }

@@ -11,6 +11,7 @@ public class SiardEvent extends Event {
     public static final EventType<SiardEvent> ARCHIVE_METADATA_UPDATED;
     public static final EventType<SiardEvent> DATABASE_DOWNLOADED;
     public static final EventType<SiardEvent> UPLOAD_DBMS_SELECTED;
+    public static EventType<SiardEvent> UPLOAD_CONNECTION_UPDATED;
 
     public SiardEvent(EventType<? extends Event> eventType) {
         super(eventType);
@@ -24,5 +25,6 @@ public class SiardEvent extends Event {
         ARCHIVE_METADATA_UPDATED = new EventType("ARCHIVE_METADATA_UPDATED");
         DATABASE_DOWNLOADED = new EventType("DATABASE_DOWNLOADED");
         UPLOAD_DBMS_SELECTED = new EventType<>("UPLOAD_DBMS_SELECTED");
+        UPLOAD_CONNECTION_UPDATED = new EventType<>( "UPLOAD_CONNECTION_UPDATED");
     }
 }

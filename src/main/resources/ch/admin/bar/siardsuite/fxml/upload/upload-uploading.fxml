@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadingPresenter">
+    <center>
+        <VBox>
+            <children>
+                <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2"/>
+                <Label fx:id="progress" contentDisplay="RIGHT" styleClass="h2"
+                       text="1234 Datensätze archiviert">
+                    <graphic>
+                        <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
+                            <styleClass>
+                                <String fx:value="loading-icon"/>
+                                <String fx:value="icon-button"/>
+                            </styleClass>
+                            <Image url="@../../icons/loading.png"/>
+                        </ImageView>
+                    </graphic>
+                    <VBox.margin>
+                        <Insets top="25.0"/>
+                    </VBox.margin>
+                </Label>
+            </children>
+            <BorderPane.margin>
+                <Insets left="25.0" right="25.0" top="48.0"/>
+            </BorderPane.margin>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+              minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
+            <children>
+                <MFXButton fx:id="cancel">
+                    <styleClass>
+                        <String fx:value="button"/>
+                        <String fx:value="secondary"/>
+                    </styleClass>
+                </MFXButton>
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

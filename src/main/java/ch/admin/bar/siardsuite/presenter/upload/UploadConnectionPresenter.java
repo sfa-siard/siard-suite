@@ -29,7 +29,6 @@ import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
-import static ch.admin.bar.siardsuite.util.SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
@@ -207,7 +206,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
                 errorMessage.setVisible(false);
                 stage.setHeight(950);
                 stepper.next();
-                stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBLOAD_EVENT));
+                stepper.fireEvent(new SiardEvent(SiardEvent.UPLOAD_CONNECTION_UPDATED));
             }
 
         });

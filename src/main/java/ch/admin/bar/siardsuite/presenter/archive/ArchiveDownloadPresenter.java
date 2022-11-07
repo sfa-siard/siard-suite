@@ -84,8 +84,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     }
 
     private void bindTexts() {
-        this.title.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.inProgress"));
-        this.resultTitle.textProperty().bind(I18n.createStringBinding("archiveDownload.view.title.success"));
+        I18n.bind(title.textProperty(), "archiveDownload.view.title.inProgress");
+        I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.success");
     }
 
     private EventHandler<SiardEvent> downloadAndArchiveDatabase(MFXStepper stepper) {
@@ -95,7 +95,6 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
             this.archivePath.setText(targetArchive.getAbsolutePath());
             controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure());
-
         };
     }
 
