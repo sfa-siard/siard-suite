@@ -9,11 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
+import java.util.*;
 
 public class DatabaseColumn extends DatabaseObject {
 
@@ -116,12 +112,8 @@ public class DatabaseColumn extends DatabaseObject {
         }
     }
 
-    private static boolean contains(String s1, String s2) {
-        return s1 != null && s2 != null && Pattern.compile(Pattern.quote(s1), Pattern.CASE_INSENSITIVE).matcher(s2).find();
-    }
-
-    private Set<MetaSearchHit> metaSearch(String s) {
-        Set<MetaSearchHit> hits = new HashSet<>();
+    private TreeSet<MetaSearchHit> metaSearch(String s) {
+        TreeSet<MetaSearchHit> hits = new TreeSet<>();
         final List<String> nodeIds = new ArrayList<>();
         if (contains(name, s)) {
             nodeIds.add("name");
@@ -151,12 +143,12 @@ public class DatabaseColumn extends DatabaseObject {
             nodeIds.add("description");
         }
         if (nodeIds.size() > 0) {
-            hits = Set.of(new MetaSearchHit("Schema " + schema.name + ", Table " + table.name + ", Column " + name, treeContentView, nodeIds));
+            hits = new TreeSet<>(Set.of(new MetaSearchHit("Schema " + schema.name + ", Table " + table.name + ", Column " + name, this, treeContentView, nodeIds)));
         }
         return hits;
     }
 
-    protected Set<MetaSearchHit> aggregatedMetaSearch(String s) {
+    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         return metaSearch(s);
     }
 

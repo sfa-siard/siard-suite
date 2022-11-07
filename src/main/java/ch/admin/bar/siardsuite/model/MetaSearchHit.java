@@ -1,9 +1,11 @@
 package ch.admin.bar.siardsuite.model;
 
+import ch.admin.bar.siardsuite.model.database.DatabaseObject;
+
 import java.util.List;
 import java.util.Objects;
 
-public record MetaSearchHit(String displayName, TreeContentView treeContentView, List<String> nodeIds) {
+public record MetaSearchHit(String displayName, DatabaseObject databaseObject, TreeContentView treeContentView, List<String> nodeIds) implements Comparable<MetaSearchHit> {
 
     @Override
     public String toString() {
@@ -21,5 +23,10 @@ public record MetaSearchHit(String displayName, TreeContentView treeContentView,
     @Override
     public int hashCode() {
         return Objects.hash(displayName);
+    }
+
+    @Override
+    public int compareTo(MetaSearchHit o) {
+        return displayName.compareTo(o.displayName);
     }
 }

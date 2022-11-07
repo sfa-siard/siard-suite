@@ -138,6 +138,10 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   protected void setListeners() {
     MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
     selection.selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateTableContainerContent(newValue.getValue())));
+    metaSearchButton.setOnAction(event -> {
+      model.setCurrentPreviewPresenter(this);
+      stage.openDialog(View.SEARCH_METADATA_DIALOG);
+    });
   }
 
   protected void updateTableContainerContent(TreeAttributeWrapper wrapper) {
@@ -146,10 +150,13 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
       Node container = loader.load();
       tableContainerContent.getChildren().setAll(container);
       loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
-
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public VBox getTableContainerContent() {
+    return tableContainerContent;
   }
 
   @Override

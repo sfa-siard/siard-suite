@@ -15,10 +15,7 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
@@ -118,9 +115,24 @@ public class DatabaseSchema extends DatabaseObject {
     @Override
     protected void populate(VBox vbox, TreeContentView type) {}
 
-    protected List<MetaSearchHit> aggregatedMetaSearch(String string) {
-        final List<MetaSearchHit> hits = new ArrayList<>();
-        hits.addAll(tables.stream().flatMap(table -> table.aggregatedMetaSearch(string).stream()).toList());
+    private TreeSet<MetaSearchHit> metaSearch(String s) {
+        TreeSet<MetaSearchHit> hits = new TreeSet<>();
+        final List<String> nodeIds = new ArrayList<>();
+        if (contains(name, s)) {
+            nodeIds.add("name");
+        }
+        if (contains(description, s)) {
+            nodeIds.add("description");
+        }
+        if (nodeIds.size() > 0) {
+            hits = new TreeSet<>(List.of(new MetaSearchHit("Schema " + name, this, treeContentView, nodeIds)));
+        }
+        return hits;
+    }
+
+    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
+        final TreeSet<MetaSearchHit> hits = metaSearch(s);
+        hits.addAll(tables.stream().flatMap(table -> table.aggregatedMetaSearch(s).stream()).toList());
         return hits;
     }
 

@@ -6,21 +6,22 @@ import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.presenter.Presenter;
+import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Model {
 
   private View currentView = View.START;
+  private PreviewPresenter currentPreviewPresenter = null;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private SiardArchive archive = new SiardArchive();
 
@@ -32,6 +33,14 @@ public class Model {
 
   public void setCurrentView(View view) {
     this.currentView = view;
+  }
+
+  public PreviewPresenter getCurrentPreviewPresenter() {
+    return currentPreviewPresenter;
+  }
+
+  public void setCurrentPreviewPresenter(PreviewPresenter presenter) {
+    currentPreviewPresenter = presenter;
   }
 
   public Archive initArchive() {
@@ -177,5 +186,12 @@ public class Model {
     }
   }
 
+  public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
+    TreeSet<MetaSearchHit> hits = new TreeSet<>();
+    if (getArchive() != null) {
+      hits = getArchive().aggregatedMetaSearch(s);
+    }
+    return hits;
+  }
 
 }

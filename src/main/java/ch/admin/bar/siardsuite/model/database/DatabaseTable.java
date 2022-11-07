@@ -14,10 +14,7 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DatabaseTable extends DatabaseObject {
 
@@ -148,9 +145,21 @@ public class DatabaseTable extends DatabaseObject {
         outPutStream.close();
     }
 
-    protected List<MetaSearchHit> aggregatedMetaSearch(String string) {
-        final List<MetaSearchHit> hits = new ArrayList<>();
-        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(string).stream()).toList());
+    private TreeSet<MetaSearchHit> metaSearch(String s) {
+        TreeSet<MetaSearchHit> hits = new TreeSet<>();
+        final List<String> nodeIds = new ArrayList<>();
+        if (contains(name, s)) {
+            nodeIds.add("name");
+        }
+        if (nodeIds.size() > 0) {
+            hits = new TreeSet<>(Set.of(new MetaSearchHit("Schema " + schema.name + ", Table " + name, this, treeContentView, nodeIds)));
+        }
+        return hits;
+    }
+
+    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
+        final TreeSet<MetaSearchHit> hits = metaSearch(s);
+        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).toList());
         return hits;
     }
 
