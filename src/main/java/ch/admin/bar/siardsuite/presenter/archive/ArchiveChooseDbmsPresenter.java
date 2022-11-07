@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+import static ch.admin.bar.siardsuite.util.SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT;
 
 public class ArchiveChooseDbmsPresenter extends StepperPresenter {
 
@@ -84,7 +85,7 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
         this.errorMessage.setVisible(false);
         this.stage.setHeight(1080.00);
         stepper.next();
-        stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT));
+          stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBTYPE_EVENT));
         //fire event
       } else {
         this.errorMessage.setVisible(true);

@@ -51,7 +51,7 @@ public class RootStage extends Stage {
 //    scene.setFill(Color.WHITESMOKE);
     scene.getRoot().getStyleClass().add("root");
     scene.setFill(null);
-    this.initStyle(StageStyle.TRANSPARENT);
+    this.initStyle(StageStyle.UTILITY);
     this.setScene(scene);
     this.show();
   }

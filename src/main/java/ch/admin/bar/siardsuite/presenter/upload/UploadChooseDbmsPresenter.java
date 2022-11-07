@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+import static ch.admin.bar.siardsuite.util.SiardEvent.UPLOAD_DBMS_SELECTED;
 
 public class UploadChooseDbmsPresenter extends StepperPresenter {
 
@@ -84,7 +85,7 @@ public class UploadChooseDbmsPresenter extends StepperPresenter {
                 this.errorMessage.setVisible(false);
                 this.stage.setHeight(1080.00);
                 stepper.next();
-                stepper.fireEvent(getUpdateEvent(SiardEvent.UPLOAD_DBMS_SELECTED));
+                stepper.fireEvent(new SiardEvent(UPLOAD_DBMS_SELECTED));
                 //fire event
             } else {
                 this.errorMessage.setVisible(true);

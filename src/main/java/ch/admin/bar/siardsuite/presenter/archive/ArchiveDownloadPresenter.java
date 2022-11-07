@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
+import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOADED;
 
 public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
 
@@ -117,7 +118,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             this.fileSystemBox.setVisible(true);
             loadingSpinner.hide();
             controller.closeDbConnection();
-            stepper.fireEvent(getUpdateEvent(SiardEvent.DATABASE_DOWNLOADED));
+            stepper.fireEvent(new SiardEvent(DATABASE_DOWNLOADED));
         };
     }
 

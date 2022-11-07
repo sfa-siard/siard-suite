@@ -5,13 +5,10 @@ import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.Step;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,10 +24,6 @@ public abstract class StepperPresenter extends Presenter {
   @FXML
   protected BorderPane borderPane;
   public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);
-
-  public Event getUpdateEvent(EventType<SiardEvent> eventType) {
-    return new SiardEvent(eventType);
-  }
 
   protected List<MFXStepperToggle> createSteps(List<Step> steps, MFXStepper stepper) {
 

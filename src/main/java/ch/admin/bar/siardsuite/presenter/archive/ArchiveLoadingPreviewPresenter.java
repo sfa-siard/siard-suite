@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.CANCEL;
+import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_LOADED;
 
 public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     @FXML
@@ -101,7 +102,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
             EventHandler<WorkerStateEvent> onSuccess = e -> {
                 controller.closeDbConnection();
                 stepper.next();
-                stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_LOADED));
+                stepper.fireEvent(new SiardEvent(ARCHIVE_LOADED));
                 this.stage.setHeight(950);
             };
 
