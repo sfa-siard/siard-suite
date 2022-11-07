@@ -6,7 +6,6 @@ import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.database.*;
-import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -22,6 +21,7 @@ public class Model {
 
   private View currentView = View.START;
   private PreviewPresenter currentPreviewPresenter = null;
+  private String currentSearch = null;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private SiardArchive archive = new SiardArchive();
 
@@ -41,6 +41,14 @@ public class Model {
 
   public void setCurrentPreviewPresenter(PreviewPresenter presenter) {
     currentPreviewPresenter = presenter;
+  }
+
+  public String getCurrentSearch() {
+    return currentSearch;
+  }
+
+  public void setCurrentSearch(String s) {
+    currentSearch = s;
   }
 
   public Archive initArchive() {

@@ -47,6 +47,11 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
         title.textProperty().bind(I18n.createStringBinding("search.metadata.dialog.title"));
         text.textProperty().bind(I18n.createStringBinding("search.metadata.dialog.text"));
 
+        if (model.getCurrentSearch() != null) {
+            searchField.setText(model.getCurrentSearch());
+            metaSearch(model.getCurrentSearch());
+        }
+
         closeButton.setOnAction(event -> stage.closeDialog());
         buttonBox.getChildren().add(new CloseDialogButton(this.stage));
 
@@ -67,6 +72,7 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
         } else {
             showNoSearchHits();
         }
+        model.setCurrentSearch(s);
     }
 
     private void showNoSearchHits() {
