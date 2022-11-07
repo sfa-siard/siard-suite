@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.Schema;
+import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -12,7 +12,7 @@ import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
-
+import javafx.scene.layout.VBox;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,21 +23,23 @@ import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
 
-    protected final SiardArchive siardArchive;
-    protected final Archive archive;
+    protected final SiardArchive archive;
+    protected final Schema schema;
     protected final boolean onlyMetaData;
     protected final String name;
     protected final String description;
     protected final List<DatabaseTable> tables = new ArrayList<>();
 
-    protected DatabaseSchema(SiardArchive siardArchive, Archive archive, Schema schema, boolean onlyMetaData) {
-        this.siardArchive = siardArchive;
+    protected final TreeContentView treeContentView = TreeContentView.SCHEMA;
+
+    protected DatabaseSchema(SiardArchive archive, Schema schema, boolean onlyMetaData) {
         this.archive = archive;
+        this.schema = schema;
         this.onlyMetaData = onlyMetaData;
         name = schema.getMetaSchema().getName();
         description = schema.getMetaSchema().getDescription();
         for (int i = 0; i < schema.getTables(); i++) {
-            tables.add(new DatabaseTable(siardArchive, archive, this, schema.getTable(i), onlyMetaData));
+            tables.add(new DatabaseTable(archive, this, schema.getTable(i), onlyMetaData));
         }
     }
 
@@ -112,4 +114,14 @@ public class DatabaseSchema extends DatabaseObject {
                                             .collect(Collectors.toList());
         schemaItem.getChildren().setAll(checkBoxTreeItems);
     }
+
+    @Override
+    protected void populate(VBox vbox, TreeContentView type) {}
+
+    protected List<MetaSearchHit> aggregatedMetaSearch(String string) {
+        final List<MetaSearchHit> hits = new ArrayList<>();
+        hits.addAll(tables.stream().flatMap(table -> table.aggregatedMetaSearch(string).stream()).toList());
+        return hits;
+    }
+
 }

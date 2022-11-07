@@ -11,6 +11,7 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
+import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
@@ -151,6 +152,12 @@ public class Model {
   public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
     if (getArchive() != null) {
       getArchive().populate(tableView, databaseObject, type);
+    }
+  }
+
+  public void populate(VBox vBox, DatabaseObject databaseObject, TreeContentView type) {
+    if (getArchive() != null) {
+      getArchive().populate(vBox, databaseObject, type);
     }
   }
 

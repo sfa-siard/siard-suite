@@ -2,11 +2,13 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
+import javafx.scene.layout.VBox;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ public class SiardArchive {
     private boolean onlyMetaData = false;
     private final List<DatabaseSchema> schemas = new ArrayList<>();
     private SiardArchiveMetaData metaData;
+    private final TreeContentView treeContentView = TreeContentView.ROOT;
 
     public SiardArchive() {}
 
@@ -31,7 +34,7 @@ public class SiardArchive {
         this.archiveName = archiveName;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         for (int i = 0; i < archive.getSchemas(); i++) {
-            schemas.add(new DatabaseSchema(this, archive, archive.getSchema(i), onlyMetaData));
+            schemas.add(new DatabaseSchema(this, archive.getSchema(i), onlyMetaData));
         }
     }
 
@@ -73,6 +76,12 @@ public class SiardArchive {
         }
     }
 
+    public void populate(VBox vBox, DatabaseObject databaseObject, TreeContentView type) {
+        if (databaseObject != null) {
+            databaseObject.populate(vBox, type);
+        }
+    }
+
     public void export(File directory) {
         List<String> allTables = this.schemas.stream()
                                            .flatMap(schema -> schema.tables.stream())
@@ -94,6 +103,12 @@ public class SiardArchive {
             return schemaItem;
         }).toList();
         root.getChildren().setAll(checkBoxTreeItems);
+    }
+
+    public List<MetaSearchHit> aggregatedMetaSearch(String string) {
+        final List<MetaSearchHit> hits = new ArrayList<>();
+        hits.addAll(schemas.stream().flatMap(schema -> schema.aggregatedMetaSearch(string).stream()).toList());
+        return hits;
     }
 
     public void databaseName(SiardArchiveDatabaseNameVisitor visitor) {

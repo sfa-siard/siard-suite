@@ -5,7 +5,6 @@ import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.io.File;
 import java.time.DateTimeException;
 import java.time.LocalDate;

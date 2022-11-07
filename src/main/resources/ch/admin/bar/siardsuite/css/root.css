@@ -515,9 +515,9 @@
     -fx-font-size: 12;
     -fx-text-fill: black;
     -fx-max-width: infinity;
-    -fx-text-alignment: RIGHT;
+    -fx-text-alignment: LEFT;
     -fx-label-padding: 6 0 6 0;
-    -fx-alignment: CENTER_RIGHT;
+    -fx-alignment: CENTER_LEFT;
 }
 
 .table-container-text-small{

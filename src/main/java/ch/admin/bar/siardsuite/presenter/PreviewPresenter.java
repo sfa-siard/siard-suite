@@ -100,7 +100,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         for (DatabaseColumn column : columns) {
           model.provideDatabaseArchiveProperties(this, column);
 
-          columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, table));
+          columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
           columnsItem.getChildren().add(columnItem);
         }
 

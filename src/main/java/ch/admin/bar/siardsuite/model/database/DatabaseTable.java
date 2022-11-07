@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.*;
+import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -10,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.VBox;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,25 +21,28 @@ import java.util.Map;
 
 public class DatabaseTable extends DatabaseObject {
 
-    protected final SiardArchive siardArchive;
-    protected final Archive archive;
+    protected final SiardArchive archive;
     protected final DatabaseSchema schema;
+    protected final Table table;
     protected final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     protected final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
     protected final String numberOfRows;
-    protected DatabaseTable(SiardArchive siardArchive, Archive archive, DatabaseSchema schema, Table table) {
-        this(siardArchive, archive, schema, table, false);
+
+    protected final TreeContentView treeContentView = TreeContentView.TABLE;
+
+    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
+        this(archive, schema, table, false);
     }
 
-    protected DatabaseTable(SiardArchive siardArchive, Archive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
-        this.siardArchive = siardArchive;
-        this.schema = schema;
+    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
         this.archive = archive;
+        this.schema = schema;
+        this.table = table;
         name = table.getMetaTable().getName();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(siardArchive, archive, schema, this, table.getMetaTable().getMetaColumn(i)));
+            columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
         }
         numberOfColumns = String.valueOf(columns.size());
         String n = "";
@@ -46,7 +51,7 @@ public class DatabaseTable extends DatabaseObject {
                 int i = 0;
                 final RecordDispenser recordDispenser = table.openRecords();
                 while (i < table.getMetaTable().getRows()) {
-                    rows.add(new DatabaseRow(siardArchive, archive, schema, this, recordDispenser.get()));
+                    rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
                     i++;
                 }
                 n = String.valueOf(rows.size());
@@ -107,6 +112,9 @@ public class DatabaseTable extends DatabaseObject {
         }
     }
 
+    @Override
+    protected void populate(VBox vbox, TreeContentView type) {}
+
     private ObservableList<Map> colItems() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         for (DatabaseColumn column : columns) {
@@ -136,7 +144,14 @@ public class DatabaseTable extends DatabaseObject {
         File destination = new File(directory.getAbsolutePath(), this.name + ".html");
         File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
         OutputStream outPutStream = new FileOutputStream(destination);
-        this.archive.getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
+        this.table.getParentSchema().getParentArchive().getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
     }
+
+    protected List<MetaSearchHit> aggregatedMetaSearch(String string) {
+        final List<MetaSearchHit> hits = new ArrayList<>();
+        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(string).stream()).toList());
+        return hits;
+    }
+
 }
