@@ -66,6 +66,10 @@
     -fx-graphic-text-gap: 0.8em;
 }
 
+.header .button {
+    -fx-min-width: 24;
+}
+
 .icon-button {
     -fx-background-color: transparent;
     -fx-max-height: 24;
