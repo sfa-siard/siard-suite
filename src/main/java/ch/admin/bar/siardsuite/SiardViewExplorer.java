@@ -28,7 +28,7 @@ public class SiardViewExplorer extends Application {
         rootStage.setHeight(1200);
         rootStage.setWidth(1800);
         // change the view that you want to see. note: the stepper is not yet supported
-        rootStage.navigate(View.ARCHIVE_METADATA_EDITOR);
+        rootStage.navigate(View.UPLOAD_DB_CONNECTION_DIALOG);
     }
     public static void main(String[] args) {
         launch();

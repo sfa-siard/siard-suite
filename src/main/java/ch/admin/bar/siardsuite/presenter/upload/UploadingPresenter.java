@@ -55,6 +55,7 @@ public class UploadingPresenter  extends StepperPresenter {
         return event -> {
             System.out.println("now - upload the archive into the database");
             loadingSpinner.play();
+            stepper.next();
         };
     }
 }
