@@ -143,7 +143,7 @@ public class DatabaseColumn extends DatabaseObject {
             nodeIds.add("description");
         }
         if (nodeIds.size() > 0) {
-            hits = new TreeSet<>(Set.of(new MetaSearchHit("Schema " + schema.name + ", Table " + table.name + ", Column " + name, this, treeContentView, nodeIds)));
+            hits = new TreeSet<>(List.of(new MetaSearchHit("Schema " + schema.name + ", Table " + table.name + ", Column " + name, this, treeContentView, nodeIds)));
         }
         return hits;
     }
