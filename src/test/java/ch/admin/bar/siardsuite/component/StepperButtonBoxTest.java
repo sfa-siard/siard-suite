@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.component;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -12,6 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(ApplicationExtension.class)
 public class StepperButtonBoxTest {
+
+    @Before
+    public void setUpHeadlessMode() {
+        System.setProperty("java.awt.headless", "true");
+        System.setProperty("testfx.headless", "true");
+    }
 
     @Test
     void shouldCreateDefaultButtonBox() {
