@@ -11,11 +11,6 @@ repositories {
     }
 }
 
-configurations {
-    resolvableImplementation.extendsFrom implementation
-}
-
-
 group = 'ch.admin.bar'
 version = '1.0-SNAPSHOT'
 description = 'SIARD Suite'
