@@ -5,6 +5,7 @@ import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 import java.io.File;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -71,10 +72,7 @@ public class SiardArchiveMetaData {
                 archiverName.getValue(), archiverContact.getValue(), targetArchive);
     }
 
-    public void accept(SiardArchiveDatabaseNameVisitor visitor) {
-        visitor.visit(databaseName.getValue());
 
-    }
     public void shareObject(SiardArchiveMetaDataVisitor visitor) {
         visitor.visit(this);
     }

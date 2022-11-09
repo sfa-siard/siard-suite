@@ -106,10 +106,5 @@ public class Controller {
     this.onDatabaseUploadSuccess(onSuccess);
     this.onDatabaseUploadFailed(onFailure);
     this.databaseUploadService.start();
-
-  }
-
-  public DatabaseLoadService getDatabaseLoadingService() {
-    return this.databaseLoadService;
   }
 }

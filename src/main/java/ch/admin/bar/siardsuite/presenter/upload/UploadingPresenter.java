@@ -52,7 +52,7 @@ public class UploadingPresenter  extends StepperPresenter {
 
         this.loader.setImage(Icon.loading);
         loadingSpinner = new Spinner(this.loader);
-
+        loadingSpinner.play();
         I18n.bind(title.textProperty(), "upload.inProgress.title");
         I18n.bind(progress.textProperty(), "upload.records.uploaded.message");
         I18n.bind(cancel.textProperty(), "button.cancel");
@@ -101,9 +101,6 @@ public class UploadingPresenter  extends StepperPresenter {
                     label.setGraphic(getImageView(newValue.intValue(), Icon.ok));
                 }
             });
-
-            System.out.println("now - upload the archive into the database");
-            loadingSpinner.play();
 
         };
     }
