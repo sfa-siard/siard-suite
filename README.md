@@ -30,3 +30,8 @@ To create a platform specific installer use:
 ./gradlew jpackage
 ```
 
+Hint: If you are working on ubuntu building the rpm installer may fail - in this case install the necessary packages on your system:
+
+```shell
+sudo apt install alien
+```
