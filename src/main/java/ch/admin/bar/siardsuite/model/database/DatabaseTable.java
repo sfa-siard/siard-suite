@@ -42,21 +42,19 @@ public class DatabaseTable extends DatabaseObject {
             columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
         }
         numberOfColumns = String.valueOf(columns.size());
-        String n = "";
         if (!onlyMetaData) {
             try {
                 int i = 0;
                 final RecordDispenser recordDispenser = table.openRecords();
-                while (i < table.getMetaTable().getRows()) {
+                while (i < table.getMetaTable().getRows() && i < 50) {
                     rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
                     i++;
                 }
-                n = String.valueOf(rows.size());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        numberOfRows = n;
+        numberOfRows = String.valueOf(table.getMetaTable().getRows());
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
