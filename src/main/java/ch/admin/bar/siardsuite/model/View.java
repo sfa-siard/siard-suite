@@ -22,7 +22,8 @@ public enum View {
   UPLOAD_STEPPER("fxml/upload/upload-stepper.fxml"),
   UPLOAD_CHOOSE_DBMS("fxml/upload/upload-choose-dbms.fxml"),
   UPLOAD_ABORT_DIALOG("fxml/upload/upload-abort-dialog.fxml"),
-  UPLOAD_DB_CONNECTION("fxml/upload/upload-db-connection.fxml");
+  UPLOAD_DB_CONNECTION("fxml/upload/upload-db-connection.fxml"),
+  SEARCH_METADATA_DIALOG("fxml/search/search-metadata-dialog-view.fxml");
 
   private final String viewName;
 

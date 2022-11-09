@@ -17,6 +17,8 @@ public class ColumnPresenter extends TreePresenter {
   @FXML
   public VBox labels;
   @FXML
+  public VBox texts;
+  @FXML
   private Label titleTableContainer;
 
 
@@ -29,7 +31,7 @@ public class ColumnPresenter extends TreePresenter {
     this.titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
     initLabels();
 
-
+    model.populate(texts, wrapper.getDatabaseObject(), wrapper.getType());
   }
 
   private void initLabels() {

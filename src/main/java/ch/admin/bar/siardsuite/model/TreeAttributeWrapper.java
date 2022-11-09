@@ -7,13 +7,11 @@ import javafx.beans.property.StringProperty;
 public class TreeAttributeWrapper {
 
   private final StringProperty name;
-  private final int id;
   private final TreeContentView type;
   private final DatabaseObject databaseObject;
 
-  public TreeAttributeWrapper(String name, int id, TreeContentView type, DatabaseObject databaseObject) {
+  public TreeAttributeWrapper(String name, TreeContentView type, DatabaseObject databaseObject) {
     this.name = new SimpleStringProperty(name);
-    this.id = id;
     this.type = type;
     this.databaseObject = databaseObject;
   }

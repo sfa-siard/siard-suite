@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.Schema;
+import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -12,30 +12,31 @@ import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
-
+import javafx.scene.layout.VBox;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
 
     protected final SiardArchive archive;
+    protected final Schema schema;
     protected final boolean onlyMetaData;
     protected final String name;
     protected final String description;
     protected final List<DatabaseTable> tables = new ArrayList<>();
 
-    protected DatabaseSchema(SiardArchive archive, Archive legacyArchive, Schema schema, boolean onlyMetaData) {
+    protected final TreeContentView treeContentView = TreeContentView.SCHEMA;
+
+    protected DatabaseSchema(SiardArchive archive, Schema schema, boolean onlyMetaData) {
         this.archive = archive;
+        this.schema = schema;
         this.onlyMetaData = onlyMetaData;
         name = schema.getMetaSchema().getName();
         description = schema.getMetaSchema().getDescription();
         for (int i = 0; i < schema.getTables(); i++) {
-            tables.add(new DatabaseTable(archive, this, schema.getTable(i), legacyArchive, onlyMetaData));
+            tables.add(new DatabaseTable(archive, this, schema.getTable(i), onlyMetaData));
         }
     }
 
@@ -110,4 +111,29 @@ public class DatabaseSchema extends DatabaseObject {
                                             .collect(Collectors.toList());
         schemaItem.getChildren().setAll(checkBoxTreeItems);
     }
+
+    @Override
+    protected void populate(VBox vbox, TreeContentView type) {}
+
+    private TreeSet<MetaSearchHit> metaSearch(String s) {
+        TreeSet<MetaSearchHit> hits = new TreeSet<>();
+        final List<String> nodeIds = new ArrayList<>();
+        if (contains(name, s)) {
+            nodeIds.add("name");
+        }
+        if (contains(description, s)) {
+            nodeIds.add("description");
+        }
+        if (nodeIds.size() > 0) {
+            hits = new TreeSet<>(List.of(new MetaSearchHit("Schema " + name, this, treeContentView, nodeIds)));
+        }
+        return hits;
+    }
+
+    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
+        final TreeSet<MetaSearchHit> hits = metaSearch(s);
+        hits.addAll(tables.stream().flatMap(table -> table.aggregatedMetaSearch(s).stream()).toList());
+        return hits;
+    }
+
 }

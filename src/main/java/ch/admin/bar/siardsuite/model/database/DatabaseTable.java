@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.*;
-import ch.admin.bar.siard2.api.primary.ArchiveImpl;
+import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -11,31 +11,32 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.VBox;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DatabaseTable extends DatabaseObject {
 
     protected final SiardArchive archive;
     protected final DatabaseSchema schema;
+    protected final Table table;
     protected final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     protected final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
     protected final String numberOfRows;
-    private final Archive legacyArchive;
-    protected DatabaseTable(SiardArchive archive, Archive legacyArchive, DatabaseSchema schema, Table table) {
-        this(archive, schema, table,  legacyArchive, false);
+
+    protected final TreeContentView treeContentView = TreeContentView.TABLE;
+
+    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
+        this(archive, schema, table, false);
     }
 
-    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, Archive legacyArchive, boolean onlyMetaData) {
+    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
         this.archive = archive;
         this.schema = schema;
-        this.legacyArchive = legacyArchive;
+        this.table = table;
         name = table.getMetaTable().getName();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
@@ -108,6 +109,9 @@ public class DatabaseTable extends DatabaseObject {
         }
     }
 
+    @Override
+    protected void populate(VBox vbox, TreeContentView type) {}
+
     private ObservableList<Map> colItems() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         for (DatabaseColumn column : columns) {
@@ -137,7 +141,26 @@ public class DatabaseTable extends DatabaseObject {
         File destination = new File(directory.getAbsolutePath(), this.name + ".html");
         File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
         OutputStream outPutStream = new FileOutputStream(destination);
-        this.legacyArchive.getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
+        this.table.getParentSchema().getParentArchive().getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
     }
+
+    private TreeSet<MetaSearchHit> metaSearch(String s) {
+        TreeSet<MetaSearchHit> hits = new TreeSet<>();
+        final List<String> nodeIds = new ArrayList<>();
+        if (contains(name, s)) {
+            nodeIds.add("name");
+        }
+        if (nodeIds.size() > 0) {
+            hits = new TreeSet<>(List.of(new MetaSearchHit("Schema " + schema.name + ", Table " + name, this, treeContentView, nodeIds)));
+        }
+        return hits;
+    }
+
+    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
+        final TreeSet<MetaSearchHit> hits = metaSearch(s);
+        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).toList());
+        return hits;
+    }
+
 }

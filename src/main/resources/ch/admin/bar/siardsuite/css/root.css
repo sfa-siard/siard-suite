@@ -519,9 +519,9 @@
     -fx-font-size: 12;
     -fx-text-fill: black;
     -fx-max-width: infinity;
-    -fx-text-alignment: RIGHT;
+    -fx-text-alignment: LEFT;
     -fx-label-padding: 6 0 6 0;
-    -fx-alignment: CENTER_RIGHT;
+    -fx-alignment: CENTER_LEFT;
 }
 
 .table-container-text-small{
@@ -666,6 +666,36 @@
     -fx-pref-width: 110.0;
     -fx-pref-height: 40.0;
     -fx-alignment: center-right;
+    -fx-text-fill: #1a1a1aa8;
+}
+
+/* Search Hits */
+
+.search-hits-vbox-list {
+    -fx-pref-width: 700.0;
+}
+
+.search-hits-vbox-list .search-hit-hbox {
+    -fx-border-color: #d3d3d3;
+    -fx-border-width: 2 2 2 2;
+    -fx-padding: 5 10 5 10;
+}
+
+.search-hits-vbox-list .search-hit-hbox:hover {
+    -fx-background-color: #eceaea82;
+}
+
+.search-hits-vbox-list .search-hit-hbox .name-label {
+    -fx-pref-width: 600.0;
+    -fx-pref-height: 40.0;
+    -fx-font-size: 15;
+    -fx-alignment: center-left;
+}
+
+.search-hits-vbox-list .search-hit-hbox .number-label {
+    -fx-pref-width: 50.0;
+    -fx-pref-height: 40.0;
+    -fx-alignment: center-left;
     -fx-text-fill: #1a1a1aa8;
 }
 

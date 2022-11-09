@@ -5,7 +5,6 @@ import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.io.File;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -14,18 +13,18 @@ import java.util.Calendar;
 // understands additional metadata of the archive
 public class SiardArchiveMetaData {
 
-    private final StringProperty siardFormatVersion;
-    private final StringProperty databaseName;
-    private final StringProperty databaseProduct;
-    private final StringProperty databaseConnectionURL;
-    private final StringProperty databaseUsername;
-    private final StringProperty databaseDescription;
-    private final StringProperty dataOwner;
-    private final StringProperty dataOriginTimespan;
-    private final LocalDate archivingDate;
-    private final StringProperty archiverName;
-    private final StringProperty archiverContact;
-    private File targetArchive; // not sure if this is the correct place here... maybe just use the model?
+    protected final StringProperty siardFormatVersion;
+    protected final StringProperty databaseName;
+    protected final StringProperty databaseProduct;
+    protected final StringProperty databaseConnectionURL;
+    protected final StringProperty databaseUsername;
+    protected final StringProperty databaseDescription;
+    protected final StringProperty dataOwner;
+    protected final StringProperty dataOriginTimespan;
+    protected final LocalDate archivingDate;
+    protected final StringProperty archiverName;
+    protected final StringProperty archiverContact;
+    protected File targetArchive; // not sure if this is the correct place here... maybe just use the model?
 
     public SiardArchiveMetaData(String dbName, String databaseDescription, String dataOwner, String dataOriginTimespan,
                                 String archiverName, String archiverContact, File targetArchive) {

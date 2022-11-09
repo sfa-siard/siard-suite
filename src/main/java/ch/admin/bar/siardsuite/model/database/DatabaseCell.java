@@ -4,6 +4,8 @@ import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
+
 import java.io.IOException;
 import java.sql.Types;
 
@@ -14,6 +16,7 @@ public class DatabaseCell extends DatabaseObject {
     protected final DatabaseTable table;
     protected final DatabaseColumn column;
     protected final DatabaseRow row;
+    protected final Cell cell;
     protected final String index;
     protected final String name;
     protected final String type;
@@ -25,6 +28,7 @@ public class DatabaseCell extends DatabaseObject {
         this.table = table;
         column = new DatabaseColumn(archive, schema, table, cell.getMetaColumn());
         this.row = row;
+        this.cell = cell;
         index = String.valueOf(cell.getMetaColumn().getPosition());
         name = "Cell " + index;
         try {
@@ -46,5 +50,8 @@ public class DatabaseCell extends DatabaseObject {
 
     @Override
     protected void populate(TableView tableView, TreeContentView type) {}
+
+    @Override
+    protected void populate(VBox vbox, TreeContentView type) {}
 
 }
