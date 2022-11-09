@@ -3,7 +3,7 @@ name: Package Platform Specific Runtimes and Installer
 
 on:
   push:
-    branches: [ "main", "feature/513-include-jre" ]
+    branches: [ "main" ]
 
 jobs:
   build:
