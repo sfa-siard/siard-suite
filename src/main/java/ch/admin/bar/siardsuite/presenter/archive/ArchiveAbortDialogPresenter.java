@@ -39,6 +39,7 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
     cancelArchiveButton.setManaged(true);
 
     cancelArchiveButton.setOnAction(event -> {
+      controller.closeDbConnection();
       stage.closeDialog();
       stage.navigate(View.START);
     });

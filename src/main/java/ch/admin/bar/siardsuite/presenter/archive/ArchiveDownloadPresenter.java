@@ -25,6 +25,7 @@ import javafx.scene.paint.Paint;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DOWNLOAD_FINISHED;
@@ -94,7 +95,12 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             model.provideDatabaseArchiveMetaDataProperties(this);
             this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
             this.archivePath.setText(targetArchive.getAbsolutePath());
-            controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure());
+            try {
+                controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure());
+            } catch (SQLException e) {
+                // TODO should notify user about any error - Toast it # CR 458
+                throw new RuntimeException(e);
+            }
         };
     }
 
