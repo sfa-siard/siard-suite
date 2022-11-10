@@ -29,15 +29,7 @@ public class DatabaseTable extends DatabaseObject {
     protected final List<DatabaseRow> rows = new ArrayList<>();
     protected final String numberOfRows;
     protected final int loadBatchSize = 50;
-    /*
-    TODO: remove magic number lastRowLoadedIndex = -51
-    Explanation: populate(TableView<Map> tableView, TreeContentView type) is initially called twice by tableView's
-    parent node (see TablePresenter.java: there init is called twice). Maybe our view hierarchy (stage, scene, ...)
-    is messed up and causes strange lifecycle activities.
-     */
-    protected int lastRowLoadedIndex = -51;
-    protected final RecordDispenser recordDispenser;
-
+    protected int lastRowLoadedIndex = -1;
     protected final TreeContentView treeContentView = TreeContentView.TABLE;
 
     protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
@@ -55,11 +47,6 @@ public class DatabaseTable extends DatabaseObject {
         }
         numberOfColumns = String.valueOf(columns.size());
         numberOfRows = String.valueOf(table.getMetaTable().getRows());
-        try {
-            recordDispenser = table.openRecords();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
@@ -90,6 +77,7 @@ public class DatabaseTable extends DatabaseObject {
                 tableView.getColumns().add(col2);
                 tableView.setItems(colItems());
             } else if (TreeContentView.ROWS.equals(type)) {
+                lastRowLoadedIndex = -1;
                 final List<TableRow<Map>> rows = new ArrayList<>();
                 final Callback<TableView<Map>, TableRow<Map>> rowFactory = o -> {
                     TableRow<Map> row = new TableRow<>();
@@ -112,9 +100,14 @@ public class DatabaseTable extends DatabaseObject {
                     col.setCellValueFactory(new MapValueFactory<>(column.index));
                     tableView.getColumns().add(col);
                 }
-                loadRecords();
-                tableView.setItems(rowItems());
-                tableView.setOnScroll(event -> loadItems(tableView, rows));
+                try {
+                    final RecordDispenser recordDispenser = table.openRecords();
+                    loadRecords(recordDispenser);
+                    tableView.setItems(rowItems());
+                    tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
             tableView.setMinWidth(590);
             tableView.setMaxWidth(590);
@@ -149,7 +142,7 @@ public class DatabaseTable extends DatabaseObject {
         return items;
     }
 
-    private void loadItems(TableView<Map> tableView, List<TableRow<Map>> rows) {
+    private void loadItems(RecordDispenser recordDispenser, TableView<Map> tableView, List<TableRow<Map>> rows) {
         boolean reload = false;
         for (TableRow<Map> row : rows) {
             if (lastRowLoadedIndex <= row.getIndex()) {
@@ -157,18 +150,19 @@ public class DatabaseTable extends DatabaseObject {
             }
         }
         if (reload) {
-            loadRecords();
+            loadRecords(recordDispenser);
             tableView.getItems().addAll(rowItems());
         }
     }
 
-    private void loadRecords() {
+    private void loadRecords(RecordDispenser recordDispenser) {
         rows.clear();
         if (!onlyMetaData) {
             try {
+                final long numberOfRows = table.getMetaTable().getRows();
                 int j = 0;
-                while (j < table.getMetaTable().getRows() && j < loadBatchSize) {
-                    if (lastRowLoadedIndex >= -1 && recordDispenser.getPosition() < table.getMetaTable().getRows()) {
+                while (j < numberOfRows && j < loadBatchSize) {
+                    if (recordDispenser.getPosition() < numberOfRows) {
                         rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
                     }
                     j++;
