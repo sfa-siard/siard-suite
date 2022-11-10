@@ -9,10 +9,11 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
-
+import javafx.util.Callback;
 import java.io.*;
 import java.util.*;
 
@@ -21,11 +22,21 @@ public class DatabaseTable extends DatabaseObject {
     protected final SiardArchive archive;
     protected final DatabaseSchema schema;
     protected final Table table;
+    protected final boolean onlyMetaData;
     protected final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     protected final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
     protected final String numberOfRows;
+    protected final int loadBatchSize = 50;
+    /*
+    TODO: remove magic number lastRowLoadedIndex = -51
+    Explanation: populate(TableView<Map> tableView, TreeContentView type) is initially called twice by tableView's
+    parent node (see TablePresenter.java: there init is called twice). Maybe our view hierarchy (stage, scene, ...)
+    is messed up and causes strange lifecycle activities.
+     */
+    protected int lastRowLoadedIndex = -51;
+    protected final RecordDispenser recordDispenser;
 
     protected final TreeContentView treeContentView = TreeContentView.TABLE;
 
@@ -37,24 +48,18 @@ public class DatabaseTable extends DatabaseObject {
         this.archive = archive;
         this.schema = schema;
         this.table = table;
+        this.onlyMetaData = onlyMetaData;
         name = table.getMetaTable().getName();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
         }
         numberOfColumns = String.valueOf(columns.size());
-        if (!onlyMetaData) {
-            try {
-                int i = 0;
-                final RecordDispenser recordDispenser = table.openRecords();
-                while (i < table.getMetaTable().getRows() && i < 50) {
-                    rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
-                    i++;
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
         numberOfRows = String.valueOf(table.getMetaTable().getRows());
+        try {
+            recordDispenser = table.openRecords();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
@@ -85,6 +90,13 @@ public class DatabaseTable extends DatabaseObject {
                 tableView.getColumns().add(col2);
                 tableView.setItems(colItems());
             } else if (TreeContentView.ROWS.equals(type)) {
+                final List<TableRow<Map>> rows = new ArrayList<>();
+                final Callback<TableView<Map>, TableRow<Map>> rowFactory = o -> {
+                    TableRow<Map> row = new TableRow<>();
+                    rows.add(row);
+                    return row;
+                };
+                tableView.setRowFactory(rowFactory);
                 final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
                 col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
                 col0.setMinWidth(125);
@@ -100,7 +112,9 @@ public class DatabaseTable extends DatabaseObject {
                     col.setCellValueFactory(new MapValueFactory<>(column.index));
                     tableView.getColumns().add(col);
                 }
+                loadRecords();
                 tableView.setItems(rowItems());
+                tableView.setOnScroll(event -> loadItems(tableView, rows));
             }
             tableView.setMinWidth(590);
             tableView.setMaxWidth(590);
@@ -114,7 +128,7 @@ public class DatabaseTable extends DatabaseObject {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         for (DatabaseColumn column : columns) {
             Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(columns.indexOf(column) + 1));
+            item.put("index", column.index);
             item.put("name", column.name);
             item.put("type", column.type);
             items.add(item);
@@ -126,13 +140,44 @@ public class DatabaseTable extends DatabaseObject {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         for (DatabaseRow row : rows) {
             Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(rows.indexOf(row) + 1));
+            item.put("index", String.valueOf(Integer.parseInt(row.index) + 1));
             for (DatabaseCell cell : row.cells) {
                 item.put(cell.index, cell.value);
             }
             items.add(item);
         }
         return items;
+    }
+
+    private void loadItems(TableView<Map> tableView, List<TableRow<Map>> rows) {
+        boolean reload = false;
+        for (TableRow<Map> row : rows) {
+            if (lastRowLoadedIndex <= row.getIndex()) {
+                reload = true;
+            }
+        }
+        if (reload) {
+            loadRecords();
+            tableView.getItems().addAll(rowItems());
+        }
+    }
+
+    private void loadRecords() {
+        rows.clear();
+        if (!onlyMetaData) {
+            try {
+                int j = 0;
+                while (j < table.getMetaTable().getRows() && j < loadBatchSize) {
+                    if (lastRowLoadedIndex >= -1 && recordDispenser.getPosition() < table.getMetaTable().getRows()) {
+                        rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
+                    }
+                    j++;
+                    lastRowLoadedIndex++;
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     protected void export(File directory) throws IOException {
