@@ -119,16 +119,19 @@
     -fx-background-color: white;
     -fx-border-color: transparent transparent #c5c4c4 transparent; /* dirty hack to prevent elements moving around without border*/
     -fx-border-width: 0.1em;
+    -fx-cursor: HAND;
 }
 
 .menu-item:hover, .menu-item:focused {
     -fx-background-color: #c5c4c4;
     -fx-border-color: #b0afaf;
     -fx-border-width: 1 1 1 1;
+    -fx-cursor: HAND;
 }
 
 .menu-item .label {
     -fx-text-fill: black;
+    -fx-cursor: HAND;
 }
 
 .sub-menu {
@@ -251,6 +254,7 @@
     -fx-border-radius: 5;
     -fx-font-family: siard-font-family;
     -fx-font-size: 14px;
+    -fx-cursor: HAND;
 }
 
 .primary {
@@ -293,6 +297,7 @@
     -fx-background-radius: 5;
     -fx-border-radius: 5;
     -fx-font-size: 14px;
+    -fx-cursor: HAND;
 }
 
 .dialog-title {
@@ -382,6 +387,15 @@
     -fx-max-height: 48;
 }
 
+.ok-check-icon {
+    -fx-graphic: url(../icons/ok_check.png);
+}
+
+.x-circle-icon {
+    -fx-graphic: url(../icons/x-circle-red.png);
+    -fx-graphic-text-gap: 1.2em;
+}
+
 .form-container {
     -fx-background-color: #f5f7fa;
     -fx-font-family: siard-font-family;
@@ -438,6 +452,7 @@
     -mfx-secondary: #9aa5b1;
     -fx-background-color: transparent;
     -fx-text-fill: siard-text-color;
+    -fx-cursor: HAND;
 }
 
 .form-container .info-tooltip {
@@ -597,6 +612,7 @@
 
 .files-vbox-list .file-hbox:hover {
     -fx-background-color: #eceaea82;
+    -fx-cursor: HAND;
 }
 
 .files-vbox-list .file-hbox .icon-label {
@@ -661,6 +677,7 @@
 
 .connections-vbox-list .connections-hbox:hover {
     -fx-background-color: #eceaea82;
+    -fx-cursor: HAND;
 }
 
 .connections-vbox-list .connections-hbox .icon-label {

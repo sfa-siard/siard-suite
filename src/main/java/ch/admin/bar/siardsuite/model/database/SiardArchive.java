@@ -4,7 +4,7 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveSchemasVisitor;
+import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
@@ -59,6 +59,18 @@ public class SiardArchive extends DatabaseObject {
         }
     }
 
+    public void shareObject (ArchiveVisitor visitor) {
+        if (archive != null) {
+            visitor.visit(archive);
+        }
+    }
+
+    public void shareProperties (ArchiveVisitor visitor) {
+        if (archive != null) {
+            visitor.visit(archive.getMetaData());
+        }
+    }
+
     public void shareObject(SiardArchiveVisitor visitor) {
         visitor.visit(this);
     }
@@ -72,12 +84,6 @@ public class SiardArchive extends DatabaseObject {
     public void shareObject(SiardArchiveMetaDataVisitor visitor) {
         if (metaData != null) {
             metaData.shareObject(visitor);
-        }
-    }
-
-    public void shareSchemas(SiardArchiveSchemasVisitor visitor) {
-        if (!schemas.isEmpty()) {
-            visitor.visit(schemas);
         }
     }
 

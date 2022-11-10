@@ -8,6 +8,7 @@ import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
+import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
@@ -200,6 +201,18 @@ public class Model {
     }
   }
 
+  public void provideArchiveProperties(ArchiveVisitor visitor) {
+    if (getArchive() != null) {
+      getArchive().shareProperties(visitor);
+    }
+  }
+
+  public void provideArchiveObject(ArchiveVisitor visitor) {
+    if (getArchive() != null) {
+      getArchive().shareObject(visitor);
+    }
+  }
+
   public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
     TreeSet<MetaSearchHit> hits = new TreeSet<>();
     if (getArchive() != null) {
@@ -211,4 +224,10 @@ public class Model {
   public void setSchemaMap(Map schemaMap) {
     this.schemaMap = schemaMap;
   }
+
+  public Map<String, String> getSchemaMap() {
+    return schemaMap;
+  }
+
+
 }

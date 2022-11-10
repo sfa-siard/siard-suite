@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
             stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadResultPresenter">
@@ -18,19 +12,16 @@
             <children>
                 <VBox>
                     <children>
-                        <Label fx:id="title" styleClass="h2" textFill="#1BCB95">
-                            <graphic>
-                                <ImageView fx:id="resultIcon" fitHeight="24.0" fitWidth="24.0">
-                                    <Image url="@../../icons/ok_check.png"/>
-                                </ImageView>
-                            </graphic>
-                            <VBox.margin>
-                                <Insets top="-25.0"/>
-                            </VBox.margin>
+                        <Label fx:id="title" textFill="#1BCB95">
+                            <styleClass>
+                                <String fx:value="h2"/>
+                                <String fx:value="label-icon-left"/>
+                                <String fx:value="ok-check-icon"/>
+                            </styleClass>
+
                         </Label>
 
-                        <Label fx:id="summary" contentDisplay="RIGHT" styleClass="h2"
-                               text="1234 Datensätze heruntergeladen">
+                        <Label fx:id="summary" styleClass="view-text">
                             <VBox.margin>
                                 <Insets top="25.0"/>
                             </VBox.margin>
@@ -47,14 +38,5 @@
         </VBox>
     </center>
     <bottom>
-        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-              minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
-                <MFXButton fx:id="toStartScreen">
-                    <styleClass>
-                        <String fx:value="button"/>
-                        <String fx:value="primary"/>
-                    </styleClass>
-                </MFXButton>
-        </HBox>
     </bottom>
 </BorderPane>

@@ -1,36 +1,28 @@
 package ch.admin.bar.siardsuite.database;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.MetaData;
+import ch.admin.bar.siard2.cmd.MetaDataToDb;
+import ch.admin.bar.siard2.cmd.PrimaryDataToDb;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
-import java.io.File;
 import java.sql.Connection;
-import java.time.LocalDate;
 
-public class DatabaseUploadTask extends Task<ObservableList<String>> implements Progress, SiardArchiveMetaDataVisitor {
+public class DatabaseUploadTask extends Task<ObservableList<String>> implements Progress, ArchiveVisitor {
 
   private final Connection connection;
   private final Model model;
-  private SiardArchiveMetaData metaData;
+  private MetaData metaData;
+  private Archive archive;
 
   public DatabaseUploadTask(Connection connection, Model model) {
     this.connection = connection;
     this.model = model;
-  }
-
-  @Override
-  public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL, String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate, LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
-
-  }
-
-  @Override
-  public void visit(SiardArchiveMetaData metaData) {
-    this.metaData = metaData;
   }
 
   @Override
@@ -45,12 +37,34 @@ public class DatabaseUploadTask extends Task<ObservableList<String>> implements 
 
   @Override
   protected ObservableList<String> call() throws Exception {
+    this.model.provideArchiveProperties(this);
     ObservableList<String> progressData = FXCollections.observableArrayList();
     connection.setAutoCommit(false);
-//    MetaDataToDb metadata = MetaDataToDb.newInstance()
 
-//    MetaDataToDb mdtd = MetaDataToDb.newInstance(connection.getMetaData(), this.metaData, "asdf");
-//    if (ucd.isOverwrite() || ((mdtd.tablesDroppedByUpload() == 0) && (mdtd.typesDroppedByUpload() == 0)))
-    return null;
+    boolean isOverwrite = true;
+    boolean metaDataOnly = false;
+    MetaDataToDb mdtd = MetaDataToDb.newInstance(connection.getMetaData(), this.metaData, model.getSchemaMap());
+    if (isOverwrite || ((mdtd.tablesDroppedByUpload() == 0) && (mdtd.typesDroppedByUpload() == 0))) {
+      mdtd.upload(this);
+      if (!metaDataOnly) {
+        this.model.provideArchiveObject(this);
+        updateProgress(0, 100);
+        PrimaryDataToDb pdtd = PrimaryDataToDb.newInstance(connection, this.archive,
+                mdtd.getArchiveMapping(), mdtd.supportsArrays(), mdtd.supportsDistincts(), mdtd.supportsUdts());
+        pdtd.upload(this);
+      }
+    }
+    return progressData;
+  }
+
+
+  @Override
+  public void visit(Archive archive) {
+    this.archive = archive;
+  }
+
+  @Override
+  public void visit(MetaData metaData) {
+    this.metaData = metaData;
   }
 }

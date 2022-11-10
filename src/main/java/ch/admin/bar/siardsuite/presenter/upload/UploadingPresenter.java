@@ -89,12 +89,12 @@ public class UploadingPresenter  extends StepperPresenter {
                 throw new RuntimeException(e);
             }
 
-            controller.addDatabaseLoadingValuePropertyListener((o1, oldValue1, newValue1) -> {
+            controller.addDatabaseUploadingValuePropertyListener((o1, oldValue1, newValue1) -> {
                 AtomicInteger pos1 = new AtomicInteger();
                 newValue1.forEach(s -> addTableData(s, pos1.getAndIncrement()));
             });
 
-            controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+            controller.addDatabaseUploadingProgressPropertyListener((o, oldValue, newValue) -> {
                 double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
                 if (pos >= 1) {
                     Label label = (Label) scrollBox.getChildren().get((int) pos);

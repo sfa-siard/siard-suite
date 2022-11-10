@@ -11,7 +11,7 @@ import java.util.Objects;
 public class StepperButtonBox extends HBox {
 
   public enum Type {
-    DEFAULT, CANCEL, DOWNLOAD_FINISHED;
+    DEFAULT, CANCEL, DOWNLOAD_FINISHED, FAILED;
   }
 
   @FXML
@@ -26,6 +26,7 @@ public class StepperButtonBox extends HBox {
       case CANCEL -> new CancelButtonBox();
       case DOWNLOAD_FINISHED -> new DownloadFinishedButtonBox();
       case DEFAULT -> new DefaultButtonBox();
+      case FAILED -> new FailedButtonBox();
     };
   }
 
@@ -84,6 +85,21 @@ public class StepperButtonBox extends HBox {
       this.nextButton.getStyleClass().setAll("button", "primary");
       this.nextButton.setManaged(true);
       this.cancelButton.textProperty().bind(I18n.createStringBinding("button.home"));
+      this.cancelButton.getStyleClass().setAll("button", "secondary");
+      this.cancelButton.setManaged(true);
+      this.getChildren().addAll(this.cancelButton, this.nextButton);
+      this.initialize();
+    }
+  }
+
+
+  private class FailedButtonBox extends StepperButtonBox {
+
+    FailedButtonBox() {
+      this.nextButton.textProperty().bind(I18n.createStringBinding("button.close"));
+      this.nextButton.getStyleClass().setAll("button", "primary");
+      this.nextButton.setManaged(true);
+      this.cancelButton.textProperty().bind(I18n.createStringBinding("button.back"));
       this.cancelButton.getStyleClass().setAll("button", "secondary");
       this.cancelButton.setManaged(true);
       this.getChildren().addAll(this.cancelButton, this.nextButton);
