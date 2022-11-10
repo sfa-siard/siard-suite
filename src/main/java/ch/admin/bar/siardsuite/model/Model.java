@@ -27,7 +27,7 @@ public class Model {
 
   private View currentView = View.START;
   private PreviewPresenter currentPreviewPresenter = null;
-  private String currentSearch = null;
+  private String currentMetaSearch = null;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private Map<String, String> schemaMap = new HashMap<>();
   private SiardArchive archive = new SiardArchive();
@@ -50,12 +50,12 @@ public class Model {
     currentPreviewPresenter = presenter;
   }
 
-  public String getCurrentSearch() {
-    return currentSearch;
+  public String getCurrentMetaSearch() {
+    return currentMetaSearch;
   }
 
-  public void setCurrentSearch(String s) {
-    currentSearch = s;
+  public void setCurrentMetaSearch(String s) {
+    currentMetaSearch = s;
   }
 
   public Archive initArchive() {

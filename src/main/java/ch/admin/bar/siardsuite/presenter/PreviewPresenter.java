@@ -138,6 +138,10 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   protected void setListeners() {
     MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
     selection.selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateTableContainerContent(newValue.getValue())));
+    tableSearchButton.setOnAction(event -> {
+      model.setCurrentPreviewPresenter(this);
+      stage.openDialog(View.SEARCH_TABLE_DIALOG);
+    });
     metaSearchButton.setOnAction(event -> {
       model.setCurrentPreviewPresenter(this);
       stage.openDialog(View.SEARCH_METADATA_DIALOG);

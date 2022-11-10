@@ -25,6 +25,7 @@ public enum View {
   UPLOAD_DB_CONNECTION("fxml/upload/upload-db-connection.fxml"),
   UPLOADING("fxml/upload/upload-uploading.fxml"),
   UPLOAD_RESULT("fxml/upload/upload-result.fxml"),
+  SEARCH_TABLE_DIALOG("fxml/search/search-table-dialog-view.fxml"),
   SEARCH_METADATA_DIALOG("fxml/search/search-metadata-dialog-view.fxml");
 
   private final String viewName;
