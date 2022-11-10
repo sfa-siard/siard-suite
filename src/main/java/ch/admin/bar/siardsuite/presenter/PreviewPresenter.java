@@ -35,7 +35,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   private String tableName = "";
   private List<DatabaseColumn> columns = new ArrayList<>();
   private String columnName = "";
-  private List<DatabaseRow> rows = new ArrayList<>();
+  private String numberOfRows = "";
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
   @FXML
   protected TreeView<TreeAttributeWrapper> treeView;
@@ -106,7 +106,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
         if (!onlyMetaData) {
           rowsItem = new TreeItem<>();
-          rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.rows", TreeContentView.ROWS, table, rows.size()));
+          rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.rows", TreeContentView.ROWS, table, numberOfRows));
 
           tableItem.getChildren().add(rowsItem);
         }
@@ -176,7 +176,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) {
     this.tableName = tableName;
     this.columns = columns;
-    this.rows = rows;
+    this.numberOfRows = numberOfRows;
   }
 
   @Override
