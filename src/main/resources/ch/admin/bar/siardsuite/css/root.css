@@ -351,6 +351,7 @@
     -fx-content-display: RIGHT;
 }
 
+
 .label-icon-left {
     -fx-content-display: LEFT;
 }
@@ -377,6 +378,8 @@
 
 .arrow-right-icon {
     -fx-graphic: url(../icons/right_arrow.png);
+    -fx-max-width: 48;
+    -fx-max-height: 48;
 }
 
 .form-container {

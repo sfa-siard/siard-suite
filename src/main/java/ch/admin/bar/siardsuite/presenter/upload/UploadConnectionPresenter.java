@@ -89,6 +89,10 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     public Label titleNewSchemaName;
     @FXML
     public VBox schemaFields;
+    @FXML
+    public Label currentNameLabel;
+    @FXML
+    public Label newNameLabel;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -143,6 +147,8 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         I18n.bind(passwordField.floatingTextProperty(), "archiveConnection.view.password.label");
         I18n.bind(urlField.floatingTextProperty(), "archiveConnection.view.url.label");
         I18n.bind(titleNewSchemaName.textProperty(), "uploadConnection.view.new.schema.name");
+        I18n.bind(currentNameLabel.textProperty(), "uploadConnection.view.current.name");
+        I18n.bind(newNameLabel.textProperty(), "uploadConnection.view.new.name");
     }
 
     private void addRecentDatabaseConnection() {
@@ -227,29 +233,23 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
         for (DatabaseSchema schema : schemas) {
             model.provideDatabaseArchiveProperties(this, schema);
-            MFXTextField currentName = new MFXTextField();
+            Label currentName = new Label();
+            Label iconLabel = new Label();
             MFXTextField newName = new MFXTextField();
             currentName.setText(schemaName);
             newName.setText(schemaName);
             HBox container = new HBox();
-            container.setPrefSize(200.0, 100.0);
-            currentName.setEditable(false);
-            currentName.setSelectable(false);
-            currentName.setDisable(true);
+            container.setPrefSize(200.0, 48.0);
             currentName.setPrefSize(277.0, 48.0);
-            currentName.getStyleClass().addAll("form-field", "label-icon", "arrow-right-icon");
+            iconLabel.setPrefSize(48.0,48.0);
+            iconLabel.getStyleClass().add( "arrow-right-icon");
             newName.setPrefSize(277.0, 48.0);
             newName.getStyleClass().add("form-field");
-            container.getChildren().addAll(currentName, newName);
-            HBox.setMargin(newName, new Insets(0,0,0,24));
+            container.getChildren().addAll(currentName, iconLabel, newName);
+            HBox.setMargin(currentName, new Insets(10,0,0,0));
+            HBox.setMargin(iconLabel, new Insets(10,0,0,0));
+            HBox.setMargin(newName, new Insets(10,0,0,0));
             schemaFields.getChildren().add(container);
-            VBox.setMargin(container, new Insets(10, 0, 0, 0));
-
-            if (schemaFields.getChildren().size() == 1) {
-                I18n.bind(currentName.floatingTextProperty(), "uploadConnection.view.current.name");
-                I18n.bind(newName.floatingTextProperty(), "uploadConnection.view.new.name");
-            }
-
         }
     }
 
