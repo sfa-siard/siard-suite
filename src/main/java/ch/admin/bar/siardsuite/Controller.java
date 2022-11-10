@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class Controller {
 
@@ -59,6 +60,10 @@ public class Controller {
     this.model.setDatabaseName(databaseName);
     this.model.setUsername(username);
     this.model.setPassword(password);
+  }
+
+  public void updateSchemaMap(Map schemaMap) {
+    this.model.setSchemaMap(schemaMap);
   }
 
   public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {

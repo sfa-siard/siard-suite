@@ -20,6 +20,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
@@ -30,7 +31,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
@@ -47,6 +51,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     private String dbTypeString;
     private List<DatabaseSchema> schemas = new ArrayList<>();
     private String schemaName = "";
+    private Map<String, String> schemaMap = new HashMap<>();
     @FXML
     public Label errorMessage;
     @FXML
@@ -212,8 +217,12 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             } else if (urlField.getText().isEmpty()) {
                 I18n.bind(errorMessage.textProperty(), "archiveConnection.view.error.connection.url");
                 errorMessage.setVisible(true);
+            } else if (!hasValidSchemaFields()) {
+                I18n.bind(errorMessage.textProperty(), "uploadConnection.view.error.schema.name");
+                errorMessage.setVisible(true);
             } else {
                 controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
+                controller.updateSchemaMap(schemaMap);
                 errorMessage.setVisible(false);
                 stage.setHeight(950);
                 stepper.next();
@@ -229,8 +238,25 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.UPLOAD_ABORT_DIALOG));
     }
 
-    private void initSchemaFields() {
+    private boolean hasValidSchemaFields() {
+        AtomicBoolean result = new AtomicBoolean(true);
+        schemaFields.getChildren().forEach(container -> {
+            List<Node> nodes = ((HBox) container).getChildren();
+            if (nodes.size() > 2) {
+                String currentName = ((Label) nodes.get(0)).getText();
+                String newName = ((MFXTextField) nodes.get(2)).getText();
+                if (!currentName.isEmpty() && !newName.isEmpty()) {
+                    schemaMap.put(currentName, newName);
+                } else {
+                    result.set(false);
+                }
+            }
+        });
 
+        return result.get();
+    }
+
+    private void initSchemaFields() {
         for (DatabaseSchema schema : schemas) {
             model.provideDatabaseArchiveProperties(this, schema);
             Label currentName = new Label();
@@ -240,7 +266,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             newName.setText(schemaName);
             HBox container = new HBox();
             container.setPrefSize(200.0, 48.0);
-            currentName.setPrefSize(277.0, 48.0);
+            currentName.setPrefSize(253.0, 48.0);
             iconLabel.setPrefSize(48.0,48.0);
             iconLabel.getStyleClass().add( "arrow-right-icon");
             newName.setPrefSize(277.0, 48.0);
@@ -251,6 +277,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             HBox.setMargin(newName, new Insets(10,0,0,0));
             schemaFields.getChildren().add(container);
         }
+        stage.setHeight(stage.getHeight() + (schemas.size() - 1) * 58.0);
     }
 
     private void handleKeyEvent(KeyEvent event) {

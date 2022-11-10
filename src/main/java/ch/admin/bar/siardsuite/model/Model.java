@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -27,6 +28,7 @@ public class Model {
   private PreviewPresenter currentPreviewPresenter = null;
   private String currentSearch = null;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
+  private Map<String, String> schemaMap = new HashMap<>();
   private SiardArchive archive = new SiardArchive();
 
   public Model() {}
@@ -206,4 +208,7 @@ public class Model {
     return hits;
   }
 
+  public void setSchemaMap(Map schemaMap) {
+    this.schemaMap = schemaMap;
+  }
 }
