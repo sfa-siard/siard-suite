@@ -11,7 +11,7 @@ public class UploadSteps {
                                                       2,
                                                       true);
     private final static Step uploadArchiveInProgress = new Step("upload.step.name.uploading", View.UPLOADING, 3, false);
-    private final static Step uploadArchiveResult = new Step("upload.step.name.result", View.UPLOAD_RESULT, 4, true);
+    private final static Step uploadArchiveResult = new Step("upload.step.name.result", View.UPLOAD_RESULT, 3, true);
 
     static {
         steps = List.of(selectDbms, dbConnection, uploadArchiveInProgress, uploadArchiveResult);

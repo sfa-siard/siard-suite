@@ -211,6 +211,14 @@
     -fx-graphic: url(../icons/bubble_checked.png);
 }
 
+.mfx-stepper-toggle:invalid .number-btn {
+    -fx-content-display: graphic-only;
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+    -fx-max-height: 22;
+    -fx-graphic: url(../icons/bubble_error.png);
+}
+
 .mfx-stepper-toggle .mfx-text-field,
 .custom-stepper-toggle .mfx-text-field {
     -fx-padding: 0 0 0 0;
@@ -234,7 +242,9 @@
 .mfx-stepper-toggle:selected .mfx-text-field,
 .custom-stepper-toggle:selected .mfx-text-field,
 .mfx-stepper-toggle:completed .mfx-text-field,
-.custom-stepper-toggle:completed .mfx-text-field {
+.custom-stepper-toggle:completed .mfx-text-field,
+.mfx-stepper-toggle:invalid .mfx-text-field,
+.custom-stepper-toggle:invalid .mfx-text-field {
     -fx-opacity: 1;
     -fx-text-fill: black;
 }

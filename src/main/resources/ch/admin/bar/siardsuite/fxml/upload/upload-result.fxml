@@ -12,15 +12,12 @@
             <children>
                 <VBox>
                     <children>
-                        <Label fx:id="title" textFill="#1BCB95">
+                        <Label fx:id="title">
                             <styleClass>
                                 <String fx:value="h2"/>
                                 <String fx:value="label-icon-left"/>
-                                <String fx:value="ok-check-icon"/>
                             </styleClass>
-
                         </Label>
-
                         <Label fx:id="summary" styleClass="view-text">
                             <VBox.margin>
                                 <Insets top="25.0"/>

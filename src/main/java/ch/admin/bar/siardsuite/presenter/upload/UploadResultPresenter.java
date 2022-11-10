@@ -9,6 +9,7 @@ import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import io.github.palexdev.materialfx.enums.StepperToggleState;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -61,6 +62,8 @@ public class UploadResultPresenter extends StepperPresenter {
 
     private EventHandler<SiardEvent> showFailed(MFXStepper stepper) {
         return event -> {
+            stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.ERROR);
+            stepper.updateProgress();
             // stepper Progress failed
             // stepper update
             I18n.bind(title.textProperty(), "upload.result.failed.title");
