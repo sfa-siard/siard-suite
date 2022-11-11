@@ -5,8 +5,10 @@ import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
-import ch.admin.bar.siardsuite.ui.Icon;
-import ch.admin.bar.siardsuite.ui.Spinner;
+import ch.admin.bar.siardsuite.component.Icon;
+import ch.admin.bar.siardsuite.component.IconView;
+import ch.admin.bar.siardsuite.component.LabelIcon;
+import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -14,7 +16,6 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -73,25 +74,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         this.setListeners(stepper);
     }
 
-    private void addTableData(String tableName, Integer pos) {
-        Label label = new Label(tableName);
-        label.getStyleClass().add("view-text");
-        label.setContentDisplay(ContentDisplay.RIGHT);
-        ImageView imageView = getImageView(pos, loading);
-        new Spinner(imageView).play();
-        label.setGraphic(imageView);
-        scrollBox.getChildren().add(label);
-    }
-
-    private ImageView getImageView(Integer pos, Image image) {
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(14.0);
-        imageView.setFitWidth(14.0);
-        imageView.getStyleClass().addAll("loading-icon", "icon-button");
-        imageView.setId("dataLoader" + pos);
-        return imageView;
-    }
-
     private void setListeners(MFXStepper stepper) {
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
             scrollBox.getChildren().clear();
@@ -124,8 +106,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
             controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
                 double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
                 if (pos >= 1) {
-                    Label label = (Label) scrollBox.getChildren().get((int) pos);
-                    label.setGraphic(getImageView(newValue.intValue(), ok));
+                    LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
+                    label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
                 }
             });
 
@@ -137,6 +119,11 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
             this.stage.setHeight(1080.00);
         });
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+    }
+
+    private void addTableData(String tableName, Integer pos) {
+        scrollBox.getChildren().add(
+                new LabelIcon(tableName, pos, IconView.IconType.LOADING));
     }
 
     private void navigateBack(MFXStepper stepper) {

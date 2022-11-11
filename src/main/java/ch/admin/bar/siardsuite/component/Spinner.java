@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.ui;
+package ch.admin.bar.siardsuite.component;
 
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
