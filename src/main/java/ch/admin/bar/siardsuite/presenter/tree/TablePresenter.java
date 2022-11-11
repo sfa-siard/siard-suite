@@ -10,6 +10,7 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.util.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,8 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
 
     model.provideDatabaseArchiveProperties(this, wrapper.getDatabaseObject());
     model.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
+
+    model.setCurrentDatabaseTable(new Pair<>(tableView, wrapper.getDatabaseObject()));
   }
 
   @Override

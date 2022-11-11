@@ -102,14 +102,16 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
     }
 
     private void show(MetaSearchHit hit) {
-        stage.closeDialog();
-        try {
-            FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView().getViewName()));
-            Node node = loader.load();
-            model.getCurrentPreviewPresenter().getTableContainerContent().getChildren().setAll(node);
-            loader.<TreePresenter>getController().init(controller, model, stage, new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (model.getCurrentPreviewPresenter() != null) {
+            stage.closeDialog();
+            try {
+                FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView().getViewName()));
+                Node node = loader.load();
+                model.getCurrentPreviewPresenter().getTableContainerContent().getChildren().setAll(node);
+                loader.<TreePresenter>getController().init(controller, model, stage, new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

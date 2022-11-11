@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.model;
 
-
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
@@ -16,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 
+import javafx.util.Pair;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,7 +26,9 @@ import java.util.TreeSet;
 public class Model {
 
   private View currentView = View.START;
+  private Pair<TableView<Map>, DatabaseObject> currentDatabaseTable = null;
   private PreviewPresenter currentPreviewPresenter = null;
+  private String currentTableSearch = null;
   private String currentMetaSearch = null;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private Map<String, String> schemaMap = new HashMap<>();
@@ -42,12 +44,28 @@ public class Model {
     this.currentView = view;
   }
 
+  public Pair<TableView<Map>, DatabaseObject> getCurrentDatabaseTable() {
+    return currentDatabaseTable;
+  }
+
+  public void setCurrentDatabaseTable(Pair<TableView<Map>, DatabaseObject> databaseTable) {
+    currentDatabaseTable = databaseTable;
+  }
+
   public PreviewPresenter getCurrentPreviewPresenter() {
     return currentPreviewPresenter;
   }
 
   public void setCurrentPreviewPresenter(PreviewPresenter presenter) {
     currentPreviewPresenter = presenter;
+  }
+
+  public String getCurrentTableSearch() {
+    return currentTableSearch;
+  }
+
+  public void setCurrentTableSearch(String s) {
+    currentTableSearch = s;
   }
 
   public String getCurrentMetaSearch() {
