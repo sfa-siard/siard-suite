@@ -61,14 +61,12 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
 
   private EventHandler<SiardEvent> showResult(MFXStepper stepper) {
     return event -> {
-      this.model.provideArchiveObject(this);
       stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.COMPLETED);
       stepper.updateProgress();
       this.subtitle1.setVisible(true);
       this.resultBox.setVisible(true);
-      setScrollBox();
+      setResultData();
       I18n.bind(title.textProperty(), "upload.result.success.title");
-      I18n.bind(summary.textProperty(), "upload.result.success.message", 6666);
       title.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
       this.buttonsBox = new StepperButtonBox().make(TO_START);
       addButtons(stepper);
@@ -102,8 +100,10 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
     }
   }
 
-  private void setScrollBox() {
+  private void setResultData() {
+    this.model.provideArchiveObject(this);
     this.subtitle1.setText(this.archive.getMetaData().getDbName());
+    long total = 0;
     for (int i = 0; i < this.archive.getSchemas(); i++) {
       Schema schema = this.archive.getSchema(i);
       scrollBox.getChildren().add(new Label(schema.getMetaSchema().getName()));
@@ -111,8 +111,10 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
         String tableName = schema.getTable(y).getMetaTable().getName();
         Long rows = schema.getTable(y).getMetaTable().getRows();
         addTableData(tableName, rows, y);
+        total += rows;
       }
     }
+    I18n.bind(summary.textProperty(), "upload.result.success.message", total);
   }
 
   private void addTableData(String tableName, Long rows, Integer pos) {

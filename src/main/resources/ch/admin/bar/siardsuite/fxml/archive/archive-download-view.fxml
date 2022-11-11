@@ -67,7 +67,7 @@
                             </VBox.margin>
                         </ScrollPane>
                         <VBox visible="false" fx:id="fileSystemBox">
-                            <Label fx:id="pathTitle" contentDisplay="RIGHT" styleClass="h3" text="Speicherort">
+                            <Label fx:id="pathTitle" contentDisplay="RIGHT" styleClass="h3">
                                 <VBox.margin>
                                     <Insets top="25.0"/>
                                 </VBox.margin>
@@ -75,7 +75,7 @@
                             <HBox>
                                 <children>
                                     <Label fx:id="archivePath" contentDisplay="RIGHT"/>
-                                    <Label fx:id="openLink" contentDisplay="RIGHT" text="Ordner öffnen"
+                                    <Label fx:id="openLink" contentDisplay="RIGHT"
                                            underline="true">
                                         <HBox.margin>
                                             <Insets left="25.0"/>
