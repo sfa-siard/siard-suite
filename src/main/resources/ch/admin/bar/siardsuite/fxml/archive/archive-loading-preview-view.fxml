@@ -50,7 +50,7 @@
                            <children>
                               <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Label fx:id="subtitle1" style="-fx-text-fill: black;" styleClass=".scroll-box" text="asdfasdf" />
+                                    <Label fx:id="subtitle1" style="-fx-text-fill: black;" styleClass=".scroll-box" />
                                  </children></VBox>
                            </children>
                         </AnchorPane>

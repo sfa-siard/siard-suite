@@ -369,6 +369,7 @@
 
 .label-icon-left {
     -fx-content-display: LEFT;
+    -fx-graphic-text-gap: 1.2em;
 }
 
 .server-icon {
@@ -397,13 +398,15 @@
     -fx-max-height: 48;
 }
 
-.ok-check-icon {
-    -fx-graphic: url(../icons/ok_check.png);
+.ok-circle-icon {
+    -fx-graphic: url(../icons/ok-circle-green.png);
+    -fx-text-fill: #159F75;
 }
 
 .x-circle-icon {
     -fx-graphic: url(../icons/x-circle-red.png);
     -fx-graphic-text-gap: 1.2em;
+    -fx-text-fill: red;
 }
 
 .form-container {
