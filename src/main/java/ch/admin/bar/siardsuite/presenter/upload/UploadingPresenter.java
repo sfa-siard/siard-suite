@@ -54,7 +54,7 @@ public class UploadingPresenter extends StepperPresenter {
     loadingSpinner = new Spinner(this.loader);
     loadingSpinner.play();
     I18n.bind(title.textProperty(), "upload.inProgress.title");
-    I18n.bind(progress.textProperty(), "upload.records.uploaded.message");
+    I18n.bind(progress.textProperty(), "upload.records.uploaded.message", 6666);
     I18n.bind(cancel.textProperty(), "button.cancel");
 
     cancel.setOnAction(event -> stage.openDialog(UPLOAD_ABORT_DIALOG)); // TODO: how to cancel the upload task
