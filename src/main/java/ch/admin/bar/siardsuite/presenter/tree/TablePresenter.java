@@ -42,7 +42,7 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
     model.provideDatabaseArchiveProperties(this, wrapper.getDatabaseObject());
     model.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
 
-    model.setCurrentDatabaseTable(new Pair<>(tableView, wrapper.getDatabaseObject()));
+    model.setCurrentDatabaseTable(tableView, tableView.getItems());
   }
 
   @Override

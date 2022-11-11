@@ -26,7 +26,7 @@ import java.util.TreeSet;
 public class Model {
 
   private View currentView = View.START;
-  private Pair<TableView<Map>, DatabaseObject> currentDatabaseTable = null;
+  private Pair<TableView<Map>, List<Map>> currentDatabaseTable = null;
   private PreviewPresenter currentPreviewPresenter = null;
   private String currentTableSearch = null;
   private String currentMetaSearch = null;
@@ -44,12 +44,12 @@ public class Model {
     this.currentView = view;
   }
 
-  public Pair<TableView<Map>, DatabaseObject> getCurrentDatabaseTable() {
+  public Pair<TableView<Map>, List<Map>> getCurrentDatabaseTable() {
     return currentDatabaseTable;
   }
 
-  public void setCurrentDatabaseTable(Pair<TableView<Map>, DatabaseObject> databaseTable) {
-    currentDatabaseTable = databaseTable;
+  public void setCurrentDatabaseTable(TableView<Map> tableView, List<Map> rows) {
+    currentDatabaseTable = new Pair<>(tableView, rows);
   }
 
   public PreviewPresenter getCurrentPreviewPresenter() {
