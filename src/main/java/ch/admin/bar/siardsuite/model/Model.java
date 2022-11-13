@@ -10,6 +10,7 @@ import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
@@ -18,15 +19,13 @@ import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Model {
 
   private View currentView = View.START;
-  private Pair<TableView<Map>, List<Map>> currentDatabaseTable = null;
+  private TableSearchBase currentTableSearchBase = null;
+  private TableSearchButton currentTableSearchButton = null;
   private PreviewPresenter currentPreviewPresenter = null;
   private String currentTableSearch = null;
   private String currentMetaSearch = null;
@@ -44,12 +43,20 @@ public class Model {
     this.currentView = view;
   }
 
-  public Pair<TableView<Map>, List<Map>> getCurrentDatabaseTable() {
-    return currentDatabaseTable;
+  public TableSearchBase getCurrentTableSearchBase() {
+    return currentTableSearchBase;
   }
 
-  public void setCurrentDatabaseTable(TableView<Map> tableView, List<Map> rows) {
-    currentDatabaseTable = new Pair<>(tableView, rows);
+  public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> rows) {
+    currentTableSearchBase = new TableSearchBase(tableView, rows);
+  }
+
+  public  TableSearchButton getCurrentTableSearchButton() {
+    return currentTableSearchButton;
+  }
+
+  public void setCurrentTableSearchButton(MFXButton button, Boolean active) {
+    currentTableSearchButton = new TableSearchButton(button, active);
   }
 
   public PreviewPresenter getCurrentPreviewPresenter() {

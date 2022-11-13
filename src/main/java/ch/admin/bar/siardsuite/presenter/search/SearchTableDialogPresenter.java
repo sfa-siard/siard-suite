@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.presenter.search;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.ui.CloseDialogButton;
+import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -14,7 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +33,8 @@ public class SearchTableDialogPresenter extends DialogPresenter {
     @FXML
     protected HBox buttonBox;
     private TableView<Map> tableView;
-    private List<Map> rows;
-    private final List<Map> hits = new ArrayList<>();
+    private LinkedHashSet<Map> rows;
+    private final LinkedHashSet<Map> hits = new LinkedHashSet<>();
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -49,19 +49,17 @@ public class SearchTableDialogPresenter extends DialogPresenter {
             searchField.setText(model.getCurrentTableSearch());
         }
 
-        if (model.getCurrentDatabaseTable() != null) {
-            tableView = model.getCurrentDatabaseTable().getKey();
-            rows = model.getCurrentDatabaseTable().getValue();
+        if (model.getCurrentTableSearchBase() != null) {
+            tableView = model.getCurrentTableSearchBase().tableView();
+            rows = model.getCurrentTableSearchBase().rows();
         }
 
         if (tableView != null) {
-            // ability to search whole table
+            // ability to search whole table:
             // tableView.fireEvent(new SiardEvent(SiardEvent.EXPAND_DATABASE_TABLE));
             hits.addAll(tableView.getItems());
             if (rows != null) {
-                if (rows.size() < tableView.getItems().size()) {
-                    model.setCurrentDatabaseTable(tableView, tableView.getItems());
-                }
+                rows.addAll(tableView.getItems());
             }
         }
 
@@ -84,8 +82,10 @@ public class SearchTableDialogPresenter extends DialogPresenter {
             } else {
                 stage.closeDialog();
             }
+            model.setCurrentTableSearch(s);
+            model.setCurrentTableSearchButton(model.getCurrentTableSearchButton().button(), true);
+            model.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: bold;");
         }
-        model.setCurrentTableSearch(s);
     }
 
 }

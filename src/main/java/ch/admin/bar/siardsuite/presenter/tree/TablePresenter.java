@@ -10,8 +10,8 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.util.Pair;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +42,11 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
     model.provideDatabaseArchiveProperties(this, wrapper.getDatabaseObject());
     model.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
 
-    model.setCurrentDatabaseTable(tableView, tableView.getItems());
+    model.setCurrentTableSearchBase(tableView, new LinkedHashSet<>(tableView.getItems()));
+    if (model.getCurrentTableSearchButton() != null && model.getCurrentTableSearchButton().button() != null) {
+      model.setCurrentTableSearchButton(model.getCurrentTableSearchButton().button(), false);
+      model.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: normal;");
+    }
   }
 
   @Override
