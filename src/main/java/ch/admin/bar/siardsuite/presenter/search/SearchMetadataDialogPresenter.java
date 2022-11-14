@@ -47,9 +47,9 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
         title.textProperty().bind(I18n.createStringBinding("search.metadata.dialog.title"));
         text.textProperty().bind(I18n.createStringBinding("search.metadata.dialog.text"));
 
-        if (model.getCurrentSearch() != null) {
-            searchField.setText(model.getCurrentSearch());
-            metaSearch(model.getCurrentSearch());
+        if (model.getCurrentMetaSearch() != null) {
+            searchField.setText(model.getCurrentMetaSearch());
+            metaSearch(model.getCurrentMetaSearch());
         }
 
         closeButton.setOnAction(event -> stage.closeDialog());
@@ -72,7 +72,7 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
         } else {
             showNoSearchHits();
         }
-        model.setCurrentSearch(s);
+        model.setCurrentMetaSearch(s);
     }
 
     private void showNoSearchHits() {
@@ -102,14 +102,16 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
     }
 
     private void show(MetaSearchHit hit) {
-        stage.closeDialog();
-        try {
-            FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView().getViewName()));
-            Node node = loader.load();
-            model.getCurrentPreviewPresenter().getTableContainerContent().getChildren().setAll(node);
-            loader.<TreePresenter>getController().init(controller, model, stage, new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (model.getCurrentPreviewPresenter() != null) {
+            stage.closeDialog();
+            try {
+                FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView().getViewName()));
+                Node node = loader.load();
+                model.getCurrentPreviewPresenter().getTableContainerContent().getChildren().setAll(node);
+                loader.<TreePresenter>getController().init(controller, model, stage, new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

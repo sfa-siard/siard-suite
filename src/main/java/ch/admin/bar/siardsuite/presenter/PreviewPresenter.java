@@ -12,6 +12,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -51,6 +52,8 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     this.model = model;
     this.controller = controller;
     this.stage = stage;
+
+    model.setCurrentPreviewPresenter(this);
 
     this.metaSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.metaSearchButton"));
     this.tableSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.tableSearchButton"));
@@ -138,10 +141,17 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   protected void setListeners() {
     MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
     selection.selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateTableContainerContent(newValue.getValue())));
-    metaSearchButton.setOnAction(event -> {
-      model.setCurrentPreviewPresenter(this);
-      stage.openDialog(View.SEARCH_METADATA_DIALOG);
+    tableSearchButton.setOnAction(event -> {
+      if (model.getCurrentTableSearchButton() != null && tableSearchButton.equals(model.getCurrentTableSearchButton().button()) && model.getCurrentTableSearchButton().active()) {
+        model.setCurrentTableSearchButton(tableSearchButton, false);
+        tableSearchButton.setStyle("-fx-font-weight: normal;");
+        model.getCurrentTableSearchBase().tableView().setItems(FXCollections.observableArrayList(model.getCurrentTableSearchBase().rows()));
+      } else {
+        model.setCurrentTableSearchButton(tableSearchButton, false);
+        stage.openDialog(View.SEARCH_TABLE_DIALOG);
+      }
     });
+    metaSearchButton.setOnAction(event -> stage.openDialog(View.SEARCH_METADATA_DIALOG));
   }
 
   protected void updateTableContainerContent(TreeAttributeWrapper wrapper) {

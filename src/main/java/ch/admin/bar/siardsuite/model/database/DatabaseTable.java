@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.*;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -28,7 +29,7 @@ public class DatabaseTable extends DatabaseObject {
     protected final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
     protected final String numberOfRows;
-    protected final int loadBatchSize = 50;
+    protected int loadBatchSize = 50;
     protected int lastRowLoadedIndex = -1;
     protected final TreeContentView treeContentView = TreeContentView.TABLE;
 
@@ -105,6 +106,7 @@ public class DatabaseTable extends DatabaseObject {
                     loadRecords(recordDispenser);
                     tableView.setItems(rowItems());
                     tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
+                    tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE, event -> expand(recordDispenser, tableView));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -172,6 +174,18 @@ public class DatabaseTable extends DatabaseObject {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private void expand(RecordDispenser recordDispenser, TableView<Map> tableView) {
+        final int loadBatchSize = this.loadBatchSize;
+        final long numberOfRows = table.getMetaTable().getRows();
+        this.loadBatchSize = (int) numberOfRows / 50;
+        while (recordDispenser.getPosition() < numberOfRows) {
+            loadRecords(recordDispenser);
+            tableView.getItems().addAll(rowItems());
+            System.out.println(numberOfRows - recordDispenser.getPosition() + " rows remaining");
+        }
+        this.loadBatchSize = loadBatchSize;
     }
 
     protected void export(File directory) throws IOException {

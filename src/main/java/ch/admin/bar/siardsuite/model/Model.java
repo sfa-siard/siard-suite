@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.model;
 
-
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
@@ -11,23 +10,25 @@ import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 
+import javafx.util.Pair;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Model {
 
   private View currentView = View.START;
+  private TableSearchBase currentTableSearchBase = null;
+  private TableSearchButton currentTableSearchButton = null;
   private PreviewPresenter currentPreviewPresenter = null;
-  private String currentSearch = null;
+  private String currentTableSearch = null;
+  private String currentMetaSearch = null;
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private Map<String, String> schemaMap = new HashMap<>();
   private SiardArchive archive = new SiardArchive();
@@ -42,6 +43,22 @@ public class Model {
     this.currentView = view;
   }
 
+  public TableSearchBase getCurrentTableSearchBase() {
+    return currentTableSearchBase;
+  }
+
+  public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> rows) {
+    currentTableSearchBase = new TableSearchBase(tableView, rows);
+  }
+
+  public  TableSearchButton getCurrentTableSearchButton() {
+    return currentTableSearchButton;
+  }
+
+  public void setCurrentTableSearchButton(MFXButton button, Boolean active) {
+    currentTableSearchButton = new TableSearchButton(button, active);
+  }
+
   public PreviewPresenter getCurrentPreviewPresenter() {
     return currentPreviewPresenter;
   }
@@ -50,12 +67,20 @@ public class Model {
     currentPreviewPresenter = presenter;
   }
 
-  public String getCurrentSearch() {
-    return currentSearch;
+  public String getCurrentTableSearch() {
+    return currentTableSearch;
   }
 
-  public void setCurrentSearch(String s) {
-    currentSearch = s;
+  public void setCurrentTableSearch(String s) {
+    currentTableSearch = s;
+  }
+
+  public String getCurrentMetaSearch() {
+    return currentMetaSearch;
+  }
+
+  public void setCurrentMetaSearch(String s) {
+    currentMetaSearch = s;
   }
 
   public Archive initArchive() {
