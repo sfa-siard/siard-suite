@@ -6,25 +6,35 @@ import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.model.database.SiardArchiveDatabaseNameVisitor;
+import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
@@ -32,13 +42,16 @@ import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
-public class UploadConnectionPresenter extends StepperPresenter implements SiardArchiveDatabaseNameVisitor {
+public class UploadConnectionPresenter extends StepperPresenter implements SiardArchiveVisitor {
 
     private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
     private static final String TEST_DB = "test-db";
 
     private String portString;
     private String dbTypeString;
+    private List<DatabaseSchema> schemas = new ArrayList<>();
+    private String schemaName = "";
+    private Map<String, String> schemaMap = new HashMap<>();
     @FXML
     public Label errorMessage;
     @FXML
@@ -79,11 +92,12 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     private Tooltip tooltip;
     @FXML
     public Label titleNewSchemaName;
-
     @FXML
-    public MFXTextField currentName;
+    public VBox schemaFields;
     @FXML
-    public MFXTextField newName;
+    public Label currentNameLabel;
+    @FXML
+    public Label newNameLabel;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -98,18 +112,18 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         init(controller, model, stage);
-
+        this.model.provideDatabaseArchiveProperties(this);
         addTextWithStyles();
         addFormText();
 
         if (controller.recentDatabaseConnection != null) {
             addRecentDatabaseConnection();
+            initSchemaFields();
         }
 
         errorMessage.setVisible(false);
         buttonsBox = new StepperButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
-        this.model.getArchive().databaseName(this);
         setListeners(stepper);
     }
 
@@ -138,8 +152,8 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         I18n.bind(passwordField.floatingTextProperty(), "archiveConnection.view.password.label");
         I18n.bind(urlField.floatingTextProperty(), "archiveConnection.view.url.label");
         I18n.bind(titleNewSchemaName.textProperty(), "uploadConnection.view.new.schema.name");
-        I18n.bind(currentName.floatingTextProperty(), "uploadConnection.view.current.name");
-        I18n.bind(newName.floatingTextProperty(), "uploadConnection.view.new.name");
+        I18n.bind(currentNameLabel.textProperty(), "uploadConnection.view.current.name");
+        I18n.bind(newNameLabel.textProperty(), "uploadConnection.view.new.name");
     }
 
     private void addRecentDatabaseConnection() {
@@ -168,6 +182,8 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             portField.setText(portString);
             portField.setPromptText(portString);
             urlField.setPromptText(url);
+
+            initSchemaFields();
         });
 
         dbServerField.setOnKeyReleased(this::handleKeyEvent);
@@ -201,12 +217,16 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             } else if (urlField.getText().isEmpty()) {
                 I18n.bind(errorMessage.textProperty(), "archiveConnection.view.error.connection.url");
                 errorMessage.setVisible(true);
+            } else if (!hasValidSchemaFields()) {
+                I18n.bind(errorMessage.textProperty(), "uploadConnection.view.error.schema.name");
+                errorMessage.setVisible(true);
             } else {
                 controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
+                controller.updateSchemaMap(schemaMap);
                 errorMessage.setVisible(false);
                 stage.setHeight(950);
                 stepper.next();
-                stepper.fireEvent(getUpdateEvent(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT));
+                stepper.fireEvent(new SiardEvent(SiardEvent.UPLOAD_CONNECTION_UPDATED));
             }
 
         });
@@ -216,6 +236,48 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             this.stage.setHeight(700.00); // TODO: should probably move to the previes step itself...
         });
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.UPLOAD_ABORT_DIALOG));
+    }
+
+    private boolean hasValidSchemaFields() {
+        AtomicBoolean result = new AtomicBoolean(true);
+        schemaFields.getChildren().forEach(container -> {
+            List<Node> nodes = ((HBox) container).getChildren();
+            if (nodes.size() > 2) {
+                String currentName = ((Label) nodes.get(0)).getText();
+                String newName = ((MFXTextField) nodes.get(2)).getText();
+                if (!currentName.isEmpty() && !newName.isEmpty()) {
+                    schemaMap.put(currentName, newName);
+                } else {
+                    result.set(false);
+                }
+            }
+        });
+
+        return result.get();
+    }
+
+    private void initSchemaFields() {
+        for (DatabaseSchema schema : schemas) {
+            model.provideDatabaseArchiveProperties(this, schema);
+            Label currentName = new Label();
+            Label iconLabel = new Label();
+            MFXTextField newName = new MFXTextField();
+            currentName.setText(schemaName);
+            newName.setText(schemaName);
+            HBox container = new HBox();
+            container.setPrefSize(200.0, 48.0);
+            currentName.setPrefSize(253.0, 48.0);
+            iconLabel.setPrefSize(48.0,48.0);
+            iconLabel.getStyleClass().add( "arrow-right-icon");
+            newName.setPrefSize(277.0, 48.0);
+            newName.getStyleClass().add("form-field");
+            container.getChildren().addAll(currentName, iconLabel, newName);
+            HBox.setMargin(currentName, new Insets(10,0,0,0));
+            HBox.setMargin(iconLabel, new Insets(10,0,0,0));
+            HBox.setMargin(newName, new Insets(10,0,0,0));
+            schemaFields.getChildren().add(container);
+        }
+        stage.setHeight(stage.getHeight() + (schemas.size() - 1) * 58.0);
     }
 
     private void handleKeyEvent(KeyEvent event) {
@@ -236,8 +298,21 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     }
 
     @Override
-    public void visit(String databaseName) {
-        this.currentName.setText(databaseName);
-        this.newName.setText(databaseName);
+    public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {
+        this.schemas = schemas;
     }
+
+    @Override
+    public void visit(String schemaName, String schemaDescription, List<DatabaseTable> tables) {
+        this.schemaName = schemaName;
+    }
+
+    @Override
+    public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) { }
+
+    @Override
+    public void visit(String columnName) { }
+
+    @Override
+    public void visit(SiardArchive archive) { }
 }

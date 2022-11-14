@@ -38,6 +38,7 @@ public class DatabaseLoadTask extends Task<ObservableList<String>> implements Pr
         connection.setAutoCommit(false);
         MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
         metadata.download(true, false, this);
+
         for (int i = 0; i < this.archive.getSchemas(); i++) {
             Schema schema = this.archive.getSchema(i);
             for (int y = 0; y < schema.getTables(); y++) {

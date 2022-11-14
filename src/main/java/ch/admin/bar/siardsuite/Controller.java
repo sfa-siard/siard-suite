@@ -1,22 +1,25 @@
 package ch.admin.bar.siardsuite;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
+import ch.admin.bar.siardsuite.database.DatabaseLoadService;
+import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 
 import java.io.File;
+import java.sql.SQLException;
+import java.util.Map;
 
 public class Controller {
 
   private final Model model;
 
   private DatabaseLoadService databaseLoadService;
+  private DatabaseUploadService databaseUploadService;
 
   private Workflow workflow;
 
@@ -32,7 +35,7 @@ public class Controller {
 
   public void loadDatabase(boolean onlyMetaData,EventHandler<WorkerStateEvent> onSuccess,
                            EventHandler<WorkerStateEvent> onFailure
-                           ) {
+                           ) throws SQLException {
     final Archive archive = model.initArchive();
     this.databaseLoadService = DatabaseConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
     this.onDatabaseLoadSuccess(onSuccess);
@@ -40,7 +43,7 @@ public class Controller {
     this.databaseLoadService.start();
   }
   public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
-                           EventHandler<WorkerStateEvent> onFailure) {
+                           EventHandler<WorkerStateEvent> onFailure) throws SQLException {
     final Archive archive = model.initArchive(target);
     this.databaseLoadService = DatabaseConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
     this.onDatabaseLoadSuccess(onSuccess);
@@ -59,6 +62,10 @@ public class Controller {
     this.model.setPassword(password);
   }
 
+  public void updateSchemaMap(Map schemaMap) {
+    this.model.setSchemaMap(schemaMap);
+  }
+
   public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
     this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
   }
@@ -75,11 +82,34 @@ public class Controller {
     this.databaseLoadService.progressProperty().addListener(listener);
   }
 
+  public void onDatabaseUploadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    this.databaseUploadService.setOnSucceeded(workerStateEventEventHandler);
+  }
+
+  public void onDatabaseUploadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    this.databaseUploadService.setOnFailed(workerStateEventEventHandler);
+  }
+
+  public void addDatabaseUploadingValuePropertyListener(ChangeListener<ObservableList<String>> listener) {
+    this.databaseUploadService.valueProperty().addListener(listener);
+  }
+
+  public void addDatabaseUploadingProgressPropertyListener(ChangeListener<Number> listener )  {
+    this.databaseUploadService.progressProperty().addListener(listener);
+  }
+
   public Workflow getWorkflow() {
     return workflow;
   }
 
   public void setWorkflow(Workflow workflow) {
     this.workflow = workflow;
+  }
+
+  public void uploadArchive(EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> onFailure) throws SQLException {
+    this.databaseUploadService = DatabaseConnectionFactory.getInstance(model).createDatabaseUploader();
+    this.onDatabaseUploadSuccess(onSuccess);
+    this.onDatabaseUploadFailed(onFailure);
+    this.databaseUploadService.start();
   }
 }

@@ -15,31 +15,26 @@ public class DatabaseConnectionFactory {
   private static Connection connection;
   private static Model model;
 
-  private DatabaseConnectionFactory(Model model) {
+  private DatabaseConnectionFactory(Model model) throws SQLException {
     DatabaseConnectionFactory.model = model;
     loadDriver(DatabaseConnectionFactory.model.getDatabaseProps().product());
-    try {
-      connection = DriverManager.getConnection(model.getConnectionUrl().get(),
-              model.getDatabaseUsername().get(), model.getDatabasePassword());
-    } catch (SQLException e) {
-      // TODO should notify user about any error and navigate back to last view - Toast it # CR 458
-      throw new RuntimeException(e);
-    }
+    connection = DriverManager.getConnection(model.getConnectionUrl().get(),
+            model.getDatabaseUsername().get(), model.getDatabasePassword());
   }
 
-  public static DatabaseConnectionFactory getInstance(Model model) {
-    try {
-      if (instance == null || connection.isClosed()) {
-        instance = new DatabaseConnectionFactory(model);
-      }
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
+  public static DatabaseConnectionFactory getInstance(Model model) throws SQLException {
+    if (instance == null || connection.isClosed()) {
+      instance = new DatabaseConnectionFactory(model);
     }
     return instance;
   }
 
   public DatabaseLoadService createDatabaseLoader(final Archive archive, boolean onlyMetaData) {
     return new DatabaseLoadService(connection, model, archive, onlyMetaData);
+  }
+
+  public DatabaseUploadService createDatabaseUploader() {
+    return new DatabaseUploadService(connection, model);
   }
 
   public static void disconnect() {

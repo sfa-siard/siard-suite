@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.*?>
+<?import java.lang.String?>
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
             stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveDownloadPresenter">
+            fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadingPresenter">
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
             <children>
                 <VBox>
                     <children>
                         <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2"/>
-                        <Label fx:id="resultTitle" visible="false">
-
-                            <VBox.margin>
-                                <Insets top="-25.0"/>
-                            </VBox.margin>
-                        </Label>
-
-                        <Label fx:id="recordsLoaded" contentDisplay="RIGHT" styleClass="h3">
+                        <Label fx:id="progress" contentDisplay="RIGHT" styleClass="h3">
                             <graphic>
                                 <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
                                     <styleClass>
@@ -36,29 +31,23 @@
                                 <Insets top="25.0"/>
                             </VBox.margin>
                         </Label>
-                        <Label visible="false" fx:id="subtitle1">
+                        <Label fx:id="subtitle1" >
                             <styleClass>
                                 <String fx:value="h4"/>
-                                <String fx:value="label-icon-left"/>
+                                <String fx:value="label-icon"/>
                                 <String fx:value="server-icon"/>
                             </styleClass>
                             <VBox.margin>
                                 <Insets top="25.0"/>
                             </VBox.margin>
                         </Label>
-                        <ScrollPane fx:id="resultBox" visible="false" styleClass="scroll-box">
+                        <ScrollPane styleClass="scroll-box">
                             <content>
                                 <AnchorPane>
                                     <children>
-                                        <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0"
-                                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                              AnchorPane.topAnchor="0.0">
+                                        <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
-                                            </children>
-                                            <padding>
-                                                <Insets left="25.0"/>
-                                            </padding>
-                                        </VBox>
+                                            </children></VBox>
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -66,30 +55,9 @@
                                 <Insets top="25.0"/>
                             </VBox.margin>
                         </ScrollPane>
-                        <VBox visible="false" fx:id="fileSystemBox">
-                            <Label fx:id="pathTitle" contentDisplay="RIGHT" styleClass="h3">
-                                <VBox.margin>
-                                    <Insets top="25.0"/>
-                                </VBox.margin>
-                            </Label>
-                            <HBox>
-                                <children>
-                                    <Label fx:id="archivePath" contentDisplay="RIGHT"/>
-                                    <Label fx:id="openLink" contentDisplay="RIGHT"
-                                           underline="true">
-                                        <HBox.margin>
-                                            <Insets left="25.0"/>
-                                        </HBox.margin>
-                                    </Label>
-                                </children>
-                                <VBox.margin>
-                                    <Insets top="25.0"/>
-                                </VBox.margin>
-                            </HBox>
-                        </VBox>
                     </children>
                     <VBox.margin>
-                        <Insets left="25.0" right="25.0"/>
+                        <Insets left="25.0" right="25.0" />
                     </VBox.margin>
                 </VBox>
             </children>
@@ -99,5 +67,16 @@
         </VBox>
     </center>
     <bottom>
+        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+              minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
+            <children>
+                <MFXButton fx:id="cancel">
+                    <styleClass>
+                        <String fx:value="button"/>
+                        <String fx:value="secondary"/>
+                    </styleClass>
+                </MFXButton>
+            </children>
+        </HBox>
     </bottom>
 </BorderPane>

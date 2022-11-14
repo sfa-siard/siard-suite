@@ -25,6 +25,7 @@ import java.io.File;
 import java.time.LocalDate;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
 
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
 
@@ -119,7 +120,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                             this.archiverContact.getText(),
                             targetArchive);
                     stepper.next();
-                    stepper.fireEvent(getUpdateEvent(SiardEvent.ARCHIVE_METADATA_UPDATED));
+                    stepper.fireEvent(new SiardEvent(ARCHIVE_METADATA_UPDATED));
                 }
             }
         });

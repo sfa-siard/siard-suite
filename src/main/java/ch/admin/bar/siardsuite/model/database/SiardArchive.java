@@ -1,16 +1,21 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
+import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
+
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class SiardArchive extends DatabaseObject {
@@ -51,6 +56,18 @@ public class SiardArchive extends DatabaseObject {
     public void shareProperties (SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
         if (databaseObject != null) {
             databaseObject.shareProperties(visitor);
+        }
+    }
+
+    public void shareObject (ArchiveVisitor visitor) {
+        if (archive != null) {
+            visitor.visit(archive);
+        }
+    }
+
+    public void shareProperties (ArchiveVisitor visitor) {
+        if (archive != null) {
+            visitor.visit(archive.getMetaData());
         }
     }
 
@@ -162,7 +179,5 @@ public class SiardArchive extends DatabaseObject {
         return hits;
     }
 
-    public void databaseName(SiardArchiveDatabaseNameVisitor visitor) {
-        this.metaData.accept(visitor);
-    }
+
 }

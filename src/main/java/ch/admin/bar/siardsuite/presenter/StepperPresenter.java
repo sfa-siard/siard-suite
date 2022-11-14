@@ -5,13 +5,12 @@ import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.Step;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.view.skins.CustomStepperSkin;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
-import javafx.event.Event;
-import javafx.event.EventType;
+import io.github.palexdev.materialfx.enums.StepperToggleState;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -20,19 +19,30 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class StepperPresenter extends Presenter {
 
   @FXML
   protected BorderPane borderPane;
+
   public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);
 
-  public Event getUpdateEvent(EventType<SiardEvent> eventType) {
-    return new SiardEvent(eventType);
+  protected void createStepper(Controller controller, List<Step> steps, MFXStepper stepper) {
+    boolean recentConnection = !Objects.isNull(this.controller.recentDatabaseConnection);
+    List<MFXStepperToggle> stepperToggles = createSteps(steps, stepper);
+
+    stepper.getStepperToggles().addAll(stepperToggles);
+    stepper.setSkin(new CustomStepperSkin(stepper, stage));
+    if (recentConnection) {
+      stepper.getStepperToggles().get(0).setState(StepperToggleState.COMPLETED);
+      stepper.updateProgress();
+      stepper.next();
+    }
   }
 
-  protected List<MFXStepperToggle> createSteps(List<Step> steps, MFXStepper stepper) {
+  private List<MFXStepperToggle> createSteps(List<Step> steps, MFXStepper stepper) {
 
     return steps.stream()
             .map((step) -> createCustomStepperToggle(step.key(), step.position(), loadView(step.contentView(), stepper), step.visible()))

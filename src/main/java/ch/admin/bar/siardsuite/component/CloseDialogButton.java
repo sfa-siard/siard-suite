@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.ui;
+package ch.admin.bar.siardsuite.component;
 
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;

@@ -5,7 +5,6 @@ import java.util.List;
 public class ArchiveSteps {
 
     public static final List<Step> steps;
-    public static final List<Step> savedConnectionSteps;
 
     private final static Step selectDbms = new Step("archive.step.name.dbms", View.ARCHIVE_DB, 1, true);
     private final static Step dbConnection = new Step("archive.step.name.databaseConnectionURL",
@@ -29,14 +28,6 @@ public class ArchiveSteps {
     static {
         steps = List.of(
                 selectDbms,
-                dbConnection,
-                dbLoading,
-                dbPreview,
-                editMetaData,
-                dbDownload
-        );
-
-        savedConnectionSteps = List.of(
                 dbConnection,
                 dbLoading,
                 dbPreview,

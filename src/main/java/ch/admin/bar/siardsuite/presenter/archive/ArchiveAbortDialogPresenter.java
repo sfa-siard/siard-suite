@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.ui.CloseDialogButton;
+import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -39,6 +39,7 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
     cancelArchiveButton.setManaged(true);
 
     cancelArchiveButton.setOnAction(event -> {
+      controller.closeDbConnection();
       stage.closeDialog();
       stage.navigate(View.START);
     });

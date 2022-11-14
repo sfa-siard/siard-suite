@@ -67,7 +67,8 @@
 }
 
 .header .button {
-    -fx-min-width: 24;
+    -fx-min-width: 40;
+    -fx-min-height: 40;
 }
 
 .icon-button {
@@ -118,16 +119,19 @@
     -fx-background-color: white;
     -fx-border-color: transparent transparent #c5c4c4 transparent; /* dirty hack to prevent elements moving around without border*/
     -fx-border-width: 0.1em;
+    -fx-cursor: HAND;
 }
 
 .menu-item:hover, .menu-item:focused {
     -fx-background-color: #c5c4c4;
     -fx-border-color: #b0afaf;
     -fx-border-width: 1 1 1 1;
+    -fx-cursor: HAND;
 }
 
 .menu-item .label {
     -fx-text-fill: black;
+    -fx-cursor: HAND;
 }
 
 .sub-menu {
@@ -207,6 +211,14 @@
     -fx-graphic: url(../icons/bubble_checked.png);
 }
 
+.mfx-stepper-toggle:invalid .number-btn {
+    -fx-content-display: graphic-only;
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+    -fx-max-height: 22;
+    -fx-graphic: url(../icons/bubble_error.png);
+}
+
 .mfx-stepper-toggle .mfx-text-field,
 .custom-stepper-toggle .mfx-text-field {
     -fx-padding: 0 0 0 0;
@@ -230,7 +242,9 @@
 .mfx-stepper-toggle:selected .mfx-text-field,
 .custom-stepper-toggle:selected .mfx-text-field,
 .mfx-stepper-toggle:completed .mfx-text-field,
-.custom-stepper-toggle:completed .mfx-text-field {
+.custom-stepper-toggle:completed .mfx-text-field,
+.mfx-stepper-toggle:invalid .mfx-text-field,
+.custom-stepper-toggle:invalid .mfx-text-field {
     -fx-opacity: 1;
     -fx-text-fill: black;
 }
@@ -250,6 +264,7 @@
     -fx-border-radius: 5;
     -fx-font-family: siard-font-family;
     -fx-font-size: 14px;
+    -fx-cursor: HAND;
 }
 
 .primary {
@@ -292,6 +307,7 @@
     -fx-background-radius: 5;
     -fx-border-radius: 5;
     -fx-font-size: 14px;
+    -fx-cursor: HAND;
 }
 
 .dialog-title {
@@ -350,8 +366,10 @@
     -fx-content-display: RIGHT;
 }
 
+
 .label-icon-left {
     -fx-content-display: LEFT;
+    -fx-graphic-text-gap: 1.2em;
 }
 
 .server-icon {
@@ -374,6 +392,23 @@
     -fx-graphic: url(../icons/search.png);
 }
 
+.arrow-right-icon {
+    -fx-graphic: url(../icons/right_arrow.png);
+    -fx-max-width: 48;
+    -fx-max-height: 48;
+}
+
+.ok-circle-icon {
+    -fx-graphic: url(../icons/ok-circle-green.png);
+    -fx-text-fill: #159F75;
+}
+
+.x-circle-icon {
+    -fx-graphic: url(../icons/x-circle-red.png);
+    -fx-graphic-text-gap: 1.2em;
+    -fx-text-fill: red;
+}
+
 .form-container {
     -fx-background-color: #f5f7fa;
     -fx-font-family: siard-font-family;
@@ -393,6 +428,12 @@
     -fx-border-width: 1;
     -fx-border-radius: 0;
     -fx-text-fill: black;
+}
+
+.form-field:disabled {
+    -fx-border-width: 0;
+    -fx-text-fill: black;
+    -fx-font-family: siard-font-family;
 }
 
 .form-container .mfx-text-field .text-field {
@@ -424,6 +465,7 @@
     -mfx-secondary: #9aa5b1;
     -fx-background-color: transparent;
     -fx-text-fill: siard-text-color;
+    -fx-cursor: HAND;
 }
 
 .form-container .info-tooltip {
@@ -583,6 +625,7 @@
 
 .files-vbox-list .file-hbox:hover {
     -fx-background-color: #eceaea82;
+    -fx-cursor: HAND;
 }
 
 .files-vbox-list .file-hbox .icon-label {
@@ -647,6 +690,7 @@
 
 .connections-vbox-list .connections-hbox:hover {
     -fx-background-color: #eceaea82;
+    -fx-cursor: HAND;
 }
 
 .connections-vbox-list .connections-hbox .icon-label {
