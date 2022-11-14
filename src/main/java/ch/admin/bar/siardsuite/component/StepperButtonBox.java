@@ -82,10 +82,10 @@ public class StepperButtonBox extends HBox {
   private class DownloadFinishedButtonBox extends StepperButtonBox {
 
     DownloadFinishedButtonBox() {
-      this.nextButton.textProperty().bind(I18n.createStringBinding("button.view-archive"));
+      this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
       this.nextButton.getStyleClass().setAll("button", "primary");
       this.nextButton.setManaged(true);
-      this.cancelButton.textProperty().bind(I18n.createStringBinding("button.home"));
+      this.cancelButton.textProperty().bind(I18n.createStringBinding("button.view-archive"));
       this.cancelButton.getStyleClass().setAll("button", "secondary");
       this.cancelButton.setManaged(true);
       this.getChildren().addAll(this.nextButton, this.cancelButton);
