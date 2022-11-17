@@ -1,5 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.*;
 import ch.admin.bar.siardsuite.model.Model;
@@ -88,7 +90,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     if (this.buttonsBox.cancel() != null) {
       if (this.resultTitle.isVisible()) {
         this.buttonsBox.cancel().setOnAction((event) -> {
-          // TODO show Archive
+          try {
+            final Archive archive = ArchiveImpl.newInstance();
+            archive.open(targetArchive);
+            model.setArchive(targetArchive.getName(), archive);
+            stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
         });
       } else {
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
