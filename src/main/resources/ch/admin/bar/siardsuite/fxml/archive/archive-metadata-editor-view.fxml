@@ -5,122 +5,109 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataEditorPresenter">
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataEditorPresenter">
     <center>
         <VBox BorderPane.alignment="TOP_LEFT">
             <children>
                 <VBox prefWidth="100.0">
                     <children>
-                        <Text fx:id="titleText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Metadaten"/>
-                        <Text fx:id="descriptionText" strokeWidth="0.0" styleClass="view-text"
-                              text="Metadaten der Datenbank bearbeiten"/>
+                        <Text fx:id="titleText" styleClass="h2" />
+                        <Text fx:id="descriptionText" lineSpacing="8.0" styleClass="view-text">
+                            <VBox.margin>
+                                <Insets bottom="24.0" top="15.0" />
+                            </VBox.margin>
+                        </Text>
                     </children>
                     <VBox.margin>
-                        <Insets left="25.0" right="25.0"/>
+                        <Insets left="25.0" right="25.0" />
                     </VBox.margin>
                 </VBox>
-                <HBox prefHeight="100.0" prefWidth="200.0">
+                <HBox prefWidth="1140.0">
+                    <styleClass>
+                        <String fx:value="form-container" />
+                        <String fx:value="form-container-white" />
+                    </styleClass>
                     <children>
-                        <VBox styleClass="form-container">
+                        <VBox prefWidth="570.0">
                             <children>
-                                <Text fx:id="titleWhat" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h3"
-                                      text="Was wird archiviert?"/>
-                                <MFXTextField fx:id="name" editable="false" floatingText="Name der Datenbank"
-                                              maxWidth="1.7976931348623157E308" styleClass="form-field">
+                                <Text fx:id="titleWhat" styleClass="h3">
                                     <VBox.margin>
-                                        <Insets bottom="24.0" right="25.0" top="60.0"/>
+                                        <Insets bottom="15.0" top="15.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <MFXTextField fx:id="name" editable="false" floatingText="Ihr N" maxWidth="410.0" styleClass="form-field">
+                                    <VBox.margin>
+                                        <Insets bottom="24.0" right="25.0" top="60.0" />
                                     </VBox.margin>
                                 </MFXTextField>
-                                <MFXTextField fx:id="description" floatingText="Beschreibung der Datenbank"
-                                              maxWidth="1.7976931348623157E308" styleClass="form-field">
+                                <Label fx:id="descriptionLabel" style="-fx-text-fill: siard-text-color;" />
+                                <TextArea fx:id="description" maxWidth="410.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="410.0" styleClass="form-field-double">
                                     <VBox.margin>
-                                        <Insets bottom="24.0" right="25.0" top="60.0"/>
+                                        <Insets bottom="24.0" right="25.0" top="10.0" />
+                                    </VBox.margin>
+                                </TextArea>
+                                <MFXTextField fx:id="owner" floatingText="Ihr N" maxWidth="410.0" styleClass="form-field">
+                                    <VBox.margin>
+                                        <Insets bottom="24.0" right="25.0" top="30.0" />
                                     </VBox.margin>
                                 </MFXTextField>
-                                <MFXTextField fx:id="owner"
-                                              floatingText="Abliefernde Stelle: Dateneigentümer vor Archivierung"
-                                              maxWidth="1.7976931348623157E308" styleClass="form-field">
+                                <MFXTextField fx:id="dataOriginTimespan" floatingText="Ihr N" maxWidth="410.0" styleClass="form-field">
                                     <VBox.margin>
-                                        <Insets bottom="24.0" right="25.0" top="60.0"/>
-                                    </VBox.margin>
-                                </MFXTextField>
-                                <MFXTextField fx:id="dataOriginTimespan" floatingText="Entstehungszeit der Daten"
-                                              maxWidth="1.7976931348623157E308" styleClass="form-field">
-                                    <VBox.margin>
-                                        <Insets bottom="24.0" right="25.0" top="60.0"/>
+                                        <Insets bottom="24.0" right="25.0" top="30.0" />
                                     </VBox.margin>
                                 </MFXTextField>
                                 <Label fx:id="errorMessage" styleClass="error-text" visible="false">
                                     <VBox.margin>
-                                        <Insets bottom="5.0"/>
+                                        <Insets bottom="5.0" />
                                     </VBox.margin>
                                 </Label>
                             </children>
-                            <VBox.margin>
-                                <Insets/>
-                            </VBox.margin>
                             <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="60.0"/>
+                                <Insets bottom="25.0" left="25.0" right="25.0" top="30.0" />
                             </HBox.margin>
-                            <padding>
-                                <Insets left="25.0" top="25.0"/>
-                            </padding>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" styleClass="form-container">
+                        <VBox prefHeight="200.0" prefWidth="570.0">
                             <children>
-                                <Text fx:id="titleWho" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h3"
-                                      text="Wer hat archiviert?"/>
-                                <MFXTextField fx:id="archiverName" floatingText="Ihr Name (Optional)"
-                                              maxWidth="1.7976931348623157E308" styleClass="form-field">
+                                <Text fx:id="titleWho" styleClass="h3">
                                     <VBox.margin>
-                                        <Insets bottom="24.0" right="25.0" top="60.0"/>
+                                        <Insets bottom="15.0" top="15.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <MFXTextField fx:id="archiverName" floatingText="Ihr Name (Optional)" maxWidth="410.0" styleClass="form-field">
+                                    <VBox.margin>
+                                        <Insets bottom="24.0" top="60.0" />
                                     </VBox.margin>
                                 </MFXTextField>
-                                <HBox prefHeight="100.0" prefWidth="200.0">
-                                    <children>
-                                        <MFXTextField fx:id="archiverContact"
-                                                      floatingText="Ihre Kontaktangaben (z.B. E-Mail, Telefonnummer)"
-                                                      maxWidth="1.7976931348623157E308" styleClass="form-field">
-                                            <HBox.margin>
-                                                <Insets top="60.0"/>
-                                            </HBox.margin>
-                                        </MFXTextField>
-                                        <MFXButton fx:id="infoButton" alignment="CENTER" maxHeight="37.0"
-                                                   prefHeight="37.0" prefWidth="34.0" rippleAnimateBackground="false">
-                                            <styleClass>
-                                                <String fx:value="info-icon"/>
-                                                <String fx:value="icon-button"/>
-                                            </styleClass>
-                                            <HBox.margin>
-                                                <Insets top="25.0"/>
-                                            </HBox.margin>
-                                        </MFXButton>
-                                    </children>
+                                <HBox prefWidth="570.0" styleClass="info-container">
+                                    <Label fx:id="archiverContactLabel" style="-fx-text-fill: siard-text-color;" />
+                                    <MFXButton fx:id="infoButton" alignment="CENTER" maxHeight="37.0" maxWidth="37.0" prefHeight="37.0" prefWidth="34.0" rippleAnimateBackground="false">
+                                        <styleClass>
+                                            <String fx:value="info-icon" />
+                                            <String fx:value="icon-button" />
+                                        </styleClass>
+                                        <HBox.margin>
+                                            <Insets top="-10.0" />
+                                        </HBox.margin>
+                                    </MFXButton>
                                 </HBox>
+                                 <TextArea fx:id="archiverContact" maxHeight="103.0" maxWidth="410.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="103.0" prefWidth="410.0" styleClass="form-field-double" />
                             </children>
-                            <VBox.margin>
-                                <Insets/>
-                            </VBox.margin>
                             <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="60.0"/>
+                                <Insets bottom="25.0" left="25.0" right="25.0" top="30.0" />
                             </HBox.margin>
-                            <padding>
-                                <Insets left="25.0" top="25.0"/>
-                            </padding>
                         </VBox>
                     </children>
                 </HBox>
 
             </children>
             <BorderPane.margin>
-                <Insets left="25.0" right="25.0" top="48.0"/>
+                <Insets left="25.0" right="25.0" top="48.0" />
             </BorderPane.margin>
         </VBox>
     </center>

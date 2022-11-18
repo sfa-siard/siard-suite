@@ -6,17 +6,18 @@ import ch.admin.bar.siardsuite.component.StepperButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -40,7 +41,9 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @FXML
     MFXTextField name = new MFXTextField();
     @FXML
-    MFXTextField description = new MFXTextField();
+    public Label descriptionLabel;
+    @FXML
+    TextArea description = new TextArea();
     @FXML
     MFXTextField owner = new MFXTextField();
     @FXML
@@ -48,7 +51,9 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @FXML
     MFXTextField archiverName = new MFXTextField();
     @FXML
-    MFXTextField archiverContact = new MFXTextField();
+    public Label archiverContactLabel;
+    @FXML
+    TextArea archiverContact = new TextArea();
     @FXML
     protected StepperButtonBox buttonsBox;
     @FXML
@@ -83,13 +88,13 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
 
         this.name.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseName"));
 
-        this.description.floatingTextProperty()
+        this.descriptionLabel.textProperty()
                         .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
         this.owner.floatingTextProperty()
                   .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
         this.dataOriginTimespan.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseCreationDate"));
         this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
-        this.archiverContact.floatingTextProperty()
+        archiverContactLabel.textProperty()
                             .bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
         this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.error"));
     }

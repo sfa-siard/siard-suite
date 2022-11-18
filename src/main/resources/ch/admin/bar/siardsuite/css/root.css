@@ -66,6 +66,7 @@
     -fx-graphic-text-gap: 0.8em;
 }
 
+.info-container .button,
 .header .button {
     -fx-min-width: 40;
     -fx-min-height: 40;
@@ -149,6 +150,15 @@
 .container {
     -fx-max-width: infinity;
     -fx-max-height: infinity;
+}
+
+.step-scroll-pane {
+    -fx-background-color: white;
+    -fx-border-radius: 0;
+}
+
+.main-container {
+    -fx-background-color: white;
 }
 
 /*Stepper*/
@@ -249,6 +259,7 @@
     -fx-text-fill: black;
 }
 
+.main-container .btn-box,
 .mfx-stepper .btn-box {
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 25 50 25 50;
@@ -359,13 +370,16 @@
     -fx-stroke: #1F2933;
 }
 
+.loader-label {
+    -fx-graphic-text-gap: 15.0;
+}
+
 .label-icon {
     -fx-max-height: 24;
     -fx-label-padding: 0 0 0 0;
     -fx-graphic-text-gap: 1.2em;
     -fx-content-display: RIGHT;
 }
-
 
 .label-icon-left {
     -fx-content-display: LEFT;
@@ -409,6 +423,12 @@
     -fx-text-fill: red;
 }
 
+.link-icon {
+    -fx-graphic: url(../icons/link.png);
+    -fx-pref-width: 40.0;
+    -fx-pref-height: 40.0;
+}
+
 .form-container {
     -fx-background-color: #f5f7fa;
     -fx-font-family: siard-font-family;
@@ -429,6 +449,30 @@
     -fx-border-radius: 0;
     -fx-text-fill: black;
 }
+
+.form-field-double {
+    -fx-max-height: 60;
+    -fx-min-height: 60;
+    -fx-border-color: #b0afaf;
+    -fx-border-width: 1;
+    -fx-border-radius: 0;
+    -fx-text-fill: black;
+    -fx-prompt-text-fill: #9aa5b1;
+}
+
+.form-field-double .text {
+    -fx-padding: 0 0 0 17;
+    -fx-font-family: siard-font-family;
+}
+
+.text-area,
+.text-area .content,
+.text-area:focused .content,
+.text-area:focused {
+    -fx-background-color: white;
+    -fx-focus-color: white;
+}
+
 
 .form-field:disabled {
     -fx-border-width: 0;
@@ -522,7 +566,7 @@
 }
 
 .table-container-header {
-    -fx-padding: 25 25 20 25;
+    -fx-padding: 15 25 10 25;
     -fx-border-color: #e4e7eb;
     -fx-border-width: 0 0 2 0;
 }
@@ -749,4 +793,61 @@
 
 .text-center {
     -fx-text-alignment: center;
+}
+
+.scroll-bar:horizontal .track ,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #5d636c;
+    -fx-opacity: 0.2;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 0em;
+}
+
+ 
+/* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" */
+.scroll-bar .thumb:hover,
+.scroll-bar .thumb:pressed {
+    -fx-background-color: #5d636c;
+    -fx-opacity: 0.4;
+}
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button,
+.scroll-bar:vertical .decrement-button,
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button{
+    -fx-background-size: 8px 8px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+
+.scroll-bar:vertical .increment-button {
+    -fx-background-image: url(../icons/caret-down.png);
+}
+
+.scroll-bar:vertical .decrement-button {
+    -fx-background-image: url(../icons/caret-up.png);
+}
+
+
+.scroll-bar:horizontal .increment-button {
+    -fx-background-image: url(../icons/caret-right.png);
+}
+
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-image: url(../icons/caret-left.png);
+}
+
+.scroll-bar:vertical .increment-button .increment-arrow,
+.scroll-bar:horizontal .increment-button .increment-arrow,
+.scroll-bar:vertical .decrement-button .decrement-arrow,
+.scroll-bar:horizontal .decrement-button .decrement-arrow {
+    -fx-background-color: transparent;
 }

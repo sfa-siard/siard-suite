@@ -30,11 +30,11 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
     this.controller = controller;
     this.stage = stage;
 
-    this.title.textProperty().bind(I18n.createStringBinding("archiveAbortDialog.title"));
-    this.text.textProperty().bind(I18n.createStringBinding("archiveAbortDialog.text"));
+    I18n.bind(title.textProperty(),"archiveAbortDialog.title");
+    I18n.bind(text.textProperty(),"archiveAbortDialog.text");
 
     final MFXButton cancelArchiveButton = new MFXButton();
-    cancelArchiveButton.textProperty().bind(I18n.createStringBinding("button.cancel.archive"));
+    I18n.bind(cancelArchiveButton.textProperty(),"button.cancel.archive");
     cancelArchiveButton.getStyleClass().setAll("button", "primary");
     cancelArchiveButton.setManaged(true);
 
@@ -47,7 +47,7 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
     closeButton.setOnAction(event -> stage.closeDialog());
 
       final MFXButton proceedArchiveButton = new CloseDialogButton(this.stage);
-    proceedArchiveButton.textProperty().bind(I18n.createStringBinding("button.proceed.archive"));
+    I18n.bind(proceedArchiveButton.textProperty(),"button.proceed.archive");
 
     buttonBox.getChildren().addAll(proceedArchiveButton, cancelArchiveButton);
   }

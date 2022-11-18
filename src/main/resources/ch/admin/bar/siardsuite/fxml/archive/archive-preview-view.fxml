@@ -22,7 +22,7 @@
                 <VBox>
                     <children>
                         <Label fx:id="title" styleClass="h2"/>
-                        <Text fx:id="text" styleClass="view-text">
+                        <Text fx:id="text" styleClass="view-text" lineSpacing="8.0">
                             <VBox.margin>
                                 <Insets bottom="24.0" top="15.0"/>
                             </VBox.margin>
@@ -40,9 +40,9 @@
                             </children>
                         </VBox>
                         <StackPane fx:id="rightTableBox" prefWidth="714.0" HBox.hgrow="ALWAYS">
-                            <ScrollPane hbarPolicy="NEVER" styleClass="table-container">
+                            <ScrollPane styleClass="table-container" hbarPolicy="NEVER" >
                                 <content>
-                                    <AnchorPane maxWidth="1.7976931348623157E308" prefWidth="714.0">
+                                    <AnchorPane styleClass="table-container" maxWidth="1.7976931348623157E308" prefWidth="714.0">
                                         <children>
                                             <VBox fx:id="tableContainerContent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                                                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

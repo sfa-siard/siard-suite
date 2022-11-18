@@ -70,15 +70,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     this.controller = controller;
     this.model = model;
     this.stage = stage;
-
-    this.loader.setImage(Icon.loading);
-    loadingSpinner = new Spinner(this.loader);
-    this.bindTexts();
   }
 
   @Override
   public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
     this.init(controller, model, stage);
+    this.loader.setImage(Icon.loading);
+    loadingSpinner = new Spinner(this.loader);
+    this.bindTexts();
     this.buttonsBox = new StepperButtonBox().make(CANCEL);
     addButtons(stepper);
     setListeners(stepper);
@@ -131,8 +130,10 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
 
         controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
           double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
-          LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
-          label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
+          if (pos >= 1) {
+            LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
+            label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
+          }
         });
       } catch (SQLException e) {
         // TODO should notify user about any error - Toast it # CR 458

@@ -18,11 +18,15 @@
                 <VBox>
                     <children>
                         <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2">
+                            <styleClass>
+                                <String fx:value="h2" />
+                                <String fx:value="loader-label" />
+                            </styleClass>
                             <graphic>
                                 <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
                                     <styleClass>
                                         <String fx:value="loading-icon" />
-                                        <String fx:value="icon-button" />
+                                        <String fx:value="label-icon" />
                                     </styleClass>
                                     <image>
                                         <Image url="@../../icons/loading.png" />

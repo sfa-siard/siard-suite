@@ -99,7 +99,7 @@ public class UploadDbDialogPresenter extends DialogPresenter {
             final Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(connectionName);
 
             final Label imageLabel = new Label();
-            imageLabel.getStyleClass().add("icon-label");
+            imageLabel.getStyleClass().add("link-icon");
             final Label nameLabel = new Label(connectionName);
             nameLabel.getStyleClass().add("name-label");
 

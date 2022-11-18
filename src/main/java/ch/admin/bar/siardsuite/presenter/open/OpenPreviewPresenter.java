@@ -1,7 +1,9 @@
 package ch.admin.bar.siardsuite.presenter.open;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.*;
+import ch.admin.bar.siardsuite.component.StepperButtonBox;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -9,6 +11,10 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
+
+import static ch.admin.bar.siardsuite.Workflow.EXPORT;
+import static ch.admin.bar.siardsuite.Workflow.UPLOAD;
+import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.OPEN_PREVIEW;
 
 public class OpenPreviewPresenter extends PreviewPresenter {
 
@@ -18,9 +24,11 @@ public class OpenPreviewPresenter extends PreviewPresenter {
   protected Text text;
   @FXML
   public MFXButton cancelButton;
-
   @FXML
   public MFXButton exportButton;
+  @FXML
+  protected StepperButtonBox buttonsBox;
+
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
     super.init(controller, model, stage);
@@ -30,11 +38,18 @@ public class OpenPreviewPresenter extends PreviewPresenter {
 
     initTreeView();
 
-    cancelButton.setOnAction(event -> this.stage.navigate(View.START));
-    cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
+    this.buttonsBox = new StepperButtonBox().make(OPEN_PREVIEW);
+    this.borderPane.setBottom(buttonsBox);
 
-    exportButton.setOnAction(event -> this.stage.openDialog(View.EXPORT_SELECT_TABLES));
-    exportButton.textProperty().bind(I18n.createStringBinding("button.export"));
+    buttonsBox.cancel().setOnAction(event -> {
+      this.controller.setWorkflow(UPLOAD);
+      stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
+    });
+    buttonsBox.previous().setOnAction(event -> {
+      this.controller.setWorkflow(EXPORT);
+      this.stage.openDialog(View.EXPORT_SELECT_TABLES);
+    });
+    buttonsBox.next().setOnAction(event -> this.stage.navigate(View.START));
     setListeners();
   }
 
