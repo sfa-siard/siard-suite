@@ -1,8 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.MetaData;
-import ch.admin.bar.siard2.api.Schema;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.*;
 import ch.admin.bar.siardsuite.model.Model;
@@ -12,7 +11,6 @@ import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
@@ -29,12 +27,13 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.*;
 import static ch.admin.bar.siardsuite.model.View.START;
 import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOADED;
 
-public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor, ArchiveVisitor {
+public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
 
   @FXML
   public Label title;
@@ -63,7 +62,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
 
   private Spinner loadingSpinner;
   private File targetArchive;
-  private Archive archive;
+  private String databaseName;
+  private long total;
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
@@ -90,7 +90,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     if (this.buttonsBox.cancel() != null) {
       if (this.resultTitle.isVisible()) {
         this.buttonsBox.cancel().setOnAction((event) -> {
-          stepper.previous();
+          try {
+            final Archive archive = ArchiveImpl.newInstance();
+            archive.open(targetArchive);
+            model.setArchive(targetArchive.getName(), archive);
+            stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
         });
       } else {
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
@@ -114,12 +121,43 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
       model.provideDatabaseArchiveMetaDataProperties(this);
       this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
       this.archivePath.setText(targetArchive.getAbsolutePath());
+      this.subtitle1.setText(this.databaseName);
       try {
         controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure(stepper));
+        controller.addDatabaseLoadingValuePropertyListener((o1, oldValue1, newValue1) -> {
+          AtomicInteger pos1 = new AtomicInteger();
+          newValue1.forEach(p -> addTableData(p.getKey(), p.getValue(), pos1.getAndIncrement()));
+        });
+
+        controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+          double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
+          LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
+          label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
+        });
       } catch (SQLException e) {
         // TODO should notify user about any error - Toast it # CR 458
         throw new RuntimeException(e);
       }
+    };
+  }
+
+
+
+  private EventHandler<WorkerStateEvent> handleDownloadSuccess(MFXStepper stepper) {
+    return e -> {
+      stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.COMPLETED);
+      stepper.updateProgress();
+      loadingSpinner.hide();
+      this.title.setVisible(false);
+      this.resultTitle.setVisible(true);
+      this.fileSystemBox.setVisible(true);
+      I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.success");
+      resultTitle.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
+      setResultData();
+      controller.closeDbConnection();
+      stepper.fireEvent(new SiardEvent(DATABASE_DOWNLOADED));
+      this.buttonsBox = new StepperButtonBox().make(DOWNLOAD_FINISHED);
+      addButtons(stepper);
     };
   }
 
@@ -130,31 +168,13 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
       this.title.setVisible(false);
       loadingSpinner.hide();
       this.resultTitle.setVisible(true);
+      this.subtitle1.setVisible(false);
+      this.resultBox.setVisible(false);
       I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.failed");
       I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.failed");
       resultTitle.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
       controller.closeDbConnection();
-      this.buttonsBox = new StepperButtonBox().make(FAILED);
-      addButtons(stepper);
-    };
-  }
-
-  private EventHandler<WorkerStateEvent> handleDownloadSuccess(MFXStepper stepper) {
-    return e -> {
-      stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.COMPLETED);
-      stepper.updateProgress();
-      loadingSpinner.hide();
-      this.title.setVisible(false);
-      this.resultTitle.setVisible(true);
-      this.subtitle1.setVisible(true);
-      this.resultBox.setVisible(true);
-      this.fileSystemBox.setVisible(true);
-      I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.success");
-      resultTitle.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
-//      setResultData();
-      controller.closeDbConnection();
-      stepper.fireEvent(new SiardEvent(DATABASE_DOWNLOADED));
-      this.buttonsBox = new StepperButtonBox().make(DOWNLOAD_FINISHED);
+      this.buttonsBox = new StepperButtonBox().make(TO_START);
       addButtons(stepper);
     };
   }
@@ -175,26 +195,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
   }
 
   private void setResultData() {
-    this.model.provideArchiveObject(this);
-    this.subtitle1.setText(this.archive.getMetaData().getDbName());
-    long total = 0;
-    for (int i = 0; i < this.archive.getSchemas(); i++) {
-      Schema schema = this.archive.getSchema(i);
-      scrollBox.getChildren().add(new Label(schema.getMetaSchema().getName()));
-      for (int y = 0; y < schema.getTables(); y++) {
-        String tableName = schema.getTable(y).getMetaTable().getName();
-        Long rows = schema.getTable(y).getMetaTable().getRows();
-        addTableData(tableName, rows, y);
-        total += rows;
-      }
-    }
     I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.success", total);
   }
 
   private void addTableData(String tableName, Long rows, Integer pos) {
-    LabelIcon label = new LabelIcon(tableName, pos, IconView.IconType.OK);
+    LabelIcon label = new LabelIcon(tableName, pos, IconView.IconType.LOADING);
     I18n.bind(label.textProperty(), "upload.result.success.table.rows", tableName, rows);
     scrollBox.getChildren().add(label);
+    total += rows;
   }
 
   @Override
@@ -202,19 +210,10 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                     String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
                     LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
     this.targetArchive = targetArchive;
+    this.databaseName = databaseName;
   }
 
   @Override
   public void visit(SiardArchiveMetaData metaData) {
-  }
-
-  @Override
-  public void visit(Archive archive) {
-    this.archive = archive;
-  }
-
-  @Override
-  public void visit(MetaData metaData) {
-
   }
 }

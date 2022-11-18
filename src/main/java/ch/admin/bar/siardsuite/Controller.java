@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.util.Pair;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -74,7 +75,7 @@ public class Controller {
     this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
   }
 
-  public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<String>> listener) {
+  public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<Pair<String, Long>>> listener) {
     this.databaseLoadService.valueProperty().addListener(listener);
   }
 

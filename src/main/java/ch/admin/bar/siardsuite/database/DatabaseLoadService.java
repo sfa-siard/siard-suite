@@ -5,10 +5,11 @@ import ch.admin.bar.siardsuite.model.Model;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.util.Pair;
 
 import java.sql.Connection;
 
-public class DatabaseLoadService extends Service<ObservableList<String>> {
+public class DatabaseLoadService extends Service<ObservableList<Pair<String, Long>>> {
 
   private final Connection connection;
   private final Model model;
@@ -23,7 +24,7 @@ public class DatabaseLoadService extends Service<ObservableList<String>> {
   }
 
   @Override
-  protected Task<ObservableList<String>> createTask() {
+  protected Task<ObservableList<Pair<String, Long>>> createTask() {
     return new DatabaseLoadTask(connection, model, archive, onlyMetaData);
   }
 }

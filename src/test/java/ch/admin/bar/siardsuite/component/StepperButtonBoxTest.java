@@ -61,7 +61,7 @@ public class StepperButtonBoxTest {
         assertNotNull(buttonBox);
         assertThat(buttonBox.getChildren().size(), is(2));
         assertThat(buttonBox.getChildren(), hasItems(buttonBox.cancelButton, buttonBox.nextButton));
-        assertThat(buttonBox.cancelButton.getText(), is("Home"));
-        assertThat(buttonBox.nextButton.getText(), is("View archive"));
+        assertThat(buttonBox.cancelButton.getText(), is("View archive"));
+        assertThat(buttonBox.nextButton.getText(), is("Home"));
     }
 }
