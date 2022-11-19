@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'Roboto Medium';
     font-weight: 500px;
@@ -267,6 +266,7 @@
     -fx-border-color: #e4e7eb;
     -fx-border-width: 2 0 0 0;
 }
+
 .button,
 .mfx-stepper .btn-box .button {
     -fx-min-width: 148px;
@@ -555,7 +555,7 @@
     -fx-cursor: HAND;
 }
 
-.tree-view .tree-cell > .tree-disclosure-node > .arrow  {
+.tree-view .tree-cell > .tree-disclosure-node > .arrow {
     -fx-background-color: #1f2933;
 }
 
@@ -610,14 +610,14 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-.table-container-text-small{
+.table-container-text-small {
     -fx-font-size: 12;
     -fx-text-fill: black;
     -fx-label-padding: 6 0 6 0;
     -fx-max-width: infinity;
 }
 
-.tree-table-view .column-header-background{
+.tree-table-view .column-header-background {
     -fx-background-color: #e4e7eb;
     -fx-padding: 5 0 5 0;
 
@@ -708,6 +708,7 @@
     -fx-background-color: rgba(27, 204, 150, 1);
 
 }
+
 /* Select Connections */
 
 .connections-vbox-header-name {
@@ -795,8 +796,8 @@
     -fx-text-alignment: center;
 }
 
-.scroll-bar:horizontal .track ,
-.scroll-bar:vertical .track{
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
     -fx-background-color: transparent;
     -fx-background-radius: 0em;
 }
@@ -809,7 +810,7 @@
     -fx-background-radius: 0em;
 }
 
- 
+
 /* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" */
 .scroll-bar .thumb:hover,
 .scroll-bar .thumb:pressed {
@@ -821,7 +822,7 @@
 .scroll-bar:vertical .decrement-button,
 .scroll-bar:vertical .decrement-button,
 .scroll-bar:horizontal .increment-button,
-.scroll-bar:horizontal .decrement-button{
+.scroll-bar:horizontal .decrement-button {
     -fx-background-size: 8px 8px;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
@@ -851,3 +852,26 @@
 .scroll-bar:horizontal .decrement-button .decrement-arrow {
     -fx-background-color: transparent;
 }
+
+/*# Start*/
+
+.start-view {
+    -fx-background-color: linear-gradient(to bottom, rgb(255, 255, 255), rgb(228, 231, 235));
+}
+
+.siard-icon {
+    -fx-effect: dropshadow(three-pass-box, rgb(62, 76, 89, 0.27), 20, 0, 0, 8);
+}
+
+.arrow-icon {
+    -fx-graphic: url(../icons/arrow.png);
+    -fx-max-width: 234;
+    -fx-max-height: 16;
+}
+
+.text-flow {
+    -fx-border-color: #e4e7eb;
+    -fx-border-width: 0 0 2 0;
+
+}
+
