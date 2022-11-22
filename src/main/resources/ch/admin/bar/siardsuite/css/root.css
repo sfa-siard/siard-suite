@@ -18,6 +18,7 @@
     -fx-header-background-color: #323f4b;
     siard-font-family: 'Roboto Regular';
     siard-text-color: #52606D;
+    siard-text-color-black: #1e2731;
 }
 
 .root {
@@ -130,7 +131,7 @@
 }
 
 .menu-item .label {
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-cursor: HAND;
 }
 
@@ -198,7 +199,7 @@
     -fx-background-color: #e4e7eb;
     -fx-pref-height: 52;
     -fx-alignment: CENTER_LEFT;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -mfx-label-text-gap: 12.0;
 }
 
@@ -212,7 +213,7 @@
 .number-btn {
     -fx-shape: "M 159 96  C 165.16 96  170 100.84  170 107  C 170 113.16  165.16 118  159 118  C 152.84 118  148 113.16  148 107  C 148 100.84  152.84 96  159 96  Z ";
     -fx-background-color: #9aa5b1;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-font-size: 11px;
     -fx-opacity: 0.5;
     -fx-font-family: "Roboto Medium";
@@ -245,7 +246,7 @@
 .mfx-stepper-toggle .mfx-text-field,
 .mfx-stepper-toggle .mfx-text-field .text-field,
 .custom-stepper-toggle .mfx-text-field .text-field {
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-opacity: 0.7;
     -fx-font-width: 500;
     -fx-alignment: BASELINE_CENTER;
@@ -262,7 +263,7 @@
 .mfx-stepper-toggle:invalid .mfx-text-field,
 .custom-stepper-toggle:invalid .mfx-text-field {
     -fx-opacity: 1;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
 }
 
 .main-container .btn-box,
@@ -285,16 +286,22 @@
     -fx-cursor: HAND;
 }
 
+.icon-text-btn {
+    -fx-background-insets: 0;
+    -fx-graphic-text-gap: 10px;
+    -fx-content-display: LEFT;
+}
+
 .primary {
-    -fx-background-color: black;
-    -fx-border-color: black;
+    -fx-background-color: siard-text-color-black;
+    -fx-border-color: siard-text-color-black;
     -fx-text-fill: white;
 }
 
 .secondary {
     -fx-background-color: white;
-    -fx-border-color: black;
-    -fx-text-fill: black;
+    -fx-border-color: siard-text-color-black;
+    -fx-text-fill: siard-text-color-black;
 }
 
 /*Button*/
@@ -462,7 +469,7 @@
     -fx-border-color: #b0afaf;
     -fx-border-width: 1;
     -fx-border-radius: 0;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
 }
 
 .form-field-double {
@@ -471,7 +478,7 @@
     -fx-border-color: #b0afaf;
     -fx-border-width: 1;
     -fx-border-radius: 0;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-prompt-text-fill: #9aa5b1;
 }
 
@@ -491,7 +498,7 @@
 
 .form-field:disabled {
     -fx-border-width: 0;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-font-family: siard-font-family;
 }
 
@@ -532,7 +539,7 @@
     -fx-background-color: rgba(0, 0, 0, 0);
     -fx-background: rgba(0, 0, 0, 0);
     -fx-fill: transparent;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-alignment: top-center;
     -fx-text-alignment: center;
     -fx-font-size: 13;
@@ -557,7 +564,7 @@
 }
 
 .tree-view .tree-cell {
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-font-size: 14;
 }
 
@@ -594,7 +601,7 @@
     -fx-content-display: LEFT;
     -fx-label-padding: 0 0 0 0;
     -fx-graphic-text-gap: 1.2em;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-font-size: 14;
 }
 
@@ -610,15 +617,16 @@
 }
 
 .table-container-text {
+    -fx-font-family: siard-font-family;
     -fx-font-size: 14;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-label-padding: 6 0 14 0;
     -fx-max-width: infinity;
 }
 
 .table-container-label-small {
     -fx-font-size: 12;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-max-width: infinity;
     -fx-text-alignment: LEFT;
     -fx-label-padding: 6 0 6 0;
@@ -627,7 +635,7 @@
 
 .table-container-text-small {
     -fx-font-size: 12;
-    -fx-text-fill: black;
+    -fx-text-fill: siard-text-color-black;
     -fx-label-padding: 6 0 6 0;
     -fx-max-width: infinity;
 }

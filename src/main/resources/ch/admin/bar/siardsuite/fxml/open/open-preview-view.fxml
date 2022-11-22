@@ -104,16 +104,6 @@
             <bottom>
             </bottom>
             <bottom>
-                <MFXButton BorderPane.alignment="CENTER">
-                    <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true"
-                                   styleClass="label-icon">
-                            <image>
-                                <Image url="@../../icons/export_action.png"/>
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </MFXButton>
             </bottom>
         </BorderPane>
     </ScrollPane>

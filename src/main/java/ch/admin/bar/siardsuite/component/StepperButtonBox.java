@@ -123,13 +123,13 @@ public class StepperButtonBox extends HBox {
   private static class OpenPreviewButtonBox extends StepperButtonBox {
     public OpenPreviewButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
-      this.nextButton.getStyleClass().setAll("button", "primary");
+      this.nextButton.getStyleClass().setAll("button", "primary" );
       this.nextButton.setManaged(true);
       this.previousButton.textProperty().bind(I18n.createStringBinding("button.export"));
-      this.previousButton.getStyleClass().setAll("button", "secondary");
+      this.previousButton.getStyleClass().setAll("button", "secondary", "export-icon", "icon-text-btn");
       this.previousButton.setManaged(true);
       this.cancelButton.textProperty().bind(I18n.createStringBinding("button.upload"));
-      this.cancelButton.getStyleClass().setAll("button", "secondary");
+      this.cancelButton.getStyleClass().setAll("button", "secondary", "upload-icon", "icon-text-btn");
       this.cancelButton.setManaged(true);
       this.getChildren().addAll(this.previousButton, this.cancelButton, this.nextButton);
       this.initialize();
