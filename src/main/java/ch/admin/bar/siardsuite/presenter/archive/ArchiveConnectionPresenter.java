@@ -222,6 +222,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
                 errorMessage.setVisible(false);
                 stepper.next();
                 stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBLOAD_EVENT));
+                passwordField.setText("");
             }
 
         });

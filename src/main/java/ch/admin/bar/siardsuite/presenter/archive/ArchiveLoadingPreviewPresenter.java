@@ -79,14 +79,14 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
             EventHandler<WorkerStateEvent> onFailure = e -> {
                 controller.closeDbConnection();
-                navigateBack(stepper);
+                stepper.previous();
             };
 
             try {
                 controller.loadDatabase(true, onSuccess, onFailure);
             } catch (SQLException e) {
                 // TODO should notify user about any error - Toast it # CR 458
-                navigateBack(stepper);
+                stepper.previous();
                 throw new RuntimeException(e);
             }
 
@@ -110,6 +110,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         this.buttonsBox.previous().setOnAction((event) -> {
             controller.closeDbConnection();
             stepper.previous();
+
         });
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
@@ -119,7 +120,4 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 //                new LabelIcon(tableName, pos, IconView.IconType.LOADING));
 //    }
 
-    private void navigateBack(MFXStepper stepper) {
-        stepper.previous();
-    }
 }

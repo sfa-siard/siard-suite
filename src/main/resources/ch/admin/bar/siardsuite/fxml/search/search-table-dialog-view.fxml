@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
-
+<?import java.lang.String?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" styleClass="dialog" stylesheets="@../../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.search.SearchTableDialogPresenter">
     <center>
         <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefWidth="418.0" BorderPane.alignment="CENTER">
@@ -33,6 +31,10 @@
                      <VBox.margin>
                          <Insets bottom="25.0" />
                      </VBox.margin>
+                     <styleClass>
+                         <String fx:value="form-field" />
+                         <String fx:value="search-field" />
+                     </styleClass>
                  </MFXTextField>
              </VBox>
          </center>

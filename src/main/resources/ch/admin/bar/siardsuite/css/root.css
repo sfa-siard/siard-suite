@@ -472,6 +472,14 @@
     -fx-text-fill: siard-text-color-black;
 }
 
+.search-field {
+    -fx-background-image: url(../icons/search.png);
+    -fx-padding: 45;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 2% center;
+    -fx-background-size: 24px 24px;
+}
+
 .form-field-double {
     -fx-max-height: 60;
     -fx-min-height: 60;
