@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.beryx.runtime' version '1.12.7'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 repositories {
@@ -126,4 +127,11 @@ task siardFromDb(type: CreateStartScripts) {
 
 installDist {
     dependsOn(siardFromDb)
+}
+
+
+asciidoctor {
+    sourceDir  file('docs')
+
+    outputDir  file('build/docs')
 }

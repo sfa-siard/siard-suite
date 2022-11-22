@@ -1,0 +1,95 @@
+== Siard Suite Handbuch
+
+=== Einleitung
+
+Die Anwendung "`Siard Suite`" wurde durch das Schweizerische
+Bundesarchiv entwickelt. Der SIARD (Software-Independent Archival of
+Relational Databases) Standard definiert ein Format um Inhalte
+relationaler Datenbanken langfristig zu archivieren.
+
+In Zusammenarbeit mit dem EU-Projekt E-ARK und der KOST wurde 2015-2018
+die Version 2.1 des SIARD Formats spezifiziert. Wie schon Version 1.0
+wurde SIARD Format 2.1 als Standard eCH-0165 vom Verein eCH E-Government
+Standards homologiert. Im Jahr 2021 hat der DILCIS-Vorstand das
+erweiterte SIARD-Format 2.2 entwickelt und genehmigt. Puzzle ITC wurde
+vom Schweizerischen Bundesarchiv beauftragt, die SIARD Suite 2.2 nach
+dem erweiterten Format zu entwickeln.
+
+Siard Suite ist die Referenzimplementation für das Archvieren
+relationaler Datenbanken im standardisierten SIARD Format 2.2. Weiter
+kann Siard Suite auch SIARD Archive in den Formaten SIARD 2.1 und SIARD
+1.0 einlesen und zu SIARD 2.2 konvertieren.
+
+=== Systemanforderungen und Installation
+
+Die Applikation Siard Suite ist eine Java FX Applikation. Als solche
+kann sie grundsätzlich auf jeden System ausgeführt werden, auf welchem
+ein Java Runtime Environment 18 (JRE) mit der JavaFX Extension
+installiert ist. Allerdings stehen Downloads für Windows, Mac und Linux
+zur Verfügung, welche die entsprechende Runtime beinhalten, so dass
+nicht notwendigerweise eine eigene JRE installiert werden muss.
+
+In der Folge sind die einzelnen Distributionen beschrieben.
+
+==== Native Installer
+
+Für Windows, Mac und Linux können installierbare Pakete heruntergeladen
+und damit die Applikation SIARD Suite auf dem System installiert werden.
+Allenfalls werden dazu auf dem System Administratorrechte benötigt.
+
+TODO: Liste der Downloads
+
+*Hinweis:* für diese Installationsart steht das Siard CLI (Command Line
+Interface) nicht zur Verfügung.
+
+==== Installation und Verwendung der ZIP Archive
+
+TODO: bessere Kapitelüberschrift
+
+Anstelle der nativen Installer kann auch eine als ZIP Archiv
+bereitgestellte Distribution verwendet werden. Für Windows, Mac und
+Linux stehen entsprechende Archive mit inkludierter JRE zur Verfügung.
+Ausserdem kann auch eine Version ohne mitgelieferte Runtime verwendet
+werden - in diesem Fall muss Java 18 mit JavaFX auf dem System verfügbar
+sein.
+
+Beide Distrubutionen ermöglichen es, das Siard CLI zu verwenden.
+
+Die die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt werden und dann mittels der entsprechenden Startskripte ausgeführt werden.
+
+TODO: Namen der Startskripte angeben.
+
+== Anwenden
+
+TODO: besserer Titel
+
+Die Siard Suite besteht aus folgenden Komponenten:
+    * Grafische Bentutzeroberfläche (GUI)
+    * SiardFromDb (CLI)
+    * SiardToDB (CLI)
+
+Zweck und Verwendung der Komponenten wird in der Folge erklärt.
+
+=== Siard Suite GUI
+
+Siard Suite GUI bietet folgende Funktionalitäten an:
+
+* Datenbank herunterladen und in einem SIARD Archiv speichern.
+* Anzeige der Meta- und Primärdaten eines SIARD Archives.
+* Upload eines SIARD Archives in eine Datenbank
+* Export von Tabellendaten
+
+Die grafische Benutzeroberfläche ist die zentrale Anwendung um SIARD Archive zu erstellen und später auch wieder zu sichten. Primärdaten können nicht geändert werden. Die grafische Oberfläche eignet sich nicht für komplexe Recherchen - stattdessen sollte für solche Anwendungsfälle das Archiv in eine Datenbank hochgeladen werden.
+
+
+TODO: prüfen ob die CLIs auch mit dem native Installer verwendet werden können...
+
+=== Siard Suite CLI
+Die Befehlszeilenanwendung SiardFromDb dient dem Herunterladen einer Datenbank und deren Speicherung in einer SIARD-Datei. Die Funktionalität dieser Anwendung ist identisch mit der in SiardGui verfügbaren Download-Funktion. Besonders beim Herunterladen grosser Datenbanken oder vieler Datenbanken ist die Benutzung der Befehlszeilenversion bequemer. Mittels Umleitung von stdout und stderr kann das lange dauernde Herunterladen auch besser dokumentiert werden (s. „Verwenden von Befehlsumleitungsoperatoren“).
+
+
+=== SiardToDb
+Die Befehlszeilenanwendung SiardToDb dient dem Hinaufladen einer Datenbank aus einer SIARD-Datei. Die Funktionalität dieser Anwendung ist identisch mit der in SiardGui verfügbaren Upload-Funktion. Besonders beim Hinaufladen grosser Datenbanken ist die Benutzung der Befehlszeilenversion bequemer. Mittels Umleitung von stdout und stderr kann das lange dauernde Hinaufladen auch besser dokumentiert werden (s. „Verwenden von Befehlsumleitungsoperatoren“).
+
+
+
