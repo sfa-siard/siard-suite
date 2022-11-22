@@ -47,7 +47,7 @@ tasks.withType(JavaExec) {
     jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED")
 }
 
-// task to create an exectutable jar file with all necessary dependencies included and sigrnature files removed.
+// task to create an exectutable jar file with all necessary dependencies included and signature files removed.
 task fatJar(type: Jar) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
@@ -111,4 +111,19 @@ runtime {
             installerOptions += ['--mac-package-name', 'siard-suite']
         }
     }
+}
+
+
+// create additional scripts for siardcmd...
+// see https://stackoverflow.com/a/62069262/1310321
+
+task siardFromDb(type: CreateStartScripts) {
+    applicationName = "siard-from-db"
+    mainClass = 'ch.admin.bar.siard2.cmd.SiardFromDb'
+    outputDir = file("build/scripts")
+    classpath = project.tasks.getAt(JavaPlugin.JAR_TASK_NAME).outputs.files.plus(project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)) // I took this from ApplicationPlugin.java:129
+}
+
+installDist {
+    dependsOn(siardFromDb)
 }
