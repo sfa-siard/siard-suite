@@ -12,85 +12,91 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchivePreviewPresenter">
-    <center>
-        <VBox BorderPane.alignment="TOP_LEFT">
-            <children>
-                <VBox>
-                    <children>
-                        <Label fx:id="title" styleClass="h2"/>
-                        <Text fx:id="text" styleClass="view-text" lineSpacing="8.0">
-                            <VBox.margin>
-                                <Insets bottom="24.0" top="15.0"/>
-                            </VBox.margin>
-                        </Text>
-                    </children>
-                    <VBox.margin>
-                        <Insets left="25.0" right="25.0"/>
-                    </VBox.margin>
-                </VBox>
-                <HBox prefHeight="467">
-                    <children>
-                        <VBox fx:id="leftTreeBox" prefWidth="365.0">
-                            <children>
-                                <TreeView fx:id="treeView" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"/>
-                            </children>
-                        </VBox>
-                        <StackPane fx:id="rightTableBox" prefWidth="714.0" HBox.hgrow="ALWAYS">
-                            <ScrollPane styleClass="table-container" hbarPolicy="NEVER" >
-                                <content>
-                                    <AnchorPane styleClass="table-container" maxWidth="1.7976931348623157E308" prefWidth="714.0">
-                                        <children>
-                                            <VBox fx:id="tableContainerContent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                <padding>
-                                                    <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
-                                                </padding>
-                                            </VBox>
-                                        </children>
-                                    </AnchorPane>
-                                </content>
-                                <StackPane.margin>
-                                    <Insets/>
-                                </StackPane.margin>
-                            </ScrollPane>
-                            <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" styleClass="table-container-header"
-                                  StackPane.alignment="TOP_RIGHT">
+<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchivePreviewPresenter"
+            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+    <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
+                maxWidth="1.7976931348623157E308"
+    >
+        <center>
+            <VBox BorderPane.alignment="TOP_LEFT">
+                <children>
+                    <VBox>
+                        <children>
+                            <Label fx:id="title" styleClass="h2"/>
+                            <Text fx:id="text" styleClass="view-text" lineSpacing="8.0">
+                                <VBox.margin>
+                                    <Insets bottom="24.0" top="15.0"/>
+                                </VBox.margin>
+                            </Text>
+                        </children>
+                        <VBox.margin>
+                            <Insets left="25.0" right="25.0"/>
+                        </VBox.margin>
+                    </VBox>
+                    <HBox prefHeight="467">
+                        <children>
+                            <VBox fx:id="leftTreeBox" prefWidth="365.0">
                                 <children>
-                                    <MFXButton fx:id="tableSearchButton" alignment="CENTER_RIGHT"
-                                               rippleAnimateBackground="false">
-                                        <styleClass>
-                                            <String fx:value="search-icon"/>
-                                            <String fx:value="icon-text-button"/>
-                                        </styleClass>
-                                    </MFXButton>
-                                    <MFXButton fx:id="metaSearchButton" alignment="CENTER_RIGHT"
-                                               rippleAnimateBackground="false">
-                                        <styleClass>
-                                            <String fx:value="search-icon"/>
-                                            <String fx:value="icon-text-button"/>
-                                        </styleClass>
-                                    </MFXButton>
+                                    <TreeView fx:id="treeView" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"/>
                                 </children>
-                            </HBox>
-                            <HBox.margin>
-                                <Insets left="20.0"/>
-                            </HBox.margin>
-                        </StackPane>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
-                    </VBox.margin>
-                </HBox>
-            </children>
-            <BorderPane.margin>
-                <Insets left="25.0" right="25.0" top="48.0"/>
-            </BorderPane.margin>
-        </VBox>
-    </center>
-    <bottom>
-    </bottom>
-</BorderPane>
+                            </VBox>
+                            <StackPane fx:id="rightTableBox" prefWidth="714.0" HBox.hgrow="ALWAYS">
+                                <ScrollPane styleClass="table-container" hbarPolicy="NEVER">
+                                    <content>
+                                        <AnchorPane styleClass="table-container" maxWidth="1.7976931348623157E308"
+                                                    prefWidth="714.0">
+                                            <children>
+                                                <VBox fx:id="tableContainerContent" AnchorPane.bottomAnchor="0.0"
+                                                      AnchorPane.leftAnchor="0.0"
+                                                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                    <padding>
+                                                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+                                                    </padding>
+                                                </VBox>
+                                            </children>
+                                        </AnchorPane>
+                                    </content>
+                                    <StackPane.margin>
+                                        <Insets/>
+                                    </StackPane.margin>
+                                </ScrollPane>
+                                <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" styleClass="table-container-header"
+                                      StackPane.alignment="TOP_RIGHT">
+                                    <children>
+                                        <MFXButton fx:id="tableSearchButton" alignment="CENTER_RIGHT"
+                                                   rippleAnimateBackground="false">
+                                            <styleClass>
+                                                <String fx:value="search-icon"/>
+                                                <String fx:value="icon-text-button"/>
+                                            </styleClass>
+                                        </MFXButton>
+                                        <MFXButton fx:id="metaSearchButton" alignment="CENTER_RIGHT"
+                                                   rippleAnimateBackground="false">
+                                            <styleClass>
+                                                <String fx:value="search-icon"/>
+                                                <String fx:value="icon-text-button"/>
+                                            </styleClass>
+                                        </MFXButton>
+                                    </children>
+                                </HBox>
+                                <HBox.margin>
+                                    <Insets left="20.0"/>
+                                </HBox.margin>
+                            </StackPane>
+                        </children>
+                        <VBox.margin>
+                            <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
+                        </VBox.margin>
+                    </HBox>
+                </children>
+                <BorderPane.margin>
+                    <Insets left="25.0" right="25.0" top="48.0"/>
+                </BorderPane.margin>
+            </VBox>
+        </center>
+        <bottom>
+        </bottom>
+    </BorderPane>
+</ScrollPane>

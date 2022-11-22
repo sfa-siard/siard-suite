@@ -16,200 +16,189 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="start-view"
-          stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="ch.admin.bar.siardsuite.presenter.StartPresenter">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="start-view" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.StartPresenter">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="171.0" minWidth="50.0" prefWidth="171.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="115.0" prefWidth="115.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="115.0" prefWidth="115.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="83.0" minWidth="10.0" prefWidth="57.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="428.0" minWidth="10.0" prefWidth="370.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="226.0" minWidth="10.0" prefWidth="218.0"/>
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="171.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="370.0" minWidth="-Infinity" prefWidth="370.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="115.0" minWidth="115.0" prefWidth="115.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="115.0" minWidth="115.0" prefWidth="115.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="57.0" minWidth="57.0" prefWidth="57.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="370.0" minWidth="-Infinity" prefWidth="370.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="171.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="87.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="71.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="28.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="306.0" vgrow="SOMETIMES"/>
-        <RowConstraints/>
+        <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="87.0" />
+        <RowConstraints maxHeight="71.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="28.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="306.0" />
+        <RowConstraints />
     </rowConstraints>
     <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <TextFlow fx:id="flowLeft" lineSpacing="8.0" styleClass="text-flow">
-            <Text styleClass="view-text"/>
+            <Text styleClass="view-text" />
             <Text>
                 <styleClass>
-                    <String fx:value="bold"/>
-                    <String fx:value="view-text"/>
+                    <String fx:value="bold" />
+                    <String fx:value="view-text" />
                 </styleClass>
             </Text>
-            <Text styleClass="view-text"/>
+            <Text styleClass="view-text" />
             <padding>
-                <Insets bottom="8.0"/>
+                <Insets bottom="8.0" />
             </padding>
             <VBox.margin>
-                <Insets right="40.0"/>
+                <Insets right="40.0" />
             </VBox.margin>
         </TextFlow>
     </VBox>
-    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3"
-          GridPane.rowSpan="2">
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2">
         <ImageView fx:id="dbImg" fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
             <HBox.margin>
-                <Insets left="15.0"/>
+                <Insets left="15.0" />
             </HBox.margin>
         </ImageView>
         <StackPane prefHeight="222.0" prefWidth="257.0" HBox.hgrow="ALWAYS">
             <opaqueInsets>
-                <Insets/>
+                <Insets />
             </opaqueInsets>
-            <ImageView fx:id="archiveArrow" fitHeight="36.0" fitWidth="264.0" pickOnBounds="true" preserveRatio="true"
-                       styleClass="arrow-icon" StackPane.alignment="CENTER">
+            <ImageView fx:id="archiveArrow" fitHeight="36.0" fitWidth="264.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow-icon" StackPane.alignment="CENTER">
                 <StackPane.margin>
-                    <Insets left="10.0"/>
+                    <Insets left="10.0" />
                 </StackPane.margin>
-                <Image url="@../icons/arrow.png"/>
+                <Image url="@../icons/arrow.png" />
             </ImageView>
-            <ImageView fx:id="archiveBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false" StackPane.alignment="CENTER_LEFT">
+            <ImageView fx:id="archiveBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_LEFT">
                 <StackPane.margin>
-                    <Insets left="10.0"/>
+                    <Insets left="10.0" />
                 </StackPane.margin>
-                <Image url="@../icons/red-bubble.png"/>
+                <Image url="@../icons/red-bubble.png" />
             </ImageView>
             <MFXButton fx:id="archive" style="-fx-background-color: #006699;" text="Archivieren" textFill="WHITE">
                 <font>
-                    <Font size="16.0"/>
+                    <Font size="16.0" />
                 </font>
                 <cursor>
-                    <Cursor fx:constant="HAND"/>
+                    <Cursor fx:constant="HAND" />
                 </cursor>
             </MFXButton>
         </StackPane>
     </HBox>
-    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" GridPane.columnIndex="2"
-          GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.rowSpan="4">
-        <ImageView fx:id="archiveImg" fitHeight="209.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true"
-                   styleClass="siard-icon"/>
+    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.rowSpan="4">
+        <ImageView fx:id="archiveImg" fitHeight="209.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" styleClass="siard-icon" />
         <MFXButton fx:id="open" style="-fx-background-color: #006699;" text="Öffnen" textFill="WHITE">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
             <cursor>
-                <Cursor fx:constant="HAND"/>
+                <Cursor fx:constant="HAND" />
             </cursor>
         </MFXButton>
         <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="NEVER">
-            <TextFlow fx:id="flowCenter" lineSpacing="8.0" styleClass="text-flow" VBox.vgrow="NEVER">
+            <TextFlow fx:id="flowCenter" lineSpacing="8.0" styleClass="text-flow" textAlignment="CENTER" VBox.vgrow="NEVER">
                 <padding>
-                    <Insets bottom="8.0"/>
+                    <Insets bottom="8.0" />
                 </padding>
                 <VBox.margin>
-                    <Insets left="-30.0" right="-30.0"/>
+                    <Insets left="-30.0" right="-30.0" />
                 </VBox.margin>
-                <Text styleClass="view-text"/>
+                <Text styleClass="view-text" />
                 <Text>
                     <styleClass>
-                        <String fx:value="bold"/>
-                        <String fx:value="view-text"/>
+                        <String fx:value="bold" />
+                        <String fx:value="view-text" />
                     </styleClass>
                 </Text>
-                <Text styleClass="view-text"/>
+                <Text styleClass="view-text" />
             </TextFlow>
         </VBox>
     </VBox>
-    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2"
-          GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
         <GridPane.margin>
-            <Insets right="80.0"/>
+            <Insets right="80.0" />
         </GridPane.margin>
         <StackPane>
             <opaqueInsets>
-                <Insets/>
+                <Insets />
             </opaqueInsets>
             <ImageView fx:id="uploadArrow" pickOnBounds="true" preserveRatio="true" styleClass="arrow-icon">
-                <Image url="@../icons/arrow.png"/>
+                <Image url="@../icons/arrow.png" />
                 <StackPane.margin>
-                    <Insets left="10.0"/>
+                    <Insets left="10.0" />
                 </StackPane.margin>
             </ImageView>
-            <ImageView fx:id="uploadBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false" StackPane.alignment="CENTER_LEFT">
+            <ImageView fx:id="uploadBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_LEFT">
                 <StackPane.margin>
-                    <Insets left="10.0"/>
+                    <Insets left="10.0" />
                 </StackPane.margin>
-                <Image url="@../icons/red-bubble.png"/>
+                <Image url="@../icons/red-bubble.png" />
             </ImageView>
             <MFXButton fx:id="upload" style="-fx-background-color: #006699;" text="Hochladen" textFill="WHITE">
                 <font>
-                    <Font size="16.0"/>
+                    <Font size="16.0" />
                 </font>
                 <cursor>
-                    <Cursor fx:constant="HAND"/>
+                    <Cursor fx:constant="HAND" />
                 </cursor>
             </MFXButton>
         </StackPane>
-        <ImageView fx:id="dbRightImg" fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true"/>
+        <ImageView fx:id="dbRightImg" fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true" />
     </HBox>
-    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2"
-          GridPane.rowIndex="4">
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="4">
         <GridPane.margin>
-            <Insets right="80.0"/>
+            <Insets right="80.0" />
         </GridPane.margin>
         <StackPane>
             <opaqueInsets>
-                <Insets/>
+                <Insets />
             </opaqueInsets>
             <ImageView fx:id="exportArrow" pickOnBounds="true" preserveRatio="true" styleClass="arrow-icon">
-                <Image url="@../icons/arrow.png"/>
+                <Image url="@../icons/arrow.png" />
                 <StackPane.margin>
-                    <Insets left="10.0"/>
+                    <Insets left="10.0" />
                 </StackPane.margin>
             </ImageView>
-            <ImageView fx:id="exportBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"
-                       visible="false" StackPane.alignment="CENTER_LEFT">
+            <ImageView fx:id="exportBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_LEFT">
                 <StackPane.margin>
-                    <Insets left="10.0"/>
+                    <Insets left="10.0" />
                 </StackPane.margin>
-                <Image url="@../icons/red-bubble.png"/>
+                <Image url="@../icons/red-bubble.png" />
             </ImageView>
             <MFXButton fx:id="export" style="-fx-background-color: #006699;" text="Exportieren" textFill="WHITE">
                 <font>
-                    <Font size="16.0"/>
+                    <Font size="16.0" />
                 </font>
                 <cursor>
-                    <Cursor fx:constant="HAND"/>
+                    <Cursor fx:constant="HAND" />
                 </cursor>
             </MFXButton>
         </StackPane>
-        <ImageView fx:id="exportImg" fitHeight="75.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true"/>
+        <ImageView fx:id="exportImg" fitHeight="75.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" />
     </HBox>
     <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
         <TextFlow fx:id="flowRight" lineSpacing="8.0" styleClass="text-flow">
             <padding>
-                <Insets bottom="8.0"/>
+                <Insets bottom="8.0" />
             </padding>
             <VBox.margin>
-                <Insets right="-30.0"/>
+                <Insets right="-30.0" />
             </VBox.margin>
-            <Text styleClass="view-text"/>
+            <Text styleClass="view-text" />
             <Text>
                 <styleClass>
-                    <String fx:value="bold"/>
-                    <String fx:value="view-text"/>
+                    <String fx:value="bold" />
+                    <String fx:value="view-text" />
                 </styleClass>
             </Text>
-            <Text styleClass="view-text"/>
+            <Text styleClass="view-text" />
             <Text>
                 <styleClass>
-                    <String fx:value="view-text"/>
-                    <String fx:value="bold"/>
+                    <String fx:value="view-text" />
+                    <String fx:value="bold" />
                 </styleClass>
             </Text>
-            <Text styleClass="view-text"/>
+            <Text styleClass="view-text" />
         </TextFlow>
     </VBox>
 </GridPane>

@@ -10,67 +10,76 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveLoadingPreviewPresenter">
-    <center>
-        <VBox BorderPane.alignment="TOP_LEFT">
-            <children>
-                <VBox>
-                    <children>
-                        <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2">
-                            <styleClass>
-                                <String fx:value="h2" />
-                                <String fx:value="loader-label" />
-                            </styleClass>
-                            <graphic>
-                                <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
-                                    <styleClass>
-                                        <String fx:value="loading-icon" />
-                                        <String fx:value="label-icon" />
-                                    </styleClass>
-                                    <image>
-                                        <Image url="@../../icons/loading.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Label>
-                        <Text fx:id="text" styleClass="view-text">
-                            <VBox.margin>
-                                <Insets bottom="24.0" top="15.0" />
-                            </VBox.margin>
-                        </Text>
-                    </children>
-                    <VBox.margin>
-                        <Insets left="25.0" right="25.0" />
-                    </VBox.margin>
-                </VBox>
-                <VBox fx:id="leftVBox" prefWidth="365.0">
-                    <children>
-                        <Label fx:id="subtitle" styleClass="h4">
-                        </Label>
-                  <ScrollPane styleClass="scroll-box">
-                    <content>
-                      <AnchorPane>
-                           <children>
-                              <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Label fx:id="subtitle1" style="-fx-text-fill: black;" styleClass=".scroll-box" />
-                                 </children></VBox>
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </ScrollPane>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0" />
-                    </VBox.margin>
-                </VBox>
-            </children>
-            <BorderPane.margin>
-                <Insets left="25.0" right="25.0" top="48.0" />
-            </BorderPane.margin>
-        </VBox>
-    </center>
-    <bottom>
-    </bottom>
-</BorderPane>
+<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveLoadingPreviewPresenter"
+            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+    <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
+                maxWidth="1.7976931348623157E308">
+        <center>
+            <VBox BorderPane.alignment="TOP_LEFT">
+                <children>
+                    <VBox>
+                        <children>
+                            <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2">
+                                <styleClass>
+                                    <String fx:value="h2"/>
+                                    <String fx:value="loader-label"/>
+                                </styleClass>
+                                <graphic>
+                                    <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
+                                        <styleClass>
+                                            <String fx:value="loading-icon"/>
+                                            <String fx:value="label-icon"/>
+                                        </styleClass>
+                                        <image>
+                                            <Image url="@../../icons/loading.png"/>
+                                        </image>
+                                    </ImageView>
+                                </graphic>
+                            </Label>
+                            <Text fx:id="text" styleClass="view-text">
+                                <VBox.margin>
+                                    <Insets bottom="24.0" top="15.0"/>
+                                </VBox.margin>
+                            </Text>
+                        </children>
+                        <VBox.margin>
+                            <Insets left="25.0" right="25.0"/>
+                        </VBox.margin>
+                    </VBox>
+                    <VBox fx:id="leftVBox" prefWidth="365.0">
+                        <children>
+                            <Label fx:id="subtitle" styleClass="h4">
+                            </Label>
+                            <ScrollPane styleClass="scroll-box">
+                                <content>
+                                    <AnchorPane>
+                                        <children>
+                                            <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0"
+                                                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                                  AnchorPane.topAnchor="0.0">
+                                                <children>
+                                                    <Label fx:id="subtitle1" style="-fx-text-fill: black;"
+                                                           styleClass=".scroll-box"/>
+                                                </children>
+                                            </VBox>
+                                        </children>
+                                    </AnchorPane>
+                                </content>
+                            </ScrollPane>
+                        </children>
+                        <VBox.margin>
+                            <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
+                        </VBox.margin>
+                    </VBox>
+                </children>
+                <BorderPane.margin>
+                    <Insets left="25.0" right="25.0" top="48.0"/>
+                </BorderPane.margin>
+            </VBox>
+        </center>
+        <bottom>
+        </bottom>
+    </BorderPane>
+</ScrollPane>

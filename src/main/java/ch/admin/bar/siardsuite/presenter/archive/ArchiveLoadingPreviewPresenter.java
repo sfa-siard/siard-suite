@@ -99,7 +99,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 //
 //            controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
 //                double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
-//                if (pos >= 1) {
+//
 //                    LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
 //                    label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
 //                }

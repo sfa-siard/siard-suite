@@ -151,9 +151,16 @@
     -fx-max-height: infinity;
 }
 
-.step-scroll-pane {
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-border-radius: 0;
+}
+
+.scrollable-pane {
     -fx-background-color: white;
     -fx-border-radius: 0;
+    -fx-fit-to-height: TRUE;
+    -fx-fit-to-width: TRUE;
 }
 
 .main-container {
@@ -404,6 +411,14 @@
 
 .search-icon {
     -fx-graphic: url(../icons/search.png);
+}
+
+.upload-icon {
+    -fx-graphic: url(../icons/upload.png);
+}
+
+.export-icon {
+    -fx-graphic: url(../icons/export_action.png);
 }
 
 .arrow-right-icon {

@@ -6,11 +6,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
-<ScrollPane styleClass="step-scroll-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
+<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadConnectionPresenter"
-            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            fitToWidth="true">
+            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
     <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308">
         <center>
