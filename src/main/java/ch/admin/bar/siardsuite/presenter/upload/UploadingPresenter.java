@@ -93,14 +93,14 @@ public class UploadingPresenter extends StepperPresenter {
         AtomicInteger pos1 = new AtomicInteger();
         newValue1.forEach(s -> addTableData(s, pos1.getAndIncrement()));
       });
-
-      controller.addDatabaseUploadingProgressPropertyListener((o, oldValue, newValue) -> {
-        double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
-        if (pos >= 1) {
-          LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
-          label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
-        }
-      });
+      // TODO CR 459 Progress is no processable with current api data
+//      controller.addDatabaseUploadingProgressPropertyListener((o, oldValue, newValue) -> {
+//        double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
+//        if (pos >= 1) {
+//          LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
+//          label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
+//        }
+//      });
 
     };
   }

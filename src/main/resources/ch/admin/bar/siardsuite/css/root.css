@@ -577,8 +577,23 @@
     -fx-cursor: HAND;
 }
 
-.tree-view .tree-cell > .tree-disclosure-node > .arrow {
-    -fx-background-color: #1f2933;
+.tree-view .tree-cell .tree-disclosure-node .arrow {
+    -fx-background-color: #868686;
+}
+
+
+
+.check-box > .box,
+.tree-view .check-box .box {
+    -fx-background-color: white;
+    -fx-padding: 2px;
+    -fx-border-color:grey;
+}
+
+
+.check-box > .box > .mark,
+.tree-view .check-box .box .mark {
+    -fx-padding: 4px;
 }
 
 /* Table stuff */
