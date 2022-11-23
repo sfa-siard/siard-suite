@@ -6,6 +6,7 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.cmd.MetaDataToDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataToDb;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
@@ -13,6 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 
 import java.sql.Connection;
+
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.QUERY_TIMEOUT;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
 
 public class DatabaseUploadTask extends Task<ObservableList<String>> implements Progress, ArchiveVisitor {
 
@@ -42,12 +46,14 @@ public class DatabaseUploadTask extends Task<ObservableList<String>> implements 
     this.model.provideArchiveObject(this);
     ObservableList<String> progressData = FXCollections.observableArrayList();
     connection.setAutoCommit(false);
+    int timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
 
     // TODO overwrite and metadataonly?
     boolean isOverwrite = true;
     boolean metaDataOnly = false;
 
     MetaDataToDb metadata = MetaDataToDb.newInstance(connection.getMetaData(), this.metaData, model.getSchemaMap());
+    metadata.setQueryTimeout(timeout);
     if (isOverwrite || ((metadata.tablesDroppedByUpload() == 0) && (metadata.typesDroppedByUpload() == 0))) {
       metadata.upload(this);
       for (int i = 0; i < this.archive.getSchemas(); i++) {
@@ -60,9 +66,10 @@ public class DatabaseUploadTask extends Task<ObservableList<String>> implements 
       updateProgress(0, progressData.size());
 
       if (!metaDataOnly) {
-        PrimaryDataToDb pdtd = PrimaryDataToDb.newInstance(connection, this.archive,
+        PrimaryDataToDb data = PrimaryDataToDb.newInstance(connection, this.archive,
                 metadata.getArchiveMapping(), metadata.supportsArrays(), metadata.supportsDistincts(), metadata.supportsUdts());
-        pdtd.upload(this);
+        data.setQueryTimeout(timeout);
+        data.upload(this);
       }
     }
     return progressData;

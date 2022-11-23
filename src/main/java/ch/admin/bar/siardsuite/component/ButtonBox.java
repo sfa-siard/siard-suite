@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 
 import java.util.Objects;
 
-public class StepperButtonBox extends HBox {
+public class ButtonBox extends HBox {
 
   public enum Type {
     DEFAULT, CANCEL, DOWNLOAD_FINISHED, FAILED, TO_START, OPEN_PREVIEW;
@@ -21,7 +21,7 @@ public class StepperButtonBox extends HBox {
   @FXML
   final MFXButton cancelButton = new MFXButton();
 
-  public StepperButtonBox make(Type type) {
+  public ButtonBox make(Type type) {
     return switch (type) {
       case CANCEL -> new CancelButtonBox();
       case DOWNLOAD_FINISHED -> new DownloadFinishedButtonBox();
@@ -53,7 +53,7 @@ public class StepperButtonBox extends HBox {
     return cancelButton;
   }
 
-  private static class CancelButtonBox extends StepperButtonBox {
+  private static class CancelButtonBox extends ButtonBox {
 
     public CancelButtonBox() {
       this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
@@ -64,7 +64,7 @@ public class StepperButtonBox extends HBox {
     }
   }
 
-  private static class DefaultButtonBox extends StepperButtonBox {
+  private static class DefaultButtonBox extends ButtonBox {
     public DefaultButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.next"));
       this.nextButton.getStyleClass().setAll("button", "primary");
@@ -80,7 +80,7 @@ public class StepperButtonBox extends HBox {
     }
   }
 
-  private class DownloadFinishedButtonBox extends StepperButtonBox {
+  private class DownloadFinishedButtonBox extends ButtonBox {
 
     DownloadFinishedButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
@@ -95,7 +95,7 @@ public class StepperButtonBox extends HBox {
   }
 
 
-  private class FailedButtonBox extends StepperButtonBox {
+  private class FailedButtonBox extends ButtonBox {
 
     FailedButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.close"));
@@ -109,7 +109,7 @@ public class StepperButtonBox extends HBox {
     }
   }
 
-  private class StartButtonBox extends StepperButtonBox {
+  private class StartButtonBox extends ButtonBox {
 
     StartButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
@@ -120,7 +120,7 @@ public class StepperButtonBox extends HBox {
     }
   }
 
-  private static class OpenPreviewButtonBox extends StepperButtonBox {
+  private static class OpenPreviewButtonBox extends ButtonBox {
     public OpenPreviewButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
       this.nextButton.getStyleClass().setAll("button", "primary" );

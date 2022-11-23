@@ -64,6 +64,8 @@ public class UserPreferences {
         STORAGE_DATE,
         ABSOLUTE_PATH,
         TIMESTAMP,
-        EXPORT_PATH
+        EXPORT_PATH,
+        QUERY_TIMEOUT,
+        LOGIN_TIMEOUT
     }
 }

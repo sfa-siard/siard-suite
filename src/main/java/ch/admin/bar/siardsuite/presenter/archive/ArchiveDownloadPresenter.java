@@ -29,7 +29,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.*;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.*;
 import static ch.admin.bar.siardsuite.model.View.START;
 import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOADED;
 
@@ -58,7 +58,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     @FXML
     public VBox scrollBox;
     @FXML
-    private StepperButtonBox buttonsBox;
+    private ButtonBox buttonsBox;
 
     private Spinner loadingSpinner;
     private File targetArchive;
@@ -78,7 +78,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
         this.loader.setImage(Icon.loading);
         loadingSpinner = new Spinner(this.loader);
         this.bindTexts();
-        this.buttonsBox = new StepperButtonBox().make(CANCEL);
+        this.buttonsBox = new ButtonBox().make(CANCEL);
         addButtons(stepper);
         setListeners(stepper);
     }
@@ -154,7 +154,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             setResultData();
             controller.closeDbConnection();
             stepper.fireEvent(new SiardEvent(DATABASE_DOWNLOADED));
-            this.buttonsBox = new StepperButtonBox().make(DOWNLOAD_FINISHED);
+            this.buttonsBox = new ButtonBox().make(DOWNLOAD_FINISHED);
             addButtons(stepper);
         };
     }
@@ -172,7 +172,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.failed");
             resultTitle.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
             controller.closeDbConnection();
-            this.buttonsBox = new StepperButtonBox().make(TO_START);
+            this.buttonsBox = new ButtonBox().make(TO_START);
             addButtons(stepper);
         };
     }

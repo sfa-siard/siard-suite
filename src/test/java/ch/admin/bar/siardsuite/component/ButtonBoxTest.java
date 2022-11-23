@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.*;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.*;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(ApplicationExtension.class)
-public class StepperButtonBoxTest {
+public class ButtonBoxTest {
 
     @Before
     public void setUpHeadlessMode() {
@@ -25,7 +25,7 @@ public class StepperButtonBoxTest {
         // given
 
         // when
-        StepperButtonBox buttonBox = new StepperButtonBox().make(DEFAULT);
+        ButtonBox buttonBox = new ButtonBox().make(DEFAULT);
 
         // then
         assertNotNull(buttonBox);
@@ -41,7 +41,7 @@ public class StepperButtonBoxTest {
         // given
 
         // when
-        StepperButtonBox buttonBox = new StepperButtonBox().make(CANCEL);
+        ButtonBox buttonBox = new ButtonBox().make(CANCEL);
 
         // then
         assertNotNull(buttonBox);
@@ -55,7 +55,7 @@ public class StepperButtonBoxTest {
         // given
 
         // when
-        StepperButtonBox buttonBox = new StepperButtonBox().make(DOWNLOAD_FINISHED);
+        ButtonBox buttonBox = new ButtonBox().make(DOWNLOAD_FINISHED);
 
         // then
         assertNotNull(buttonBox);

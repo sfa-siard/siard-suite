@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.open;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
+import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 
 import static ch.admin.bar.siardsuite.Workflow.EXPORT;
 import static ch.admin.bar.siardsuite.Workflow.UPLOAD;
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.OPEN_PREVIEW;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.OPEN_PREVIEW;
 
 public class OpenPreviewPresenter extends PreviewPresenter {
 
@@ -27,7 +27,7 @@ public class OpenPreviewPresenter extends PreviewPresenter {
   @FXML
   public MFXButton exportButton;
   @FXML
-  protected StepperButtonBox buttonsBox;
+  protected ButtonBox buttonsBox;
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
@@ -38,7 +38,7 @@ public class OpenPreviewPresenter extends PreviewPresenter {
 
     initTreeView();
 
-    this.buttonsBox = new StepperButtonBox().make(OPEN_PREVIEW);
+    this.buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
     this.borderPane.setBottom(buttonsBox);
 
     buttonsBox.cancel().setOnAction(event -> {

@@ -21,7 +21,7 @@ import javafx.scene.text.Text;
 
 import java.sql.SQLException;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.CANCEL;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_LOADED;
 
 public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
@@ -40,7 +40,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     @FXML
     public VBox scrollBox;
     @FXML
-    private StepperButtonBox buttonsBox;
+    private ButtonBox buttonsBox;
 
     private final Image loading = Icon.loading;
     private final Image ok = Icon.ok;
@@ -62,7 +62,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         this.loader.setImage(loading);
         new Spinner(this.loader).play();
 
-        this.buttonsBox = new StepperButtonBox().make(CANCEL);
+        this.buttonsBox = new ButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
         this.setListeners(stepper);
     }

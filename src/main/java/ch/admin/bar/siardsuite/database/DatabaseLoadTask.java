@@ -6,6 +6,7 @@ import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
+import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
@@ -16,6 +17,9 @@ import javafx.util.Pair;
 import java.io.File;
 import java.sql.Connection;
 import java.time.LocalDate;
+
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.QUERY_TIMEOUT;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
 
 public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress, SiardArchiveMetaDataVisitor {
 
@@ -37,7 +41,10 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
 
     ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
     connection.setAutoCommit(false);
+    int timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
+
     MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
+    metadata.setQueryTimeout(timeout);
     metadata.download(true, false, this);
 
     for (int i = 0; i < this.archive.getSchemas(); i++) {
@@ -60,11 +67,11 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
     if (!onlyMetaData) {
       // TODO PrimaryDataFromDB needs extension show progress per table -CR #459
       PrimaryDataFromDb data = PrimaryDataFromDb.newInstance(connection, archive);
+      data.setQueryTimeout(timeout);
       data.download(this);
     }
 
     model.setArchive("sample.siard", archive, onlyMetaData);
-//        archive.close(); // maybe this is needed - but here?
     return progressData;
   }
 

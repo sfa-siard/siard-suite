@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
+import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
 import static ch.admin.bar.siardsuite.util.SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
@@ -77,7 +77,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     @FXML
     public BorderPane borderPane;
     @FXML
-    private StepperButtonBox buttonsBox;
+    private ButtonBox buttonsBox;
     @FXML
     public MFXButton infoButton;
     @FXML
@@ -102,7 +102,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         }
         tooltip = new SiardTooltip("archiveConnection.view.tooltip");
         errorMessage.setVisible(false);
-        buttonsBox = new StepperButtonBox().make(DEFAULT);
+        buttonsBox = new ButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
         setListeners(stepper);
     }

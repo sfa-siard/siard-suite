@@ -304,7 +304,7 @@
     -fx-text-fill: siard-text-color-black;
 }
 
-#folderButton {
+#options .button-small {
     -fx-min-width: 70px;
     -fx-min-height: 30px;
     -fx-font-size: 12px;
