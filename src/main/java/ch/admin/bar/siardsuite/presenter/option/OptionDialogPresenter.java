@@ -74,9 +74,9 @@ public class OptionDialogPresenter extends DialogPresenter {
 
     private void initFormFields() {
         final Preferences preferences = UserPreferences.node(OPTIONS);
-        exportFolderText.setText(preferences.get(EXPORT_PATH.name(), ""));
-        queryTimeoutText.setText(preferences.get(QUERY_TIMEOUT.name(), ""));
-        loginTimeoutText.setText(preferences.get(LOGIN_TIMEOUT.name(), ""));
+        exportFolderText.setText(preferences.get(EXPORT_PATH.name(), "0"));
+        queryTimeoutText.setText(preferences.get(QUERY_TIMEOUT.name(), "0"));
+        loginTimeoutText.setText(preferences.get(LOGIN_TIMEOUT.name(), "0"));
     }
 
     private void handleSetExportPath(ActionEvent actionEvent) {

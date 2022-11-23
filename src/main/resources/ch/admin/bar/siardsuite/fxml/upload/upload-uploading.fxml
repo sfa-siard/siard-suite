@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.String?>
+<?import java.lang.*?>
 <ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadingPresenter"
@@ -51,8 +51,6 @@
                                             <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0"
                                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                                   AnchorPane.topAnchor="0.0">
-                                                <children>
-                                                </children>
                                             </VBox>
                                         </children>
                                     </AnchorPane>
@@ -61,6 +59,8 @@
                                     <Insets top="25.0"/>
                                 </VBox.margin>
                             </ScrollPane>
+                            <MFXProgressBar fx:id="progressBar" prefHeight="17.0" prefWidth="415.0" progress="0.0"
+                                            VBox.vgrow="ALWAYS"/>
                         </children>
                         <VBox.margin>
                             <Insets left="25.0" right="25.0"/>

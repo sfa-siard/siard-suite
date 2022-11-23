@@ -91,7 +91,7 @@ public class Controller {
     this.databaseUploadService.setOnFailed(workerStateEventEventHandler);
   }
 
-  public void addDatabaseUploadingValuePropertyListener(ChangeListener<ObservableList<String>> listener) {
+  public void addDatabaseUploadingValuePropertyListener(ChangeListener<String> listener) {
     this.databaseUploadService.valueProperty().addListener(listener);
   }
 

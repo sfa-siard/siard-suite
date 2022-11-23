@@ -12,6 +12,7 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import javafx.concurrent.WorkerStateEvent;
@@ -57,6 +58,9 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     public ScrollPane resultBox;
     @FXML
     public VBox scrollBox;
+    @FXML
+    public MFXProgressBar progressBar;
+    public VBox scrollBox2;
     @FXML
     private ButtonBox buttonsBox;
 
@@ -109,7 +113,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
 
     private void bindTexts() {
         I18n.bind(title.textProperty(), "archiveDownload.view.title.inProgress");
-        I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.inProgress", 6666);
+        I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.inProgress");
         I18n.bind(pathTitle.textProperty(), "archiveDownload.view.pathTitle");
         I18n.bind(openLink.textProperty(), "archiveDownload.view.openLink");
     }
@@ -123,16 +127,16 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             this.subtitle1.setText(this.databaseName);
             try {
                 controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure(stepper));
-                controller.addDatabaseLoadingValuePropertyListener((o1, oldValue1, newValue1) -> {
-                    AtomicInteger pos1 = new AtomicInteger();
-                    newValue1.forEach(p -> addTableData(p.getKey(), p.getValue(), pos1.getAndIncrement()));
+                controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
+                    AtomicInteger pos = new AtomicInteger();
+                    newValue.forEach(p ->
+                            addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
+                    );
                 });
-                // TODO CR 459 Progress is no processable with current api data
-//                controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
-//                    double pos = (newValue.doubleValue() * 100) * scrollBox.getChildren().size();
-//                    LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
-//                    label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
-//                });
+                controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+                    double pos = newValue.doubleValue();
+                    progressBar.progressProperty().set(pos);
+                });
             } catch (SQLException e) {
                 // TODO should notify user about any error - Toast it # CR 458
                 throw new RuntimeException(e);
@@ -165,6 +169,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             stepper.updateProgress();
             this.title.setVisible(false);
             loadingSpinner.hide();
+            progressBar.setVisible(false);
             this.resultTitle.setVisible(true);
             this.subtitle1.setVisible(false);
             this.resultBox.setVisible(false);
@@ -193,14 +198,30 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     }
 
     private void setResultData() {
+        // remove progressbar
+        progressBar.setVisible(false);
+        scrollBox.setVisible(false);
+        scrollBox2.setVisible(true);
         I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.success", total);
     }
 
-    private void addTableData(String tableName, Long rows, Integer pos) {
-        LabelIcon label = new LabelIcon(tableName, pos, IconView.IconType.LOADING);
-        I18n.bind(label.textProperty(), "upload.result.success.table.rows", tableName, rows);
-        scrollBox.getChildren().add(label);
-        total += rows;
+
+    private void addLoadingData(String text, Long rows, Integer pos) {
+        if (rows < 0) {
+            // set previous to ok
+            if (scrollBox.getChildren().size() > 0) {
+                int itemPos = scrollBox.getChildren().size() - 1;
+                LabelIcon label = (LabelIcon) scrollBox.getChildren().get(itemPos);
+                label.setGraphic(new IconView(itemPos, IconView.IconType.OK));
+            }
+            scrollBox.getChildren().add(
+                    new LabelIcon(text, pos, IconView.IconType.LOADING));
+        } else {
+            LabelIcon label = new LabelIcon(text, pos, IconView.IconType.OK);
+            I18n.bind(label.textProperty(), "upload.result.success.table.rows", text, rows);
+            scrollBox2.getChildren().add(label);
+            total += rows;
+        }
     }
 
     @Override

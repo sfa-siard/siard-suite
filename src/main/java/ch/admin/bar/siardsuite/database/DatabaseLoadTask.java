@@ -40,12 +40,20 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
   protected ObservableList<Pair<String, Long>> call() throws Exception {
 
     ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
+    progressData.add(new Pair<>("Metadata", -1L));
     connection.setAutoCommit(false);
-    int timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
+    Integer timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
 
     MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
     metadata.setQueryTimeout(timeout);
+    updateValue(progressData);
+    updateProgress(0, 100);
     metadata.download(true, false, this);
+
+    model.provideDatabaseArchiveMetaDataObject(this);
+    if (metaData != null) {
+      metaData.write(archive);
+    }
 
     for (int i = 0; i < this.archive.getSchemas(); i++) {
       Schema schema = this.archive.getSchema(i);
@@ -54,20 +62,15 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
                 schema.getTable(y).getMetaTable().getRows()));
       }
     }
-
     updateValue(progressData);
-    updateProgress(0, progressData.size());
-
-    model.provideDatabaseArchiveMetaDataObject(this);
-    if (metaData != null) {
-      metaData.write(archive);
-    }
 
     // TODO: replace the boolean flag with a strategy pattern
     if (!onlyMetaData) {
-      // TODO PrimaryDataFromDB needs extension show progress per table -CR #459
       PrimaryDataFromDb data = PrimaryDataFromDb.newInstance(connection, archive);
       data.setQueryTimeout(timeout);
+      progressData.add(new Pair<>("Dataload", -1L));
+      updateValue(progressData);
+      updateProgress(0, 100);
       data.download(this);
     }
 
