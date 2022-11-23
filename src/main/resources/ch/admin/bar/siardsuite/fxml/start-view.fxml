@@ -1,163 +1,204 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.Separator?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.*?>
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="root-center" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.StartPresenter">
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="start-view" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.StartPresenter">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="50.0" prefWidth="150.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="633.0" minWidth="10.0" prefWidth="302.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="629.0" minWidth="10.0" prefWidth="74.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="557.0" minWidth="10.0" prefWidth="171.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="557.0" minWidth="10.0" prefWidth="104.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="557.0" minWidth="10.0" prefWidth="280.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="10.0" prefWidth="55.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="249.0" minWidth="10.0" prefWidth="223.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="171.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="370.0" minWidth="-Infinity" prefWidth="370.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="115.0" minWidth="115.0" prefWidth="115.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="115.0" minWidth="115.0" prefWidth="115.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="57.0" minWidth="57.0" prefWidth="57.0" />
+        <ColumnConstraints hgrow="NEVER" maxWidth="370.0" minWidth="-Infinity" prefWidth="370.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="171.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="229.0" minHeight="10.0" prefHeight="87.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="316.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="265.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="532.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="410.0" minHeight="10.0" prefHeight="306.0" vgrow="SOMETIMES" />
-      <RowConstraints />
+        <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="87.0" />
+        <RowConstraints maxHeight="71.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="28.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="109.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="306.0" />
+        <RowConstraints />
     </rowConstraints>
-    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <children>
-              <Text fx:id="archiveHint" lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datenbank archivieren und im SIARD-Format abspeichern" wrappingWidth="301.19677734375" x="100.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-              </Text>
-            <Separator prefWidth="200.0">
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-            </Separator>
-         </children>
-      </VBox>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2">
-            <children>
-            <ImageView fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/siard-db.png" />
-               </image>
-            </ImageView>
-                <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
-                    <children>
-                        <Line endX="132.5" startX="-100.0" stroke="#9aa5b1" strokeWidth="3.0" />
-                        <MFXButton fx:id="archive" style="-fx-background-color: #006699;" text="Archivieren" textFill="WHITE">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </MFXButton>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </StackPane>
-            </children>
-        </HBox>
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.rowSpan="4">
-            <children>
-                <ImageView fitHeight="301.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../icons/archive.png" />
-                    </image>
-                </ImageView>
-                <MFXButton fx:id="open" style="-fx-background-color: #006699;" text="Öffnen" textFill="WHITE">
-                    <font>
-                        <Font size="16.0" />
-                    </font>
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                </MFXButton>
-            <VBox prefHeight="200.0" prefWidth="100.0">
-               <children>
-                      <Text fx:id="openHint" strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei anzeigen" wrappingWidth="233.19677734375" x="100.0" />
-                  <Separator prefHeight="23.0" prefWidth="207.0">
-                     <padding>
-                        <Insets top="5.0" />
-                     </padding>
-                  </Separator>
-               </children>
-            </VBox>
-            </children>
-        </VBox>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3">
-            <children>
-                <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
-                    <children>
-                        <Line endX="185.5" startX="-76.18380737304688" startY="0.12129449844360352" stroke="#9aa5b1" strokeWidth="3.0" />
-                        <MFXButton fx:id="upload" style="-fx-background-color: #006699;" text="Hochladen" textFill="WHITE">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </MFXButton>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </StackPane>
-            <ImageView fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/siard-db.png" />
-               </image>
-            </ImageView>
-            </children>
-        </HBox>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="4">
-            <children>
-                <StackPane prefHeight="163.0" prefWidth="123.0" HBox.hgrow="ALWAYS">
-                    <children>
-                        <Line endX="179.5" startX="-100.0" stroke="#9aa5b1" strokeWidth="3.0" />
-                        <MFXButton fx:id="export" style="-fx-background-color: #006699;" text="Exportieren" textFill="WHITE">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </MFXButton>
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </StackPane>
-                <ImageView fitHeight="75.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../icons/export.png" />
-                    </image>
-                </ImageView>
-            </children>
-        </HBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="1">
-         <children>
-            <Text fx:id="uploadHint" lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inhalte einer SIARD-Datei in eine Datenbank hochladen oder Daten in eine Tabelle exportieren." wrappingWidth="421.19677734375" x="100.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
+    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextFlow fx:id="flowLeft" lineSpacing="8.0" styleClass="text-flow">
+            <Text styleClass="view-text" />
+            <Text>
+                <styleClass>
+                    <String fx:value="bold" />
+                    <String fx:value="view-text" />
+                </styleClass>
             </Text>
-            <Separator prefWidth="200.0">
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-            </Separator>
-         </children>
-      </VBox>
-    </children>
+            <Text styleClass="view-text" />
+            <padding>
+                <Insets bottom="8.0" />
+            </padding>
+            <VBox.margin>
+                <Insets right="40.0" />
+            </VBox.margin>
+        </TextFlow>
+    </VBox>
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2">
+        <ImageView fx:id="dbImg" fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+            <HBox.margin>
+                <Insets left="15.0" />
+            </HBox.margin>
+        </ImageView>
+        <StackPane prefHeight="222.0" prefWidth="257.0" HBox.hgrow="ALWAYS">
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <ImageView fx:id="archiveArrow" fitHeight="36.0" fitWidth="264.0" pickOnBounds="true" preserveRatio="true" styleClass="arrow-icon" StackPane.alignment="CENTER">
+                <StackPane.margin>
+                    <Insets left="10.0" />
+                </StackPane.margin>
+                <Image url="@../icons/arrow.png" />
+            </ImageView>
+            <ImageView fx:id="archiveBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_LEFT">
+                <StackPane.margin>
+                    <Insets left="10.0" />
+                </StackPane.margin>
+                <Image url="@../icons/red-bubble.png" />
+            </ImageView>
+            <MFXButton fx:id="archive" style="-fx-background-color: #006699;" text="Archivieren" textFill="WHITE">
+                <font>
+                    <Font size="16.0" />
+                </font>
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </MFXButton>
+        </StackPane>
+    </HBox>
+    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.rowSpan="4">
+        <ImageView fx:id="archiveImg" fitHeight="209.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" styleClass="siard-icon" />
+        <MFXButton fx:id="open" style="-fx-background-color: #006699;" text="Öffnen" textFill="WHITE">
+            <font>
+                <Font size="16.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </MFXButton>
+        <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="NEVER">
+            <TextFlow fx:id="flowCenter" lineSpacing="8.0" styleClass="text-flow" textAlignment="CENTER" VBox.vgrow="NEVER">
+                <padding>
+                    <Insets bottom="8.0" />
+                </padding>
+                <VBox.margin>
+                    <Insets left="-30.0" right="-30.0" />
+                </VBox.margin>
+                <Text styleClass="view-text" />
+                <Text>
+                    <styleClass>
+                        <String fx:value="bold" />
+                        <String fx:value="view-text" />
+                    </styleClass>
+                </Text>
+                <Text styleClass="view-text" />
+            </TextFlow>
+        </VBox>
+    </VBox>
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+        <GridPane.margin>
+            <Insets right="80.0" />
+        </GridPane.margin>
+        <StackPane>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <ImageView fx:id="uploadArrow" pickOnBounds="true" preserveRatio="true" styleClass="arrow-icon">
+                <Image url="@../icons/arrow.png" />
+                <StackPane.margin>
+                    <Insets left="10.0" />
+                </StackPane.margin>
+            </ImageView>
+            <ImageView fx:id="uploadBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_LEFT">
+                <StackPane.margin>
+                    <Insets left="10.0" />
+                </StackPane.margin>
+                <Image url="@../icons/red-bubble.png" />
+            </ImageView>
+            <MFXButton fx:id="upload" style="-fx-background-color: #006699;" text="Hochladen" textFill="WHITE">
+                <font>
+                    <Font size="16.0" />
+                </font>
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </MFXButton>
+        </StackPane>
+        <ImageView fx:id="dbRightImg" fitHeight="70.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true" />
+    </HBox>
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="4">
+        <GridPane.margin>
+            <Insets right="80.0" />
+        </GridPane.margin>
+        <StackPane>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <ImageView fx:id="exportArrow" pickOnBounds="true" preserveRatio="true" styleClass="arrow-icon">
+                <Image url="@../icons/arrow.png" />
+                <StackPane.margin>
+                    <Insets left="10.0" />
+                </StackPane.margin>
+            </ImageView>
+            <ImageView fx:id="exportBubble" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_LEFT">
+                <StackPane.margin>
+                    <Insets left="10.0" />
+                </StackPane.margin>
+                <Image url="@../icons/red-bubble.png" />
+            </ImageView>
+            <MFXButton fx:id="export" style="-fx-background-color: #006699;" text="Exportieren" textFill="WHITE">
+                <font>
+                    <Font size="16.0" />
+                </font>
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+            </MFXButton>
+        </StackPane>
+        <ImageView fx:id="exportImg" fitHeight="75.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" />
+    </HBox>
+    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
+        <TextFlow fx:id="flowRight" lineSpacing="8.0" styleClass="text-flow">
+            <padding>
+                <Insets bottom="8.0" />
+            </padding>
+            <VBox.margin>
+                <Insets right="-30.0" />
+            </VBox.margin>
+            <Text styleClass="view-text" />
+            <Text>
+                <styleClass>
+                    <String fx:value="bold" />
+                    <String fx:value="view-text" />
+                </styleClass>
+            </Text>
+            <Text styleClass="view-text" />
+            <Text>
+                <styleClass>
+                    <String fx:value="view-text" />
+                    <String fx:value="bold" />
+                </styleClass>
+            </Text>
+            <Text styleClass="view-text" />
+        </TextFlow>
+    </VBox>
 </GridPane>

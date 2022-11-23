@@ -104,14 +104,11 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         this.model = model;
         this.controller = controller;
         this.stage = stage;
-
-        this.stage.setHeight(1200);
-        this.tooltip = new SiardTooltip("uploadConnection.view.tooltip");
     }
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        init(controller, model, stage);
+        this.init(controller, model, stage);
         this.model.provideDatabaseArchiveProperties(this);
         addTextWithStyles();
         addFormText();
@@ -121,6 +118,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             initSchemaFields();
         }
 
+        tooltip = new SiardTooltip("uploadConnection.view.tooltip");
         errorMessage.setVisible(false);
         buttonsBox = new StepperButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
@@ -129,28 +127,28 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     private void addTextWithStyles() {
         // TODO: use generic names - its really the same.. for upload and archiving
-        I18n.bind(title.textProperty(),"archiveConnection.view.title");
-        I18n.bind(subtitleLeft.textProperty(),"archiveConnection.view.subtitleLeft");
-        I18n.bind(subtitleRight.textProperty(),"archiveConnection.view.subtitleRight");
-        I18n.bind(textLeft.textProperty(),"archiveConnection.view.textLeft");
-        I18n.bind(textRight.textProperty(),"archiveConnection.view.textRight");
+        I18n.bind(title.textProperty(),"connection.view.title");
+        I18n.bind(subtitleLeft.textProperty(),"connection.view.subtitleLeft");
+        I18n.bind(subtitleRight.textProperty(),"connection.view.subtitleRight");
+        I18n.bind(textLeft.textProperty(),"connection.view.textLeft");
+        I18n.bind(textRight.textProperty(),"connection.view.textRight");
 
         for (int i = 0; i < textFlow.getChildren().size(); i++) {
             Text text = (Text) textFlow.getChildren().get(i);
-            I18n.bind(text.textProperty(), "archiveConnection.view.text" + i);
+            I18n.bind(text.textProperty(), "connection.view.text" + i);
         }
         text1.getStyleClass().add("bold");
         text3.getStyleClass().add("bold");
     }
 
     private void addFormText() {
-        I18n.bind(dbServerField.floatingTextProperty(), "archiveConnection.view.dbServer.label");
-        I18n.bind(dbServerField.promptTextProperty(), "archiveConnection.view.dbServer.prompt");
-        I18n.bind(portField.floatingTextProperty(), "archiveConnection.view.port.label");
-        I18n.bind(dbNameField.floatingTextProperty(), "archiveConnection.view.databaseName.label");
-        I18n.bind(usernameField.floatingTextProperty(), "archiveConnection.view.username.label");
-        I18n.bind(passwordField.floatingTextProperty(), "archiveConnection.view.password.label");
-        I18n.bind(urlField.floatingTextProperty(), "archiveConnection.view.url.label");
+        I18n.bind(dbServerField.floatingTextProperty(), "connection.view.dbServer.label");
+        I18n.bind(dbServerField.promptTextProperty(), "connection.view.dbServer.prompt");
+        I18n.bind(portField.floatingTextProperty(), "connection.view.port.label");
+        I18n.bind(dbNameField.floatingTextProperty(), "connection.view.databaseName.label");
+        I18n.bind(usernameField.floatingTextProperty(), "connection.view.username.label");
+        I18n.bind(passwordField.floatingTextProperty(), "connection.view.password.label");
+        I18n.bind(urlField.floatingTextProperty(), "connection.view.url.label");
         I18n.bind(titleNewSchemaName.textProperty(), "uploadConnection.view.new.schema.name");
         I18n.bind(currentNameLabel.textProperty(), "uploadConnection.view.current.name");
         I18n.bind(newNameLabel.textProperty(), "uploadConnection.view.new.name");
@@ -203,19 +201,19 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
         buttonsBox.next().setOnAction((event) -> {
             if (dbServerField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "archiveConnection.view.error.database.server");
+                I18n.bind(errorMessage.textProperty(), "connection.view.error.database.server");
                 errorMessage.setVisible(true);
             } else if (dbNameField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "archiveConnection.view.error.database.name");
+                I18n.bind(errorMessage.textProperty(), "connection.view.error.database.name");
                 errorMessage.setVisible(true);
             } else if (usernameField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "archiveConnection.view.error.user.name");
+                I18n.bind(errorMessage.textProperty(), "connection.view.error.user.name");
                 errorMessage.setVisible(true);
             } else if (passwordField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(),"archiveConnection.view.error.user.password");
+                I18n.bind(errorMessage.textProperty(),"connection.view.error.user.password");
                 errorMessage.setVisible(true);
             } else if (urlField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "archiveConnection.view.error.connection.url");
+                I18n.bind(errorMessage.textProperty(), "connection.view.error.connection.url");
                 errorMessage.setVisible(true);
             } else if (!hasValidSchemaFields()) {
                 I18n.bind(errorMessage.textProperty(), "uploadConnection.view.error.schema.name");

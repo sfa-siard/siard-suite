@@ -10,17 +10,18 @@ import javafx.fxml.FXML;
 
 public class ArchiveStepperPresenter extends StepperPresenter {
 
-  @FXML
-  private MFXStepper stepper;
+    @FXML
+    private MFXStepper stepper;
 
-  public void init(Controller controller, Model model, RootStage stage) {
-    this.model = model;
-    this.controller = controller;
-    this.stage = stage;
+    public void init(Controller controller, Model model, RootStage stage) {
+        this.model = model;
+        this.controller = controller;
+        this.stage = stage;
 
-    createStepper(controller, ArchiveSteps.steps, stepper);
-  }
+        createStepper(controller, ArchiveSteps.steps, stepper);
+    }
 
-  @Override
-  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) { }
+    @Override
+    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
+    }
 }

@@ -51,14 +51,12 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
 
   @Override
   public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-    this.model = model;
-    this.controller = controller;
-    this.stage = stage;
+    this.init(controller, model, stage);
 
-    this.title.textProperty().bind(I18n.createStringBinding("archiveDb.view.title"));
-    this.text.textProperty().bind(I18n.createStringBinding("archiveDb.view.text"));
+    I18n.bind(title.textProperty(),"archiveDb.view.title");
+    I18n.bind(text.textProperty(),"archiveDb.view.text");
     this.errorMessage.setVisible(false);
-    this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveDb.view.error"));
+    I18n.bind(errorMessage.textProperty(),"archiveDb.view.error");
 
 
     this.model.getDatabaseTypes().forEach(this::createRadioToVBox);
@@ -83,7 +81,6 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
       if (selected != null) {
         controller.setDatabaseType(selected.getText());
         this.errorMessage.setVisible(false);
-        this.stage.setHeight(1080.00);
         stepper.next();
           stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBTYPE_EVENT));
         //fire event

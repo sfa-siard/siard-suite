@@ -2,48 +2,49 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveChooseDbmsPresenter">
+<ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveChooseDbmsPresenter">
+    <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white">
 
-    <center>
-        <VBox BorderPane.alignment="TOP_LEFT">
-            <BorderPane.margin>
-                <Insets left="50.0" right="50.0" top="50.0"/>
-            </BorderPane.margin>
-            <children>
-                <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2"/>
-                <TextFlow lineSpacing="8.0">
-                    <Text fx:id="text" styleClass="view-text"/>
-                    <VBox.margin>
-                        <Insets bottom="25.0" top="25.0"/>
-                    </VBox.margin>
-                </TextFlow>
-                <HBox prefHeight="100.0" prefWidth="600.0">
-                    <children>
-                        <VBox fx:id="leftVBox" prefHeight="200.0" prefWidth="300.0">
-                        </VBox>
-                        <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="300.0">
-                        </VBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets top="25.0"/>
-                    </VBox.margin>
-                </HBox>
-                <Label fx:id="errorMessage" styleClass="error-text">
-                    <VBox.margin>
-                        <Insets bottom="25.0" top="25.0"/>
-                    </VBox.margin>
-                </Label>
-            </children>
-        </VBox>
-    </center>
-    <bottom>
-    </bottom>
-</BorderPane>
+        <center>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="TOP_LEFT">
+                <BorderPane.margin>
+                    <Insets left="50.0" right="50.0" top="50.0" />
+                </BorderPane.margin>
+                <children>
+                    <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" />
+                    <TextFlow lineSpacing="8.0">
+                        <Text fx:id="text" styleClass="view-text" />
+                        <VBox.margin>
+                            <Insets bottom="25.0" top="25.0" />
+                        </VBox.margin>
+                    </TextFlow>
+                    <HBox prefHeight="100.0" prefWidth="600.0">
+                        <children>
+                            <VBox fx:id="leftVBox" prefHeight="200.0" prefWidth="300.0">
+                            </VBox>
+                            <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="300.0">
+                            </VBox>
+                        </children>
+                        <VBox.margin>
+                            <Insets top="25.0" />
+                        </VBox.margin>
+                    </HBox>
+                    <Label fx:id="errorMessage" styleClass="error-text">
+                        <VBox.margin>
+                            <Insets bottom="25.0" top="25.0" />
+                        </VBox.margin>
+                    </Label>
+                </children>
+            </VBox>
+        </center>
+        <bottom>
+        </bottom>
+    </BorderPane>
+</ScrollPane>

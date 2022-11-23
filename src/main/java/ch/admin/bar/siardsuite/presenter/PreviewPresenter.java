@@ -54,7 +54,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     this.stage = stage;
 
     model.setCurrentPreviewPresenter(this);
-
+    this.tableSearchButton.setVisible(false);
     this.metaSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.metaSearchButton"));
     this.tableSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.tableSearchButton"));
 
@@ -96,6 +96,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         model.provideDatabaseArchiveProperties(this, table);
 
         tableItem = new TreeItem<>(new TreeAttributeWrapper(tableName, TreeContentView.TABLE, table));
+
 
         columnsItem = new TreeItem<>();
         columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns", TreeContentView.COLUMNS, table, columns.size()));
@@ -160,6 +161,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
       Node container = loader.load();
       tableContainerContent.getChildren().setAll(container);
       loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
+      tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

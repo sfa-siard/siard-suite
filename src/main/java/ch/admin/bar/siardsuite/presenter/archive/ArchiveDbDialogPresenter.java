@@ -51,18 +51,18 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        title.textProperty().bind(I18n.createStringBinding("archiveDbDialog.title"));
-        text.textProperty().bind(I18n.createStringBinding("archiveDbDialog.text"));
+        I18n.bind(title.textProperty(),"archiveDbDialog.title");
+        I18n.bind(text.textProperty(),"archiveDbDialog.text");
 
-        newConnectionButton.textProperty().bind(I18n.createStringBinding("archiveDbDialog.btnNewConnection"));
+        I18n.bind(newConnectionButton.textProperty(),"archiveDbDialog.btnNewConnection");
 
         newConnectionButton.setOnAction(event -> {
             stage.closeDialog();
             stage.navigate(View.ARCHIVE_STEPPER);
         });
 
-        recentConnectionsHeaderName.textProperty().bind(I18n.createStringBinding("dialog.recent.connections.header.name"));
-        recentConnectionsHeaderDate.textProperty().bind(I18n.createStringBinding("dialog.recent.connections.header.date"));
+        I18n.bind(recentConnectionsHeaderName.textProperty(),"dialog.recent.connections.header.name");
+        I18n.bind(recentConnectionsHeaderDate.textProperty(),"dialog.recent.connections.header.date");
 
         try {
             List<String> connectionNames = sortedChildrenNames(DATABASE_CONNECTION, TIMESTAMP, Comparator.reverseOrder());
@@ -98,7 +98,7 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
             final Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(connectionName);
 
             final Label imageLabel = new Label();
-            imageLabel.getStyleClass().add("icon-label");
+            imageLabel.getStyleClass().add("link-icon");
             final Label nameLabel = new Label(connectionName);
             nameLabel.getStyleClass().add("name-label");
 

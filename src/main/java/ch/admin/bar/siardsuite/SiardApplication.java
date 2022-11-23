@@ -13,6 +13,9 @@ public class SiardApplication extends Application {
   public void start(Stage stage) throws IOException {
     Model model = new Model();
     Controller controller = new Controller(model);
+    // trial to fix the bad font rendering issue from javafx
+    System.setProperty("prism.lcdtext", "false");
+    System.setProperty("prism.text", "t2k");
 
     ProgramInfo programInfo = ProgramInfo.getProgramInfo(
             "SIARD Suite","0",

@@ -8,75 +8,82 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.String?>
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadingPresenter">
-    <center>
-        <VBox BorderPane.alignment="TOP_LEFT">
-            <children>
-                <VBox>
-                    <children>
-                        <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2"/>
-                        <Label fx:id="progress" contentDisplay="RIGHT" styleClass="h3">
-                            <graphic>
-                                <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
-                                    <styleClass>
-                                        <String fx:value="loading-icon"/>
-                                        <String fx:value="icon-button"/>
-                                    </styleClass>
-                                    <Image url="@../../icons/loading.png"/>
-                                </ImageView>
-                            </graphic>
-                            <VBox.margin>
-                                <Insets top="25.0"/>
-                            </VBox.margin>
-                        </Label>
-                        <Label fx:id="subtitle1" >
-                            <styleClass>
-                                <String fx:value="h4"/>
-                                <String fx:value="label-icon"/>
-                                <String fx:value="server-icon"/>
-                            </styleClass>
-                            <VBox.margin>
-                                <Insets top="25.0"/>
-                            </VBox.margin>
-                        </Label>
-                        <ScrollPane styleClass="scroll-box">
-                            <content>
-                                <AnchorPane>
-                                    <children>
-                                        <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <children>
-                                            </children></VBox>
-                                    </children>
-                                </AnchorPane>
-                            </content>
-                            <VBox.margin>
-                                <Insets top="25.0"/>
-                            </VBox.margin>
-                        </ScrollPane>
-                    </children>
-                    <VBox.margin>
-                        <Insets left="25.0" right="25.0" />
-                    </VBox.margin>
-                </VBox>
-            </children>
-            <BorderPane.margin>
-                <Insets left="25.0" right="25.0" top="48.0"/>
-            </BorderPane.margin>
-        </VBox>
-    </center>
-    <bottom>
-        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-              minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
-            <children>
-                <MFXButton fx:id="cancel">
-                    <styleClass>
-                        <String fx:value="button"/>
-                        <String fx:value="secondary"/>
-                    </styleClass>
-                </MFXButton>
-            </children>
-        </HBox>
-    </bottom>
-</BorderPane>
+<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadingPresenter"
+            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+    <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
+                maxWidth="1.7976931348623157E308">
+        <center>
+            <VBox BorderPane.alignment="TOP_LEFT">
+                <children>
+                    <VBox>
+                        <children>
+                            <Label fx:id="title" contentDisplay="RIGHT" styleClass="h2"/>
+                            <Label fx:id="progress" contentDisplay="RIGHT" styleClass="h3">
+                                <graphic>
+                                    <ImageView fx:id="loader" fitHeight="24.0" fitWidth="24.0">
+                                        <styleClass>
+                                            <String fx:value="loading-icon"/>
+                                            <String fx:value="icon-button"/>
+                                        </styleClass>
+                                        <Image url="@../../icons/loading.png"/>
+                                    </ImageView>
+                                </graphic>
+                                <VBox.margin>
+                                    <Insets top="25.0"/>
+                                </VBox.margin>
+                            </Label>
+                            <Label fx:id="subtitle1">
+                                <styleClass>
+                                    <String fx:value="h4"/>
+                                    <String fx:value="label-icon"/>
+                                    <String fx:value="server-icon"/>
+                                </styleClass>
+                                <VBox.margin>
+                                    <Insets top="25.0"/>
+                                </VBox.margin>
+                            </Label>
+                            <ScrollPane styleClass="scroll-box">
+                                <content>
+                                    <AnchorPane>
+                                        <children>
+                                            <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0"
+                                                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                                  AnchorPane.topAnchor="0.0">
+                                                <children>
+                                                </children>
+                                            </VBox>
+                                        </children>
+                                    </AnchorPane>
+                                </content>
+                                <VBox.margin>
+                                    <Insets top="25.0"/>
+                                </VBox.margin>
+                            </ScrollPane>
+                        </children>
+                        <VBox.margin>
+                            <Insets left="25.0" right="25.0"/>
+                        </VBox.margin>
+                    </VBox>
+                </children>
+                <BorderPane.margin>
+                    <Insets left="25.0" right="25.0" top="48.0"/>
+                </BorderPane.margin>
+            </VBox>
+        </center>
+        <bottom>
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
+                <children>
+                    <MFXButton fx:id="cancel">
+                        <styleClass>
+                            <String fx:value="button"/>
+                            <String fx:value="secondary"/>
+                        </styleClass>
+                    </MFXButton>
+                </children>
+            </HBox>
+        </bottom>
+    </BorderPane>
+</ScrollPane>
