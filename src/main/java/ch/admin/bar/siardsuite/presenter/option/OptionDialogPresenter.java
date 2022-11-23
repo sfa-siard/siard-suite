@@ -17,12 +17,10 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
-import java.time.Clock;
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.EXPORT_PATH;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
 
 public class OptionDialogPresenter extends DialogPresenter {
@@ -72,9 +70,9 @@ public class OptionDialogPresenter extends DialogPresenter {
         File file = directoryChooser.showDialog(stage);
         if (Objects.nonNull(file)) {
             try {
-                final Preferences preferences = UserPreferences.push(OPTIONS, TIMESTAMP, Comparator.reverseOrder(), String.valueOf(file.hashCode()));
+                final Preferences preferences = UserPreferences.node(OPTIONS);
                 preferences.put(EXPORT_PATH.name(), file.getAbsolutePath());
-                preferences.put(TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
+                exportFolderText.setText(file.getAbsolutePath());
 //                this.stage.openDialog(View.OPTION_DIALOG);
 //                this.stage.closeDialog();
 
