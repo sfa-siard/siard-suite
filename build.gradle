@@ -132,6 +132,14 @@ installDist {
 
 asciidoctor {
     sourceDir  file('docs')
-
     outputDir  file('build/docs')
+
+    resources {
+        from('docs/user-manual/de/') {
+            include 'images/**/*.png'
+        }
+
+        into './user-manual/de/'
+    }
 }
+
