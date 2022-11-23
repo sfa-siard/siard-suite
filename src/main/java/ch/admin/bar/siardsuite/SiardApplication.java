@@ -18,7 +18,7 @@ public class SiardApplication extends Application {
     System.setProperty("prism.text", "t2k");
 
     ProgramInfo programInfo = ProgramInfo.getProgramInfo(
-            "SIARD Suite","0",
+            "SIARD Suite",getClass().getPackage().getImplementationVersion(),
             "SiardGui","0",
             "Program to download, view, upload database content and database edit meta data in a .siard file",
             "Swiss Federal Archives, Berne, Switzerland, 2007-2022");

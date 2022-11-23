@@ -18,6 +18,12 @@ description = 'SIARD Suite'
 java.sourceCompatibility = JavaVersion.VERSION_18
 mainClassName = "ch.admin.bar.siardsuite.Launcher"
 
+manifest {
+    attributes (
+        'Implementation-Version': version
+    )
+}
+
 
 dependencies {
     implementation 'org.openjfx:javafx-controls:18'
