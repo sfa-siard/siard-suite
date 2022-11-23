@@ -28,6 +28,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
   private final Archive archive;
   private SiardArchiveMetaData metaData;
   private final boolean onlyMetaData;
+  private String name;
 
   public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
     this.connection = connection;
@@ -40,13 +41,12 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
   protected ObservableList<Pair<String, Long>> call() throws Exception {
 
     ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
-    progressData.add(new Pair<>("Metadata", -1L));
     connection.setAutoCommit(false);
     Integer timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
 
     MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
     metadata.setQueryTimeout(timeout);
-    updateValue(progressData);
+    updateValue(FXCollections.observableArrayList(new Pair<>("Metadata", -1L)));
     updateProgress(0, 100);
     metadata.download(true, false, this);
 
@@ -55,26 +55,26 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
       metaData.write(archive);
     }
 
-    for (int i = 0; i < this.archive.getSchemas(); i++) {
-      Schema schema = this.archive.getSchema(i);
-      for (int y = 0; y < schema.getTables(); y++) {
-        progressData.add(new Pair<>(schema.getMetaSchema().getName() + "." + schema.getTable(y).getMetaTable().getName(),
-                schema.getTable(y).getMetaTable().getRows()));
-      }
-    }
-    updateValue(progressData);
-
     // TODO: replace the boolean flag with a strategy pattern
     if (!onlyMetaData) {
       PrimaryDataFromDb data = PrimaryDataFromDb.newInstance(connection, archive);
       data.setQueryTimeout(timeout);
-      progressData.add(new Pair<>("Dataload", -1L));
-      updateValue(progressData);
+      updateValue(FXCollections.observableArrayList(new Pair<>("Dataload", -1L)));
       updateProgress(0, 100);
       data.download(this);
+
+      for (int i = 0; i < this.archive.getSchemas(); i++) {
+        Schema schema = this.archive.getSchema(i);
+        for (int y = 0; y < schema.getTables(); y++) {
+          progressData.add(new Pair<>(schema.getMetaSchema().getName() + "." + schema.getTable(y).getMetaTable().getName(),
+                  schema.getTable(y).getMetaTable().getRows()));
+        }
+      }
+      updateValue(progressData);
     }
 
-    model.setArchive("sample.siard", archive, onlyMetaData);
+    model.setArchive(name, archive, onlyMetaData);
+    archive.close();
     return progressData;
   }
 
@@ -92,6 +92,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
   public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                     String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
                     LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
+    this.name = targetArchive.getName();
   }
 
   @Override
