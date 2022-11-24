@@ -146,17 +146,11 @@ installDist {
 
 asciidoctor {
 
-    baseDirIsRootProjectDir()
+    languages 'en', 'de'
+    baseDirFollowsSourceDir()
 
-    sourceDir 'docs/user-manual/de/'
+    sourceDir 'docs/user-manual/'
     outputDir file('build/docs')
-
-    resources {
-        from('docs/user-manual/de/') {
-            include 'images/**/*.png'
-        }
-    }
-
 
     sources {
         include 'user-manual.adoc'
@@ -167,25 +161,28 @@ asciidoctor {
 
 asciidoctorPdf {
 
+    languages 'en', 'de'
+    baseDirFollowsSourceDir()
+
     outputDir 'build/docs/pdf'
-    sourceDir 'docs/user-manual/de/'
+    sourceDir 'docs/user-manual/'
 
 
     pdfThemes {
         local 'basic', {
             themeDir = 'docs/theme'
-            themeName = 'acrevis-tpl'
+            themeName = 'siard-theme'
 
         }
     }
 
     asciidoctorj {
         attributes 'media': 'press',
-                'pdf-themesdir': 'docs/theme',
-                'pdf-theme': 'acrevis-tpl',
+//                'pdf-themesdir': 'docs/theme',
+//                'pdf-theme': 'acrevis-tpl-theme',
                 'styles-dir': 'docs/theme',
                 'source-highlighter': 'coderay',
-                'imagesdir': 'docs/user-manual/de/images',
+                'imagesdir': 'images',
                 'toc': 'left'
     }
 } dependsOn(asciidoctor)

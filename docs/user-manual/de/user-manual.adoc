@@ -1,4 +1,4 @@
-include::docs/theme/config.adoc[]
+include::../../theme/config.adoc[]
 
 == Siard Suite Handbuch
 
@@ -99,7 +99,7 @@ Die Applikation führt den Benutzer durch die jeweiligen Prozesse.
 
 Unter dem Menupunkt "Optionen" kann die Applikation konfiguriert werden.
 
-image::images/options.png[]
+image::options.png[]
 
 Folgende Eintstellungen können vorgenommen werden:
 
