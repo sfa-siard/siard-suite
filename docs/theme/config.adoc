@@ -2,9 +2,9 @@
 // ==================================
 :title-page:
 // toc-title definition MUST follow document title without blank line!
-:toc-title: Inhaltsverzeichnis
-// enable table-of-contents
-:toc:
+// :toc-title: Inhaltsverzeichnis
+// // enable table-of-contents
+// :toc:
 
 :caution-caption: Achtung
 :important-caption: Wichtig
@@ -20,3 +20,6 @@
 
 :sectnums:
 :imagesdir: images
+:stylesdir: ../../theme
+:stylesheet:  siard-theme.css
+:title-logo-image: image::../../../theme/img/logo.png[logo,1900]

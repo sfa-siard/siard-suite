@@ -1,11 +1,11 @@
 font:
   catalog:
     # Noto Serif supports Latin, Latin-1 Supplement, Latin Extended-A, Greek, Cyrillic, Vietnamese & an assortment of symbols
-    Noto Serif:
-      normal: notoserif-regular-subset.ttf
-      bold: notoserif-bold-subset.ttf
-      italic: notoserif-italic-subset.ttf
-      bold_italic: notoserif-bold_italic-subset.ttf
+    Frutiger Neue:
+      normal: fonts/FrutigerNeueW02-Regular.ttf?v2
+      bold: fonts/FrutigerNeueW02-Bd.ttf?v2
+      italic: fonts/FrutigerNeueW02-It.ttf?v2
+      bold_italic: fonts/FrutigerNeueW02-Bd.ttf?v2
     # M+ 1mn supports ASCII and the circled numbers used for conums
     M+ 1mn:
       normal: mplus1mn-regular-ascii-conums.ttf
@@ -96,7 +96,7 @@ heading:
 title_page:
   align: right
   logo:
-    top: 10%
+    top: 1%
   title:
     top: 55%
     font_size: $heading_h1_font_size

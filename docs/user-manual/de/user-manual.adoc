@@ -1,14 +1,14 @@
 include::../../theme/config.adoc[]
 
-== Siard Suite Handbuch
+= Siard Suite Handbuch
 
-=== Einleitung
+== Einleitung
 
 Der Standard SIARD (Software-Independent Archival of
 Relational Databases) definiert ein Format um Inhalte
 relationaler Datenbanken langfristig zu archivieren. Die Anwendung "Siard Suite" bietet eine grafische Benutzeroberfläche zum Archivieren, Wiederherstellen, Durchsuchen und Exportieren von SIARD Archiven.
 
-=== Kontext
+== Kontext
 
 In Zusammenarbeit mit dem EU-Projekt E-ARK und der KOST wurde zwischen 2015 und 2018
 die Version 2.1 des SIARD Formats spezifiziert. Wie schon zuvor die Version 1.0
@@ -21,7 +21,7 @@ relationaler Datenbanken im standardisierten SIARD Format 2.2. Weiter
 kann Siard Suite auch SIARD Archive in den Formaten SIARD 2.1 und SIARD
 1.0 einlesen und zu SIARD 2.2 konvertieren.
 
-=== Systemanforderungen und Installation
+== Systemanforderungen und Installation
 
 Die Applikation Siard Suite ist eine Java FX Applikation. Als solche
 kann sie grundsätzlich auf jedem System ausgeführt werden, auf welchem
@@ -36,7 +36,7 @@ nicht notwendigerweise eine eigene JRE installiert werden muss.
 
 In der Folge sind die einzelnen Distributionen beschrieben. Alle Distributionen können hier heruntergeladen werden: https://github.com/sfa-siard/siard-suite/releases
 
-==== Native Installer
+=== Native Installer
 
 Für Windows, Mac und Linux können installierbare Pakete heruntergeladen
 und damit die Applikation SIARD Suite auf dem System installiert werden.
@@ -46,7 +46,7 @@ Allenfalls werden dazu auf dem System Administratorrechte benötigt.
 *Hinweis:* für diese Installationsart steht das Siard CLI (Command Line
 Interface) nicht zur Verfügung.
 
-==== Zip Archive
+=== Zip Archive
 
 Anstelle der nativen Installer kann auch eine als ZIP Archiv
 bereitgestellte Distribution verwendet werden. Es steht keine Distribution mit inkludierter Runtime zur Verfügung. Entsprechend muss eine JRE v18 mit Java FX Erweiterung auf dem System installiert sein. Entsprechende Distributionen sind u.a. hier erhältlich:
