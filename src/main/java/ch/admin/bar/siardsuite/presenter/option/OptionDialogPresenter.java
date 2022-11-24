@@ -34,10 +34,6 @@ public class OptionDialogPresenter extends DialogPresenter {
     @FXML
     public MFXTextField queryTimeoutText;
     @FXML
-    public MFXButton folderButton;
-    @FXML
-    public MFXTextField exportFolderText;
-    @FXML
     public MFXTextField  loginTimeoutText;;
 
     @Override
@@ -51,9 +47,6 @@ public class OptionDialogPresenter extends DialogPresenter {
         I18n.bind(loginTimeoutText.promptTextProperty(), "option.dialog.login-timeout.placeholder");
         I18n.bind(queryTimeoutText.floatingTextProperty(), "option.dialog.query-timeout.label");
         I18n.bind(queryTimeoutText.promptTextProperty(), "option.dialog.query-timeout.placeholder");
-        I18n.bind(exportFolderText.floatingTextProperty(), "option.dialog.export-path.label");
-        I18n.bind(folderButton.textProperty(), "option.dialog.export-path.button");
-        folderButton.setOnAction(this::handleSetExportPath);
         closeButton.setOnAction(event -> stage.closeDialog());
         MFXButton save = new DialogButton(true, "button.save");
         buttonBox.getChildren().addAll(new CloseDialogButton(this.stage),
@@ -66,7 +59,6 @@ public class OptionDialogPresenter extends DialogPresenter {
 
     private void saveOptions() {
         final Preferences preferences = UserPreferences.node(OPTIONS);
-        preferences.put(EXPORT_PATH.name(), exportFolderText.getText());
         preferences.put(QUERY_TIMEOUT.name(), queryTimeoutText.getText());
         preferences.put(LOGIN_TIMEOUT.name(), loginTimeoutText.getText());
         stage.closeDialog();
@@ -74,22 +66,8 @@ public class OptionDialogPresenter extends DialogPresenter {
 
     private void initFormFields() {
         final Preferences preferences = UserPreferences.node(OPTIONS);
-        exportFolderText.setText(preferences.get(EXPORT_PATH.name(), "0"));
         queryTimeoutText.setText(preferences.get(QUERY_TIMEOUT.name(), "0"));
         loginTimeoutText.setText(preferences.get(LOGIN_TIMEOUT.name(), "0"));
     }
 
-    private void handleSetExportPath(ActionEvent actionEvent) {
-        final DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle(I18n.get("export.choose-location.text"));
-        File file = directoryChooser.showDialog(stage);
-        if (Objects.nonNull(file)) {
-            try {
-                exportFolderText.setText(file.getAbsolutePath());
-            } catch (Exception e) {
-                // TODO: show failure message
-                e.printStackTrace();
-            }
-        }
-    }
 }
