@@ -90,6 +90,19 @@ image::images/startscreen.png[]
 
 Die Applikation führt den Benutzer durch die jeweiligen Prozesse.
 
+==== Einstellungen
+
+Unter dem Menupunkt "Optionen" kann die Applikation konfiguriert werden.
+
+image::images/options.png[]
+
+Folgende Eintstellungen können vorgenommen werden:
+
+|===
+| Option | Beschreibung
+| Login Timeout (s) | Maximale Wartezeit auf eine Datenbankverbindung (in Sekunden). 0 für unbegrenzt
+| Query Timeout (s) | Maximale Wartezeit auf eine Datenbankabfrage (0 für unbegrenzt)
+|===
 
 === Siard Suite CLI
 
