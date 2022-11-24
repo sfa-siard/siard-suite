@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -10,12 +11,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveLoadingPreviewPresenter"
-            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-    <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
-                maxWidth="1.7976931348623157E308">
+
+<ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="scrollable-pane"
+            stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveLoadingPreviewPresenter">
+    <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                style="-fx-background-color: white">
         <center>
             <VBox BorderPane.alignment="TOP_LEFT">
                 <children>
@@ -48,10 +49,8 @@
                             <Insets left="25.0" right="25.0"/>
                         </VBox.margin>
                     </VBox>
-                    <VBox fx:id="leftVBox" prefWidth="365.0">
+                    <VBox fx:id="leftVBox" prefWidth="415.0">
                         <children>
-                            <Label fx:id="subtitle" styleClass="h4">
-                            </Label>
                             <ScrollPane styleClass="scroll-box">
                                 <content>
                                     <AnchorPane>
@@ -59,15 +58,14 @@
                                             <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0"
                                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                                   AnchorPane.topAnchor="0.0">
-                                                <children>
-                                                    <Label fx:id="subtitle1" style="-fx-text-fill: black;"
-                                                           styleClass=".scroll-box"/>
-                                                </children>
+
                                             </VBox>
                                         </children>
                                     </AnchorPane>
                                 </content>
                             </ScrollPane>
+                            <MFXProgressBar fx:id="progressBar" prefHeight="17.0" prefWidth="415.0" progress="0.0"
+                                            VBox.vgrow="ALWAYS"/>
                         </children>
                         <VBox.margin>
                             <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>

@@ -1,0 +1,95 @@
+package ch.admin.bar.siardsuite.presenter.option;
+
+import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.CloseDialogButton;
+import ch.admin.bar.siardsuite.component.DialogButton;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.presenter.DialogPresenter;
+import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.view.RootStage;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
+
+import java.io.File;
+import java.util.Objects;
+import java.util.prefs.Preferences;
+
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
+
+public class OptionDialogPresenter extends DialogPresenter {
+
+    @FXML
+    protected Label title;
+    @FXML
+    protected MFXButton closeButton;
+    @FXML
+    protected HBox buttonBox;
+    @FXML
+    public MFXTextField queryTimeoutText;
+    @FXML
+    public MFXButton folderButton;
+    @FXML
+    public MFXTextField exportFolderText;
+    @FXML
+    public MFXTextField  loginTimeoutText;;
+
+    @Override
+    public void init(Controller controller, Model model, RootStage stage) {
+        this.model = model;
+        this.controller = controller;
+        this.stage = stage;
+
+        I18n.bind(title.textProperty(), "option.dialog.title");
+        I18n.bind(loginTimeoutText.floatingTextProperty(), "option.dialog.login-timeout.label");
+        I18n.bind(loginTimeoutText.promptTextProperty(), "option.dialog.login-timeout.placeholder");
+        I18n.bind(queryTimeoutText.floatingTextProperty(), "option.dialog.query-timeout.label");
+        I18n.bind(queryTimeoutText.promptTextProperty(), "option.dialog.query-timeout.placeholder");
+        I18n.bind(exportFolderText.floatingTextProperty(), "option.dialog.export-path.label");
+        I18n.bind(folderButton.textProperty(), "option.dialog.export-path.button");
+        folderButton.setOnAction(this::handleSetExportPath);
+        closeButton.setOnAction(event -> stage.closeDialog());
+        MFXButton save = new DialogButton(true, "button.save");
+        buttonBox.getChildren().addAll(new CloseDialogButton(this.stage),
+                save);
+        save.setOnAction(event -> saveOptions());
+
+        initFormFields();
+
+    }
+
+    private void saveOptions() {
+        final Preferences preferences = UserPreferences.node(OPTIONS);
+        preferences.put(EXPORT_PATH.name(), exportFolderText.getText());
+        preferences.put(QUERY_TIMEOUT.name(), queryTimeoutText.getText());
+        preferences.put(LOGIN_TIMEOUT.name(), loginTimeoutText.getText());
+        stage.closeDialog();
+    }
+
+    private void initFormFields() {
+        final Preferences preferences = UserPreferences.node(OPTIONS);
+        exportFolderText.setText(preferences.get(EXPORT_PATH.name(), "0"));
+        queryTimeoutText.setText(preferences.get(QUERY_TIMEOUT.name(), "0"));
+        loginTimeoutText.setText(preferences.get(LOGIN_TIMEOUT.name(), "0"));
+    }
+
+    private void handleSetExportPath(ActionEvent actionEvent) {
+        final DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle(I18n.get("export.choose-location.text"));
+        File file = directoryChooser.showDialog(stage);
+        if (Objects.nonNull(file)) {
+            try {
+                exportFolderText.setText(file.getAbsolutePath());
+            } catch (Exception e) {
+                // TODO: show failure message
+                e.printStackTrace();
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.database;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.util.UserPreferences;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +10,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.LOGIN_TIMEOUT;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
 
 public class DatabaseConnectionFactory {
   private static DatabaseConnectionFactory instance;
@@ -18,6 +22,7 @@ public class DatabaseConnectionFactory {
   private DatabaseConnectionFactory(Model model) throws SQLException {
     DatabaseConnectionFactory.model = model;
     loadDriver(DatabaseConnectionFactory.model.getDatabaseProps().product());
+    DriverManager.setLoginTimeout(Integer.parseInt(UserPreferences.node(OPTIONS).get(LOGIN_TIMEOUT.name(), "0")));
     connection = DriverManager.getConnection(model.getConnectionUrl().get(),
             model.getDatabaseUsername().get(), model.getDatabasePassword());
   }

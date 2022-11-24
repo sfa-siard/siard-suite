@@ -1,17 +1,18 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
-import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -39,6 +40,8 @@ public class UploadingPresenter extends StepperPresenter {
   public MFXButton cancel;
   @FXML
   public VBox scrollBox;
+  @FXML
+  public MFXProgressBar progressBar;
 
   private Spinner loadingSpinner;
 
@@ -54,7 +57,7 @@ public class UploadingPresenter extends StepperPresenter {
     loadingSpinner = new Spinner(this.loader);
     loadingSpinner.play();
     I18n.bind(title.textProperty(), "upload.inProgress.title");
-    I18n.bind(progress.textProperty(), "upload.records.uploaded.message", 6666);
+    I18n.bind(progress.textProperty(), "upload.records.uploaded.message");
     I18n.bind(cancel.textProperty(), "button.cancel");
 
     cancel.setOnAction(event -> stage.openDialog(UPLOAD_ABORT_DIALOG)); // TODO: how to cancel the upload task
@@ -89,25 +92,28 @@ public class UploadingPresenter extends StepperPresenter {
         throw new RuntimeException(e);
       }
 
-      controller.addDatabaseUploadingValuePropertyListener((o1, oldValue1, newValue1) -> {
+      controller.addDatabaseUploadingValuePropertyListener((o, oldValue, newValue) -> {
         AtomicInteger pos1 = new AtomicInteger();
-        newValue1.forEach(s -> addTableData(s, pos1.getAndIncrement()));
+        addLoadingData(newValue, pos1.getAndIncrement());
       });
-      // TODO CR 459 Progress is no processable with current api data
-//      controller.addDatabaseUploadingProgressPropertyListener((o, oldValue, newValue) -> {
-//        double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
-//        if (pos >= 1) {
-//          LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
-//          label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
-//        }
-//      });
+      controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+        double pos = newValue.doubleValue();
+        progressBar.progressProperty().set(pos);
+      });
 
     };
   }
 
-  private void addTableData(String tableName, Integer pos) {
+
+  private void addLoadingData(String text, Integer pos) {
+    // set previous to ok
+    if (scrollBox.getChildren().size() > 0) {
+      int itemPos = scrollBox.getChildren().size() - 1;
+      LabelIcon label = (LabelIcon) scrollBox.getChildren().get(itemPos);
+      label.setGraphic(new IconView(itemPos, IconView.IconType.OK));
+    }
     scrollBox.getChildren().add(
-            new LabelIcon(tableName, pos, IconView.IconType.LOADING));
+            new LabelIcon(text, pos, IconView.IconType.LOADING));
   }
 
   private void navigateBack(MFXStepper stepper) {

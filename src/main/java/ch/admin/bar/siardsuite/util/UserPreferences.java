@@ -49,7 +49,8 @@ public class UserPreferences {
 
     public enum NodePath {
         RECENT_FILES,
-        DATABASE_CONNECTION
+        DATABASE_CONNECTION,
+        OPTIONS
     }
 
     public enum KeyIndex {
@@ -62,6 +63,9 @@ public class UserPreferences {
         CONNECTION_URL,
         STORAGE_DATE,
         ABSOLUTE_PATH,
-        TIMESTAMP
+        TIMESTAMP,
+        EXPORT_PATH,
+        QUERY_TIMEOUT,
+        LOGIN_TIMEOUT
     }
 }

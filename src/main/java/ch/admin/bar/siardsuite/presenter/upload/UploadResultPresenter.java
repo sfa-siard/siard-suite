@@ -6,7 +6,7 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
+import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -22,8 +22,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.FAILED;
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.TO_START;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.FAILED;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.TO_START;
 import static ch.admin.bar.siardsuite.model.View.START;
 
 public class UploadResultPresenter extends StepperPresenter implements ArchiveVisitor {
@@ -40,7 +40,7 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
   @FXML
   public VBox scrollBox;
   @FXML
-  private StepperButtonBox buttonsBox;
+  private ButtonBox buttonsBox;
 
   private Archive archive;
 
@@ -68,7 +68,7 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
       setResultData();
       I18n.bind(title.textProperty(), "upload.result.success.title");
       title.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
-      this.buttonsBox = new StepperButtonBox().make(TO_START);
+      this.buttonsBox = new ButtonBox().make(TO_START);
       addButtons(stepper);
     };
   }
@@ -80,7 +80,7 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
       I18n.bind(title.textProperty(), "upload.result.failed.title");
       I18n.bind(summary.textProperty(), "upload.result.failed.message");
       title.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
-      this.buttonsBox = new StepperButtonBox().make(FAILED);
+      this.buttonsBox = new ButtonBox().make(FAILED);
       addButtons(stepper);
     };
   }

@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
+import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
@@ -25,7 +25,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.time.LocalDate;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
 
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
@@ -55,7 +55,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @FXML
     TextArea archiverContact = new TextArea();
     @FXML
-    protected StepperButtonBox buttonsBox;
+    protected ButtonBox buttonsBox;
     @FXML
     public MFXButton infoButton;
     @FXML
@@ -69,7 +69,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.controller = controller;
         this.stage = stage;
 
-        this.buttonsBox = new StepperButtonBox().make(DEFAULT);
+        this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.borderPane.setBottom(buttonsBox);
         this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
         this.bindTexts();

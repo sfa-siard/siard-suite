@@ -8,6 +8,7 @@ import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
+import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -20,8 +21,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.CANCEL;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_LOADED;
 
 public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
@@ -36,11 +38,11 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     @FXML
     public ImageView loader;
     @FXML
-    public Label subtitle;
-    @FXML
     public VBox scrollBox;
     @FXML
-    private StepperButtonBox buttonsBox;
+    public MFXProgressBar progressBar;
+    @FXML
+    private ButtonBox buttonsBox;
 
     private final Image loading = Icon.loading;
     private final Image ok = Icon.ok;
@@ -58,11 +60,10 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
         this.title.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.title"));
         this.text.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.text"));
-        this.subtitle.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.subtitle"));
         this.loader.setImage(loading);
         new Spinner(this.loader).play();
 
-        this.buttonsBox = new StepperButtonBox().make(CANCEL);
+        this.buttonsBox = new ButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
         this.setListeners(stepper);
     }
@@ -90,20 +91,15 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                 throw new RuntimeException(e);
             }
 
-            // TODO this part is never reached because of onlyMetaData-Load
-            // There is no progress in Metadata-Load # CR 460
-//            controller.addDatabaseLoadingValuePropertyListener((o1, oldValue1, newValue1) -> {
-//                AtomicInteger pos1 = new AtomicInteger();
-//                newValue1.forEach(s -> addTableData(s.getKey(), pos1.getAndIncrement()));
-//            });
-//
-//            controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
-//                double pos = newValue.doubleValue() * (scrollBox.getChildren().size() - 1);
-//
-//                    LabelIcon label = (LabelIcon) scrollBox.getChildren().get((int) pos);
-//                    label.setGraphic(new IconView(newValue.intValue(), IconView.IconType.OK));
-//                }
-//            });
+            controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
+                AtomicInteger pos = new AtomicInteger();
+                newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
+            });
+
+            controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+                double pos = newValue.doubleValue();
+                progressBar.progressProperty().set(pos);
+            });
 
         });
 
@@ -115,9 +111,15 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
 
-//    private void addTableData(String tableName, Integer pos) {
-//        scrollBox.getChildren().add(
-//                new LabelIcon(tableName, pos, IconView.IconType.LOADING));
-//    }
+    private void addLoadingData(String text, Integer pos) {
+        // set previous to ok
+        if (scrollBox.getChildren().size() > 0) {
+            int itemPos = scrollBox.getChildren().size() - 1;
+            LabelIcon label = (LabelIcon) scrollBox.getChildren().get(itemPos);
+            label.setGraphic(new IconView(itemPos, IconView.IconType.OK));
+        }
+        scrollBox.getChildren().add(
+                new LabelIcon(text, pos, IconView.IconType.LOADING));
+    }
 
 }

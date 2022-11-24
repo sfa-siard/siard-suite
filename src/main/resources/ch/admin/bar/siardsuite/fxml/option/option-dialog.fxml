@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" styleClass="dialog" stylesheets="@../../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.option.OptionDialogPresenter">
+    <center>
+        <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefWidth="418.0" BorderPane.alignment="CENTER">
+            <top>
+                <HBox BorderPane.alignment="CENTER_LEFT">
+                    <BorderPane.margin>
+                        <Insets bottom="15.0" />
+                    </BorderPane.margin>
+                    <Label fx:id="title" prefHeight="42.0" styleClass="dialog-title" text="Label" HBox.hgrow="ALWAYS">
+                        <HBox.margin>
+                            <Insets bottom="40.0" />
+                        </HBox.margin>
+                    </Label>
+                    <MFXButton fx:id="closeButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" styleClass="dialog-close-button" text="X" HBox.hgrow="NEVER" />
+                </HBox>
+            </top>
+            <center>
+                <VBox fx:id="options" prefHeight="100.0" BorderPane.alignment="CENTER">
+                    <styleClass>
+                        <String fx:value="form-container" />
+                        <String fx:value="form-container-white" />
+                    </styleClass>
+                    <MFXTextField fx:id="loginTimeoutText" maxWidth="1.7976931348623157E308" styleClass="form-field-small">
+                        <VBox.margin>
+                            <Insets bottom="40.0" />
+                        </VBox.margin>
+                    </MFXTextField>
+                    <MFXTextField fx:id="queryTimeoutText" maxWidth="1.7976931348623157E308" styleClass="form-field-small">
+                        <VBox.margin>
+                            <Insets bottom="40.0" />
+                        </VBox.margin>
+                    </MFXTextField>
+                    <HBox maxHeight="30.0" prefHeight="28.0" prefWidth="450.0">
+                        <MFXTextField fx:id="exportFolderText" editable="false" floatingText="Ihr N" maxWidth="410.0" styleClass="form-field-small" HBox.hgrow="ALWAYS">
+                            <HBox.margin>
+                                <Insets right="20.0" />
+                            </HBox.margin>
+                        </MFXTextField>
+                        <MFXButton fx:id="folderButton" maxHeight="30.0" minHeight="30.0" minWidth="70.0" prefHeight="30.0" text="Choose directory" HBox.hgrow="NEVER">
+                            <styleClass>
+                                <String fx:value="secondary" />
+                                <String fx:value="button-small" />
+                            </styleClass>
+                        </MFXButton>
+                        <VBox.margin>
+                            <Insets bottom="40.0" />
+                        </VBox.margin>
+                    </HBox>
+                    <VBox.margin>
+                        <Insets bottom="24.0" right="25.0" top="60.0" />
+                    </VBox.margin>
+                </VBox>
+            </center>
+        </BorderPane>
+    </center>
+    <bottom>
+        <HBox fx:id="buttonBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" spacing="20.0" styleClass="btn-box">
+        </HBox>
+    </bottom>
+</BorderPane>

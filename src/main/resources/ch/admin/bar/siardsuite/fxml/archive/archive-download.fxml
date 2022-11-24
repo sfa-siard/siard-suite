@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXProgressBar?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
@@ -56,8 +57,13 @@
                                             <VBox fx:id="scrollBox" AnchorPane.bottomAnchor="0.0"
                                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                                   AnchorPane.topAnchor="0.0">
-                                                <children>
-                                                </children>
+                                                <padding>
+                                                    <Insets left="25.0"/>
+                                                </padding>
+                                            </VBox>
+                                            <VBox fx:id="scrollBox2" visible="false" AnchorPane.bottomAnchor="0.0"
+                                                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                                  AnchorPane.topAnchor="0.0">
                                                 <padding>
                                                     <Insets left="25.0"/>
                                                 </padding>
@@ -69,6 +75,8 @@
                                     <Insets top="25.0"/>
                                 </VBox.margin>
                             </ScrollPane>
+                            <MFXProgressBar fx:id="progressBar" prefHeight="17.0" prefWidth="415.0" progress="0.0"
+                                            VBox.vgrow="ALWAYS"/>
                             <VBox visible="false" fx:id="fileSystemBox">
                                 <Label fx:id="pathTitle" contentDisplay="RIGHT" styleClass="h3">
                                     <VBox.margin>

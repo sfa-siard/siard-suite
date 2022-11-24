@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -32,7 +33,7 @@ public class RootPresenter extends Presenter {
 
     allowStageRepositioning(windowHeader);
 
-    this.stage.titleProperty().bind(I18n.createStringBinding("window.title"));
+    I18n.bind(stage.titleProperty(),"window.title");
 
     initMenu();
   }
@@ -40,17 +41,17 @@ public class RootPresenter extends Presenter {
   private void initMenu() {
     this.menuBar.setOnMouseClicked(event -> this.menuContainer.show());
 
-    this.menuItemLanguage.textProperty().bind(I18n.createStringBinding("menu.item.language"));
-    this.menuItemOptions.textProperty().bind(I18n.createStringBinding("menu.item.options"));
-    this.menuItemInfo.textProperty().bind(I18n.createStringBinding("menu.item.info"));
-    this.menuItemClose.textProperty().bind(I18n.createStringBinding("menu.item.close"));
+    I18n.bind(menuItemLanguage.textProperty(),"menu.item.language");
+    I18n.bind(menuItemOptions.textProperty(),"menu.item.options");
+    I18n.bind(menuItemInfo.textProperty(),"menu.item.info");
+    I18n.bind(menuItemClose.textProperty(),"menu.item.close");
 
     // Language
     ToggleGroup items = new ToggleGroup();
     I18n.getSupportedLocales().forEach((locale) -> {
       RadioMenuItem item = new RadioMenuItem();
       item.setId(locale.toString());
-      item.textProperty().bind(I18n.createStringBinding(locale.toString()));
+      I18n.bind(item.textProperty(),locale.toString());
       this.menuItemLanguage.getItems().add(item);
       item.setOnAction(event -> {
         RadioMenuItem cmi = (RadioMenuItem) event.getSource();
@@ -61,7 +62,8 @@ public class RootPresenter extends Presenter {
     });
 
     this.menuItemClose.setOnAction(event -> this.stage.close());
-
+    this.menuItemInfo.setOnAction(event -> this.stage.openDialog(View.INFO_DIALOG));
+    this.menuItemOptions.setOnAction(event -> this.stage.openDialog(View.OPTION_DIALOG));
 
   }
 

@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
+import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
@@ -85,7 +85,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     @FXML
     public BorderPane borderPane;
     @FXML
-    private StepperButtonBox buttonsBox;
+    private ButtonBox buttonsBox;
     @FXML
     public MFXButton infoButton;
     @FXML
@@ -120,7 +120,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
         tooltip = new SiardTooltip("uploadConnection.view.tooltip");
         errorMessage.setVisible(false);
-        buttonsBox = new StepperButtonBox().make(DEFAULT);
+        buttonsBox = new ButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
         setListeners(stepper);
     }

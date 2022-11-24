@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.StepperButtonBox;
+import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -18,7 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import static ch.admin.bar.siardsuite.component.StepperButtonBox.Type.DEFAULT;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.UPLOAD_DBMS_SELECTED;
 
 public class UploadChooseDbmsPresenter extends StepperPresenter {
@@ -36,7 +36,7 @@ public class UploadChooseDbmsPresenter extends StepperPresenter {
     @FXML
     public BorderPane borderPane;
     @FXML
-    private StepperButtonBox buttonsBox;
+    private ButtonBox buttonsBox;
 
     private final ToggleGroup toggleGroup = new ToggleGroup();
 
@@ -61,7 +61,7 @@ public class UploadChooseDbmsPresenter extends StepperPresenter {
 
         this.model.getDatabaseTypes().forEach(this::createRadioToVBox);
 
-        this.buttonsBox = new StepperButtonBox().make(DEFAULT);
+        this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.borderPane.setBottom(buttonsBox);
         this.setListeners(stepper);
     }

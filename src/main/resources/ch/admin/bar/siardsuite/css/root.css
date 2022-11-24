@@ -304,6 +304,12 @@
     -fx-text-fill: siard-text-color-black;
 }
 
+#options .button-small {
+    -fx-min-width: 70px;
+    -fx-min-height: 30px;
+    -fx-font-size: 12px;
+}
+
 /*Button*/
 
 .mfx-button {
@@ -466,6 +472,17 @@
     -mfx-float-mode: ABOVE;
     -fx-max-height: 48;
     -fx-min-height: 48;
+    -fx-border-color: #b0afaf;
+    -fx-border-width: 1;
+    -fx-border-radius: 0;
+    -fx-text-fill: siard-text-color-black;
+}
+
+.form-field-small {
+    -fx-padding: 2 2 2 -2;
+    -mfx-float-mode: ABOVE;
+    -fx-max-height: 30;
+    -fx-min-height: 30;
     -fx-border-color: #b0afaf;
     -fx-border-width: 1;
     -fx-border-radius: 0;
@@ -918,6 +935,14 @@
 .text-flow {
     -fx-border-color: #e4e7eb;
     -fx-border-width: 0 0 2 0;
-
 }
 
+.mfx-progress-bar .track {
+    -fx-fill: #f5f7fa;
+}
+
+.mfx-progress-bar .bar1,
+.mfx-progress-bar:indeterminate .bar1,
+.mfx-progress-bar:indeterminate .bar2 {
+    -fx-fill: rgba(27, 204, 150, 1);
+}
