@@ -4,6 +4,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.beryx.runtime' version '1.12.7'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'org.asciidoctor.jvm.pdf' version '3.3.2'
 }
 
 repositories {
@@ -20,8 +21,8 @@ java.sourceCompatibility = JavaVersion.VERSION_18
 mainClassName = "ch.admin.bar.siardsuite.Launcher"
 
 manifest {
-    attributes (
-        'Implementation-Version': version
+    attributes(
+            'Implementation-Version': version
     )
 }
 
@@ -86,10 +87,10 @@ runtime {
 
     additive = true
     modules = [
-        'java.logging',
-        'java.sql',
-        'java.management',
-        'java.naming'
+            'java.logging',
+            'java.sql',
+            'java.management',
+            'java.naming'
     ]
 
     jpackage {
@@ -106,7 +107,7 @@ runtime {
         if (currentOs.windows) {
             installerOptions += ['--win-per-user-install', '--win-dir-chooser', '--win-menu', '--win-shortcut']
         } else if (currentOs.linux) {
-            installerType="deb"
+            installerType = "deb"
             installerOptions += ['--linux-package-name', 'siard-suite', '--linux-shortcut']
         } else if (currentOs.macOsX) {
             installerOptions += ['--mac-package-name', 'siard-suite']
@@ -122,14 +123,16 @@ task siardFromDb(type: CreateStartScripts) {
     applicationName = "siard-from-db"
     mainClass = 'ch.admin.bar.siard2.cmd.SiardFromDb'
     outputDir = file("build/scripts")
-    classpath = project.tasks.getAt(JavaPlugin.JAR_TASK_NAME).outputs.files.plus(project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)) // I took this from ApplicationPlugin.java:129
+    classpath = project.tasks.getAt(JavaPlugin.JAR_TASK_NAME).outputs.files.plus(project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME))
+    // I took this from ApplicationPlugin.java:129
 }
 
 task siardToDb(type: CreateStartScripts) {
     applicationName = "siard-to-db"
     mainClass = 'ch.admin.bar.siard2.cmd.SiardToDb'
     outputDir = file("build/scripts")
-    classpath = project.tasks.getAt(JavaPlugin.JAR_TASK_NAME).outputs.files.plus(project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME)) // I took this from ApplicationPlugin.java:129
+    classpath = project.tasks.getAt(JavaPlugin.JAR_TASK_NAME).outputs.files.plus(project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME))
+    // I took this from ApplicationPlugin.java:129
 }
 
 siardFromDb {
@@ -138,20 +141,56 @@ siardFromDb {
 
 installDist {
     dependsOn(siardFromDb)
-
 }
 
 
 asciidoctor {
-    sourceDir  file('docs')
-    outputDir  file('build/docs')
+
+    baseDirIsRootProjectDir()
+
+    sourceDir 'docs/user-manual/de/'
+    outputDir file('build/docs')
 
     resources {
         from('docs/user-manual/de/') {
             include 'images/**/*.png'
         }
-
-        into './user-manual/de/'
     }
+
+
+    sources {
+        include 'user-manual.adoc'
+    }
+
 }
+
+
+asciidoctorPdf {
+
+    outputDir 'build/docs/pdf'
+    sourceDir 'docs/user-manual/de/'
+
+
+    pdfThemes {
+        local 'basic', {
+            themeDir = 'docs/theme'
+            themeName = 'acrevis-tpl'
+
+        }
+    }
+
+    asciidoctorj {
+        attributes 'media': 'press',
+                'pdf-themesdir': 'docs/theme',
+                'pdf-theme': 'acrevis-tpl',
+                'styles-dir': 'docs/theme',
+                'source-highlighter': 'coderay',
+                'imagesdir': 'docs/user-manual/de/images',
+                'toc': 'left'
+    }
+} dependsOn(asciidoctor)
+
+
+
+
 

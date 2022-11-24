@@ -1,4 +1,4 @@
-include::docs/theme/config.adoc[]
+include::{dir}/config.adoc[]
 
 == Siard Suite Handbuch
 
