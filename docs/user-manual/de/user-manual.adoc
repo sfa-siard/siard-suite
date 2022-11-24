@@ -33,7 +33,8 @@ Zusätzlich stehen native Installer für Windows, Mac und Linux
 zur Verfügung, welche die entsprechende Runtime beinhalten, so dass
 nicht notwendigerweise eine eigene JRE installiert werden muss.
 
-In der Folge sind die einzelnen Distributionen beschrieben.
+
+In der Folge sind die einzelnen Distributionen beschrieben. Alle Distributionen können hier heruntergeladen werden: https://github.com/sfa-siard/siard-suite/releases
 
 ==== Native Installer
 
@@ -42,28 +43,30 @@ und damit die Applikation SIARD Suite auf dem System installiert werden.
 
 Allenfalls werden dazu auf dem System Administratorrechte benötigt.
 
-TODO: Liste der Downloads
-
 *Hinweis:* für diese Installationsart steht das Siard CLI (Command Line
 Interface) nicht zur Verfügung.
-
-TODO: stimmt das?
 
 ==== Zip Archive
 
 Anstelle der nativen Installer kann auch eine als ZIP Archiv
-bereitgestellte Distribution verwendet werden. Für Windows, Mac und
-Linux stehen entsprechende Archive mit inkludierter JRE zur Verfügung.
+bereitgestellte Distribution verwendet werden. Es steht keine Distribution mit inkludierter Runtime zur Verfügung. Entsprechend muss eine JRE v18 mit Java FX Erweiterung auf dem System installiert sein. Entsprechende Distributionen sind u.a. hier erhältlich:
 
-Ausserdem kann auch eine Version ohne mitgelieferte Runtime verwendet
-werden - in diesem Fall muss Java 18 mit JavaFX auf dem System verfügbar
-sein.
+https://www.azul.com/downloads/?package=jdk-fx#download-openjdk
 
-Beide Distrubutionen ermöglichen es, das Siard CLI zu verwenden.
+https://aws.amazon.com/correto
 
-Die die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt werden und dann mittels der entsprechenden Startskripte ausgeführt werden.
+Die die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt werden und dann mittels der entsprechenden Startskripte ausgeführt werden:
 
-TODO: Namen der Startskripte angeben.
+
+|===
+| Skriptname | Beschreibung
+
+| siard-suite (.bat) | Starten der grafischen Benutzeroberfläche für Unix bzw. Windows Systeme
+| siard-from-db (.bat) | Archivieren einer Datenbank
+| siard-to-db (.bat) | Upload eines SIARD Archives in eine Datenbank
+|===
+
+
 
 == Siard Suite verwenden
 
@@ -92,16 +95,29 @@ image::startscreen.png[]
 
 Die Applikation führt den Benutzer durch die jeweiligen Prozesse.
 
+==== Einstellungen
+
+Unter dem Menupunkt "Optionen" kann die Applikation konfiguriert werden.
+
+image::images/options.png[]
+
+Folgende Eintstellungen können vorgenommen werden:
+
+|===
+| Option | Beschreibung
+| Login Timeout (s) | Maximale Wartezeit auf eine Datenbankverbindung (in Sekunden). 0 für unbegrenzt
+| Query Timeout (s) | Maximale Wartezeit auf eine Datenbankabfrage (0 für unbegrenzt)
+|===
 
 === Siard Suite CLI
 
-Neben der grafischen Benutzeroberfläche können Datenabanken auch per Kommandozeile archiviert bzw. ein Archiv wieder in eine Datenbank eingelesen werden.
+Neben der grafischen Benutzeroberfläche können Datenbanken auch per Kommandozeile archiviert bzw. ein Archiv wieder in eine Datenbank eingelesen werden.
 
-Dazu stehen in der ZIP Distribution die Scripte `SiardFromDb` und `SiardToDb` zur Verfügung.
+Dazu stehen in der ZIP Distribution die Scripte `siard-from-db` und `siard-to-db` zur Verfügung.
 
 === SiardFromDb
 
-Mit SiardFromDb kann man
+Mit `siard-from-db`  kann man
 
 * ein SIARD-Archive (Metadaten und Primärdaten) aus einer Datenbank (Option -s), und/oder
 * eine SIARD Metadaten XML mit der Definition des Datenbankschemas (option -e).
@@ -109,16 +125,16 @@ erzeugen.
 
 ==== Aufruf
 
+In einem Terminal in das Verzeichnis wechseln, wo das ZIP Archiv entpackt wurde und dort in des Verzeichnis `bin` öffnen und dann ausführen mit:
+
 ```
-java -cp <siardpath>/lib/siardcmd.jar ch.admin.bar.siard2.cmd.SiardFromDb [-h] |
-[-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<import meta data>] [-x=<external lob folder>] [-m=<mime type>]
--j=<JDBC URL> -u=<database user> -p=<database password> -s=<siard file> -e=<export meta data>"
+siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<import meta data>] [-x=<external lob folder>] [-m=<mime type>] -j=<JDBC URL> -u=<database user> -p=<database password> -s=<siard file> -e=<export meta data>"
 ```
 
 ==== Argumente
 
 |===
-|Argument |Beschreibung
+|Argument | Beschreibung
 
 | -o	| Überschreiben (overwrite) der Ausgabe Datei(en), wenn sie existieren
 | -v	| Views (Ansichten) als Tabellen archivieren
@@ -174,17 +190,16 @@ SiardToDb ist ein Befehlszeilenprogramm, welches ein SIARD-Archiv zu Recherchezw
 
 Aufruf
 ```shell
-java -cp <siardpath>/lib/siardcmd.jar ch.admin.bar.siard2.cmd.SiardToDb [-h]
-[-o] [-l=<login timeout>] [-q=<query timeout>]
+siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
 -s=<siard file> -j=<JDBC URL> -u=<database user> -p=<database password>
-[<schema> <mappedschema>]*
+[<schema> <mappedschema>]
 ```
 
 
 ==== Argumente
 
 |===
-| Argument | Bedeutung
+| Argument | Beschreibung
 |-o |	Überschreiben (overwrite) von gleichnamigen Typen und/oder Tabellen in der Datenbank, sofern solche existieren
 | <login timeout> |	Timeout in Sekunden für die Anmeldung (login) (0 für unbeschränkt)
 | <query timeout> |	Timeout in Sekunden für eine Abfrage (query) (0 für unbeschränkt)
@@ -212,17 +227,18 @@ jdbc:sqlserver://<host>\<db-name>:1433
 
 ==== Bemerkungen
 
-Da ältere Datenbanken nicht SQL:2008-konform sind, ist es unvermeidlich, dass etliche manuelle Vorbereitung für das Hochladen durchgeführt wird. Es gibt keine Schema-Objekte in MS Access. Benutzer und Schemas sind untrennbar in Oracle. Schemaobjekte und Datenbanken sind dasselbe in MySQL. Deshalb müssen alle Schemas vor dem Hochladen manuell erzeugt werden. Ausserdem muss der Datenbankbenutzer das Recht haben, Tabellen und Typen in diesen Schemas zu erzeugen. Da dies nicht immer einfach möglich ist, werden Datenbankschemas entsprechend der Abbildungsliste auf der Befehlszeile den Schemanamen zugeordnet.
+Da ältere Datenbanken nicht SQL:2008-konform sind, ist es unvermeidlich, dass etliche manuelle Vorbereitungen für das Hochladen notwendig sind. Es gibt keine Schema-Objekte in MS Access. Benutzer und Schemas sind untrennbar in Oracle. Schemaobjekte und Datenbanken sind dasselbe in MySQL. Deshalb müssen alle Schemas vor dem Hochladen manuell erzeugt werden. Ausserdem muss der Datenbankbenutzer das Recht haben, Tabellen und Typen in diesen Schemas zu erzeugen. Da dies nicht immer einfach möglich ist, werden Datenbankschemas entsprechend der Abbildungsliste auf der Befehlszeile den Schemanamen zugeordnet.
 
-Das Hochladen erzeugt nur Tabellen und Typen und versucht Eindeutigkeits- und Fremdschlüssel zu aktivieren. Keine anderen Objekte werden in der Zieldatenbank erzeugt. Falls die Schlüssel nicht aktiviert werden konnten, wird eine Warnung ausgegeben, das Hochladen aber trotzdem als erfolgreich abgeschlossen betrachtet. Auch ohne diese Schlüssel kann man SQL SELECT Abfragen der Datenbank ausführen.
+Das Hochladen erzeugt nur Tabellen und Typen und versucht Primär- und Fremdschlüssel zu aktivieren. Keine anderen Objekte werden in der Zieldatenbank erzeugt. Falls die Schlüssel nicht aktiviert werden konnten, wird eine Warnung ausgegeben, das Hochladen aber trotzdem als erfolgreich abgeschlossen betrachtet. Auch ohne diese Schlüssel kann man SQL SELECT Abfragen der Datenbank ausführen.
 
-Ausserdem werden beim Hochladen evtl. gewisse Abstriche gemacht. Bei MS Access landen alle Tabellen in derselben MDB/ACCDB. Bei Oracle werden alle Namen, die länger sind als 30 Zeichen gekürzt. Zur Vermeidung von Kollisionen werden Tabellen- und Spaltennamen um einen Zähler ergänzt. (So wird etwa aus der Tabelle „Ein viel zu langer Tabellenname für Oracle“ zum Beispiel „Ein viel zu langer Tabellen01“.)
+Ausserdem werden beim Hochladen eventuell gewisse Abstriche gemacht. Bei MS Access landen alle Tabellen in derselben MDB/ACCDB. Bei Oracle werden alle Namen, die länger sind als 30 Zeichen gekürzt. Zur Vermeidung von Kollisionen werden Tabellen- und Spaltennamen um einen Zähler ergänzt. (So wird etwa aus der Tabelle „Ein viel zu langer Tabellenname für Oracle“ zum Beispiel „Ein viel zu langer Tabellen01“.)
 
 Wo die maximale Präzision und die maximale Anzahl Dezimalstellen (etwa unter MS Access) kleiner ist als benötigt, werden die Werte mit geringerer Präzision hinaufgeladen. SIARD behilft sich so gut es eben im Zieldatenbanksystem möglich ist. Wenn man die Metadaten der Datenbank mittels SiardGui konsultiert, wird man die korrekten Bezeichnungen und Werte zuordnen können.
 
 == Tips und Tricks
 
 === Vorbereiten einer Datenbank für das Herunterladen
+
 SIARD Suite lädt alle Daten herunter, die für den Datenbank-User sichtbar sind, welcher für die Verbindung benutzt wird. Die Wahl eines geeigneten Datenbank-Users bestimmt deshalb den Umfang der archivierten Datenbank. Oft steht ein geeigneter "technischer Datenbank-User" einer Datenbank-Anwendung zur Verfügung, mit der die Datenbank bewirtschaftet wird. Dieser hat normalerweise genau die Zugriffsrechte, die für die Archivierung der Datenbank benötigt werden.
 
 Wenn jedoch kein solcher Datenbank-User verfügbar ist, sollte nicht der Datenbank-Administrator (database administrator, DBA, dbo, root, SYSTEM, sa, ...) für das Herunterladen benutzt werden. Denn dieser hat lesend Zugriff auf viele Systemtabellen und Tabellen aus anderen Datenbanken, die nicht archiviert werden sollen. Stattdessen wird empfohlen, einen Datenbank-User zum Zweck der Archivierung zu erzeugen. Diesem Archivierungsuser sind Leseprivilegien auf alle Schemas, Tabellen, Views und Typen einzuräumen, die zur zu archivierenden Datenbank gehören. Die Dokumentation des DBMS gibt Auskunft, wie man einen User erzeugt und ihn mit den notwendigen Privilegien ausstattet.
@@ -231,6 +247,7 @@ Wenn ein geeigneter User bestimmt oder erzeugt wurde, kann das Herunterladen der
 
 
 === Vorbereiten einer Datenbank für das Hochladen
+
 Für das Hochladen einer Datenbank in eine Instanz eines DBMS mit SIARD Suite müssen geeignete Datenbank-Schemas in der Zieldatenbank zur Verfügung stehen. Diese Schemas können dann in der Schema-Zuordnung im Dialog für das Hochladen (oder im Teil Schema-Zuordnung der Befehlszeile von SiardToDb) mit den Schemas im SIARD-Archiv assoziiert werden.
 
 Idealerweise sind die Zielschemas leer. Es ist aber je nach Sicherheitsvorgaben beim DBMS nicht immer möglich, Schemas nach Belieben zu erzeugen oder auszuwählen. Wenn die Zielschemas nicht leer sind, werden die archivierten Daten nur hochgeladen, wenn entweder keine Namenskollisionen bei den Typen und Tabellen vorkommen, oder aber explizit die Option Überschreiben gewählt wurde.
