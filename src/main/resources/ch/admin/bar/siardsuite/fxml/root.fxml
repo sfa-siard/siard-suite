@@ -31,7 +31,7 @@
                     <Cursor fx:constant="HAND" />
                 </cursor>
             </MenuBar>
-            <MFXButton fx:id="openDoc" alignment="CENTER" buttonType="RAISED" depthLevel="LEVEL0" rippleAnimateBackground="false">
+            <MFXButton fx:id="helpButton" alignment="CENTER" buttonType="RAISED" depthLevel="LEVEL0" rippleAnimateBackground="false">
                 <styleClass>
                     <String fx:value="help-icon" />
                     <String fx:value="icon-button" />
