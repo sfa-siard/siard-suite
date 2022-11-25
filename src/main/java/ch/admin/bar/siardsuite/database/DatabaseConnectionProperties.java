@@ -3,19 +3,18 @@ package ch.admin.bar.siardsuite.database;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class DatabaseConnectionProperties {
 
-  private StringProperty databaseName = new SimpleStringProperty();
-  private StringProperty databaseProduct = new SimpleStringProperty();
-  private StringProperty databasePort = new SimpleStringProperty();
-  private StringProperty databaseUsername = new SimpleStringProperty();
+  private final StringProperty databaseName = new SimpleStringProperty();
+  private final StringProperty databaseProduct = new SimpleStringProperty();
+  private final StringProperty databasePort = new SimpleStringProperty();
+  private final StringProperty databaseUsername = new SimpleStringProperty();
   private String password;
-  private StringProperty connectionUrl = new SimpleStringProperty();
+  private final StringProperty connectionUrl = new SimpleStringProperty();
   public static final String PRODUCT = "{product}";
   public static final String HOST = "{host}";
   public static final String PORT = "{port}";
@@ -42,10 +41,7 @@ public class DatabaseConnectionProperties {
   public DatabaseConnectionProperties() {}
 
   public DatabaseProperties getDatabaseProps() {
-    if (databaseProduct != null) {
-      return dbTypes.get(databaseProduct.getValue());
-    }
-    return null;
+    return dbTypes.get(databaseProduct.getValue());
   }
 
   public List<String> getDatabaseTypes() {

@@ -7,7 +7,6 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
@@ -22,10 +21,6 @@ public class OpenPreviewPresenter extends PreviewPresenter {
   protected Label title;
   @FXML
   protected Text text;
-  @FXML
-  public MFXButton cancelButton;
-  @FXML
-  public MFXButton exportButton;
   @FXML
   protected ButtonBox buttonsBox;
 

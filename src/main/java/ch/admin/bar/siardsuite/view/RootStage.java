@@ -48,7 +48,6 @@ public class RootStage extends Stage {
     StackPane stackPane = new StackPane(rootPane, dialogPane);
 
     Scene scene = new Scene(stackPane);
-//    scene.setFill(Color.WHITESMOKE);
     scene.getRoot().getStyleClass().add("root");
     scene.setFill(null);
     this.getIcons().add(Icon.archiveRed);

@@ -6,7 +6,6 @@ import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -22,7 +21,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.model.View.UPLOAD_ABORT_DIALOG;
@@ -43,10 +41,6 @@ public class UploadingPresenter extends StepperPresenter {
   @FXML
   public MFXProgressBar progressBar;
 
-  private Spinner loadingSpinner;
-
-  List<DatabaseTable> data;
-
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
     this.controller = controller;
@@ -54,7 +48,7 @@ public class UploadingPresenter extends StepperPresenter {
     this.stage = stage;
 
     this.loader.setImage(Icon.loading);
-    loadingSpinner = new Spinner(this.loader);
+    Spinner loadingSpinner = new Spinner(this.loader);
     loadingSpinner.play();
     I18n.bind(title.textProperty(), "upload.inProgress.title");
     I18n.bind(progress.textProperty(), "upload.records.uploaded.message");
@@ -96,7 +90,7 @@ public class UploadingPresenter extends StepperPresenter {
         AtomicInteger pos1 = new AtomicInteger();
         addLoadingData(newValue, pos1.getAndIncrement());
       });
-      controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+      controller.addDatabaseUploadingProgressPropertyListener((o, oldValue, newValue) -> {
         double pos = newValue.doubleValue();
         progressBar.progressProperty().set(pos);
       });
@@ -118,6 +112,5 @@ public class UploadingPresenter extends StepperPresenter {
 
   private void navigateBack(MFXStepper stepper) {
     stepper.previous();
-    this.stage.setHeight(1080.00);
   }
 }

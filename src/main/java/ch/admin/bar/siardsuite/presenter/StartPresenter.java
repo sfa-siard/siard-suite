@@ -56,7 +56,7 @@ public class StartPresenter extends Presenter {
     @FXML
     private Button open;
 
-    PathTransition transition = new PathTransition();
+    final PathTransition transition = new PathTransition();
 
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
@@ -106,9 +106,7 @@ public class StartPresenter extends Presenter {
             animateBubble(archiveArrow, archiveBubble);
         });
 
-        archive.setOnMouseExited(event ->  {
-            resetImageViews();
-        });
+        archive.setOnMouseExited(event -> resetImageViews());
 
         upload.setOnMouseEntered(event -> {
             dbRightImg.setImage(Icon.siardDbRed);
@@ -116,9 +114,7 @@ public class StartPresenter extends Presenter {
             animateBubble(uploadArrow, uploadBubble);
         });
 
-        upload.setOnMouseExited(event ->  {
-            resetImageViews();
-        });
+        upload.setOnMouseExited(event -> resetImageViews());
 
         export.setOnMouseEntered(event -> {
             exportImg.setImage(Icon.exportRed);
@@ -126,17 +122,11 @@ public class StartPresenter extends Presenter {
             animateBubble(exportArrow, exportBubble);
         });
 
-        export.setOnMouseExited(event ->  {
-            resetImageViews();
-        });
+        export.setOnMouseExited(event -> resetImageViews());
 
-        open.setOnMouseMoved(event -> {
-            archiveImg.setImage(Icon.archiveRed);
-        });
+        open.setOnMouseMoved(event -> archiveImg.setImage(Icon.archiveRed));
 
-        open.setOnMouseExited(event ->  {
-            archiveImg.setImage(Icon.archive);
-        });
+        open.setOnMouseExited(event -> archiveImg.setImage(Icon.archive));
     }
 
     private void animateBubble(ImageView path, ImageView bubble) {

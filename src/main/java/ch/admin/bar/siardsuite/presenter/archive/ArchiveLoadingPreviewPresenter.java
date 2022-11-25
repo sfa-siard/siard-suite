@@ -45,7 +45,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     private ButtonBox buttonsBox;
 
     private final Image loading = Icon.loading;
-    private final Image ok = Icon.ok;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {

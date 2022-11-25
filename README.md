@@ -35,3 +35,16 @@ Hint: If you are working on ubuntu building the rpm installer may fail - in this
 ```shell
 sudo apt install alien
 ```
+
+## documentation
+
+Siard-Suite documentation is made with  [Asciidoc]( https://asciidoctor.org/).
+
+To build the docs locally use: 
+
+```shell
+./gradlew asciidoctorPdf
+```
+
+To provide the documentation with the app, the rendering of the documentation is included in the build step of the app.
+

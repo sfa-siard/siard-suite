@@ -29,7 +29,7 @@ public abstract class StepperPresenter extends Presenter {
 
   public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);
 
-  protected void createStepper(Controller controller, List<Step> steps, MFXStepper stepper) {
+  protected void createStepper(List<Step> steps, MFXStepper stepper) {
     boolean recentConnection = !Objects.isNull(this.controller.recentDatabaseConnection);
     List<MFXStepperToggle> stepperToggles = createSteps(steps, stepper);
 

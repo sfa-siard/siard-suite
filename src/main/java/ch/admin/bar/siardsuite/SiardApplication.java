@@ -17,6 +17,7 @@ public class SiardApplication extends Application {
     System.setProperty("prism.lcdtext", "false");
     System.setProperty("prism.text", "t2k");
 
+    // needed for the api *eyes rolling*
     ProgramInfo programInfo = ProgramInfo.getProgramInfo(
             "SIARD Suite",getClass().getPackage().getImplementationVersion(),
             "SiardGui","0",

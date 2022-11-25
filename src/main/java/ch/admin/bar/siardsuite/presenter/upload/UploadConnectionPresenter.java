@@ -51,7 +51,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     private String dbTypeString;
     private List<DatabaseSchema> schemas = new ArrayList<>();
     private String schemaName = "";
-    private Map<String, String> schemaMap = new HashMap<>();
+    private final Map<String, String> schemaMap = new HashMap<>();
     @FXML
     public Label errorMessage;
     @FXML
@@ -222,17 +222,14 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
                 controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
                 controller.updateSchemaMap(schemaMap);
                 errorMessage.setVisible(false);
-                stage.setHeight(950);
                 stepper.next();
                 stepper.fireEvent(new SiardEvent(SiardEvent.UPLOAD_CONNECTION_UPDATED));
+                passwordField.setText("");
             }
 
         });
 
-        this.buttonsBox.previous().setOnAction((event) -> {
-            stepper.previous();
-            this.stage.setHeight(700.00); // TODO: should probably move to the previes step itself...
-        });
+        this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.UPLOAD_ABORT_DIALOG));
     }
 
@@ -275,7 +272,6 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             HBox.setMargin(newName, new Insets(10,0,0,0));
             schemaFields.getChildren().add(container);
         }
-        stage.setHeight(stage.getHeight() + (schemas.size() - 1) * 58.0);
     }
 
     private void handleKeyEvent(KeyEvent event) {

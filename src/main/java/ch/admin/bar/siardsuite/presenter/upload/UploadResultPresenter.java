@@ -109,7 +109,7 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
       scrollBox.getChildren().add(new Label(schema.getMetaSchema().getName()));
       for (int y = 0; y < schema.getTables(); y++) {
         String tableName = schema.getTable(y).getMetaTable().getName();
-        Long rows = schema.getTable(y).getMetaTable().getRows();
+        long rows = schema.getTable(y).getMetaTable().getRows();
         addTableData(tableName, rows, y);
         total += rows;
       }

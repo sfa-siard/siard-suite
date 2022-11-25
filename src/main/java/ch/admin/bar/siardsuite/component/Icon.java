@@ -5,15 +5,15 @@ import javafx.scene.image.Image;
 
 // provides a set of icons
 public class Icon {
-  public static Image loading;
-  public static Image ok;
-  public static Image error;
-  public static Image siardDb;
-  public static Image siardDbRed;
-  public static Image archive;
-  public static Image archiveRed;
-  public static Image export;
-  public static Image exportRed;
+  public static final Image loading;
+  public static final Image ok;
+  public static final Image error;
+  public static final Image siardDb;
+  public static final Image siardDbRed;
+  public static final Image archive;
+  public static final Image archiveRed;
+  public static final Image export;
+  public static final Image exportRed;
 
   static {
     loading = new Image(String.valueOf(SiardApplication.class.getResource("icons/loading.png")));
