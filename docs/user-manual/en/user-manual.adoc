@@ -1,6 +1,6 @@
 include::../../theme/config.adoc[]
-
-= Siard Suite Handbuch
+:toc-title: Table of contents
+= Siard Suite Manual
 
 == Einleitung
 

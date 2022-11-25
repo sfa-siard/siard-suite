@@ -145,13 +145,11 @@ installDist {
 
 
 asciidoctor {
-
-    languages 'en', 'de'
+    languages 'en', 'de', 'fr', 'it'
     baseDirFollowsSourceDir()
 
     sourceDir 'docs/user-manual/'
     outputDir file('build/docs')
-
     sources {
         include 'user-manual.adoc'
     }
@@ -159,13 +157,11 @@ asciidoctor {
 
 
 asciidoctorPdf {
-
-    languages 'en', 'de'
+    languages 'en', 'de', 'fr', 'it'
     baseDirFollowsSourceDir()
 
     outputDir 'build/docs/pdf'
     sourceDir 'docs/user-manual/'
-
 
     pdfThemes {
         local 'basic', {

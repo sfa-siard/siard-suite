@@ -2,9 +2,9 @@
 // ==================================
 :title-page:
 // toc-title definition MUST follow document title without blank line!
-// :toc-title: Inhaltsverzeichnis
+
 // // enable table-of-contents
-// :toc:
+:toc:
 
 :caution-caption: Achtung
 :important-caption: Wichtig
