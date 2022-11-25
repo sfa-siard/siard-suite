@@ -182,9 +182,17 @@ asciidoctorPdf {
                 'imagesdir': 'images',
                 'toc': 'left'
     }
-} dependsOn(asciidoctor)
+
+}  dependsOn(asciidoctor)
 
 
+task copyDocumentation(type: Copy) {
+    from layout.buildDirectory.dir("docs/pdf")
+    into layout.projectDirectory.dir('./src/main/resources/ch/admin/bar/siardsuite/doc')
+} dependsOn(asciidoctorPdf)
 
+tasks.named("asciidoctorPdf") { finalizedBy(copyDocumentation)}
+tasks.named("build") { dependsOn(asciidoctorPdf)}
+tasks.named("processResources") { dependsOn(copyDocumentation)}
 
 

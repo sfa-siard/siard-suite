@@ -17,7 +17,7 @@
         <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" styleClass="header"
               BorderPane.alignment="CENTER">
             <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS"/>
-            <MFXButton alignment="CENTER" rippleAnimateBackground="false">
+            <MFXButton fx:id="openDoc" alignment="CENTER" rippleAnimateBackground="false">
                 <styleClass>
                     <String fx:value="help-icon"/>
                     <String fx:value="icon-button"/>
