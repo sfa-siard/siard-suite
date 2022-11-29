@@ -5,7 +5,6 @@ import ch.admin.bar.siardsuite.util.SiardEvent;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.TextUtils;
-import io.github.palexdev.materialfx.validation.MFXValidator;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.SkinBase;
@@ -41,14 +40,11 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   }
 
   private void setListeners(Stage stage) {
-    MFXStepperToggle stepperToggle = (MFXStepperToggle) this.getSkinnable();
-    MFXValidator validator = stepperToggle.getValidator();
+    MFXStepperToggle stepperToggle = this.getSkinnable();
 
     this.label.visibleProperty().bind(stepperToggle.textProperty().isEmpty().not());
 
-    stage.addEventHandler(SiardEvent.UPDATE_LANGUAGE_EVENT, event -> {
-      layoutChildren(0,0,0,0);
-    });
+    stage.addEventHandler(SiardEvent.UPDATE_LANGUAGE_EVENT, event -> layoutChildren(0,0,0,0));
   }
 
   protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -57,16 +53,16 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
 
   protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
     if (this.visible) {
-      return leftInset + this.icon.getMaxWidth() + TextUtils.computeTextWidth(this.label.getFont(), this.label.getText()) + ((MFXStepperToggle) this.getSkinnable()).getLabelTextGap() * 2.0 + rightInset;
+      return leftInset + this.icon.getMaxWidth() + TextUtils.computeTextWidth(this.label.getFont(), this.label.getText()) + this.getSkinnable().getLabelTextGap() * 2.0 + rightInset;
     } else return 0;
   }
 
   protected void layoutChildren(double x, double y, double w, double h) {
     super.layoutChildren(x, y, w, h);
-    MFXStepperToggle stepperToggle = (MFXStepperToggle) this.getSkinnable();
-    double lw = this.snapSizeX(w - this.icon.getMaxWidth() - ((MFXStepperToggle) this.getSkinnable()).getLabelTextGap());
+    MFXStepperToggle stepperToggle = this.getSkinnable();
+    double lw = this.snapSizeX(w - this.icon.getMaxWidth() - this.getSkinnable().getLabelTextGap());
     double lh = this.snapSizeY(h);
-    double lx = 0.0;
+    double lx;
     this.label.setTranslateX(0.0);
     lx = this.snapPositionX(this.icon.getMaxWidth() + stepperToggle.getLabelTextGap());
     this.label.resizeRelocate(lx, -0.1, lw, lh);

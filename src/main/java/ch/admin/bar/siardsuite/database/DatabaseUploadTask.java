@@ -51,19 +51,22 @@ public class DatabaseUploadTask extends Task<String> implements Progress, Archiv
 
     MetaDataToDb metadata = MetaDataToDb.newInstance(connection.getMetaData(), this.metaData, model.getSchemaMap());
     metadata.setQueryTimeout(timeout);
-    if (isOverwrite || ((metadata.tablesDroppedByUpload() == 0) && (metadata.typesDroppedByUpload() == 0))) {
-      updateValue("Metadata");
-      updateProgress(0, 100);
-      metadata.upload(this);
-
-      if (!metaDataOnly) {
-        PrimaryDataToDb data = PrimaryDataToDb.newInstance(connection, this.archive,
-                metadata.getArchiveMapping(), metadata.supportsArrays(), metadata.supportsDistincts(), metadata.supportsUdts());
-        data.setQueryTimeout(timeout);
-        updateValue("Dataload");
-        updateProgress(0, 100);
-        data.upload(this);
+    if (!isOverwrite) {
+      if ((metadata.tablesDroppedByUpload() == 0)) {
+        metadata.typesDroppedByUpload();
       }
+    }
+    updateValue("Metadata");
+    updateProgress(0, 100);
+    metadata.upload(this);
+
+    if (!metaDataOnly) {
+      PrimaryDataToDb data = PrimaryDataToDb.newInstance(connection, this.archive,
+              metadata.getArchiveMapping(), metadata.supportsArrays(), metadata.supportsDistincts(), metadata.supportsUdts());
+      data.setQueryTimeout(timeout);
+      updateValue("Dataload");
+      updateProgress(0, 100);
+      data.upload(this);
     }
     return null;
   }

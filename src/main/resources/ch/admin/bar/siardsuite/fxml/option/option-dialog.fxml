@@ -41,22 +41,6 @@
                             <Insets bottom="40.0" />
                         </VBox.margin>
                     </MFXTextField>
-                    <HBox maxHeight="30.0" prefHeight="28.0" prefWidth="450.0">
-                        <MFXTextField fx:id="exportFolderText" editable="false" floatingText="Ihr N" maxWidth="410.0" styleClass="form-field-small" HBox.hgrow="ALWAYS">
-                            <HBox.margin>
-                                <Insets right="20.0" />
-                            </HBox.margin>
-                        </MFXTextField>
-                        <MFXButton fx:id="folderButton" maxHeight="30.0" minHeight="30.0" minWidth="70.0" prefHeight="30.0" text="Choose directory" HBox.hgrow="NEVER">
-                            <styleClass>
-                                <String fx:value="secondary" />
-                                <String fx:value="button-small" />
-                            </styleClass>
-                        </MFXButton>
-                        <VBox.margin>
-                            <Insets bottom="40.0" />
-                        </VBox.margin>
-                    </HBox>
                     <VBox.margin>
                         <Insets bottom="24.0" right="25.0" top="60.0" />
                     </VBox.margin>

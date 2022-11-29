@@ -8,8 +8,8 @@ import javafx.util.Duration;
 
 public class Spinner {
 
-    ImageView imageView;
-    RotateTransition transition;
+    final ImageView imageView;
+    final RotateTransition transition;
 
     public Spinner(ImageView imageView) {
         this.imageView = imageView;

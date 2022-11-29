@@ -2,6 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -10,35 +11,35 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="850.0"
-            prefWidth="1440.0" styleClass="root" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
+<BorderPane fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="850.0" prefWidth="1440.0" styleClass="root" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
     <top>
-        <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" styleClass="header"
-              BorderPane.alignment="CENTER">
-            <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS"/>
-            <MFXButton alignment="CENTER" rippleAnimateBackground="false">
-                <styleClass>
-                    <String fx:value="help-icon"/>
-                    <String fx:value="icon-button"/>
-                </styleClass>
-            </MFXButton>
+        <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" styleClass="header" BorderPane.alignment="CENTER">
+            <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS" />
             <MenuBar fx:id="menuBar" styleClass="menu-bar">
                 <menus>
                     <Menu fx:id="menuContainer" mnemonicParsing="false" styleClass="menu-button">
                         <items>
-                            <Menu fx:id="menuItemLanguage" styleClass="sub-menu" mnemonicParsing="false">
+                            <Menu fx:id="menuItemLanguage" mnemonicParsing="false" styleClass="sub-menu">
                             </Menu>
-                            <MenuItem fx:id="menuItemOptions" mnemonicParsing="false"/>
-                            <MenuItem fx:id="menuItemInfo" mnemonicParsing="false"/>
-                            <MenuItem fx:id="menuItemClose" mnemonicParsing="false"/>
+                            <MenuItem fx:id="menuItemOptions" mnemonicParsing="false" />
+                            <MenuItem fx:id="menuItemInfo" mnemonicParsing="false" />
+                            <MenuItem fx:id="menuItemClose" mnemonicParsing="false" />
                         </items>
                     </Menu>
                 </menus>
                 <cursor>
-                    <Cursor fx:constant="HAND"/>
+                    <Cursor fx:constant="HAND" />
                 </cursor>
             </MenuBar>
+            <MFXButton fx:id="helpButton" alignment="CENTER" buttonType="RAISED" depthLevel="LEVEL0" rippleAnimateBackground="false">
+                <styleClass>
+                    <String fx:value="help-icon" />
+                    <String fx:value="icon-button" />
+                </styleClass>
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
+            </MFXButton>
         </HBox>
     </top>
     <center>

@@ -226,9 +226,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
             }
 
         });
-        this.buttonsBox.previous().setOnAction((event) -> {
-            stepper.previous();
-        });
+        this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
 

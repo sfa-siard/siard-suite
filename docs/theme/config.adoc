@@ -1,0 +1,25 @@
+// asciidoc settings for DE (German)
+// ==================================
+:title-page:
+// toc-title definition MUST follow document title without blank line!
+
+// // enable table-of-contents
+:toc:
+
+:caution-caption: Achtung
+:important-caption: Wichtig
+:note-caption: Hinweis
+:tip-caption: Tip
+:warning-caption: Warnung
+
+:appendix-caption: Anhang
+:example-caption: Beispiel
+:figure-caption: Abbildung
+:table-caption: Tabelle
+
+
+:sectnums:
+:imagesdir: images
+:stylesdir: ../../theme
+:stylesheet:  siard-theme.css
+:title-logo-image: image::../../../theme/img/logo.png[logo,1900]

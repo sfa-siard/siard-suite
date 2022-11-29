@@ -18,7 +18,7 @@ public class UploadStepperPresenter extends StepperPresenter {
         this.controller = controller;
         this.stage = stage;
 
-       createStepper(controller, UploadSteps.steps, stepper);
+       createStepper(UploadSteps.steps, stepper);
     }
 
     @Override

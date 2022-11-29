@@ -11,7 +11,7 @@ import java.util.Objects;
 public class ButtonBox extends HBox {
 
   public enum Type {
-    DEFAULT, CANCEL, DOWNLOAD_FINISHED, FAILED, TO_START, OPEN_PREVIEW;
+    DEFAULT, CANCEL, DOWNLOAD_FINISHED, FAILED, TO_START, OPEN_PREVIEW
   }
 
   @FXML
@@ -80,7 +80,7 @@ public class ButtonBox extends HBox {
     }
   }
 
-  private class DownloadFinishedButtonBox extends ButtonBox {
+  private static class DownloadFinishedButtonBox extends ButtonBox {
 
     DownloadFinishedButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
@@ -95,7 +95,7 @@ public class ButtonBox extends HBox {
   }
 
 
-  private class FailedButtonBox extends ButtonBox {
+  private static class FailedButtonBox extends ButtonBox {
 
     FailedButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.close"));
@@ -109,7 +109,7 @@ public class ButtonBox extends HBox {
     }
   }
 
-  private class StartButtonBox extends ButtonBox {
+  private static class StartButtonBox extends ButtonBox {
 
     StartButtonBox() {
       this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));

@@ -2,9 +2,10 @@ package ch.admin.bar.siardsuite.view;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
+import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.presenter.RootPresenter;
 import javafx.fxml.FXML;
@@ -12,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-//import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -48,9 +48,9 @@ public class RootStage extends Stage {
     StackPane stackPane = new StackPane(rootPane, dialogPane);
 
     Scene scene = new Scene(stackPane);
-//    scene.setFill(Color.WHITESMOKE);
     scene.getRoot().getStyleClass().add("root");
     scene.setFill(null);
+    this.getIcons().add(Icon.archiveRed);
     this.initStyle(StageStyle.DECORATED);
     this.setScene(scene);
     this.show();

@@ -30,7 +30,6 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final StackPane contentPane;
   private final HBox stepperBar;
   private final Group progressBarGroup;
-  private final double height = 2.0;
   private final Rectangle bar;
   private final Rectangle track = this.buildRectangle("track");
   private boolean buttonWasPressed = false;
@@ -51,9 +50,9 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar.setMinHeight(52.0);
     layoutWidth(stepper);
     this.stepperBar.setMaxSize(stepper.getPrefWidth(), 52.0);
-    this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() -> {
-      return this.snapPositionY(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2));
-    }, this.stepperBar.heightProperty()));
+    this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() ->
+            this.snapPositionY(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2)),
+            this.stepperBar.heightProperty()));
     this.contentPane = new StackPane();
     this.contentPane.getStyleClass().setAll("content-pane");
     BorderPane container = new BorderPane();
@@ -76,7 +75,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   }
 
   private void setListeners(Stage stage) {
-    MFXStepper stepper = (MFXStepper) this.getSkinnable();
+    MFXStepper stepper = this.getSkinnable();
 
     stage.addEventHandler(SiardEvent.UPDATE_LANGUAGE_EVENT, event -> {
       stepper.requestLayout();
@@ -87,20 +86,14 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
       stepper.requestLayout();
       this.computeProgress();
     });
-    stepper.addEventFilter(MouseEvent.MOUSE_PRESSED, (event) -> {
-      stepper.requestFocus();
-    });
-    stepper.addEventFilter(MFXStepperToggle.MFXStepperToggleEvent.STATE_CHANGED, (event) -> {
-      this.computeProgress();
-    });
+    stepper.addEventFilter(MouseEvent.MOUSE_PRESSED, (event) -> stepper.requestFocus());
+    stepper.addEventFilter(MFXStepperToggle.MFXStepperToggleEvent.STATE_CHANGED, (event) -> this.computeProgress());
     stepper.getStepperToggles().addListener((ListChangeListener<? super MFXStepperToggle>) (invalidated) -> {
       stepper.reset();
       this.stepperBar.getChildren().setAll(stepper.getStepperToggles());
       this.stepperBar.getChildren().add(0, this.progressBarGroup);
       stepper.next();
-      AnimationUtils.PauseBuilder.build().setDuration(250.0).setOnFinished((event) -> {
-        stepper.requestLayout();
-      }).getAnimation().play();
+      AnimationUtils.PauseBuilder.build().setDuration(250.0).setOnFinished((event) -> stepper.requestLayout()).getAnimation().play();
     });
     stepper.currentContentProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
@@ -121,7 +114,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   }
 
   private void manageScene() {
-    MFXStepper stepper = (MFXStepper) this.getSkinnable();
+    MFXStepper stepper = this.getSkinnable();
     Scene scene = stepper.getScene();
     if (scene != null) {
       stepper.next();
@@ -143,7 +136,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   }
 
   private void computeProgress() {
-    MFXStepper stepper = (MFXStepper) this.getSkinnable();
+    MFXStepper stepper = this.getSkinnable();
     if (stepper.isLastToggle()) {
     } else {
       MFXStepperToggle stepperToggle = stepper.getCurrentStepperNode();
@@ -151,7 +144,6 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
         Bounds bounds = stepperToggle.getGraphicBounds();
         if (bounds != null) {
           double minX = this.snapSizeX(stepperToggle.localToParent(bounds).getMinX());
-
         }
       }
     }
@@ -170,7 +162,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   }
 
   protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-    return Math.max(super.computeMinWidth(height, topInset, leftInset, bottomInset, rightInset) + ((MFXStepper) this.getSkinnable()).getExtraSpacing() * 2.0, 300.0);
+    return Math.max(super.computeMinWidth(height, topInset, leftInset, bottomInset, rightInset) + this.getSkinnable().getExtraSpacing() * 2.0, 300.0);
   }
 
   protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -178,11 +170,11 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   }
 
   protected double computeMaxWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
-    return ((MFXStepper) this.getSkinnable()).prefWidth(height);
+    return this.getSkinnable().prefWidth(height);
   }
 
   protected double computeMaxHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
-    return ((MFXStepper) this.getSkinnable()).prefHeight(width);
+    return this.getSkinnable().prefHeight(width);
   }
 
   public void dispose() {

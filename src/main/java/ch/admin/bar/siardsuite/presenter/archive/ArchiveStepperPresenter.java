@@ -18,7 +18,7 @@ public class ArchiveStepperPresenter extends StepperPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        createStepper(controller, ArchiveSteps.steps, stepper);
+        createStepper(ArchiveSteps.steps, stepper);
     }
 
     @Override

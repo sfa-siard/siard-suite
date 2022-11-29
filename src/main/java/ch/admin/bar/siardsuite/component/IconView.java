@@ -10,8 +10,8 @@ public class IconView extends ImageView {
     OK(Icon.ok, ""),
     ERROR(Icon.error, "");
 
-    private Image icon;
-    private String styleClass;
+    private final Image icon;
+    private final String styleClass;
 
     IconType(Image icon, String style) {
       this.icon = icon;
