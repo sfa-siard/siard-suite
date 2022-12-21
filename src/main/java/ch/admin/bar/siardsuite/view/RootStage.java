@@ -51,7 +51,6 @@ public class RootStage extends Stage {
     scene.getRoot().getStyleClass().add("root");
     scene.setFill(null);
     this.getIcons().add(Icon.archiveRed);
-    this.initStyle(StageStyle.DECORATED);
     this.setScene(scene);
     this.show();
   }
