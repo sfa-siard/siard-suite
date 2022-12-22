@@ -168,7 +168,10 @@ public class SiardArchive extends DatabaseObject {
             nodeIds.add("archiverContact");
         }
         if (nodeIds.size() > 0) {
-            hits = new TreeSet<>(List.of(new MetaSearchHit("Database Information", this, treeContentView, nodeIds)));
+            List<MetaSearchHit> metaSearchHits = new ArrayList<>();
+            metaSearchHits.add(new MetaSearchHit("Database Information", this, treeContentView, nodeIds));
+            hits = new TreeSet<>(
+                    metaSearchHits);
         }
         return hits;
     }

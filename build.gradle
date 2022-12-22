@@ -49,9 +49,6 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-tasks.withType(JavaExec) {
-    jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED")
-}
 
 // task to create an exectutable jar file with all necessary dependencies included and signature files removed.
 task fatJar(type: Jar) {
@@ -79,7 +76,6 @@ javafx {
 
 application {
     mainClass = mainClassName
-    applicationDefaultJvmArgs = ['--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED', '--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED', '--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED']
 }
 
 runtime {
@@ -194,5 +190,3 @@ task copyDocumentation(type: Copy) {
 tasks.named("asciidoctorPdf") { finalizedBy(copyDocumentation)}
 tasks.named("build") { dependsOn(asciidoctorPdf)}
 tasks.named("processResources") { dependsOn(copyDocumentation)}
-
-

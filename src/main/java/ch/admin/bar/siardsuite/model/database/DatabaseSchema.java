@@ -125,7 +125,10 @@ public class DatabaseSchema extends DatabaseObject {
             nodeIds.add("description");
         }
         if (nodeIds.size() > 0) {
-            hits = new TreeSet<>(List.of(new MetaSearchHit("Schema " + name, this, treeContentView, nodeIds)));
+            List<MetaSearchHit> metaSearchHits = new ArrayList<>();
+            metaSearchHits.add(new MetaSearchHit("Schema " + name, this, treeContentView, nodeIds));
+            hits = new TreeSet<>(
+                    metaSearchHits);
         }
         return hits;
     }

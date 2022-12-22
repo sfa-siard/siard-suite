@@ -203,7 +203,13 @@ public class DatabaseTable extends DatabaseObject {
             nodeIds.add("name");
         }
         if (nodeIds.size() > 0) {
-            hits = new TreeSet<>(List.of(new MetaSearchHit("Schema " + schema.name + ", Table " + name, this, treeContentView, nodeIds)));
+            List<MetaSearchHit> metaSearchHits = new ArrayList<>();
+            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", Table " + name,
+                                                 this,
+                                                 treeContentView,
+                                                 nodeIds));
+            hits = new TreeSet<>(
+                    metaSearchHits);
         }
         return hits;
     }
