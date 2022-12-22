@@ -26,7 +26,6 @@ public class SiardApplication extends Application {
             "Program to download, view, upload database content and database edit meta data in a .siard file",
             "Swiss Federal Archives, Berne, Switzerland, 2007-2022");
 
-    stage.initStyle(StageStyle.DECORATED);
     new RootStage(model, controller);
   }
 

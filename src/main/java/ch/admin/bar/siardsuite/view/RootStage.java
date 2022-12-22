@@ -50,6 +50,8 @@ public class RootStage extends Stage {
     Scene scene = new Scene(stackPane);
     scene.getRoot().getStyleClass().add("root");
     scene.setFill(null);
+    this.setMaximized(true);
+    this.initStyle(StageStyle.DECORATED);
     this.getIcons().add(Icon.archiveRed);
     this.setScene(scene);
     this.show();
