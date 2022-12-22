@@ -55,7 +55,7 @@ https://www.azul.com/downloads/?package=jdk-fx#download-openjdk
 
 https://aws.amazon.com/correto
 
-Die die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt werden und dann mittels der entsprechenden Startskripte ausgeführt werden:
+Die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt werden und dann mittels der entsprechenden Startskripte ausgeführt werden:
 
 
 |===
@@ -82,7 +82,7 @@ Zweck und Verwendung der Komponenten wird in der Folge erklärt.
 Die grafische Benutzeroberfläche ist die zentrale Anwendung um SIARD-Archive zu erstellen und später auch wieder zu sichten, ohne dass die Primärdaten des Archivs geändert werden können. Für komplexe Analysen der archivierten Daten sollte das Archiv wieder in eine Datenbank hochgeladen werden.
 
 
-Der Startscreen bietet dein Einstiegspunkt in die Applikation. Hier können die vier wesentlichen Funktionalitäten der Applikation initiiert werden:
+Der Startscreen bietet den Einstiegspunkt in die Applikation. Hier können die vier wesentlichen Funktionalitäten der Applikation initiiert werden:
 
 
 image::startscreen.png[]
@@ -125,7 +125,7 @@ erzeugen.
 
 ==== Aufruf
 
-In einem Terminal in das Verzeichnis wechseln, wo das ZIP Archiv entpackt wurde und dort in des Verzeichnis `bin` öffnen und dann ausführen mit:
+In einem Terminal in das Verzeichnis wechseln, wo das ZIP Archiv entpackt wurde und dort das Verzeichnis `bin` öffnen und dann ausführen mit:
 
 ```
 siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<import meta data>] [-x=<external lob folder>] [-m=<mime type>] -j=<JDBC URL> -u=<database user> -p=<database password> -s=<siard file> -e=<export meta data>"
@@ -174,7 +174,7 @@ Mindestens einer der beiden Parameter `siard-file` bzw. `export meta data` muss 
 
 __Hinweis:__ Während des Archivierungsprozesses sollte der Inhalt der Datenbank nicht geändert werden - verwenden sie gegebenenfalls einen Snapshot der Datenbank.
 
-Die Option Views als Tabellen archivieren hat normalerweise redundante Speicherung derselben Daten zur Folge und ist deshalb nicht empfohlen. Sie ist dann nützlichm wenn der für das Archivieren genutzte Datenbank-User die Inhalte der Views (Ansichten) anzeigen kann, nicht aber die der Basistabellen.
+Die Option Views als Tabellen archivieren hat normalerweise redundante Speicherung derselben Daten zur Folge und ist deshalb nicht empfohlen. Sie ist dann nützlich, wenn der für das Archivieren genutzte Datenbank-User die Inhalte der Views (Ansichten) anzeigen kann, nicht aber die der Basistabellen.
 
 Der Archivierungsprozess ist entweder gänzlich erfolgreich oder er scheitert gänzlich.
 
