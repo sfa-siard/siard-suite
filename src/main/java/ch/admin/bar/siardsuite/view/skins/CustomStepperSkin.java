@@ -52,9 +52,9 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar.setMinHeight(52.0);
     layoutWidth(stepper);
     this.stepperBar.setMaxSize(stepper.getPrefWidth(), 52.0);
-    /*TODO this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() ->
-            this.snapPositionY(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2)),
-            this.stepperBar.heightProperty()));*/
+    this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() ->
+            this.snapPosition(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2)),
+            this.stepperBar.heightProperty()));
     this.contentPane = new StackPane();
     this.contentPane.getStyleClass().setAll("content-pane");
     BorderPane container = new BorderPane();
@@ -145,8 +145,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
       if (stepperToggle != null) {
         Bounds bounds = stepperToggle.getGraphicBounds();
         if (bounds != null) {
-          double minX = 0;
-          // TODO double minX = this.snapSizeX(stepperToggle.localToParent(bounds).getMinX());
+          double minX = this.snapSize(stepperToggle.localToParent(bounds).getMinX());
         }
       }
     }
