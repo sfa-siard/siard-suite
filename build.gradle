@@ -34,7 +34,6 @@ compileJava {
 dependencies {
     implementation 'org.openjfx:javafx-controls:18'
     implementation 'org.openjfx:javafx-fxml:18'
-    implementation 'io.github.palexdev:materialfx:11.13.5'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testImplementation "org.testfx:testfx-core:4.0.16-alpha"
