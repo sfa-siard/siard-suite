@@ -469,14 +469,20 @@
 }
 
 .form-field {
-    -fx-padding: 2 2 2 -2;
-    -mfx-float-mode: ABOVE;
+    -fx-padding: 2 2 2 10;
     -fx-max-height: 48;
     -fx-min-height: 48;
     -fx-border-color: #b0afaf;
     -fx-border-width: 1;
     -fx-border-radius: 0;
     -fx-text-fill: siard-text-color-black;
+}
+
+.form-label {
+    -fx-padding: 0 0 5 0;
+    -fx-font-size: 14px;
+    -fx-text-fill: siard-text-color;
+    -fx-fill: siard-text-color;
 }
 
 .form-field-small {
@@ -492,6 +498,7 @@
 
 .form-label-small {
     -fx-padding: 0 0 5 0;
+    -fx-text-fill: siard-text-color;
     -fx-fill: siard-text-color;
 }
 

@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -11,10 +11,14 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXStepper;
+import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -37,7 +41,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
     private static final String TEST_DB = "test-db";
-
     private String portString;
     private String dbTypeString;
     @FXML
@@ -59,19 +62,19 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     @FXML
     public Text textRight;
     @FXML
-    public MFXTextField dbServerField;
+    public TextField dbServerField;
     @FXML
-    public MFXTextField dbNameField;
+    public TextField dbNameField;
     @FXML
-    public MFXTextField usernameField;
+    public TextField usernameField;
     @FXML
-    public MFXTextField urlField;
+    public TextField urlField;
     @FXML
-    public MFXPasswordField passwordField;
+    public PasswordField passwordField;
     @FXML
-    public MFXTextField portField;
+    public TextField portField;
     @FXML
-    public MFXTextField connectionName;
+    public TextField connectionName;
     @FXML
     public MFXToggleButton toggleSave;
     @FXML
@@ -82,6 +85,20 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     public MFXButton infoButton;
     @FXML
     private Tooltip tooltip;
+    @FXML
+    public Label dbServerLabel;
+    @FXML
+    public Label portLabel;
+    @FXML
+    public Label dbNameLabel;
+    @FXML
+    public Label usernameLabel;
+    @FXML
+    public Label passwordLabel;
+    @FXML
+    public Label urlLabel;
+    @FXML
+    public Label connectionLabel;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -123,15 +140,15 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     }
 
     private void addFormText() {
-        I18n.bind(dbServerField.floatingTextProperty(), "connection.view.dbServer.label");
+        I18n.bind(dbServerLabel.textProperty(), "connection.view.dbServer.label");
         I18n.bind(dbServerField.promptTextProperty(), "connection.view.dbServer.prompt");
-        I18n.bind(portField.floatingTextProperty(), "connection.view.port.label");
-        I18n.bind(dbNameField.floatingTextProperty(), "connection.view.databaseName.label");
-        I18n.bind(usernameField.floatingTextProperty(), "connection.view.username.label");
-        I18n.bind(passwordField.floatingTextProperty(), "connection.view.password.label");
-        I18n.bind(urlField.floatingTextProperty(), "connection.view.url.label");
+        I18n.bind(portLabel.textProperty(), "connection.view.port.label");
+        I18n.bind(dbNameLabel.textProperty(), "connection.view.databaseName.label");
+        I18n.bind(usernameLabel.textProperty(), "connection.view.username.label");
+        I18n.bind(passwordLabel.textProperty(), "connection.view.password.label");
+        I18n.bind(urlLabel.textProperty(), "connection.view.url.label");
         I18n.bind(toggleSave.textProperty(), "archiveConnection.view.toggleSave");
-        I18n.bind(connectionName.floatingTextProperty(), "archiveConnection.view.connectionName.label");
+        I18n.bind(connectionLabel.textProperty(), "archiveConnection.view.connectionName.label");
     }
 
     private void addRecentDatabaseConnection() {
