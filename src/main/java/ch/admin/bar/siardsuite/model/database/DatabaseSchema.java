@@ -135,7 +135,7 @@ public class DatabaseSchema extends DatabaseObject {
 
     protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(tables.stream().flatMap(table -> table.aggregatedMetaSearch(s).stream()).toList());
+        hits.addAll(tables.stream().flatMap(table -> table.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
         return hits;
     }
 

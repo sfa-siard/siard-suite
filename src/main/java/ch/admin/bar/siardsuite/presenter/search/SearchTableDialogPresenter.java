@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static ch.admin.bar.siardsuite.model.database.DatabaseObject.contains;
 
@@ -75,8 +76,8 @@ public class SearchTableDialogPresenter extends DialogPresenter {
 
     private void tableSearch(String s) {
         if (tableView != null) {
-            if (!s.isEmpty() && !s.isBlank()) {
-                final List<Map> hits = this.hits.stream().filter(row -> contains(row, s)).toList();
+            if (!s.isEmpty() && !s.equals("")) {
+                final List<Map> hits = this.hits.stream().filter(row -> contains(row, s)).collect(Collectors.toList());
                 tableView.setItems(FXCollections.observableArrayList(hits));
                 stage.closeDialog();
             } else {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class DatabaseConnectionProperties {
 
@@ -59,7 +60,7 @@ public class DatabaseConnectionProperties {
   }
 
   public List<String> getDatabaseTypes() {
-    return dbTypes.keySet().stream().toList();
+    return dbTypes.keySet().stream().collect(Collectors.toList());
   }
 
   public StringProperty getDatabaseProduct() {

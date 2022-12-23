@@ -26,6 +26,8 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.stream.Collectors;
+
 public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final StackPane contentPane;
   private final HBox stepperBar;
@@ -44,15 +46,15 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar = new HBox(this.progressBarGroup);
     this.stepperBar.setSpacing(40.0);
     this.stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
-    this.stepperBar.getChildren().addAll(stepper.getStepperToggles().stream().filter(Node::isVisible).toList());
+    this.stepperBar.getChildren().addAll(stepper.getStepperToggles().stream().filter(Node::isVisible).collect(Collectors.toList()));
     this.stepperBar.getStyleClass().setAll("stepper-bar");
     this.stepperBar.setMaxHeight(52.0);
     this.stepperBar.setMinHeight(52.0);
     layoutWidth(stepper);
     this.stepperBar.setMaxSize(stepper.getPrefWidth(), 52.0);
-    this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() ->
+    /*TODO this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() ->
             this.snapPositionY(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2)),
-            this.stepperBar.heightProperty()));
+            this.stepperBar.heightProperty()));*/
     this.contentPane = new StackPane();
     this.contentPane.getStyleClass().setAll("content-pane");
     BorderPane container = new BorderPane();
@@ -143,7 +145,8 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
       if (stepperToggle != null) {
         Bounds bounds = stepperToggle.getGraphicBounds();
         if (bounds != null) {
-          double minX = this.snapSizeX(stepperToggle.localToParent(bounds).getMinX());
+          double minX = 0;
+          // TODO double minX = this.snapSizeX(stepperToggle.localToParent(bounds).getMinX());
         }
       }
     }

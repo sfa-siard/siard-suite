@@ -60,11 +60,14 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   protected void layoutChildren(double x, double y, double w, double h) {
     super.layoutChildren(x, y, w, h);
     MFXStepperToggle stepperToggle = this.getSkinnable();
-    double lw = this.snapSizeX(w - this.icon.getMaxWidth() - this.getSkinnable().getLabelTextGap());
-    double lh = this.snapSizeY(h);
+    // TODO double lw = this.snapSizeX(w - this.icon.getMaxWidth() - this.getSkinnable().getLabelTextGap());
+    double lw = 100;
+    // TODO double lh = this.snapSizeY(h);
+    double lh = 100;
     double lx;
     this.label.setTranslateX(0.0);
-    lx = this.snapPositionX(this.icon.getMaxWidth() + stepperToggle.getLabelTextGap());
+    // TODO lx = this.snapPositionX(this.icon.getMaxWidth() + stepperToggle.getLabelTextGap());
+    lx = 0;
     this.label.resizeRelocate(lx, -0.1, lw, lh);
   }
 }

@@ -124,7 +124,7 @@ public class SiardArchive extends DatabaseObject {
             schema.populate(schemaItem);
 
             return schemaItem;
-        }).toList();
+        }).collect(Collectors.toList());
         root.getChildren().setAll(checkBoxTreeItems);
     }
 
@@ -178,7 +178,7 @@ public class SiardArchive extends DatabaseObject {
 
     public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(schemas.stream().flatMap(schema -> schema.aggregatedMetaSearch(s).stream()).toList());
+        hits.addAll(schemas.stream().flatMap(schema -> schema.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
         return hits;
     }
 

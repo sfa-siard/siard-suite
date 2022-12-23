@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DatabaseTable extends DatabaseObject {
 
@@ -216,7 +217,7 @@ public class DatabaseTable extends DatabaseObject {
 
     protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).toList());
+        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
         return hits;
     }
 

@@ -110,7 +110,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
-            if (this.owner.getText().isBlank() || this.dataOriginTimespan.getText().isBlank()) {
+            if (this.owner.getText().equals("") || this.dataOriginTimespan.getText().equals("")) {
                 this.errorMessage.setVisible(true);
             } else {
                 this.errorMessage.setVisible(false);
