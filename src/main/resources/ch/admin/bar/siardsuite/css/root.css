@@ -480,7 +480,7 @@
 }
 
 .form-field-small {
-    -fx-padding: 2 2 2 -2;
+    -fx-padding: 2 2 2 2;
     -mfx-float-mode: ABOVE;
     -fx-max-height: 30;
     -fx-min-height: 30;
@@ -488,6 +488,11 @@
     -fx-border-width: 1;
     -fx-border-radius: 0;
     -fx-text-fill: siard-text-color-black;
+}
+
+.form-label-small {
+    -fx-padding: 0 0 5 0;
+    -fx-fill: siard-text-color;
 }
 
 .search-field {
@@ -947,3 +952,4 @@
 .mfx-progress-bar:indeterminate .bar2 {
     -fx-fill: rgba(27, 204, 150, 1);
 }
+
