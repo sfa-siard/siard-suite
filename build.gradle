@@ -27,6 +27,8 @@ manifest {
 
 dependencies {
 
+    implementation 'org.glavo.materialfx:materialfx:11.13.5'
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testImplementation "org.testfx:testfx-core:4.0.16-alpha"
     testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
