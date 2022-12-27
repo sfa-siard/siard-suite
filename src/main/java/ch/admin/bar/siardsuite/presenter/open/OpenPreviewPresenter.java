@@ -28,8 +28,8 @@ public class OpenPreviewPresenter extends PreviewPresenter {
   public void init(Controller controller, Model model, RootStage stage) {
     super.init(controller, model, stage);
 
-    title.textProperty().bind(I18n.createStringBinding("open.siard.archive.preview.title"));
-    text.textProperty().bind(I18n.createStringBinding("open.siard.archive.preview.text"));
+    I18n.bind(title.textProperty(), "open.siard.archive.preview.title");
+    I18n.bind(text.textProperty(), "open.siard.archive.preview.text");
 
     initTreeView();
 
