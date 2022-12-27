@@ -72,68 +72,89 @@
                         <children>
                             <VBox prefWidth="670.0">
                                 <children>
-                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <HBox>
                                         <children>
-                                            <MFXTextField fx:id="dbServerField" maxWidth="458.0" minWidth="458.0"
-                                                          styleClass="form-field">
+                                            <VBox>
+                                                <children>
+                                                    <Label fx:id="dbServerLabel" styleClass="form-label">
+                                                        <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                        </VBox.margin>
+                                                    </Label>
+                                                    <TextField fx:id="dbServerField" maxWidth="458.0" minWidth="458.0" styleClass="form-field" />
+                                                </children>
                                                 <HBox.margin>
-                                                    <Insets right="25.0"/>
+                                                    <Insets right="25.0" />
                                                 </HBox.margin>
-                                            </MFXTextField>
-                                            <MFXTextField fx:id="portField" minWidth="-Infinity" prefWidth="96.0"
-                                                          styleClass="form-field"/>
+                                            </VBox>
+                                            <VBox>
+                                                <children>
+                                                    <Label fx:id="portLabel" styleClass="form-label">
+                                                        <VBox.margin>
+                                                            <Insets bottom="10.0" />
+                                                        </VBox.margin>
+                                                    </Label>
+                                                    <TextField fx:id="portField" minWidth="-Infinity" prefWidth="96.0" styleClass="form-field" />
+                                                </children>
+                                            </VBox>
                                         </children>
-                                        <VBox.margin>
-                                            <Insets/>
-                                        </VBox.margin>
                                     </HBox>
-                                    <MFXTextField fx:id="dbNameField" maxWidth="578.0" styleClass="form-field">
+                                    <Label fx:id="dbNameLabel" styleClass="form-label">
                                         <VBox.margin>
-                                            <Insets top="10.0"/>
+                                            <Insets bottom="10.0" top="25.0" />
                                         </VBox.margin>
-                                    </MFXTextField>
+                                    </Label>
+                                    <TextField fx:id="dbNameField" maxWidth="578.0" styleClass="form-field" />
                                 </children>
                                 <HBox.margin>
-                                    <Insets bottom="24.0" left="25.0" right="25.0" top="60.0"/>
+                                    <Insets bottom="24.0" left="25.0" right="25.0" top="25.0" />
                                 </HBox.margin>
                                 <padding>
-                                    <Insets right="50.0"/>
+                                    <Insets right="50.0" />
                                 </padding>
                             </VBox>
                             <VBox prefWidth="470.0">
                                 <children>
-                                    <MFXTextField fx:id="usernameField" maxWidth="1.7976931348623157E308"
-                                                  styleClass="form-field">
+                                    <Label fx:id="usernameLabel" styleClass="form-label">
                                         <VBox.margin>
-                                            <Insets/>
+                                            <Insets bottom="10.0" />
                                         </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXPasswordField fx:id="passwordField" maxWidth="1.7976931348623157E308"
-                                                      styleClass="form-field">
+                                    </Label>
+                                    <TextField fx:id="usernameField" maxWidth="1.7976931348623157E308" styleClass="form-field" />
+                                    <Label fx:id="passwordLabel" styleClass="form-label">
                                         <VBox.margin>
-                                            <Insets top="60.0"/>
+                                            <Insets bottom="10.0" top="25.0" />
                                         </VBox.margin>
-                                    </MFXPasswordField>
+                                    </Label>
+                                    <PasswordField fx:id="passwordField" maxWidth="1.7976931348623157E308" styleClass="form-field">
+                                        <VBox.margin>
+                                            <Insets />
+                                        </VBox.margin>
+                                    </PasswordField>
                                 </children>
                                 <HBox.margin>
-                                    <Insets bottom="25.0" right="25.0" top="60.0"/>
+                                    <Insets bottom="25.0" right="25.0" top="25.0" />
                                 </HBox.margin>
                             </VBox>
                         </children>
                     </HBox>
-                    <HBox styleClass="form-container">
+                    <VBox maxWidth="1140.0" styleClass="form-container">
                         <children>
-                            <MFXTextField fx:id="urlField" maxWidth="1.7976931348623157E308" styleClass="form-field"
-                                          HBox.hgrow="ALWAYS">
-                                <HBox.margin>
-                                    <Insets bottom="24.0" left="25.0" right="25.0" top="60.0"/>
-                                </HBox.margin>
-                            </MFXTextField>
+                            <Label fx:id="urlLabel" styleClass="form-label">
+                                <VBox.margin>
+                                    <Insets bottom="10.0" left="25.0" top="25.0" />
+                                </VBox.margin>
+                            </Label>
+                            <TextField fx:id="urlField" maxWidth="1.7976931348623157E308" styleClass="form-field" HBox.hgrow="ALWAYS">
+                                <VBox.margin>
+                                    <Insets bottom="24.0" left="25.0" right="25.0" />
+                                </VBox.margin>
+                            </TextField>
                         </children>
                         <VBox.margin>
-                            <Insets top="24.0"/>
+                            <Insets top="24.0" />
                         </VBox.margin>
-                    </HBox>
+                    </VBox>
                     <VBox>
                         <VBox.margin>
                             <Insets bottom="24.0" left="25.0" right="25.0" top="24.0"/>
