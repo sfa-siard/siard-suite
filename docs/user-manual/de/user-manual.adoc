@@ -1,29 +1,29 @@
 include::../../theme/config.adoc[]
 :toc-title: Inhaltsverzeichnis
-= Siard Suite Handbuch
+= SIARD Suite Handbuch
 
 == Einleitung
 
 Der Standard SIARD (Software-Independent Archival of
-Relational Databases) definiert ein Format um Inhalte
-relationaler Datenbanken langfristig zu archivieren. Die Anwendung "Siard Suite" bietet eine grafische Benutzeroberfläche zum Archivieren, Wiederherstellen, Durchsuchen und Exportieren von SIARD Archiven.
+Relational Databases) definiert ein Format, um Inhalte
+relationaler Datenbanken langfristig zu archivieren. Die Anwendung "SIARD Suite" bietet eine grafische Benutzeroberfläche zum Archivieren, Wiederherstellen, Durchsuchen und Exportieren von SIARD-Archiven.
 
 == Kontext
 
 In Zusammenarbeit mit dem EU-Projekt E-ARK und der KOST wurde zwischen 2015 und 2018
-die Version 2.1 des SIARD Formats spezifiziert. Wie schon zuvor die Version 1.0
-wurde auch SIARD Format 2.1 als Standard eCH-0165 vom Verein "eCH E-Government
+die Version 2.1 des SIARD-Formats spezifiziert. Wie schon zuvor die Version 1.0
+wurde auch SIARD-Format 2.1 als Standard eCH-0165 vom Verein "eCH E-Government
 Standards" homologiert. Im Jahr 2021 hat der DILCIS-Vorstand das
 erweiterte SIARD-Format 2.2 entwickelt und genehmigt.
 
-Siard Suite ist die Referenzimplementation für das Archivieren
-relationaler Datenbanken im standardisierten SIARD Format 2.2. Weiter
-kann Siard Suite auch SIARD Archive in den Formaten SIARD 2.1 und SIARD
+SIARD Suite ist die Referenzimplementation für das Archivieren
+relationaler Datenbanken im standardisierten SIARD-Format 2.2. Weiter
+kann SIARD Suite auch SIARD-Archive in den Formaten SIARD 2.1 und SIARD
 1.0 einlesen und zu SIARD 2.2 konvertieren.
 
 == Systemanforderungen und Installation
 
-Die Applikation Siard Suite ist eine Java FX Applikation. Als solche
+Die Applikation SIARD Suite ist eine Java FX Applikation. Als solche
 kann sie grundsätzlich auf jedem System ausgeführt werden, auf welchem
 ein Java Runtime Environment 18 (JRE) mit der JavaFX Extension
 installiert ist.
@@ -55,7 +55,7 @@ https://www.azul.com/downloads/?package=jdk-fx#download-openjdk
 
 https://aws.amazon.com/correto
 
-Die die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt werden und dann mittels der entsprechenden Startskripte ausgeführt werden:
+Die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt werden und dann mittels der entsprechenden Startskripte ausgeführt werden:
 
 
 |===
@@ -68,21 +68,21 @@ Die die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt w
 
 
 
-== Siard Suite verwenden
+== SIARD Suite verwenden
 
-Die Siard Suite besteht aus folgenden Komponenten:
+Die SIARD Suite besteht aus folgenden Komponenten:
     * Grafische Bentutzeroberfläche (GUI)
     * SiardFromDb (CLI)
     * SiardToDB (CLI)
 
 Zweck und Verwendung der Komponenten wird in der Folge erklärt.
 
-=== Siard Suite GUI
+=== SIARD Suite GUI
 
-Die grafische Benutzeroberfläche ist die zentrale Anwendung um SIARD Archive zu erstellen und später auch wieder zu sichten, ohne dass die Primärdaten des Archives geändert werden können. Für komplexe Analysen der archivierten Daten sollte das Archiv wieder in eine Datenbank hochgeladen werden.
+Die grafische Benutzeroberfläche ist die zentrale Anwendung um SIARD-Archive zu erstellen und später auch wieder zu sichten, ohne dass die Primärdaten des Archivs geändert werden können. Für komplexe Analysen der archivierten Daten sollte das Archiv wieder in eine Datenbank hochgeladen werden.
 
 
-Der Startscreen bietet dein Einstiegspunkt in die Applikation. Hier können die vier wesentlichen Funktionalitäten der Applikation initiiert werden:
+Der Startscreen bietet den Einstiegspunkt in die Applikation. Hier können die vier wesentlichen Funktionalitäten der Applikation initiiert werden:
 
 
 image::startscreen.png[]
@@ -109,7 +109,7 @@ Folgende Eintstellungen können vorgenommen werden:
 | Query Timeout (s) | Maximale Wartezeit auf eine Datenbankabfrage (0 für unbegrenzt)
 |===
 
-=== Siard Suite CLI
+=== SIARD Suite CLI
 
 Neben der grafischen Benutzeroberfläche können Datenbanken auch per Kommandozeile archiviert bzw. ein Archiv wieder in eine Datenbank eingelesen werden.
 
@@ -119,13 +119,13 @@ Dazu stehen in der ZIP Distribution die Scripte `siard-from-db` und `siard-to-db
 
 Mit `siard-from-db`  kann man
 
-* ein SIARD-Archive (Metadaten und Primärdaten) aus einer Datenbank (Option -s), und/oder
+* ein SIARD-Archiv (Metadaten und Primärdaten) aus einer Datenbank (Option -s), und/oder
 * eine SIARD Metadaten XML mit der Definition des Datenbankschemas (option -e).
 erzeugen.
 
 ==== Aufruf
 
-In einem Terminal in das Verzeichnis wechseln, wo das ZIP Archiv entpackt wurde und dort in des Verzeichnis `bin` öffnen und dann ausführen mit:
+In einem Terminal in das Verzeichnis wechseln, wo das ZIP Archiv entpackt wurde und dort das Verzeichnis `bin` öffnen und dann ausführen mit:
 
 ```
 siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<import meta data>] [-x=<external lob folder>] [-m=<mime type>] -j=<JDBC URL> -u=<database user> -p=<database password> -s=<siard file> -e=<export meta data>"
@@ -174,7 +174,7 @@ Mindestens einer der beiden Parameter `siard-file` bzw. `export meta data` muss 
 
 __Hinweis:__ Während des Archivierungsprozesses sollte der Inhalt der Datenbank nicht geändert werden - verwenden sie gegebenenfalls einen Snapshot der Datenbank.
 
-Die Option Views als Tabellen archivieren hat normalerweise redundante Speicherung derselben Daten zur Folge und ist deshalb nicht empfohlen. Sie ist dann nützlichm wenn der für das Archivieren genutzte Datenbank-User die Inhalte der Views (Ansichten) anzeigen kann, nicht aber die der Basistabellen.
+Die Option Views als Tabellen archivieren hat normalerweise redundante Speicherung derselben Daten zur Folge und ist deshalb nicht empfohlen. Sie ist dann nützlich, wenn der für das Archivieren genutzte Datenbank-User die Inhalte der Views (Ansichten) anzeigen kann, nicht aber die der Basistabellen.
 
 Der Archivierungsprozess ist entweder gänzlich erfolgreich oder er scheitert gänzlich.
 
