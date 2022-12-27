@@ -487,7 +487,6 @@
 
 .form-field-small {
     -fx-padding: 2 2 2 2;
-    -mfx-float-mode: ABOVE;
     -fx-max-height: 30;
     -fx-min-height: 30;
     -fx-border-color: #b0afaf;
@@ -504,9 +503,9 @@
 
 .search-field {
     -fx-background-image: url(../icons/search.png);
-    -fx-padding: 45;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 2% center;
+    -fx-padding: 0 0 0 40;
     -fx-background-size: 24px 24px;
 }
 

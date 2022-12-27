@@ -1,19 +1,20 @@
 package ch.admin.bar.siardsuite.presenter.search;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class SearchTableDialogPresenter extends DialogPresenter {
     @FXML
     protected MFXButton closeButton; // seems redundant
     @FXML
-    protected MFXTextField searchField;
+    protected TextField searchField;
     @FXML
     protected HBox buttonBox;
     private TableView<Map> tableView;
@@ -43,8 +44,8 @@ public class SearchTableDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        title.textProperty().bind(I18n.createStringBinding("search.table.dialog.title"));
-        text.textProperty().bind(I18n.createStringBinding("search.table.dialog.text"));
+        I18n.bind(title.textProperty(), "search.table.dialog.title");
+        I18n.bind(text.textProperty(), "search.table.dialog.text");
 
         if (model.getCurrentTableSearch() != null) {
             searchField.setText(model.getCurrentTableSearch());
@@ -68,7 +69,7 @@ public class SearchTableDialogPresenter extends DialogPresenter {
         buttonBox.getChildren().add(new CloseDialogButton(this.stage));
 
         final MFXButton searchButton = new MFXButton();
-        searchButton.textProperty().bind(I18n.createStringBinding("search.table.dialog.search"));
+        I18n.bind(searchButton.textProperty(), "search.table.dialog.search");
         searchButton.getStyleClass().add("primary");
         searchButton.setOnAction(event -> tableSearch(searchField.getText()));
         buttonBox.getChildren().add(searchButton);
@@ -76,7 +77,7 @@ public class SearchTableDialogPresenter extends DialogPresenter {
 
     private void tableSearch(String s) {
         if (tableView != null) {
-            if (!s.isEmpty() && !s.equals("")) {
+            if (!s.isEmpty() && !s.equals(" ")) {
                 final List<Map> hits = this.hits.stream().filter(row -> contains(row, s)).collect(Collectors.toList());
                 tableView.setItems(FXCollections.observableArrayList(hits));
                 stage.closeDialog();

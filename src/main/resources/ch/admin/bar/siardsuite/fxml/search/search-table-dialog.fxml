@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
@@ -27,7 +27,7 @@
                          <Insets bottom="25.0"/>
                      </VBox.margin>
                  </Text>
-                 <MFXTextField fx:id="searchField" prefWidth="500.0" styleClass="form-field">
+                 <TextField fx:id="searchField" prefWidth="500.0" styleClass="form-field">
                      <VBox.margin>
                          <Insets bottom="25.0" />
                      </VBox.margin>
@@ -35,7 +35,7 @@
                          <String fx:value="form-field" />
                          <String fx:value="search-field" />
                      </styleClass>
-                 </MFXTextField>
+                 </TextField>
              </VBox>
          </center>
         </BorderPane>
