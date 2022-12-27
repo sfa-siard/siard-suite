@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
@@ -13,11 +13,11 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -39,21 +39,21 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @FXML
     Text titleWho = new Text();
     @FXML
-    MFXTextField name = new MFXTextField();
+    TextField name;
     @FXML
     public Label descriptionLabel;
     @FXML
-    TextArea description = new TextArea();
+    TextArea description;
     @FXML
-    MFXTextField owner = new MFXTextField();
+    TextField owner;
     @FXML
-    MFXTextField dataOriginTimespan = new MFXTextField();
+    TextField dataOriginTimespan;
     @FXML
-    MFXTextField archiverName = new MFXTextField();
+    TextField archiverName;
     @FXML
     public Label archiverContactLabel;
     @FXML
-    TextArea archiverContact = new TextArea();
+    TextArea archiverContact;
     @FXML
     protected ButtonBox buttonsBox;
     @FXML
@@ -62,6 +62,14 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     private Tooltip tooltip;
     @FXML
     public Label errorMessage;
+    @FXML
+    public Label nameLabel;
+    @FXML
+    public Label ownerLabel;
+    @FXML
+    public Label dataOriginTimespanLabel;
+    @FXML
+    public Label archiverLabel;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -86,14 +94,14 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.titleWhat.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.titleWhat"));
         this.titleWho.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.titleWho"));
 
-        this.name.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseName"));
+        this.nameLabel.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseName"));
 
         this.descriptionLabel.textProperty()
                         .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
-        this.owner.floatingTextProperty()
+        this.ownerLabel.textProperty()
                   .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
-        this.dataOriginTimespan.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseCreationDate"));
-        this.archiverName.floatingTextProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
+        this.dataOriginTimespanLabel.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseCreationDate"));
+        this.archiverLabel.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
         archiverContactLabel.textProperty()
                             .bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
         this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.error"));
