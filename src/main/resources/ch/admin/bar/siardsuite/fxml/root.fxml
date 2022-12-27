@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="850.0" prefWidth="1440.0" styleClass="root" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
+<BorderPane fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="850.0" prefWidth="1440.0" styleClass="root" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
     <top>
         <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" styleClass="header" BorderPane.alignment="CENTER">
             <Label styleClass="header-app-label" text="SIARD Suite" HBox.hgrow="ALWAYS" />

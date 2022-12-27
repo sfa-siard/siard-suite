@@ -24,7 +24,9 @@ public class UserPreferences {
 
     public static Preferences push(NodePath nodePath, KeyIndex comparisonKeyIndex, Comparator<String> comparator, String path) throws BackingStoreException {
         final List<String> childrenNames = sortedChildrenNames(nodePath, comparisonKeyIndex, comparator);
-        childrenNames.removeAll(List.of(path));
+        List<String> list = new java.util.ArrayList<>();
+        list.add(path);
+        childrenNames.removeAll(list);
         childrenNames.add(0, path);
         for (String childName : childrenNames) {
             if (childrenNames.indexOf(childName) > max_stack_size - 1) {

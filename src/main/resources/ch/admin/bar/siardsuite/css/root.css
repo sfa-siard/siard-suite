@@ -469,8 +469,7 @@
 }
 
 .form-field {
-    -fx-padding: 2 2 2 -2;
-    -mfx-float-mode: ABOVE;
+    -fx-padding: 2 2 2 10;
     -fx-max-height: 48;
     -fx-min-height: 48;
     -fx-border-color: #b0afaf;
@@ -479,9 +478,15 @@
     -fx-text-fill: siard-text-color-black;
 }
 
+.form-label {
+    -fx-padding: 0 0 5 0;
+    -fx-font-size: 14px;
+    -fx-text-fill: siard-text-color;
+    -fx-fill: siard-text-color;
+}
+
 .form-field-small {
-    -fx-padding: 2 2 2 -2;
-    -mfx-float-mode: ABOVE;
+    -fx-padding: 2 2 2 2;
     -fx-max-height: 30;
     -fx-min-height: 30;
     -fx-border-color: #b0afaf;
@@ -490,11 +495,17 @@
     -fx-text-fill: siard-text-color-black;
 }
 
+.form-label-small {
+    -fx-padding: 0 0 5 0;
+    -fx-text-fill: siard-text-color;
+    -fx-fill: siard-text-color;
+}
+
 .search-field {
     -fx-background-image: url(../icons/search.png);
-    -fx-padding: 45;
     -fx-background-repeat: no-repeat;
     -fx-background-position: 2% center;
+    -fx-padding: 0 0 0 40;
     -fx-background-size: 24px 24px;
 }
 
@@ -947,3 +958,4 @@
 .mfx-progress-bar:indeterminate .bar2 {
     -fx-fill: rgba(27, 204, 150, 1);
 }
+

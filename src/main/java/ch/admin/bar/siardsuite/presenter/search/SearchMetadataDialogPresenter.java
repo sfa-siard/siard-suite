@@ -2,24 +2,25 @@ package ch.admin.bar.siardsuite.presenter.search;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
+import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
-import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
 import java.io.IOException;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
     @FXML
     protected MFXButton closeButton; // seems redundant
     @FXML
-    protected MFXTextField searchField;
+    protected TextField searchField;
     @FXML
     protected VBox searchHitsBox;
     @FXML
@@ -44,8 +45,8 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        title.textProperty().bind(I18n.createStringBinding("search.metadata.dialog.title"));
-        text.textProperty().bind(I18n.createStringBinding("search.metadata.dialog.text"));
+        I18n.bind(title.textProperty(), "search.metadata.dialog.title");
+        I18n.bind(text.textProperty(), "search.metadata.dialog.text");
 
         if (model.getCurrentMetaSearch() != null) {
             searchField.setText(model.getCurrentMetaSearch());
@@ -56,7 +57,7 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
         buttonBox.getChildren().add(new CloseDialogButton(this.stage));
 
         final MFXButton searchButton = new MFXButton();
-        searchButton.textProperty().bind(I18n.createStringBinding("search.metadata.dialog.search"));
+        I18n.bind(searchButton.textProperty(), "search.metadata.dialog.search");
         searchButton.getStyleClass().add("primary");
         searchButton.setOnAction(event -> metaSearch(searchField.getText()));
         buttonBox.getChildren().add(searchButton);

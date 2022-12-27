@@ -7,7 +7,7 @@
 
 <?import javafx.scene.control.Label?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="300.0" prefWidth="480.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/18"
+            prefHeight="300.0" prefWidth="480.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../../css/root.css" styleClass="dialog"
             fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveAbortDialogPresenter">
     <center>

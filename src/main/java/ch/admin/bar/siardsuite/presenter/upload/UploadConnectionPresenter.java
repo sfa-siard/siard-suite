@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -14,14 +14,14 @@ import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXStepper;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -71,17 +71,17 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     @FXML
     public Text textRight;
     @FXML
-    public MFXTextField dbServerField;
+    public TextField dbServerField;
     @FXML
-    public MFXTextField dbNameField;
+    public TextField dbNameField;
     @FXML
-    public MFXTextField usernameField;
+    public TextField usernameField;
     @FXML
-    public MFXTextField urlField;
+    public TextField urlField;
     @FXML
-    public MFXPasswordField passwordField;
+    public PasswordField passwordField;
     @FXML
-    public MFXTextField portField;
+    public TextField portField;
     @FXML
     public BorderPane borderPane;
     @FXML
@@ -98,6 +98,20 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     public Label currentNameLabel;
     @FXML
     public Label newNameLabel;
+    @FXML
+    public Label dbServerLabel;
+    @FXML
+    public Label portLabel;
+    @FXML
+    public Label dbNameLabel;
+    @FXML
+    public Label usernameLabel;
+    @FXML
+    public Label passwordLabel;
+    @FXML
+    public Label urlLabel;
+    @FXML
+    public Label connectionLabel;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -142,13 +156,13 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     }
 
     private void addFormText() {
-        I18n.bind(dbServerField.floatingTextProperty(), "connection.view.dbServer.label");
+        I18n.bind(dbServerLabel.textProperty(), "connection.view.dbServer.label");
         I18n.bind(dbServerField.promptTextProperty(), "connection.view.dbServer.prompt");
-        I18n.bind(portField.floatingTextProperty(), "connection.view.port.label");
-        I18n.bind(dbNameField.floatingTextProperty(), "connection.view.databaseName.label");
-        I18n.bind(usernameField.floatingTextProperty(), "connection.view.username.label");
-        I18n.bind(passwordField.floatingTextProperty(), "connection.view.password.label");
-        I18n.bind(urlField.floatingTextProperty(), "connection.view.url.label");
+        I18n.bind(portLabel.textProperty(), "connection.view.port.label");
+        I18n.bind(dbNameLabel.textProperty(), "connection.view.databaseName.label");
+        I18n.bind(usernameLabel.textProperty(), "connection.view.username.label");
+        I18n.bind(passwordLabel.textProperty(), "connection.view.password.label");
+        I18n.bind(urlLabel.textProperty(), "connection.view.url.label");
         I18n.bind(titleNewSchemaName.textProperty(), "uploadConnection.view.new.schema.name");
         I18n.bind(currentNameLabel.textProperty(), "uploadConnection.view.current.name");
         I18n.bind(newNameLabel.textProperty(), "uploadConnection.view.new.name");
@@ -239,7 +253,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             List<Node> nodes = ((HBox) container).getChildren();
             if (nodes.size() > 2) {
                 String currentName = ((Label) nodes.get(0)).getText();
-                String newName = ((MFXTextField) nodes.get(2)).getText();
+                String newName = ((TextField) nodes.get(2)).getText();
                 if (!currentName.isEmpty() && !newName.isEmpty()) {
                     schemaMap.put(currentName, newName);
                 } else {
@@ -256,7 +270,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             model.provideDatabaseArchiveProperties(this, schema);
             Label currentName = new Label();
             Label iconLabel = new Label();
-            MFXTextField newName = new MFXTextField();
+            TextField newName = new TextField();
             currentName.setText(schemaName);
             newName.setText(schemaName);
             HBox container = new HBox();

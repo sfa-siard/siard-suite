@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
-<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
+<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataEditorPresenter"
             maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -41,12 +41,16 @@
                                             <Insets bottom="15.0" top="15.0"/>
                                         </VBox.margin>
                                     </Text>
-                                    <MFXTextField fx:id="name" editable="false" floatingText="Ihr N" maxWidth="410.0"
-                                                  styleClass="form-field">
+                                    <Label fx:id="nameLabel" styleClass="form-label">
                                         <VBox.margin>
-                                            <Insets bottom="24.0" right="25.0" top="60.0"/>
+                                            <Insets bottom="10.0"  top="25.0" />
                                         </VBox.margin>
-                                    </MFXTextField>
+                                    </Label>
+                                    <TextField fx:id="name" editable="false" maxWidth="410.0" styleClass="form-field" >
+                                        <VBox.margin>
+                                            <Insets bottom="24.0" right="25.0" />
+                                        </VBox.margin>
+                                    </TextField>
                                     <Label fx:id="descriptionLabel" style="-fx-text-fill: siard-text-color;"/>
                                     <TextArea fx:id="description" maxWidth="410.0" nodeOrientation="LEFT_TO_RIGHT"
                                               prefWidth="410.0" styleClass="form-field-double">
@@ -54,18 +58,26 @@
                                             <Insets bottom="24.0" right="25.0" top="10.0"/>
                                         </VBox.margin>
                                     </TextArea>
-                                    <MFXTextField fx:id="owner" floatingText="Ihr N" maxWidth="410.0"
-                                                  styleClass="form-field">
+                                    <Label fx:id="ownerLabel" styleClass="form-label">
                                         <VBox.margin>
-                                            <Insets bottom="24.0" right="25.0" top="30.0"/>
+                                            <Insets bottom="10.0"  top="10.0" />
                                         </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField fx:id="dataOriginTimespan" floatingText="Ihr N" maxWidth="410.0"
-                                                  styleClass="form-field">
+                                    </Label>
+                                    <TextField fx:id="owner" editable="false" maxWidth="410.0" styleClass="form-field" >
                                         <VBox.margin>
-                                            <Insets bottom="24.0" right="25.0" top="30.0"/>
+                                            <Insets bottom="24.0" right="25.0" />
                                         </VBox.margin>
-                                    </MFXTextField>
+                                    </TextField>
+                                    <Label fx:id="dataOriginTimespanLabel" styleClass="form-label">
+                                        <VBox.margin>
+                                            <Insets bottom="10.0"  top="10.0" />
+                                        </VBox.margin>
+                                    </Label>
+                                    <TextField fx:id="dataOriginTimespan" editable="false" maxWidth="410.0" styleClass="form-field" >
+                                        <VBox.margin>
+                                            <Insets bottom="24.0" right="25.0" />
+                                        </VBox.margin>
+                                    </TextField>
                                     <Label fx:id="errorMessage" styleClass="error-text" visible="false">
                                         <VBox.margin>
                                             <Insets bottom="5.0"/>
@@ -83,12 +95,16 @@
                                             <Insets bottom="15.0" top="15.0"/>
                                         </VBox.margin>
                                     </Text>
-                                    <MFXTextField fx:id="archiverName" floatingText="Ihr Name (Optional)"
-                                                  maxWidth="410.0" styleClass="form-field">
+                                    <Label fx:id="archiverLabel"  styleClass="form-label">
                                         <VBox.margin>
-                                            <Insets bottom="24.0" top="60.0"/>
+                                            <Insets bottom="10.0"  top="25.0" />
                                         </VBox.margin>
-                                    </MFXTextField>
+                                    </Label>
+                                    <TextField fx:id="archiverName"  maxWidth="410.0" styleClass="form-field" >
+                                        <VBox.margin>
+                                            <Insets bottom="24.0" right="25.0" />
+                                        </VBox.margin>
+                                    </TextField>
                                     <HBox prefWidth="570.0" styleClass="info-container">
                                         <Label fx:id="archiverContactLabel" style="-fx-text-fill: siard-text-color;"/>
                                         <MFXButton fx:id="infoButton" alignment="CENTER" maxHeight="37.0"

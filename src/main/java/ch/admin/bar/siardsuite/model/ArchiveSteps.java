@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArchiveSteps {
@@ -26,13 +27,12 @@ public class ArchiveSteps {
                                                     true);
 
     static {
-        steps = List.of(
-                selectDbms,
-                dbConnection,
-                dbLoading,
-                dbPreview,
-                editMetaData,
-                dbDownload
-        );
+        steps = new ArrayList<>();
+        steps.add(selectDbms);
+        steps.add(dbConnection);
+        steps.add(dbLoading);
+        steps.add(dbPreview);
+        steps.add(editMetaData);
+        steps.add(dbDownload);
     }
 }

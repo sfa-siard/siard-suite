@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DatabaseTable extends DatabaseObject {
 
@@ -203,14 +204,20 @@ public class DatabaseTable extends DatabaseObject {
             nodeIds.add("name");
         }
         if (nodeIds.size() > 0) {
-            hits = new TreeSet<>(List.of(new MetaSearchHit("Schema " + schema.name + ", Table " + name, this, treeContentView, nodeIds)));
+            List<MetaSearchHit> metaSearchHits = new ArrayList<>();
+            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", Table " + name,
+                                                 this,
+                                                 treeContentView,
+                                                 nodeIds));
+            hits = new TreeSet<>(
+                    metaSearchHits);
         }
         return hits;
     }
 
     protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).toList());
+        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
         return hits;
     }
 

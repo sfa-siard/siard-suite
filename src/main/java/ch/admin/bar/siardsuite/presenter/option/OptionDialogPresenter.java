@@ -9,9 +9,9 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
 import java.util.prefs.Preferences;
@@ -29,9 +29,14 @@ public class OptionDialogPresenter extends DialogPresenter {
     @FXML
     protected HBox buttonBox;
     @FXML
-    public MFXTextField queryTimeoutText;
+    public TextField queryTimeoutText;
     @FXML
-    public MFXTextField  loginTimeoutText;
+    public TextField  loginTimeoutText;
+    @FXML
+    public Label loginTimeoutLabel;
+    @FXML
+    public Label queryTimeoutLabel;
+
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -40,10 +45,11 @@ public class OptionDialogPresenter extends DialogPresenter {
         this.stage = stage;
 
         I18n.bind(title.textProperty(), "option.dialog.title");
-        I18n.bind(loginTimeoutText.floatingTextProperty(), "option.dialog.login-timeout.label");
+        I18n.bind(loginTimeoutLabel.textProperty(), "option.dialog.login-timeout.label");
         I18n.bind(loginTimeoutText.promptTextProperty(), "option.dialog.login-timeout.placeholder");
-        I18n.bind(queryTimeoutText.floatingTextProperty(), "option.dialog.query-timeout.label");
+        I18n.bind(queryTimeoutLabel.textProperty(), "option.dialog.query-timeout.label");
         I18n.bind(queryTimeoutText.promptTextProperty(), "option.dialog.query-timeout.placeholder");
+
         closeButton.setOnAction(event -> stage.closeDialog());
         MFXButton save = new DialogButton(true, "button.save");
         buttonBox.getChildren().addAll(new CloseDialogButton(this.stage),
@@ -51,7 +57,6 @@ public class OptionDialogPresenter extends DialogPresenter {
         save.setOnAction(event -> saveOptions());
 
         initFormFields();
-
     }
 
     private void saveOptions() {

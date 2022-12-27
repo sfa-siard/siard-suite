@@ -124,7 +124,7 @@ public class SiardArchive extends DatabaseObject {
             schema.populate(schemaItem);
 
             return schemaItem;
-        }).toList();
+        }).collect(Collectors.toList());
         root.getChildren().setAll(checkBoxTreeItems);
     }
 
@@ -168,14 +168,17 @@ public class SiardArchive extends DatabaseObject {
             nodeIds.add("archiverContact");
         }
         if (nodeIds.size() > 0) {
-            hits = new TreeSet<>(List.of(new MetaSearchHit("Database Information", this, treeContentView, nodeIds)));
+            List<MetaSearchHit> metaSearchHits = new ArrayList<>();
+            metaSearchHits.add(new MetaSearchHit("Database Information", this, treeContentView, nodeIds));
+            hits = new TreeSet<>(
+                    metaSearchHits);
         }
         return hits;
     }
 
     public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(schemas.stream().flatMap(schema -> schema.aggregatedMetaSearch(s).stream()).toList());
+        hits.addAll(schemas.stream().flatMap(schema -> schema.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
         return hits;
     }
 

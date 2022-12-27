@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UploadSteps {
@@ -14,6 +15,10 @@ public class UploadSteps {
     private final static Step uploadArchiveResult = new Step("upload.step.name.result", View.UPLOAD_RESULT, 3, true);
 
     static {
-        steps = List.of(selectDbms, dbConnection, uploadArchiveInProgress, uploadArchiveResult);
+        steps = new ArrayList<>();
+        steps.add(selectDbms);
+        steps.add(dbConnection);
+        steps.add(uploadArchiveInProgress);
+        steps.add(uploadArchiveResult);
     }
 }

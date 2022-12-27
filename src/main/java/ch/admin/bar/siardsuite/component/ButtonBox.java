@@ -22,14 +22,22 @@ public class ButtonBox extends HBox {
   final MFXButton cancelButton = new MFXButton();
 
   public ButtonBox make(Type type) {
-    return switch (type) {
-      case CANCEL -> new CancelButtonBox();
-      case DOWNLOAD_FINISHED -> new DownloadFinishedButtonBox();
-      case DEFAULT -> new DefaultButtonBox();
-      case FAILED -> new FailedButtonBox();
-      case TO_START -> new StartButtonBox();
-      case OPEN_PREVIEW -> new OpenPreviewButtonBox();
-    };
+    switch (type) {
+      case CANCEL:
+        return new CancelButtonBox();
+      case DOWNLOAD_FINISHED:
+        return new DownloadFinishedButtonBox();
+      case DEFAULT:
+        return new DefaultButtonBox();
+      case FAILED:
+        return new FailedButtonBox();
+      case TO_START:
+        return new StartButtonBox();
+      case OPEN_PREVIEW:
+        return new OpenPreviewButtonBox();
+      default:
+        throw new IllegalArgumentException();
+    }
   }
 
   protected void initialize() {

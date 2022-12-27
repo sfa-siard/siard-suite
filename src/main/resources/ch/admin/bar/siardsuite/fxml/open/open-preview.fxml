@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
-<AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
+<AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.open.OpenPreviewPresenter">
     <ScrollPane styleClass="scrollable-pane"

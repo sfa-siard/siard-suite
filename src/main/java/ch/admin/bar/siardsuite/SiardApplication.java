@@ -5,7 +5,6 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import ch.enterag.utils.ProgramInfo;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
