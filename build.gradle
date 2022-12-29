@@ -1,4 +1,5 @@
 plugins {
+    id 'org.ajoberstar.reckon' version '0.16.1'
     id 'java'
     id 'application'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
@@ -13,7 +14,6 @@ repositories {
 }
 
 group = 'ch.admin.bar'
-version = '1.0-SNAPSHOT'
 description = 'SIARD Suite'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 java.targetCompatibility = JavaVersion.VERSION_1_8
@@ -59,7 +59,7 @@ task fatJar(type: Jar) {
 test {
     useJUnitPlatform()
     // run tets in headless mode -for testFX
-    jvmArgs "-Djava.awt.headless=true", "-Dtestfx.headless=true"
+    jvmArgs "-Djava.awt.headless=true", "-Dtestfx.headless=true", "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
 }
 
 
@@ -141,3 +141,8 @@ task copyDocumentation(type: Copy) {
 tasks.named("asciidoctorPdf") { finalizedBy(copyDocumentation)}
 tasks.named("build") { dependsOn(asciidoctorPdf)}
 tasks.named("processResources") { dependsOn(copyDocumentation)}
+
+reckon {
+    scopeFromProp()
+    stageFromProp('beta', 'rc', 'final')
+}
