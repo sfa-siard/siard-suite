@@ -1,10 +1,11 @@
 plugins {
-    id 'org.ajoberstar.reckon' version '0.16.1'
     id 'java'
     id 'application'
     id 'org.beryx.runtime' version '1.12.7'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'org.asciidoctor.jvm.pdf' version '3.3.2'
+    id 'pl.allegro.tech.build.axion-release' version '1.14.3'
+
 }
 
 repositories {
@@ -16,13 +17,16 @@ repositories {
 
 group = 'ch.admin.bar'
 description = 'SIARD Suite'
+
+version = scmVersion.version
+
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 java.targetCompatibility = JavaVersion.VERSION_1_8
 mainClassName = "ch.admin.bar.siardsuite.Launcher"
 
 manifest {
     attributes(
-            'Implementation-Version': project.version
+            'Implementation-Version': version
     )
 }
 
@@ -76,7 +80,7 @@ runtime {
     ]
 
     jpackage {
-        appVersion = project.version
+        appVersion = version
 
         skipInstaller = false
 
@@ -184,8 +188,3 @@ task copyDocumentation(type: Copy) {
 tasks.named("asciidoctorPdf") { finalizedBy(copyDocumentation)}
 tasks.named("build") { dependsOn(asciidoctorPdf)}
 tasks.named("processResources") { dependsOn(copyDocumentation)}
-
-reckon {
-    scopeFromProp()
-    stageFromProp('beta', 'rc', 'final')
-}
