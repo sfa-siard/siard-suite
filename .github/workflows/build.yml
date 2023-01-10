@@ -26,15 +26,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Execute Gradle build
-        run: ./gradlew build fatJar -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
-      - name: unzip bundle
-        run: |
-          unzip *.zip -d extracted
-      - name: upload distribution zip
+        run: ./gradlew build installDist fatJar -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
+      - name: upload install-dist as zip
         uses: actions/upload-artifact@v3
         with:
           name: siard-suite
-          path: build/distributions/extracted/*
+          path: build/install/siard-suite
       - name: upload executable jar
         uses: actions/upload-artifact@v3
         with:
