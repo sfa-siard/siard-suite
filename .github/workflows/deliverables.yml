@@ -5,6 +5,8 @@ on:
   push:
     tags:
       - v*.**
+    push:
+      branches: [ "feature/*" ]
 
 jobs:
   build:
@@ -45,23 +47,31 @@ jobs:
         with:
           name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-exe
           path: build/jpackage/*.exe
+          if-no-files-found: ignore
       - name: Upload MSI as an artifact
         uses: actions/upload-artifact@v2
         with:
           name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-msi
           path: build/jpackage/*.msi
+          if-no-files-found: ignore
       - name: Upload DEB as an artifact
         uses: actions/upload-artifact@v2
         with:
           name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-deb
           path: build/jpackage/*.deb
+          if-no-files-found: ignore
       - name: Upload RPM as an artifact
         uses: actions/upload-artifact@v2
         with:
           name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-rpm
           path: build/jpackage/*.rpm
+          if-no-files-found: ignore
+      - name: tar bundled package to maintain file permissions
+        run: |
+          cd build/jpackage/siard-suite
+          tar -cvf siard-suite-standalone.tar .
       - name: Upload bundled package
         uses: actions/upload-artifact@v2
         with:
-          name: siard-suite-${{ matrix.os }}
-          path: build/install/siard-suite
+          name: siard-suite-standalone-${{ matrix.os }}
+          path: build/jpackage/siard-suite/siard-suite-standalone.tar
