@@ -62,5 +62,5 @@ jobs:
       - name: Upload bundled package
         uses: actions/upload-artifact@v2
         with:
-          name: siard-suite-${matrix.os}
+          name: siard-suite-${{ matrix.os }}
           path: build/install/siard-suite
