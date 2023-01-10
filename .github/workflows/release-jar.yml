@@ -3,7 +3,7 @@ name: Create standalone deliverables for SIARD (installers and distributions wit
 
 on:
   push:
-    branches: [ "main"
+    branches: [ "main" ]
 
 jobs:
   build:
