@@ -4,7 +4,7 @@ name: Create standalone deliverables for SIARD (installers and distributions wit
 on:
   push:
     tags:
-      -v*.**
+      - v*.**
 
 jobs:
   build:
