@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: siard-suite
-          path: build/install/siard-suite
+          path: build/distributions/siard-suite-*.zip
       - name: upload executable jar
         uses: actions/upload-artifact@v3
         with:
