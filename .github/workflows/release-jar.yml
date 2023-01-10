@@ -2,8 +2,8 @@
 name: Create standalone deliverables for SIARD (installers and distributions with runtimes)
 
 on:
-  tag:
-    branches: [ "main" ]
+  push:
+    branches: [ "main"
 
 jobs:
   build:
