@@ -82,6 +82,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
         this.bindTexts();
     }
+
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         this.init(controller, model, stage);
@@ -89,22 +90,19 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
 
     private void bindTexts() {
-        this.titleText.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.title"));
-        this.descriptionText.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.description"));
-        this.titleWhat.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.titleWhat"));
-        this.titleWho.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.titleWho"));
+        I18n.bind(this.titleText.textProperty(), "archiveMetadata.view.title");
+        I18n.bind(this.descriptionText.textProperty(), "archiveMetadata.view.description");
+        I18n.bind(this.titleWhat.textProperty(), "archiveMetadata.view.titleWhat");
+        I18n.bind(this.titleWho.textProperty(), "archiveMetadata.view.titleWho");
 
-        this.nameLabel.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseName"));
+        I18n.bind(this.nameLabel.textProperty(), "archiveMetadata.view.databaseName");
 
-        this.descriptionLabel.textProperty()
-                        .bind(I18n.createStringBinding("archiveMetadata.view.databaseDescription"));
-        this.ownerLabel.textProperty()
-                  .bind(I18n.createStringBinding("archiveMetadata.view.deliveringOffice"));
-        this.dataOriginTimespanLabel.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.databaseCreationDate"));
-        this.archiverLabel.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.archiverName"));
-        archiverContactLabel.textProperty()
-                            .bind(I18n.createStringBinding("archiveMetadata.view.archiverContact"));
-        this.errorMessage.textProperty().bind(I18n.createStringBinding("archiveMetadata.view.error"));
+        I18n.bind(this.descriptionLabel.textProperty(), "archiveMetadata.view.databaseDescription");
+        I18n.bind(this.ownerLabel.textProperty(),"archiveMetadata.view.deliveringOffice");
+        I18n.bind(this.dataOriginTimespanLabel.textProperty(), "archiveMetadata.view.databaseCreationDate");
+        I18n.bind(this.archiverLabel.textProperty(), "archiveMetadata.view.archiverName");
+        I18n.bind(archiverContactLabel.textProperty(), "archiveMetadata.view.archiverContact");
+        I18n.bind(this.errorMessage.textProperty(), "archiveMetadata.view.error");
     }
 
     private File showFileChoserToSelectTargetArchive(String databaseName) {
@@ -116,6 +114,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         return fileChooser.showSaveDialog(stage);
 
     }
+
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
             if (this.owner.getText().equals("") || this.dataOriginTimespan.getText().equals("")) {
@@ -143,8 +142,8 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         infoButton.setOnMouseMoved(event -> {
             Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
             tooltip.show(infoButton,
-                         (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-                         boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
+                    (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
+                    boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
         });
 
         infoButton.setOnMouseExited(event -> tooltip.hide());
@@ -156,6 +155,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         name.setText(this.model.getDatabaseName().getValue());
         model.provideDatabaseArchiveMetaDataProperties(this);
     }
+
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
@@ -168,6 +168,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
 
     @Override
-    public void visit(SiardArchiveMetaData metaData) {}
+    public void visit(SiardArchiveMetaData metaData) {
+    }
 
 }
