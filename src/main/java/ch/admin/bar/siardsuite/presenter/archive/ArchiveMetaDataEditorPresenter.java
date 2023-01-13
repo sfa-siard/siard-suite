@@ -152,17 +152,21 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
 
     private void initFields() {
-        name.setText(this.model.getDatabaseName().getValue());
         model.provideDatabaseArchiveMetaDataProperties(this);
+    }
+
+    private String removePlaceholder(String value) {
+        return (value.equals("(...)") ? "" : value);
     }
 
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
                       LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
+        name.setText(databaseName);
         description.setText(databaseDescription);
-        owner.setText(databseOwner);
-        this.dataOriginTimespan.setText(databaseCreationDate);
+        owner.setText(removePlaceholder(databseOwner));
+        this.dataOriginTimespan.setText(removePlaceholder(databaseCreationDate));
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
     }
