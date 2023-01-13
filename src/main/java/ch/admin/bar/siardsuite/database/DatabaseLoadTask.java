@@ -43,7 +43,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
     ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
     connection.setAutoCommit(false);
     int timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
-
+    archive.getMetaData().setDbName(model.getDatabaseName().getValue());
     MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
     metadata.setQueryTimeout(timeout);
     updateValue(FXCollections.observableArrayList(new Pair<>("Metadata", -1L)));
