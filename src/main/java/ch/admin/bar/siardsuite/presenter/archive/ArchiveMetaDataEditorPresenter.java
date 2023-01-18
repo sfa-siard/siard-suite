@@ -98,14 +98,14 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         I18n.bind(this.nameLabel.textProperty(), "archiveMetadata.view.databaseName");
 
         I18n.bind(this.descriptionLabel.textProperty(), "archiveMetadata.view.databaseDescription");
-        I18n.bind(this.ownerLabel.textProperty(),"archiveMetadata.view.deliveringOffice");
+        I18n.bind(this.ownerLabel.textProperty(), "archiveMetadata.view.deliveringOffice");
         I18n.bind(this.dataOriginTimespanLabel.textProperty(), "archiveMetadata.view.databaseCreationDate");
         I18n.bind(this.archiverLabel.textProperty(), "archiveMetadata.view.archiverName");
         I18n.bind(archiverContactLabel.textProperty(), "archiveMetadata.view.archiverContact");
         I18n.bind(this.errorMessage.textProperty(), "archiveMetadata.view.error");
     }
 
-    private File showFileChoserToSelectTargetArchive(String databaseName) {
+    private File showFileChooserToSelectTargetArchive(String databaseName) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(I18n.get("open.siard.archive.dialog.choose.file.title"));
         fileChooser.setInitialFileName(databaseName + ".siard");
@@ -121,7 +121,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 this.errorMessage.setVisible(true);
             } else {
                 this.errorMessage.setVisible(false);
-                File targetArchive = this.showFileChoserToSelectTargetArchive(this.name.getText());
+                File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
                 if (targetArchive != null) {
                     this.model.updateArchiveMetaData(
                             this.name.getText(),

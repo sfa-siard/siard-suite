@@ -83,7 +83,6 @@ public class UploadChooseDbmsPresenter extends StepperPresenter {
                 this.errorMessage.setVisible(false);
                 stepper.next();
                 stepper.fireEvent(new SiardEvent(UPLOAD_DBMS_SELECTED));
-                //fire event
             } else {
                 this.errorMessage.setVisible(true);
             }

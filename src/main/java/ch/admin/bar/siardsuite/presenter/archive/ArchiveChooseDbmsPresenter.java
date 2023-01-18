@@ -23,73 +23,73 @@ import static ch.admin.bar.siardsuite.util.SiardEvent.UPDATE_STEPPER_DBTYPE_EVEN
 
 public class ArchiveChooseDbmsPresenter extends StepperPresenter {
 
-  @FXML
-  public Text title;
-  @FXML
-  public Text text;
-  @FXML
-  public VBox leftVBox;
-  @FXML
-  public VBox rightVBox;
-  @FXML
-  public Label errorMessage;
-  @FXML
-  public BorderPane borderPane;
-  @FXML
-  private ButtonBox buttonsBox;
+    @FXML
+    public Text title;
+    @FXML
+    public Text text;
+    @FXML
+    public VBox leftVBox;
+    @FXML
+    public VBox rightVBox;
+    @FXML
+    public Label errorMessage;
+    @FXML
+    public BorderPane borderPane;
+    @FXML
+    private ButtonBox buttonsBox;
 
-  private final ToggleGroup toggleGroup = new ToggleGroup();
+    private final ToggleGroup toggleGroup = new ToggleGroup();
 
-  private boolean next = true;
+    private boolean next = true;
 
-  @Override
-  public void init(Controller controller, Model model, RootStage stage) {
-    this.model = model;
-    this.controller = controller;
-    this.stage = stage;
-  }
+    @Override
+    public void init(Controller controller, Model model, RootStage stage) {
+        this.model = model;
+        this.controller = controller;
+        this.stage = stage;
+    }
 
-  @Override
-  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-    this.init(controller, model, stage);
+    @Override
+    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
+        this.init(controller, model, stage);
 
-    I18n.bind(title.textProperty(),"archiveDb.view.title");
-    I18n.bind(text.textProperty(),"archiveDb.view.text");
-    this.errorMessage.setVisible(false);
-    I18n.bind(errorMessage.textProperty(),"archiveDb.view.error");
-
-
-    this.model.getDatabaseTypes().forEach(this::createRadioToVBox);
-
-    this.buttonsBox = new ButtonBox().make(DEFAULT);
-    this.borderPane.setBottom(buttonsBox);
-    this.setListeners(stepper);
-  }
-
-  private void createRadioToVBox(String s) {
-    VBox vBox = next ? leftVBox : rightVBox;
-    next = !next;
-    MFXRadioButton radioButton = new MFXRadioButton(s);
-    radioButton.setToggleGroup(toggleGroup);
-    vBox.getChildren().add(radioButton);
-    VBox.setMargin(radioButton, new Insets(0, 0, 25, 0));
-  }
-
-  private void setListeners(MFXStepper stepper) {
-    this.buttonsBox.next().setOnAction((event) -> {
-      MFXRadioButton selected = (MFXRadioButton) toggleGroup.getSelectedToggle();
-      if (selected != null) {
-        controller.setDatabaseType(selected.getText());
+        I18n.bind(title.textProperty(), "archiveDb.view.title");
+        I18n.bind(text.textProperty(), "archiveDb.view.text");
         this.errorMessage.setVisible(false);
-        stepper.next();
-          stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBTYPE_EVENT));
-        //fire event
-      } else {
-        this.errorMessage.setVisible(true);
-      }
-    });
-    this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG));
-    this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
-  }
+        I18n.bind(errorMessage.textProperty(), "archiveDb.view.error");
+
+
+        this.model.getDatabaseTypes().forEach(this::createRadioToVBox);
+
+        this.buttonsBox = new ButtonBox().make(DEFAULT);
+        this.borderPane.setBottom(buttonsBox);
+        this.setListeners(stepper);
+    }
+
+    private void createRadioToVBox(String s) {
+        VBox vBox = next ? leftVBox : rightVBox;
+        next = !next;
+        MFXRadioButton radioButton = new MFXRadioButton(s);
+        radioButton.setToggleGroup(toggleGroup);
+        vBox.getChildren().add(radioButton);
+        VBox.setMargin(radioButton, new Insets(0, 0, 25, 0));
+    }
+
+    private void setListeners(MFXStepper stepper) {
+        this.buttonsBox.next().setOnAction((event) -> {
+            MFXRadioButton selected = (MFXRadioButton) toggleGroup.getSelectedToggle();
+            if (selected != null) {
+                controller.setDatabaseType(selected.getText());
+                this.errorMessage.setVisible(false);
+                stepper.next();
+                stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBTYPE_EVENT));
+                //fire event
+            } else {
+                this.errorMessage.setVisible(true);
+            }
+        });
+        this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG));
+        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+    }
 
 }

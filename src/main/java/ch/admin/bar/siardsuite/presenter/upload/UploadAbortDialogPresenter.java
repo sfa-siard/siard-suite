@@ -20,7 +20,7 @@ public class UploadAbortDialogPresenter extends DialogPresenter {
     @FXML
     protected Text text;
     @FXML
-    protected MFXButton closeButton; // seems redundant
+    protected MFXButton closeButton; // x-button
     @FXML
     protected HBox buttonBox;
     @FXML

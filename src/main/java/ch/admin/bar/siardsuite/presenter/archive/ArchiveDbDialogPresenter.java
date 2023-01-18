@@ -15,10 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.STORAGE_DATE;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
@@ -31,7 +33,7 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
     @FXML
     public Text text;
     @FXML
-    protected MFXButton closeButton; // seems redundant
+    protected MFXButton closeButton;
     @FXML
     public MFXButton newConnectionButton;
     @FXML
@@ -51,18 +53,18 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        I18n.bind(title.textProperty(),"archiveDbDialog.title");
-        I18n.bind(text.textProperty(),"archiveDbDialog.text");
+        I18n.bind(title.textProperty(), "archiveDbDialog.title");
+        I18n.bind(text.textProperty(), "archiveDbDialog.text");
 
-        I18n.bind(newConnectionButton.textProperty(),"archiveDbDialog.btnNewConnection");
+        I18n.bind(newConnectionButton.textProperty(), "archiveDbDialog.btnNewConnection");
 
         newConnectionButton.setOnAction(event -> {
             stage.closeDialog();
             stage.navigate(View.ARCHIVE_STEPPER);
         });
 
-        I18n.bind(recentConnectionsHeaderName.textProperty(),"dialog.recent.connections.header.name");
-        I18n.bind(recentConnectionsHeaderDate.textProperty(),"dialog.recent.connections.header.date");
+        I18n.bind(recentConnectionsHeaderName.textProperty(), "dialog.recent.connections.header.name");
+        I18n.bind(recentConnectionsHeaderDate.textProperty(), "dialog.recent.connections.header.date");
 
         try {
             List<String> connectionNames = sortedChildrenNames(DATABASE_CONNECTION, TIMESTAMP, Comparator.reverseOrder());

@@ -57,8 +57,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         this.init(controller, model, stage);
 
-        this.title.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.title"));
-        this.text.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.text"));
+        I18n.bind(this.title.textProperty(),"archiveLoadingPreview.view.title");
+        I18n.bind(this.text.textProperty(),"archiveLoadingPreview.view.text");
         this.loader.setImage(loading);
         new Spinner(this.loader).play();
 
@@ -81,10 +81,10 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                     throw new RuntimeException(e);
                 }
 
-            controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
-                AtomicInteger pos = new AtomicInteger();
-                newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
-            });
+                controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
+                    AtomicInteger pos = new AtomicInteger();
+                    newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
+                });
 
                 controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
                     double pos = newValue.doubleValue();
