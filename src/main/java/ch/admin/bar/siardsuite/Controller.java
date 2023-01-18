@@ -12,6 +12,9 @@ import javafx.event.EventHandler;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -53,7 +56,7 @@ public class Controller {
   }
 
   public void closeDbConnection() {
-    model.closeDbConnection();
+    DatabaseConnectionFactory.disconnect();
   }
 
   public void updateConnectionData(String connectionUrl, String username, String databaseName, String password) {
@@ -112,5 +115,30 @@ public class Controller {
     this.onDatabaseUploadSuccess(onSuccess);
     this.onDatabaseUploadFailed(onFailure);
     this.databaseUploadService.start();
+  }
+
+  public void cancelDownload() {
+    if (databaseLoadService != null && databaseLoadService.isRunning()) {
+      this.databaseLoadService.cancel();
+    }
+    releaseResources();
+  }
+
+  public void cancelUpload() {
+    if (databaseUploadService != null && databaseUploadService.isRunning()) {
+      this.databaseUploadService.cancel();
+    }
+    releaseResources();
+  }
+
+  public void releaseResources() {
+    closeDbConnection();
+    removeTmpArchive();
+  }
+
+  private void removeTmpArchive() {
+    try {
+      Files.delete(Paths.get(Model.TMP_SIARD));
+    } catch (IOException ignored) {}
   }
 }

@@ -68,24 +68,27 @@ public class UploadingPresenter extends StepperPresenter {
       if (!event.isConsumed()) {
         scrollBox.getChildren().clear();
 
-      EventHandler<WorkerStateEvent> onSuccess = e -> {
-        controller.closeDbConnection();
-        stepper.next();
-        stepper.fireEvent(new SiardEvent(UPLOAD_SUCCEDED));
-      };
+        EventHandler<WorkerStateEvent> onSuccess = e -> {
+          stepper.next();
+          stepper.fireEvent(new SiardEvent(UPLOAD_SUCCEDED));
+          controller.releaseResources();
+        };
 
-      EventHandler<WorkerStateEvent> onFailure = e -> {
-        controller.closeDbConnection();
-        stepper.next();
-        stepper.fireEvent(new SiardEvent(UPLOAD_FAILED));
-      };
+        EventHandler<WorkerStateEvent> onFailure = e -> {
+          System.err.println( I18n.get( "upload.result.failed.title") + " " + e.getSource().getException());
+          e.getSource().getException().printStackTrace();
+          stepper.next();
+          controller.cancelUpload();
+          stepper.fireEvent(new SiardEvent(UPLOAD_FAILED));
+        };
 
-      try {
-        controller.uploadArchive(onSuccess, onFailure);
-      } catch (SQLException e) {
-        navigateBack(stepper);
-        throw new RuntimeException(e);
-      }
+        try {
+          controller.uploadArchive(onSuccess, onFailure);
+        } catch (SQLException e) {
+          stepper.previous();
+          controller.cancelUpload();
+          throw new RuntimeException(e);
+        }
 
         controller.addDatabaseUploadingValuePropertyListener((o, oldValue, newValue) -> {
           AtomicInteger pos1 = new AtomicInteger();
@@ -109,9 +112,5 @@ public class UploadingPresenter extends StepperPresenter {
     }
     scrollBox.getChildren().add(
             new LabelIcon(text, pos, IconView.IconType.LOADING));
-  }
-
-  private void navigateBack(MFXStepper stepper) {
-    stepper.previous();
   }
 }

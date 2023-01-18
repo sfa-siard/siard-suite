@@ -168,6 +168,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
 
     private EventHandler<WorkerStateEvent> handleDownloadFailure(MFXStepper stepper) {
         return e -> {
+            System.err.println( I18n.get( "archiveDownload.view.title.failed") + " " + e.getSource().getException());
+            e.getSource().getException().printStackTrace();
             stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.ERROR);
             stepper.updateProgress();
             this.title.setVisible(false);

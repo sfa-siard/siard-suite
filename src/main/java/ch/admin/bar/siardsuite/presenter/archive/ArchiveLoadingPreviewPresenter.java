@@ -72,24 +72,14 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
             if (!event.isConsumed()) {
                 scrollBox.getChildren().clear();
 
-            EventHandler<WorkerStateEvent> onSuccess = e -> {
-                controller.closeDbConnection();
-                stepper.next();
-                stepper.fireEvent(new SiardEvent(ARCHIVE_LOADED));
-            };
-
-            EventHandler<WorkerStateEvent> onFailure = e -> {
-                controller.closeDbConnection();
-                stepper.previous();
-            };
-
-            try {
-                controller.loadDatabase(true, onSuccess, onFailure);
-            } catch (SQLException e) {
-                // TODO should notify user about any error - Toast it # CR 458
-                stepper.previous();
-                throw new RuntimeException(e);
-            }
+                try {
+                    controller.loadDatabase(true, handleOnSuccess(stepper), handleOnFailure(stepper));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    // TODO should notify user about any error - Toast it # CR 458
+                    cancel(stepper);
+                    throw new RuntimeException(e);
+                }
 
             controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
                 AtomicInteger pos = new AtomicInteger();
@@ -104,12 +94,25 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
             }
         });
 
-        this.buttonsBox.previous().setOnAction((event) -> {
-            controller.closeDbConnection();
-            stepper.previous();
-
-        });
+        this.buttonsBox.previous().setOnAction((event) -> cancel(stepper));
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+    }
+
+
+
+    private EventHandler<WorkerStateEvent> handleOnFailure(MFXStepper stepper) {
+        return e -> {
+            e.getSource().getException().printStackTrace();
+            cancel(stepper);
+        };
+    }
+
+    private EventHandler<WorkerStateEvent> handleOnSuccess(MFXStepper stepper) {
+        return e -> {
+            stepper.next();
+            stepper.fireEvent(new SiardEvent(ARCHIVE_LOADED));
+            controller.releaseResources();
+        };
     }
 
     private void addLoadingData(String text, Integer pos) {
@@ -123,4 +126,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                 new LabelIcon(text, pos, IconView.IconType.LOADING));
     }
 
+    private void cancel(MFXStepper stepper) {
+        stepper.previous();
+        controller.cancelDownload();
+    }
 }
