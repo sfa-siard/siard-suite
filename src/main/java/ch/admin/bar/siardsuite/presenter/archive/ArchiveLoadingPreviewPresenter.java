@@ -69,7 +69,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
     private void setListeners(MFXStepper stepper) {
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
-            scrollBox.getChildren().clear();
+            if (!event.isConsumed()) {
+                scrollBox.getChildren().clear();
 
             EventHandler<WorkerStateEvent> onSuccess = e -> {
                 controller.closeDbConnection();
@@ -95,11 +96,12 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                 newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
             });
 
-            controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
-                double pos = newValue.doubleValue();
-                progressBar.progressProperty().set(pos);
-            });
-
+                controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+                    double pos = newValue.doubleValue();
+                    progressBar.progressProperty().set(pos);
+                });
+                event.consume();
+            }
         });
 
         this.buttonsBox.previous().setOnAction((event) -> {

@@ -65,7 +65,8 @@ public class UploadingPresenter extends StepperPresenter {
 
   private EventHandler<SiardEvent> uploadDatabase(MFXStepper stepper) {
     return event -> {
-      scrollBox.getChildren().clear();
+      if (!event.isConsumed()) {
+        scrollBox.getChildren().clear();
 
       EventHandler<WorkerStateEvent> onSuccess = e -> {
         controller.closeDbConnection();
@@ -86,18 +87,18 @@ public class UploadingPresenter extends StepperPresenter {
         throw new RuntimeException(e);
       }
 
-      controller.addDatabaseUploadingValuePropertyListener((o, oldValue, newValue) -> {
-        AtomicInteger pos1 = new AtomicInteger();
-        addLoadingData(newValue, pos1.getAndIncrement());
-      });
-      controller.addDatabaseUploadingProgressPropertyListener((o, oldValue, newValue) -> {
-        double pos = newValue.doubleValue();
-        progressBar.progressProperty().set(pos);
-      });
-
+        controller.addDatabaseUploadingValuePropertyListener((o, oldValue, newValue) -> {
+          AtomicInteger pos1 = new AtomicInteger();
+          addLoadingData(newValue, pos1.getAndIncrement());
+        });
+        controller.addDatabaseUploadingProgressPropertyListener((o, oldValue, newValue) -> {
+          double pos = newValue.doubleValue();
+          progressBar.progressProperty().set(pos);
+        });
+        event.consume();
+      }
     };
   }
-
 
   private void addLoadingData(String text, Integer pos) {
     // set previous to ok
