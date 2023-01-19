@@ -120,26 +120,29 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
 
     private EventHandler<SiardEvent> downloadAndArchiveDatabase(MFXStepper stepper) {
         return event -> {
-            loadingSpinner.play();
-            model.provideDatabaseArchiveMetaDataProperties(this);
-            this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
-            this.archivePath.setText(targetArchive.getAbsolutePath());
-            this.subtitle1.setText(this.databaseName);
-            try {
-                controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure(stepper));
-                controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
-                    AtomicInteger pos = new AtomicInteger();
-                    newValue.forEach(p ->
-                            addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
-                    );
-                });
-                controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
-                    double pos = newValue.doubleValue();
-                    progressBar.progressProperty().set(pos);
-                });
-            } catch (SQLException e) {
-                // TODO should notify user about any error - Toast it # CR 458
-                throw new RuntimeException(e);
+            if (!event.isConsumed()) {
+                loadingSpinner.play();
+                model.provideDatabaseArchiveMetaDataProperties(this);
+                this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
+                this.archivePath.setText(targetArchive.getAbsolutePath());
+                this.subtitle1.setText(this.databaseName);
+                try {
+                    controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure(stepper));
+                    controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
+                        AtomicInteger pos = new AtomicInteger();
+                        newValue.forEach(p ->
+                                addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
+                        );
+                    });
+                    controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+                        double pos = newValue.doubleValue();
+                        progressBar.progressProperty().set(pos);
+                    });
+                    event.consume();
+                } catch (SQLException e) {
+                    // TODO should notify user about any error - Toast it # CR 458
+                    throw new RuntimeException(e);
+                }
             }
         };
     }
@@ -165,6 +168,8 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
 
     private EventHandler<WorkerStateEvent> handleDownloadFailure(MFXStepper stepper) {
         return e -> {
+            System.err.println( I18n.get( "archiveDownload.view.title.failed") + " " + e.getSource().getException());
+            e.getSource().getException().printStackTrace();
             stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.ERROR);
             stepper.updateProgress();
             this.title.setVisible(false);

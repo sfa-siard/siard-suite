@@ -26,8 +26,8 @@ public class ArchivePreviewPresenter extends PreviewPresenter {
   public void init(Controller controller, Model model, RootStage stage) {
     super.init(controller, model, stage);
 
-    this.title.textProperty().bind(I18n.createStringBinding("archivePreview.view.title"));
-    this.text.textProperty().bind(I18n.createStringBinding("archivePreview.view.text"));
+    I18n.bind(this.title.textProperty(),"archivePreview.view.title");
+    I18n.bind(this.text.textProperty(),"archivePreview.view.text");
 
     this.buttonsBox = new ButtonBox().make(DEFAULT);
     this.borderPane.setBottom(buttonsBox);
@@ -39,7 +39,7 @@ public class ArchivePreviewPresenter extends PreviewPresenter {
   }
 
   protected void setListeners(MFXStepper stepper) {
-    setListeners();
+    super.setListeners();
 
     stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initTreeView());
 

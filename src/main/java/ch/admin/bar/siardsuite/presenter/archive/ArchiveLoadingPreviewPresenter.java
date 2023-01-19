@@ -57,8 +57,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         this.init(controller, model, stage);
 
-        this.title.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.title"));
-        this.text.textProperty().bind(I18n.createStringBinding("archiveLoadingPreview.view.text"));
+        I18n.bind(this.title.textProperty(),"archiveLoadingPreview.view.title");
+        I18n.bind(this.text.textProperty(),"archiveLoadingPreview.view.text");
         this.loader.setImage(loading);
         new Spinner(this.loader).play();
 
@@ -69,45 +69,50 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
     private void setListeners(MFXStepper stepper) {
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
-            scrollBox.getChildren().clear();
+            if (!event.isConsumed()) {
+                scrollBox.getChildren().clear();
 
-            EventHandler<WorkerStateEvent> onSuccess = e -> {
-                controller.closeDbConnection();
-                stepper.next();
-                stepper.fireEvent(new SiardEvent(ARCHIVE_LOADED));
-            };
+                try {
+                    controller.loadDatabase(true, handleOnSuccess(stepper), handleOnFailure(stepper));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    // TODO should notify user about any error - Toast it # CR 458
+                    cancel(stepper);
+                    throw new RuntimeException(e);
+                }
 
-            EventHandler<WorkerStateEvent> onFailure = e -> {
-                controller.closeDbConnection();
-                stepper.previous();
-            };
+                controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
+                    AtomicInteger pos = new AtomicInteger();
+                    newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
+                });
 
-            try {
-                controller.loadDatabase(true, onSuccess, onFailure);
-            } catch (SQLException e) {
-                // TODO should notify user about any error - Toast it # CR 458
-                stepper.previous();
-                throw new RuntimeException(e);
+                controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+                    double pos = newValue.doubleValue();
+                    progressBar.progressProperty().set(pos);
+                });
+                event.consume();
             }
-
-            controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
-                AtomicInteger pos = new AtomicInteger();
-                newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
-            });
-
-            controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
-                double pos = newValue.doubleValue();
-                progressBar.progressProperty().set(pos);
-            });
-
         });
 
-        this.buttonsBox.previous().setOnAction((event) -> {
-            controller.closeDbConnection();
-            stepper.previous();
-
-        });
+        this.buttonsBox.previous().setOnAction((event) -> cancel(stepper));
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+    }
+
+
+
+    private EventHandler<WorkerStateEvent> handleOnFailure(MFXStepper stepper) {
+        return e -> {
+            e.getSource().getException().printStackTrace();
+            cancel(stepper);
+        };
+    }
+
+    private EventHandler<WorkerStateEvent> handleOnSuccess(MFXStepper stepper) {
+        return e -> {
+            stepper.next();
+            stepper.fireEvent(new SiardEvent(ARCHIVE_LOADED));
+            controller.releaseResources();
+        };
     }
 
     private void addLoadingData(String text, Integer pos) {
@@ -121,4 +126,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                 new LabelIcon(text, pos, IconView.IconType.LOADING));
     }
 
+    private void cancel(MFXStepper stepper) {
+        stepper.previous();
+        controller.cancelDownload();
+    }
 }

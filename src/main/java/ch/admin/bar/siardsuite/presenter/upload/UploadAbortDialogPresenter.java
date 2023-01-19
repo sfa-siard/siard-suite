@@ -20,7 +20,7 @@ public class UploadAbortDialogPresenter extends DialogPresenter {
     @FXML
     protected Text text;
     @FXML
-    protected MFXButton closeButton; // seems redundant
+    protected MFXButton closeButton; // x-button
     @FXML
     protected HBox buttonBox;
     @FXML
@@ -41,7 +41,7 @@ public class UploadAbortDialogPresenter extends DialogPresenter {
         I18n.bind(confirm.textProperty(), "uploadAbortDialog.confirm");
 
         confirm.setOnAction(event -> {
-            controller.closeDbConnection();
+            controller.cancelUpload();
             stage.closeDialog();
             stage.navigate(View.START);
         });

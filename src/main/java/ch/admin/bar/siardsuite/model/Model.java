@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.model;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
@@ -31,6 +30,7 @@ public class Model {
   private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
   private Map<String, String> schemaMap = new HashMap<>();
   private SiardArchive archive = new SiardArchive();
+  public static final String TMP_SIARD = "tmp.siard";
 
   public Model() {}
 
@@ -83,7 +83,7 @@ public class Model {
   }
 
   public Archive initArchive() {
-    return this.initArchive(new File("sample.siard"));
+    return this.initArchive(new File(TMP_SIARD));
   }
 
   public Archive initArchive(File fileArchive) {
@@ -166,13 +166,6 @@ public class Model {
     return this.dbConnectionProps.getPassword();
   }
 
-  // TODO: check if this is correctly placed in the model. I think the model should just represent the state of the application
-  // loading the database is not a state... it's an effect
-
-  public void closeDbConnection() {
-    DatabaseConnectionFactory.disconnect();
-  }
-
   // TODO: maybe use some sort of visitor or provider or...
   public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan, String archiverName,
                                     String archiverContact, File targetArchive) {
@@ -252,6 +245,4 @@ public class Model {
   public Map<String, String> getSchemaMap() {
     return schemaMap;
   }
-
-
 }
