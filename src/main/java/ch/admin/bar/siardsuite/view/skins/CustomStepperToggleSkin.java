@@ -28,6 +28,7 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
         this.container = new HBox(stepperToggle.getIcon(), this.label);
         this.label.textProperty().bind(I18n.createStringBinding(stepperToggle.getText()));
         this.label.setManaged(false);
+        this.label.setLayoutY(26);
         this.icon.setMaxWidth(22);
         this.container.getStyleClass().setAll("custom-stepper-toggle");
         this.getChildren().addAll(new Node[]{this.container});
@@ -64,7 +65,7 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
     double lh = 0;
     double lx = this.snapPosition(this.icon.getMaxWidth() + stepperToggle.getLabelTextGap());
     this.label.setTranslateX(0.0);
-    this.label.resizeRelocate(lx, 15.0, lw, lh);
+    this.label.resizeRelocate(lx, 26.0, lw, lh);
   }
 }
 

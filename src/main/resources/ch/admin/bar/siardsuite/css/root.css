@@ -175,6 +175,7 @@
     -mfx-base-color: #e4e7eb;
     -mfx-spacing: 40.0;
     -mfx-extra-spacing: 0;
+    -fx-pref-height: 52.0;
     -mfx-alignment: BASELINE_LEFT;
 }
 

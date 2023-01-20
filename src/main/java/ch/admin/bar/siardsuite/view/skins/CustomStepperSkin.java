@@ -35,9 +35,11 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private final Rectangle bar;
   private final Rectangle track = this.buildRectangle("track");
   private boolean buttonWasPressed = false;
+  private final MFXStepper stepper;
 
   public CustomStepperSkin(MFXStepper stepper, Stage stage) {
     super(stepper);
+    this.stepper = stepper;
     this.track.setHeight(2.0);
     this.bar = this.buildRectangle("bar");
     this.bar.setHeight(2.0);
@@ -51,6 +53,8 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar.setMaxHeight(52.0);
     this.stepperBar.setMinHeight(52.0);
     layoutWidth(stepper);
+//    this.stepperBar.setLayoutY(26.0);
+//    this.stepper.setLayoutY(26.0);
     this.stepperBar.setMaxSize(stepper.getPrefWidth(), 52.0);
     this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() ->
             this.snapPosition(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2)),
@@ -72,8 +76,11 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
             .mapToDouble(
                     t -> this.stepperBar.spacingProperty().get() + (TextUtils.computeTextWidth(Font.font("Roboto Regular", 13.0), I18n.get(t.textProperty().get())) + (t.getLabelTextGap() + 22))
             ).sum();
-    this.bar.setWidth(toggleWidth);
-    this.track.setWidth(toggleWidth);
+    MFXStepperToggle last = stepper.getStepperToggles().stream().reduce((first, second) -> second).get();
+    Bounds bounds = last.localToParent(last.getBoundsInLocal());
+
+    this.bar.setWidth(bounds.getMaxX() - bounds.getWidth());
+    this.track.setWidth(bounds.getMaxX() - bounds.getWidth());
   }
 
   private void setListeners(Stage stage) {
@@ -185,6 +192,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
 
   protected void layoutChildren(double x, double y, double w, double h) {
     super.layoutChildren(x, y, w, h);
+    layoutWidth(this.stepper);
     this.progressBarGroup.resize(w, 2.0);
   }
 }
