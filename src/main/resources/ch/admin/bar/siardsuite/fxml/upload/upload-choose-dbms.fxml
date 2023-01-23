@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
+
 <ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadChooseDbmsPresenter"
@@ -13,7 +14,7 @@
     <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308">
         <center>
-            <VBox BorderPane.alignment="TOP_LEFT">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="TOP_LEFT">
                 <BorderPane.margin>
                     <Insets left="50.0" right="50.0" top="50.0"/>
                 </BorderPane.margin>

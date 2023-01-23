@@ -27,6 +27,7 @@
 
 .root-center {
     -fx-background-color: #f5f7fa;
+
 }
 
 
@@ -250,7 +251,7 @@
     -fx-padding: 0 .5em 0 0;
     -fx-opacity: 0.7;
     -fx-font-width: 500;
-    -fx-alignment: CENTER ;
+    -fx-alignment: CENTER;
     -fx-font-family: "Roboto Medium";
     -fx-font-size: 15px;
     -fx-border-color: transparent;
@@ -619,12 +620,11 @@
 }
 
 
-
 .check-box > .box,
 .tree-view .check-box .box {
     -fx-background-color: white;
     -fx-padding: 2px;
-    -fx-border-color:grey;
+    -fx-border-color: grey;
 }
 
 
@@ -640,6 +640,7 @@
 }
 
 .table-container-header {
+    -fx-background-color: #f5f7fa;
     -fx-padding: 15 25 10 25;
     -fx-border-color: #e4e7eb;
     -fx-border-width: 0 0 2 0;
@@ -659,7 +660,8 @@
 
 .table-container-title {
     -fx-max-width: infinity;
-    -fx-padding: 0 0 50 0;
+    -fx-text-alignment: LEFT;
+    -fx-alignment: CENTER_LEFT;
 }
 
 .table-container-label {
@@ -695,7 +697,6 @@
 .tree-table-view .column-header-background {
     -fx-background-color: #e4e7eb;
     -fx-padding: 5 0 5 0;
-
 }
 
 .tree-table-view .column-header {
@@ -705,16 +706,18 @@
 .tree-table-view .column-header .label {
     -fx-font-size: 10;
     -fx-alignment: center_left;
-}
-
-.tree-table-view .column-header .cell {
-    -fx-cell-size: 30;
+    -fx-text-alignment: LEFT;
     -fx-padding: 0 5 0 5;
 }
 
-.tree-table-view .cell {
+.tree-table-view .column-header .table-cell {
+    /*-fx-cell-size: 30;*/
+    -fx-padding: 0 5 0 5;
+}
+
+.tree-table-view .table-cell {
+    -fx-text-alignment: LEFT;
     -fx-font-size: 10;
-    -fx-cell-size: 30;
     -fx-padding: 0 10 0 10;
 }
 

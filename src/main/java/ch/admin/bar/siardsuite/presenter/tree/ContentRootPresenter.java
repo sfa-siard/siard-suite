@@ -21,8 +21,6 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
 
   @FXML
   public VBox container;
-  @FXML
-  private Label titleTableContainer;
 
   @FXML
   private Label textFormat;
@@ -52,8 +50,6 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
     this.model = model;
     this.controller = controller;
     this.stage = stage;
-
-    titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
 
     initLabels();
 

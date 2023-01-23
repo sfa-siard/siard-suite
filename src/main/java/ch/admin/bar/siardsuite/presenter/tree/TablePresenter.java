@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TablePresenter extends TreePresenter implements SiardArchiveVisitor {
-  @FXML
-  public Label titleTableContainer;
+
   @FXML
   public Label nameLabel;
   @FXML
@@ -29,19 +28,20 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
   @FXML
   public TableView<Map> tableView = new TableView<>();
 
-  @Override
+    @Override
   public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
     this.model = model;
     this.controller = controller;
     this.stage = stage;
 
-    this.titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
+
     this.nameLabel.textProperty().bind(I18n.createStringBinding(wrapper.getType().getNameLabel()));
     this.infoLabel.textProperty().bind(I18n.createStringBinding(wrapper.getType().getInfoLabel()));
 
     model.provideDatabaseArchiveProperties(this, wrapper.getDatabaseObject());
     model.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
-
+    tableView.setColumnResizePolicy((param -> true));
+    tableView.resize(1400, 400);
     model.setCurrentTableSearchBase(tableView, new LinkedHashSet<>(tableView.getItems()));
     if (model.getCurrentTableSearchButton() != null && model.getCurrentTableSearchButton().button() != null) {
       model.setCurrentTableSearchButton(model.getCurrentTableSearchButton().button(), false);
