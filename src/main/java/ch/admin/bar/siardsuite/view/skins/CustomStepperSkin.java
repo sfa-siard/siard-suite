@@ -49,13 +49,10 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar.setSpacing(40.0);
     this.stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
     this.stepperBar.getChildren().addAll(stepper.getStepperToggles().stream().filter(Node::isVisible).collect(Collectors.toList()));
-    this.stepperBar.getChildren().forEach(c -> c.setLayoutY(26.0));
     this.stepperBar.getStyleClass().setAll("stepper-bar");
     this.stepperBar.setMaxHeight(52.0);
     this.stepperBar.setMinHeight(52.0);
     layoutWidth(stepper);
-//    this.stepperBar.setLayoutY(26.0);
-//    this.stepper.setLayoutY(26.0);
     this.stepperBar.setMaxSize(stepper.getPrefWidth(), 52.0);
     this.progressBarGroup.layoutYProperty().bind(Bindings.createDoubleBinding(() ->
             this.snapPosition(this.stepperBar.getHeight() / 2.0 - (this.bar.getHeight() / 2)),
@@ -79,6 +76,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
             ).sum();
     MFXStepperToggle last = stepper.getStepperToggles().stream().reduce((first, second) -> second).get();
     Bounds bounds = last.localToParent(last.getBoundsInLocal());
+
     if ((bounds.getMaxX() -bounds.getWidth()) >= toggleWidth) {
       toggleWidth = bounds.getMaxX() -bounds.getWidth();
     }
@@ -198,5 +196,14 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     super.layoutChildren(x, y, w, h);
     layoutWidth(this.stepper);
     this.progressBarGroup.resize(w, 2.0);
+  }
+
+  protected void printToggleY() {
+    this.stepper.getStepperToggles().forEach( t -> {
+      Bounds b = t.localToParent(t.getBoundsInLocal());
+    } );
+
+    this.stepper.forceLayoutUpdate();
+    stepper.requestLayout();
   }
 }

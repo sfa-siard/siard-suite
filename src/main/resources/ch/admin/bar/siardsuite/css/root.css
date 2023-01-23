@@ -199,7 +199,7 @@
 .custom-stepper-toggle {
     -fx-padding: 0 0.5em 0 0.5em;
     -fx-background-color: #e4e7eb;
-    -fx-pref-height: 52;
+    -fx-pref-height: 52.0;
     -fx-alignment: CENTER_LEFT;
     -fx-text-fill: siard-text-color-black;
     -mfx-label-text-gap: 12.0;
@@ -239,31 +239,30 @@
 }
 
 .mfx-stepper-toggle .mfx-text-field,
-.custom-stepper-toggle .mfx-text-field {
-    -fx-padding: 0 0 0 0;
+.mfx-stepper-toggle .text-field,
+.mfx-stepper-toggle .mfx-text-field .text-field,
+.custom-stepper-toggle .text-field,
+.custom-stepper-toggle .mfx-text-field .text-field {
     -fx-background-color: #e4e7eb;
     -mfx-float-mode: disabled;
-}
-
-.mfx-stepper-toggle .mfx-text-field,
-.mfx-stepper-toggle .mfx-text-field .text-field,
-.custom-stepper-toggle .mfx-text-field .text-field {
+    -fx-cursor: DEFAULT;
     -fx-text-fill: siard-text-color-black;
+    -fx-padding: 0 .5em 0 0;
     -fx-opacity: 0.7;
     -fx-font-width: 500;
-    -fx-alignment: BASELINE_CENTER;
+    -fx-alignment: CENTER ;
     -fx-font-family: "Roboto Medium";
-    -fx-font-size: 16px;
+    -fx-font-size: 15px;
     -fx-border-color: transparent;
 }
 
 .mfx-stepper-toggle:selected .number-btn,
-.mfx-stepper-toggle:selected .mfx-text-field,
-.custom-stepper-toggle:selected .mfx-text-field,
-.mfx-stepper-toggle:completed .mfx-text-field,
-.custom-stepper-toggle:completed .mfx-text-field,
-.mfx-stepper-toggle:invalid .mfx-text-field,
-.custom-stepper-toggle:invalid .mfx-text-field {
+.mfx-stepper-toggle:selected .text-field,
+.custom-stepper-toggle:selected .text-field,
+.mfx-stepper-toggle:completed .text-field,
+.custom-stepper-toggle:completed .text-field,
+.mfx-stepper-toggle:invalid .text-field,
+.custom-stepper-toggle:invalid .text-field {
     -fx-opacity: 1;
     -fx-text-fill: siard-text-color-black;
 }
@@ -540,19 +539,19 @@
     -fx-font-family: siard-font-family;
 }
 
-.form-container .mfx-text-field .text-field {
+.form-container .text-field {
     /*-fx-highlight-fill: #ECE0FD; !* Selected text highlight *!*/
     -fx-prompt-text-fill: #9aa5b1; /* Prompt text color */
     -fx-padding: 0 0 0 17;
 }
 
-.form-container .mfx-text-field .floating-text {
+.form-container .text-field .floating-text {
     -fx-padding: 0 0 8 -12;
     -fx-text-fill: siard-text-color;
     -fx-background-color: transparent;
 }
 
-.form-container .mfx-text-field:focus-within {
+.form-container .text-field:focus-within {
     -fx-background-insets: 0;
     -fx-border-color: #b0afaf;
     -fx-border-width: 1;
