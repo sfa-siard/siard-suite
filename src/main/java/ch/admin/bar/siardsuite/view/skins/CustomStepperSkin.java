@@ -49,6 +49,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.stepperBar.setSpacing(40.0);
     this.stepperBar.alignmentProperty().bind(stepper.alignmentProperty());
     this.stepperBar.getChildren().addAll(stepper.getStepperToggles().stream().filter(Node::isVisible).collect(Collectors.toList()));
+    this.stepperBar.getChildren().forEach(c -> c.setLayoutY(26.0));
     this.stepperBar.getStyleClass().setAll("stepper-bar");
     this.stepperBar.setMaxHeight(52.0);
     this.stepperBar.setMinHeight(52.0);
@@ -78,9 +79,11 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
             ).sum();
     MFXStepperToggle last = stepper.getStepperToggles().stream().reduce((first, second) -> second).get();
     Bounds bounds = last.localToParent(last.getBoundsInLocal());
-
-    this.bar.setWidth(bounds.getMaxX() - bounds.getWidth());
-    this.track.setWidth(bounds.getMaxX() - bounds.getWidth());
+    if ((bounds.getMaxX() -bounds.getWidth()) >= toggleWidth) {
+      toggleWidth = bounds.getMaxX() -bounds.getWidth();
+    }
+    this.bar.setWidth(toggleWidth);
+    this.track.setWidth(toggleWidth);
   }
 
   private void setListeners(Stage stage) {
@@ -93,6 +96,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
 
     stepper.addEventFilter(MFXStepper.MFXStepperEvent.FORCE_LAYOUT_UPDATE_EVENT, (event) -> {
       stepper.requestLayout();
+      layoutWidth(stepper);
       this.computeProgress();
     });
     stepper.addEventFilter(MouseEvent.MOUSE_PRESSED, (event) -> stepper.requestFocus());
