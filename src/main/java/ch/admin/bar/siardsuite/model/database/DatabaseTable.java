@@ -65,12 +65,6 @@ public class DatabaseTable extends DatabaseObject {
                 col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.position"));
                 col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnName"));
                 col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnType"));
-                col0.setMinWidth(125);
-                col1.setMinWidth(250);
-                col2.setMinWidth(250);
-                col0.setStyle("-fx-alignment: CENTER_RIGHT");
-                col1.setStyle("-fx-alignment: CENTER_LEFT");
-                col2.setStyle("-fx-alignment: CENTER_LEFT");
                 col0.setCellValueFactory(new MapValueFactory<>("index"));
                 col1.setCellValueFactory(new MapValueFactory<>("name"));
                 col2.setCellValueFactory(new MapValueFactory<>("type"));
@@ -89,16 +83,12 @@ public class DatabaseTable extends DatabaseObject {
                 tableView.setRowFactory(rowFactory);
                 final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
                 col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
-                col0.setMinWidth(125);
-                col0.setStyle("-fx-alignment: CENTER_RIGHT");
                 col0.setCellValueFactory(new MapValueFactory<>("index"));
                 tableView.getColumns().add(col0);
                 TableColumn<Map, StringProperty> col;
                 for (DatabaseColumn column : columns) {
                     col = new TableColumn<>();
                     col.setText(column.name);
-                    col.setMinWidth(125);
-                    col.setStyle("-fx-alignment: CENTER_LEFT");
                     col.setCellValueFactory(new MapValueFactory<>(column.index));
                     tableView.getColumns().add(col);
                 }
@@ -112,8 +102,6 @@ public class DatabaseTable extends DatabaseObject {
                     throw new RuntimeException(e);
                 }
             }
-            tableView.setMinWidth(590);
-            tableView.setMaxWidth(590);
         }
     }
 

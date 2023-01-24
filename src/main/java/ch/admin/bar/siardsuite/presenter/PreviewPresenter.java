@@ -19,13 +19,11 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,8 +51,8 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   protected AnchorPane tableContainerContent;
   @FXML
   public Label titleTableContainer;
-
-
+  @FXML
+  public StackPane rightTableBox;
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {
@@ -173,6 +171,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
       loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
       tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
       this.titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
+      tableContainerContent.prefWidthProperty().bind(rightTableBox.widthProperty());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

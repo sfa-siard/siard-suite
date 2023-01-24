@@ -9,6 +9,7 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import static ch.admin.bar.siardsuite.Workflow.EXPORT;
@@ -18,11 +19,19 @@ import static ch.admin.bar.siardsuite.component.ButtonBox.Type.OPEN_PREVIEW;
 public class OpenPreviewPresenter extends PreviewPresenter {
 
   @FXML
+  public VBox container;
+  @FXML
+  public VBox leftTreeBox;
+
+  @FXML
   protected Label title;
   @FXML
   protected Text text;
   @FXML
   protected ButtonBox buttonsBox;
+  @FXML
+  public Label titleTableContainer;
+
 
   @Override
   public void init(Controller controller, Model model, RootStage stage) {

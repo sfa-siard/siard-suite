@@ -4,24 +4,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.tree.TablePresenter">
-    <VBox fx:id="tableContainerContent" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.tree.TablePresenter">
+    <VBox fx:id="tableContainer" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
         <padding>
-            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
         </padding>
 
-
-        <Label fx:id="nameLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-label" />
-        <Label fx:id="nameText" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-text" />
-        <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-label" />
-        <Label fx:id="infoText" alignment="CENTER" contentDisplay="CENTER" styleClass="table-container-text" />
-        <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="1400.0">
-            <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="tree-table-view" HBox.hgrow="ALWAYS" />
-        </HBox>
-
-
+        <Label fx:id="nameLabel" styleClass="table-container-label"/>
+        <Label fx:id="nameText" styleClass="table-container-text"/>
+        <Label fx:id="infoLabel" styleClass="table-container-label"/>
+        <Label fx:id="infoText" styleClass="table-container-text"/>
+        <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                   styleClass="tree-table-view" VBox.vgrow="ALWAYS"/>
     </VBox>
 </AnchorPane>

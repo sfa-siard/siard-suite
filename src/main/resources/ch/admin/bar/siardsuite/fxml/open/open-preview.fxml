@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-
-<AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18"
+<?import java.lang.*?>
+<AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.open.OpenPreviewPresenter">
-    <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="scrollable-pane"
-                AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0"
-                AnchorPane.topAnchor="40.0">
+    <ScrollPane fitToHeight="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                styleClass="scrollable-pane" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="110.0"
+                AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="40.0">
         <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                     styleClass="main-container">
             <center>
-                <VBox BorderPane.alignment="TOP_LEFT">
+                <VBox fx:id="container" maxHeight="1.7976931348623157E308" BorderPane.alignment="TOP_LEFT">
                     <children>
                         <VBox>
                             <children>
@@ -38,21 +30,21 @@
                                 <Insets left="25.0" right="25.0"/>
                             </VBox.margin>
                         </VBox>
-                        <HBox prefHeight="467">
+                        <HBox VBox.vgrow="ALWAYS">
                             <children>
-                                <VBox fx:id="leftTreeBox" prefWidth="365.0">
+                                <VBox fx:id="leftTreeBox" prefWidth="365.0" HBox.hgrow="SOMETIMES">
                                     <children>
                                         <TreeView fx:id="treeView" maxHeight="1.7976931348623157E308"
                                                   VBox.vgrow="ALWAYS"/>
                                     </children>
                                 </VBox>
                                 <StackPane fx:id="rightTableBox" maxHeight="1.7976931348623157E308"
-                                           maxWidth="1.7976931348623157E308" prefWidth="714.0" HBox.hgrow="ALWAYS">
-                                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308"
-                                                maxWidth="1.7976931348623157E308" styleClass="table-container"
-                                                StackPane.alignment="CENTER">
+                                           maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                                    <ScrollPane fitToHeight="true" fitToWidth="true"
+                                                maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                                styleClass="table-container" StackPane.alignment="CENTER_LEFT">
                                         <content>
-                                            <AnchorPane fx:id="tableContainerContent"
+                                            <AnchorPane fx:id="tableContainerContent" maxHeight="1.7976931348623157E308"
                                                         maxWidth="1.7976931348623157E308"/>
                                         </content>
                                         <StackPane.margin>
