@@ -30,11 +30,11 @@ jobs:
       - name: upload zip archive
         uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-$(git describe)
+          name: siard-suite-${{ git describe}}
           path: build/distributions/siard-suite-*.zip
       - name: upload executable jar
         uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-$(git describe)-jar
+          name: siard-suite-${{ git describe }}-jar
           path: build/libs/siard-suite-*.jar
 
