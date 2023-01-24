@@ -27,18 +27,14 @@ jobs:
         uses: gradle/gradle-build-action@v2
       - name: Execute Gradle build
         run: ./gradlew build installDist fatJar -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
-      - name: tar install/siard-suite to maintain file persmission on executable files
-        run: |
-          cd build/install/siard-suite
-          tar -cvf siard-suite.tar .
-      - name: upload tar archive
+      - name: upload zip archive
         uses: actions/upload-artifact@v3
         with:
-          name: siard-suite
-          path: build/install/siard-suite/siard-suite.tar
+          name: siard-suite-${{GITHUB_REF_NAME}}
+          path: build/distributions/siard-suite-*.zip
       - name: upload executable jar
         uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-executable-jar
+          name: siard-suite-${{GITHUB_REF_NAME}}-jar
           path: build/libs/siard-suite-*.jar
 
