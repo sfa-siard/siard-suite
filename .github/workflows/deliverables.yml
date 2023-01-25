@@ -18,6 +18,12 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
+      - name: Set TAG-Env
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: echo "NAME_TAG=SIARD-suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Set TAG-Env Windows
+        if: runner.os == 'Windows'
+        run: echo "NAME_TAG=SIARD-suite-${{ github.ref_name }}" >> $env:GITHUB_ENV
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -36,40 +42,49 @@ jobs:
       - name: Execute jpackage
         run: ./gradlew jpackage --no-daemon
       - name: Upload DMG as an artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-dmg
+          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-${{ runner.os }}-dmg
           path: build/jpackage/*.dmg
+          if-no-files-found: ignore
       - name: Upload EXE as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-exe
+          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-win-exe
           path: build/jpackage/*.exe
           if-no-files-found: ignore
       - name: Upload MSI as an artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-msi
+          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-win-msi
           path: build/jpackage/*.msi
           if-no-files-found: ignore
       - name: Upload DEB as an artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-deb
+          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-${{ runner.os }}-deb
           path: build/jpackage/*.deb
           if-no-files-found: ignore
       - name: Upload RPM as an artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-jdk-${{ matrix.java }}-${{ matrix.os }}-rpm
+          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-${{ runner.os }}-rpm
           path: build/jpackage/*.rpm
           if-no-files-found: ignore
       - name: tar bundled package to maintain file permissions
+        # needed because of bug https://github.com/actions/upload-artifact/issues/38
         run: |
           cd build/jpackage/siard-suite
           tar -cvf siard-suite-standalone.tar .
-      - name: Upload bundled package
-        uses: actions/upload-artifact@v2
+      - name: Upload bundled package linux/mac
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-standalone-${{ matrix.os }}
+          name: ${{ env.NAME_TAG }}-${{ runner.os }}
+          path: build/jpackage/siard-suite/siard-suite-standalone.tar
+      - name: Upload bundled package win
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.NAME_TAG }}-win
           path: build/jpackage/siard-suite/siard-suite-standalone.tar

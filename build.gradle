@@ -137,7 +137,7 @@ siardFromDb {
     dependsOn(siardToDb)
 }
 
-installDist {
+assembleDist {
     dependsOn(siardFromDb)
 }
 
