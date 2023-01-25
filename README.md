@@ -36,6 +36,24 @@ Hint: If you are working on ubuntu building the rpm installer may fail - in this
 sudo apt install alien
 ```
 
+## versioning, tags and releases
+
+Versions and tags are managed with the Axion Release Plugin for Gradle (https://github.com/allegro/axion-release-plugin)
+
+Short overview:
+
+```shell
+./gradlew currentVersion # show the current version
+
+./gradlew release        # creates a new release adds a tag and pushes it to remote.
+```
+
+Run the release task to create a new patch version and push it to remote. The Github Actions will create the deliverables.
+
+__NOTE: the official github release has be created manually by BUAR!__
+
+While the versioning scheme looks like it's semver it is actuall not! The major and minor version represent the supported SIARD Format version (currently 2.2)
+
 ## documentation
 
 Siard-Suite documentation is made with  [Asciidoc]( https://asciidoctor.org/).
