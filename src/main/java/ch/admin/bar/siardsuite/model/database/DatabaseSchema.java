@@ -53,12 +53,6 @@ public class DatabaseSchema extends DatabaseObject {
             col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
             col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.tableName"));
             col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfColumns"));
-            col0.setMinWidth(125);
-            col1.setMinWidth(285);
-            col2.setMinWidth(125);
-            col0.setStyle("-fx-alignment: CENTER_RIGHT");
-            col1.setStyle("-fx-alignment: CENTER_LEFT");
-            col2.setStyle("-fx-alignment: CENTER_RIGHT");
             col0.setCellValueFactory(new MapValueFactory<>("index"));
             col1.setCellValueFactory(new MapValueFactory<>("name"));
             col2.setCellValueFactory(new MapValueFactory<>("numberOfColumns"));
@@ -68,14 +62,10 @@ public class DatabaseSchema extends DatabaseObject {
             if (!onlyMetaData) {
                 final TableColumn<Map, StringProperty> col3 = new TableColumn<>();
                 col3.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfRows"));
-                col3.setMinWidth(125);
-                col3.setStyle("-fx-alignment: CENTER_RIGHT");
                 col3.setCellValueFactory(new MapValueFactory<>("numberOfRows"));
                 tableView.getColumns().add(col3);
             }
             tableView.setItems(items());
-            tableView.setMinWidth(590);
-            tableView.setMaxWidth(590);
         }
     }
 

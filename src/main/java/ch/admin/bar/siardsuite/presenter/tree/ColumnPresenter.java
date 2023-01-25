@@ -18,8 +18,6 @@ public class ColumnPresenter extends TreePresenter {
   public VBox labels;
   @FXML
   public VBox texts;
-  @FXML
-  private Label titleTableContainer;
 
 
   @Override
@@ -28,7 +26,6 @@ public class ColumnPresenter extends TreePresenter {
     this.controller = controller;
     this.stage = stage;
 
-    this.titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
     initLabels();
 
     model.populate(texts, wrapper.getDatabaseObject(), wrapper.getType());
@@ -37,7 +34,7 @@ public class ColumnPresenter extends TreePresenter {
   private void initLabels() {
     for (Node child : this.labels.getChildren()) {
       if (child.getId().contains("label")) {
-        ((Label) child).textProperty().bind(I18n.createStringBinding("tableContainer.column." + child.getId()));
+        I18n.bind(((Label) child).textProperty(),"tableContainer.column." + child.getId());
         child.getStyleClass().add("table-container-label-small");
       }
     }

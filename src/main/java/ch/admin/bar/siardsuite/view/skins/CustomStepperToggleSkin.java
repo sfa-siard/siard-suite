@@ -3,17 +3,17 @@ package ch.admin.bar.siardsuite.view.skins;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
-import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.utils.TextUtils;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.SkinBase;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   private final HBox container;
-  private final MFXTextField label;
+  private final TextField label;
   private final Button icon;
 
   private Boolean visible;
@@ -21,7 +21,8 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   public CustomStepperToggleSkin(MFXStepperToggle stepperToggle, Boolean visible, Stage stage) {
     super(stepperToggle);
       this.visible = visible;
-      this.label = MFXTextField.asLabel();
+      this.label = new TextField();
+      this.label.setEditable(false);
       this.icon = (Button) stepperToggle.getIcon();
 
       if (visible) {
@@ -30,6 +31,10 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
         this.label.setManaged(false);
         this.icon.setMaxWidth(22);
         this.container.getStyleClass().setAll("custom-stepper-toggle");
+        this.container.setLayoutY(0);
+        this.container.setMinHeight(52.0);
+        this.label.setLayoutY(0);
+        this.label.setMinHeight(52.0);
         this.getChildren().addAll(new Node[]{this.container});
         this.setListeners(stage);
       } else {
@@ -61,11 +66,13 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
     super.layoutChildren(x, y, w, h);
     MFXStepperToggle stepperToggle = this.getSkinnable();
     double lw = this.snapSize(w - this.icon.getMaxWidth() - this.getSkinnable().getLabelTextGap());
-    double lh = 0;
+    double lh = 52.0;
     double lx = this.snapPosition(this.icon.getMaxWidth() + stepperToggle.getLabelTextGap());
     this.label.setTranslateX(0.0);
-    this.label.resizeRelocate(lx, 15.0, lw, lh);
+    this.label.resizeRelocate(lx, 0.0, lw, lh);
   }
+
+
 }
 
 
