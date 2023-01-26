@@ -35,12 +35,8 @@ jobs:
         run: echo $JAVA_HOME
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Execute build
+      - name: Execute build imageZip jpackage
         run: ./gradlew build --no-daemon
-      - name: Execute runtime
-        run: ./gradlew runtime --no-daemon
-      - name: Execute jpackage
-        run: ./gradlew jpackage --no-daemon
       - name: Upload DMG as an artifact
         uses: actions/upload-artifact@v3
         with:
@@ -71,20 +67,8 @@ jobs:
           name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-${{ runner.os }}-rpm
           path: build/jpackage/*.rpm
           if-no-files-found: ignore
-      - name: tar bundled package to maintain file permissions
-        # needed because of bug https://github.com/actions/upload-artifact/issues/38
-        run: |
-          cd build/jpackage/siard-suite
-          tar -cvf siard-suite-standalone.tar .
-      - name: Upload bundled package linux/mac
-        if: runner.os == 'Linux' || runner.os == 'macOS'
+      - name: Upload application image zip
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}
-          path: build/jpackage/siard-suite/siard-suite-standalone.tar
-      - name: Upload bundled package win
-        if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.NAME_TAG }}-win
-          path: build/jpackage/siard-suite/siard-suite-standalone.tar
+          path: build/image-zip/*.zip
