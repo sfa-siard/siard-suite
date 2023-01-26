@@ -18,6 +18,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Set TAG-Env
+        run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set up JDK 18
         uses: actions/setup-java@v3
         with:
@@ -34,11 +36,11 @@ jobs:
       - name: upload zip archive
         uses: actions/upload-artifact@v3
         with:
-          name: siard-suite
+          name: ${{ env.NAME_TAG }}
           path: build/distributions/siard-suite-*.zip
       - name: upload executable jar
         uses: actions/upload-artifact@v3
         with:
-          name: siard-suite-jar
+          name: ${{ env.NAME_TAG }}-jar
           path: build/libs/siard-suite-*.jar
 
