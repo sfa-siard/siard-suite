@@ -137,7 +137,7 @@ siardFromDb {
     dependsOn(siardToDb)
 }
 
-assembleDist {
+distZip {
     dependsOn(siardFromDb)
 }
 
