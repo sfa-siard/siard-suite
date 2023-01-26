@@ -72,13 +72,13 @@ jobs:
       - name: Upload DMG as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-${{ runner.os }}-dmg
+          name: ${{ env.NAME_TAG }}-${{ runner.os }}-dmg
           path: build/jpackage/*.dmg
           if-no-files-found: ignore
       - name: Upload EXE as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-win-exe
+          name: ${{ env.NAME_TAG }}-win-exe
           path: build/jpackage/*.exe
           if-no-files-found: ignore
       - name: Upload MSI as an artifact
