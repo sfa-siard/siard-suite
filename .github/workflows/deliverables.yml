@@ -52,19 +52,19 @@ jobs:
       - name: Upload MSI as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-win-msi
+          name: ${{ env.NAME_TAG }}-win-msi
           path: build/jpackage/*.msi
           if-no-files-found: ignore
       - name: Upload DEB as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-${{ runner.os }}-deb
+          name: ${{ env.NAME_TAG }}-${{ runner.os }}-deb
           path: build/jpackage/*.deb
           if-no-files-found: ignore
       - name: Upload RPM as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-jdk-${{ matrix.java }}-${{ runner.os }}-rpm
+          name: ${{ env.NAME_TAG }}-${{ runner.os }}-rpm
           path: build/jpackage/*.rpm
           if-no-files-found: ignore
       - name: Upload application image zip
