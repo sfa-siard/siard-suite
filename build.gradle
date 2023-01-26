@@ -79,6 +79,8 @@ runtime {
             'java.naming'
     ]
 
+    imageZip = file("$buildDir/image-zip/siard-suite.${version}.zip")
+
     jpackage {
         appVersion = version
 
