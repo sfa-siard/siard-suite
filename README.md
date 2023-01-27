@@ -48,11 +48,11 @@ Short overview:
 ./gradlew release        # creates a new release adds a tag and pushes it to remote.
 ```
 
-Run the release task to create a new patch version and push it to remote. The Github Actions will create the deliverables.
+Run the release task to create a new patch version and push it to remote. The GitHub Actions will create the deliverables.
 
-__NOTE: the official github release has be created manually by BUAR!__
+__NOTE: the official GitHub Release has be created manually by BUAR!__
 
-While the versioning scheme looks like it's semver it is actuall not! The major and minor version represent the supported SIARD Format version (currently 2.2)
+While the versioning scheme looks like it's semver it is actually not! The major and minor version represent the supported SIARD Format version (currently 2.2)
 
 ## documentation
 
