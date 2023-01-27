@@ -84,10 +84,13 @@ runtime {
     def currentOs = org.gradle.internal.os.OperatingSystem.current()
     if (currentOs.windows) {
         imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-win.zip")
+        imageDir = file("$buildDir/SIARD-Suite.${version}-win")
     } else if (currentOs.linux) {
         imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-linux.zip")
+        imageDir = file("$buildDir/SIARD-Suite.${version}-linux")
     } else if (currentOs.macOsX) {
         imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-mac.zip")
+        imageDir = file("$buildDir/SIARD-Suite.${version}-mac")
     }
 
     jpackage {
