@@ -67,7 +67,7 @@ jobs:
         run: echo $JAVA_HOME
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Execute build imageZip jpackage
+      - name: Execute build runtimeZip jpackage
         run: ./gradlew build runtimeZip jpackage --no-daemon
       - name: Upload DMG as an artifact
         uses: actions/upload-artifact@v3
