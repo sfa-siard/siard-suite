@@ -23,6 +23,7 @@ version = scmVersion.version
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 java.targetCompatibility = JavaVersion.VERSION_1_8
 mainClassName = "ch.admin.bar.siardsuite.Launcher"
+applicationName = "SIARD-Suite"
 
 manifest {
     attributes(
@@ -54,7 +55,6 @@ tasks.withType(JavaExec) {
 // task to create an exectutable jar file with all necessary dependencies included and signature files removed.
 task fatJar(type: Jar) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
     manifest {
         attributes "Main-Class": "ch.admin.bar.siardsuite.SiardApplication"
     }
@@ -79,18 +79,20 @@ runtime {
             'java.naming'
     ]
 
-    imageZip = file("$buildDir/image-zip/siard-suite.${version}.zip")
+    imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}.zip")
 
     def currentOs = org.gradle.internal.os.OperatingSystem.current()
     if (currentOs.windows) {
-        imageZip = file("$buildDir/image-zip/siard-suite.${version}-win.zip")
+        imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-win.zip")
     } else if (currentOs.linux) {
-        imageZip = file("$buildDir/image-zip/siard-suite.${version}-linux.zip")
+        imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-linux.zip")
     } else if (currentOs.macOsX) {
-        imageZip = file("$buildDir/image-zip/siard-suite.${version}-mac.zip")
+        imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-mac.zip")
     }
 
     jpackage {
+        imageName = "SIARD-Suite"
+        installerName = "SIARD-Suite"
         appVersion = version
 
         skipInstaller = false
