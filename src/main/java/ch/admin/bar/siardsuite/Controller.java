@@ -145,4 +145,8 @@ public class Controller {
   public void failure(String failureMessage) {
     this.model.setFailure(failureMessage);
   }
+
+  public String getErrorMessage() {
+    return this.model.getFailure();
+  }
 }

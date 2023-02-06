@@ -88,7 +88,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    fail(stepper, e.getLocalizedMessage(), DATABASE_DOWNLOAD_FAILED);
+                    fail(stepper, e, DATABASE_DOWNLOAD_FAILED);
                 } finally {
                     event.consume();
                 }
@@ -103,8 +103,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
     private EventHandler<WorkerStateEvent> handleOnFailure(MFXStepper stepper) {
         return e -> {
-            e.getSource().getException().printStackTrace();
-            cancel(stepper);
+            fail(stepper, e.getSource().getException(), DATABASE_DOWNLOAD_FAILED);
         };
     }
 
@@ -132,9 +131,11 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         controller.cancelDownload();
     }
 
-    private void fail(MFXStepper stepper, String failureMessage, EventType<SiardEvent> event) {
+    private void fail(MFXStepper stepper, Throwable e, EventType<SiardEvent> event) {
         stepper.previous();
-        controller.failure(failureMessage);
+        this.stage.openDialog(View.ERROR_DIALOG);
+        controller.cancelDownload();
+        controller.failure(e.getLocalizedMessage());
         stepper.fireEvent(new SiardEvent(event));
     }
 }

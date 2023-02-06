@@ -182,12 +182,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     }
 
     private void setListeners(MFXStepper stepper) {
-        EventHandler<SiardEvent> databaseDownloadFailedHandler = event -> {
-            // I18n.bind(errorMessage.textProperty(), "connection.view.error.database.name");
-            // errorMessage.setVisible(true);
-        };
 
-        stepper.addEventHandler(SiardEvent.DATABASE_DOWNLOAD_FAILED, databaseDownloadFailedHandler);
 
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
             // TODO MSAccess-DB needs different Fields for selecting File- #CR457
