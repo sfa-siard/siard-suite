@@ -110,7 +110,7 @@
                             </VBox.margin>
                         </Label>
                         <TextField fx:id="dbNameField" maxWidth="578.0" styleClass="form-field"/>
-                        <Label fx:id="dbnameValidationMsg" styleClass="error-text">
+                        <Label fx:id="dbNameValidationMsg" styleClass="error-text">
                             <VBox.margin>
                                 <Insets/>
                             </VBox.margin>

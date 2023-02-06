@@ -28,7 +28,10 @@ import javafx.scene.text.TextFlow;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -44,8 +47,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     private static final String TEST_DB = "test-db";
     private String portString;
     private String dbTypeString;
-    @FXML
-    public Label errorMessage;
+
     @FXML
     public Text title;
     @FXML
@@ -106,7 +108,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     @FXML
     public Label portValidationMsg;
     @FXML
-    public Label dbnameValidationMsg;
+    public Label dbNameValidationMsg;
     @FXML
     public Label usernameValidationMsg;
     @FXML
@@ -134,7 +136,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
             addRecentDatabaseConnection();
         }
         tooltip = new SiardTooltip("archiveConnection.view.tooltip");
-        errorMessage.setVisible(false);
         buttonsBox = new ButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
         setListeners(stepper);
@@ -182,8 +183,8 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     private void setListeners(MFXStepper stepper) {
         EventHandler<SiardEvent> databaseDownloadFailedHandler = event -> {
-           // I18n.bind(errorMessage.textProperty(), "connection.view.error.database.name");
-           // errorMessage.setVisible(true);
+            // I18n.bind(errorMessage.textProperty(), "connection.view.error.database.name");
+            // errorMessage.setVisible(true);
         };
 
         stepper.addEventHandler(SiardEvent.DATABASE_DOWNLOAD_FAILED, databaseDownloadFailedHandler);
@@ -213,38 +214,20 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         infoButton.setOnMouseMoved(event -> {
             Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
             tooltip.show(infoButton,
-                    (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-                    boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
+                         (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
+                         boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
         });
 
         infoButton.setOnMouseExited(event -> tooltip.hide());
 
         buttonsBox.next().setOnAction((event) -> {
-            if (dbServerField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.database.server");
-                errorMessage.setVisible(true);
-            } else if (dbNameField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.database.name");
-                errorMessage.setVisible(true);
-            } else if (usernameField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.user.name");
-                errorMessage.setVisible(true);
-            } else if (passwordField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.user.password");
-                errorMessage.setVisible(true);
-            } else if (urlField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.connection.url");
-                errorMessage.setVisible(true);
-            } else if (toggleSave.isSelected() && connectionName.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.connection.name");
-                errorMessage.setVisible(true);
-            } else if (toggleSave.isSelected() && connectionName.getText().contains("/")) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.connection.name.symbol");
-                errorMessage.setVisible(true);
-            } else {
+            if (this.validateProperties()) {
                 if (toggleSave.isSelected()) {
                     try {
-                        final Preferences preferences = UserPreferences.push(DATABASE_CONNECTION, TIMESTAMP, Comparator.reverseOrder(), connectionName.getText());
+                        final Preferences preferences = UserPreferences.push(DATABASE_CONNECTION,
+                                                                             TIMESTAMP,
+                                                                             Comparator.reverseOrder(),
+                                                                             connectionName.getText());
                         preferences.put(DATABASE_SYSTEM.name(), model.getDatabaseProduct().get());
                         preferences.put(DATABASE_SERVER.name(), dbServerField.getText());
                         preferences.put(PORT_NUMBER.name(), portField.getText());
@@ -258,8 +241,10 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
                         throw new RuntimeException(e);
                     }
                 }
-                controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
-                errorMessage.setVisible(false);
+                controller.updateConnectionData(urlField.getText(),
+                                                this.usernameField.getText(),
+                                                this.dbNameField.getText(),
+                                                this.passwordField.getText());
                 stepper.next();
                 stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBLOAD_EVENT));
                 passwordField.setText("");
@@ -269,6 +254,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
+
 
     private void handleKeyEvent(KeyEvent event) {
         String inputText = event.getText();
@@ -285,5 +271,66 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
             urlField.setText(url);
         }
         event.consume();
+    }
+
+    private class DbConnectionDefinitions {
+        private final List<ValidationProperty> definitions;
+
+        private DbConnectionDefinitions(List<ValidationProperty> definitions) {
+            this.definitions = definitions;
+        }
+
+        public boolean validate() {
+            this.definitions.forEach(ValidationProperty::validate);
+            return this.definitions.stream().noneMatch(definition -> !definition.isValid);
+        }
+    }
+
+    private boolean validateProperties() {
+        ArrayList properties = new ArrayList<>(Arrays.asList(new ValidationProperty(dbServerField,
+                                                                                    dbServerValidationMsg,
+                                                                                    "connection.view.error.database.server"),
+                                                             new ValidationProperty(dbNameField,
+                                                                                    dbNameValidationMsg,
+                                                                                    "connection.view.error.database.name"),
+                                                             new ValidationProperty(portField, portValidationMsg,
+                                                                                    "connection.view.error.port.number"),
+                                                             new ValidationProperty(usernameField,
+                                                                                    usernameValidationMsg,
+                                                                                    "connection.view.error.user.name"),
+                                                             new ValidationProperty(passwordField,
+                                                                                    passwordValidationMsg,
+                                                                                    "connection.view.error.user.password"),
+                                                             new ValidationProperty(urlField,
+                                                                                    urlValidationMsg,
+                                                                                    "connection.view.error.connection.url")));
+        if (toggleSave.isSelected()) {
+            properties.add(new ValidationProperty(connectionName,
+                                                  connectionValidationMsg,
+                                                  "connection.view.error.connection.name.symbol"));
+        }
+
+        return new DbConnectionDefinitions(properties).validate();
+    }
+
+    private static class ValidationProperty {
+        private final TextField field;
+        private final Label validationMsgField;
+        private final String validationMsg;
+        private boolean isValid = true;
+
+        public ValidationProperty(TextField field, Label validationMsgField, String validationMsg) {
+            this.field = field;
+            this.validationMsgField = validationMsgField;
+            this.validationMsg = validationMsg;
+        }
+
+        public void validate() {
+            if (this.field.getText().isEmpty()) {
+                I18n.bind(this.validationMsgField.textProperty(), this.validationMsg);
+                this.validationMsgField.setVisible(true);
+                this.isValid = false;
+            }
+        }
     }
 }
