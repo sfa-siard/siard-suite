@@ -14,6 +14,7 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
@@ -100,6 +101,21 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     @FXML
     public Label connectionLabel;
 
+    @FXML
+    public Label dbServerValidationMsg;
+    @FXML
+    public Label portValidationMsg;
+    @FXML
+    public Label dbnameValidationMsg;
+    @FXML
+    public Label usernameValidationMsg;
+    @FXML
+    public Label passwordValidationMsg;
+    @FXML
+    public Label urlValidationMsg;
+    @FXML
+    public Label connectionValidationMsg;
+
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
@@ -165,6 +181,13 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     }
 
     private void setListeners(MFXStepper stepper) {
+        EventHandler<SiardEvent> databaseDownloadFailedHandler = event -> {
+           // I18n.bind(errorMessage.textProperty(), "connection.view.error.database.name");
+           // errorMessage.setVisible(true);
+        };
+
+        stepper.addEventHandler(SiardEvent.DATABASE_DOWNLOAD_FAILED, databaseDownloadFailedHandler);
+
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
             // TODO MSAccess-DB needs different Fields for selecting File- #CR457
             DatabaseConnectionProperties.DatabaseProperties props = model.getDatabaseProps();

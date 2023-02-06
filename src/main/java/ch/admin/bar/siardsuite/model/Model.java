@@ -31,6 +31,7 @@ public class Model {
   private Map<String, String> schemaMap = new HashMap<>();
   private SiardArchive archive = new SiardArchive();
   public static final String TMP_SIARD = "tmp.siard";
+  private String errorMessage = "";
 
   public Model() {}
 
@@ -245,4 +246,8 @@ public class Model {
   public Map<String, String> getSchemaMap() {
     return schemaMap;
   }
+
+    public void setFailure(String failureMessage) {
+      this.errorMessage = failureMessage;
+    }
 }

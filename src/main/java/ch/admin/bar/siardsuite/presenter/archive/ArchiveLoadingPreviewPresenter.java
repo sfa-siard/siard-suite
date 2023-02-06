@@ -12,6 +12,7 @@ import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_LOADED;
+import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOAD_FAILED;
 
 public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     @FXML
@@ -74,23 +76,22 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
                 try {
                     controller.loadDatabase(true, handleOnSuccess(stepper), handleOnFailure(stepper));
+                    controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
+                        AtomicInteger pos = new AtomicInteger();
+                        newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
+                    });
+
+                    controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+                        double pos = newValue.doubleValue();
+                        progressBar.progressProperty().set(pos);
+                    });
+
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    // TODO should notify user about any error - Toast it # CR 458
-                    cancel(stepper);
-                    throw new RuntimeException(e);
+                    fail(stepper, e.getLocalizedMessage(), DATABASE_DOWNLOAD_FAILED);
+                } finally {
+                    event.consume();
                 }
-
-                controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
-                    AtomicInteger pos = new AtomicInteger();
-                    newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
-                });
-
-                controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
-                    double pos = newValue.doubleValue();
-                    progressBar.progressProperty().set(pos);
-                });
-                event.consume();
             }
         });
 
@@ -129,5 +130,11 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     private void cancel(MFXStepper stepper) {
         stepper.previous();
         controller.cancelDownload();
+    }
+
+    private void fail(MFXStepper stepper, String failureMessage, EventType<SiardEvent> event) {
+        stepper.previous();
+        controller.failure(failureMessage);
+        stepper.fireEvent(new SiardEvent(event));
     }
 }

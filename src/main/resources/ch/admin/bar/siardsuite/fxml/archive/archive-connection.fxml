@@ -83,6 +83,11 @@
                                 </Label>
                                 <TextField fx:id="dbServerField" maxWidth="458.0" minWidth="458.0"
                                            styleClass="form-field"/>
+                                <Label fx:id="dbServerValidationMsg" styleClass="error-text">
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                </Label>
                             </VBox>
                             <VBox>
                                 <Label fx:id="portLabel" styleClass="form-label">
@@ -92,6 +97,11 @@
                                 </Label>
                                 <TextField fx:id="portField" minWidth="-Infinity" prefWidth="96.0"
                                            styleClass="form-field"/>
+                                <Label fx:id="portValidationMsg" styleClass="error-text">
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                </Label>
                             </VBox>
                         </HBox>
                         <Label fx:id="dbNameLabel" styleClass="form-label">
@@ -100,6 +110,11 @@
                             </VBox.margin>
                         </Label>
                         <TextField fx:id="dbNameField" maxWidth="578.0" styleClass="form-field"/>
+                        <Label fx:id="dbnameValidationMsg" styleClass="error-text">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </Label>
                     </VBox>
                     <VBox prefWidth="470.0">
                         <HBox.margin>
@@ -112,6 +127,11 @@
                         </Label>
                         <TextField fx:id="usernameField" maxWidth="1.7976931348623157E308"
                                    styleClass="form-field"/>
+                        <Label fx:id="usernameValidationMsg" styleClass="error-text">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </Label>
                         <Label fx:id="passwordLabel" styleClass="form-label">
                             <VBox.margin>
                                 <Insets bottom="10.0" top="25.0"/>
@@ -123,6 +143,11 @@
                                 <Insets/>
                             </VBox.margin>
                         </PasswordField>
+                        <Label fx:id="passwordValidationMsg" styleClass="error-text">
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </Label>
                     </VBox>
                 </HBox>
                 <VBox maxWidth="1140.0" styleClass="form-container">
@@ -140,6 +165,11 @@
                             <Insets bottom="24.0" left="25.0" right="25.0"/>
                         </VBox.margin>
                     </TextField>
+                    <Label fx:id="urlValidationMsg" styleClass="error-text">
+                        <VBox.margin>
+                            <Insets/>
+                        </VBox.margin>
+                    </Label>
                 </VBox>
                 <VBox>
                     <VBox.margin>
@@ -176,7 +206,7 @@
                             <Insets bottom="10.0"/>
                         </VBox.margin>
                     </TextField>
-                    <Label fx:id="errorMessage" styleClass="error-text">
+                    <Label fx:id="connectionValidationMsg" styleClass="error-text">
                         <VBox.margin>
                             <Insets/>
                         </VBox.margin>

@@ -141,4 +141,8 @@ public class Controller {
       Files.delete(Paths.get(Model.TMP_SIARD));
     } catch (IOException ignored) {}
   }
+
+  public void failure(String failureMessage) {
+    this.model.setFailure(failureMessage);
+  }
 }
