@@ -103,6 +103,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
     private EventHandler<WorkerStateEvent> handleOnFailure(MFXStepper stepper) {
         return e -> {
+            e.getSource().getException().printStackTrace();
             fail(stepper, e.getSource().getException(), DATABASE_DOWNLOAD_FAILED);
         };
     }
