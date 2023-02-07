@@ -11,6 +11,8 @@ import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -21,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -67,6 +70,10 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
         this.buttonsBox = new ButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
+
+        this.buttonsBox.previous().setOnAction((event) -> cancel(stepper));
+        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+
         this.setListeners(stepper);
     }
 
@@ -77,18 +84,9 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
                 try {
                     controller.loadDatabase(true, handleOnSuccess(stepper), handleOnFailure(stepper));
-                    controller.addDatabaseLoadingValuePropertyListener((o1, oldValue, newValue) -> {
-                        AtomicInteger pos = new AtomicInteger();
-                        newValue.forEach(p -> addLoadingData(p.getKey(), pos.getAndIncrement()));
-                    });
-
-                    controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
-                        double pos = newValue.doubleValue();
-                        progressBar.progressProperty().set(pos);
-                    });
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    controller.addDatabaseLoadingValuePropertyListener(databaseLoadingValuePropertyListener);
+                    controller.addDatabaseLoadingProgressPropertyListener(numberChangeListener);
+                } catch (Exception e) {
                     fail(stepper, e, DATABASE_DOWNLOAD_FAILED);
                 } finally {
                     event.consume();
@@ -98,23 +96,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
         this.buttonsBox.previous().setOnAction((event) -> cancel(stepper));
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
-    }
-
-
-
-    private EventHandler<WorkerStateEvent> handleOnFailure(MFXStepper stepper) {
-        return e -> {
-            e.getSource().getException().printStackTrace();
-            fail(stepper, e.getSource().getException(), DATABASE_DOWNLOAD_FAILED);
-        };
-    }
-
-    private EventHandler<WorkerStateEvent> handleOnSuccess(MFXStepper stepper) {
-        return e -> {
-            stepper.next();
-            stepper.fireEvent(new SiardEvent(ARCHIVE_LOADED));
-            controller.releaseResources();
-        };
     }
 
     private void addLoadingData(String text, Integer pos) {
@@ -135,9 +116,34 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
     private void fail(MFXStepper stepper, Throwable e, EventType<SiardEvent> event) {
         stepper.previous();
+        e.printStackTrace();
         this.stage.openDialog(View.ERROR_DIALOG);
         controller.cancelDownload();
         controller.failure(new Failure(e));
         stepper.fireEvent(new SiardEvent(event));
     }
+
+    private EventHandler<WorkerStateEvent> handleOnFailure(MFXStepper stepper) {
+        return e -> {
+            e.getSource().getException().printStackTrace();
+            fail(stepper, e.getSource().getException(), DATABASE_DOWNLOAD_FAILED);
+        };
+    }
+
+    private EventHandler<WorkerStateEvent> handleOnSuccess(MFXStepper stepper) {
+        return e -> {
+            stepper.next();
+            stepper.fireEvent(new SiardEvent(ARCHIVE_LOADED));
+            controller.releaseResources();
+        };
+    }
+
+
+    private final ChangeListener<ObservableList<Pair<String, Long>>> databaseLoadingValuePropertyListener = (o1, oldValue, newValue) -> {
+        newValue.forEach(p -> addLoadingData(p.getKey(), new AtomicInteger().getAndIncrement()));
+    };
+
+    private final ChangeListener<Number> numberChangeListener = (o, oldValue, newValue) -> {
+        progressBar.progressProperty().set(newValue.doubleValue());
+    };
 }
