@@ -21,8 +21,6 @@ public class ErrorDialogPresenter extends DialogPresenter {
     @FXML
     public Text message;
     @FXML
-    public MFXButton toggleStackTrace;
-    @FXML
     public TextArea stacktrace;
 
     @Override
