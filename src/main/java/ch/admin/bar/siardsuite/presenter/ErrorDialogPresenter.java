@@ -31,8 +31,9 @@ public class ErrorDialogPresenter extends DialogPresenter {
 
         EventHandler<SiardEvent> databaseDownloadFailedHandler = event -> {
             I18n.bind(this.title.textProperty(), "error.title");
-            this.message.textProperty().setValue(this.controller.getErrorMessage());
-            this.stacktrace.textProperty().setValue(this.controller.getStacktrace());
+
+            this.message.textProperty().setValue(this.controller.errorMessage());
+            this.stacktrace.textProperty().setValue(this.controller.errorStackTrace());
         };
 
         this.stage.addEventHandler(SiardEvent.DATABASE_DOWNLOAD_FAILED, databaseDownloadFailedHandler);

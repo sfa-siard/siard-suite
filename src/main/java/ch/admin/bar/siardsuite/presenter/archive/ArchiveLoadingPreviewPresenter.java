@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.*;
+import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -21,8 +22,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -138,10 +137,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         stepper.previous();
         this.stage.openDialog(View.ERROR_DIALOG);
         controller.cancelDownload();
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        controller.failure(e.getLocalizedMessage(), sw.toString());
+        controller.failure(new Failure(e));
         stepper.fireEvent(new SiardEvent(event));
     }
 }

@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
+import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -147,17 +148,15 @@ public class Controller {
         }
     }
 
-    public void failure(String failureMessage, String stackTrace) {
-        this.model.setFailure(failureMessage);
-        this.model.setStacktrace(stackTrace);
+    public void failure(Failure failure) {
+        this.model.setFailure(failure);
     }
 
-    public String getErrorMessage() {
-        return this.model.getFailure();
+    public String errorMessage() {
+        return this.model.getFailure().message();
     }
 
-
-    public String getStacktrace() {
-        return this.model.getStacktrace();
+    public String errorStackTrace() {
+        return this.model.getFailure().stacktrace();
     }
 }

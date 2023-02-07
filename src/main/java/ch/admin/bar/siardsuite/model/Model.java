@@ -31,8 +31,7 @@ public class Model {
     private Map<String, String> schemaMap = new HashMap<>();
     private SiardArchive archive = new SiardArchive();
     public static final String TMP_SIARD = "tmp.siard";
-    private String errorMessage = "";
-    private String stacktrace;
+    private Failure failure = null;
 
     public Model() {
     }
@@ -256,18 +255,11 @@ public class Model {
         return schemaMap;
     }
 
-    public void setFailure(String failureMessage) {
-        this.errorMessage = failureMessage;
+    public void setFailure(Failure failure) {
+        this.failure = failure;
     }
 
-    public String getFailure() {
-        return this.errorMessage;
-    }
-
-    public void setStacktrace(String stacktrace) {
-        this.stacktrace = stacktrace;
-    }
-    public String getStacktrace() {
-        return this.stacktrace;
+    public Failure getFailure() {
+        return this.failure;
     }
 }
