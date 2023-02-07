@@ -152,7 +152,7 @@
                 </HBox>
                 <VBox maxWidth="1140.0" styleClass="form-container">
                     <VBox.margin>
-                        <Insets top="24.0"/>
+                        <Insets  top="24.0"/>
                     </VBox.margin>
                     <Label fx:id="urlLabel" styleClass="form-label">
                         <VBox.margin>
@@ -162,12 +162,12 @@
                     <TextField fx:id="urlField" maxWidth="1.7976931348623157E308" styleClass="form-field"
                                HBox.hgrow="ALWAYS">
                         <VBox.margin>
-                            <Insets bottom="24.0" left="25.0" right="25.0"/>
+                            <Insets left="25.0" right="25.0"/>
                         </VBox.margin>
                     </TextField>
                     <Label fx:id="urlValidationMsg" styleClass="error-text">
                         <VBox.margin>
-                            <Insets/>
+                            <Insets bottom="25.0" left="25.0"/>
                         </VBox.margin>
                     </Label>
                 </VBox>
