@@ -33,7 +33,7 @@
                         <String fx:value="text-black" />
                      </styleClass>
                   </MFXButton>
-                  <TextArea fx:id="stacktrace" prefHeight="200.0" prefWidth="200.0" text="Stacktrace&#10;" />
+                  <TextArea fx:id="stacktrace" editable="false" text="Stacktrace&#10;" />
                </children>
                 </VBox>
             </center>
