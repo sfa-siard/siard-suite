@@ -32,6 +32,7 @@ public class Model {
     private SiardArchive archive = new SiardArchive();
     public static final String TMP_SIARD = "tmp.siard";
     private String errorMessage = "";
+    private String stacktrace;
 
     public Model() {
     }
@@ -261,5 +262,12 @@ public class Model {
 
     public String getFailure() {
         return this.errorMessage;
+    }
+
+    public void setStacktrace(String stacktrace) {
+        this.stacktrace = stacktrace;
+    }
+    public String getStacktrace() {
+        return this.stacktrace;
     }
 }

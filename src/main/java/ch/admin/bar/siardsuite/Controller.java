@@ -20,133 +20,144 @@ import java.util.Map;
 
 public class Controller {
 
-  private final Model model;
+    private final Model model;
 
-  private DatabaseLoadService databaseLoadService;
-  private DatabaseUploadService databaseUploadService;
+    private DatabaseLoadService databaseLoadService;
+    private DatabaseUploadService databaseUploadService;
 
-  private Workflow workflow;
+    private Workflow workflow;
 
-  public String recentDatabaseConnection;
+    public String recentDatabaseConnection;
 
-  public Controller(Model model) {
-    this.model = model;
-  }
-
-  public void setDatabaseType(String databaseType) {
-    model.setDatabaseType(databaseType);
-  }
-
-  public void loadDatabase(boolean onlyMetaData,EventHandler<WorkerStateEvent> onSuccess,
-                           EventHandler<WorkerStateEvent> onFailure
-                           ) throws SQLException {
-    final Archive archive = model.initArchive();
-    this.databaseLoadService = DatabaseConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
-    this.onDatabaseLoadSuccess(onSuccess);
-    this.onDatabaseLoadFailed(onFailure);
-    this.databaseLoadService.start();
-  }
-  public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
-                           EventHandler<WorkerStateEvent> onFailure) throws SQLException {
-    final Archive archive = model.initArchive(target);
-    this.databaseLoadService = DatabaseConnectionFactory.getInstance(model).createDatabaseLoader(archive, onlyMetaData);
-    this.onDatabaseLoadSuccess(onSuccess);
-    this.onDatabaseLoadFailed(onFailure);
-    this.databaseLoadService.start();
-  }
-
-  public void closeDbConnection() {
-    DatabaseConnectionFactory.disconnect();
-  }
-
-  public void updateConnectionData(String connectionUrl, String username, String databaseName, String password) {
-    this.model.setConnectionUrl(connectionUrl);
-    this.model.setDatabaseName(databaseName);
-    this.model.setUsername(username);
-    this.model.setPassword(password);
-  }
-
-  public void updateSchemaMap(Map schemaMap) {
-    this.model.setSchemaMap(schemaMap);
-  }
-
-  public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
-    this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
-  }
-
-  public void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
-    this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
-  }
-
-  public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<Pair<String, Long>>> listener) {
-    this.databaseLoadService.valueProperty().addListener(listener);
-  }
-
-  public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener )  {
-    this.databaseLoadService.progressProperty().addListener(listener);
-  }
-
-  public void onDatabaseUploadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
-    this.databaseUploadService.setOnSucceeded(workerStateEventEventHandler);
-  }
-
-  public void onDatabaseUploadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
-    this.databaseUploadService.setOnFailed(workerStateEventEventHandler);
-  }
-
-  public void addDatabaseUploadingValuePropertyListener(ChangeListener<String> listener) {
-    this.databaseUploadService.valueProperty().addListener(listener);
-  }
-
-  public void addDatabaseUploadingProgressPropertyListener(ChangeListener<Number> listener )  {
-    this.databaseUploadService.progressProperty().addListener(listener);
-  }
-
-  public Workflow getWorkflow() {
-    return workflow;
-  }
-
-  public void setWorkflow(Workflow workflow) {
-    this.workflow = workflow;
-  }
-
-  public void uploadArchive(EventHandler<WorkerStateEvent> onSuccess, EventHandler<WorkerStateEvent> onFailure) throws SQLException {
-    this.databaseUploadService = DatabaseConnectionFactory.getInstance(model).createDatabaseUploader();
-    this.onDatabaseUploadSuccess(onSuccess);
-    this.onDatabaseUploadFailed(onFailure);
-    this.databaseUploadService.start();
-  }
-
-  public void cancelDownload() {
-    if (databaseLoadService != null && databaseLoadService.isRunning()) {
-      this.databaseLoadService.cancel();
+    public Controller(Model model) {
+        this.model = model;
     }
-    releaseResources();
-  }
 
-  public void cancelUpload() {
-    if (databaseUploadService != null && databaseUploadService.isRunning()) {
-      this.databaseUploadService.cancel();
+    public void setDatabaseType(String databaseType) {
+        model.setDatabaseType(databaseType);
     }
-    releaseResources();
-  }
 
-  public void releaseResources() {
-    closeDbConnection();
-    removeTmpArchive();
-  }
+    public void loadDatabase(boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
+                             EventHandler<WorkerStateEvent> onFailure
+    ) throws SQLException {
+        final Archive archive = model.initArchive();
+        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
+                                                            .createDatabaseLoader(archive, onlyMetaData);
+        this.onDatabaseLoadSuccess(onSuccess);
+        this.onDatabaseLoadFailed(onFailure);
+        this.databaseLoadService.start();
+    }
 
-  private void removeTmpArchive() {
-    try {
-      Files.delete(Paths.get(Model.TMP_SIARD));
-    } catch (IOException ignored) {}
-  }
+    public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
+                             EventHandler<WorkerStateEvent> onFailure) throws SQLException {
+        final Archive archive = model.initArchive(target);
+        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
+                                                            .createDatabaseLoader(archive, onlyMetaData);
+        this.onDatabaseLoadSuccess(onSuccess);
+        this.onDatabaseLoadFailed(onFailure);
+        this.databaseLoadService.start();
+    }
 
-  public void failure(String failureMessage) {
-    this.model.setFailure(failureMessage);
-  }
+    public void closeDbConnection() {
+        DatabaseConnectionFactory.disconnect();
+    }
 
-  public String getErrorMessage() {
-    return this.model.getFailure();
-  }
+    public void updateConnectionData(String connectionUrl, String username, String databaseName, String password) {
+        this.model.setConnectionUrl(connectionUrl);
+        this.model.setDatabaseName(databaseName);
+        this.model.setUsername(username);
+        this.model.setPassword(password);
+    }
+
+    public void updateSchemaMap(Map schemaMap) {
+        this.model.setSchemaMap(schemaMap);
+    }
+
+    public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+        this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
+    }
+
+    public void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+        this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
+    }
+
+    public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<Pair<String, Long>>> listener) {
+        this.databaseLoadService.valueProperty().addListener(listener);
+    }
+
+    public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener) {
+        this.databaseLoadService.progressProperty().addListener(listener);
+    }
+
+    public void onDatabaseUploadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+        this.databaseUploadService.setOnSucceeded(workerStateEventEventHandler);
+    }
+
+    public void onDatabaseUploadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+        this.databaseUploadService.setOnFailed(workerStateEventEventHandler);
+    }
+
+    public void addDatabaseUploadingValuePropertyListener(ChangeListener<String> listener) {
+        this.databaseUploadService.valueProperty().addListener(listener);
+    }
+
+    public void addDatabaseUploadingProgressPropertyListener(ChangeListener<Number> listener) {
+        this.databaseUploadService.progressProperty().addListener(listener);
+    }
+
+    public Workflow getWorkflow() {
+        return workflow;
+    }
+
+    public void setWorkflow(Workflow workflow) {
+        this.workflow = workflow;
+    }
+
+    public void uploadArchive(EventHandler<WorkerStateEvent> onSuccess,
+                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
+        this.databaseUploadService = DatabaseConnectionFactory.getInstance(model).createDatabaseUploader();
+        this.onDatabaseUploadSuccess(onSuccess);
+        this.onDatabaseUploadFailed(onFailure);
+        this.databaseUploadService.start();
+    }
+
+    public void cancelDownload() {
+        if (databaseLoadService != null && databaseLoadService.isRunning()) {
+            this.databaseLoadService.cancel();
+        }
+        releaseResources();
+    }
+
+    public void cancelUpload() {
+        if (databaseUploadService != null && databaseUploadService.isRunning()) {
+            this.databaseUploadService.cancel();
+        }
+        releaseResources();
+    }
+
+    public void releaseResources() {
+        closeDbConnection();
+        removeTmpArchive();
+    }
+
+    private void removeTmpArchive() {
+        try {
+            Files.delete(Paths.get(Model.TMP_SIARD));
+        } catch (IOException ignored) {
+        }
+    }
+
+    public void failure(String failureMessage, String stackTrace) {
+        this.model.setFailure(failureMessage);
+        this.model.setStacktrace(stackTrace);
+    }
+
+    public String getErrorMessage() {
+        return this.model.getFailure();
+    }
+
+
+    public String getStacktrace() {
+        return this.model.getStacktrace();
+    }
 }

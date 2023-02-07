@@ -21,6 +21,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -136,7 +138,10 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         stepper.previous();
         this.stage.openDialog(View.ERROR_DIALOG);
         controller.cancelDownload();
-        controller.failure(e.getLocalizedMessage());
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        controller.failure(e.getLocalizedMessage(), sw.toString());
         stepper.fireEvent(new SiardEvent(event));
     }
 }
