@@ -5,6 +5,8 @@ import ch.admin.bar.siardsuite.component.*;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.presenter.ProgressItem;
+import ch.admin.bar.siardsuite.presenter.ProgressItems;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -17,6 +19,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -52,6 +55,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
     private final Image loading = Icon.loading;
 
+    private final ProgressItems progressItems = new ProgressItems();
+
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
@@ -63,8 +68,8 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         this.init(controller, model, stage);
 
-        I18n.bind(this.title.textProperty(),"archiveLoadingPreview.view.title");
-        I18n.bind(this.text.textProperty(),"archiveLoadingPreview.view.text");
+        I18n.bind(this.title.textProperty(), "archiveLoadingPreview.view.title");
+        I18n.bind(this.text.textProperty(), "archiveLoadingPreview.view.text");
         this.loader.setImage(loading);
         new Spinner(this.loader).play();
 
@@ -93,20 +98,24 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                 }
             }
         });
-
-        this.buttonsBox.previous().setOnAction((event) -> cancel(stepper));
-        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
 
-    private void addLoadingData(String text, Integer pos) {
-        // set previous to ok
-        if (scrollBox.getChildren().size() > 0) {
-            int itemPos = scrollBox.getChildren().size() - 1;
-            LabelIcon label = (LabelIcon) scrollBox.getChildren().get(itemPos);
-            label.setGraphic(new IconView(itemPos, IconView.IconType.OK));
+    private void addLoadingItem(String text, Integer pos) {
+        ObservableList<Node> children = scrollBox.getChildren();
+        setPreviousItemToOk(children);
+        ProgressItem newItem = new ProgressItem(pos, text);
+        progressItems.add(newItem);
+        children.add(newItem.icon());
+    }
+
+    private void setPreviousItemToOk(ObservableList<Node> children) {
+        if (children.size() > 0) {
+            ProgressItem previous = this.progressItems.last();
+            previous.ok();
+            /*int itemPos = children.size() - 1;
+            LabelIcon label = (LabelIcon) children.get(itemPos);
+            label.setGraphic(new IconView(itemPos, IconView.IconType.OK));*/
         }
-        scrollBox.getChildren().add(
-                new LabelIcon(text, pos, IconView.IconType.LOADING));
     }
 
     private void cancel(MFXStepper stepper) {
@@ -140,7 +149,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
 
     private final ChangeListener<ObservableList<Pair<String, Long>>> databaseLoadingValuePropertyListener = (o1, oldValue, newValue) -> {
-        newValue.forEach(p -> addLoadingData(p.getKey(), new AtomicInteger().getAndIncrement()));
+        newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
     };
 
     private final ChangeListener<Number> numberChangeListener = (o, oldValue, newValue) -> {
