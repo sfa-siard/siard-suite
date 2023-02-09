@@ -6,7 +6,7 @@ import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.DbConnectionDefinitions;
+import ch.admin.bar.siardsuite.presenter.ValidationProperties;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -292,7 +292,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
                                                   "connection.view.error.connection.name.symbol"));
         }
 
-        return new DbConnectionDefinitions(properties).validate();
+        return new ValidationProperties(properties).validate();
     }
 
 }
