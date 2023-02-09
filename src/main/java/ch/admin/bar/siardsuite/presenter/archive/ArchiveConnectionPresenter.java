@@ -6,7 +6,9 @@ import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.presenter.DbConnectionDefinitions;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
+import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
@@ -14,7 +16,6 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
@@ -31,7 +32,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -268,19 +268,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         event.consume();
     }
 
-    private class DbConnectionDefinitions {
-        private final List<ValidationProperty> definitions;
-
-        private DbConnectionDefinitions(List<ValidationProperty> definitions) {
-            this.definitions = definitions;
-        }
-
-        public boolean validate() {
-            this.definitions.forEach(ValidationProperty::validate);
-            return this.definitions.stream().noneMatch(definition -> !definition.isValid);
-        }
-    }
-
     private boolean validateProperties() {
         ArrayList properties = new ArrayList<>(Arrays.asList(new ValidationProperty(dbServerField,
                                                                                     dbServerValidationMsg,
@@ -308,24 +295,4 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         return new DbConnectionDefinitions(properties).validate();
     }
 
-    private static class ValidationProperty {
-        private final TextField field;
-        private final Label validationMsgField;
-        private final String validationMsg;
-        private boolean isValid = true;
-
-        public ValidationProperty(TextField field, Label validationMsgField, String validationMsg) {
-            this.field = field;
-            this.validationMsgField = validationMsgField;
-            this.validationMsg = validationMsg;
-        }
-
-        public void validate() {
-            if (this.field.getText().isEmpty()) {
-                I18n.bind(this.validationMsgField.textProperty(), this.validationMsg);
-                this.validationMsgField.setVisible(true);
-                this.isValid = false;
-            }
-        }
-    }
 }
