@@ -8,6 +8,8 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
+import ch.admin.bar.siardsuite.presenter.ValidationProperties;
+import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
@@ -30,10 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
@@ -47,13 +46,12 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
     private static final String TEST_DB = "test-db";
 
+
     private String portString;
     private String dbTypeString;
     private List<DatabaseSchema> schemas = new ArrayList<>();
     private String schemaName = "";
     private final Map<String, String> schemaMap = new HashMap<>();
-    @FXML
-    public Label errorMessage;
     @FXML
     public Text title;
     @FXML
@@ -110,8 +108,22 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     public Label passwordLabel;
     @FXML
     public Label urlLabel;
+
     @FXML
-    public Label connectionLabel;
+    public Label dbServerValidationMsg;
+    @FXML
+    public Label dbNameValidationMsg;
+    @FXML
+    public Label portValidationMsg;
+    @FXML
+    public Label userNameValidationMsg;
+    @FXML
+    public Label passwordValidationMsg;
+    @FXML
+    public Label urlValidationMsg;
+    @FXML
+    public Label schemaValidationMsg;
+
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -133,7 +145,6 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         }
 
         tooltip = new SiardTooltip("uploadConnection.view.tooltip");
-        errorMessage.setVisible(false);
         buttonsBox = new ButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
         setListeners(stepper);
@@ -141,11 +152,11 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     private void addTextWithStyles() {
         // TODO: use generic names - its really the same.. for upload and archiving
-        I18n.bind(title.textProperty(),"connection.view.title");
-        I18n.bind(subtitleLeft.textProperty(),"connection.view.subtitleLeft");
-        I18n.bind(subtitleRight.textProperty(),"connection.view.subtitleRight");
-        I18n.bind(textLeft.textProperty(),"connection.view.textLeft");
-        I18n.bind(textRight.textProperty(),"connection.view.textRight");
+        I18n.bind(title.textProperty(), "connection.view.title");
+        I18n.bind(subtitleLeft.textProperty(), "connection.view.subtitleLeft");
+        I18n.bind(subtitleRight.textProperty(), "connection.view.subtitleRight");
+        I18n.bind(textLeft.textProperty(), "connection.view.textLeft");
+        I18n.bind(textRight.textProperty(), "connection.view.textRight");
 
         for (int i = 0; i < textFlow.getChildren().size(); i++) {
             Text text = (Text) textFlow.getChildren().get(i);
@@ -189,7 +200,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             String url = this.dbTypeString
                     .replace(HOST, DBSERVER_ORGANISATION_ORG)
                     .replace(PORT, portString)
-                    .replace(DB_NAME, TEST_DB );
+                    .replace(DB_NAME, TEST_DB);
 
             portField.setText(portString);
             portField.setPromptText(portString);
@@ -214,37 +225,56 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         infoButton.setOnMouseExited(event -> tooltip.hide());
 
         buttonsBox.next().setOnAction((event) -> {
-            if (dbServerField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.database.server");
-                errorMessage.setVisible(true);
-            } else if (dbNameField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.database.name");
-                errorMessage.setVisible(true);
-            } else if (usernameField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.user.name");
-                errorMessage.setVisible(true);
-            } else if (passwordField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(),"connection.view.error.user.password");
-                errorMessage.setVisible(true);
-            } else if (urlField.getText().isEmpty()) {
-                I18n.bind(errorMessage.textProperty(), "connection.view.error.connection.url");
-                errorMessage.setVisible(true);
-            } else if (!hasValidSchemaFields()) {
-                I18n.bind(errorMessage.textProperty(), "uploadConnection.view.error.schema.name");
-                errorMessage.setVisible(true);
-            } else {
-                controller.updateConnectionData(urlField.getText(), this.usernameField.getText(), this.dbNameField.getText(), this.passwordField.getText());
+
+            boolean allPropsValid = this.validateProperties();
+            boolean validSchemaFields = validSchemaFields();
+            if (allPropsValid && validSchemaFields) {
+                controller.updateConnectionData(urlField.getText(),
+                                                this.usernameField.getText(),
+                                                this.dbNameField.getText(),
+                                                this.passwordField.getText());
                 controller.updateSchemaMap(schemaMap);
-                errorMessage.setVisible(false);
                 stepper.next();
                 stepper.fireEvent(new SiardEvent(SiardEvent.UPLOAD_CONNECTION_UPDATED));
                 passwordField.setText("");
             }
-
         });
 
         this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.UPLOAD_ABORT_DIALOG));
+    }
+
+    private boolean validSchemaFields() {
+        if (hasValidSchemaFields()) return true;
+        I18n.bind(schemaValidationMsg.textProperty(), "uploadConnection.view.error.schema.name");
+        schemaValidationMsg.setVisible(true);
+        return false;
+    }
+
+    private boolean validateProperties() {
+        ValidationProperties validationProperties = new ValidationProperties(Arrays.asList(new ValidationProperty(
+                                                                                                   dbServerField,
+                                                                                                   dbServerValidationMsg,
+                                                                                                   "connection.view.error.database.server"),
+                                                                                           new ValidationProperty(
+                                                                                                   dbNameField,
+                                                                                                   dbNameValidationMsg,
+                                                                                                   "connection.view.error.database.name"),
+                                                                                           new ValidationProperty(
+                                                                                                   usernameField,
+                                                                                                   userNameValidationMsg,
+                                                                                                   "connection.view.error.user.name"),
+
+                                                                                           new ValidationProperty(
+                                                                                                   passwordField,
+                                                                                                   passwordValidationMsg,
+                                                                                                   "connection.view.error.user.password"),
+                                                                                           new ValidationProperty(
+                                                                                                   urlField,
+                                                                                                   urlValidationMsg,
+                                                                                                   "connection.view.error.connection.url")));
+
+        return validationProperties.validate();
     }
 
     private boolean hasValidSchemaFields() {
@@ -276,14 +306,14 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             HBox container = new HBox();
             container.setPrefSize(200.0, 48.0);
             currentName.setPrefSize(253.0, 48.0);
-            iconLabel.setPrefSize(48.0,48.0);
-            iconLabel.getStyleClass().add( "arrow-right-icon");
+            iconLabel.setPrefSize(48.0, 48.0);
+            iconLabel.getStyleClass().add("arrow-right-icon");
             newName.setPrefSize(277.0, 48.0);
             newName.getStyleClass().add("form-field");
             container.getChildren().addAll(currentName, iconLabel, newName);
-            HBox.setMargin(currentName, new Insets(10,0,0,0));
-            HBox.setMargin(iconLabel, new Insets(10,0,0,0));
-            HBox.setMargin(newName, new Insets(10,0,0,0));
+            HBox.setMargin(currentName, new Insets(10, 0, 0, 0));
+            HBox.setMargin(iconLabel, new Insets(10, 0, 0, 0));
+            HBox.setMargin(newName, new Insets(10, 0, 0, 0));
             schemaFields.getChildren().add(container);
         }
     }
@@ -316,11 +346,14 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     }
 
     @Override
-    public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) { }
+    public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) {
+    }
 
     @Override
-    public void visit(String columnName) { }
+    public void visit(String columnName) {
+    }
 
     @Override
-    public void visit(SiardArchive archive) { }
+    public void visit(SiardArchive archive) {
+    }
 }
