@@ -28,12 +28,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 
-import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_LOADED;
-import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOAD_FAILED;
+import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
 public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     @FXML
@@ -92,7 +91,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                     controller.addDatabaseLoadingValuePropertyListener(databaseLoadingValuePropertyListener);
                     controller.addDatabaseLoadingProgressPropertyListener(numberChangeListener);
                 } catch (Exception e) {
-                    fail(stepper, e, DATABASE_DOWNLOAD_FAILED);
+                    fail(stepper, e, ERROR_OCCURED);
                 } finally {
                     event.consume();
                 }
@@ -135,7 +134,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     private EventHandler<WorkerStateEvent> handleOnFailure(MFXStepper stepper) {
         return e -> {
             e.getSource().getException().printStackTrace();
-            fail(stepper, e.getSource().getException(), DATABASE_DOWNLOAD_FAILED);
+            fail(stepper, e.getSource().getException(), ERROR_OCCURED);
         };
     }
 

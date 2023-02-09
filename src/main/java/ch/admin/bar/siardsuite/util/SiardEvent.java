@@ -15,7 +15,7 @@ public class SiardEvent extends Event {
     public static final EventType<SiardEvent> UPLOAD_CONNECTION_UPDATED;
     public static final EventType<SiardEvent> UPLOAD_SUCCEDED;
     public static final EventType<SiardEvent> UPLOAD_FAILED;
-    public static final EventType<SiardEvent> DATABASE_DOWNLOAD_FAILED;
+    public static final EventType<SiardEvent> ERROR_OCCURED;
 
     public SiardEvent(EventType<? extends Event> eventType) {
         super(eventType);
@@ -33,6 +33,6 @@ public class SiardEvent extends Event {
         UPLOAD_SUCCEDED = new EventType<>( "UPLOAD_SUCCEDED");
         UPLOAD_FAILED = new EventType<>( "UPLOAD_FAILED");
         EXPAND_DATABASE_TABLE = new EventType<>("EXPAND_DATABASE_TABLE");
-        DATABASE_DOWNLOAD_FAILED = new EventType<>("DATABASE_DOWNLOAD_FAILED");
+        ERROR_OCCURED = new EventType<>("DATABASE_DOWNLOAD_FAILED");
     }
 }

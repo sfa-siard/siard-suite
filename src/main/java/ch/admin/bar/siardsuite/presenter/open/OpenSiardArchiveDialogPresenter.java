@@ -4,11 +4,13 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.Workflow;
+import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -192,16 +194,23 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
                 stage.closeDialog();
                 this.proceed();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                fail(e);
             }
             try {
                 final Preferences preferences = UserPreferences.push(RECENT_FILES, TIMESTAMP, Comparator.reverseOrder(), String.valueOf(file.hashCode()));
                 preferences.put(ABSOLUTE_PATH.name(), file.getAbsolutePath());
                 preferences.put(TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
             } catch (BackingStoreException e) {
-                throw new RuntimeException(e);
+                fail(e);
             }
         }
+    }
+
+    private void fail(Throwable e) {
+        e.printStackTrace();
+        this.stage.openDialog(View.ERROR_DIALOG);
+        controller.failure(new Failure(e));
+        this.stage.fireEvent(new SiardEvent(SiardEvent.ERROR_OCCURED));
     }
 
     private void proceed() {

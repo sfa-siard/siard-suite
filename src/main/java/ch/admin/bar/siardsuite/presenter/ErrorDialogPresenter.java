@@ -36,7 +36,7 @@ public class ErrorDialogPresenter extends DialogPresenter {
             this.stacktrace.textProperty().setValue(this.controller.errorStackTrace());
         };
 
-        this.stage.addEventHandler(SiardEvent.DATABASE_DOWNLOAD_FAILED, databaseDownloadFailedHandler);
+        this.stage.addEventHandler(SiardEvent.ERROR_OCCURED, databaseDownloadFailedHandler);
         this.closeButton.setOnAction(event -> this.stage.closeDialog());
     }
 }
