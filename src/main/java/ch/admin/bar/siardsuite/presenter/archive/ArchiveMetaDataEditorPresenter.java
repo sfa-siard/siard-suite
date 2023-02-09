@@ -7,6 +7,8 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
+import ch.admin.bar.siardsuite.presenter.ValidationProperties;
+import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -24,6 +26,8 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
@@ -61,8 +65,6 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @FXML
     private Tooltip tooltip;
     @FXML
-    public Label errorMessage;
-    @FXML
     public Label nameLabel;
     @FXML
     public Label ownerLabel;
@@ -70,6 +72,10 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     public Label dataOriginTimespanLabel;
     @FXML
     public Label archiverLabel;
+    @FXML
+    public Label ownerValidationMsg;
+    @FXML
+    public Label dataOriginTimespanValidationMsg;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -80,12 +86,17 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.borderPane.setBottom(buttonsBox);
         this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
+
         this.bindTexts();
     }
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
         this.init(controller, model, stage);
+
+        this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
+        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+
         this.setListeners(stepper);
     }
 
@@ -102,7 +113,6 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         I18n.bind(this.dataOriginTimespanLabel.textProperty(), "archiveMetadata.view.databaseCreationDate");
         I18n.bind(this.archiverLabel.textProperty(), "archiveMetadata.view.archiverName");
         I18n.bind(archiverContactLabel.textProperty(), "archiveMetadata.view.archiverContact");
-        I18n.bind(this.errorMessage.textProperty(), "archiveMetadata.view.error");
     }
 
     private File showFileChooserToSelectTargetArchive(String databaseName) {
@@ -112,15 +122,11 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
         fileChooser.getExtensionFilters().add(extensionFilter);
         return fileChooser.showSaveDialog(stage);
-
     }
 
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
-            if (this.owner.getText().equals("") || this.dataOriginTimespan.getText().equals("")) {
-                this.errorMessage.setVisible(true);
-            } else {
-                this.errorMessage.setVisible(false);
+            if(this.validateProperties()) {
                 File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
                 if (targetArchive != null) {
                     this.model.updateArchiveMetaData(
@@ -135,21 +141,22 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                     stepper.fireEvent(new SiardEvent(ARCHIVE_METADATA_UPDATED));
                 }
             }
+
         });
-        this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
-        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
 
         infoButton.setOnMouseMoved(event -> {
             Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
             tooltip.show(infoButton,
-                    (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-                    boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
+                         (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
+                         boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
         });
 
         infoButton.setOnMouseExited(event -> tooltip.hide());
 
         stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initFields());
     }
+
+
 
     private void initFields() {
         model.provideDatabaseArchiveMetaDataProperties(this);
@@ -160,8 +167,10 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
 
     @Override
-    public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
-                      String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
+    public void visit(String siardFormatVersion, String databaseName, String databaseProduct,
+                      String databaseConnectionURL,
+                      String databaseUsername, String databaseDescription, String databseOwner,
+                      String databaseCreationDate,
                       LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
         name.setText(databaseName);
         description.setText(databaseDescription);
@@ -175,4 +184,14 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     public void visit(SiardArchiveMetaData metaData) {
     }
 
+    private boolean validateProperties() {
+        List<ValidationProperty> validationProperties = Arrays.asList(new ValidationProperty(owner,
+                                                                                             ownerValidationMsg,
+                                                                                             "archiveMetaData.owner.missing"),
+                                                                      new ValidationProperty(dataOriginTimespan,
+                                                                                             dataOriginTimespanValidationMsg,
+                                                                                             "archiveMetaData.timespan.missing"));
+
+        return new ValidationProperties(validationProperties).validate();
+    }
 }

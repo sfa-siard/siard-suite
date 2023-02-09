@@ -65,9 +65,14 @@
                                     </Label>
                                     <TextField fx:id="owner" maxWidth="410.0" styleClass="form-field" >
                                         <VBox.margin>
-                                            <Insets bottom="24.0" right="25.0" />
+                                            <Insets bottom="4.0" right="25.0" />
                                         </VBox.margin>
                                     </TextField>
+                                    <Label fx:id="ownerValidationMsg" styleClass="error-text" visible="false">
+                                        <VBox.margin>
+                                            <Insets bottom="20.0"/>
+                                        </VBox.margin>
+                                    </Label>
                                     <Label fx:id="dataOriginTimespanLabel" styleClass="form-label">
                                         <VBox.margin>
                                             <Insets bottom="10.0"  top="10.0" />
@@ -75,12 +80,12 @@
                                     </Label>
                                     <TextField fx:id="dataOriginTimespan" maxWidth="410.0" styleClass="form-field" >
                                         <VBox.margin>
-                                            <Insets bottom="24.0" right="25.0" />
+                                            <Insets bottom="5.0" right="25.0" />
                                         </VBox.margin>
                                     </TextField>
-                                    <Label fx:id="errorMessage" styleClass="error-text" visible="false">
+                                    <Label fx:id="dataOriginTimespanValidationMsg" styleClass="error-text" visible="false">
                                         <VBox.margin>
-                                            <Insets bottom="5.0"/>
+                                            <Insets bottom="20.0"/>
                                         </VBox.margin>
                                     </Label>
                                 </children>
