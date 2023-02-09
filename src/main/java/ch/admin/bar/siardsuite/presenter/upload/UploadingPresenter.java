@@ -5,8 +5,10 @@ import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
+import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
+import ch.admin.bar.siardsuite.util.FileUtils;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -23,9 +25,9 @@ import javafx.scene.layout.VBox;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static ch.admin.bar.siardsuite.model.View.ERROR_DIALOG;
 import static ch.admin.bar.siardsuite.model.View.UPLOAD_ABORT_DIALOG;
-import static ch.admin.bar.siardsuite.util.SiardEvent.UPLOAD_FAILED;
-import static ch.admin.bar.siardsuite.util.SiardEvent.UPLOAD_SUCCEDED;
+import static ch.admin.bar.siardsuite.util.SiardEvent.*;
 
 public class UploadingPresenter extends StepperPresenter {
   @FXML
@@ -84,10 +86,8 @@ public class UploadingPresenter extends StepperPresenter {
 
         try {
           controller.uploadArchive(onSuccess, onFailure);
-        } catch (SQLException e) {
-          stepper.previous();
-          controller.cancelUpload();
-          throw new RuntimeException(e);
+        } catch (Exception e) {
+          fail(e, stepper);
         }
 
         controller.addDatabaseUploadingValuePropertyListener((o, oldValue, newValue) -> {
@@ -101,6 +101,15 @@ public class UploadingPresenter extends StepperPresenter {
         event.consume();
       }
     };
+  }
+
+  private void fail(Throwable e, MFXStepper stepper) {
+    e.printStackTrace();
+    stepper.previous();
+    controller.cancelUpload();
+    controller.failure(new Failure(e));
+    this.stage.openDialog(ERROR_DIALOG);
+    this.stage.fireEvent(new SiardEvent(ERROR_OCCURED));
   }
 
   private void addLoadingData(String text, Integer pos) {
