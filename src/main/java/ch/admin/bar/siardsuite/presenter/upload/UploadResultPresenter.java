@@ -19,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -39,6 +40,10 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
   public ScrollPane resultBox;
   @FXML
   public VBox scrollBox;
+  @FXML
+  public Label errorMessage;
+  @FXML
+  public TextArea stackTrace;
   @FXML
   private ButtonBox buttonsBox;
 
@@ -79,6 +84,8 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
       stepper.updateProgress();
       I18n.bind(title.textProperty(), "upload.result.failed.title");
       I18n.bind(summary.textProperty(), "upload.result.failed.message");
+      errorMessage.textProperty().setValue(controller.errorMessage());
+      stackTrace.textProperty().setValue(controller.errorStackTrace());
       title.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
       this.buttonsBox = new ButtonBox().make(FAILED);
       addButtons(stepper);

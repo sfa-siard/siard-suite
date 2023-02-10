@@ -78,6 +78,7 @@ public class UploadingPresenter extends StepperPresenter {
 
         EventHandler<WorkerStateEvent> onFailure = e -> {
           System.err.println( I18n.get( "upload.result.failed.title") + " " + e.getSource().getException());
+          controller.failure(new Failure(e.getSource().getException()));
           e.getSource().getException().printStackTrace();
           stepper.next();
           controller.cancelUpload();
