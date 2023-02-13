@@ -783,7 +783,14 @@
 
 .bg-green {
     -fx-background-color: rgba(27, 204, 150, 1);
+}
 
+.bg-red {
+    -fx-background-color: #D9001B
+}
+
+.bg-white {
+    -fx-background-color: #FFFFFF;
 }
 
 /* Select Connections */

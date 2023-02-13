@@ -54,7 +54,8 @@ public class I18n {
 
   public static String get(final String key, final Object... args) {
     ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, getLocale());
-    return String.format(bundle.getString(key), args);
+    String translation = bundle.containsKey(key) ? bundle.getString(key) : key;
+    return String.format(translation, args);
   }
 
   @Deprecated

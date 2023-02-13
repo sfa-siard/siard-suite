@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.*;
+import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
@@ -33,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.*;
 import static ch.admin.bar.siardsuite.model.View.START;
 import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOADED;
+import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
 public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
 
@@ -140,6 +142,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                     });
                     event.consume();
                 } catch (SQLException e) {
+                    fail(stepper, e);
                     // TODO should notify user about any error - Toast it # CR 458
                     throw new RuntimeException(e);
                 }
@@ -147,6 +150,12 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
         };
     }
 
+    private void fail(MFXStepper stepper, Throwable e) {
+        e.printStackTrace();
+        controller.failure(new Failure(e));
+        controller.cancelDownload();
+        stepper.fireEvent(new SiardEvent(ERROR_OCCURED));
+    }
 
     private EventHandler<WorkerStateEvent> handleDownloadSuccess(MFXStepper stepper) {
         return e -> {

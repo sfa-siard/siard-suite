@@ -28,7 +28,8 @@ public enum View {
   UPLOADING("fxml/upload/upload-uploading.fxml"),
   UPLOAD_RESULT("fxml/upload/upload-result.fxml"),
   SEARCH_TABLE_DIALOG("fxml/search/search-table-dialog.fxml"),
-  SEARCH_METADATA_DIALOG("fxml/search/search-metadata-dialog.fxml");
+  SEARCH_METADATA_DIALOG("fxml/search/search-metadata-dialog.fxml"),
+  ERROR_DIALOG("fxml/error-dialog.fxml");
 
   private final String viewName;
 
