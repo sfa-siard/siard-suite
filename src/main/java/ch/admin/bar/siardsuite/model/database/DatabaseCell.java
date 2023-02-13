@@ -33,13 +33,7 @@ public class DatabaseCell extends DatabaseObject {
         name = "Cell " + index;
         try {
             type = cell.getMetaColumn().getType();
-            String object = "<null>";
-            if (cell.getMetaColumn().getPreType() != Types.NULL) {
-                if (cell.getObject() != null) {
-                    object = cell.getObject().toString();
-                }
-            }
-            value = object;
+            value = cell.getString();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
