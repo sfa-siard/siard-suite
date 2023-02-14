@@ -62,8 +62,8 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
     model.setCurrentPreviewPresenter(this);
     this.tableSearchButton.setVisible(false);
-    this.metaSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.metaSearchButton"));
-    this.tableSearchButton.textProperty().bind(I18n.createStringBinding("tableContainer.tableSearchButton"));
+    I18n.bind(this.metaSearchButton.textProperty(), "tableContainer.metaSearchButton");
+    I18n.bind(this.tableSearchButton.textProperty(), "tableContainer.tableSearchButton");
 
     setListeners();
   }
@@ -79,6 +79,14 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
     final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), TreeContentView.ROOT, null), db);
 
+    rootItem.getChildren().add(createSchemasItem());
+    treeView.setRoot(rootItem);
+
+    expandChildren(rootItem);
+    updateTableContainerContent(rootItem.getValue());
+  }
+
+  private TreeItem<TreeAttributeWrapper> createSchemasItem() {
     final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
     schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.schemas", TreeContentView.SCHEMAS, null, schemas.size()));
     TreeItem<TreeAttributeWrapper> schemaItem;
@@ -129,12 +137,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
       schemaItem.getChildren().add(tablesItem);
       schemasItem.getChildren().add(schemaItem);
     }
-
-    rootItem.getChildren().add(schemasItem);
-    treeView.setRoot(rootItem);
-
-    expandChildren(rootItem);
-    updateTableContainerContent(rootItem.getValue());
+    return schemasItem;
   }
 
   protected void expandChildren(TreeItem<TreeAttributeWrapper> root) {
@@ -170,7 +173,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
       tableContainerContent.getChildren().setAll(container);
       loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
       tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
-      this.titleTableContainer.textProperty().bind(I18n.createStringBinding(wrapper.getType().getViewTitle()));
+      I18n.bind(this.titleTableContainer.textProperty(),wrapper.getType().getViewTitle());
       tableContainerContent.prefWidthProperty().bind(rightTableBox.widthProperty());
     } catch (IOException e) {
       throw new RuntimeException(e);
