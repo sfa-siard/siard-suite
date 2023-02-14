@@ -24,6 +24,7 @@ public class SiardArchive extends DatabaseObject {
     protected String archiveName;
     protected boolean onlyMetaData = false;
     protected final List<DatabaseSchema> schemas = new ArrayList<>();
+    protected List<User> users = new ArrayList<>();
     protected SiardArchiveMetaData metaData;
     protected final TreeContentView treeContentView = TreeContentView.ROOT;
 
@@ -37,10 +38,13 @@ public class SiardArchive extends DatabaseObject {
         this.archive = archive;
         this.onlyMetaData = onlyMetaData;
         this.archiveName = archiveName;
+        MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         for (int i = 0; i < archive.getSchemas(); i++) {
             schemas.add(new DatabaseSchema(this, archive.getSchema(i), onlyMetaData));
         }
+
+        this.users = metaDataFacade.users();
     }
 
     public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner, String dataOriginTimespan,
