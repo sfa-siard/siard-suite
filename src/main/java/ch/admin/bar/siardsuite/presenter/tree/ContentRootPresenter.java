@@ -72,7 +72,7 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
   }
 
   @Override
-  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {}
+  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users) {}
 
   @Override
   public void visit(String schemaName, String schemaDescription, List<DatabaseTable> tables) {}

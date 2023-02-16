@@ -54,7 +54,7 @@ public class SiardArchive extends DatabaseObject {
     }
 
     public void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(archiveName, onlyMetaData, schemas);
+        visitor.visit(archiveName, onlyMetaData, schemas, users);
     }
 
     public void shareProperties (SiardArchiveVisitor visitor, DatabaseObject databaseObject) {

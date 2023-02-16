@@ -336,7 +336,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     }
 
     @Override
-    public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {
+    public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users) {
         this.schemas = schemas;
     }
 

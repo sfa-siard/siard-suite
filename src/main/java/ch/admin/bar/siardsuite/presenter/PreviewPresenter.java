@@ -28,6 +28,7 @@ import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PreviewPresenter extends StepperPresenter implements SiardArchiveVisitor {
 
@@ -40,6 +41,8 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   private List<DatabaseColumn> columns = new ArrayList<>();
   private String columnName = "";
   private String numberOfRows = "";
+  private List<User> users;
+
   protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
   @FXML
   protected TreeView<TreeAttributeWrapper> treeView;
@@ -80,10 +83,26 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), TreeContentView.ROOT, null), db);
 
     rootItem.getChildren().add(createSchemasItem());
+    rootItem.getChildren().add(createUsersItem());
     treeView.setRoot(rootItem);
 
     expandChildren(rootItem);
     updateTableContainerContent(rootItem.getValue());
+  }
+
+  private TreeItem<TreeAttributeWrapper> createUsersItem() {
+    final TreeItem<TreeAttributeWrapper> usersItem = new TreeItem<>();
+    usersItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.users", TreeContentView.USERS, null, users.size()));
+
+    /*List<TreeItem<TreeAttributeWrapper>> userItems = this.users.stream()
+                                      .map(user -> new TreeItem(new TreeAttributeWrapper("Users",
+                                                                                         TreeContentView.USER,
+                                                                                         user)))
+                                      .collect(
+                                              Collectors.toList());*/
+
+    //usersItem.getChildren().addAll(userItems);
+    return usersItem;
   }
 
   private TreeItem<TreeAttributeWrapper> createSchemasItem() {
@@ -185,10 +204,11 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   }
 
   @Override
-  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas) {
+  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users) {
     this.archiveName.setValue(archiveName);
     this.onlyMetaData = onlyMetaData;
     this.schemas = schemas;
+    this.users = users;
   }
 
   @Override

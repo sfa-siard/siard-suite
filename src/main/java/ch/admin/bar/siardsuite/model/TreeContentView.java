@@ -9,7 +9,8 @@ public enum TreeContentView {
   TABLE("fxml/tree/table.fxml", "tableContainer.title.table", "tableContainer.labelTable", "tableContainer.labelNumberOfRows", true),
   COLUMNS("fxml/tree/table.fxml", "tableContainer.title.columns", "tableContainer.labelTable", "tableContainer.labelNumberOfRows", true),
   COLUMN("fxml/tree/column.fxml", "tableContainer.title.column", null, null, false),
-  ROWS("fxml/tree/table.fxml", "tableContainer.title.data", "tableContainer.labelTable", "tableContainer.labelNumberOfRows", true);
+  ROWS("fxml/tree/table.fxml", "tableContainer.title.data", "tableContainer.labelTable", "tableContainer.labelNumberOfRows", true),
+  USERS("fxml/tree/table.fxml", "tableContainer.title.users", "tableContainer.users", "tableContainer.labelNumberOfRows", false);
 
   private final String viewName;
   private final String viewTitle;
