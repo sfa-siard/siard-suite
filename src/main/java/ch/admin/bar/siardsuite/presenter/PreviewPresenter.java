@@ -125,6 +125,28 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     viewsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.views", TreeContentView.TABLES,
                                                                           schema, views.size()));
 
+    for (DatabaseView view: views) {
+      model.provideDatabaseArchiveProperties(this, view);
+      viewItem = new TreeItem<>(new TreeAttributeWrapper(view.name(), TreeContentView.TABLE, view));
+
+      columnsItem = new TreeItem<>();
+      columnsItem.valueProperty()
+                 .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns",
+                                                             TreeContentView.COLUMNS,
+                                                             view,
+                                                             columns.size()));
+
+
+      for (DatabaseColumn column : columns) {
+        model.provideDatabaseArchiveProperties(this, column);
+
+        columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
+        columnsItem.getChildren().add(columnItem);
+      }
+
+      viewItem.getChildren().add(columnsItem);
+      viewsItem.getChildren().add(viewItem);
+    }
     return viewsItem;
   }
 
