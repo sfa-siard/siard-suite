@@ -25,6 +25,7 @@ public class SiardArchive extends DatabaseObject {
     protected boolean onlyMetaData = false;
     protected final List<DatabaseSchema> schemas = new ArrayList<>();
     protected List<User> users = new ArrayList<>();
+    protected List<Privilige> priviliges = new ArrayList<>();
     protected SiardArchiveMetaData metaData;
     protected final TreeContentView treeContentView = TreeContentView.ROOT;
 
@@ -45,6 +46,7 @@ public class SiardArchive extends DatabaseObject {
         }
 
         this.users = metaDataFacade.users();
+        this.priviliges = metaDataFacade.priviliges();
     }
 
     public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner, String dataOriginTimespan,
@@ -54,7 +56,7 @@ public class SiardArchive extends DatabaseObject {
     }
 
     public void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(archiveName, onlyMetaData, schemas, users);
+        visitor.visit(archiveName, onlyMetaData, schemas, users, priviliges);
     }
 
     public void shareProperties (SiardArchiveVisitor visitor, DatabaseObject databaseObject) {

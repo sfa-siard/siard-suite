@@ -56,7 +56,7 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
 
 
     @Override
-    public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users) {
+    public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users, List<Privilige> priviliges) {
     }
 
     @Override

@@ -19,7 +19,10 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -31,236 +34,278 @@ import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements SiardArchiveVisitor {
 
-  private final StringProperty archiveName = new SimpleStringProperty();
-  private boolean onlyMetaData = false;
-  private List<DatabaseSchema> schemas = new ArrayList<>();
-  private String schemaName = "";
-  private List<DatabaseTable> tables = new ArrayList<>();
-  private List<DatabaseView> views = new ArrayList<>();
-  private String tableName = "";
-  private List<DatabaseColumn> columns = new ArrayList<>();
-  private String columnName = "";
-  private String numberOfRows = "";
-  private List<User> users;
+    private final StringProperty archiveName = new SimpleStringProperty();
+    private boolean onlyMetaData = false;
+    private List<DatabaseSchema> schemas = new ArrayList<>();
+    private String schemaName = "";
+    private List<DatabaseTable> tables = new ArrayList<>();
+    private List<DatabaseView> views = new ArrayList<>();
+    private String tableName = "";
+    private List<DatabaseColumn> columns = new ArrayList<>();
+    private String columnName = "";
+    private String numberOfRows = "";
+    private List<User> users;
+    private List<Privilige> priviliges;
 
-  protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource("icons/server.png")), 16.0, 16.0, true, false));
-  @FXML
-  protected TreeView<TreeAttributeWrapper> treeView;
-  @FXML
-  protected MFXButton tableSearchButton;
-  @FXML
-  protected MFXButton metaSearchButton;
-  @FXML
-  protected AnchorPane tableContainerContent;
-  @FXML
-  public Label titleTableContainer;
-  @FXML
-  public StackPane rightTableBox;
+    protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource(
+            "icons/server.png")), 16.0, 16.0, true, false));
+    @FXML
+    protected TreeView<TreeAttributeWrapper> treeView;
+    @FXML
+    protected MFXButton tableSearchButton;
+    @FXML
+    protected MFXButton metaSearchButton;
+    @FXML
+    protected AnchorPane tableContainerContent;
+    @FXML
+    public Label titleTableContainer;
+    @FXML
+    public StackPane rightTableBox;
 
-  @Override
-  public void init(Controller controller, Model model, RootStage stage) {
-    this.model = model;
-    this.controller = controller;
-    this.stage = stage;
+    @Override
+    public void init(Controller controller, Model model, RootStage stage) {
+        this.model = model;
+        this.controller = controller;
+        this.stage = stage;
 
-    model.setCurrentPreviewPresenter(this);
-    this.tableSearchButton.setVisible(false);
-    I18n.bind(this.metaSearchButton.textProperty(), "tableContainer.metaSearchButton");
-    I18n.bind(this.tableSearchButton.textProperty(), "tableContainer.tableSearchButton");
+        model.setCurrentPreviewPresenter(this);
+        this.tableSearchButton.setVisible(false);
+        I18n.bind(this.metaSearchButton.textProperty(), "tableContainer.metaSearchButton");
+        I18n.bind(this.tableSearchButton.textProperty(), "tableContainer.tableSearchButton");
 
-    setListeners();
-  }
-
-  @Override
-  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-    this.init(controller, model, stage);
-  }
-
-  protected void initTreeView() {
-    model.provideDatabaseArchiveObject(this);
-    model.provideDatabaseArchiveProperties(this);
-
-    final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(), TreeContentView.ROOT, null), db);
-
-    rootItem.getChildren().add(createSchemasItem());
-    rootItem.getChildren().add(createUsersItem());
-    treeView.setRoot(rootItem);
-
-    expandChildren(rootItem);
-    updateTableContainerContent(rootItem.getValue());
-  }
-
-  private TreeItem<TreeAttributeWrapper> createUsersItem() {
-    final TreeItem<TreeAttributeWrapper> usersItem = new TreeItem<>();
-    usersItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.users", TreeContentView.USERS, new Users(users), users.size()));
-    return usersItem;
-  }
-
-  private TreeItem<TreeAttributeWrapper> createSchemasItem() {
-    final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
-    schemasItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.schemas", TreeContentView.SCHEMAS, null, schemas.size()));
-    TreeItem<TreeAttributeWrapper> schemaItem;
-
-    for (DatabaseSchema schema : schemas) {
-      model.provideDatabaseArchiveProperties(this, schema);
-
-      schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, TreeContentView.SCHEMA, schema));
-
-
-      schemaItem.getChildren().add(createTablesItem(schema));
-      schemaItem.getChildren().add(createViewsItem(schema));
-      schemasItem.getChildren().add(schemaItem);
+        setListeners();
     }
-    return schemasItem;
-  }
 
-  private TreeItem<TreeAttributeWrapper> createViewsItem(DatabaseSchema schema) {
-    TreeItem<TreeAttributeWrapper> rowsItem;
-    TreeItem<TreeAttributeWrapper> columnsItem;
-    TreeItem<TreeAttributeWrapper> viewsItem;
-    TreeItem<TreeAttributeWrapper> viewItem;
-    TreeItem<TreeAttributeWrapper> columnItem;
-    viewsItem = new TreeItem<>();
-
-    viewsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.views", TreeContentView.VIEWS,
-                                                                          schema, views.size()));
-
-    for (DatabaseView view: views) {
-      model.provideDatabaseArchiveProperties(this, view);
-      viewItem = new TreeItem<>(new TreeAttributeWrapper(view.name(), TreeContentView.VIEW, view));
-
-      columnsItem = new TreeItem<>();
-      columnsItem.valueProperty()
-                 .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns",
-                                                             TreeContentView.COLUMNS,
-                                                             view,
-                                                             columns.size()));
-
-
-      for (DatabaseColumn column : columns) {
-        model.provideDatabaseArchiveProperties(this, column);
-
-        columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
-        columnsItem.getChildren().add(columnItem);
-      }
-
-      viewItem.getChildren().add(columnsItem);
-      viewsItem.getChildren().add(viewItem);
+    @Override
+    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
+        this.init(controller, model, stage);
     }
-    return viewsItem;
-  }
 
-  private TreeItem<TreeAttributeWrapper> createTablesItem(DatabaseSchema schema) {
-    TreeItem<TreeAttributeWrapper> rowsItem;
-    TreeItem<TreeAttributeWrapper> columnsItem;
-    TreeItem<TreeAttributeWrapper> tablesItem;
-    TreeItem<TreeAttributeWrapper> tableItem;
-    TreeItem<TreeAttributeWrapper> columnItem;
-    tablesItem = new TreeItem<>();
-    tablesItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.tables", TreeContentView.TABLES,
-                                                                          schema, tables.size()));
+    protected void initTreeView() {
+        model.provideDatabaseArchiveObject(this);
+        model.provideDatabaseArchiveProperties(this);
 
-    for (DatabaseTable table : tables) {
-      model.provideDatabaseArchiveProperties(this, table);
+        final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(),
+                                                                                                TreeContentView.ROOT,
+                                                                                                null), db);
 
-      tableItem = new TreeItem<>(new TreeAttributeWrapper(tableName, TreeContentView.TABLE, table));
+        rootItem.getChildren().add(createSchemasItem());
+        rootItem.getChildren().add(createUsersItem());
+        rootItem.getChildren().add(createPriviligeItem());
+        treeView.setRoot(rootItem);
 
-
-      columnsItem = new TreeItem<>();
-      columnsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns", TreeContentView.COLUMNS, table, columns.size()));
-
-      for (DatabaseColumn column : columns) {
-        model.provideDatabaseArchiveProperties(this, column);
-
-        columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
-        columnsItem.getChildren().add(columnItem);
-      }
-
-      if (!onlyMetaData) {
-        rowsItem = new TreeItem<>();
-        rowsItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.rows", TreeContentView.ROWS, table, numberOfRows));
-
-        tableItem.getChildren().add(rowsItem);
-      }
-
-      tableItem.getChildren().add(columnsItem);
-      tablesItem.getChildren().add(tableItem);
+        expandChildren(rootItem);
+        updateTableContainerContent(rootItem.getValue());
     }
-    return tablesItem;
-  }
 
-  protected void expandChildren(TreeItem<TreeAttributeWrapper> root) {
-    root.setExpanded(true);
-    if (!root.valueProperty().getValue().getType().getViewTitle().equals("tableContainer.title.tables")) {
-      for (TreeItem<TreeAttributeWrapper> child : root.getChildren()) {
-        child.setExpanded(true);
-        expandChildren(child);
-      }
+    private TreeItem<TreeAttributeWrapper> createUsersItem() {
+        final TreeItem<TreeAttributeWrapper> usersItem = new TreeItem<>();
+        usersItem.valueProperty()
+                 .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.users",
+                                                             TreeContentView.USERS,
+                                                             new Users(users),
+                                                             users.size()));
+        return usersItem;
     }
-  }
 
-  protected void setListeners() {
-    MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
-    selection.selectedItemProperty().addListener(((observable, oldValue, newValue) -> updateTableContainerContent(newValue.getValue())));
-    tableSearchButton.setOnAction(event -> {
-      if (model.getCurrentTableSearchButton() != null && tableSearchButton.equals(model.getCurrentTableSearchButton().button()) && model.getCurrentTableSearchButton().active()) {
-        model.setCurrentTableSearchButton(tableSearchButton, false);
-        tableSearchButton.setStyle("-fx-font-weight: normal;");
-        model.getCurrentTableSearchBase().tableView().setItems(FXCollections.observableArrayList(model.getCurrentTableSearchBase().rows()));
-      } else {
-        model.setCurrentTableSearchButton(tableSearchButton, false);
-        stage.openDialog(View.SEARCH_TABLE_DIALOG);
-      }
-    });
-    metaSearchButton.setOnAction(event -> stage.openDialog(View.SEARCH_METADATA_DIALOG));
-  }
-
-  protected void updateTableContainerContent(TreeAttributeWrapper wrapper) {
-    try {
-      FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.getType().getViewName()));
-      Node container = loader.load();
-      tableContainerContent.getChildren().setAll(container);
-      loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
-      tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
-      I18n.bind(this.titleTableContainer.textProperty(),wrapper.getType().getViewTitle());
-      tableContainerContent.prefWidthProperty().bind(rightTableBox.widthProperty());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    private TreeItem<TreeAttributeWrapper> createPriviligeItem() {
+        final TreeItem<TreeAttributeWrapper> priviligeItem = new TreeItem<>();
+        priviligeItem.valueProperty()
+                     .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.priviliges",
+                                                                 TreeContentView.PRIVILIGES,
+                                                                 new Priviliges(priviliges),
+                                                                 priviliges.size()));
+        return priviligeItem;
     }
-  }
 
-  public AnchorPane getTableContainerContent() {
-    return tableContainerContent;
-  }
+    private TreeItem<TreeAttributeWrapper> createSchemasItem() {
+        final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
+        schemasItem.valueProperty()
+                   .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.schemas",
+                                                               TreeContentView.SCHEMAS,
+                                                               null,
+                                                               schemas.size()));
+        TreeItem<TreeAttributeWrapper> schemaItem;
 
-  @Override
-  public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users) {
-    this.archiveName.setValue(archiveName);
-    this.onlyMetaData = onlyMetaData;
-    this.schemas = schemas;
-    this.users = users;
-  }
+        for (DatabaseSchema schema : schemas) {
+            model.provideDatabaseArchiveProperties(this, schema);
 
-  @Override
-  public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables, List<DatabaseView> views) {
-    this.schemaName = schemaName;
-    this.tables = tables;
-    this.views = views;
-  }
+            schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, TreeContentView.SCHEMA, schema));
 
-  @Override
-  public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) {
-    this.tableName = tableName;
-    this.columns = columns;
-    this.numberOfRows = numberOfRows;
-  }
 
-  @Override
-  public void visit(String columnName) {
-    this.columnName = columnName;
-  }
+            schemaItem.getChildren().add(createTablesItem(schema));
+            schemaItem.getChildren().add(createViewsItem(schema));
+            schemasItem.getChildren().add(schemaItem);
+        }
+        return schemasItem;
+    }
 
-  @Override
-  public void visit(SiardArchive archive) {}
+    private TreeItem<TreeAttributeWrapper> createViewsItem(DatabaseSchema schema) {
+        TreeItem<TreeAttributeWrapper> rowsItem;
+        TreeItem<TreeAttributeWrapper> columnsItem;
+        TreeItem<TreeAttributeWrapper> viewsItem;
+        TreeItem<TreeAttributeWrapper> viewItem;
+        TreeItem<TreeAttributeWrapper> columnItem;
+        viewsItem = new TreeItem<>();
+
+        viewsItem.valueProperty()
+                 .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.views", TreeContentView.VIEWS,
+                                                             schema, views.size()));
+
+        for (DatabaseView view : views) {
+            model.provideDatabaseArchiveProperties(this, view);
+            viewItem = new TreeItem<>(new TreeAttributeWrapper(view.name(), TreeContentView.VIEW, view));
+
+            columnsItem = new TreeItem<>();
+            columnsItem.valueProperty()
+                       .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns",
+                                                                   TreeContentView.COLUMNS,
+                                                                   view,
+                                                                   columns.size()));
+
+
+            for (DatabaseColumn column : columns) {
+                model.provideDatabaseArchiveProperties(this, column);
+
+                columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
+                columnsItem.getChildren().add(columnItem);
+            }
+
+            viewItem.getChildren().add(columnsItem);
+            viewsItem.getChildren().add(viewItem);
+        }
+        return viewsItem;
+    }
+
+    private TreeItem<TreeAttributeWrapper> createTablesItem(DatabaseSchema schema) {
+        TreeItem<TreeAttributeWrapper> rowsItem;
+        TreeItem<TreeAttributeWrapper> columnsItem;
+        TreeItem<TreeAttributeWrapper> tablesItem;
+        TreeItem<TreeAttributeWrapper> tableItem;
+        TreeItem<TreeAttributeWrapper> columnItem;
+        tablesItem = new TreeItem<>();
+        tablesItem.valueProperty()
+                  .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.tables", TreeContentView.TABLES,
+                                                              schema, tables.size()));
+
+        for (DatabaseTable table : tables) {
+            model.provideDatabaseArchiveProperties(this, table);
+
+            tableItem = new TreeItem<>(new TreeAttributeWrapper(tableName, TreeContentView.TABLE, table));
+
+
+            columnsItem = new TreeItem<>();
+            columnsItem.valueProperty()
+                       .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns",
+                                                                   TreeContentView.COLUMNS,
+                                                                   table,
+                                                                   columns.size()));
+
+            for (DatabaseColumn column : columns) {
+                model.provideDatabaseArchiveProperties(this, column);
+
+                columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
+                columnsItem.getChildren().add(columnItem);
+            }
+
+            if (!onlyMetaData) {
+                rowsItem = new TreeItem<>();
+                rowsItem.valueProperty()
+                        .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.rows",
+                                                                    TreeContentView.ROWS,
+                                                                    table,
+                                                                    numberOfRows));
+
+                tableItem.getChildren().add(rowsItem);
+            }
+
+            tableItem.getChildren().add(columnsItem);
+            tablesItem.getChildren().add(tableItem);
+        }
+        return tablesItem;
+    }
+
+    protected void expandChildren(TreeItem<TreeAttributeWrapper> root) {
+        root.setExpanded(true);
+        if (!root.valueProperty().getValue().getType().getViewTitle().equals("tableContainer.title.tables")) {
+            for (TreeItem<TreeAttributeWrapper> child : root.getChildren()) {
+                child.setExpanded(true);
+                expandChildren(child);
+            }
+        }
+    }
+
+    protected void setListeners() {
+        MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
+        selection.selectedItemProperty()
+                 .addListener(((observable, oldValue, newValue) -> updateTableContainerContent(newValue.getValue())));
+        tableSearchButton.setOnAction(event -> {
+            if (model.getCurrentTableSearchButton() != null && tableSearchButton.equals(model.getCurrentTableSearchButton()
+                                                                                             .button()) && model.getCurrentTableSearchButton()
+                                                                                                                .active()) {
+                model.setCurrentTableSearchButton(tableSearchButton, false);
+                tableSearchButton.setStyle("-fx-font-weight: normal;");
+                model.getCurrentTableSearchBase()
+                     .tableView()
+                     .setItems(FXCollections.observableArrayList(model.getCurrentTableSearchBase().rows()));
+            } else {
+                model.setCurrentTableSearchButton(tableSearchButton, false);
+                stage.openDialog(View.SEARCH_TABLE_DIALOG);
+            }
+        });
+        metaSearchButton.setOnAction(event -> stage.openDialog(View.SEARCH_METADATA_DIALOG));
+    }
+
+    protected void updateTableContainerContent(TreeAttributeWrapper wrapper) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.getType().getViewName()));
+            Node container = loader.load();
+            tableContainerContent.getChildren().setAll(container);
+            loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
+            tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
+            I18n.bind(this.titleTableContainer.textProperty(), wrapper.getType().getViewTitle());
+            tableContainerContent.prefWidthProperty().bind(rightTableBox.widthProperty());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public AnchorPane getTableContainerContent() {
+        return tableContainerContent;
+    }
+
+    @Override
+    public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users,
+                      List<Privilige> priviliges) {
+        this.archiveName.setValue(archiveName);
+        this.onlyMetaData = onlyMetaData;
+        this.schemas = schemas;
+        this.users = users;
+        this.priviliges = priviliges;
+    }
+
+    @Override
+    public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
+                            List<DatabaseView> views) {
+        this.schemaName = schemaName;
+        this.tables = tables;
+        this.views = views;
+    }
+
+    @Override
+    public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) {
+        this.tableName = tableName;
+        this.columns = columns;
+        this.numberOfRows = numberOfRows;
+    }
+
+    @Override
+    public void visit(String columnName) {
+        this.columnName = columnName;
+    }
+
+    @Override
+    public void visit(SiardArchive archive) {
+    }
 
 }

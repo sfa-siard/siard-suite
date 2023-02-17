@@ -24,11 +24,7 @@ public class Users extends DatabaseObject {
     }
 
     @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-
-
-    }
-
+    protected void shareProperties(SiardArchiveVisitor visitor) {}
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView != null && type != null) {

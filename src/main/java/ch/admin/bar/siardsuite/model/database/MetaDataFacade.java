@@ -20,4 +20,16 @@ public class MetaDataFacade {
                         .map(user -> new User(user.getName(), user.getDescription()))
                         .collect(Collectors.toList());
     }
+
+    public List<Privilige> priviliges() {
+        return IntStream.range(0, this.metaData.getMetaPrivileges())
+                        .mapToObj(this.metaData::getMetaPrivilege)
+                        .map(privilige -> new Privilige(privilige.getType(),
+                                                        privilige.getObject(),
+                                                        privilige.getGrantor(),
+                                                        privilige.getGrantee(),
+                                                        privilige.getOption(),
+                                                        privilige.getDescription()))
+                        .collect(Collectors.toList());
+    }
 }
