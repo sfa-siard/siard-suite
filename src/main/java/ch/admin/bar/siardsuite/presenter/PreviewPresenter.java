@@ -203,7 +203,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
   }
 
   @Override
-  public void visit(String schemaName, String schemaDescription, List<DatabaseTable> tables) {
+  public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables) {
     this.schemaName = schemaName;
     this.tables = tables;
   }

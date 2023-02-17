@@ -42,7 +42,7 @@ public class DatabaseSchema extends DatabaseObject {
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(name, description, tables);
+        visitor.visitSchema(name, description, tables);
     }
 
     @Override
