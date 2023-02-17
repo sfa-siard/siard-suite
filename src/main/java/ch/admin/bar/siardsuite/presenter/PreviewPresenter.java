@@ -134,6 +134,11 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
 
             schemaItem.getChildren().add(createTablesItem(schema));
+            schemaItem.getChildren()
+                      .add(create("archive.tree.view.node.types",
+                                  TreeContentView.TYPES,
+                                  new DatabaseTypes(types),
+                                  types));
             schemaItem.getChildren().add(createViewsItem(schema));
             schemasItem.getChildren().add(schemaItem);
         }

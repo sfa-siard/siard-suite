@@ -18,4 +18,8 @@ public class DatabaseType {
         this.base = base;
         this.description = description;
     }
+
+    public <T> T accept(TypeVisitor<T> visitor) {
+        return visitor.visit(name, category, instantiable, isFinal, base, description);
+    }
 }
