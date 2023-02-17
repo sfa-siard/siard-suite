@@ -136,7 +136,7 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         }
         if (nodeIds.size() > 0) {
             List<MetaSearchHit> metaSearchHits = new ArrayList<>();
-            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", Table " + name,
+            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", View " + name,
                                                  this,
                                                  treeContentView,
                                                  nodeIds));

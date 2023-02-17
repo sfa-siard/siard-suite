@@ -7,6 +7,8 @@ public enum TreeContentView {
   SCHEMA("fxml/tree/table.fxml", "tableContainer.title.schema", "tableContainer.labelSchema", "tableContainer.labelDescSchema", false),
   TABLES("fxml/tree/table.fxml", "tableContainer.title.tables", "tableContainer.labelSchema", "tableContainer.labelDescSchema", false),
   TABLE("fxml/tree/table.fxml", "tableContainer.title.table", "tableContainer.labelTable", "tableContainer.labelNumberOfRows", true),
+  VIEWS("fxml/tree/table.fxml", "tableContainer.title.views", "tableContainer.labelSchema", "tableContainer.labelDescSchema", false),
+  VIEW("fxml/tree/table.fxml", "tableContainer.title.view", "tableContainer.labelView", "tableContainer.labelNumberOfRows", true),
   COLUMNS("fxml/tree/table.fxml", "tableContainer.title.columns", "tableContainer.labelTable", "tableContainer.labelNumberOfRows", true),
   COLUMN("fxml/tree/column.fxml", "tableContainer.title.column", null, null, false),
   ROWS("fxml/tree/table.fxml", "tableContainer.title.data", "tableContainer.labelTable", "tableContainer.labelNumberOfRows", true),
