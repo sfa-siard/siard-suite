@@ -27,9 +27,10 @@ class UserTest {
 
 
         @Override
-        public void visit(String name, String description) {
+        public Object visit(String name, String description) {
             this.name = name;
             this.description = description;
+            return true;
         }
     }
 }
