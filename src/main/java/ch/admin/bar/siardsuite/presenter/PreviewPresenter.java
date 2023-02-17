@@ -30,6 +30,7 @@ import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements SiardArchiveVisitor {
@@ -90,32 +91,29 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
                                                                                                 null), db);
 
         rootItem.getChildren().add(createSchemasItem());
-        rootItem.getChildren().add(createUsersItem());
-        rootItem.getChildren().add(createPriviligeItem());
+        rootItem.getChildren().add(create("archive.tree.view.node.users",
+                                          TreeContentView.USERS,
+                                          new Users(users),
+                                          users));
+        rootItem.getChildren().add(create("archive.tree.view.node.priviliges",
+                                          TreeContentView.PRIVILIGES,
+                                          new Priviliges(priviliges),
+                                          priviliges));
         treeView.setRoot(rootItem);
 
         expandChildren(rootItem);
         updateTableContainerContent(rootItem.getValue());
     }
 
-    private TreeItem<TreeAttributeWrapper> createUsersItem() {
-        final TreeItem<TreeAttributeWrapper> usersItem = new TreeItem<>();
-        usersItem.valueProperty()
-                 .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.users",
-                                                             TreeContentView.USERS,
-                                                             new Users(users),
-                                                             users.size()));
-        return usersItem;
-    }
-
-    private TreeItem<TreeAttributeWrapper> createPriviligeItem() {
-        final TreeItem<TreeAttributeWrapper> priviligeItem = new TreeItem<>();
-        priviligeItem.valueProperty()
-                     .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.priviliges",
-                                                                 TreeContentView.PRIVILIGES,
-                                                                 new Priviliges(priviliges),
-                                                                 priviliges.size()));
-        return priviligeItem;
+    private TreeItem<TreeAttributeWrapper> create(String nodeLabel, TreeContentView view, DatabaseObject dbObject,
+                                                  Collection elements) {
+        final TreeItem<TreeAttributeWrapper> item = new TreeItem<>();
+        item.valueProperty()
+            .bind(I18n.createTreeAtributeWrapperBinding(nodeLabel,
+                                                        view,
+                                                        dbObject,
+                                                        elements.size()));
+        return item;
     }
 
     private TreeItem<TreeAttributeWrapper> createSchemasItem() {
