@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.Map;
 
-public class User extends DatabaseObject {
+public class User {
     private final String name;
 
     private final String description;
@@ -17,23 +17,8 @@ public class User extends DatabaseObject {
         this.description = description;
     }
 
-    public void accept(UserVisitor visitor) {
-        visitor.visit(this.name, this.description);
+    public <T> T accept(UserVisitor<T> visitor) {
+        return visitor.visit(this.name, this.description);
     }
 
-
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-
-    }
-
-    @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
-
-    }
-
-    @Override
-    protected void populate(VBox vBox, TreeContentView type) {
-
-    }
 }

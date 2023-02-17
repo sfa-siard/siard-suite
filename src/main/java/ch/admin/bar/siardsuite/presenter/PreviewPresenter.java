@@ -92,16 +92,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
   private TreeItem<TreeAttributeWrapper> createUsersItem() {
     final TreeItem<TreeAttributeWrapper> usersItem = new TreeItem<>();
-    usersItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.users", TreeContentView.USERS, null, users.size()));
-
-    /*List<TreeItem<TreeAttributeWrapper>> userItems = this.users.stream()
-                                      .map(user -> new TreeItem(new TreeAttributeWrapper("Users",
-                                                                                         TreeContentView.USER,
-                                                                                         user)))
-                                      .collect(
-                                              Collectors.toList());*/
-
-    //usersItem.getChildren().addAll(userItems);
+    usersItem.valueProperty().bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.users", TreeContentView.USERS, new Users(users), users.size()));
     return usersItem;
   }
 

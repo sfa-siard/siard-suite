@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
-public interface UserVisitor {
+public interface UserVisitor<T> {
 
-    void visit(String name, String description);
+    T visit(String name, String description);
 }
