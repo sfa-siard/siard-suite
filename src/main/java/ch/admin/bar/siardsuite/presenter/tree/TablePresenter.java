@@ -60,7 +60,7 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
     }
 
     @Override
-    public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables) {
+    public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables, List<DatabaseView> views) {
         nameText.setText(schemaName);
         infoText.setText(schemaDescription == null || schemaDescription.isEmpty() ? "(...)" : schemaDescription);
     }

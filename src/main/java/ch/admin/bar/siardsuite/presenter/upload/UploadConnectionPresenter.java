@@ -341,7 +341,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     }
 
     @Override
-    public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables) {
+    public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables, List<DatabaseView> views) {
         this.schemaName = schemaName;
     }
 

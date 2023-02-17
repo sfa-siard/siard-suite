@@ -26,6 +26,7 @@ public class DatabaseSchema extends DatabaseObject {
     protected final String name;
     protected final String description;
     protected final List<DatabaseTable> tables = new ArrayList<>();
+    protected final List<DatabaseView> views = new ArrayList<>();
 
     protected final TreeContentView treeContentView = TreeContentView.SCHEMA;
 
@@ -39,10 +40,14 @@ public class DatabaseSchema extends DatabaseObject {
         for (int i = 0; i < schema.getTables(); i++) {
             tables.add(new DatabaseTable(archive, this, schema.getTable(i), onlyMetaData));
         }
+
+        for (int i = 0; i < schema.getMetaSchema().getMetaViews(); i++) {
+            views.add(new DatabaseView(archive, this, schema.getMetaSchema().getMetaView(i)));
+        }
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visitSchema(name, description, tables);
+        visitor.visitSchema(name, description, tables, views);
     }
 
     @Override
