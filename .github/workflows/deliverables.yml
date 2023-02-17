@@ -27,7 +27,7 @@ jobs:
       - name: Show current application version
         run: ./gradlew cV
       - name: Execute Gradle build
-        run: ./gradlew build fatJar -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon -x test
+        run: ./gradlew build fatJar -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
       - name: upload zip archive
         uses: actions/upload-artifact@v3
         with:
