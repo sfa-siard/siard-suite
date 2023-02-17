@@ -93,18 +93,24 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
                                                                                                 null), db);
 
         rootItem.getChildren().add(createSchemasItem());
-        rootItem.getChildren().add(create("archive.tree.view.node.users",
-                                          TreeContentView.USERS,
-                                          new Users(users),
-                                          users));
-        rootItem.getChildren().add(create("archive.tree.view.node.priviliges",
-                                          TreeContentView.PRIVILIGES,
-                                          new Priviliges(priviliges),
-                                          priviliges));
+        addIfNotEmpty(rootItem, users, create("archive.tree.view.node.users",
+                                              TreeContentView.USERS,
+                                              new Users(users),
+                                              users));
+        addIfNotEmpty(rootItem, priviliges, create("archive.tree.view.node.priviliges",
+                                                   TreeContentView.PRIVILIGES,
+                                                   new Priviliges(priviliges),
+                                                   priviliges));
         treeView.setRoot(rootItem);
 
         expandChildren(rootItem);
         updateTableContainerContent(rootItem.getValue());
+    }
+
+    private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem, List<? extends Object> items,
+                               TreeItem<TreeAttributeWrapper> item) {
+        if (items.size() == 0) return;
+        rootItem.getChildren().add(item);
     }
 
     private TreeItem<TreeAttributeWrapper> create(String nodeLabel, TreeContentView view, DatabaseObject dbObject,
@@ -133,13 +139,12 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, TreeContentView.SCHEMA, schema));
 
 
-            schemaItem.getChildren().add(createTablesItem(schema));
-            schemaItem.getChildren()
-                      .add(create("archive.tree.view.node.types",
-                                  TreeContentView.TYPES,
-                                  new DatabaseTypes(types),
-                                  types));
-            schemaItem.getChildren().add(createViewsItem(schema));
+            addIfNotEmpty(schemaItem, types, create("archive.tree.view.node.types",
+                                                    TreeContentView.TYPES,
+                                                    new DatabaseTypes(types),
+                                                    types));
+            addIfNotEmpty(schemaItem, tables, createTablesItem(schema));
+            addIfNotEmpty(schemaItem, views, createViewsItem(schema));
             schemasItem.getChildren().add(schemaItem);
         }
         return schemasItem;
