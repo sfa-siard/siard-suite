@@ -36,4 +36,16 @@ public class MetaSchemaFacade {
                         .map(view -> new DatabaseView(archive, databaseSchema, view))
                         .collect(Collectors.toList());
     }
+
+    public List<DatabaseType> types() {
+        return IntStream.range(0, schema.getMetaSchema().getMetaTypes())
+                        .mapToObj(schema.getMetaSchema()::getMetaType)
+                        .map(type -> new DatabaseType(type.getName(),
+                                                      type.getCategory(),
+                                                      type.isInstantiable(),
+                                                      type.isFinal(),
+                                                      type.getBase(),
+                                                      type.getDescription()))
+                        .collect(Collectors.toList());
+    }
 }

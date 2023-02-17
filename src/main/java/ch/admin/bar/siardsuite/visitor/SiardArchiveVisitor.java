@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface SiardArchiveVisitor {
 
-    void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users, List<Privilige> priviliges);
+    void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users,
+               List<Privilige> priviliges);
 
-    void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables, List<DatabaseView> views);
+    void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables, List<DatabaseView> views,
+                     List<DatabaseType> types);
 
     void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows);
 

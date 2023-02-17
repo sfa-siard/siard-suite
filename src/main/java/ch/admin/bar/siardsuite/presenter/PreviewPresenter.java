@@ -47,6 +47,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     private String numberOfRows = "";
     private List<User> users;
     private List<Privilige> priviliges;
+    private List<DatabaseType> types;
 
     protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource(
             "icons/server.png")), 16.0, 16.0, true, false));
@@ -62,6 +63,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     public Label titleTableContainer;
     @FXML
     public StackPane rightTableBox;
+
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -284,10 +286,11 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
     @Override
     public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
-                            List<DatabaseView> views) {
+                            List<DatabaseView> views, List<DatabaseType> types) {
         this.schemaName = schemaName;
         this.tables = tables;
         this.views = views;
+        this.types = types;
     }
 
     @Override
