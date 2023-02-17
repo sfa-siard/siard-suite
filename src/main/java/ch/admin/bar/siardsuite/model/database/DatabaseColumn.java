@@ -15,7 +15,7 @@ public class DatabaseColumn extends DatabaseObject {
 
     protected final SiardArchive archive;
     protected final DatabaseSchema schema;
-    protected final DatabaseTable table;
+    protected final WithColumns table;
     protected final MetaColumn column;
     protected final String index;
     protected final String name;
@@ -32,7 +32,7 @@ public class DatabaseColumn extends DatabaseObject {
 
     protected final TreeContentView treeContentView = TreeContentView.COLUMN;
 
-    protected DatabaseColumn(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, MetaColumn column) {
+    protected DatabaseColumn(SiardArchive archive, DatabaseSchema schema, WithColumns table, MetaColumn column) {
         this.archive = archive;
         this.schema = schema;
         this.table = table;
@@ -144,7 +144,7 @@ public class DatabaseColumn extends DatabaseObject {
         }
         if (nodeIds.size() > 0) {
             List<MetaSearchHit> metaSearchHits = new ArrayList<>();
-            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", Table " + table.name + ", Column " + name,
+            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", Table " + table.name() + ", Column " + name,
                                                  this,
                                                  treeContentView,
                                                  nodeIds));
