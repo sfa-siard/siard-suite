@@ -35,6 +35,7 @@ public class DatabaseSchema extends DatabaseObject {
         this.onlyMetaData = onlyMetaData;
         name = schema.getMetaSchema().getName();
         description = schema.getMetaSchema().getDescription();
+
         for (int i = 0; i < schema.getTables(); i++) {
             tables.add(new DatabaseTable(archive, this, schema.getTable(i), onlyMetaData));
         }

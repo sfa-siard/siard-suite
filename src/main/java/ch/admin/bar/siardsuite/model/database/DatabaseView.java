@@ -1,10 +1,9 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.*;
+import ch.admin.bar.siard2.api.MetaView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -15,15 +14,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import java.io.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DatabaseTable extends DatabaseObject implements WithColumns {
-
+public class DatabaseView extends DatabaseObject implements WithColumns {
     protected final SiardArchive archive;
     protected final DatabaseSchema schema;
-    protected final Table table;
+    protected final MetaView view;
     protected final boolean onlyMetaData;
     protected final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
@@ -34,21 +32,27 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     protected int lastRowLoadedIndex = -1;
     protected final TreeContentView treeContentView = TreeContentView.TABLE;
 
-    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
-        this(archive, schema, table, false);
+    protected DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView view) {
+        this(archive, schema, view, false);
     }
 
-    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
+    protected DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView view, boolean onlyMetaData) {
         this.archive = archive;
         this.schema = schema;
-        this.table = table;
+        this.view = view;
         this.onlyMetaData = onlyMetaData;
-        name = table.getMetaTable().getName();
-        for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
+        name = view.getName();
+
+        for (int i = 0; i < view.getMetaColumns(); i++) {
+            columns.add(new DatabaseColumn(archive, schema, this, view.getMetaColumn(i)));
         }
         numberOfColumns = String.valueOf(columns.size());
-        numberOfRows = String.valueOf(table.getMetaTable().getRows());
+        numberOfRows = String.valueOf(view.getRows());
+    }
+
+    @Override
+    public String name() {
+        return name;
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
@@ -92,15 +96,6 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                     col.setCellValueFactory(new MapValueFactory<>(column.index));
                     tableView.getColumns().add(col);
                 }
-                try {
-                    final RecordDispenser recordDispenser = table.openRecords();
-                    loadRecords(recordDispenser);
-                    tableView.setItems(rowItems());
-                    tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
-                    tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE, event -> expand(recordDispenser, tableView));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
             }
         }
     }
@@ -133,58 +128,6 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         return items;
     }
 
-    private void loadItems(RecordDispenser recordDispenser, TableView<Map> tableView, List<TableRow<Map>> rows) {
-        boolean reload = false;
-        for (TableRow<Map> row : rows) {
-            if (lastRowLoadedIndex <= row.getIndex()) {
-                reload = true;
-            }
-        }
-        if (reload) {
-            loadRecords(recordDispenser);
-            tableView.getItems().addAll(rowItems());
-        }
-    }
-
-    private void loadRecords(RecordDispenser recordDispenser) {
-        rows.clear();
-        if (!onlyMetaData) {
-            try {
-                final long numberOfRows = table.getMetaTable().getRows();
-                int j = 0;
-                while (j < numberOfRows && j < loadBatchSize) {
-                    if (recordDispenser.getPosition() < numberOfRows) {
-                        rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
-                    }
-                    j++;
-                    lastRowLoadedIndex++;
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private void expand(RecordDispenser recordDispenser, TableView<Map> tableView) {
-        final int loadBatchSize = this.loadBatchSize;
-        final long numberOfRows = table.getMetaTable().getRows();
-        this.loadBatchSize = (int) numberOfRows / 50;
-        while (recordDispenser.getPosition() < numberOfRows) {
-            loadRecords(recordDispenser);
-            tableView.getItems().addAll(rowItems());
-            System.out.println(numberOfRows - recordDispenser.getPosition() + " rows remaining");
-        }
-        this.loadBatchSize = loadBatchSize;
-    }
-
-    protected void export(File directory) throws IOException {
-        File destination = new File(directory.getAbsolutePath(), this.name + ".html");
-        File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
-        OutputStream outPutStream = new FileOutputStream(destination);
-        this.table.getParentSchema().getParentArchive().getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
-        outPutStream.close();
-    }
-
     private TreeSet<MetaSearchHit> metaSearch(String s) {
         TreeSet<MetaSearchHit> hits = new TreeSet<>();
         final List<String> nodeIds = new ArrayList<>();
@@ -207,10 +150,5 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
         hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
         return hits;
-    }
-
-    @Override
-    public String name() {
-        return name;
     }
 }
