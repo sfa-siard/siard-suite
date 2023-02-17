@@ -13,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -25,8 +26,9 @@ public class DatabaseSchema extends DatabaseObject {
     protected final boolean onlyMetaData;
     protected final String name;
     protected final String description;
-    protected final List<DatabaseTable> tables = new ArrayList<>();
-    protected final List<DatabaseView> views = new ArrayList<>();
+    protected List<DatabaseTable> tables;
+    protected List<DatabaseView> views;
+    protected final List<DatabaseType> types = new ArrayList<>();
 
     protected final TreeContentView treeContentView = TreeContentView.SCHEMA;
 
@@ -34,16 +36,13 @@ public class DatabaseSchema extends DatabaseObject {
         this.archive = archive;
         this.schema = schema;
         this.onlyMetaData = onlyMetaData;
-        name = schema.getMetaSchema().getName();
-        description = schema.getMetaSchema().getDescription();
 
-        for (int i = 0; i < schema.getTables(); i++) {
-            tables.add(new DatabaseTable(archive, this, schema.getTable(i), onlyMetaData));
-        }
+        MetaSchemaFacade metaSchemaFacade = new MetaSchemaFacade(schema);
+        name = metaSchemaFacade.name();
+        description = metaSchemaFacade.description();
 
-        for (int i = 0; i < schema.getMetaSchema().getMetaViews(); i++) {
-            views.add(new DatabaseView(archive, this, schema.getMetaSchema().getMetaView(i)));
-        }
+        this.tables = metaSchemaFacade.tables(archive, this, onlyMetaData);
+        this.views = metaSchemaFacade.views(archive, this);
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
@@ -103,13 +102,14 @@ public class DatabaseSchema extends DatabaseObject {
 
     public void populate(CheckBoxTreeItem<String> schemaItem) {
         List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.tables.stream()
-                                            .map(table -> new CheckBoxTreeItem<>(table.name))
-                                            .collect(Collectors.toList());
+                                                                      .map(table -> new CheckBoxTreeItem<>(table.name))
+                                                                      .collect(Collectors.toList());
         schemaItem.getChildren().setAll(checkBoxTreeItems);
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {}
+    protected void populate(VBox vbox, TreeContentView type) {
+    }
 
     private TreeSet<MetaSearchHit> metaSearch(String s) {
         TreeSet<MetaSearchHit> hits = new TreeSet<>();
@@ -131,7 +131,9 @@ public class DatabaseSchema extends DatabaseObject {
 
     protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(tables.stream().flatMap(table -> table.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
+        hits.addAll(tables.stream()
+                          .flatMap(table -> table.aggregatedMetaSearch(s).stream())
+                          .collect(Collectors.toList()));
         return hits;
     }
 
