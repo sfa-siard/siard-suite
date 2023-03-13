@@ -101,7 +101,7 @@ runtime {
         skipInstaller = false
 
         def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
-        imageOptions += ['--icon', "src/main/resources/ch/admin/bar/siardsuite/icons/archive.png"]
+        imageOptions += ['--icon', "src/main/resources/ch/admin/bar/siardsuite/icons/archive_red.$imgType"]
 
         installerOptions += ['--resource-dir', "src/main/resources"]
         installerOptions += ['--vendor', 'BUAR']
