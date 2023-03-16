@@ -22,7 +22,7 @@ import java.util.Map;
 public class Controller {
 
     private final Model model;
-
+    private Archive tmpArchive;
     private DatabaseLoadService databaseLoadService;
     private DatabaseUploadService databaseUploadService;
 
@@ -41,9 +41,9 @@ public class Controller {
     public void loadDatabase(boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
                              EventHandler<WorkerStateEvent> onFailure
     ) throws SQLException {
-        final Archive archive = model.initArchive();
+        tmpArchive = model.initArchive();
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                                                            .createDatabaseLoader(archive, onlyMetaData);
+                                                            .createDatabaseLoader(tmpArchive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -143,6 +143,7 @@ public class Controller {
 
     private void removeTmpArchive() {
         try {
+            tmpArchive.close();
             Files.delete(Paths.get(Model.TMP_SIARD));
         } catch (IOException ignored) {
         }
