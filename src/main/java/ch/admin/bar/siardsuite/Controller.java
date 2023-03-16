@@ -146,6 +146,7 @@ public class Controller {
             tmpArchive.close();
             Files.delete(Paths.get(Model.TMP_SIARD));
         } catch (IOException ignored) {
+            ignored.printStackTrace();
         }
     }
 
