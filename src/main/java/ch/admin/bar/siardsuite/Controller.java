@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.util.Pair;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -142,11 +143,14 @@ public class Controller {
     }
 
     private void removeTmpArchive() {
-        try {
-            tmpArchive.close();
-            Files.delete(Paths.get(Model.TMP_SIARD));
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
+        File tmpFile;
+        if (tmpArchive!=null) {
+            tmpFile = tmpArchive.getFile();
+        } else {
+            tmpFile = Paths.get(Model.TMP_SIARD).toFile();
+        }
+        if (!tmpFile.delete()) {
+            tmpFile.deleteOnExit();
         }
     }
 
