@@ -34,6 +34,7 @@ manifest {
 dependencies {
 
     implementation 'org.glavo.materialfx:materialfx:11.13.5'
+    implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testImplementation "org.testfx:testfx-core:4.0.16-alpha"
