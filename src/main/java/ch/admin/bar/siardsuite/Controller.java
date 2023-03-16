@@ -141,7 +141,7 @@ public class Controller {
 
     private void removeTmpArchive() {
         File tmpFile;
-        if (tmpArchive!=null) {
+        if (tmpArchive != null && tmpArchive.getFile() != null) {
             tmpFile = tmpArchive.getFile();
         } else {
             tmpFile = Paths.get(Model.TMP_SIARD).toFile();
