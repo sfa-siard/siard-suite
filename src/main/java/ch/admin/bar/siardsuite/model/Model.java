@@ -85,7 +85,11 @@ public class Model {
     }
 
     public Archive initArchive() {
-        return this.initArchive(new File(TMP_SIARD), true);
+        try {
+            return this.initArchive(File.createTempFile("tmp", ".siard"), true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Archive initArchive(File fileArchive,  Boolean metaLoad) {
