@@ -27,19 +27,16 @@ public class SiardApplication extends Application {
             "Program to download, view, upload database content and database edit meta data in a .siard file",
             "Swiss Federal Archives, Berne, Switzerland, 2007-2022");
 
-    if (!SystemTray.isSupported()) {
-      System.out.println("SystemTray is not supported");
-      return;
-    }
-
-    URL url = SiardApplication.class.getResource("icons/archive_red.png");
-    Image image = Toolkit.getDefaultToolkit().getImage(url);
-    final TrayIcon trayIcon = new TrayIcon(image);
-    final SystemTray tray = SystemTray.getSystemTray();
-    try {
-      tray.add(trayIcon);
-    } catch (AWTException e) {
-      System.out.println("TrayIcon could not be added.");
+    if (SystemTray.isSupported()) {
+      URL url = SiardApplication.class.getResource("icons/archive_red.png");
+      Image image = Toolkit.getDefaultToolkit().getImage(url);
+      final TrayIcon trayIcon = new TrayIcon(image);
+      final SystemTray tray = SystemTray.getSystemTray();
+      try {
+        tray.add(trayIcon);
+      } catch (AWTException e) {
+        System.out.println("TrayIcon could not be added.");
+      }
     }
     new RootStage(model, controller);
   }
