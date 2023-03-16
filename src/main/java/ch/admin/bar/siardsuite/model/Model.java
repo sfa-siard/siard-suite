@@ -85,16 +85,19 @@ public class Model {
     }
 
     public Archive initArchive() {
-        return this.initArchive(new File(TMP_SIARD));
+        return this.initArchive(new File(TMP_SIARD), true);
     }
 
-    public Archive initArchive(File fileArchive) {
+    public Archive initArchive(File fileArchive,  Boolean metaLoad) {
         if (fileArchive.exists()) {
             fileArchive.delete();
         }
         final Archive archive = ArchiveImpl.newInstance();
         try {
             archive.create(fileArchive);
+            if (metaLoad) {
+                fileArchive.deleteOnExit();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

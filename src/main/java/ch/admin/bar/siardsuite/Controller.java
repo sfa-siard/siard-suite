@@ -13,8 +13,6 @@ import javafx.event.EventHandler;
 import javafx.util.Pair;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Map;
@@ -51,7 +49,7 @@ public class Controller {
 
     public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
-        final Archive archive = model.initArchive(target);
+        final Archive archive = model.initArchive(target, onlyMetaData);
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
                                                             .createDatabaseLoader(archive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
@@ -142,11 +140,14 @@ public class Controller {
     }
 
     private void removeTmpArchive() {
-        try {
-            tmpArchive.close();
-            Files.delete(Paths.get(Model.TMP_SIARD));
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
+        File tmpFile;
+        if (tmpArchive!=null) {
+            tmpFile = tmpArchive.getFile();
+        } else {
+            tmpFile = Paths.get(Model.TMP_SIARD).toFile();
+        }
+        if (!tmpFile.delete()) {
+            tmpFile.deleteOnExit();
         }
     }
 
