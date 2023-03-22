@@ -140,15 +140,17 @@ public class Controller {
     }
 
     private void removeTmpArchive() {
-        File tmpFile;
-        if (tmpArchive != null && tmpArchive.getFile() != null) {
-            tmpFile = tmpArchive.getFile();
-        } else {
-            tmpFile = Paths.get(Model.TMP_SIARD).toFile();
-        }
-        if (!tmpFile.delete()) {
-            tmpFile.deleteOnExit();
-        }
+        try {
+            File tmpFile;
+            if (tmpArchive != null && tmpArchive.getFile() != null) {
+                tmpFile = tmpArchive.getFile();
+            } else {
+                tmpFile = Paths.get(Model.TMP_SIARD).toFile();
+            }
+            if (!tmpFile.delete()) {
+                tmpFile.deleteOnExit();
+            }
+        } catch (Exception ignored) {}
     }
 
     public void failure(Failure failure) {
