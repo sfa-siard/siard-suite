@@ -5,7 +5,6 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'org.asciidoctor.jvm.pdf' version '3.3.2'
     id 'pl.allegro.tech.build.axion-release' version '1.14.3'
-
 }
 
 repositories {
@@ -25,10 +24,36 @@ java.targetCompatibility = JavaVersion.VERSION_1_8
 mainClassName = "ch.admin.bar.siardsuite.Launcher"
 applicationName = "SIARD-Suite"
 
-manifest {
-    attributes(
-            'Implementation-Version': version
-    )
+jar {
+    manifest {
+        attributes(
+                'Implementation-Version': '1.0',
+                'Main-Class': 'ch.admin.bar.siardsuite.SiardApplication',
+                'Class-Path': 'activation-1.1.1.jar       junit-4.12.jar\n' +
+                        '            adapter-0.2.0.jar          materialfx-11.13.5.jar\n' +
+                        '            antlr-runtime-4.5.2.jar    mslinks.jar\n' +
+                        '            commons-lang-2.6.jar       msv-core-2010.2.jar\n' +
+                        '            commons-logging-1.1.3.jar  mysql-connector-java-8.0.11.jar\n' +
+                        '            db2jcc4.jar                mysql-connector-java-8.0.18.jar\n' +
+                        '            enterutils.jar             ojdbc6.jar\n' +
+                        '            hamcrest-core-1.3.jar      postgresql-42.2.5.jar\n' +
+                        '            ini4j-0.5.4.jar            siardapi.jar\n' +
+                        '            jackcess-2.1.6a.jar        siardcmd.jar\n' +
+                        '            jaxb-api.jar               siard-suite-2.2.118.jar\n' +
+                        '            jaxb-core.jar              sqljdbc41.jar\n' +
+                        '            jaxb-impl.jar              sqlparser.jar\n' +
+                        '            jdbcaccess.jar             stax2-api-3.1.1.jar\n' +
+                        '            jdbcbase.jar               sunjdbc.jar\n' +
+                        '            jdbcdb2.jar                virtualizedfx-11.2.6.1.jar\n' +
+                        '            jdbcmssql.jar              woodstox-core-lgpl-4.1.2.jar\n' +
+                        '            jdbcmysql.jar              woodstox-msv-rng-datatype-20020414.jar\n' +
+                        '            jdbcoracle.jar             xdb6.jar\n' +
+                        '            jdbcpostgres.jar           xmlparserv2.jar\n' +
+                        '            jfxrt.jar                  xsdlib-2010.1.jar\n' +
+                        '            json-simple-1.1.1.jar      zip64.jar\n' +
+                        '            jts-1.14.jar'
+        )
+    }
 }
 
 dependencies {
@@ -50,18 +75,6 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(JavaExec) {
     //jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED")
-}
-
-// task to create an exectutable jar file with all necessary dependencies included and signature files removed.
-task fatJar(type: Jar) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    manifest {
-        attributes "Main-Class": "ch.admin.bar.siardsuite.SiardApplication"
-    }
-    from { (configurations.runtimeClasspath).collect { it.isDirectory() ? it : zipTree(it) } } {
-        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
-    }
-    with jar
 }
 
 runtime {

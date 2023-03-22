@@ -27,17 +27,12 @@ jobs:
       - name: Show current application version
         run: ./gradlew cV
       - name: Execute Gradle build
-        run: ./gradlew build fatJar -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
+        run: ./gradlew build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
       - name: upload zip archive
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.NAME_TAG }}
           path: build/distributions/siard-suite-*.zip
-      - name: upload executable jar
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.NAME_TAG }}-jar
-          path: build/libs/siard-suite-*.jar
 
   native-packages:
     runs-on: ${{ matrix.os }}
