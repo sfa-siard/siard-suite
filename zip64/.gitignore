@@ -1,0 +1,2 @@
+# the tmp folder contains up to 80'000 (generated) files - they should no be in VCS
+tmp/

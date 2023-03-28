@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: Hartwig Thomas, Enter AG, Zurich, Switzerland
+Specification-Title: ZIP64
+Specification-Version: 1.0
+Implementation-Title: Zip64
+Implementation-Version: 2.2.1
+Implementation-Vendor: Enter AG, Rüti ZH, Switzerland
+Built-Date: 24. Nov 2022
+Main-Class: ch.enterag.zip.zip64
+Class-Path: ../lib/enterutils.jar

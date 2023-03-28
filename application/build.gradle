@@ -50,7 +50,7 @@ jar {
                         '            jdbcoracle.jar             xdb6.jar\n' +
                         '            jdbcpostgres.jar           xmlparserv2.jar\n' +
                         '            jfxrt.jar                  xsdlib-2010.1.jar\n' +
-                        '            json-simple-1.1.1.jar      zip64.jar\n' +
+                        '            json-simple-1.1.1.jar      zip64-2.2.121-SNAPSHOT.jar\n' +
                         '            jts-1.14.jar'
         )
     }
@@ -58,6 +58,7 @@ jar {
 
 dependencies {
     implementation project(':EnterUtilities')
+    implementation project(':zip64')
 
     implementation 'org.glavo.materialfx:materialfx:11.13.5'
 

@@ -5,4 +5,5 @@
 rootProject.name = 'siard-suite'
 include 'EnterUtilities'
 include 'application'
+include 'zip64'
 

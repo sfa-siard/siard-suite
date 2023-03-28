@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/EnterUtilities" />
             <option value="$PROJECT_DIR$/application" />
+            <option value="$PROJECT_DIR$/zip64" />
           </set>
         </option>
       </GradleProjectSettings>
