@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: Hartwig Thomas, Enter AG, Rüti ZH, Switzerland
+Specification-Title: Enter Utilities
+Specification-Version: 1
+Specification-Vendor: Enter AG, Rüti ZH, Switzerland
+Implementation-Title: Enter Utilities
+Implementation-Version: 2.2.1
+Implementation-Vendor: Enter AG, Rüti ZH, Switzerland
+Built-Date: 24. Nov 2022
