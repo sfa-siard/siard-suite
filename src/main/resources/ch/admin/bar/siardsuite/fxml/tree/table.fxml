@@ -6,21 +6,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-            xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.tree.TablePresenter">
-    <VBox fx:id="tableContainer" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-          AnchorPane.topAnchor="0.0">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.tree.TablePresenter">
+    <VBox fx:id="tableContainer" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <padding>
-            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
         </padding>
 
-        <Label fx:id="nameLabel" styleClass="table-container-label"/>
-        <Label fx:id="nameText" styleClass="table-container-text"/>
-        <Label fx:id="infoLabel" styleClass="table-container-label"/>
-        <Label fx:id="infoText" styleClass="table-container-text"/>
-        <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                   styleClass="tree-table-view" VBox.vgrow="ALWAYS"/>
+        <Label fx:id="nameLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" styleClass="table-container-label" />
+        <Label fx:id="nameText" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" styleClass="table-container-text" />
+        <Label fx:id="infoLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" styleClass="table-container-label" />
+        <Label fx:id="infoText" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" styleClass="table-container-text" />
+        <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="tree-table-view" VBox.vgrow="ALWAYS" />
     </VBox>
 </AnchorPane>
