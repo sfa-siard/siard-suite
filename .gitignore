@@ -43,4 +43,4 @@ build/
 /lobs/
 
 # ignore generated user manuals
-/src/main/resources/ch/admin/bar/siardsuite/doc/
+/application/src/main/resources/ch/admin/bar/siardsuite/doc/
