@@ -39,11 +39,11 @@ public class DatabaseColumn extends DatabaseObject {
         this.column = column;
         this.index = String.valueOf(column.getPosition());
         name = column.getName();
+        String type = null;
         try {
             type = column.getType();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException ignored) {}
+        this.type = type;
         lobFolder = column.getLobFolder() != null ? column.getLobFolder().toString() : "";
         mimeType = column.getMimeType();
         userDefinedTypeSchema = column.getTypeSchema();
@@ -51,11 +51,11 @@ public class DatabaseColumn extends DatabaseObject {
         originalType = column.getTypeOriginal();
         isNullable = String.valueOf(column.isNullable());
         defaultValue = column.getDefaultValue();
+        String cardinality = null;
         try {
             cardinality = String.valueOf(column.getCardinality());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException ignored) {}
+        this.cardinality = cardinality;
         description = column.getDescription();
     }
 

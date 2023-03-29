@@ -14,8 +14,6 @@ public abstract class DatabaseObject {
                 && s2 != null
                 && !s1.isEmpty()
                 && !s2.isEmpty()
-                && !s1.equals("")
-                && !s2.equals("")
                 && Pattern.compile(Pattern.quote(s2), Pattern.CASE_INSENSITIVE).matcher(s1).find();
     }
 

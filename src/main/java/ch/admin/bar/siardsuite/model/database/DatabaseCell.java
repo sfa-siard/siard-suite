@@ -7,7 +7,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.sql.Types;
 
 public class DatabaseCell extends DatabaseObject {
 
@@ -31,12 +30,16 @@ public class DatabaseCell extends DatabaseObject {
         this.cell = cell;
         index = String.valueOf(cell.getMetaColumn().getPosition());
         name = "Cell " + index;
+        String type = null;
         try {
             type = cell.getMetaColumn().getType();
+        } catch (IOException ignored) {}
+        this.type = type;
+        String value = null;
+        try {
             value = cell.getString();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException | IllegalArgumentException ignored) {}
+        this.value = value;
     }
 
     @Override
