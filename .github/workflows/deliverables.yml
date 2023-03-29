@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.NAME_TAG }}
-          path: build/distributions/siard-suite-*.zip
+          path: build/distributions/SIARD-Suite-*.zip
 
   native-packages:
     runs-on: ${{ matrix.os }}
