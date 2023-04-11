@@ -1,16 +1,21 @@
 package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.FileUtils;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.enterag.utils.io.SpecialFolder;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import mslinks.ShellLink;
 
 import javax.swing.*;
 import java.io.File;
@@ -18,7 +23,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 public class RootPresenter extends Presenter {
 
@@ -77,6 +85,7 @@ public class RootPresenter extends Presenter {
         this.menuItemClose.setOnAction(event -> this.stage.close());
         this.menuItemInfo.setOnAction(event -> this.stage.openDialog(View.INFO_DIALOG));
         this.menuItemOptions.setOnAction(event -> this.stage.openDialog(View.OPTION_DIALOG));
+        this.menuItemInstall.setOnAction(this::installToDesktop);
         this.helpButton.setOnAction(event -> {
             try {
                 File p = new File("user-manual.pdf");
@@ -92,5 +101,39 @@ public class RootPresenter extends Presenter {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    private void installToDesktop(ActionEvent actionEvent) throws IOException {
+        String java = OS.IS_WINDOWS ? "java.exe" : "java";
+
+        String javaHome = System.getProperty("java.home"); // TODO: what happens if java home is not set?
+        File javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
+        String applicationFolder = new File(SiardApplication.class.getProtectionDomain()
+                                                                  .getCodeSource()
+                                                                  .getLocation()
+                                                                  .getPath()).getParent();
+        System.out.println("got an application folder: " + applicationFolder);
+
+        Properties props = new Properties();
+        props.load(RootPresenter.class.getResourceAsStream("version.properties"));
+        String version = (String) props.get("version");
+        System.out.println("got an application version: " + version);
+        List<String> arguments = Arrays.asList(new String[]{
+                "-Xmx1024m",
+                "-Dsun.awt.disablegrab=true",
+                "-jar",
+                applicationFolder + File.separator + "lib" + File.separator + "siard-suite-" + version + ".jar"
+        });
+
+        File icon = new File(getClass().getResource("icons/archive_red.ico").getPath());
+        String description = "SIARD Suite: view and modify archived data from relational databases";
+
+        ShellLink shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
+        shellLink.setCMDArgs(String.join(" ", arguments)); // TODO: Hartwig used ~20 lines to format the arguments. Why?
+        shellLink.setWorkingDir(applicationFolder);
+        shellLink.setIconLocation(icon.getAbsolutePath());
+        shellLink.setName(description); // TODO: why set the name to description?
+        SpecialFolder.getDesktopFolder();
+        shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite.lnk");
     }
 }

@@ -140,6 +140,12 @@ application {
     mainClass = mainClassName
 }
 
+processResources {
+    filesMatching ('**/version.properties') {
+        expand projectVersion: project.version
+    }
+}
+
 // create additional scripts for siardcmd...
 // see https://stackoverflow.com/a/62069262/1310321
 
