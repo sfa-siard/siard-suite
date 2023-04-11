@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.presenter.upload;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
+import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.*;
@@ -194,7 +194,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     private void setListeners(MFXStepper stepper) {
         stepper.addEventHandler(SiardEvent.UPLOAD_DBMS_SELECTED, event -> {
             // TODO MSAccess-DB needs different Fields for selecting File- #CR457
-            DatabaseConnectionProperties.DatabaseProperties props = model.getDatabaseProps();
+            DatabaseProperties props = model.getDatabaseProps();
             dbTypeString = props.defaultUrl().replace(PRODUCT, props.product());
             portString = props.port();
             String url = this.dbTypeString

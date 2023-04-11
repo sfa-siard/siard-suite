@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.model;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
+import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
@@ -135,7 +136,7 @@ public class Model {
         this.dbConnectionProps.setConnectionUrl(connectionUrl);
     }
 
-    public DatabaseConnectionProperties.DatabaseProperties getDatabaseProps() {
+    public DatabaseProperties getDatabaseProps() {
         return this.dbConnectionProps.getDatabaseProps();
     }
 
