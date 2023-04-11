@@ -1,6 +1,10 @@
 package ch.admin.bar.siardsuite.database;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Objects;
+
+import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
 
 public final class DatabaseProperties {
     private final String product;
@@ -19,10 +23,6 @@ public final class DatabaseProperties {
 
     public String port() {
         return port;
-    }
-
-    public String defaultUrl() {
-        return defaultUrl;
     }
 
     @Override
@@ -48,4 +48,15 @@ public final class DatabaseProperties {
                 "defaultUrl=" + defaultUrl + ']';
     }
 
+    public String jdbcUrl(String server, String port, String dbname) {
+        return defaultUrl
+                .replace(PRODUCT, product)
+                .replace(HOST, StringUtils.isEmpty(server) ? "localhost" : server)
+                .replace(PORT, StringUtils.isEmpty(port) ? this.port : port)
+                .replace(DB_NAME, StringUtils.isEmpty(dbname) ? "test-db" : dbname);
+    }
+
+    public String jdbcUrl() {
+        return jdbcUrl("", "", "");
+    }
 }

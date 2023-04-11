@@ -36,17 +36,11 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
-import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
 import static ch.admin.bar.siardsuite.util.SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
-
-    private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
-    private static final String TEST_DB = "test-db";
-    private String portString;
-    private String dbTypeString;
 
     @FXML
     public Text title;
@@ -170,8 +164,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     private void addRecentDatabaseConnection() {
         Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection);
-        dbTypeString = preferences.get(DATABASE_SYSTEM.name(), "");
-        controller.setDatabaseType(dbTypeString);
+        controller.setDatabaseType(preferences.get(DATABASE_SYSTEM.name(), ""));
         dbServerField.setText(preferences.get(DATABASE_SERVER.name(), ""));
         portField.setText(preferences.get(PORT_NUMBER.name(), ""));
         dbNameField.setText(preferences.get(DATABASE_NAME.name(), ""));
@@ -182,20 +175,12 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     }
 
     private void setListeners(MFXStepper stepper) {
-
-
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
             // TODO MSAccess-DB needs different Fields for selecting File- #CR457
-            DatabaseProperties props = model.getDatabaseProps();
-            this.dbTypeString = props.defaultUrl().replace(PRODUCT, props.product());
-            this.portString = props.port();
-            String url = this.dbTypeString
-                    .replace(HOST, DBSERVER_ORGANISATION_ORG)
-                    .replace(PORT, portString)
-                    .replace(DB_NAME, TEST_DB);
-
-            portField.setText(portString);
-            portField.setPromptText(portString);
+            DatabaseProperties databaseProps = model.getDatabaseProps();
+            String url = databaseProps.jdbcUrl();
+            portField.setText(databaseProps.port());
+            portField.setPromptText(databaseProps.port());
             urlField.setPromptText(url);
         });
 
@@ -254,16 +239,8 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     private void handleKeyEvent(KeyEvent event) {
         String inputText = event.getText();
         if (inputText != null) {
-            String server = dbServerField.getText().isEmpty() ? DBSERVER_ORGANISATION_ORG : dbServerField.getText();
-            String dbname = dbNameField.getText().isEmpty() ? TEST_DB : dbNameField.getText();
-            String port = portField.getText().isEmpty() ? portString : portField.getText();
-
-            String url = dbTypeString
-                    .replace(HOST, server)
-                    .replace(PORT, port)
-                    .replace(DB_NAME, dbname);
-
-            urlField.setText(url);
+            urlField.setText(model.getDatabaseProps().jdbcUrl(dbServerField.getText(), portField.getText(),
+                                                              dbNameField.getText()));
         }
         event.consume();
     }

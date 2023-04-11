@@ -37,18 +37,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
-import static ch.admin.bar.siardsuite.database.DatabaseConnectionProperties.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
 public class UploadConnectionPresenter extends StepperPresenter implements SiardArchiveVisitor {
 
-    private static final String DBSERVER_ORGANISATION_ORG = "dbserver.organisation.org";
-    private static final String TEST_DB = "test-db";
-
-
-    private String portString;
-    private String dbTypeString;
     private List<DatabaseSchema> schemas = new ArrayList<>();
     private String schemaName = "";
     private final Map<String, String> schemaMap = new HashMap<>();
@@ -181,7 +174,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     private void addRecentDatabaseConnection() {
         Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection);
-        dbTypeString = preferences.get(DATABASE_SYSTEM.name(), "");
+        String dbTypeString = preferences.get(DATABASE_SYSTEM.name(), "");
         controller.setDatabaseType(dbTypeString);
         dbServerField.setText(preferences.get(DATABASE_SERVER.name(), ""));
         portField.setText(preferences.get(PORT_NUMBER.name(), ""));
@@ -195,17 +188,9 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         stepper.addEventHandler(SiardEvent.UPLOAD_DBMS_SELECTED, event -> {
             // TODO MSAccess-DB needs different Fields for selecting File- #CR457
             DatabaseProperties props = model.getDatabaseProps();
-            dbTypeString = props.defaultUrl().replace(PRODUCT, props.product());
-            portString = props.port();
-            String url = this.dbTypeString
-                    .replace(HOST, DBSERVER_ORGANISATION_ORG)
-                    .replace(PORT, portString)
-                    .replace(DB_NAME, TEST_DB);
-
-            portField.setText(portString);
-            portField.setPromptText(portString);
-            urlField.setPromptText(url);
-
+            portField.setText(props.port());
+            portField.setPromptText(props.port());
+            urlField.setPromptText(props.jdbcUrl());
             initSchemaFields();
         });
 
@@ -321,16 +306,8 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     private void handleKeyEvent(KeyEvent event) {
         String inputText = event.getText();
         if (inputText != null) {
-            String server = dbServerField.getText().isEmpty() ? DBSERVER_ORGANISATION_ORG : dbServerField.getText();
-            String dbname = dbNameField.getText().isEmpty() ? TEST_DB : dbNameField.getText();
-            String port = portField.getText().isEmpty() ? portString : portField.getText();
-
-            String url = dbTypeString
-                    .replace(HOST, server)
-                    .replace(PORT, port)
-                    .replace(DB_NAME, dbname);
-
-            urlField.setText(url);
+            urlField.setText(model.getDatabaseProps()
+                                  .jdbcUrl(dbServerField.getText(), portField.getText(), dbNameField.getText()));
         }
         event.consume();
     }
