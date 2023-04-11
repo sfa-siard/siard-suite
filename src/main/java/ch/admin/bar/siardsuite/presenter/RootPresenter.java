@@ -25,7 +25,7 @@ public class RootPresenter extends Presenter {
     @FXML
     public Menu menuItemLanguage;
     @FXML
-    public MenuItem menuItemOptions, menuItemInfo, menuItemClose;
+    public MenuItem menuItemOptions, menuItemInfo, menuItemInstall, menuItemClose;
 
     @FXML
     public HBox windowHeader;
@@ -54,6 +54,9 @@ public class RootPresenter extends Presenter {
         I18n.bind(menuItemLanguage.textProperty(), "menu.item.language");
         I18n.bind(menuItemOptions.textProperty(), "menu.item.options");
         I18n.bind(menuItemInfo.textProperty(), "menu.item.info");
+        I18n.bind(menuItemInstall.textProperty(), "menu.item.install");
+        //menuItemInstall.setVisible(OS.IS_WINDOWS);
+
         I18n.bind(menuItemClose.textProperty(), "menu.item.close");
 
         // Language
