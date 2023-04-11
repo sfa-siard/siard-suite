@@ -93,7 +93,7 @@ public class Model {
         }
     }
 
-    public Archive initArchive(File fileArchive,  Boolean metaLoad) {
+    public Archive initArchive(File fileArchive, Boolean metaLoad) {
         if (fileArchive.exists()) {
             fileArchive.delete();
         }
