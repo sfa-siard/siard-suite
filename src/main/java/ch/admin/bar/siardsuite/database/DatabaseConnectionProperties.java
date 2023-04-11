@@ -12,7 +12,6 @@ public class DatabaseConnectionProperties {
 
     private final StringProperty databaseName = new SimpleStringProperty();
     private final StringProperty databaseProduct = new SimpleStringProperty();
-    private final StringProperty databasePort = new SimpleStringProperty();
     private final StringProperty databaseUsername = new SimpleStringProperty();
     private String password;
     private final StringProperty connectionUrl = new SimpleStringProperty();
