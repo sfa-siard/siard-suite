@@ -103,37 +103,43 @@ public class RootPresenter extends Presenter {
         });
     }
 
-    private void installToDesktop(ActionEvent actionEvent) throws IOException {
-        String java = OS.IS_WINDOWS ? "java.exe" : "java";
+    private void installToDesktop(ActionEvent actionEvent)  {
+        try {
 
-        String javaHome = System.getProperty("java.home"); // TODO: what happens if java home is not set?
-        File javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
-        String applicationFolder = new File(SiardApplication.class.getProtectionDomain()
-                                                                  .getCodeSource()
-                                                                  .getLocation()
-                                                                  .getPath()).getParent();
-        System.out.println("got an application folder: " + applicationFolder);
+            String java = OS.IS_WINDOWS ? "java.exe" : "java";
 
-        Properties props = new Properties();
-        props.load(RootPresenter.class.getResourceAsStream("version.properties"));
-        String version = (String) props.get("version");
-        System.out.println("got an application version: " + version);
-        List<String> arguments = Arrays.asList(new String[]{
-                "-Xmx1024m",
-                "-Dsun.awt.disablegrab=true",
-                "-jar",
-                applicationFolder + File.separator + "lib" + File.separator + "siard-suite-" + version + ".jar"
-        });
+            String javaHome = System.getProperty("java.home"); // TODO: what happens if java home is not set?
+            File javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
+            String applicationFolder = new File(SiardApplication.class.getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath()).getParent();
+            System.out.println("got an application folder: " + applicationFolder);
 
-        File icon = new File(getClass().getResource("icons/archive_red.ico").getPath());
-        String description = "SIARD Suite: view and modify archived data from relational databases";
+            Properties props = new Properties();
+            props.load(SiardApplication.class.getResourceAsStream("version.properties"));
+            String version = (String) props.get("version");
+            System.out.println("got an application version: " + version);
+            List<String> arguments = Arrays.asList(new String[]{
+                    "-Xmx1024m",
+                    "-Dsun.awt.disablegrab=true",
+                    "-jar",
+                    applicationFolder + File.separator + "siard-suite-" + version + ".jar"
+            });
 
-        ShellLink shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
-        shellLink.setCMDArgs(String.join(" ", arguments)); // TODO: Hartwig used ~20 lines to format the arguments. Why?
-        shellLink.setWorkingDir(applicationFolder);
-        shellLink.setIconLocation(icon.getAbsolutePath());
-        shellLink.setName(description); // TODO: why set the name to description?
-        SpecialFolder.getDesktopFolder();
-        shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite.lnk");
+            File icon = new File(SiardApplication.class.getResource("icons/archive_red.ico").getPath());
+            String description = "SIARD Suite: view and modify archived data from relational databases";
+
+            ShellLink shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
+            shellLink.setCMDArgs(String.join(" ", arguments)); // TODO: Hartwig used ~20 lines to format the arguments. Why?
+            shellLink.setWorkingDir(applicationFolder);
+          //  shellLink.setIconLocation(SiardApplication.class.getResource("icons/archive_red.ico").getPath());
+            shellLink.setName(description); // TODO: why set the name to description?
+            shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite.lnk");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
