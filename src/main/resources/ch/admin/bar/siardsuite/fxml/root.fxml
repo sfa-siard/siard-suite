@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
 <BorderPane fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="850.0" prefWidth="1440.0" styleClass="root" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.RootPresenter">
     <top>
         <HBox fx:id="windowHeader" alignment="CENTER" minWidth="-Infinity" styleClass="header" BorderPane.alignment="CENTER">
@@ -23,6 +18,7 @@
                             </Menu>
                             <MenuItem fx:id="menuItemOptions" mnemonicParsing="false" />
                             <MenuItem fx:id="menuItemInfo" mnemonicParsing="false" />
+                            <MenuItem fx:id="menuItemInstall" mnemonicParsing="false" />
                             <MenuItem fx:id="menuItemClose" mnemonicParsing="false" />
                         </items>
                     </Menu>
