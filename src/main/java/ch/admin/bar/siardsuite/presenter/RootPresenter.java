@@ -63,7 +63,7 @@ public class RootPresenter extends Presenter {
         I18n.bind(menuItemOptions.textProperty(), "menu.item.options");
         I18n.bind(menuItemInfo.textProperty(), "menu.item.info");
         I18n.bind(menuItemInstall.textProperty(), "menu.item.install");
-        //menuItemInstall.setVisible(OS.IS_WINDOWS);
+        menuItemInstall.setVisible(OS.IS_WINDOWS);
 
         I18n.bind(menuItemClose.textProperty(), "menu.item.close");
 
@@ -103,7 +103,7 @@ public class RootPresenter extends Presenter {
         });
     }
 
-    private void installToDesktop(ActionEvent actionEvent)  {
+    private void installToDesktop(ActionEvent actionEvent) {
         try {
 
             String java = OS.IS_WINDOWS ? "java.exe" : "java";
@@ -111,9 +111,9 @@ public class RootPresenter extends Presenter {
             String javaHome = System.getProperty("java.home"); // TODO: what happens if java home is not set?
             File javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
             String applicationFolder = new File(SiardApplication.class.getProtectionDomain()
-                    .getCodeSource()
-                    .getLocation()
-                    .getPath()).getParent();
+                                                                      .getCodeSource()
+                                                                      .getLocation()
+                                                                      .getPath()).getParent();
             System.out.println("got an application folder: " + applicationFolder);
 
             Properties props = new Properties();
@@ -131,9 +131,10 @@ public class RootPresenter extends Presenter {
             String description = "SIARD Suite: view and modify archived data from relational databases";
 
             ShellLink shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
-            shellLink.setCMDArgs(String.join(" ", arguments)); // TODO: Hartwig used ~20 lines to format the arguments. Why?
+            shellLink.setCMDArgs(String.join(" ",
+                                             arguments)); // TODO: Hartwig used ~20 lines to format the arguments. Why?
             shellLink.setWorkingDir(applicationFolder);
-          //  shellLink.setIconLocation(SiardApplication.class.getResource("icons/archive_red.ico").getPath());
+            //  shellLink.setIconLocation(SiardApplication.class.getResource("icons/archive_red.ico").getPath());
             shellLink.setName(description); // TODO: why set the name to description?
             shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite.lnk");
 
