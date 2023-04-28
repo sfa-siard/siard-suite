@@ -18,6 +18,7 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -129,11 +130,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                 this.archivePath.setText(targetArchive.getAbsolutePath());
                 this.subtitle1.setText(this.databaseName);
                 try {
-                    controller.loadDatabase(targetArchive, false, handleDownloadSuccess(stepper), handleDownloadFailure(stepper));
+                    controller.loadDatabase(targetArchive,
+                                            false,
+                                            handleDownloadSuccess(stepper),
+                                            handleDownloadFailure(stepper));
                     controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
                         AtomicInteger pos = new AtomicInteger();
                         newValue.forEach(p ->
-                                addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
+                                                 addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
                         );
                     });
                     controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
@@ -142,19 +146,18 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                     });
                     event.consume();
                 } catch (SQLException e) {
-                    fail(stepper, e);
-                    // TODO should notify user about any error - Toast it # CR 458
-                    throw new RuntimeException(e);
+                    fail(stepper, e, ERROR_OCCURED);
                 }
             }
         };
     }
 
-    private void fail(MFXStepper stepper, Throwable e) {
+    private void fail(MFXStepper stepper, Throwable e, EventType<SiardEvent> event) {
         e.printStackTrace();
-        controller.failure(new Failure(e));
+        this.stage.openDialog(View.ERROR_DIALOG);
         controller.cancelDownload();
-        stepper.fireEvent(new SiardEvent(ERROR_OCCURED));
+        controller.failure(new Failure(e));
+        stepper.fireEvent(new SiardEvent(event));
     }
 
     private EventHandler<WorkerStateEvent> handleDownloadSuccess(MFXStepper stepper) {
@@ -177,7 +180,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
 
     private EventHandler<WorkerStateEvent> handleDownloadFailure(MFXStepper stepper) {
         return e -> {
-            System.err.println( I18n.get( "archiveDownload.view.title.failed") + " " + e.getSource().getException());
+            System.err.println(I18n.get("archiveDownload.view.title.failed") + " " + e.getSource().getException());
             e.getSource().getException().printStackTrace();
             stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.ERROR);
             stepper.updateProgress();
@@ -192,6 +195,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             resultTitle.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
             controller.closeDbConnection();
             this.buttonsBox = new ButtonBox().make(TO_START);
+            fail(stepper, e.getSource().getException(), ERROR_OCCURED);
             addButtons(stepper);
         };
     }
@@ -239,8 +243,10 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     }
 
     @Override
-    public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
-                      String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
+    public void visit(String siardFormatVersion, String databaseName, String databaseProduct,
+                      String databaseConnectionURL,
+                      String databaseUsername, String databaseDescription, String databaseOwner,
+                      String databaseCreationDate,
                       LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
         this.targetArchive = targetArchive;
         this.databaseName = databaseName;
