@@ -82,7 +82,7 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
     }
 
     private void autoResizeColumns(TableView<?> table) {
-        table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.getColumns().stream().forEach((column) ->
                                             {
                                                 Text t = new Text(column.getText());
