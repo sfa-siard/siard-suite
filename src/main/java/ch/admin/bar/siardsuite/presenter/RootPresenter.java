@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
@@ -106,7 +107,7 @@ public class RootPresenter extends Presenter {
     private void installToDesktop(ActionEvent actionEvent) {
         try {
 
-            String java = OS.IS_WINDOWS ? "java.exe" : "java";
+            String java = OS.IS_WINDOWS ? "javaw.exe" : "java";
 
             String javaHome = System.getProperty("java.home"); // TODO: what happens if java home is not set?
             File javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
@@ -127,16 +128,17 @@ public class RootPresenter extends Presenter {
                     applicationFolder + File.separator + "siard-suite-" + version + ".jar"
             });
 
-            File icon = new File(SiardApplication.class.getResource("icons/archive_red.ico").getPath());
+            InputStream resourceAsStream = SiardApplication.class.getResourceAsStream("icons/archive_red.ico");
+            Files.copy(resourceAsStream, Paths.get(applicationFolder + File.separator +"archive_red.ico"), StandardCopyOption.REPLACE_EXISTING);
             String description = "SIARD Suite: view and modify archived data from relational databases";
 
             ShellLink shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
             shellLink.setCMDArgs(String.join(" ",
                                              arguments)); // TODO: Hartwig used ~20 lines to format the arguments. Why?
             shellLink.setWorkingDir(applicationFolder);
-            //  shellLink.setIconLocation(SiardApplication.class.getResource("icons/archive_red.ico").getPath());
+            shellLink.setIconLocation(applicationFolder + File.separator + "archive_red.ico");
             shellLink.setName(description); // TODO: why set the name to description?
-            shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite.lnk");
+            shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite-"+ version + ".lnk");
 
         } catch (IOException e) {
             e.printStackTrace();
