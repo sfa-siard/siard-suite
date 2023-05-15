@@ -27,7 +27,7 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
     @FXML
     private Label siardFormatVersion;
     @FXML
-    private Label textDb;
+    private Label databaseName;
     @FXML
     public Label textProduct;
     @FXML
@@ -102,7 +102,7 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
                       String databaseCreationDate,
                       LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
         this.siardFormatVersion.setText(siardFormatVersion);
-        textDb.setText(databaseName);
+        this.databaseName.setText(databaseName);
         textProduct.setText(databaseProduct);
         textConnection.setText(databaseConnectionURL);
         textUsername.setText(databaseUsername);
