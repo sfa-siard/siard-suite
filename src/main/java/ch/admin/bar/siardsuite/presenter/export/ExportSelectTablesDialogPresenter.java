@@ -81,7 +81,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
                 List<String> tables = new ArrayList<>();
                 this.findCheckedItems((CheckBoxTreeItem<String>) this.tableSelector.getRoot(), tables);
 
-                this.model.getArchive().export(tables, file);
+                this.model.getSiardArchive().export(tables, file);
                 this.stage.closeDialog();
                 this.stage.openDialog(View.EXPORT_SUCCESS);
             } catch (Exception e) {

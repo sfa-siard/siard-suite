@@ -99,7 +99,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                     try {
                         final Archive archive = ArchiveImpl.newInstance();
                         archive.open(targetArchive);
-                        model.setArchive(targetArchive.getName(), archive);
+                        model.setSiardArchive(targetArchive.getName(), archive);
                         stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
                     } catch (IOException e) {
                         throw new RuntimeException(e);

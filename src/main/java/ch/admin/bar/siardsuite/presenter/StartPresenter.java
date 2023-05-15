@@ -68,10 +68,10 @@ public class StartPresenter extends Presenter {
         bindTextFlows(flowLeft, "left");
         bindTextFlows(flowRight, "right");
         bindTextFlows(flowCenter, "center");
-        I18n.bind(archive.textProperty(),"button.archive");
-        I18n.bind(upload.textProperty(),"button.upload");
-        I18n.bind(export.textProperty(),"button.export");
-        I18n.bind(open.textProperty(),"button.open");
+        I18n.bind(archive.textProperty(), "button.archive");
+        I18n.bind(upload.textProperty(), "button.upload");
+        I18n.bind(export.textProperty(), "button.export");
+        I18n.bind(open.textProperty(), "button.open");
     }
 
     private void bindTextFlows(TextFlow textFlow, String orientation) {
@@ -83,19 +83,23 @@ public class StartPresenter extends Presenter {
 
     private void setListener() {
         this.archive.setOnAction(event -> {
+            this.controller.clearSiardArchive();
             this.controller.setWorkflow(ARCHIVE);
             stage.openDialog(View.ARCHIVE_DB_DIALOG);
         });
         this.upload.setOnAction(event -> {
+            this.controller.clearSiardArchive();
             this.controller.setWorkflow(UPLOAD);
             stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
         });
         this.export.setOnAction(event -> {
+            this.controller.clearSiardArchive();
             this.controller.setWorkflow(EXPORT);
             stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
 
         });
         this.open.setOnAction(event -> {
+            this.controller.clearSiardArchive();
             this.controller.setWorkflow(OPEN);
             stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
         });
@@ -132,7 +136,7 @@ public class StartPresenter extends Presenter {
     private void animateBubble(ImageView path, ImageView bubble) {
         Bounds bounds = path.localToScreen(path.getBoundsInLocal());
         bubble.setVisible(true);
-        Line line = new Line(0, bounds.getHeight()/2-10, bounds.getWidth()-25, bounds.getHeight()/2-10);
+        Line line = new Line(0, bounds.getHeight() / 2 - 10, bounds.getWidth() - 25, bounds.getHeight() / 2 - 10);
         transition.setNode(bubble);
         transition.setDuration(Duration.seconds(1));
         transition.setPath(line);

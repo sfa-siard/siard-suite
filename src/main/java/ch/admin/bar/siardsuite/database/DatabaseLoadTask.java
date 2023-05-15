@@ -73,7 +73,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
       updateValue(progressData);
     }
 
-    model.setArchive(name, archive, onlyMetaData);
+    model.setSiardArchive(name, archive, onlyMetaData);
     archive.close();
     return progressData;
   }

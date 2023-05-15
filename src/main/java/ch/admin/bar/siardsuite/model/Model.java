@@ -30,7 +30,7 @@ public class Model {
     private String currentMetaSearch = null;
     private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
     private Map<String, String> schemaMap = new HashMap<>();
-    private SiardArchive archive = new SiardArchive();
+    private SiardArchive siardArchive = new SiardArchive();
     public static final String TMP_SIARD = "tmp.siard";
     private Failure failure = null;
 
@@ -109,20 +109,16 @@ public class Model {
         return archive;
     }
 
-    public void setArchive(SiardArchive archive) {
-        this.archive = archive;
+    public void setSiardArchive(String name, Archive archive) {
+        setSiardArchive(name, archive, false);
     }
 
-    public void setArchive(String name, Archive archive) {
-        setArchive(name, archive, false);
+    public void setSiardArchive(String name, Archive archive, boolean onlyMetaData) {
+        this.siardArchive = new SiardArchive(name, archive, onlyMetaData);
     }
 
-    public void setArchive(String name, Archive archive, boolean onlyMetaData) {
-        this.archive = new SiardArchive(name, archive, onlyMetaData);
-    }
-
-    public SiardArchive getArchive() {
-        return archive;
+    public SiardArchive getSiardArchive() {
+        return siardArchive;
     }
 
     public void setDatabaseType(String databaseType) {
@@ -180,77 +176,77 @@ public class Model {
     public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
                                       String archiverName,
                                       String archiverContact, File targetArchive) {
-        getArchive().addArchiveMetaData(dbName,
-                                        description,
-                                        owner,
-                                        dataOriginTimespan,
-                                        archiverName,
-                                        archiverContact,
-                                        targetArchive);
+        getSiardArchive().addArchiveMetaData(dbName,
+                                             description,
+                                             owner,
+                                             dataOriginTimespan,
+                                             archiverName,
+                                             archiverContact,
+                                             targetArchive);
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
-        if (getArchive() != null) {
-            getArchive().shareProperties(visitor);
+        if (getSiardArchive() != null) {
+            getSiardArchive().shareProperties(visitor);
         }
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
-        if (getArchive() != null) {
-            getArchive().shareProperties(visitor, databaseObject);
+        if (getSiardArchive() != null) {
+            getSiardArchive().shareProperties(visitor, databaseObject);
         }
     }
 
     public void provideDatabaseArchiveObject(SiardArchiveVisitor visitor) {
-        if (getArchive() != null) {
-            getArchive().shareObject(visitor);
+        if (getSiardArchive() != null) {
+            getSiardArchive().shareObject(visitor);
         }
     }
 
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
-        if (getArchive() != null) {
-            getArchive().populate(tableView, databaseObject, type);
+        if (getSiardArchive() != null) {
+            getSiardArchive().populate(tableView, databaseObject, type);
         }
     }
 
     public void populate(VBox vBox, DatabaseObject databaseObject, TreeContentView type) {
-        if (getArchive() != null) {
-            getArchive().populate(vBox, databaseObject, type);
+        if (getSiardArchive() != null) {
+            getSiardArchive().populate(vBox, databaseObject, type);
         }
     }
 
     public void populate(TreeItem root) {
-        getArchive().populate(root);
+        getSiardArchive().populate(root);
     }
 
     public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
-        if (getArchive() != null) {
-            getArchive().shareProperties(visitor);
+        if (getSiardArchive() != null) {
+            getSiardArchive().shareProperties(visitor);
         }
     }
 
     public void provideDatabaseArchiveMetaDataObject(SiardArchiveMetaDataVisitor visitor) {
-        if (getArchive() != null) {
-            getArchive().shareObject(visitor);
+        if (getSiardArchive() != null) {
+            getSiardArchive().shareObject(visitor);
         }
     }
 
     public void provideArchiveProperties(ArchiveVisitor visitor) {
-        if (getArchive() != null) {
-            getArchive().shareProperties(visitor);
+        if (getSiardArchive() != null) {
+            getSiardArchive().shareProperties(visitor);
         }
     }
 
     public void provideArchiveObject(ArchiveVisitor visitor) {
-        if (getArchive() != null) {
-            getArchive().shareObject(visitor);
+        if (getSiardArchive() != null) {
+            getSiardArchive().shareObject(visitor);
         }
     }
 
     public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         TreeSet<MetaSearchHit> hits = new TreeSet<>();
-        if (getArchive() != null) {
-            hits = getArchive().aggregatedMetaSearch(s);
+        if (getSiardArchive() != null) {
+            hits = getSiardArchive().aggregatedMetaSearch(s);
         }
         return hits;
     }
@@ -269,5 +265,9 @@ public class Model {
 
     public Failure getFailure() {
         return this.failure;
+    }
+
+    public void clearSiardArchive() {
+        this.siardArchive = new SiardArchive();
     }
 }

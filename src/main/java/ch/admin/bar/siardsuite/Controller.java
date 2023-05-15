@@ -164,4 +164,8 @@ public class Controller {
     public String errorStackTrace() {
         return this.model.getFailure().stacktrace();
     }
+
+    public void clearSiardArchive() {
+        this.model.clearSiardArchive();
+    }
 }
