@@ -59,7 +59,9 @@ public class SiardArchiveMetaData {
         final Calendar calendar = metaData.getArchivalDate();
         LocalDate date;
         try {
-            date = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE));
+            date = LocalDate.of(calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH) + 1,
+                                calendar.get(Calendar.DATE));
         } catch (DateTimeException e) {
             date = LocalDate.now();
         }
@@ -70,11 +72,11 @@ public class SiardArchiveMetaData {
 
     }
 
-    public void shareProperties(SiardArchiveMetaDataVisitor visitor) {
+    public void accept(SiardArchiveMetaDataVisitor visitor) {
         visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
-                databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
-                dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,
-                archiverName.getValue(), archiverContact.getValue(), targetArchive, lobFolder);
+                      databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
+                      dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,
+                      archiverName.getValue(), archiverContact.getValue(), targetArchive, lobFolder);
     }
 
 
