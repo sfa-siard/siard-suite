@@ -236,10 +236,10 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     }
 
     protected void expandChildren(TreeItem<TreeAttributeWrapper> root) {
-        root.setExpanded(true);
+        root.setExpanded(false);
         if (!root.valueProperty().getValue().getType().getViewTitle().equals("tableContainer.title.tables")) {
             for (TreeItem<TreeAttributeWrapper> child : root.getChildren()) {
-                child.setExpanded(true);
+                child.setExpanded(false);
                 expandChildren(child);
             }
         }
