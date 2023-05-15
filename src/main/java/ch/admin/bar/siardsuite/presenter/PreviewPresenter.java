@@ -41,6 +41,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     private String schemaName = "";
     private List<DatabaseTable> tables = new ArrayList<>();
     private List<DatabaseView> views = new ArrayList<>();
+    private List<DatabaseRoutine> routines = new ArrayList<>();
     private String tableName = "";
     private List<DatabaseColumn> columns = new ArrayList<>();
     private String columnName = "";
@@ -148,10 +149,50 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             TreeItem<TreeAttributeWrapper> tablesItem = createTablesItem(schema);
             tablesItem.setExpanded(true);
             addIfNotEmpty(schemaItem, tables, tablesItem);
+            addIfNotEmpty(schemaItem, routines, createRoutinesItem(schema));
             addIfNotEmpty(schemaItem, views, createViewsItem(schema));
             schemasItem.getChildren().add(schemaItem);
         }
         return schemasItem;
+    }
+
+    private TreeItem<TreeAttributeWrapper> createRoutinesItem(DatabaseSchema schema) {
+        TreeItem<TreeAttributeWrapper> rowsItem;
+        TreeItem<TreeAttributeWrapper> columnsItem;
+        TreeItem<TreeAttributeWrapper> routinesItem;
+        TreeItem<TreeAttributeWrapper> routineItem;
+        TreeItem<TreeAttributeWrapper> columnItem;
+        routinesItem = new TreeItem<>();
+
+        routinesItem.valueProperty()
+                    .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.routines",
+                                                                TreeContentView.ROUTINES,
+                                                                schema,
+                                                                views.size()));
+
+        for (DatabaseRoutine routine : routines) {
+            model.provideDatabaseArchiveProperties(this, routine);
+            routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.VIEW, routine));
+
+            columnsItem = new TreeItem<>();
+            columnsItem.valueProperty()
+                       .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns",
+                                                                   TreeContentView.COLUMNS,
+                                                                   routine,
+                                                                   columns.size()));
+
+
+            for (DatabaseColumn column : columns) {
+                model.provideDatabaseArchiveProperties(this, column);
+
+                columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
+                columnsItem.getChildren().add(columnItem);
+            }
+
+            routineItem.getChildren().add(columnsItem);
+            routinesItem.getChildren().add(routineItem);
+        }
+        return routinesItem;
     }
 
     private TreeItem<TreeAttributeWrapper> createViewsItem(DatabaseSchema schema) {
@@ -290,11 +331,12 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
     @Override
     public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
-                            List<DatabaseView> views, List<DatabaseType> types) {
+                            List<DatabaseView> views, List<DatabaseType> types, List<DatabaseRoutine> routines) {
         this.schemaName = schemaName;
         this.tables = tables;
         this.views = views;
         this.types = types;
+        this.routines = routines;
     }
 
     @Override

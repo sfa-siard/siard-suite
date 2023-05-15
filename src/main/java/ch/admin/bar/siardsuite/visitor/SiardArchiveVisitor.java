@@ -10,7 +10,7 @@ public interface SiardArchiveVisitor {
                List<Privilige> priviliges);
 
     void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables, List<DatabaseView> views,
-                     List<DatabaseType> types);
+                     List<DatabaseType> types, List<DatabaseRoutine> routines);
 
     void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows);
 

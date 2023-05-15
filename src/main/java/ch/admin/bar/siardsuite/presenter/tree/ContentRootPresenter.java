@@ -80,7 +80,7 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
 
     @Override
     public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
-                            List<DatabaseView> views, List<DatabaseType> types) {
+                            List<DatabaseView> views, List<DatabaseType> types, List<DatabaseRoutine> routines) {
     }
 
     @Override
