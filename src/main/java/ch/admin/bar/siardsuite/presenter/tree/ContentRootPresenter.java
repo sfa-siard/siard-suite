@@ -62,8 +62,6 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
 
         this.model.provideDatabaseArchiveMetaDataProperties(this);
         this.model.provideDatabaseArchiveProperties(this);
-
-        setListeners();
     }
 
     private void initLabels() {
@@ -72,10 +70,6 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
                 ((Label) child).textProperty().bind(I18n.createStringBinding("tableContainer." + child.getId()));
             }
         }
-    }
-
-    protected void setListeners() {
-
     }
 
     @Override
