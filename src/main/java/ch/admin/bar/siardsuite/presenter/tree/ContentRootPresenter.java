@@ -19,6 +19,11 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
+
+/**
+ * Represents the content root of the tree view of a SIARD Archive displaying general information
+ * of the database and siard archive, e.g. SIARD Format Version, Database Name and product and other general informations.
+ */
 public class ContentRootPresenter extends TreePresenter implements SiardArchiveVisitor, SiardArchiveMetaDataVisitor {
 
     @FXML
@@ -29,23 +34,23 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
     @FXML
     private Label databaseName;
     @FXML
-    public Label textProduct;
+    public Label databaseProduct;
     @FXML
-    public Label textConnection;
+    public Label jdbcConnectionUrl;
     @FXML
-    public Label textUsername;
+    public Label username;
     @FXML
-    public Label textDesc;
+    public Label description;
     @FXML
-    public Label textOwner;
+    public Label owner;
     @FXML
-    public Label textDataOriginTimespan;
+    public Label dataOriginTimeSpan;
     @FXML
-    public Label textArchiveDate;
+    public Label archiveData;
     @FXML
-    public Label textArchiveUser;
+    public Label archivedBy;
     @FXML
-    public Label textContactArchiveUser;
+    public Label archiverContact;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
@@ -103,17 +108,17 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
                       LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
         this.siardFormatVersion.setText(siardFormatVersion);
         this.databaseName.setText(databaseName);
-        textProduct.setText(databaseProduct);
-        textConnection.setText(databaseConnectionURL);
-        textUsername.setText(databaseUsername);
-        textDesc.setText(databaseDescription);
-        textOwner.setText(databaseOwner);
-        textDataOriginTimespan.setText(databaseCreationDate);
-        textArchiveDate.textProperty()
-                       .bind(Bindings.createStringBinding(() -> I18n.getLocaleDate(archivingDate),
-                                                          I18n.localeProperty()));
-        textArchiveUser.setText(archiverName);
-        textContactArchiveUser.setText(archiverContact);
+        this.databaseProduct.setText(databaseProduct);
+        jdbcConnectionUrl.setText(databaseConnectionURL);
+        username.setText(databaseUsername);
+        description.setText(databaseDescription);
+        owner.setText(databaseOwner);
+        dataOriginTimeSpan.setText(databaseCreationDate);
+        archiveData.textProperty()
+                   .bind(Bindings.createStringBinding(() -> I18n.getLocaleDate(archivingDate),
+                                                      I18n.localeProperty()));
+        archivedBy.setText(archiverName);
+        this.archiverContact.setText(archiverContact);
     }
 
     @Override
