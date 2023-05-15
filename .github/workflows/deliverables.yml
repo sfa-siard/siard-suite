@@ -15,10 +15,10 @@ jobs:
           fetch-depth: 0
       - name: Set TAG-Env
         run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Set up JDK 18
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '18'
+          java-version: '17'
           distribution: 'zulu'
           java-package: "jdk+fx"
           cache: "gradle"
@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        java: [ '18' ]
+        java: [ '17' ]
       fail-fast: false
     name: ${{ matrix.os }}
     steps:
@@ -63,7 +63,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Execute build runtimeZip jpackage
-        run: ./gradlew build runtimeZip jpackage -x test --no-daemon
+        run: ./gradlew build runtimeZip jpackage --no-daemon
       - name: Upload DMG as an artifact
         uses: actions/upload-artifact@v3
         with:
