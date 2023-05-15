@@ -25,7 +25,7 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
     public VBox container;
 
     @FXML
-    private Label textFormat;
+    private Label siardFormatVersion;
     @FXML
     private Label textDb;
     @FXML
@@ -101,7 +101,7 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
                       String databaseUsername, String databaseDescription, String databaseOwner,
                       String databaseCreationDate,
                       LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
-        textFormat.setText(siardFormatVersion);
+        this.siardFormatVersion.setText(siardFormatVersion);
         textDb.setText(databaseName);
         textProduct.setText(databaseProduct);
         textConnection.setText(databaseConnectionURL);

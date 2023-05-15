@@ -8,7 +8,7 @@
     <VBox fx:id="container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label fx:id="labelFormat" styleClass="table-container-label"/>
-        <Label fx:id="textFormat" styleClass="table-container-text"/>
+        <Label fx:id="siardFormatVersion" styleClass="table-container-text"/>
         <Label fx:id="labelDb" styleClass="table-container-label"/>
         <Label fx:id="textDb" styleClass="table-container-text"/>
         <Label fx:id="labelProduct" styleClass="table-container-label"/>
