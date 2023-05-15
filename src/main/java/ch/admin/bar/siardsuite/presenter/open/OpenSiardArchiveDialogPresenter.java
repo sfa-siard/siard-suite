@@ -4,11 +4,11 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.Workflow;
+import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
@@ -24,6 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,6 +35,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.ABSOLUTE_PATH;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.RECENT_FILES;
@@ -72,11 +74,11 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        I18n.bind(title.textProperty(),"open.siard.archive.dialog.title");
+        I18n.bind(title.textProperty(), "open.siard.archive.dialog.title");
         I18n.bind(text.textProperty(), "open.siard.archive.dialog.text");
 
-        I18n.bind(recentFilesHeaderName.textProperty(),"dialog.recent.files.header.name");
-        I18n.bind(recentFilesHeaderDate.textProperty(),"dialog.recent.files.header.date");
+        I18n.bind(recentFilesHeaderName.textProperty(), "dialog.recent.files.header.name");
+        I18n.bind(recentFilesHeaderDate.textProperty(), "dialog.recent.files.header.date");
 
         try {
             List<String> fileHashCodes = sortedChildrenNames(RECENT_FILES, TIMESTAMP, Comparator.reverseOrder());
@@ -97,8 +99,8 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             recentFilesBox.getChildren().removeIf(child -> recentFilesBox.getChildren().indexOf(child) > 2);
         }
 
-        I18n.bind(dropFileTextTop.textProperty(),"dialog.drop.file.text.top");
-        I18n.bind(dropFileTextMiddle.textProperty(),"dialog.drop.file.text.middle");
+        I18n.bind(dropFileTextTop.textProperty(), "dialog.drop.file.text.top");
+        I18n.bind(dropFileTextMiddle.textProperty(), "dialog.drop.file.text.middle");
 
         dropFileBox.setOnDragOver(this::handleDragOver);
         dropFileBox.setOnDragDropped(this::handleDragDropped);
@@ -158,14 +160,17 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
 
             final String filePath = preferences.get(ABSOLUTE_PATH.name(), "");
             final File recentFile = new File(filePath);
-            final BasicFileAttributes recentFileAttributes = Files.readAttributes(Paths.get(filePath), BasicFileAttributes.class);
+            final BasicFileAttributes recentFileAttributes = Files.readAttributes(Paths.get(filePath),
+                                                                                  BasicFileAttributes.class);
 
             final Label imageLabel = new Label();
             imageLabel.getStyleClass().add("icon-label");
             final Label nameLabel = new Label(recentFile.getName());
             nameLabel.getStyleClass().add("name-label");
 
-            final String localeDate = I18n.getLocaleDate(recentFileAttributes.lastModifiedTime().toString().split("T")[0]);
+            final String localeDate = I18n.getLocaleDate(recentFileAttributes.lastModifiedTime()
+                                                                             .toString()
+                                                                             .split("T")[0]);
             final Label dateLabel = new Label(localeDate);
             dateLabel.getStyleClass().add("date-label");
 
@@ -190,14 +195,17 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             try {
                 final Archive archive = ArchiveImpl.newInstance();
                 archive.open(file);
-                model.setArchive(file.getName(), archive);
+                model.setSiardArchive(file.getName(), archive);
                 stage.closeDialog();
                 this.proceed();
             } catch (IOException e) {
                 fail(e);
             }
             try {
-                final Preferences preferences = UserPreferences.push(RECENT_FILES, TIMESTAMP, Comparator.reverseOrder(), String.valueOf(file.hashCode()));
+                final Preferences preferences = UserPreferences.push(RECENT_FILES,
+                                                                     TIMESTAMP,
+                                                                     Comparator.reverseOrder(),
+                                                                     String.valueOf(file.hashCode()));
                 preferences.put(ABSOLUTE_PATH.name(), file.getAbsolutePath());
                 preferences.put(TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
             } catch (BackingStoreException e) {
