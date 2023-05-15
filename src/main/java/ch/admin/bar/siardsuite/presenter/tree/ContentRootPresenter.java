@@ -67,7 +67,7 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
     private void initLabels() {
         for (Node child : this.container.getChildren()) {
             if (child.getId().contains("label")) {
-                ((Label) child).textProperty().bind(I18n.createStringBinding("tableContainer." + child.getId()));
+                I18n.bind(((Label) child).textProperty(), "tableContainer." + child.getId());
             }
         }
     }
