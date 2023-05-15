@@ -58,18 +58,20 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
         this.controller = controller;
         this.stage = stage;
 
-        initLabels();
+        initializeLabels();
 
         this.model.provideDatabaseArchiveMetaDataProperties(this);
         this.model.provideDatabaseArchiveProperties(this);
     }
 
-    private void initLabels() {
-        for (Node child : this.container.getChildren()) {
-            if (child.getId().contains("label")) {
-                I18n.bind(((Label) child).textProperty(), "tableContainer." + child.getId());
-            }
-        }
+    // Dynamically initialize labels from ch/admin/bar/siardsuite/fxml/tree/content-root.fxml based on the id!
+    private void initializeLabels() {
+        this.container.getChildren().forEach(this::initLabel);
+    }
+
+    private void initLabel(Node node) {
+        if (!node.getId().contains("label")) return;
+        I18n.bind(((Label) node).textProperty(), "tableContainer." + node.getId());
     }
 
     @Override
