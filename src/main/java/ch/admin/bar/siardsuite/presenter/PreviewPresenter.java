@@ -102,21 +102,6 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         updateTableContainerContent(rootItem.getValue());
     }
 
-    private TreeItem<TreeAttributeWrapper> createRootItem() {
-        final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(),
-                                                                                                TreeContentView.ROOT,
-                                                                                                null), db);
-
-        rootItem.setExpanded(true);
-        return rootItem;
-    }
-
-    private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem,
-                               TreeItem<TreeAttributeWrapper> item) {
-        if (item.getChildren().size() == 0) return;
-        rootItem.getChildren().add(item);
-    }
-
 
     private TreeItem<TreeAttributeWrapper> createSchemasItem() {
         final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
@@ -271,6 +256,21 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             tablesItem.getChildren().add(tableItem);
         }
         return tablesItem;
+    }
+
+    private TreeItem<TreeAttributeWrapper> createRootItem() {
+        final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(),
+                                                                                                TreeContentView.ROOT,
+                                                                                                null), db);
+
+        rootItem.setExpanded(true);
+        return rootItem;
+    }
+
+    private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem,
+                               TreeItem<TreeAttributeWrapper> item) {
+        if (item.getChildren().size() == 0) return;
+        rootItem.getChildren().add(item);
     }
 
     protected void setListeners() {
