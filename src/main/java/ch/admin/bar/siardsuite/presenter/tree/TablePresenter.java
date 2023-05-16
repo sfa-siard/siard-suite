@@ -77,10 +77,6 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
     public void visit(String columnName) {
     }
 
-    @Override
-    public void visit(SiardArchive archive) {
-    }
-
     private void autoResizeColumns(TableView<?> table) {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.getColumns().stream().forEach((column) ->

@@ -84,7 +84,6 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     }
 
     protected void initTreeView() {
-        model.provideDatabaseArchiveObject(this);
         model.provideDatabaseArchiveProperties(this);
 
         final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(),
@@ -347,10 +346,6 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     @Override
     public void visit(String columnName) {
         this.columnName = columnName;
-    }
-
-    @Override
-    public void visit(SiardArchive archive) {
     }
 
 }

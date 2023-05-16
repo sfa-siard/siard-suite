@@ -195,10 +195,6 @@ public class Model {
         getSiardArchive().shareProperties(visitor, databaseObject);
     }
 
-    public void provideDatabaseArchiveObject(SiardArchiveVisitor visitor) {
-        getSiardArchive().shareObject(visitor);
-    }
-
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
         getSiardArchive().populate(tableView, databaseObject, type);
     }

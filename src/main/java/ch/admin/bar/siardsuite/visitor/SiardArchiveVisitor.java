@@ -15,7 +15,4 @@ public interface SiardArchiveVisitor {
     void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows);
 
     void visit(String columnName);
-
-    void visit(SiardArchive archive);
-
 }

@@ -331,8 +331,4 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     @Override
     public void visit(String columnName) {
     }
-
-    @Override
-    public void visit(SiardArchive archive) {
-    }
 }

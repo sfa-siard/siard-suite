@@ -80,10 +80,6 @@ public class SiardArchive extends DatabaseObject {
         }
     }
 
-    public void shareObject(SiardArchiveVisitor visitor) {
-        visitor.visit(this);
-    }
-
     public void shareProperties(SiardArchiveMetaDataVisitor visitor) {
         if (metaData != null) {
             metaData.accept(visitor);
