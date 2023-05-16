@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
+import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
@@ -23,7 +24,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -50,8 +50,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     private List<DatabaseType> types;
     private List<Routine> routines = new ArrayList<>();
 
-    protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource(
-            "icons/server.png")), 16.0, 16.0, true, false));
+    protected final Node db = new ImageView(Icon.db);
     @FXML
     protected TreeView<TreeAttributeWrapper> treeView;
     @FXML
