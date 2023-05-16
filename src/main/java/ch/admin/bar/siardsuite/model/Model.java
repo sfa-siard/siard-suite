@@ -119,6 +119,7 @@ public class Model {
     }
 
     public SiardArchive getSiardArchive() {
+        if (this.siardArchive == null) this.siardArchive = new SiardArchive();
         return siardArchive;
     }
 
@@ -187,33 +188,23 @@ public class Model {
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareProperties(visitor);
-        }
+        getSiardArchive().shareProperties(visitor);
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareProperties(visitor, databaseObject);
-        }
+        getSiardArchive().shareProperties(visitor, databaseObject);
     }
 
     public void provideDatabaseArchiveObject(SiardArchiveVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareObject(visitor);
-        }
+        getSiardArchive().shareObject(visitor);
     }
 
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().populate(tableView, databaseObject, type);
-        }
+        getSiardArchive().populate(tableView, databaseObject, type);
     }
 
     public void populate(VBox vBox, DatabaseObject databaseObject, TreeContentView type) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().populate(vBox, databaseObject, type);
-        }
+        getSiardArchive().populate(vBox, databaseObject, type);
     }
 
     public void populate(TreeItem root) {
@@ -221,35 +212,23 @@ public class Model {
     }
 
     public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareProperties(visitor);
-        }
+        getSiardArchive().shareProperties(visitor);
     }
 
     public void provideDatabaseArchiveMetaDataObject(SiardArchiveMetaDataVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareObject(visitor);
-        }
+        getSiardArchive().shareObject(visitor);
     }
 
     public void provideArchiveProperties(ArchiveVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareProperties(visitor);
-        }
+        getSiardArchive().shareProperties(visitor);
     }
 
     public void provideArchiveObject(ArchiveVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareObject(visitor);
-        }
+        getSiardArchive().shareObject(visitor);
     }
 
     public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
-        TreeSet<MetaSearchHit> hits = new TreeSet<>();
-        if (getSiardArchive() != null) {
-            hits = getSiardArchive().aggregatedMetaSearch(s);
-        }
-        return hits;
+        return getSiardArchive().aggregatedMetaSearch(s);
     }
 
     public void setSchemaMap(Map schemaMap) {
