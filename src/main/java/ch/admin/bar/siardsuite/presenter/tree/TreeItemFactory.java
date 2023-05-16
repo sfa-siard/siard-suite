@@ -4,6 +4,8 @@ import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.util.I18n;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.scene.control.TreeItem;
 
 import java.util.Collection;
@@ -24,12 +26,26 @@ public class TreeItemFactory {
                                                         DatabaseObject dbObject,
                                                         Collection elements) {
 
+        return create(label, view, dbObject, String.valueOf(elements.size()));
+    }
+
+    public static TreeItem<TreeAttributeWrapper> create(String label, TreeContentView view, DatabaseObject dbObject,
+                                                        String numberOfElements) {
         final TreeItem<TreeAttributeWrapper> item = new TreeItem<>();
         item.valueProperty()
-            .bind(I18n.createTreeAtributeWrapperBinding(label,
-                                                        view,
-                                                        dbObject,
-                                                        elements.size()));
+            .bind(createTreeAtributeWrapperBinding(label,
+                                                   view,
+                                                   dbObject,
+                                                   numberOfElements));
         return item;
+    }
+
+
+    public static ObjectBinding<TreeAttributeWrapper> createTreeAtributeWrapperBinding(final String key,
+                                                                                       final TreeContentView type,
+                                                                                       DatabaseObject databaseObject,
+                                                                                       final Object... args) {
+        return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(I18n.get(key, args), type, databaseObject),
+                                            I18n.locale);
     }
 }

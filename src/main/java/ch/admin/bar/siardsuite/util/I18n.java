@@ -1,10 +1,6 @@
 package ch.admin.bar.siardsuite.util;
 
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -19,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class I18n {
 
-    private static final ObjectProperty<Locale> locale;
+    public static final ObjectProperty<Locale> locale;
 
     public static Locale getLocale() {
         return locale.get();
@@ -68,16 +64,6 @@ public class I18n {
 
     public static void bind(StringProperty stringProperty, final String key, final Object... args) {
         stringProperty.bind(I18n.createStringBinding(key, args));
-    }
-
-    // TODO: move to TreeItemFactory and make it private?
-    @Deprecated
-    public static ObjectBinding<TreeAttributeWrapper> createTreeAtributeWrapperBinding(final String key,
-                                                                                       final TreeContentView type,
-                                                                                       DatabaseObject databaseObject,
-                                                                                       final Object... args) {
-        return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(get(key, args), type, databaseObject),
-                                            locale);
     }
 
     public static String getLocaleDate(final LocalDate date) {

@@ -142,24 +142,20 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         TreeItem<TreeAttributeWrapper> routinesItem;
         TreeItem<TreeAttributeWrapper> routineItem;
         TreeItem<TreeAttributeWrapper> columnItem;
-        routinesItem = new TreeItem<>();
 
-        routinesItem.valueProperty()
-                    .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.routines",
+        routinesItem = TreeItemFactory.create("archive.tree.view.node.routines",
                                                                 TreeContentView.ROUTINES,
                                                                 schema,
-                                                                views.size()));
+                                                                views);
 
         for (Routine routine : routines) {
             model.provideDatabaseArchiveProperties(this, routine);
             routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.VIEW, routine));
 
-            columnsItem = new TreeItem<>();
-            columnsItem.valueProperty()
-                       .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns",
+            columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
                                                                    TreeContentView.COLUMNS,
                                                                    routine,
-                                                                   columns.size()));
+                                                                   columns);
 
 
             for (DatabaseColumn column : columns) {
@@ -181,22 +177,17 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         TreeItem<TreeAttributeWrapper> viewsItem;
         TreeItem<TreeAttributeWrapper> viewItem;
         TreeItem<TreeAttributeWrapper> columnItem;
-        viewsItem = new TreeItem<>();
-
-        viewsItem.valueProperty()
-                 .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.views", TreeContentView.VIEWS,
-                                                             schema, views.size()));
+        viewsItem = TreeItemFactory.create("archive.tree.view.node.views", TreeContentView.VIEWS,
+                                                             schema, views);
 
         for (DatabaseView view : views) {
             model.provideDatabaseArchiveProperties(this, view);
             viewItem = new TreeItem<>(new TreeAttributeWrapper(view.name(), TreeContentView.VIEW, view));
 
-            columnsItem = new TreeItem<>();
-            columnsItem.valueProperty()
-                       .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns",
+            columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
                                                                    TreeContentView.COLUMNS,
                                                                    view,
-                                                                   columns.size()));
+                                                                   columns);
 
 
             for (DatabaseColumn column : columns) {
@@ -218,10 +209,8 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         TreeItem<TreeAttributeWrapper> tablesItem;
         TreeItem<TreeAttributeWrapper> tableItem;
         TreeItem<TreeAttributeWrapper> columnItem;
-        tablesItem = new TreeItem<>();
-        tablesItem.valueProperty()
-                  .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.tables", TreeContentView.TABLES,
-                                                              schema, tables.size()));
+        tablesItem = TreeItemFactory.create("archive.tree.view.node.tables", TreeContentView.TABLES,
+                                                              schema, tables);
 
         for (DatabaseTable table : tables) {
             model.provideDatabaseArchiveProperties(this, table);
@@ -229,12 +218,10 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             tableItem = new TreeItem<>(new TreeAttributeWrapper(tableName, TreeContentView.TABLE, table));
 
 
-            columnsItem = new TreeItem<>();
-            columnsItem.valueProperty()
-                       .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.columns",
+            columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
                                                                    TreeContentView.COLUMNS,
                                                                    table,
-                                                                   columns.size()));
+                                                                   columns);
 
             for (DatabaseColumn column : columns) {
                 model.provideDatabaseArchiveProperties(this, column);
@@ -244,12 +231,10 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             }
 
             if (!onlyMetaData) {
-                rowsItem = new TreeItem<>();
-                rowsItem.valueProperty()
-                        .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.rows",
+                rowsItem = TreeItemFactory.create("archive.tree.view.node.rows",
                                                                     TreeContentView.ROWS,
                                                                     table,
-                                                                    numberOfRows));
+                                                                    numberOfRows);
 
                 tableItem.getChildren().add(rowsItem);
             }
