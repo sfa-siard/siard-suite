@@ -104,34 +104,36 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
 
     private TreeItem<TreeAttributeWrapper> createSchemasItem() {
-        final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
-        schemasItem.valueProperty()
-                   .bind(I18n.createTreeAtributeWrapperBinding("archive.tree.view.node.schemas",
-                                                               TreeContentView.SCHEMAS,
-                                                               null,
-                                                               schemas.size()));
-        TreeItem<TreeAttributeWrapper> schemaItem;
+        final TreeItem<TreeAttributeWrapper> schemasItem = TreeItemFactory.create("archive.tree.view.node.schemas",
+                                                                                  TreeContentView.SCHEMAS,
+                                                                                  null,
+                                                                                  schemas);
         schemasItem.setExpanded(true);
 
-        for (DatabaseSchema schema : schemas) {
+        schemas.forEach(schema -> {
             model.provideDatabaseArchiveProperties(this, schema);
+            schemasItem.getChildren().add(createSchemaItem(schema));
+        });
 
-            schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, TreeContentView.SCHEMA, schema));
-            schemaItem.setExpanded(true);
-
-
-            addIfNotEmpty(schemaItem, TreeItemFactory.create("archive.tree.view.node.types",
-                                                             TreeContentView.TYPES,
-                                                             new DatabaseTypes(types),
-                                                             types));
-            TreeItem<TreeAttributeWrapper> tablesItem = createTablesItem(schema);
-            tablesItem.setExpanded(true);
-            addIfNotEmpty(schemaItem, tablesItem);
-            addIfNotEmpty(schemaItem, createRoutinesItem(schema));
-            addIfNotEmpty(schemaItem, createViewsItem(schema));
-            schemasItem.getChildren().add(schemaItem);
-        }
         return schemasItem;
+    }
+
+    private TreeItem<TreeAttributeWrapper> createSchemaItem(DatabaseSchema schema) {
+        TreeItem<TreeAttributeWrapper> schemaItem;
+        schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, TreeContentView.SCHEMA, schema));
+        schemaItem.setExpanded(true);
+
+
+        addIfNotEmpty(schemaItem, TreeItemFactory.create("archive.tree.view.node.types",
+                                                         TreeContentView.TYPES,
+                                                         new DatabaseTypes(types),
+                                                         types));
+        TreeItem<TreeAttributeWrapper> tablesItem = createTablesItem(schema);
+        tablesItem.setExpanded(true);
+        addIfNotEmpty(schemaItem, tablesItem);
+        addIfNotEmpty(schemaItem, createRoutinesItem(schema));
+        addIfNotEmpty(schemaItem, createViewsItem(schema));
+        return schemaItem;
     }
 
     private TreeItem<TreeAttributeWrapper> createRoutinesItem(DatabaseSchema schema) {
