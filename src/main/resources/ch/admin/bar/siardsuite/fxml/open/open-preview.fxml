@@ -44,7 +44,7 @@
                                                 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                                                 styleClass="table-container" StackPane.alignment="CENTER_LEFT">
                                         <content>
-                                            <AnchorPane fx:id="tableContainerContent" maxHeight="1.7976931348623157E308"
+                                            <AnchorPane fx:id="contentPane" maxHeight="1.7976931348623157E308"
                                                         maxWidth="1.7976931348623157E308"/>
                                         </content>
                                         <StackPane.margin>

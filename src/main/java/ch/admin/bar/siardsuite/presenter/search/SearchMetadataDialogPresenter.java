@@ -108,7 +108,7 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
             try {
                 FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView().getViewName()));
                 Node node = loader.load();
-                model.getCurrentPreviewPresenter().getTableContainerContent().getChildren().setAll(node);
+                model.getCurrentPreviewPresenter().getContentPane().getChildren().setAll(node);
                 loader.<TreePresenter>getController().init(controller, model, stage, new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -58,7 +58,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     @FXML
     protected MFXButton metaSearchButton;
     @FXML
-    protected AnchorPane tableContainerContent;
+    protected AnchorPane contentPane;
     @FXML
     public Label titleTableContainer;
     @FXML
@@ -99,7 +99,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
                                                        priviliges));
         treeView.setRoot(rootItem);
 
-        updateTableContainerContent(rootItem.getValue());
+        refreshContentPane(rootItem.getValue());
     }
 
 
@@ -144,18 +144,18 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         TreeItem<TreeAttributeWrapper> columnItem;
 
         routinesItem = TreeItemFactory.create("archive.tree.view.node.routines",
-                                                                TreeContentView.ROUTINES,
-                                                                schema,
-                                                                views);
+                                              TreeContentView.ROUTINES,
+                                              schema,
+                                              views);
 
         for (Routine routine : routines) {
             model.provideDatabaseArchiveProperties(this, routine);
             routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.VIEW, routine));
 
             columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
-                                                                   TreeContentView.COLUMNS,
-                                                                   routine,
-                                                                   columns);
+                                                 TreeContentView.COLUMNS,
+                                                 routine,
+                                                 columns);
 
 
             for (DatabaseColumn column : columns) {
@@ -178,16 +178,16 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         TreeItem<TreeAttributeWrapper> viewItem;
         TreeItem<TreeAttributeWrapper> columnItem;
         viewsItem = TreeItemFactory.create("archive.tree.view.node.views", TreeContentView.VIEWS,
-                                                             schema, views);
+                                           schema, views);
 
         for (DatabaseView view : views) {
             model.provideDatabaseArchiveProperties(this, view);
             viewItem = new TreeItem<>(new TreeAttributeWrapper(view.name(), TreeContentView.VIEW, view));
 
             columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
-                                                                   TreeContentView.COLUMNS,
-                                                                   view,
-                                                                   columns);
+                                                 TreeContentView.COLUMNS,
+                                                 view,
+                                                 columns);
 
 
             for (DatabaseColumn column : columns) {
@@ -210,7 +210,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         TreeItem<TreeAttributeWrapper> tableItem;
         TreeItem<TreeAttributeWrapper> columnItem;
         tablesItem = TreeItemFactory.create("archive.tree.view.node.tables", TreeContentView.TABLES,
-                                                              schema, tables);
+                                            schema, tables);
 
         for (DatabaseTable table : tables) {
             model.provideDatabaseArchiveProperties(this, table);
@@ -219,9 +219,9 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
 
             columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
-                                                                   TreeContentView.COLUMNS,
-                                                                   table,
-                                                                   columns);
+                                                 TreeContentView.COLUMNS,
+                                                 table,
+                                                 columns);
 
             for (DatabaseColumn column : columns) {
                 model.provideDatabaseArchiveProperties(this, column);
@@ -232,9 +232,9 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
             if (!onlyMetaData) {
                 rowsItem = TreeItemFactory.create("archive.tree.view.node.rows",
-                                                                    TreeContentView.ROWS,
-                                                                    table,
-                                                                    numberOfRows);
+                                                  TreeContentView.ROWS,
+                                                  table,
+                                                  numberOfRows);
 
                 tableItem.getChildren().add(rowsItem);
             }
@@ -263,7 +263,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     protected void setListeners() {
         MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
         selection.selectedItemProperty()
-                 .addListener(((observable, oldValue, newValue) -> updateTableContainerContent(newValue.getValue())));
+                 .addListener(((observable, oldValue, newValue) -> refreshContentPane(newValue.getValue())));
         tableSearchButton.setOnAction(event -> {
             if (model.getCurrentTableSearchButton() != null && tableSearchButton.equals(model.getCurrentTableSearchButton()
                                                                                              .button()) && model.getCurrentTableSearchButton()
@@ -281,22 +281,23 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         metaSearchButton.setOnAction(event -> stage.openDialog(View.SEARCH_METADATA_DIALOG));
     }
 
-    protected void updateTableContainerContent(TreeAttributeWrapper wrapper) {
+    // Refresh the content view based on the selected item in the tree (e.g. tables, users...)
+    protected void refreshContentPane(TreeAttributeWrapper wrapper) {
         try {
             FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.getType().getViewName()));
             Node container = loader.load();
-            tableContainerContent.getChildren().setAll(container);
+            contentPane.getChildren().setAll(container);
             loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
             tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
             I18n.bind(this.titleTableContainer.textProperty(), wrapper.getType().getViewTitle());
-            tableContainerContent.prefWidthProperty().bind(rightTableBox.widthProperty());
+            contentPane.prefWidthProperty().bind(rightTableBox.widthProperty());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public AnchorPane getTableContainerContent() {
-        return tableContainerContent;
+    public AnchorPane getContentPane() {
+        return contentPane;
     }
 
     @Override
