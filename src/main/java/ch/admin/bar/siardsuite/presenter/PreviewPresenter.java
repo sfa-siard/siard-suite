@@ -119,8 +119,9 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     }
 
     private TreeItem<TreeAttributeWrapper> createSchemaItem(DatabaseSchema schema) {
-        TreeItem<TreeAttributeWrapper> schemaItem;
-        schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName, TreeContentView.SCHEMA, schema));
+        TreeItem<TreeAttributeWrapper> schemaItem = new TreeItem<>(new TreeAttributeWrapper(schemaName,
+                                                                                            TreeContentView.SCHEMA,
+                                                                                            schema));
         schemaItem.setExpanded(true);
 
 
@@ -128,9 +129,8 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
                                                          TreeContentView.TYPES,
                                                          new DatabaseTypes(types),
                                                          types));
-        TreeItem<TreeAttributeWrapper> tablesItem = createTablesItem(schema);
-        tablesItem.setExpanded(true);
-        addIfNotEmpty(schemaItem, tablesItem);
+
+        addIfNotEmpty(schemaItem, createTablesItem(schema));
         addIfNotEmpty(schemaItem, createRoutinesItem(schema));
         addIfNotEmpty(schemaItem, createViewsItem(schema));
         return schemaItem;
@@ -172,10 +172,10 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     }
 
     private TreeItem<TreeAttributeWrapper> createViewsItem(DatabaseSchema schema) {
-        TreeItem<TreeAttributeWrapper> rowsItem;
-        TreeItem<TreeAttributeWrapper> columnsItem;
         TreeItem<TreeAttributeWrapper> viewsItem;
         TreeItem<TreeAttributeWrapper> viewItem;
+
+        TreeItem<TreeAttributeWrapper> columnsItem;
         TreeItem<TreeAttributeWrapper> columnItem;
         viewsItem = TreeItemFactory.create("archive.tree.view.node.views", TreeContentView.VIEWS,
                                            schema, views);
@@ -242,6 +242,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             tableItem.getChildren().add(columnsItem);
             tablesItem.getChildren().add(tableItem);
         }
+        tablesItem.setExpanded(true);
         return tablesItem;
     }
 
