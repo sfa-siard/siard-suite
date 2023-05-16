@@ -3,20 +3,18 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.presenter.tree.TablesTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
@@ -56,40 +54,12 @@ public class DatabaseSchema extends DatabaseObject {
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView != null && type != null) {
-            final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-            col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
-            col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.tableName"));
-            col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfColumns"));
-            col0.setCellValueFactory(new MapValueFactory<>("index"));
-            col1.setCellValueFactory(new MapValueFactory<>("name"));
-            col2.setCellValueFactory(new MapValueFactory<>("numberOfColumns"));
-            tableView.getColumns().add(col0);
-            tableView.getColumns().add(col1);
-            tableView.getColumns().add(col2);
-            if (!onlyMetaData) {
-                final TableColumn<Map, StringProperty> col3 = new TableColumn<>();
-                col3.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfRows"));
-                col3.setCellValueFactory(new MapValueFactory<>("numberOfRows"));
-                tableView.getColumns().add(col3);
+            if (type.equals(TreeContentView.TABLES)) {
+                new TablesTableViewPopulatorStrategy().populate(tableView, tables, onlyMetaData);
             }
-            tableView.setItems(items());
         }
     }
 
-    private ObservableList<Map> items() {
-        final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseTable table : tables) {
-            Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(tables.indexOf(table) + 1));
-            item.put("name", table.name);
-            item.put("numberOfColumns", table.numberOfColumns);
-            item.put("numberOfRows", table.numberOfRows);
-            items.add(item);
-        }
-        return items;
-    }
 
     public void export(List<String> tablesToExport, File directory) {
         this.tables.stream()

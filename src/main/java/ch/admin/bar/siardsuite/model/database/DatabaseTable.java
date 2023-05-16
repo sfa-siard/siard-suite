@@ -25,11 +25,11 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     protected final DatabaseSchema schema;
     protected final Table table;
     protected final boolean onlyMetaData;
-    protected final String name;
+    public final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
-    protected final String numberOfColumns;
+    public final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
-    protected final String numberOfRows;
+    public final String numberOfRows;
     protected int loadBatchSize = 50;
     protected int lastRowLoadedIndex = -1;
     protected final TreeContentView treeContentView = TreeContentView.TABLE;
