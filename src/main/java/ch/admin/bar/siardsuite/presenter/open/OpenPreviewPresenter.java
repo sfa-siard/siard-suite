@@ -40,8 +40,10 @@ public class OpenPreviewPresenter extends PreviewPresenter {
     I18n.bind(title.textProperty(), "open.siard.archive.preview.title");
     I18n.bind(text.textProperty(), "open.siard.archive.preview.text");
 
-    initTreeView();
+    initButtons();
+  }
 
+  private void initButtons() {
     this.buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
     this.borderPane.setBottom(buttonsBox);
 
@@ -54,7 +56,5 @@ public class OpenPreviewPresenter extends PreviewPresenter {
       this.stage.openDialog(View.EXPORT_SELECT_TABLES);
     });
     buttonsBox.next().setOnAction(event -> this.stage.navigate(View.START));
-    setListeners();
   }
-
 }

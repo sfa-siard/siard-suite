@@ -71,13 +71,12 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         this.model = model;
         this.controller = controller;
         this.stage = stage;
-
+        initTreeView();
+        setListeners();
         model.setCurrentPreviewPresenter(this);
         this.tableSearchButton.setVisible(false);
         I18n.bind(this.metaSearchButton.textProperty(), "tableContainer.metaSearchButton");
         I18n.bind(this.tableSearchButton.textProperty(), "tableContainer.tableSearchButton");
-
-        setListeners();
     }
 
     @Override
