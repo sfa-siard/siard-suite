@@ -11,10 +11,12 @@ import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.enterag.utils.io.SpecialFolder;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.WindowEvent;
 import mslinks.ShellLink;
 
 import javax.swing.*;
@@ -55,6 +57,11 @@ public class RootPresenter extends Presenter {
         I18n.bind(stage.titleProperty(), "window.title");
 
         initMenu();
+
+        stage.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     private void initMenu() {
@@ -83,7 +90,9 @@ public class RootPresenter extends Presenter {
             item.setToggleGroup(items);
         });
 
-        this.menuItemClose.setOnAction(event -> this.stage.close());
+        this.menuItemClose.setOnAction(event -> {
+            this.stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+        });
         this.menuItemInfo.setOnAction(event -> this.stage.openDialog(View.INFO_DIALOG));
         this.menuItemOptions.setOnAction(event -> this.stage.openDialog(View.OPTION_DIALOG));
         this.menuItemInstall.setOnAction(this::installToDesktop);
