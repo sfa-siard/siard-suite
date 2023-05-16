@@ -89,14 +89,14 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         final TreeItem<TreeAttributeWrapper> rootItem = createRootItem();
         rootItem.getChildren().add(createSchemasItem());
 
-        addIfNotEmpty(rootItem, users, TreeItemFactory.create("archive.tree.view.node.users",
-                                                              TreeContentView.USERS,
-                                                              new Users(users),
-                                                              users));
-        addIfNotEmpty(rootItem, priviliges, TreeItemFactory.create("archive.tree.view.node.priviliges",
-                                                                   TreeContentView.PRIVILIGES,
-                                                                   new Priviliges(priviliges),
-                                                                   priviliges));
+        addIfNotEmpty(rootItem, TreeItemFactory.create("archive.tree.view.node.users",
+                                                       TreeContentView.USERS,
+                                                       new Users(users),
+                                                       users));
+        addIfNotEmpty(rootItem, TreeItemFactory.create("archive.tree.view.node.priviliges",
+                                                       TreeContentView.PRIVILIGES,
+                                                       new Priviliges(priviliges),
+                                                       priviliges));
         treeView.setRoot(rootItem);
 
         updateTableContainerContent(rootItem.getValue());
@@ -111,9 +111,9 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         return rootItem;
     }
 
-    private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem, List<? extends Object> items,
+    private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem,
                                TreeItem<TreeAttributeWrapper> item) {
-        if (items.size() == 0) return;
+        if (item.getChildren().size() == 0) return;
         rootItem.getChildren().add(item);
     }
 
@@ -135,15 +135,15 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             schemaItem.setExpanded(true);
 
 
-            addIfNotEmpty(schemaItem, types, TreeItemFactory.create("archive.tree.view.node.types",
-                                                                    TreeContentView.TYPES,
-                                                                    new DatabaseTypes(types),
-                                                                    types));
+            addIfNotEmpty(schemaItem, TreeItemFactory.create("archive.tree.view.node.types",
+                                                             TreeContentView.TYPES,
+                                                             new DatabaseTypes(types),
+                                                             types));
             TreeItem<TreeAttributeWrapper> tablesItem = createTablesItem(schema);
             tablesItem.setExpanded(true);
-            addIfNotEmpty(schemaItem, tables, tablesItem);
-            addIfNotEmpty(schemaItem, routines, createRoutinesItem(schema));
-            addIfNotEmpty(schemaItem, views, createViewsItem(schema));
+            addIfNotEmpty(schemaItem, tablesItem);
+            addIfNotEmpty(schemaItem, createRoutinesItem(schema));
+            addIfNotEmpty(schemaItem, createViewsItem(schema));
             schemasItem.getChildren().add(schemaItem);
         }
         return schemasItem;
