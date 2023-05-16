@@ -86,12 +86,9 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     protected void initTreeView() {
         model.provideDatabaseArchiveProperties(this);
 
-        final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(),
-                                                                                                TreeContentView.ROOT,
-                                                                                                null), db);
-
+        final TreeItem<TreeAttributeWrapper> rootItem = createRootItem();
         rootItem.getChildren().add(createSchemasItem());
-        rootItem.setExpanded(true);
+
         addIfNotEmpty(rootItem, users, TreeItemFactory.create("archive.tree.view.node.users",
                                                               TreeContentView.USERS,
                                                               new Users(users),
@@ -103,6 +100,15 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         treeView.setRoot(rootItem);
 
         updateTableContainerContent(rootItem.getValue());
+    }
+
+    private TreeItem<TreeAttributeWrapper> createRootItem() {
+        final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(),
+                                                                                                TreeContentView.ROOT,
+                                                                                                null), db);
+
+        rootItem.setExpanded(true);
+        return rootItem;
     }
 
     private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem, List<? extends Object> items,
