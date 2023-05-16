@@ -68,6 +68,7 @@
 }
 
 .info-container .button,
+.folder-container .button,
 .header .button {
     -fx-min-width: 40;
     -fx-min-height: 40;
@@ -434,6 +435,10 @@
 
 .export-icon {
     -fx-graphic: url(../icons/export_action.png);
+}
+
+.folder-icon {
+    -fx-graphic: url(../icons/folder.png);
 }
 
 .arrow-right-icon {

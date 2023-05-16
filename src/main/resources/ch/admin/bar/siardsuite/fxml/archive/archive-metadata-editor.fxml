@@ -1,133 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import java.lang.String?>
-<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataEditorPresenter"
-            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-    <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
-                maxWidth="1.7976931348623157E308">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataEditorPresenter">
+    <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white">
         <center>
             <VBox BorderPane.alignment="TOP_LEFT">
                 <VBox prefWidth="100.0">
-                    <Text fx:id="titleText" styleClass="h2"/>
+                    <Text fx:id="titleText" styleClass="h2" />
                     <Text fx:id="descriptionText" lineSpacing="8.0" styleClass="view-text">
                         <VBox.margin>
-                            <Insets bottom="24.0" top="15.0"/>
+                            <Insets bottom="24.0" top="15.0" />
                         </VBox.margin>
                     </Text>
                     <VBox.margin>
-                        <Insets left="25.0" right="25.0"/>
+                        <Insets left="25.0" right="25.0" />
                     </VBox.margin>
                 </VBox>
                 <HBox prefWidth="1140.0">
                     <styleClass>
-                        <String fx:value="form-container"/>
-                        <String fx:value="form-container-white"/>
+                        <String fx:value="form-container" />
+                        <String fx:value="form-container-white" />
                     </styleClass>
                     <VBox prefWidth="570.0">
                         <Text fx:id="titleWhat" styleClass="h3">
                             <VBox.margin>
-                                <Insets bottom="15.0" top="15.0"/>
+                                <Insets bottom="15.0" top="15.0" />
                             </VBox.margin>
                         </Text>
                         <Label fx:id="nameLabel" styleClass="form-label">
                             <VBox.margin>
-                                <Insets bottom="10.0"  top="25.0" />
+                                <Insets bottom="10.0" top="25.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="name" editable="false" maxWidth="410.0" styleClass="form-field" >
+                        <TextField fx:id="name" editable="false" maxWidth="410.0" styleClass="form-field">
                             <VBox.margin>
                                 <Insets bottom="24.0" right="25.0" />
                             </VBox.margin>
                         </TextField>
-                        <Label fx:id="descriptionLabel" style="-fx-text-fill: siard-text-color;"/>
-                        <TextArea fx:id="description" maxWidth="410.0" nodeOrientation="LEFT_TO_RIGHT"
-                                  prefWidth="410.0" styleClass="form-field-double">
+                        <Label fx:id="descriptionLabel" style="-fx-text-fill: siard-text-color;" />
+                        <TextArea fx:id="description" maxWidth="410.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="410.0" styleClass="form-field-double">
                             <VBox.margin>
-                                <Insets bottom="24.0" right="25.0" top="10.0"/>
+                                <Insets bottom="24.0" right="25.0" top="10.0" />
                             </VBox.margin>
                         </TextArea>
                         <Label fx:id="ownerLabel" styleClass="form-label">
                             <VBox.margin>
-                                <Insets bottom="10.0"  top="10.0" />
+                                <Insets bottom="10.0" top="10.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="owner" maxWidth="410.0" styleClass="form-field" >
+                        <TextField fx:id="owner" maxWidth="410.0" styleClass="form-field">
                             <VBox.margin>
                                 <Insets bottom="4.0" right="25.0" />
                             </VBox.margin>
                         </TextField>
                         <Label fx:id="ownerValidationMsg" styleClass="error-text" visible="false">
                             <VBox.margin>
-                                <Insets bottom="20.0"/>
+                                <Insets bottom="20.0" />
                             </VBox.margin>
                         </Label>
                         <Label fx:id="dataOriginTimespanLabel" styleClass="form-label">
                             <VBox.margin>
-                                <Insets bottom="10.0"  top="10.0" />
+                                <Insets bottom="10.0" top="10.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="dataOriginTimespan" maxWidth="410.0" styleClass="form-field" >
+                        <TextField fx:id="dataOriginTimespan" maxWidth="410.0" styleClass="form-field">
                             <VBox.margin>
                                 <Insets bottom="5.0" right="25.0" />
                             </VBox.margin>
                         </TextField>
                         <Label fx:id="dataOriginTimespanValidationMsg" styleClass="error-text" visible="false">
                             <VBox.margin>
-                                <Insets bottom="20.0"/>
+                                <Insets bottom="20.0" />
                             </VBox.margin>
                         </Label>
                         <HBox.margin>
-                            <Insets bottom="25.0" left="25.0" right="25.0" top="30.0"/>
+                            <Insets bottom="25.0" left="25.0" right="25.0" top="30.0" />
                         </HBox.margin>
                     </VBox>
                     <VBox prefHeight="200.0" prefWidth="570.0">
                         <Text fx:id="titleWho" styleClass="h3">
                             <VBox.margin>
-                                <Insets bottom="15.0" top="15.0"/>
+                                <Insets bottom="15.0" top="15.0" />
                             </VBox.margin>
                         </Text>
-                        <Label fx:id="archiverLabel"  styleClass="form-label">
+                        <Label fx:id="archiverLabel" styleClass="form-label">
                             <VBox.margin>
-                                <Insets bottom="10.0"  top="25.0" />
+                                <Insets bottom="10.0" top="25.0" />
                             </VBox.margin>
                         </Label>
-                        <TextField fx:id="archiverName"  maxWidth="410.0" styleClass="form-field" >
+                        <TextField fx:id="archiverName" maxWidth="410.0" styleClass="form-field">
                             <VBox.margin>
-                                <Insets bottom="24.0" right="25.0" />
+                                <Insets bottom="22.0" right="25.0" />
                             </VBox.margin>
                         </TextField>
                         <HBox prefWidth="570.0" styleClass="info-container">
-                            <Label fx:id="archiverContactLabel" style="-fx-text-fill: siard-text-color;"/>
-                            <MFXButton fx:id="infoButton" alignment="CENTER" maxHeight="37.0"
-                                       maxWidth="37.0" prefHeight="37.0" prefWidth="34.0"
-                                       rippleAnimateBackground="false">
+                            <Label fx:id="archiverContactLabel" style="-fx-text-fill: siard-text-color;" />
+                            <MFXButton fx:id="infoButton" alignment="CENTER" maxHeight="37.0" maxWidth="37.0" prefHeight="37.0" prefWidth="34.0" rippleAnimateBackground="false">
                                 <styleClass>
-                                    <String fx:value="info-icon"/>
-                                    <String fx:value="icon-button"/>
+                                    <String fx:value="info-icon" />
+                                    <String fx:value="icon-button" />
                                 </styleClass>
                                 <HBox.margin>
-                                    <Insets top="-10.0"/>
+                                    <Insets top="-10.0" />
                                 </HBox.margin>
                             </MFXButton>
                         </HBox>
-                        <TextArea fx:id="archiverContact" maxHeight="103.0" maxWidth="410.0"
-                                  nodeOrientation="LEFT_TO_RIGHT" prefHeight="103.0" prefWidth="410.0"
-                                  styleClass="form-field-double"/>
+                        <TextArea fx:id="archiverContact" maxWidth="410.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="410.0" styleClass="form-field-double">
+                     <VBox.margin>
+                        <Insets bottom="24.0" />
+                     </VBox.margin></TextArea>
+                  <Label fx:id="lobExportLabel" styleClass="form-label">
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox styleClass="folder-container" VBox.vgrow="NEVER">
+                     <children>
+                        <TextField fx:id="lobExportLocation" minWidth="-Infinity" prefHeight="48.0" prefWidth="410.0" styleClass="form-field" HBox.hgrow="NEVER" />
+                        <MFXButton fx:id="lobFolderButton" alignment="CENTER" maxHeight="32.0" maxWidth="-Infinity" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" rippleAnimateBackground="false" HBox.hgrow="NEVER">
+                           <styleClass>
+                              <String fx:value="folder-icon" />
+                              <String fx:value="icon-button" />
+                           </styleClass>
+                           <HBox.margin>
+                              <Insets left="6.0" top="4.0" />
+                           </HBox.margin>
+                        </MFXButton>
+                     </children>
+                  </HBox>
                         <HBox.margin>
-                            <Insets bottom="25.0" left="25.0" right="25.0" top="30.0"/>
+                            <Insets bottom="25.0" left="25.0" right="25.0" top="30.0" />
                         </HBox.margin>
                     </VBox>
                 </HBox>
 
                 <BorderPane.margin>
-                    <Insets left="25.0" right="25.0" top="48.0"/>
+                    <Insets left="25.0" right="25.0" top="48.0" />
                 </BorderPane.margin>
             </VBox>
         </center>

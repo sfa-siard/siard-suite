@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class Controller {
     ) throws SQLException {
         tmpArchive = model.initArchive();
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                                                            .createDatabaseLoader(tmpArchive, onlyMetaData);
+                .createDatabaseLoader(tmpArchive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -51,7 +52,7 @@ public class Controller {
                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
         final Archive archive = model.initArchive(target, onlyMetaData);
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                                                            .createDatabaseLoader(archive, onlyMetaData);
+                .createDatabaseLoader(archive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -150,7 +151,8 @@ public class Controller {
             if (!tmpFile.delete()) {
                 tmpFile.deleteOnExit();
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     public void failure(Failure failure) {
@@ -167,5 +169,18 @@ public class Controller {
 
     public void clearSiardArchive() {
         this.model.clearSiardArchive();
+    }
+
+    public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
+                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
+        this.model.updateArchiveMetaData(
+                dbName,
+                description,
+                owner,
+                dataOriginTimespan,
+                archiverName,
+                archiverContact,
+                lobFolder,
+                targetArchive);
     }
 }

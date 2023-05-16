@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveV
                       String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databaseOwner,
                       String databaseCreationDate,
-                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
         textFormat.setText(siardFormatVersion);
         textDb.setText(databaseName);
         textProduct.setText(databaseProduct);

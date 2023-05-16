@@ -22,9 +22,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +35,7 @@ import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
 
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
+
 
     @FXML
     Text titleText = new Text();
@@ -76,6 +79,12 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     public Label ownerValidationMsg;
     @FXML
     public Label dataOriginTimespanValidationMsg;
+    @FXML
+    public Label lobExportLabel;
+    @FXML
+    public TextField lobExportLocation;
+    @FXML
+    public MFXButton lobFolderButton;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
@@ -112,7 +121,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         I18n.bind(this.ownerLabel.textProperty(), "archiveMetadata.view.deliveringOffice");
         I18n.bind(this.dataOriginTimespanLabel.textProperty(), "archiveMetadata.view.databaseCreationDate");
         I18n.bind(this.archiverLabel.textProperty(), "archiveMetadata.view.archiverName");
-        I18n.bind(archiverContactLabel.textProperty(), "archiveMetadata.view.archiverContact");
+        I18n.bind(this.archiverContactLabel.textProperty(), "archiveMetadata.view.archiverContact");
     }
 
     private File showFileChooserToSelectTargetArchive(String databaseName) {
@@ -128,14 +137,17 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.buttonsBox.next().setOnAction((event) -> {
             if(this.validateProperties()) {
                 File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
+                File lobFolder = new File(lobExportLocation.getText());
+
                 if (targetArchive != null) {
-                    this.model.updateArchiveMetaData(
+                    this.controller.updateArchiveMetaData(
                             this.name.getText(),
                             this.description.getText(),
                             this.owner.getText(),
                             this.dataOriginTimespan.getText(),
                             this.archiverName.getText(),
                             this.archiverContact.getText(),
+                            lobFolder.toURI() != null ? lobFolder.toURI() : null,
                             targetArchive);
                     stepper.next();
                     stepper.fireEvent(new SiardEvent(ARCHIVE_METADATA_UPDATED));
@@ -152,6 +164,13 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         });
 
         infoButton.setOnMouseExited(event -> tooltip.hide());
+
+        lobFolderButton.setOnAction(event -> {
+            final DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle(I18n.get("export.choose-location.text"));
+            File file = directoryChooser.showDialog(stage);
+            this.lobExportLocation.setText(file.getAbsolutePath());
+        });
 
         stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initFields());
     }
@@ -171,13 +190,14 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                       String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databseOwner,
                       String databaseCreationDate,
-                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
         name.setText(databaseName);
         description.setText(databaseDescription);
         owner.setText(removePlaceholder(databseOwner));
         this.dataOriginTimespan.setText(removePlaceholder(databaseCreationDate));
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
+        this.lobExportLocation.setText(lobFolder.toString());
     }
 
     @Override

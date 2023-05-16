@@ -3,8 +3,8 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
@@ -12,6 +12,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,9 +51,9 @@ public class SiardArchive extends DatabaseObject {
     }
 
     public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner, String dataOriginTimespan,
-                                   String archiverName, String archiverContact, File targetArchive) {
+                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
         this.metaData = new SiardArchiveMetaData(dbName, databaseDescription, databaseOwner, dataOriginTimespan,
-                archiverName, archiverContact, targetArchive);
+                archiverName, archiverContact, lobFolder, targetArchive);
     }
 
     public void shareProperties(SiardArchiveVisitor visitor) {
