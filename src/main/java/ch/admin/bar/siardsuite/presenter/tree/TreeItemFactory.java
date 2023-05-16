@@ -16,7 +16,7 @@ public class TreeItemFactory {
      * @param label    - the label key from messages_xx.properties
      * @param view     - the {@link TreeContentView}
      * @param dbObject - the {@link DatabaseObject}
-     * @param elements - elementes to display
+     * @param elements - collection of child elements - used to indicate the number of children in the root label
      * @return
      */
     public static TreeItem<TreeAttributeWrapper> create(String label,
