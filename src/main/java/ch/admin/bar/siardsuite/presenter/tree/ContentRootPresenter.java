@@ -17,6 +17,8 @@ import java.io.File;
 import java.net.URI;
 import java.time.LocalDate;
 
+import static ch.admin.bar.siardsuite.util.StringUtils.emptyApiNull;
+
 
 /**
  * Represents the content root of the tree view of a SIARD Archive displaying general information
@@ -71,24 +73,32 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveM
     }
 
     @Override
-    public void visit(String siardFormatVersion, String databaseName, String databaseProduct,
+    public void visit(String siardFormatVersion,
+                      String databaseName,
+                      String databaseProduct,
                       String databaseConnectionURL,
-                      String databaseUsername, String databaseDescription, String databaseOwner,
+                      String databaseUsername,
+                      String databaseDescription,
+                      String databaseOwner,
                       String databaseCreationDate,
-                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
-        this.siardFormatVersion.setText(siardFormatVersion);
-        this.databaseName.setText(databaseName);
-        this.databaseProduct.setText(databaseProduct);
-        this.jdbcConnectionUrl.setText(databaseConnectionURL);
-        this.username.setText(databaseUsername);
-        this.description.setText(databaseDescription);
-        this.owner.setText(databaseOwner);
-        this.dataOriginTimeSpan.setText(databaseCreationDate);
+                      LocalDate archivingDate,
+                      String archiverName,
+                      String archiverContact,
+                      File targetArchive,
+                      URI lobFolder) {
+        this.siardFormatVersion.setText(emptyApiNull(siardFormatVersion));
+        this.databaseName.setText(emptyApiNull(databaseName));
+        this.databaseProduct.setText(emptyApiNull(databaseProduct));
+        this.jdbcConnectionUrl.setText(emptyApiNull(databaseConnectionURL));
+        this.username.setText(emptyApiNull(databaseUsername));
+        this.description.setText(emptyApiNull(databaseDescription));
+        this.owner.setText(emptyApiNull(databaseOwner));
+        this.dataOriginTimeSpan.setText(emptyApiNull(databaseCreationDate));
         this.archiveData.textProperty()
                         .bind(Bindings.createStringBinding(() -> I18n.getLocaleDate(archivingDate),
                                                            I18n.localeProperty()));
-        this.archivedBy.setText(archiverName);
-        this.archiverContact.setText(archiverContact);
+        this.archivedBy.setText(emptyApiNull(archiverName));
+        this.archiverContact.setText(emptyApiNull(archiverContact));
     }
 
     @Override
