@@ -8,6 +8,7 @@ import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
 import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -30,7 +31,6 @@ import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class PreviewPresenter extends StepperPresenter implements SiardArchiveVisitor {
@@ -92,14 +92,14 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
         rootItem.getChildren().add(createSchemasItem());
         rootItem.setExpanded(true);
-        addIfNotEmpty(rootItem, users, create("archive.tree.view.node.users",
-                                              TreeContentView.USERS,
-                                              new Users(users),
-                                              users));
-        addIfNotEmpty(rootItem, priviliges, create("archive.tree.view.node.priviliges",
-                                                   TreeContentView.PRIVILIGES,
-                                                   new Priviliges(priviliges),
-                                                   priviliges));
+        addIfNotEmpty(rootItem, users, TreeItemFactory.create("archive.tree.view.node.users",
+                                                              TreeContentView.USERS,
+                                                              new Users(users),
+                                                              users));
+        addIfNotEmpty(rootItem, priviliges, TreeItemFactory.create("archive.tree.view.node.priviliges",
+                                                                   TreeContentView.PRIVILIGES,
+                                                                   new Priviliges(priviliges),
+                                                                   priviliges));
         treeView.setRoot(rootItem);
 
         updateTableContainerContent(rootItem.getValue());
@@ -111,16 +111,6 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         rootItem.getChildren().add(item);
     }
 
-    private TreeItem<TreeAttributeWrapper> create(String nodeLabel, TreeContentView view, DatabaseObject dbObject,
-                                                  Collection elements) {
-        final TreeItem<TreeAttributeWrapper> item = new TreeItem<>();
-        item.valueProperty()
-            .bind(I18n.createTreeAtributeWrapperBinding(nodeLabel,
-                                                        view,
-                                                        dbObject,
-                                                        elements.size()));
-        return item;
-    }
 
     private TreeItem<TreeAttributeWrapper> createSchemasItem() {
         final TreeItem<TreeAttributeWrapper> schemasItem = new TreeItem<>();
@@ -139,10 +129,10 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             schemaItem.setExpanded(true);
 
 
-            addIfNotEmpty(schemaItem, types, create("archive.tree.view.node.types",
-                                                    TreeContentView.TYPES,
-                                                    new DatabaseTypes(types),
-                                                    types));
+            addIfNotEmpty(schemaItem, types, TreeItemFactory.create("archive.tree.view.node.types",
+                                                                    TreeContentView.TYPES,
+                                                                    new DatabaseTypes(types),
+                                                                    types));
             TreeItem<TreeAttributeWrapper> tablesItem = createTablesItem(schema);
             tablesItem.setExpanded(true);
             addIfNotEmpty(schemaItem, tables, tablesItem);
