@@ -37,11 +37,10 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
     private final StringProperty archiveName = new SimpleStringProperty();
     private boolean onlyMetaData = false;
-    private List<DatabaseSchema> schemas = new ArrayList<>();
     private String schemaName = "";
+    private List<DatabaseSchema> schemas = new ArrayList<>();
     private List<DatabaseTable> tables = new ArrayList<>();
     private List<DatabaseView> views = new ArrayList<>();
-    private List<DatabaseRoutine> routines = new ArrayList<>();
     private String tableName = "";
     private List<DatabaseColumn> columns = new ArrayList<>();
     private String columnName = "";
@@ -49,6 +48,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
     private List<User> users;
     private List<Privilige> priviliges;
     private List<DatabaseType> types;
+    private List<Routine> routines = new ArrayList<>();
 
     protected final Node db = new ImageView(new Image(String.valueOf(SiardApplication.class.getResource(
             "icons/server.png")), 16.0, 16.0, true, false));
@@ -169,7 +169,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
                                                                 schema,
                                                                 views.size()));
 
-        for (DatabaseRoutine routine : routines) {
+        for (Routine routine : routines) {
             model.provideDatabaseArchiveProperties(this, routine);
             routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.VIEW, routine));
 
@@ -330,7 +330,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
     @Override
     public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
-                            List<DatabaseView> views, List<DatabaseType> types, List<DatabaseRoutine> routines) {
+                            List<DatabaseView> views, List<DatabaseType> types, List<Routine> routines) {
         this.schemaName = schemaName;
         this.tables = tables;
         this.views = views;

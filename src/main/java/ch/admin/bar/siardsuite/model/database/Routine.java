@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DatabaseRoutine extends DatabaseObject implements WithColumns {
+public class Routine extends DatabaseObject implements WithColumns {
     protected final String name;
     private final SiardArchive archive;
     private final DatabaseSchema schema;
@@ -31,12 +31,12 @@ public class DatabaseRoutine extends DatabaseObject implements WithColumns {
     private final MetaRoutine metaRoutine;
     protected int lastRowLoadedIndex = -1;
 
-    protected DatabaseRoutine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine) {
+    protected Routine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine) {
         this(archive, schema, metaRoutine, false);
     }
 
-    protected DatabaseRoutine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine,
-                              boolean onlyMetaData) {
+    protected Routine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine,
+                      boolean onlyMetaData) {
         this.archive = archive;
         this.schema = schema;
         this.metaRoutine = metaRoutine;
