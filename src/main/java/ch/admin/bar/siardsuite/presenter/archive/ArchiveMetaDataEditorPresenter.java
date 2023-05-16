@@ -122,6 +122,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         I18n.bind(this.dataOriginTimespanLabel.textProperty(), "archiveMetadata.view.databaseCreationDate");
         I18n.bind(this.archiverLabel.textProperty(), "archiveMetadata.view.archiverName");
         I18n.bind(this.archiverContactLabel.textProperty(), "archiveMetadata.view.archiverContact");
+        I18n.bind(this.lobExportLabel.textProperty(), "archiveMetadata.view.exportLocationLob");
     }
 
     private File showFileChooserToSelectTargetArchive(String databaseName) {
@@ -197,7 +198,6 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.dataOriginTimespan.setText(removePlaceholder(databaseCreationDate));
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
-        this.lobExportLocation.setText(lobFolder.toString());
     }
 
     @Override

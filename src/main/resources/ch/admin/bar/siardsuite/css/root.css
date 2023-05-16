@@ -74,6 +74,13 @@
     -fx-min-height: 40;
 }
 
+.folder-container .button {
+    -fx-border-radius: 5;
+    -fx-border-color: #b0afaf;
+    -fx-text-fill: white;
+    -fx-font-family: siard-font-family;
+}
+
 .icon-button {
     -fx-background-color: transparent;
     -fx-max-height: 24;
@@ -288,6 +295,8 @@
     -fx-font-size: 14px;
     -fx-cursor: HAND;
 }
+
+
 
 .icon-text-btn {
     -fx-background-insets: 0;
