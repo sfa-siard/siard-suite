@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.File;
+import java.net.URI;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -26,9 +27,10 @@ public class SiardArchiveMetaData {
     protected final StringProperty archiverName;
     protected final StringProperty archiverContact;
     protected File targetArchive; // not sure if this is the correct place here... maybe just use the model?
+    protected URI lobFolder;
 
     public SiardArchiveMetaData(String dbName, String databaseDescription, String dataOwner, String dataOriginTimespan,
-                                String archiverName, String archiverContact, File targetArchive) {
+                                String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
 
         siardFormatVersion = new SimpleStringProperty();
         databaseName = new SimpleStringProperty(dbName);
@@ -42,6 +44,7 @@ public class SiardArchiveMetaData {
         this.archiverName = new SimpleStringProperty(archiverName);
         this.archiverContact = new SimpleStringProperty(archiverContact);
         this.targetArchive = targetArchive;
+        this.lobFolder = lobFolder;
     }
 
     public SiardArchiveMetaData(MetaData metaData) {
@@ -63,13 +66,15 @@ public class SiardArchiveMetaData {
         archivingDate = date;
         archiverName = new SimpleStringProperty(metaData.getArchiver());
         archiverContact = new SimpleStringProperty(metaData.getArchiverContact());
+        lobFolder = metaData.getLobFolder();
+
     }
 
     public void shareProperties(SiardArchiveMetaDataVisitor visitor) {
         visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
                 databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
                 dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,
-                archiverName.getValue(), archiverContact.getValue(), targetArchive);
+                archiverName.getValue(), archiverContact.getValue(), targetArchive, lobFolder);
     }
 
 

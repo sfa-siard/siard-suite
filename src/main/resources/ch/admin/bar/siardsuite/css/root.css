@@ -68,9 +68,17 @@
 }
 
 .info-container .button,
+.folder-container .button,
 .header .button {
     -fx-min-width: 40;
     -fx-min-height: 40;
+}
+
+.folder-container .button {
+    -fx-border-radius: 5;
+    -fx-border-color: #b0afaf;
+    -fx-text-fill: white;
+    -fx-font-family: siard-font-family;
 }
 
 .icon-button {
@@ -288,6 +296,8 @@
     -fx-cursor: HAND;
 }
 
+
+
 .icon-text-btn {
     -fx-background-insets: 0;
     -fx-graphic-text-gap: 10px;
@@ -434,6 +444,10 @@
 
 .export-icon {
     -fx-graphic: url(../icons/export_action.png);
+}
+
+.folder-icon {
+    -fx-graphic: url(../icons/folder.png);
 }
 
 .arrow-right-icon {

@@ -15,6 +15,7 @@ import javafx.concurrent.Task;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.net.URI;
 import java.sql.Connection;
 import java.time.LocalDate;
 
@@ -91,7 +92,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
   @Override
   public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                     String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
-                    LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
+                    LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
     this.name = targetArchive.getName();
   }
 

@@ -28,6 +28,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -247,7 +248,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                       String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databaseOwner,
                       String databaseCreationDate,
-                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive) {
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
         this.targetArchive = targetArchive;
         this.databaseName = databaseName;
     }

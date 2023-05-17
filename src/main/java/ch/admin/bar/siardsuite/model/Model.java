@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.*;
 
 public class Model {
@@ -174,14 +175,14 @@ public class Model {
 
     // TODO: maybe use some sort of visitor or provider or...
     public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
-                                      String archiverName,
-                                      String archiverContact, File targetArchive) {
+                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
         getSiardArchive().addArchiveMetaData(dbName,
                                              description,
                                              owner,
                                              dataOriginTimespan,
                                              archiverName,
                                              archiverContact,
+                                             lobFolder,
                                              targetArchive);
     }
 
