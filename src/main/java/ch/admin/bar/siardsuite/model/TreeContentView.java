@@ -1,7 +1,15 @@
 package ch.admin.bar.siardsuite.model;
 
+/**
+ * Enumeration to define the available content views when browsing a SIARD archive.
+ * Each value configures the content view for a selection in the tree view, e.g. if the
+ * user select a specific table, or a node like Routines
+ */
 public enum TreeContentView {
 
+    /**
+     * the content for the root of the tree
+     */
     ROOT("fxml/tree/content-root.fxml", "tableContainer.title.siardFile", null, null, false),
     SCHEMAS("fxml/tree/content-root.fxml", "tableContainer.title.schemas", null, null, false),
     SCHEMA("fxml/tree/table.fxml",
