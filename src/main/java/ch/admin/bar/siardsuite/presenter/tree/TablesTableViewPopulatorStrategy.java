@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TablesTableViewPopulatorStrategy implements TableViewPopulatorStrategy {
+public class TablesTableViewPopulatorStrategy implements TableViewPopulatorStrategy<DatabaseTable> {
 
     @Override
     public void populate(TableView<Map> tableView, List<DatabaseTable> tables, boolean onlyMetaData) {
