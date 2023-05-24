@@ -29,6 +29,10 @@ public class Routine extends DatabaseObject implements WithColumns {
     protected final List<DatabaseRow> rows = new ArrayList<>();
     protected final String numberOfRows;
     private final MetaRoutine metaRoutine;
+    private final String characterisics;
+    private final String specificName;
+    private final String returnType;
+    private final String numberOfParameters;
     protected int lastRowLoadedIndex = -1;
 
     protected Routine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine) {
@@ -43,9 +47,15 @@ public class Routine extends DatabaseObject implements WithColumns {
         this.onlyMetaData = onlyMetaData;
 
         name = metaRoutine.getName();
+        characterisics = metaRoutine.getCharacteristic();
+        specificName = metaRoutine.getSpecificName();
+        returnType = metaRoutine.getReturnType();
+        numberOfParameters = String.valueOf(metaRoutine.getMetaParameters());
         for (int i = 0; i < metaRoutine.getMetaParameters(); i++) {
             //  columns.add(new DatabaseRoutine(archive, schema, this, metaRoutine.getMetaParameter(i)));
         }
+
+        // TODO: dont need these:
         numberOfColumns = String.valueOf(columns.size());
         numberOfRows = String.valueOf(metaRoutine.getMetaParameters());
     }
@@ -133,5 +143,21 @@ public class Routine extends DatabaseObject implements WithColumns {
     @Override
     public String name() {
         return name;
+    }
+
+    public String characteristics() {
+        return characterisics;
+    }
+
+    public String specificName() {
+        return specificName;
+    }
+
+    public String returnType() {
+        return returnType;
+    }
+
+    public String numberOfParameters() {
+        return numberOfParameters;
     }
 }

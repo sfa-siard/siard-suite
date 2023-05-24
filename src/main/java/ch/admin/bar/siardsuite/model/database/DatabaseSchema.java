@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.presenter.tree.RoutinesTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.presenter.tree.TablesTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.presenter.tree.ViewsTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -60,6 +61,10 @@ public class DatabaseSchema extends DatabaseObject {
             }
             if (type.equals(TreeContentView.VIEWS)) {
                 new ViewsTableViewPopulatorStrategy().populate(tableView, views, onlyMetaData);
+            }
+
+            if (type.equals(TreeContentView.ROUTINES)) {
+                new RoutinesTableViewPopulatorStrategy().populate(tableView, routines, onlyMetaData);
             }
         }
     }
