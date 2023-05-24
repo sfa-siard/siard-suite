@@ -55,6 +55,14 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         return name;
     }
 
+    public String getNumberOfColumns() {
+        return numberOfColumns;
+    }
+
+    public String getNumberOfRows() {
+        return numberOfRows;
+    }
+
     protected void shareProperties(SiardArchiveVisitor visitor) {
         visitor.visit(name, numberOfRows, columns, rows);
     }
@@ -101,7 +109,8 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {}
+    protected void populate(VBox vbox, TreeContentView type) {
+    }
 
     private ObservableList<Map> colItems() {
         final ObservableList<Map> items = FXCollections.observableArrayList();

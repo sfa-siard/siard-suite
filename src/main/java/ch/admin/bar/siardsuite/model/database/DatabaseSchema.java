@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.presenter.tree.TablesTableViewPopulatorStrategy;
+import ch.admin.bar.siardsuite.presenter.tree.ViewsTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
@@ -56,6 +57,9 @@ public class DatabaseSchema extends DatabaseObject {
         if (tableView != null && type != null) {
             if (type.equals(TreeContentView.TABLES)) {
                 new TablesTableViewPopulatorStrategy().populate(tableView, tables, onlyMetaData);
+            }
+            if (type.equals(TreeContentView.VIEWS)) {
+                new ViewsTableViewPopulatorStrategy().populate(tableView, views, onlyMetaData);
             }
         }
     }
