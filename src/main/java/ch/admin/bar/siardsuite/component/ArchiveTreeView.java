@@ -8,8 +8,6 @@ import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.Priviliges;
 import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
@@ -20,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class ArchiveTreeView implements SiardArchiveVisitor {
 
-    private final StringProperty archiveName = new SimpleStringProperty();
+
     private final SiardArchive siardArchive;
     private boolean onlyMetaData = false;
     private String schemaName = "";
@@ -42,7 +40,6 @@ public class ArchiveTreeView implements SiardArchiveVisitor {
 
     public ArchiveTreeView(SiardArchive siardArchive, TreeView<TreeAttributeWrapper> treeView, Model model) {
         this.siardArchive = siardArchive;
-        this.siardArchive.accept(archiveName -> this.archiveName.setValue(archiveName));
         this.treeView = treeView;
         this.model = model;
     }
@@ -62,8 +59,6 @@ public class ArchiveTreeView implements SiardArchiveVisitor {
                                                        new Priviliges(priviliges),
                                                        priviliges));
         treeView.setRoot(rootItem);
-
-
     }
 
 
@@ -212,7 +207,7 @@ public class ArchiveTreeView implements SiardArchiveVisitor {
     }
 
     private TreeItem<TreeAttributeWrapper> createRootItem() {
-        final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(archiveName.get(),
+        final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(this.siardArchive.name(),
                                                                                                 TreeContentView.ROOT,
                                                                                                 null),
                                                                        new ImageView(Icon.db));
