@@ -11,7 +11,6 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -34,6 +33,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ch.admin.bar.siardsuite.util.I18n.bind;
 
 /**
  * Presentes an archive - either when archiving a database (always only metadata) or when a SIARD Archive file was opened to browse the archive content
@@ -70,17 +71,22 @@ public class ArchivePresenter extends StepperPresenter implements SiardArchiveVi
     public StackPane rightTableBox;
 
 
+    private SiardArchive siardArchive;
+
     @Override
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
         this.controller = controller;
         this.stage = stage;
+        this.siardArchive = controller.getSiardArchive();
+        this.siardArchive.accept(archiveName -> this.archiveName.setValue(archiveName));
+
         initTreeView();
         setListeners();
         model.setCurrentPreviewPresenter(this);
-        this.tableSearchButton.setVisible(false);
-        I18n.bind(this.metaSearchButton.textProperty(), "tableContainer.metaSearchButton");
-        I18n.bind(this.tableSearchButton.textProperty(), "tableContainer.tableSearchButton");
+        tableSearchButton.setVisible(false);
+        bind(metaSearchButton, "tableContainer.metaSearchButton");
+        bind(tableSearchButton, "tableContainer.tableSearchButton");
     }
 
     @Override
@@ -89,6 +95,7 @@ public class ArchivePresenter extends StepperPresenter implements SiardArchiveVi
     }
 
     protected void initTreeView() {
+
         model.provideDatabaseArchiveProperties(this);
 
         final TreeItem<TreeAttributeWrapper> rootItem = createRootItem();
@@ -296,7 +303,7 @@ public class ArchivePresenter extends StepperPresenter implements SiardArchiveVi
             contentPane.getChildren().setAll(container);
             loader.<DetailsPresenter>getController().init(this.controller, model, this.stage, wrapper);
             tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
-            I18n.bind(this.titleTableContainer.textProperty(), wrapper.getType().getViewTitle());
+            bind(this.titleTableContainer.textProperty(), wrapper.getType().getViewTitle());
             contentPane.prefWidthProperty().bind(rightTableBox.widthProperty());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -310,7 +317,6 @@ public class ArchivePresenter extends StepperPresenter implements SiardArchiveVi
     @Override
     public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users,
                       List<Privilige> priviliges) {
-        this.archiveName.setValue(archiveName);
         this.onlyMetaData = onlyMetaData;
         this.schemas = schemas;
         this.users = users;

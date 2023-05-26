@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.visitor.ArchiveNameVisitor;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -53,7 +54,7 @@ public class SiardArchive extends DatabaseObject {
 
     public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner,
                                    String dataOriginTimespan,
-                                   String archiverName, String archiverContact, URI lobFolder,  File targetArchive) {
+                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
         this.metaData = new SiardArchiveMetaData(dbName, databaseDescription, databaseOwner, dataOriginTimespan,
                                                  archiverName, archiverContact, lobFolder, targetArchive);
     }
@@ -192,5 +193,8 @@ public class SiardArchive extends DatabaseObject {
         return hits;
     }
 
+    public void accept(ArchiveNameVisitor visitor) {
+        visitor.visit(archiveName);
+    }
 
 }

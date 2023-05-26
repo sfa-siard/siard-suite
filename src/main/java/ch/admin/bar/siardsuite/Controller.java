@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -196,5 +197,9 @@ public class Controller {
     public void start(RootStage stage) {
         this.model.clearSiardArchive();
         stage.navigate(View.START);
+    }
+
+    public SiardArchive getSiardArchive() {
+        return model.getSiardArchive();
     }
 }
