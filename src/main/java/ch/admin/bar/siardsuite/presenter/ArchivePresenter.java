@@ -51,7 +51,9 @@ public class ArchivePresenter extends StepperPresenter {
         this.stage = stage;
 
 
-        new ArchiveTreeView(controller.getSiardArchive(), treeView, model).init();
+        ArchiveTreeView archiveTreeView = new ArchiveTreeView(controller.getSiardArchive(), treeView, model);
+        archiveTreeView.init();
+        this.refreshContentPane(archiveTreeView.rootItem().getValue());
 
         setListeners();
         model.setCurrentPreviewPresenter(this);

@@ -258,4 +258,8 @@ public class ArchiveTreeView implements SiardArchiveVisitor {
     public void visit(String columnName) {
         this.columnName = columnName;
     }
+
+    public TreeItem<TreeAttributeWrapper> rootItem() {
+        return this.treeView.getRoot();
+    }
 }
