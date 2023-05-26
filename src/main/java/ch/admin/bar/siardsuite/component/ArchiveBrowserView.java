@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.component;
 
 import ch.admin.bar.siard2.api.MetaParameter;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.database.*;
@@ -19,34 +18,20 @@ public class ArchiveBrowserView {
     private final SiardArchive siardArchive;
     private final TreeView<TreeAttributeWrapper> treeView;
 
-    public ArchiveBrowserView(SiardArchive siardArchive, TreeView<TreeAttributeWrapper> treeView, Model model) {
+    public ArchiveBrowserView(SiardArchive siardArchive, TreeView<TreeAttributeWrapper> treeView) {
         this.siardArchive = siardArchive;
         this.treeView = treeView;
     }
 
     public void init() {
         final TreeItem<TreeAttributeWrapper> rootItem = createRootItem();
-        rootItem.getChildren().add(createSchemasItem());
-
-        List<User> users = this.siardArchive.users();
-        if (users.size() > 0) {
-            rootItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.users",
-                                                              TreeContentView.USERS,
-                                                              new Users(users),
-                                                              users));
-        }
-        List<Privilige> priviliges = this.siardArchive.priviliges();
-        if (priviliges.size() > 0) {
-            rootItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.priviliges",
-                                                              TreeContentView.PRIVILIGES,
-                                                              new Priviliges(priviliges),
-                                                              priviliges));
-        }
+        addSchemas(rootItem);
+        addUsers(rootItem);
+        addPriviliges(rootItem);
         treeView.setRoot(rootItem);
     }
 
-
-    private TreeItem<TreeAttributeWrapper> createSchemasItem() {
+    private void addSchemas(TreeItem<TreeAttributeWrapper> rootItem) {
         List<DatabaseSchema> schemas = this.siardArchive.schemas();
         final TreeItem<TreeAttributeWrapper> schemasItem = TreeItemFactory.create("archive.tree.view.node.schemas",
                                                                                   TreeContentView.SCHEMAS,
@@ -55,13 +40,13 @@ public class ArchiveBrowserView {
         schemasItem.setExpanded(true);
 
         schemas.forEach(schema -> {
-            schemasItem.getChildren().add(createSchemaItem(schema));
+            addSchema(schemasItem, schema);
         });
 
-        return schemasItem;
+        rootItem.getChildren().add(schemasItem);
     }
 
-    private TreeItem<TreeAttributeWrapper> createSchemaItem(DatabaseSchema schema) {
+    private void addSchema(TreeItem<TreeAttributeWrapper> schemasItem, DatabaseSchema schema) {
         TreeItem<TreeAttributeWrapper> schemaItem = new TreeItem<>(new TreeAttributeWrapper(schema.name(),
                                                                                             TreeContentView.SCHEMA,
                                                                                             schema));
@@ -77,15 +62,34 @@ public class ArchiveBrowserView {
         addIfNotEmpty(schemaItem, createTablesItem(schema));
         addIfNotEmpty(schemaItem, createRoutinesItem(schema));
         addIfNotEmpty(schemaItem, createViewsItem(schema));
-        return schemaItem;
+        schemasItem.getChildren().add(schemaItem);
     }
 
+    private void addPriviliges(TreeItem<TreeAttributeWrapper> rootItem) {
+        List<Privilige> priviliges = this.siardArchive.priviliges();
+        if (priviliges.size() > 0) {
+            rootItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.priviliges",
+                                                              TreeContentView.PRIVILIGES,
+                                                              new Priviliges(priviliges),
+                                                              priviliges));
+        }
+    }
+
+    private void addUsers(TreeItem<TreeAttributeWrapper> rootItem) {
+        List<User> users = this.siardArchive.users();
+        if (users.size() > 0) {
+            rootItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.users",
+                                                              TreeContentView.USERS,
+                                                              new Users(users),
+                                                              users));
+        }
+    }
+
+
     private TreeItem<TreeAttributeWrapper> createRoutinesItem(DatabaseSchema schema) {
-        TreeItem<TreeAttributeWrapper> rowsItem;
         TreeItem<TreeAttributeWrapper> parametersItem;
         TreeItem<TreeAttributeWrapper> routinesItem;
         TreeItem<TreeAttributeWrapper> routineItem;
-        TreeItem<TreeAttributeWrapper> columnItem;
 
         List<Routine> routines = schema.routines();
         routinesItem = TreeItemFactory.create("archive.tree.view.node.routines",

@@ -51,7 +51,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         this.stage = stage;
 
 
-        ArchiveBrowserView archiveTreeView = new ArchiveBrowserView(controller.getSiardArchive(), treeView, model);
+        ArchiveBrowserView archiveTreeView = new ArchiveBrowserView(controller.getSiardArchive(), treeView);
         archiveTreeView.init();
         this.refreshContentPane(archiveTreeView.rootItem().getValue());
 

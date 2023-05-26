@@ -50,7 +50,12 @@ public class ArchivePreviewPresenter extends ArchiveBrowserPresenter {
         super.setListeners();
 
         stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED,
-                                event -> new ArchiveBrowserView(controller.getSiardArchive(), treeView, model).init());
+                                event -> {
+                                    ArchiveBrowserView archiveBrowserView = new ArchiveBrowserView(controller.getSiardArchive(),
+                                                                                                   treeView);
+                                    archiveBrowserView.init();
+                                    refreshContentPane(archiveBrowserView.rootItem().getValue());
+                                });
 
         this.buttonsBox.next().setOnAction((event) -> stepper.next());
         this.buttonsBox.previous().setOnAction((event) -> {
