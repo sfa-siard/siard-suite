@@ -73,6 +73,10 @@ public class I18n {
         bind(labeled.textProperty(), key, args);
     }
 
+    public static void bind(Text text, String key, final Object... args) {
+        bind(text.textProperty(), key, args);
+    }
+
     public static void bind(TextFlow textFlow, String prefix, String orientation) {
         for (int i = 0; i < textFlow.getChildren().size(); i++) {
             Text text = (Text) textFlow.getChildren().get(i);
