@@ -4,42 +4,42 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.database.*;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.view.TableSize;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-public class TablePresenter extends DetailsPresenter implements SiardArchiveVisitor {
+import static ch.admin.bar.siardsuite.util.I18n.bind;
+
+public class TableDetailsPresenter extends DetailsPresenter implements SiardArchiveVisitor {
 
     @FXML
-    public Label nameLabel;
+    private Label nameLabel;
     @FXML
-    public Label nameText;
+    private Label nameText;
     @FXML
-    public Label infoLabel;
+    private Label infoLabel;
     @FXML
-    public Label infoText;
+    private Label infoText;
     @FXML
-    public TableView<Map> tableView = new TableView<>();
+    private TableView<Map> tableView = new TableView<>();
     @FXML
-    public VBox tableContainer;
+    private VBox tableContainer;
+
+    private TreeAttributeWrapper wrapper;
+
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
-        this.model = model;
-        this.controller = controller;
-        this.stage = stage;
-
-        I18n.bind(this.nameLabel.textProperty(), wrapper.getType().getNameLabel());
-        I18n.bind(this.infoLabel.textProperty(), wrapper.getType().getInfoLabel());
+        this.wrapper = wrapper;
+        super.init(controller, model, stage, wrapper);
 
         model.provideDatabaseArchiveProperties(this, wrapper.getDatabaseObject());
         model.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
@@ -51,12 +51,13 @@ public class TablePresenter extends DetailsPresenter implements SiardArchiveVisi
 
         tableContainer.prefHeightProperty().bind(stage.heightProperty().subtract(500.0));
         tableView.autosize();
-        autoResizeColumns(tableView);
+        new TableSize(tableView).resize();
     }
 
     @Override
     protected void bindLabels() {
-
+        bind(this.nameLabel, wrapper.getType().getNameLabel());
+        bind(this.infoLabel, wrapper.getType().getInfoLabel());
     }
 
 
@@ -82,22 +83,5 @@ public class TablePresenter extends DetailsPresenter implements SiardArchiveVisi
     public void visit(String columnName) {
     }
 
-    private void autoResizeColumns(TableView<?> table) {
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        table.getColumns().stream().forEach((column) ->
-                                            {
-                                                Text t = new Text(column.getText());
-                                                double max = t.getLayoutBounds().getWidth();
-                                                for (int i = 0; i < table.getItems().size(); i++) {
-                                                    if (column.getCellData(i) != null) {
-                                                        t = new Text(column.getCellData(i).toString());
-                                                        double calcwidth = t.getLayoutBounds().getWidth();
-                                                        if (calcwidth > max) {
-                                                            max = calcwidth;
-                                                        }
-                                                    }
-                                                }
-                                                column.setPrefWidth(max + 10.0d);
-                                            });
-    }
+
 }
