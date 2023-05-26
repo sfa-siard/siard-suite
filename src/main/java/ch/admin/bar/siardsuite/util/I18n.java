@@ -5,6 +5,7 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Labeled;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -64,6 +65,10 @@ public class I18n {
 
     public static void bind(StringProperty stringProperty, final String key, final Object... args) {
         stringProperty.bind(I18n.createStringBinding(key, args));
+    }
+
+    public static void bind(Labeled labeled, final String key, final Object... args) {
+        bind(labeled.textProperty(), key, args);
     }
 
     public static String getLocaleDate(final LocalDate date) {

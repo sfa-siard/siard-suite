@@ -10,15 +10,15 @@
         <HBox>
             <children>
                 <VBox fx:id="labels" prefWidth="270.0" prefHeight="400">
-                    <Label fx:id="labelName"/>
-                    <Label fx:id="labelPosition"/>
-                    <Label fx:id="labelMode"/>
-                    <Label fx:id="labelSqlType"/>
-                    <Label fx:id="labelUdtSchema"/>
-                    <Label fx:id="labelUdtName"/>
-                    <Label fx:id="labelOriginalDataType"/>
-                    <Label fx:id="labelCardinalityOfArrayParameter"/>
-                    <Label fx:id="labelDescription"/>
+                    <Label fx:id="name" styleClass="table-container-label-small"/>
+                    <Label fx:id="position" styleClass="table-container-label-small"/>
+                    <Label fx:id="mode" styleClass="table-container-label-small"/>
+                    <Label fx:id="sqlType" styleClass="table-container-label-small"/>
+                    <Label fx:id="udtSchema" styleClass="table-container-label-small"/>
+                    <Label fx:id="udtName" styleClass="table-container-label-small"/>
+                    <Label fx:id="originalDataType" styleClass="table-container-label-small"/>
+                    <Label fx:id="arrayParameterCardinality" styleClass="table-container-label-small"/>
+                    <Label fx:id="description" styleClass="table-container-label-small"/>
                 </VBox>
                 <VBox fx:id="texts" prefWidth="400.0" prefHeight="400"/>
             </children>

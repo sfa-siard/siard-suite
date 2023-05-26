@@ -671,13 +671,14 @@
     -fx-text-fill: siard-text-color-black;
     -fx-font-size: 14;
 }
-
+.container-title,
 .table-container-title {
     -fx-max-width: infinity;
     -fx-text-alignment: LEFT;
     -fx-alignment: CENTER_LEFT;
 }
 
+.container-label,
 .table-container-label {
     -fx-font-size: 12;
     -fx-text-fill: siard-text-color;

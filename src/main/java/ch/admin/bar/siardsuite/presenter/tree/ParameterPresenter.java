@@ -3,12 +3,12 @@ package ch.admin.bar.siardsuite.presenter.tree;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+
+import static ch.admin.bar.siardsuite.util.I18n.bind;
 
 public class ParameterPresenter extends TreePresenter {
 
@@ -18,6 +18,24 @@ public class ParameterPresenter extends TreePresenter {
     public VBox labels;
     @FXML
     public VBox texts;
+    @FXML
+    public Label name;
+    @FXML
+    public Label position;
+    @FXML
+    public Label mode;
+    @FXML
+    public Label sqlType;
+    @FXML
+    public Label udtSchema;
+    @FXML
+    public Label udtName;
+    @FXML
+    public Label originalDataType;
+    @FXML
+    public Label arrayParameterCardinality;
+    @FXML
+    public Label description;
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
@@ -25,19 +43,20 @@ public class ParameterPresenter extends TreePresenter {
         this.controller = controller;
         this.stage = stage;
 
-        initLabels();
+        bindLabels();
 
         model.populate(texts, wrapper.getDatabaseObject(), wrapper.getType());
     }
 
-    // TODO: maybe its not the best idea to concatenate/ magically fill the labels... message keys appear unused in message property files
-    private void initLabels() {
-        for (Node child : this.labels.getChildren()) {
-            if (child.getId().contains("label")) {
-                I18n.bind(((Label) child).textProperty(), "parameterContainer.column." + child.getId());
-                child.getStyleClass().add("table-container-label-small");
-            }
-        }
+    private void bindLabels() {
+        bind(name, "parameter.name");
+        bind(position, "parameter.position");
+        bind(mode, "parameter.mode");
+        bind(sqlType, "parameter.sqlType");
+        bind(udtSchema, "parameter.udtSchema");
+        bind(udtName, "parameter.udtName");
+        bind(originalDataType, "parameter.originalDataType");
+        bind(arrayParameterCardinality, "parameter.arrayParameterCardinality");
+        bind(description, "parameter.description");
     }
-
 }
