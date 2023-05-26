@@ -23,43 +23,18 @@ import java.util.stream.Collectors;
 
 public class Routine extends DatabaseObject implements WithColumns {
 
-
-    protected final String name;
-    protected final List<DatabaseColumn> columns = new ArrayList<>();
-    protected final String numberOfColumns;
-    protected final List<DatabaseRow> rows = new ArrayList<>();
-    protected final String numberOfRows;
     private final MetaRoutine metaRoutine;
-    private final String characterisics;
-    private final String specificName;
-    private final String returnType;
-    private final String numberOfParameters;
 
-    protected Routine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine) {
-        this(archive, schema, metaRoutine, false);
-    }
-
-    protected Routine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine,
-                      boolean onlyMetaData) {
+    protected Routine(MetaRoutine metaRoutine) {
         this.metaRoutine = metaRoutine;
-
-        name = metaRoutine.getName();
-        characterisics = metaRoutine.getCharacteristic();
-        specificName = metaRoutine.getSpecificName();
-        returnType = metaRoutine.getReturnType();
-        numberOfParameters = String.valueOf(metaRoutine.getMetaParameters());
-        for (int i = 0; i < metaRoutine.getMetaParameters(); i++) {
-            //  columns.add(new DatabaseRoutine(archive, schema, this, metaRoutine.getMetaParameter(i)));
-        }
-
-        // TODO: dont need these:
-        numberOfColumns = String.valueOf(columns.size());
-        numberOfRows = String.valueOf(metaRoutine.getMetaParameters());
     }
 
     @Override
     protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(name, numberOfRows, columns, rows);
+        visitor.visit(metaRoutine.getName(),
+                      String.valueOf(metaRoutine.getMetaParameters()),
+                      new ArrayList<>(),
+                      new ArrayList<>());
     }
 
     @Override
@@ -111,23 +86,23 @@ public class Routine extends DatabaseObject implements WithColumns {
 
     @Override
     public String name() {
-        return name;
+        return metaRoutine.getName();
     }
 
     public String characteristics() {
-        return characterisics;
+        return metaRoutine.getCharacteristic();
     }
 
     public String specificName() {
-        return specificName;
+        return metaRoutine.getSpecificName();
     }
 
     public String returnType() {
-        return returnType;
+        return metaRoutine.getSpecificName();
     }
 
     public String numberOfParameters() {
-        return numberOfParameters;
+        return String.valueOf(metaRoutine.getMetaParameters());
     }
 
     public List<MetaParameter> parameters() {

@@ -40,7 +40,7 @@ public class MetaSchemaFacade {
     public List<Routine> routines(SiardArchive archive, DatabaseSchema databaseSchema) {
         return IntStream.range(0, schema.getMetaSchema().getMetaRoutines())
                         .mapToObj(schema.getMetaSchema()::getMetaRoutine)
-                        .map(metaRoutine -> new Routine(archive, databaseSchema, metaRoutine))
+                        .map(metaRoutine -> new Routine(metaRoutine))
                         .collect(Collectors.toList());
     }
 
