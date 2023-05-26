@@ -195,4 +195,21 @@ public class SiardArchive extends DatabaseObject {
     public String name() {
         return archiveName;
     }
+
+    public List<User> users() {
+        return this.users;
+    }
+
+    public List<Privilige> priviliges() {
+        return this.priviliges;
+    }
+
+    public List<DatabaseSchema> schemas() {
+        return this.schemas;
+    }
+
+    public boolean onlyMetaData() {
+        return this.onlyMetaData;
+    }
 }
+

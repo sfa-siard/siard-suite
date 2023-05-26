@@ -8,8 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
 public class DatabaseColumn extends DatabaseObject {
 
@@ -42,7 +45,8 @@ public class DatabaseColumn extends DatabaseObject {
         String type = null;
         try {
             type = column.getType();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
         this.type = type;
         lobFolder = column.getLobFolder() != null ? column.getLobFolder().toString() : "";
         mimeType = column.getMimeType();
@@ -54,7 +58,8 @@ public class DatabaseColumn extends DatabaseObject {
         String cardinality = null;
         try {
             cardinality = String.valueOf(column.getCardinality());
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
         this.cardinality = cardinality;
         description = column.getDescription();
     }
@@ -64,7 +69,8 @@ public class DatabaseColumn extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView tableView, TreeContentView type) {}
+    protected void populate(TableView tableView, TreeContentView type) {
+    }
 
     @Override
     protected void populate(VBox vBox, TreeContentView type) {
@@ -158,4 +164,7 @@ public class DatabaseColumn extends DatabaseObject {
         return metaSearch(s);
     }
 
+    public String name() {
+        return this.name;
+    }
 }

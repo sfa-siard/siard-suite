@@ -120,4 +120,23 @@ public class DatabaseSchema extends DatabaseObject {
         return hits;
     }
 
+    public String name() {
+        return name;
+    }
+
+    public List<DatabaseType> types() {
+        return this.types;
+    }
+
+    public List<Routine> routines() {
+        return this.routines;
+    }
+
+    public List<DatabaseView> views() {
+        return this.views;
+    }
+
+    public List<DatabaseTable> tables() {
+        return this.tables;
+    }
 }

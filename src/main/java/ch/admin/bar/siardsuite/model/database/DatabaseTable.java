@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.*;
+import ch.admin.bar.siard2.api.RecordDispenser;
+import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -15,7 +16,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import java.io.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -97,7 +102,8 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                     loadRecords(recordDispenser);
                     tableView.setItems(rowItems());
                     tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
-                    tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE, event -> expand(recordDispenser, tableView));
+                    tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE,
+                                              event -> expand(recordDispenser, tableView));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -106,7 +112,8 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {}
+    protected void populate(VBox vbox, TreeContentView type) {
+    }
 
     private ObservableList<Map> colItems() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
@@ -181,7 +188,11 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         File destination = new File(directory.getAbsolutePath(), this.name + ".html");
         File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
         OutputStream outPutStream = new FileOutputStream(destination);
-        this.table.getParentSchema().getParentArchive().getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
+        this.table.getParentSchema()
+                  .getParentArchive()
+                  .getSchema(this.schema.name)
+                  .getTable(this.name)
+                  .exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
     }
 
@@ -212,5 +223,13 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     @Override
     public String name() {
         return name;
+    }
+
+    public List<DatabaseColumn> columns() {
+        return this.columns;
+    }
+
+    public String numberOfRows() {
+        return this.numberOfRows;
     }
 }

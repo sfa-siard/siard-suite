@@ -160,4 +160,8 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
         return hits;
     }
+
+    public List<DatabaseColumn> columns() {
+        return this.columns;
+    }
 }
