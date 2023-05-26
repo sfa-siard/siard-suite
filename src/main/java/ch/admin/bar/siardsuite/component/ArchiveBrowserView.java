@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ArchiveTreeView implements SiardArchiveVisitor {
+public class ArchiveBrowserView implements SiardArchiveVisitor {
 
 
     private final SiardArchive siardArchive;
@@ -38,7 +38,7 @@ public class ArchiveTreeView implements SiardArchiveVisitor {
     private final TreeView<TreeAttributeWrapper> treeView;
     private final Model model; // TODO: get rid of it asap
 
-    public ArchiveTreeView(SiardArchive siardArchive, TreeView<TreeAttributeWrapper> treeView, Model model) {
+    public ArchiveBrowserView(SiardArchive siardArchive, TreeView<TreeAttributeWrapper> treeView, Model model) {
         this.siardArchive = siardArchive;
         this.treeView = treeView;
         this.model = model;

@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.presenter.open;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.presenter.ArchivePresenter;
+import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.OPEN_PREVIEW;
 
-public class OpenPreviewPresenter extends ArchivePresenter {
+public class OpenPreviewPresenter extends ArchiveBrowserPresenter {
 
     @FXML
     public VBox container;

@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
-import ch.admin.bar.siardsuite.component.ArchiveTreeView;
+import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
@@ -28,7 +28,7 @@ import static ch.admin.bar.siardsuite.util.I18n.bind;
 /**
  * Presentes an archive - either when archiving a database (always only metadata) or when a SIARD Archive file was opened to browse the archive content
  */
-public class ArchivePresenter extends StepperPresenter {
+public class ArchiveBrowserPresenter extends StepperPresenter {
 
     @FXML
     protected TreeView<TreeAttributeWrapper> treeView;
@@ -51,7 +51,7 @@ public class ArchivePresenter extends StepperPresenter {
         this.stage = stage;
 
 
-        ArchiveTreeView archiveTreeView = new ArchiveTreeView(controller.getSiardArchive(), treeView, model);
+        ArchiveBrowserView archiveTreeView = new ArchiveBrowserView(controller.getSiardArchive(), treeView, model);
         archiveTreeView.init();
         this.refreshContentPane(archiveTreeView.rootItem().getValue());
 

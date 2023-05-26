@@ -1,11 +1,11 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.ArchiveTreeView;
+import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.ArchivePresenter;
+import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 
-public class ArchivePreviewPresenter extends ArchivePresenter {
+public class ArchivePreviewPresenter extends ArchiveBrowserPresenter {
     @FXML
     public VBox container;
     @FXML
@@ -50,7 +50,7 @@ public class ArchivePreviewPresenter extends ArchivePresenter {
         super.setListeners();
 
         stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED,
-                                event -> new ArchiveTreeView(controller.getSiardArchive(), treeView, model).init());
+                                event -> new ArchiveBrowserView(controller.getSiardArchive(), treeView, model).init());
 
         this.buttonsBox.next().setOnAction((event) -> stepper.next());
         this.buttonsBox.previous().setOnAction((event) -> {
