@@ -3,109 +3,60 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.MetaView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class DatabaseView extends DatabaseObject implements WithColumns {
-    protected final SiardArchive archive;
-    protected final DatabaseSchema schema;
+    public static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
+    public static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";
+    public static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE = "tableContainer.table.header.columnType";
+    public static final String POSITION = "index";
+    public static final String NAME = "name";
+    public static final String TYPE = "type";
     protected final MetaView view;
-    protected final boolean onlyMetaData;
-    protected final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
-    protected final String numberOfColumns;
-    protected final List<DatabaseRow> rows = new ArrayList<>();
-    protected final String numberOfRows;
-    protected int loadBatchSize = 50;
-    protected int lastRowLoadedIndex = -1;
-    protected final TreeContentView treeContentView = TreeContentView.TABLE;
+    private DatabaseSchema schema;
 
     protected DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView view) {
-        this(archive, schema, view, false);
-    }
-
-    protected DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView view, boolean onlyMetaData) {
-        this.archive = archive;
-        this.schema = schema;
         this.view = view;
-        this.onlyMetaData = onlyMetaData;
-        name = view.getName();
+        this.schema = schema;
 
         for (int i = 0; i < view.getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, this, view.getMetaColumn(i)));
         }
-        numberOfColumns = String.valueOf(columns.size());
-        numberOfRows = String.valueOf(view.getRows());
     }
 
     @Override
     public String name() {
-        return name;
+        return view.getName();
     }
 
     public String getNumberOfColumns() {
-        return numberOfColumns;
+        return String.valueOf(columns.size());
     }
 
     public String getNumberOfRows() {
-        return numberOfRows;
+        return String.valueOf(view.getRows());
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(name, numberOfRows, columns, rows);
+        visitor.visit(name(), getNumberOfRows(), columns, new ArrayList<>());
     }
 
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView != null) {
-            if (TreeContentView.COLUMNS.equals(type) || TreeContentView.VIEW.equals(type)) {
-                final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-                final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
-                final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-                col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.position"));
-                col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnName"));
-                col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnType"));
-                col0.setCellValueFactory(new MapValueFactory<>("index"));
-                col1.setCellValueFactory(new MapValueFactory<>("name"));
-                col2.setCellValueFactory(new MapValueFactory<>("type"));
-                tableView.getColumns().add(col0);
-                tableView.getColumns().add(col1);
-                tableView.getColumns().add(col2);
-                tableView.setItems(colItems());
-            } else if (TreeContentView.ROWS.equals(type)) {
-                lastRowLoadedIndex = -1;
-                final List<TableRow<Map>> rows = new ArrayList<>();
-                final Callback<TableView<Map>, TableRow<Map>> rowFactory = o -> {
-                    TableRow<Map> row = new TableRow<>();
-                    rows.add(row);
-                    return row;
-                };
-                tableView.setRowFactory(rowFactory);
-                final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-                col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
-                col0.setCellValueFactory(new MapValueFactory<>("index"));
-                tableView.getColumns().add(col0);
-                TableColumn<Map, StringProperty> col;
-                for (DatabaseColumn column : columns) {
-                    col = new TableColumn<>();
-                    col.setText(column.name);
-                    col.setCellValueFactory(new MapValueFactory<>(column.index));
-                    tableView.getColumns().add(col);
-                }
-            }
-        }
+        if (tableView == null) return;
+        if (!TreeContentView.COLUMNS.equals(type) && !TreeContentView.VIEW.equals(type)) return;
+        tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, POSITION));
+        tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME, NAME));
+        tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE, TYPE));
+        tableView.setItems(colItems());
     }
 
     @Override
@@ -124,30 +75,18 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         return items;
     }
 
-    private ObservableList<Map> rowItems() {
-        final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseRow row : rows) {
-            Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(Integer.parseInt(row.index) + 1));
-            for (DatabaseCell cell : row.cells) {
-                item.put(cell.index, cell.value);
-            }
-            items.add(item);
-        }
-        return items;
-    }
 
     private TreeSet<MetaSearchHit> metaSearch(String s) {
         TreeSet<MetaSearchHit> hits = new TreeSet<>();
         final List<String> nodeIds = new ArrayList<>();
-        if (contains(name, s)) {
+        if (contains(this.name(), s)) {
             nodeIds.add("name");
         }
         if (nodeIds.size() > 0) {
             List<MetaSearchHit> metaSearchHits = new ArrayList<>();
-            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", View " + name,
+            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", View " + view.getName(),
                                                  this,
-                                                 treeContentView,
+                                                 TreeContentView.VIEW,
                                                  nodeIds));
             hits = new TreeSet<>(
                     metaSearchHits);

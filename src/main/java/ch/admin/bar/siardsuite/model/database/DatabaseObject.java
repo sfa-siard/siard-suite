@@ -1,9 +1,13 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.util.Map;
@@ -38,5 +42,12 @@ public abstract class DatabaseObject {
         Label label = new Label(value != null && !value.isEmpty() ? value : "-");
         label.setId(id);
         return label;
+    }
+
+    protected TableColumn<Map, ?> createTableColumn(String label, String key) {
+        final TableColumn<Map, StringProperty> column = new TableColumn<>();
+        I18n.bind(column.textProperty(), label);
+        column.setCellValueFactory(new MapValueFactory<>(key));
+        return column;
     }
 }

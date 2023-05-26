@@ -53,13 +53,6 @@ public class Routine extends DatabaseObject implements WithColumns {
         }
     }
 
-    private TableColumn<Map, ?> createTableColumn(String label, String key) {
-        final TableColumn<Map, StringProperty> column = new TableColumn<>();
-        I18n.bind(column.textProperty(), label);
-        column.setCellValueFactory(new MapValueFactory<>(key));
-        return column;
-    }
-
     private ObservableList<Map> colItems() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         new MetaRoutineFacade(metaRoutine).parameters()
