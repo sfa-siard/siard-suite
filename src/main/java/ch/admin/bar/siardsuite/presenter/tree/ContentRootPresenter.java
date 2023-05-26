@@ -24,7 +24,7 @@ import static ch.admin.bar.siardsuite.util.StringUtils.emptyApiNull;
  * Represents the content root of the tree view of a SIARD Archive displaying general information
  * of the database and siard archive, e.g. SIARD Format Version, Database Name and product and other general informations.
  */
-public class ContentRootPresenter extends TreePresenter implements SiardArchiveMetaDataVisitor {
+public class ContentRootPresenter extends DetailsPresenter implements SiardArchiveMetaDataVisitor {
 
     @FXML
     public VBox container;
@@ -60,6 +60,11 @@ public class ContentRootPresenter extends TreePresenter implements SiardArchiveM
         initializeLabels();
 
         this.model.provideDatabaseArchiveMetaDataProperties(this);
+    }
+
+    @Override
+    protected void bindLabels() {
+
     }
 
     // Dynamically initialize labels from ch/admin/bar/siardsuite/fxml/tree/content-root.fxml based on the id!

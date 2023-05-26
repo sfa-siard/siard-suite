@@ -7,7 +7,7 @@ import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
+import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -106,10 +106,15 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
         if (model.getCurrentPreviewPresenter() != null) {
             stage.closeDialog();
             try {
-                FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView().getViewName()));
+                FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView()
+                                                                                         .getViewName()));
                 Node node = loader.load();
                 model.getCurrentPreviewPresenter().getContentPane().getChildren().setAll(node);
-                loader.<TreePresenter>getController().init(controller, model, stage, new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
+                loader.<DetailsPresenter>getController()
+                      .init(controller,
+                            model,
+                            stage,
+                            new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

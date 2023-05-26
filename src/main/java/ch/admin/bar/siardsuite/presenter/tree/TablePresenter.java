@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-public class TablePresenter extends TreePresenter implements SiardArchiveVisitor {
+public class TablePresenter extends DetailsPresenter implements SiardArchiveVisitor {
 
     @FXML
     public Label nameLabel;
@@ -52,6 +52,11 @@ public class TablePresenter extends TreePresenter implements SiardArchiveVisitor
         tableContainer.prefHeightProperty().bind(stage.heightProperty().subtract(500.0));
         tableView.autosize();
         autoResizeColumns(tableView);
+    }
+
+    @Override
+    protected void bindLabels() {
+
     }
 
 

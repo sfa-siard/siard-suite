@@ -9,8 +9,8 @@ import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
-import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -156,7 +156,8 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
             List<MetaParameter> parameters = routine.parameters();
             parametersItem = TreeItemFactory.create("archive.tree.view.node.parameters",
-                                                    TreeContentView.COLUMNS, // TODO: maybe create treeContentView.PARAMETERS?
+                                                    TreeContentView.COLUMNS,
+                                                    // TODO: maybe create treeContentView.PARAMETERS?
                                                     routine,
                                                     parameters);
 
@@ -290,7 +291,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.getType().getViewName()));
             Node container = loader.load();
             contentPane.getChildren().setAll(container);
-            loader.<TreePresenter>getController().init(this.controller, model, this.stage, wrapper);
+            loader.<DetailsPresenter>getController().init(this.controller, model, this.stage, wrapper);
             tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
             I18n.bind(this.titleTableContainer.textProperty(), wrapper.getType().getViewTitle());
             contentPane.prefWidthProperty().bind(rightTableBox.widthProperty());
