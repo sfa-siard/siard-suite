@@ -70,7 +70,7 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView != null) {
-            if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
+            if (TreeContentView.COLUMNS.equals(type) || TreeContentView.VIEW.equals(type)) {
                 final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
                 final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
                 final TableColumn<Map, StringProperty> col2 = new TableColumn<>();

@@ -146,11 +146,11 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
         routinesItem = TreeItemFactory.create("archive.tree.view.node.routines",
                                               TreeContentView.ROUTINES,
                                               schema,
-                                              views);
+                                              routines);
 
         for (Routine routine : routines) {
             model.provideDatabaseArchiveProperties(this, routine);
-            routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.VIEW, routine));
+            routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.ROUTINE, routine));
 
             columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
                                                  TreeContentView.COLUMNS,
