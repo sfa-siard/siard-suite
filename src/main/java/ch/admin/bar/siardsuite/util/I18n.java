@@ -6,6 +6,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Labeled;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -69,6 +71,13 @@ public class I18n {
 
     public static void bind(Labeled labeled, final String key, final Object... args) {
         bind(labeled.textProperty(), key, args);
+    }
+
+    public static void bind(TextFlow textFlow, String prefix, String orientation) {
+        for (int i = 0; i < textFlow.getChildren().size(); i++) {
+            Text text = (Text) textFlow.getChildren().get(i);
+            bind(text.textProperty(), prefix + orientation + ".text" + i);
+        }
     }
 
     public static String getLocaleDate(final LocalDate date) {

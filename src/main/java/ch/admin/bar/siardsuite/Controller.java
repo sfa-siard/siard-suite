@@ -6,6 +6,8 @@ import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
@@ -24,9 +26,7 @@ public class Controller {
     private Archive tmpArchive;
     private DatabaseLoadService databaseLoadService;
     private DatabaseUploadService databaseUploadService;
-
     private Workflow workflow;
-
     public String recentDatabaseConnection;
 
     public Controller(Model model) {
@@ -42,7 +42,7 @@ public class Controller {
     ) throws SQLException {
         tmpArchive = model.initArchive();
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(tmpArchive, onlyMetaData);
+                                                            .createDatabaseLoader(tmpArchive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -52,7 +52,7 @@ public class Controller {
                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
         final Archive archive = model.initArchive(target, onlyMetaData);
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(archive, onlyMetaData);
+                                                            .createDatabaseLoader(archive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -109,9 +109,6 @@ public class Controller {
         return workflow;
     }
 
-    public void setWorkflow(Workflow workflow) {
-        this.workflow = workflow;
-    }
 
     public void uploadArchive(EventHandler<WorkerStateEvent> onSuccess,
                               EventHandler<WorkerStateEvent> onFailure) throws SQLException {
@@ -167,10 +164,6 @@ public class Controller {
         return this.model.getFailure().stacktrace();
     }
 
-    public void clearSiardArchive() {
-        this.model.clearSiardArchive();
-    }
-
     public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
                                       String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
         this.model.updateArchiveMetaData(
@@ -182,5 +175,26 @@ public class Controller {
                 archiverContact,
                 lobFolder,
                 targetArchive);
+    }
+
+    public void initializeWorkflow(Workflow workflow, RootStage stage) {
+        this.model.clearSiardArchive();
+        this.workflow = workflow;
+        stage.openDialog(View.forWorkflow(workflow));
+    }
+
+    public void initializeExport(RootStage stage) {
+        this.workflow = Workflow.EXPORT;
+        stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
+    }
+
+    public void initializeUpload(RootStage stage) {
+        this.workflow = Workflow.UPLOAD;
+        stage.openDialog(View.EXPORT_SELECT_TABLES);
+    }
+
+    public void start(RootStage stage) {
+        this.model.clearSiardArchive();
+        stage.navigate(View.START);
     }
 }

@@ -3,8 +3,6 @@ package ch.admin.bar.siardsuite.presenter;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.animation.Animation;
 import javafx.animation.PathTransition;
@@ -13,40 +11,40 @@ import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 import static ch.admin.bar.siardsuite.Workflow.*;
+import static ch.admin.bar.siardsuite.util.I18n.bind;
 
 public class StartPresenter extends Presenter {
 
     @FXML
-    public ImageView dbImg;
+    private ImageView dbImg;
     @FXML
-    public ImageView archiveImg;
+    private ImageView archiveImg;
     @FXML
-    public ImageView dbRightImg;
+    private ImageView dbRightImg;
     @FXML
-    public ImageView exportImg;
+    private ImageView exportImg;
     @FXML
-    public TextFlow flowCenter;
+    private TextFlow flowCenter;
     @FXML
-    public TextFlow flowRight;
+    private TextFlow flowRight;
     @FXML
-    public TextFlow flowLeft;
+    private TextFlow flowLeft;
     @FXML
-    public ImageView archiveBubble;
+    private ImageView archiveBubble;
     @FXML
-    public ImageView archiveArrow;
+    private ImageView archiveArrow;
     @FXML
-    public ImageView uploadArrow;
+    private ImageView uploadArrow;
     @FXML
-    public ImageView uploadBubble;
+    private ImageView uploadBubble;
     @FXML
-    public ImageView exportArrow;
+    private ImageView exportArrow;
     @FXML
-    public ImageView exportBubble;
+    private ImageView exportBubble;
     @FXML
     private Button archive;
     @FXML
@@ -56,7 +54,7 @@ public class StartPresenter extends Presenter {
     @FXML
     private Button open;
 
-    final PathTransition transition = new PathTransition();
+    private final PathTransition transition = new PathTransition();
 
     public void init(Controller controller, Model model, RootStage stage) {
         this.model = model;
@@ -65,44 +63,24 @@ public class StartPresenter extends Presenter {
 
         resetImageViews();
         setListener();
-        bindTextFlows(flowLeft, "left");
-        bindTextFlows(flowRight, "right");
-        bindTextFlows(flowCenter, "center");
-        I18n.bind(archive.textProperty(), "button.archive");
-        I18n.bind(upload.textProperty(), "button.upload");
-        I18n.bind(export.textProperty(), "button.export");
-        I18n.bind(open.textProperty(), "button.open");
+        bindLabels();
     }
 
-    private void bindTextFlows(TextFlow textFlow, String orientation) {
-        for (int i = 0; i < textFlow.getChildren().size(); i++) {
-            Text text = (Text) textFlow.getChildren().get(i);
-            I18n.bind(text.textProperty(), "start.view." + orientation + ".text" + i);
-        }
+    private void bindLabels() {
+        bind(flowLeft, "start.view.", "left");
+        bind(flowRight, "start.view.", "right");
+        bind(flowCenter, "start.view.", "center");
+        bind(archive, "button.archive");
+        bind(upload, "button.upload");
+        bind(export, "button.export");
+        bind(open, "button.open");
     }
 
     private void setListener() {
-        this.archive.setOnAction(event -> {
-            this.controller.clearSiardArchive();
-            this.controller.setWorkflow(ARCHIVE);
-            stage.openDialog(View.ARCHIVE_DB_DIALOG);
-        });
-        this.upload.setOnAction(event -> {
-            this.controller.clearSiardArchive();
-            this.controller.setWorkflow(UPLOAD);
-            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
-        });
-        this.export.setOnAction(event -> {
-            this.controller.clearSiardArchive();
-            this.controller.setWorkflow(EXPORT);
-            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
-
-        });
-        this.open.setOnAction(event -> {
-            this.controller.clearSiardArchive();
-            this.controller.setWorkflow(OPEN);
-            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
-        });
+        this.archive.setOnAction(event -> this.controller.initializeWorkflow(ARCHIVE, stage));
+        this.upload.setOnAction(event -> this.controller.initializeWorkflow(UPLOAD, stage));
+        this.export.setOnAction(event -> this.controller.initializeWorkflow(EXPORT, stage));
+        this.open.setOnAction(event -> this.controller.initializeWorkflow(OPEN, stage));
 
         archive.setOnMouseEntered(event -> {
             dbImg.setImage(Icon.siardDbRed);
