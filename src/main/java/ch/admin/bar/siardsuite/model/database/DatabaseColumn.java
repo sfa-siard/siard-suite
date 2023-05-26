@@ -1,11 +1,11 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaColumn;
+import ch.admin.bar.siardsuite.component.SiardLabelContainer;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
@@ -74,21 +74,19 @@ public class DatabaseColumn extends DatabaseObject {
 
     @Override
     protected void populate(VBox vBox, TreeContentView type) {
-        List<Label> labels = new ArrayList<>();
-        labels.add(createLabel(name, "name"));
-        labels.add(createLabel(index, "index"));
-        labels.add(createLabel(lobFolder, "lobFolder"));
-        labels.add(createLabel(mimeType, "mimeType"));
-        labels.add(createLabel(this.type, "type"));
-        labels.add(createLabel(userDefinedTypeSchema, "userDefinedTypeSchema"));
-        labels.add(createLabel(userDefinedTypeName, "userDefinedTypeName"));
-        labels.add(createLabel(originalType, "originalType"));
-        labels.add(createLabel(isNullable, "isNullable"));
-        labels.add(createLabel(defaultValue, "defaultValue"));
-        labels.add(createLabel(cardinality, "cardinality"));
-        labels.add(createLabel(description, "description"));
+        new SiardLabelContainer(vBox).withLabel(name, "name")
+                                     .withLabel(index, "index")
+                                     .withLabel(lobFolder, "lobFolder")
+                                     .withLabel(mimeType, "mimeType")
+                                     .withLabel(this.type, "type")
+                                     .withLabel(userDefinedTypeSchema, "userDefinedTypeSchema")
+                                     .withLabel(userDefinedTypeName, "userDefinedTypeName")
+                                     .withLabel(originalType, "originalType")
+                                     .withLabel(isNullable, "isNullable")
+                                     .withLabel(defaultValue, "defaultValue")
+                                     .withLabel(cardinality, "cardinality")
+                                     .withLabel(description, "description");
 
-        vBox.getChildren().addAll(labels);
         for (Node node : vBox.getChildren()) {
             node.getStyleClass().add("table-container-label-small");
         }
@@ -142,5 +140,18 @@ public class DatabaseColumn extends DatabaseObject {
 
     public String name() {
         return this.name;
+    }
+
+    public String index() {
+        return index;
+    }
+
+    public String type() {
+        return type;
+    }
+
+    public String cardinality() {
+        if (cardinality.equals("-1")) return "";
+        return cardinality;
     }
 }

@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaView;
+import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -13,12 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class DatabaseView extends DatabaseObject implements WithColumns {
-    public static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
-    public static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";
-    public static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE = "tableContainer.table.header.columnType";
-    public static final String POSITION = "index";
-    public static final String NAME = "name";
-    public static final String TYPE = "type";
+
     protected final MetaView view;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     private DatabaseSchema schema;
@@ -53,10 +49,11 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
     protected void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null) return;
         if (!TreeContentView.COLUMNS.equals(type) && !TreeContentView.VIEW.equals(type)) return;
-        tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, POSITION));
-        tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME, NAME));
-        tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE, TYPE));
-        tableView.setItems(colItems());
+        new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, POSITION)
+                                     .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME, NAME)
+                                     .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE, TYPE)
+                                     .withColumn(TABLE_CONTAINER_TABLE_HEADER_CARDINALITY, CARDINALITY)
+                                     .withItems(colItems());
     }
 
     @Override
@@ -67,9 +64,10 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         for (DatabaseColumn column : columns) {
             Map<String, String> item = new HashMap<>();
-            item.put("index", column.index);
-            item.put("name", column.name);
-            item.put("type", column.type);
+            item.put(POSITION, column.index());
+            item.put(NAME, column.name());
+            item.put(TYPE, column.type());
+            item.put(CARDINALITY, column.cardinality());
             items.add(item);
         }
         return items;
@@ -103,4 +101,13 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
     public List<DatabaseColumn> columns() {
         return this.columns;
     }
+
+    private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.viewName";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE = "tableContainer.table.header.columnType";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_CARDINALITY = "tableContainer.view.header.cardinality";
+    private static final String POSITION = "index";
+    private static final String NAME = "name";
+    private static final String TYPE = "type";
+    private static final String CARDINALITY = "cardinality";
 }

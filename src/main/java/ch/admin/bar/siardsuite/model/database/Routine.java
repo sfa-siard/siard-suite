@@ -2,17 +2,14 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siard2.api.MetaRoutine;
+import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.MetaParameterFacade;
 import ch.admin.bar.siardsuite.model.facades.MetaRoutineFacade;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -40,17 +37,13 @@ public class Routine extends DatabaseObject implements WithColumns {
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null) return;
-        if (TreeContentView.COLUMNS.equals(type) || TreeContentView.ROUTINE.equals(type)) {
-            tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, POSITION));
-            tableView.getColumns()
-                     .add(createTableColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_NAME, PARAMETER_NAME));
-            tableView.getColumns()
-                     .add(createTableColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_MODE, PARAMETER_MODE));
-            tableView.getColumns()
-                     .add(createTableColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_TYPE, PARAMETER_TYPE));
-            tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_PARAMETER_HEADER_CARDINALITY, CARDINALITY));
-            tableView.setItems(colItems());
-        }
+        if (!TreeContentView.COLUMNS.equals(type) && !TreeContentView.ROUTINE.equals(type)) return;
+        new SiardTableView(tableView)
+                .withColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, POSITION)
+                .withColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_NAME, PARAMETER_NAME)
+                .withColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_MODE, PARAMETER_MODE)
+                .withColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_TYPE, PARAMETER_TYPE)
+                .withColumn(TABLE_CONTAINER_PARAMETER_HEADER_CARDINALITY, CARDINALITY).withItems(colItems());
     }
 
     private ObservableList<Map> colItems() {
