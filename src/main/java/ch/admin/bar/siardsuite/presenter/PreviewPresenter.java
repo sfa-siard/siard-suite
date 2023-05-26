@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.presenter;
 
+import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.Icon;
@@ -32,6 +33,7 @@ import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PreviewPresenter extends StepperPresenter implements SiardArchiveVisitor {
 
@@ -152,19 +154,19 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             model.provideDatabaseArchiveProperties(this, routine);
             routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.ROUTINE, routine));
 
+            List<MetaParameter> parameters = routine.parameters();
             parametersItem = TreeItemFactory.create("archive.tree.view.node.parameters",
-                                                    TreeContentView.COLUMNS,
+                                                    TreeContentView.COLUMNS, // TODO: maybe create treeContentView.PARAMETERS?
                                                     routine,
-                                                    columns);
+                                                    parameters);
 
-
-            for (DatabaseColumn column : columns) {
-                model.provideDatabaseArchiveProperties(this, column);
-
-                columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
-                parametersItem.getChildren().add(columnItem);
-            }
-
+            parametersItem.getChildren().addAll(parameters.stream().map(metaParameter ->
+                                                                                new TreeItem<>(new TreeAttributeWrapper(
+                                                                                        metaParameter.getName(),
+                                                                                        TreeContentView.PARAMETER,
+                                                                                        new DatabaseParameter(
+                                                                                                metaParameter)))
+            ).collect(Collectors.toList()));
             routineItem.getChildren().add(parametersItem);
             routinesItem.getChildren().add(routineItem);
         }

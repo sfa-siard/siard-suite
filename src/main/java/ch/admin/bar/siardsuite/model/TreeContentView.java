@@ -71,8 +71,12 @@ public enum TreeContentView {
     ROUTINE("fxml/tree/table.fxml",
             "tableContainer.title.routine",
             "tableContainer.labelRoutine",
-            "tableContainer.labelNumberOfRows",
-            true);
+            "tableContainer.labelNumberOfRows", true),
+    PARAMETER("fxml/tree/parameter.fxml",
+              "tableContainer.title.parameter",
+              null,
+              null,
+              false);
 
     private final String viewName;
     private final String viewTitle;

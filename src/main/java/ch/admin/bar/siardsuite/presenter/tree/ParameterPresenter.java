@@ -10,7 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class ColumnPresenter extends TreePresenter {
+public class ParameterPresenter extends TreePresenter {
 
     @FXML
     public VBox container;
@@ -18,7 +18,6 @@ public class ColumnPresenter extends TreePresenter {
     public VBox labels;
     @FXML
     public VBox texts;
-
 
     @Override
     public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
@@ -31,12 +30,14 @@ public class ColumnPresenter extends TreePresenter {
         model.populate(texts, wrapper.getDatabaseObject(), wrapper.getType());
     }
 
+    // TODO: maybe its not the best idea to concatenate/ magically fill the labels... message keys appear unused in message property files
     private void initLabels() {
         for (Node child : this.labels.getChildren()) {
             if (child.getId().contains("label")) {
-                I18n.bind(((Label) child).textProperty(), "tableContainer.column." + child.getId());
+                I18n.bind(((Label) child).textProperty(), "parameterContainer.column." + child.getId());
                 child.getStyleClass().add("table-container-label-small");
             }
         }
     }
+
 }

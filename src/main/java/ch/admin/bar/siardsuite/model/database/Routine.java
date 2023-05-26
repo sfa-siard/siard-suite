@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siard2.api.MetaRoutine;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.MetaParameterFacade;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Routine extends DatabaseObject implements WithColumns {
     protected final String name;
@@ -160,5 +162,9 @@ public class Routine extends DatabaseObject implements WithColumns {
 
     public String numberOfParameters() {
         return numberOfParameters;
+    }
+
+    public List<MetaParameter> parameters() {
+        return new MetaRoutineFacade(metaRoutine).parameters().collect(Collectors.toList());
     }
 }
