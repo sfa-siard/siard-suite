@@ -9,7 +9,6 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
@@ -21,13 +20,34 @@ import static ch.admin.bar.siardsuite.util.StringUtils.emptyApiNull;
 
 
 /**
- * Represents the content root of the tree view of a SIARD Archive displaying general information
- * of the database and siard archive, e.g. SIARD Format Version, Database Name and product and other general informations.
+ * Show details of the SIARD archive.
  */
-public class ContentRootPresenter extends DetailsPresenter implements SiardArchiveMetaDataVisitor {
+public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardArchiveMetaDataVisitor {
 
     @FXML
-    public VBox container;
+    private VBox container;
+    @FXML
+    private Label labelFormat;
+    @FXML
+    private Label labelDb;
+    @FXML
+    private Label labelProduct;
+    @FXML
+    private Label labelConnection;
+    @FXML
+    private Label labelUsername;
+    @FXML
+    private Label labelDesc;
+    @FXML
+    private Label labelOwner;
+    @FXML
+    private Label labelCreationDate;
+    @FXML
+    private Label labelArchiveDate;
+    @FXML
+    private Label labelArchiveUser;
+    @FXML
+    private Label labelContactArchiveUser;
     @FXML
     private Label siardFormatVersion;
     @FXML
@@ -57,24 +77,26 @@ public class ContentRootPresenter extends DetailsPresenter implements SiardArchi
         this.controller = controller;
         this.stage = stage;
 
-        initializeLabels();
+        bindLabels();
 
+        // TODO: align pattern with other SubClasses of DetailsPresenter
         this.model.provideDatabaseArchiveMetaDataProperties(this);
     }
 
     @Override
     protected void bindLabels() {
+        I18n.bind(labelFormat, "archiveDetails.labelFormat");
+        I18n.bind(labelDb, "archiveDetails.labelDb");
+        I18n.bind(labelProduct, "archiveDetails.labelProduct");
+        I18n.bind(labelConnection, "archiveDetails.labelConnection");
+        I18n.bind(labelUsername, "archiveDetails.labelUsername");
+        I18n.bind(labelDesc, "archiveDetails.labelDesc");
+        I18n.bind(labelOwner, "archiveDetails.labelOwner");
+        I18n.bind(labelCreationDate, "archiveDetails.labelCreationDate");
+        I18n.bind(labelArchiveDate, "archiveDetails.labelArchiveDate");
+        I18n.bind(labelArchiveUser, "archiveDetails.labelArchiveUser");
+        I18n.bind(labelContactArchiveUser, "archiveDetails.labelContactArchiveUser");
 
-    }
-
-    // Dynamically initialize labels from ch/admin/bar/siardsuite/fxml/tree/content-root.fxml based on the id!
-    private void initializeLabels() {
-        this.container.getChildren().forEach(this::initLabel);
-    }
-
-    private void initLabel(Node node) {
-        if (!node.getId().contains("label")) return;
-        I18n.bind(((Label) node).textProperty(), "tableContainer." + node.getId());
     }
 
     @Override
