@@ -6,7 +6,7 @@ import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
+import ch.admin.bar.siardsuite.presenter.ArchivePresenter;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -26,7 +26,7 @@ public class Model {
     private View currentView = View.START;
     private TableSearchBase currentTableSearchBase = null;
     private TableSearchButton currentTableSearchButton = null;
-    private PreviewPresenter currentPreviewPresenter = null;
+    private ArchivePresenter currentPreviewPresenter = null;
     private String currentTableSearch = null;
     private String currentMetaSearch = null;
     private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
@@ -62,11 +62,11 @@ public class Model {
         currentTableSearchButton = new TableSearchButton(button, active);
     }
 
-    public PreviewPresenter getCurrentPreviewPresenter() {
+    public ArchivePresenter getCurrentPreviewPresenter() {
         return currentPreviewPresenter;
     }
 
-    public void setCurrentPreviewPresenter(PreviewPresenter presenter) {
+    public void setCurrentPreviewPresenter(ArchivePresenter presenter) {
         currentPreviewPresenter = presenter;
     }
 

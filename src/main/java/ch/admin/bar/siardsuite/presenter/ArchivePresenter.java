@@ -35,7 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PreviewPresenter extends StepperPresenter implements SiardArchiveVisitor {
+/**
+ * Presentes an archive - either when archiving a database (always only metadata) or when a SIARD Archive file was opened to browse the archive content
+ */
+public class ArchivePresenter extends StepperPresenter implements SiardArchiveVisitor {
 
     private final StringProperty archiveName = new SimpleStringProperty();
     private boolean onlyMetaData = false;
