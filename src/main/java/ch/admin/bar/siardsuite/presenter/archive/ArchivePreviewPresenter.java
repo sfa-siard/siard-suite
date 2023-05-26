@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.ArchiveTreeView;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -48,7 +49,8 @@ public class ArchivePreviewPresenter extends ArchivePresenter {
     protected void setListeners(MFXStepper stepper) {
         super.setListeners();
 
-        stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initTreeView());
+        stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED,
+                                event -> new ArchiveTreeView(controller.getSiardArchive(), treeView, model).init());
 
         this.buttonsBox.next().setOnAction((event) -> stepper.next());
         this.buttonsBox.previous().setOnAction((event) -> {
