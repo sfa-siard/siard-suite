@@ -138,7 +138,7 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
 
     private TreeItem<TreeAttributeWrapper> createRoutinesItem(DatabaseSchema schema) {
         TreeItem<TreeAttributeWrapper> rowsItem;
-        TreeItem<TreeAttributeWrapper> columnsItem;
+        TreeItem<TreeAttributeWrapper> parametersItem;
         TreeItem<TreeAttributeWrapper> routinesItem;
         TreeItem<TreeAttributeWrapper> routineItem;
         TreeItem<TreeAttributeWrapper> columnItem;
@@ -152,20 +152,20 @@ public class PreviewPresenter extends StepperPresenter implements SiardArchiveVi
             model.provideDatabaseArchiveProperties(this, routine);
             routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.ROUTINE, routine));
 
-            columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
-                                                 TreeContentView.COLUMNS,
-                                                 routine,
-                                                 columns);
+            parametersItem = TreeItemFactory.create("archive.tree.view.node.parameters",
+                                                    TreeContentView.COLUMNS,
+                                                    routine,
+                                                    columns);
 
 
             for (DatabaseColumn column : columns) {
                 model.provideDatabaseArchiveProperties(this, column);
 
                 columnItem = new TreeItem<>(new TreeAttributeWrapper(columnName, TreeContentView.COLUMN, column));
-                columnsItem.getChildren().add(columnItem);
+                parametersItem.getChildren().add(columnItem);
             }
 
-            routineItem.getChildren().add(columnsItem);
+            routineItem.getChildren().add(parametersItem);
             routinesItem.getChildren().add(routineItem);
         }
         return routinesItem;
