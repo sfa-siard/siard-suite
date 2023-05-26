@@ -14,8 +14,14 @@ import java.util.List;
 import java.util.Map;
 
 public class RoutinesTableViewPopulatorStrategy implements TableViewPopulatorStrategy<Routine> {
+    private final List<Routine> routines;
+
+    public RoutinesTableViewPopulatorStrategy(List<Routine> routines) {
+        this.routines = routines;
+    }
+
     @Override
-    public void populate(TableView<Map> tableView, List<Routine> routines, boolean onlyMetaData) {
+    public void populate(TableView<Map> tableView, boolean onlyMetaData) {
         tableView.getColumns().add(createColumn("tableContainer.table.header.row", "index"));
         tableView.getColumns().add(createColumn("tableContainer.routine.header.name", "name"));
         tableView.getColumns().add(createColumn("tableContainer.routine.header.specificName", "specificName"));

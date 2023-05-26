@@ -72,7 +72,6 @@ public class DatabaseTypes extends DatabaseObject {
 
     @Override
     protected void populate(VBox vBox, TreeContentView type) {
-
     }
 
     private class MapTypesVisitor implements TypeVisitor<Map<String, String>> {

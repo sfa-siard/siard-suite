@@ -22,10 +22,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Routine extends DatabaseObject implements WithColumns {
+
+
     protected final String name;
-    private final SiardArchive archive;
-    private final DatabaseSchema schema;
-    private final boolean onlyMetaData;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     protected final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
@@ -35,7 +34,6 @@ public class Routine extends DatabaseObject implements WithColumns {
     private final String specificName;
     private final String returnType;
     private final String numberOfParameters;
-    protected int lastRowLoadedIndex = -1;
 
     protected Routine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine) {
         this(archive, schema, metaRoutine, false);
@@ -43,10 +41,7 @@ public class Routine extends DatabaseObject implements WithColumns {
 
     protected Routine(SiardArchive archive, DatabaseSchema schema, MetaRoutine metaRoutine,
                       boolean onlyMetaData) {
-        this.archive = archive;
-        this.schema = schema;
         this.metaRoutine = metaRoutine;
-        this.onlyMetaData = onlyMetaData;
 
         name = metaRoutine.getName();
         characterisics = metaRoutine.getCharacteristic();
@@ -69,54 +64,25 @@ public class Routine extends DatabaseObject implements WithColumns {
 
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
-        // Seems to be the same as in RoutinesTableViewPopulator? or is it just similar?
         if (tableView == null) return;
         if (TreeContentView.COLUMNS.equals(type) || TreeContentView.ROUTINE.equals(type)) {
-            final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col3 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col4 = new TableColumn<>();
-            col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.position"));
-            col1.textProperty().bind(I18n.createStringBinding("tableContainer.parameter.header.parameterName"));
-            col2.textProperty().bind(I18n.createStringBinding("tableContainer.parameter.header.parameterMode"));
-            col3.textProperty().bind(I18n.createStringBinding("tableContainer.parameter.header.parameterType"));
-            col4.textProperty().bind(I18n.createStringBinding("tableContainer.parameter.header.cardinality"));
-            col0.setCellValueFactory(new MapValueFactory<>("position"));
-            col1.setCellValueFactory(new MapValueFactory<>("parameterName"));
-            col2.setCellValueFactory(new MapValueFactory<>("parameterMode"));
-            col3.setCellValueFactory(new MapValueFactory<>("parameterType"));
-            col4.setCellValueFactory(new MapValueFactory<>("cardinality"));
-
-            tableView.getColumns().add(col0);
-            tableView.getColumns().add(col1);
-            tableView.getColumns().add(col2);
-            tableView.getColumns().add(col3);
-            tableView.getColumns().add(col4);
+            tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, POSITION));
+            tableView.getColumns()
+                     .add(createTableColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_NAME, PARAMETER_NAME));
+            tableView.getColumns()
+                     .add(createTableColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_MODE, PARAMETER_MODE));
+            tableView.getColumns()
+                     .add(createTableColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_TYPE, PARAMETER_TYPE));
+            tableView.getColumns().add(createTableColumn(TABLE_CONTAINER_PARAMETER_HEADER_CARDINALITY, CARDINALITY));
             tableView.setItems(colItems());
+        }
+    }
 
-        } /*else if (TreeContentView.ROWS.equals(type)) {
-            lastRowLoadedIndex = -1;
-            final List<TableRow<Map>> rows = new ArrayList<>();
-            final Callback<TableView<Map>, TableRow<Map>> rowFactory = o -> {
-                TableRow<Map> row = new TableRow<>();
-                rows.add(row);
-                return row;
-            };
-            tableView.setRowFactory(rowFactory);
-            final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-            col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
-            col0.setCellValueFactory(new MapValueFactory<>("index"));
-            tableView.getColumns().add(col0);
-            TableColumn<Map, StringProperty> col;
-            // TODO: specific for routines....
-            for (DatabaseColumn column : columns) {
-                col = new TableColumn<>();
-                col.setText(column.name);
-                col.setCellValueFactory(new MapValueFactory<>(column.index));
-                tableView.getColumns().add(col);
-            }
-        }*/
+    private TableColumn<Map, ?> createTableColumn(String label, String key) {
+        final TableColumn<Map, StringProperty> column = new TableColumn<>();
+        I18n.bind(column.textProperty(), label);
+        column.setCellValueFactory(new MapValueFactory<>(key));
+        return column;
     }
 
     private ObservableList<Map> colItems() {
@@ -167,4 +133,15 @@ public class Routine extends DatabaseObject implements WithColumns {
     public List<MetaParameter> parameters() {
         return new MetaRoutineFacade(metaRoutine).parameters().collect(Collectors.toList());
     }
+
+    private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
+    private static final String TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_NAME = "tableContainer.parameter.header.parameterName";
+    private static final String TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_MODE = "tableContainer.parameter.header.parameterMode";
+    private static final String TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_TYPE = "tableContainer.parameter.header.parameterType";
+    private static final String TABLE_CONTAINER_PARAMETER_HEADER_CARDINALITY = "tableContainer.parameter.header.cardinality";
+    private static final String POSITION = "position";
+    private static final String PARAMETER_NAME = "parameterName";
+    private static final String PARAMETER_MODE = "parameterMode";
+    private static final String PARAMETER_TYPE = "parameterType";
+    private static final String CARDINALITY = "cardinality";
 }

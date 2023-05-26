@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.presenter.tree.RoutinesTableViewPopulatorStrategy;
+import ch.admin.bar.siardsuite.presenter.tree.TableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.presenter.tree.TablesTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.presenter.tree.ViewsTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -55,18 +56,17 @@ public class DatabaseSchema extends DatabaseObject {
 
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView != null && type != null) {
-            if (type.equals(TreeContentView.TABLES)) {
-                new TablesTableViewPopulatorStrategy().populate(tableView, tables, onlyMetaData);
-            }
-            if (type.equals(TreeContentView.VIEWS)) {
-                new ViewsTableViewPopulatorStrategy().populate(tableView, views, onlyMetaData);
-            }
+        if (tableView == null || type == null) return;
+        TableViewPopulatorStrategy strategy = getStrategy(type);
+        assert strategy != null;
+        strategy.populate(tableView, onlyMetaData);
+    }
 
-            if (type.equals(TreeContentView.ROUTINES)) {
-                new RoutinesTableViewPopulatorStrategy().populate(tableView, routines, onlyMetaData);
-            }
-        }
+    private TableViewPopulatorStrategy getStrategy(TreeContentView type) {
+        if (type.equals(TreeContentView.TABLES)) return new TablesTableViewPopulatorStrategy(tables);
+        if (type.equals(TreeContentView.VIEWS)) return new ViewsTableViewPopulatorStrategy(views);
+        if (type.equals(TreeContentView.ROUTINES)) return new RoutinesTableViewPopulatorStrategy(routines);
+        return null;
     }
 
 
@@ -106,8 +106,7 @@ public class DatabaseSchema extends DatabaseObject {
         if (nodeIds.size() > 0) {
             List<MetaSearchHit> metaSearchHits = new ArrayList<>();
             metaSearchHits.add(new MetaSearchHit("Schema " + name, this, treeContentView, nodeIds));
-            hits = new TreeSet<>(
-                    metaSearchHits);
+            hits = new TreeSet<>(metaSearchHits);
         }
         return hits;
     }

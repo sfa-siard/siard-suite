@@ -15,8 +15,14 @@ import java.util.Map;
 
 public class TablesTableViewPopulatorStrategy implements TableViewPopulatorStrategy<DatabaseTable> {
 
+    private final List<DatabaseTable> tables;
+
+    public TablesTableViewPopulatorStrategy(List<DatabaseTable> tables) {
+        this.tables = tables;
+    }
+
     @Override
-    public void populate(TableView<Map> tableView, List<DatabaseTable> tables, boolean onlyMetaData) {
+    public void populate(TableView<Map> tableView, boolean onlyMetaData) {
         final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
         final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
         final TableColumn<Map, StringProperty> col2 = new TableColumn<>();

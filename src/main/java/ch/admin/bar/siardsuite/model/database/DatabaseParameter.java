@@ -53,9 +53,5 @@ public class DatabaseParameter extends DatabaseObject {
         }
     }
 
-    private static Label createLabel(String value, String id) {
-        Label label = new Label(value != null && !value.isEmpty() ? value : "-");
-        label.setId(id);
-        return label;
-    }
+
 }

@@ -15,7 +15,13 @@ import java.util.Map;
 
 public class ViewsTableViewPopulatorStrategy implements TableViewPopulatorStrategy<DatabaseView> {
 
-    public void populate(TableView<Map> tableView, List<DatabaseView> tables, boolean onlyMetaData) {
+    private final List<DatabaseView> views;
+
+    public ViewsTableViewPopulatorStrategy(List<DatabaseView> views) {
+        this.views = views;
+    }
+
+    public void populate(TableView<Map> tableView, boolean onlyMetaData) {
         final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
         final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
         final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
@@ -34,7 +40,7 @@ public class ViewsTableViewPopulatorStrategy implements TableViewPopulatorStrate
             col3.setCellValueFactory(new MapValueFactory<>("numberOfRows"));
             tableView.getColumns().add(col3);
         }
-        tableView.setItems(items(tables));
+        tableView.setItems(items(views));
     }
 
     private ObservableList<Map> items(List<DatabaseView> views) {

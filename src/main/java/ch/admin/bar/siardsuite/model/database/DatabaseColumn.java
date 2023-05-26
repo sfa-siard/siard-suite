@@ -75,42 +75,18 @@ public class DatabaseColumn extends DatabaseObject {
     @Override
     protected void populate(VBox vBox, TreeContentView type) {
         List<Label> labels = new ArrayList<>();
-        Label label = new Label(name != null && !name.isEmpty() ? name : "-");
-        label.setId("name");
-        labels.add(label);
-        label = new Label(index != null && !index.isEmpty() ? index : "-");
-        label.setId("index");
-        labels.add(label);
-        label = new Label(lobFolder != null && !lobFolder.isEmpty() ? lobFolder : "-");
-        label.setId("lobFolder");
-        labels.add(label);
-        label = new Label(mimeType != null && !mimeType.isEmpty() ? mimeType : "-");
-        label.setId("mimeType");
-        labels.add(label);
-        label = new Label(this.type != null && !this.type.isEmpty() ? this.type : "-");
-        label.setId("type");
-        labels.add(label);
-        label = new Label(userDefinedTypeSchema != null && !userDefinedTypeSchema.isEmpty() ? userDefinedTypeSchema : "-");
-        label.setId("userDefinedTypeSchema");
-        labels.add(label);
-        label = new Label(userDefinedTypeName != null && !userDefinedTypeName.isEmpty() ? userDefinedTypeName : "-");
-        label.setId("userDefinedTypeName");
-        labels.add(label);
-        label = new Label(originalType != null && !originalType.isEmpty() ? originalType : "-");
-        label.setId("originalType");
-        labels.add(label);
-        label = new Label(isNullable != null && !isNullable.isEmpty() ? isNullable : "-");
-        label.setId("isNullable");
-        labels.add(label);
-        label = new Label(defaultValue != null && !defaultValue.isEmpty() ? defaultValue : "-");
-        label.setId("defaultValue");
-        labels.add(label);
-        label = new Label(cardinality != null && !cardinality.isEmpty() ? cardinality : "-");
-        label.setId("cardinality");
-        labels.add(label);
-        label = new Label(description != null && !description.isEmpty() ? description : "-");
-        label.setId("description");
-        labels.add(label);
+        labels.add(createLabel(name, "name"));
+        labels.add(createLabel(index, "index"));
+        labels.add(createLabel(lobFolder, "lobFolder"));
+        labels.add(createLabel(mimeType, "mimeType"));
+        labels.add(createLabel(this.type, "type"));
+        labels.add(createLabel(userDefinedTypeSchema, "userDefinedTypeSchema"));
+        labels.add(createLabel(userDefinedTypeName, "userDefinedTypeName"));
+        labels.add(createLabel(originalType, "originalType"));
+        labels.add(createLabel(isNullable, "isNullable"));
+        labels.add(createLabel(defaultValue, "defaultValue"));
+        labels.add(createLabel(cardinality, "cardinality"));
+        labels.add(createLabel(description, "description"));
 
         vBox.getChildren().addAll(labels);
         for (Node node : vBox.getChildren()) {
