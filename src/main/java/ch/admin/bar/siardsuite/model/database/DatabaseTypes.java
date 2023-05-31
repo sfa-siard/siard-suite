@@ -1,14 +1,11 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
@@ -17,6 +14,18 @@ import java.util.Map;
 
 public class DatabaseTypes extends DatabaseObject {
 
+    public static final String TABLE_CONTAINER_TYPES_HEADER_NAME = "tableContainer.types.header.name";
+    public static final String TABLE_CONTAINER_TYPES_HEADER_CATEGORY = "tableContainer.types.header.category";
+    public static final String TABLE_CONTAINER_TYPES_HEADER_INSTANTIABLE = "tableContainer.types.header.instantiable";
+    public static final String TABLE_CONTAINER_TYPES_HEADER_FINAL = "tableContainer.types.header.final";
+    public static final String TABLE_CONTAINER_TYPES_HEADER_BASE = "tableContainer.types.header.base";
+    public static final String TABLE_CONTAINER_TYPES_HEADER_DESCRIPTION = "tableContainer.types.header.description";
+    public static final String NAME = "name";
+    public static final String CATEGORY = "category";
+    public static final String INSTANTIABLE = "instantiable";
+    public static final String FINAL = "final";
+    public static final String BASE = "base";
+    public static final String DESCRIPTION = "description";
     private List<DatabaseType> types;
 
     public DatabaseTypes(List<DatabaseType> types) {
@@ -29,36 +38,15 @@ public class DatabaseTypes extends DatabaseObject {
 
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView != null && type != null) {
-            final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col3 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col4 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col5 = new TableColumn<>();
-
-            col0.textProperty().bind(I18n.createStringBinding("tableContainer.types.header.name"));
-            col1.textProperty().bind(I18n.createStringBinding("tableContainer.types.header.category"));
-            col2.textProperty().bind(I18n.createStringBinding("tableContainer.types.header.instantiable"));
-            col3.textProperty().bind(I18n.createStringBinding("tableContainer.types.header.final"));
-            col4.textProperty().bind(I18n.createStringBinding("tableContainer.types.header.base"));
-            col5.textProperty().bind(I18n.createStringBinding("tableContainer.types.header.description"));
-
-            col0.setCellValueFactory(new MapValueFactory<>("name"));
-            col1.setCellValueFactory(new MapValueFactory<>("category"));
-            col2.setCellValueFactory(new MapValueFactory<>("instantiable"));
-            col3.setCellValueFactory(new MapValueFactory<>("final"));
-            col4.setCellValueFactory(new MapValueFactory<>("base"));
-            col5.setCellValueFactory(new MapValueFactory<>("description"));
-
-            tableView.getColumns().add(col0);
-            tableView.getColumns().add(col1);
-            tableView.getColumns().add(col2);
-            tableView.getColumns().add(col3);
-            tableView.getColumns().add(col4);
-            tableView.getColumns().add(col5);
-            tableView.setItems(items());
-        }
+        if (tableView == null || type == null) return;
+        new SiardTableView(tableView)
+                .withColumn(TABLE_CONTAINER_TYPES_HEADER_NAME, NAME)
+                .withColumn(TABLE_CONTAINER_TYPES_HEADER_CATEGORY, CATEGORY)
+                .withColumn(TABLE_CONTAINER_TYPES_HEADER_INSTANTIABLE, INSTANTIABLE)
+                .withColumn(TABLE_CONTAINER_TYPES_HEADER_FINAL, FINAL)
+                .withColumn(TABLE_CONTAINER_TYPES_HEADER_BASE, BASE)
+                .withColumn(TABLE_CONTAINER_TYPES_HEADER_DESCRIPTION, DESCRIPTION)
+                .withItems(items());
     }
 
     private ObservableList<Map> items() {
@@ -89,10 +77,7 @@ public class DatabaseTypes extends DatabaseObject {
             item.put("final", String.valueOf(isFinal));
             item.put("base", base);
             item.put("description", description);
-
-
             item.put("username", name);
-            item.put("description", description);
             return item;
         }
     }

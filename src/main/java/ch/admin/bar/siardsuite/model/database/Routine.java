@@ -22,7 +22,7 @@ public class Routine extends DatabaseObject implements WithColumns {
 
     private final MetaRoutine metaRoutine;
 
-    protected Routine(MetaRoutine metaRoutine) {
+    public Routine(MetaRoutine metaRoutine) {
         this.metaRoutine = metaRoutine;
     }
 
@@ -47,22 +47,22 @@ public class Routine extends DatabaseObject implements WithColumns {
     }
 
     private ObservableList<Map> colItems() {
-        final ObservableList<Map> items = FXCollections.observableArrayList();
-        new MetaRoutineFacade(metaRoutine).parameters()
-                                          .forEach(metaParameter -> {
-                                                       Map<String, String> item = new HashMap<>();
-                                                       item.put("position", String.valueOf(metaParameter.getPosition()));
-                                                       item.put("parameterName", metaParameter.getName());
-                                                       item.put("parameterMode", metaParameter.getMode());
-                                                       item.put("parameterType", metaParameter.getType());
-                                                       item.put("cardinality",
-                                                                new MetaParameterFacade(metaParameter).formattedCardinality());
-                                                       items.add(item);
-                                                   }
+        return FXCollections.observableArrayList(new MetaRoutineFacade(metaRoutine).parameters()
+                                                                                   .map(metaParameter -> createItem(
+                                                                                           metaParameter)
 
-                                          );
-        return items;
+                                                                                   ).collect(Collectors.toList()));
+    }
 
+    private static Map<String, String> createItem(MetaParameter metaParameter) {
+        Map<String, String> item = new HashMap<>();
+        item.put(POSITION, String.valueOf(metaParameter.getPosition()));
+        item.put(PARAMETER_NAME, metaParameter.getName());
+        item.put(PARAMETER_MODE, metaParameter.getMode());
+        item.put(PARAMETER_TYPE, metaParameter.getType());
+        item.put(CARDINALITY,
+                 new MetaParameterFacade(metaParameter).formattedCardinality());
+        return item;
     }
 
 

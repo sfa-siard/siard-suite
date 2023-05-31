@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
 import ch.admin.bar.siardsuite.presenter.tree.RoutinesTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.presenter.tree.TableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.presenter.tree.TablesTableViewPopulatorStrategy;
@@ -58,7 +59,7 @@ public class DatabaseSchema extends DatabaseObject {
     protected void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null || type == null) return;
         TableViewPopulatorStrategy strategy = getStrategy(type);
-        assert strategy != null;
+        if (strategy == null) return;
         strategy.populate(tableView, onlyMetaData);
     }
 

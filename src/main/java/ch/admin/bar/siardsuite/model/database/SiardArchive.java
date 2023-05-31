@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;

@@ -53,16 +53,33 @@ public class ArchiveBrowserView {
         schemaItem.setExpanded(true);
 
 
-        List<DatabaseType> types = schema.types();
-        addIfNotEmpty(schemaItem, TreeItemFactory.create("archive.tree.view.node.types",
-                                                         TreeContentView.TYPES,
-                                                         new DatabaseTypes(types),
-                                                         types));
+        addTypes(schemaItem, schema);
 
         addIfNotEmpty(schemaItem, createTablesItem(schema));
         addIfNotEmpty(schemaItem, createRoutinesItem(schema));
         addIfNotEmpty(schemaItem, createViewsItem(schema));
         schemasItem.getChildren().add(schemaItem);
+    }
+
+    private void addTypes(TreeItem<TreeAttributeWrapper> schemaItem, DatabaseSchema schema) {
+        List<DatabaseType> types = schema.types();
+        if (types.size() == 0) return;
+        TreeItem<TreeAttributeWrapper> typesItem = TreeItemFactory.create("archive.tree.view.node.types",
+                                                                          TreeContentView.TYPES,
+                                                                          new DatabaseTypes(types),
+                                                                          types);
+
+        types.forEach(type ->
+                      {
+                          TreeItem<TreeAttributeWrapper> typeItem = TreeItemFactory.create(type.name(),
+                                                                                           TreeContentView.TYPE,
+                                                                                           type,
+                                                                                           String.valueOf(type.numberOfAttributes()));
+                          //typeItem.getChildren().add(TreeItemFactory.create("attributes", TreeContentView.ROUTINES, type))
+                          typesItem.getChildren()
+                                   .add(typeItem);
+                      });
+        schemaItem.getChildren().add(typesItem);
     }
 
     private void addPriviliges(TreeItem<TreeAttributeWrapper> rootItem) {
@@ -152,7 +169,6 @@ public class ArchiveBrowserView {
     }
 
     private TreeItem<TreeAttributeWrapper> createTablesItem(DatabaseSchema schema) {
-        TreeItem<TreeAttributeWrapper> rowsItem;
         TreeItem<TreeAttributeWrapper> columnsItem;
         TreeItem<TreeAttributeWrapper> tablesItem;
         TreeItem<TreeAttributeWrapper> tableItem;
@@ -179,12 +195,10 @@ public class ArchiveBrowserView {
             }
 
             if (!siardArchive.onlyMetaData()) {
-                rowsItem = TreeItemFactory.create("archive.tree.view.node.rows",
-                                                  TreeContentView.ROWS,
-                                                  table,
-                                                  table.numberOfRows());
-
-                tableItem.getChildren().add(rowsItem);
+                tableItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.rows",
+                                                                   TreeContentView.ROWS,
+                                                                   table,
+                                                                   table.numberOfRows()));
             }
 
             tableItem.getChildren().add(columnsItem);

@@ -15,22 +15,22 @@ import java.util.stream.Collectors;
 
 public class DatabaseView extends DatabaseObject implements WithColumns {
 
-    protected final MetaView view;
+    protected final MetaView metaView;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     private DatabaseSchema schema;
 
-    protected DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView view) {
-        this.view = view;
+    public DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView metaView) {
+        this.metaView = metaView;
         this.schema = schema;
 
-        for (int i = 0; i < view.getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(archive, schema, this, view.getMetaColumn(i)));
+        for (int i = 0; i < metaView.getMetaColumns(); i++) {
+            columns.add(new DatabaseColumn(archive, schema, this, metaView.getMetaColumn(i)));
         }
     }
 
     @Override
     public String name() {
-        return view.getName();
+        return metaView.getName();
     }
 
     public String getNumberOfColumns() {
@@ -38,7 +38,7 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
     }
 
     public String getNumberOfRows() {
-        return String.valueOf(view.getRows());
+        return String.valueOf(metaView.getRows());
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
@@ -61,16 +61,18 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
     }
 
     private ObservableList<Map> colItems() {
-        final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseColumn column : columns) {
-            Map<String, String> item = new HashMap<>();
-            item.put(POSITION, column.index());
-            item.put(NAME, column.name());
-            item.put(TYPE, column.type());
-            item.put(CARDINALITY, column.cardinality());
-            items.add(item);
-        }
-        return items;
+        return FXCollections.observableArrayList(columns.stream()
+                                                        .map(DatabaseView::createItem)
+                                                        .collect(Collectors.toList()));
+    }
+
+    private static Map<String, String> createItem(DatabaseColumn column) {
+        Map<String, String> item = new HashMap<>();
+        item.put(POSITION, column.index());
+        item.put(NAME, column.name());
+        item.put(TYPE, column.type());
+        item.put(CARDINALITY, column.cardinality());
+        return item;
     }
 
 
@@ -82,7 +84,7 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         }
         if (nodeIds.size() > 0) {
             List<MetaSearchHit> metaSearchHits = new ArrayList<>();
-            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", View " + view.getName(),
+            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", View " + metaView.getName(),
                                                  this,
                                                  TreeContentView.VIEW,
                                                  nodeIds));

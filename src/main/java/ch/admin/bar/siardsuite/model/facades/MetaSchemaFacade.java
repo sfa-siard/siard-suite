@@ -1,6 +1,9 @@
-package ch.admin.bar.siardsuite.model.database;
+package ch.admin.bar.siardsuite.model.facades;
 
+import ch.admin.bar.siard2.api.MetaAttribute;
+import ch.admin.bar.siard2.api.MetaType;
 import ch.admin.bar.siard2.api.Schema;
+import ch.admin.bar.siardsuite.model.database.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,7 +55,14 @@ public class MetaSchemaFacade {
                                                       type.isInstantiable(),
                                                       type.isFinal(),
                                                       type.getBase(),
-                                                      type.getDescription()))
+                                                      type.getDescription(),
+                                                      getMetaAttributes(type)))
+                        .collect(Collectors.toList());
+    }
+
+    private List<MetaAttribute> getMetaAttributes(MetaType type) {
+        return IntStream.range(0, type.getMetaAttributes())
+                        .mapToObj(type::getMetaAttribute)
                         .collect(Collectors.toList());
     }
 
