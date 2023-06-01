@@ -14,18 +14,6 @@ import java.util.Map;
 
 public class DatabaseTypes extends DatabaseObject {
 
-    public static final String TABLE_CONTAINER_TYPES_HEADER_NAME = "tableContainer.types.header.name";
-    public static final String TABLE_CONTAINER_TYPES_HEADER_CATEGORY = "tableContainer.types.header.category";
-    public static final String TABLE_CONTAINER_TYPES_HEADER_INSTANTIABLE = "tableContainer.types.header.instantiable";
-    public static final String TABLE_CONTAINER_TYPES_HEADER_FINAL = "tableContainer.types.header.final";
-    public static final String TABLE_CONTAINER_TYPES_HEADER_BASE = "tableContainer.types.header.base";
-    public static final String TABLE_CONTAINER_TYPES_HEADER_DESCRIPTION = "tableContainer.types.header.description";
-    public static final String NAME = "name";
-    public static final String CATEGORY = "category";
-    public static final String INSTANTIABLE = "instantiable";
-    public static final String FINAL = "final";
-    public static final String BASE = "base";
-    public static final String DESCRIPTION = "description";
     private List<DatabaseType> types;
 
     public DatabaseTypes(List<DatabaseType> types) {
@@ -71,14 +59,26 @@ public class DatabaseTypes extends DatabaseObject {
 
             Map<String, String> item = new HashMap<>();
 
-            item.put("name", name);
-            item.put("category", category);
-            item.put("instantiable", String.valueOf(instantiable));
-            item.put("final", String.valueOf(isFinal));
-            item.put("base", base);
-            item.put("description", description);
-            item.put("username", name);
+            item.put(NAME, name);
+            item.put(CATEGORY, category);
+            item.put(INSTANTIABLE, String.valueOf(instantiable));
+            item.put(FINAL, String.valueOf(isFinal));
+            item.put(BASE, base);
+            item.put(DESCRIPTION, description);
             return item;
         }
     }
+
+    private static final String TABLE_CONTAINER_TYPES_HEADER_NAME = "tableContainer.types.header.name";
+    private static final String TABLE_CONTAINER_TYPES_HEADER_CATEGORY = "tableContainer.types.header.category";
+    private static final String TABLE_CONTAINER_TYPES_HEADER_INSTANTIABLE = "tableContainer.types.header.instantiable";
+    private static final String TABLE_CONTAINER_TYPES_HEADER_FINAL = "tableContainer.types.header.final";
+    private static final String TABLE_CONTAINER_TYPES_HEADER_BASE = "tableContainer.types.header.base";
+    private static final String TABLE_CONTAINER_TYPES_HEADER_DESCRIPTION = "tableContainer.types.header.description";
+    private static final String NAME = "name";
+    private static final String CATEGORY = "category";
+    private static final String INSTANTIABLE = "instantiable";
+    private static final String FINAL = "final";
+    private static final String BASE = "base";
+    private static final String DESCRIPTION = "description";
 }
