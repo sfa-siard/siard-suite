@@ -50,4 +50,12 @@ public class DatabaseAttribute extends DatabaseObject {
     public String name() {
         return this.metaAttribute.getName();
     }
+
+    public String type() {
+        return this.metaAttribute.getType();
+    }
+
+    public String cardinality() {
+        return String.valueOf(this.metaAttribute.getCardinality());
+    }
 }
