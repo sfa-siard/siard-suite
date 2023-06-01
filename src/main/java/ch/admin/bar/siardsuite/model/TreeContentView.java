@@ -71,7 +71,7 @@ public enum TreeContentView {
                "tableContainer.labelNumerOfRows",
                false),
     ATTRIBUTE(
-            "fxml/tree/parameter.fxml",
+            "fxml/tree/attribute.fxml",
             "tableContainer.title.attribute",
             null,
             null,

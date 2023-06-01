@@ -38,7 +38,7 @@ public class DatabaseParameter extends DatabaseObject {
         new SiardLabelContainer(container).withLabel(metaParameter.getName(), NAME)
                                           .withLabel(String.valueOf(metaParameter.getPosition()), POSITION)
                                           .withLabel(metaParameter.getMode(), MODE)
-                                          .withLabel(metaParameter.getTypeName(), SQL_TYPE)
+                                          .withLabel(metaParameter.getType(), SQL_TYPE)
                                           .withLabel(metaParameter.getTypeSchema(), UDT_SCHEMA)
                                           .withLabel(metaParameter.getTypeName(), TYPE_NAME)
                                           .withLabel(metaParameter.getTypeOriginal(), ORIGINAL_DATA_TYPE)
