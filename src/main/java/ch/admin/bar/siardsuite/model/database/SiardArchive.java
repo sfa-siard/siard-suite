@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.facades.ArchiveFacade;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
@@ -25,7 +26,7 @@ public class SiardArchive extends DatabaseObject {
     protected Archive archive;
     protected String archiveName;
     protected boolean onlyMetaData = false;
-    protected final List<DatabaseSchema> schemas = new ArrayList<>();
+    protected List<DatabaseSchema> schemas = new ArrayList<>();
     protected List<User> users = new ArrayList<>();
     protected List<Privilige> priviliges = new ArrayList<>();
     protected SiardArchiveMetaData metaData;
@@ -42,12 +43,12 @@ public class SiardArchive extends DatabaseObject {
         this.archive = archive;
         this.onlyMetaData = onlyMetaData;
         this.archiveName = archiveName;
-        MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         metaData = new SiardArchiveMetaData(archive.getMetaData());
-        for (int i = 0; i < archive.getSchemas(); i++) {
-            schemas.add(new DatabaseSchema(this, archive.getSchema(i), onlyMetaData));
-        }
-
+        this.schemas = new ArchiveFacade(archive).schemas()
+                                                 .stream()
+                                                 .map(schema -> new DatabaseSchema(this, schema, onlyMetaData)).collect(
+                        Collectors.toList());
+        MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         this.users = metaDataFacade.users();
         this.priviliges = metaDataFacade.priviliges();
     }
