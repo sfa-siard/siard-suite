@@ -54,7 +54,6 @@ public class ArchiveBrowserView {
 
 
         addTypes(schemaItem, schema);
-
         addIfNotEmpty(schemaItem, createTablesItem(schema));
         addIfNotEmpty(schemaItem, createRoutinesItem(schema));
         addIfNotEmpty(schemaItem, createViewsItem(schema));
@@ -76,14 +75,35 @@ public class ArchiveBrowserView {
                                                                                            type,
 
                                                                                            String.valueOf(type.numberOfAttributes()));
-                          /*typeItem.getChildren()
-                                  .add(TreeItemFactory.create("attributes",
-                                                              TreeContentView.ATTRIBUTES,
-                                                              String.valueOf(type.numberOfAttributes())));*/
+                          addAttributes(typeItem, type.attributes());
+
+
                           typesItem.getChildren()
                                    .add(typeItem);
                       });
         schemaItem.getChildren().add(typesItem);
+    }
+
+    private void addAttributes(TreeItem<TreeAttributeWrapper> typeItem, List<DatabaseAttribute> attributes) {
+        if (attributes.isEmpty()) return;
+        TreeItem<TreeAttributeWrapper> attributesItem = TreeItemFactory.create(
+                "archive.tree.view.node.attributes",
+                TreeContentView.ATTRIBUTES,
+                null,
+                String.valueOf(attributes.size()));
+
+        attributes.forEach(attribute ->
+                                   addAttribute(attributesItem, attribute)
+        );
+        typeItem.getChildren().add(attributesItem);
+    }
+
+    private void addAttribute(TreeItem<TreeAttributeWrapper> attributesItem, DatabaseAttribute attribute) {
+        TreeItem<TreeAttributeWrapper> attributeItem = TreeItemFactory.create(attribute.name(),
+                                                                              TreeContentView.ATTRIBUTE,
+                                                                              attribute,
+                                                                              "");
+        attributesItem.getChildren().add(attributeItem);
     }
 
     private void addPriviliges(TreeItem<TreeAttributeWrapper> rootItem) {

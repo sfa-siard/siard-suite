@@ -10,8 +10,11 @@ import java.util.Map;
 
 public class DatabaseAttribute extends DatabaseObject {
 
-    public DatabaseAttribute(MetaAttribute metaAttribute) {
+    // TODO: not sure if i should store props in fields or just keep the metaAttribute and then go from there...
+    private final String name;
 
+    public DatabaseAttribute(MetaAttribute metaAttribute) {
+        this.name = metaAttribute.getName();
     }
 
     @Override
@@ -27,5 +30,9 @@ public class DatabaseAttribute extends DatabaseObject {
     @Override
     protected void populate(VBox vBox, TreeContentView type) {
 
+    }
+
+    public String name() {
+        return this.name;
     }
 }

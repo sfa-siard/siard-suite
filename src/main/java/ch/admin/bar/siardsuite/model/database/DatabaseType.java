@@ -15,7 +15,9 @@ public class DatabaseType extends DatabaseObject {
     private final boolean isFinal;
     private final String base;
     private final String description;
-    private final List<DatabaseAttribute> metaAttributes;
+
+
+    private final List<DatabaseAttribute> databaseAttributes;
 
     public DatabaseType(String name, String category, boolean instantiable, boolean isFinal, String base,
                         String description, List<DatabaseAttribute> metaAttributes) {
@@ -25,7 +27,7 @@ public class DatabaseType extends DatabaseObject {
         this.isFinal = isFinal;
         this.base = base;
         this.description = description;
-        this.metaAttributes = metaAttributes;
+        this.databaseAttributes = metaAttributes;
     }
 
     public <T> T accept(TypeVisitor<T> visitor) {
@@ -52,6 +54,10 @@ public class DatabaseType extends DatabaseObject {
     }
 
     public int numberOfAttributes() {
-        return this.metaAttributes.size();
+        return this.databaseAttributes.size();
+    }
+
+    public List<DatabaseAttribute> attributes() {
+        return databaseAttributes;
     }
 }
