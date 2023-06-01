@@ -41,6 +41,7 @@ public class DatabaseType extends DatabaseObject {
         return visitor.visit(name, category, instantiable, isFinal, base, description);
     }
 
+    @Override
     public String name() {
         return name;
     }

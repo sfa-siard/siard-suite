@@ -21,28 +21,31 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+// understands the content of a SIARD Archive
 public class SiardArchive extends DatabaseObject {
 
-    protected Archive archive;
-    protected String archiveName;
-    protected boolean onlyMetaData = false;
-    protected List<DatabaseSchema> schemas = new ArrayList<>();
-    protected List<User> users = new ArrayList<>();
-    protected List<Privilige> priviliges = new ArrayList<>();
+    private Archive archive;
+    private String name;
+    private boolean onlyMetaData = false;
+    private List<DatabaseSchema> schemas = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
+    private List<Privilige> priviliges = new ArrayList<>();
+
+    // TODO: are these really needed?
     protected SiardArchiveMetaData metaData;
     protected final TreeContentView treeContentView = TreeContentView.ROOT;
 
     public SiardArchive() {
     }
 
-    public SiardArchive(String archiveName, Archive archive) {
-        this(archiveName, archive, false);
+    public SiardArchive(String name, Archive archive) {
+        this(name, archive, false);
     }
 
-    public SiardArchive(String archiveName, Archive archive, boolean onlyMetaData) {
+    public SiardArchive(String name, Archive archive, boolean onlyMetaData) {
         this.archive = archive;
         this.onlyMetaData = onlyMetaData;
-        this.archiveName = archiveName;
+        this.name = name;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         this.schemas = new ArchiveFacade(archive).schemas()
                                                  .stream()
@@ -61,7 +64,7 @@ public class SiardArchive extends DatabaseObject {
     }
 
     public void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(archiveName, onlyMetaData, schemas, users, priviliges);
+        visitor.visit(name, onlyMetaData, schemas, users, priviliges);
     }
 
     public void shareProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
@@ -195,7 +198,7 @@ public class SiardArchive extends DatabaseObject {
     }
 
     public String name() {
-        return archiveName;
+        return name;
     }
 
     public List<User> users() {

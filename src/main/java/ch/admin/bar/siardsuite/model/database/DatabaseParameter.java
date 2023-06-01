@@ -24,6 +24,11 @@ public class DatabaseParameter extends DatabaseObject {
     }
 
     @Override
+    public String name() {
+        return metaParameter.getName();
+    }
+
+    @Override
     protected void shareProperties(SiardArchiveVisitor visitor) {
 
     }

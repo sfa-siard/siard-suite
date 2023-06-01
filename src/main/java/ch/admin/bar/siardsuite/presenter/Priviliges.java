@@ -27,6 +27,11 @@ public class Priviliges extends DatabaseObject {
     }
 
     @Override
+    public String name() {
+        return null;
+    }
+
+    @Override
     protected void shareProperties(SiardArchiveVisitor visitor) {
     }
 

@@ -31,16 +31,25 @@ public class DatabaseRow extends DatabaseObject {
             for (int i = 0; i < record.getCells(); i++) {
                 cells.add(new DatabaseCell(archive, schema, table, this, record.getCell(i)));
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {}
+    public String name() {
+        return name;
+    }
 
     @Override
-    protected void populate(TableView tableView, TreeContentView type) {}
+    protected void shareProperties(SiardArchiveVisitor visitor) {
+    }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {}
+    protected void populate(TableView tableView, TreeContentView type) {
+    }
+
+    @Override
+    protected void populate(VBox vbox, TreeContentView type) {
+    }
 
 }

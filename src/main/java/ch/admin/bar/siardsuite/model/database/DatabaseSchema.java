@@ -117,6 +117,7 @@ public class DatabaseSchema extends DatabaseObject {
         hits.addAll(tables.stream()
                           .flatMap(table -> table.aggregatedMetaSearch(s).stream())
                           .collect(Collectors.toList()));
+        // TODO: search other aspects of the archive, not only tables...
         return hits;
     }
 

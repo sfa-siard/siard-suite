@@ -21,7 +21,8 @@ public class DatabaseCell extends DatabaseObject {
     protected final String type;
     protected final String value;
 
-    protected DatabaseCell(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, DatabaseRow row, Cell cell) {
+    protected DatabaseCell(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, DatabaseRow row,
+                           Cell cell) {
         this.archive = archive;
         this.schema = schema;
         this.table = table;
@@ -33,22 +34,32 @@ public class DatabaseCell extends DatabaseObject {
         String type = null;
         try {
             type = cell.getMetaColumn().getType();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
         this.type = type;
         String value = null;
         try {
             value = cell.getString();
-        } catch (IOException | IllegalArgumentException ignored) {}
+        } catch (IOException | IllegalArgumentException ignored) {
+        }
         this.value = value;
     }
 
     @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {}
+    public String name() {
+        return name;
+    }
 
     @Override
-    protected void populate(TableView tableView, TreeContentView type) {}
+    protected void shareProperties(SiardArchiveVisitor visitor) {
+    }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {}
+    protected void populate(TableView tableView, TreeContentView type) {
+    }
+
+    @Override
+    protected void populate(VBox vbox, TreeContentView type) {
+    }
 
 }
