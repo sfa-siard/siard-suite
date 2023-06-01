@@ -75,7 +75,7 @@ public class ArchiveBrowserView {
                                                                                            type,
 
                                                                                            String.valueOf(type.numberOfAttributes()));
-                          addAttributes(typeItem, type.attributes());
+                          addAttributes(typeItem, type);
 
 
                           typesItem.getChildren()
@@ -84,12 +84,13 @@ public class ArchiveBrowserView {
         schemaItem.getChildren().add(typesItem);
     }
 
-    private void addAttributes(TreeItem<TreeAttributeWrapper> typeItem, List<DatabaseAttribute> attributes) {
+    private void addAttributes(TreeItem<TreeAttributeWrapper> typeItem, DatabaseType type) {
+        List<DatabaseAttribute> attributes = type.attributes();
         if (attributes.isEmpty()) return;
         TreeItem<TreeAttributeWrapper> attributesItem = TreeItemFactory.create(
                 "archive.tree.view.node.attributes",
                 TreeContentView.ATTRIBUTES,
-                null,
+                type,
                 String.valueOf(attributes.size()));
 
         attributes.forEach(attribute ->

@@ -65,7 +65,7 @@ public enum TreeContentView {
          "tableContainer.labelSchema",
          "tableContainer.labelDescSchema",
          false),
-    ATTRIBUTES("fxml/tree/table.fxml",
+    ATTRIBUTES("fxml/tree/type.fxml",
                "tableContainer.title.attributes",
                "tableContainer.attributes",
                "tableContainer.labelNumerOfRows",
