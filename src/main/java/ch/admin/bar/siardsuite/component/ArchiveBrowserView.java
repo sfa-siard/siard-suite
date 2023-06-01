@@ -74,8 +74,12 @@ public class ArchiveBrowserView {
                           TreeItem<TreeAttributeWrapper> typeItem = TreeItemFactory.create(type.name(),
                                                                                            TreeContentView.TYPE,
                                                                                            type,
+
                                                                                            String.valueOf(type.numberOfAttributes()));
-                          //typeItem.getChildren().add(TreeItemFactory.create("attributes", TreeContentView.ROUTINES, type))
+                          /*typeItem.getChildren()
+                                  .add(TreeItemFactory.create("attributes",
+                                                              TreeContentView.ATTRIBUTES,
+                                                              String.valueOf(type.numberOfAttributes())));*/
                           typesItem.getChildren()
                                    .add(typeItem);
                       });

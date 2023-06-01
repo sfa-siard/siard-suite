@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.model.facades;
 
-import ch.admin.bar.siard2.api.MetaAttribute;
 import ch.admin.bar.siard2.api.MetaType;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.database.*;
@@ -60,9 +59,10 @@ public class MetaSchemaFacade {
                         .collect(Collectors.toList());
     }
 
-    private List<MetaAttribute> getMetaAttributes(MetaType type) {
+    private List<DatabaseAttribute> getMetaAttributes(MetaType type) {
         return IntStream.range(0, type.getMetaAttributes())
                         .mapToObj(type::getMetaAttribute)
+                        .map(metaAttribute -> new DatabaseAttribute(metaAttribute))
                         .collect(Collectors.toList());
     }
 

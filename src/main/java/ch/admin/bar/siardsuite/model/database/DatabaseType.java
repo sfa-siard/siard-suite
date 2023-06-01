@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.MetaAttribute;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.TableView;
@@ -16,10 +15,10 @@ public class DatabaseType extends DatabaseObject {
     private final boolean isFinal;
     private final String base;
     private final String description;
-    private final List<MetaAttribute> metaAttributes;
+    private final List<DatabaseAttribute> metaAttributes;
 
     public DatabaseType(String name, String category, boolean instantiable, boolean isFinal, String base,
-                        String description, List<MetaAttribute> metaAttributes) {
+                        String description, List<DatabaseAttribute> metaAttributes) {
         this.name = name;
         this.category = category;
         this.instantiable = instantiable;
