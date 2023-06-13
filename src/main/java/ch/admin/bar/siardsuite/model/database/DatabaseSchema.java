@@ -64,7 +64,8 @@ public class DatabaseSchema extends DatabaseObject {
     }
 
     private TableViewPopulatorStrategy getStrategy(TreeContentView type) {
-        if (type.equals(TreeContentView.TABLES)) return new TablesTableViewPopulatorStrategy(tables);
+        if (type.equals(TreeContentView.TABLES) || type.equals(TreeContentView.SCHEMA))
+            return new TablesTableViewPopulatorStrategy(tables);
         if (type.equals(TreeContentView.VIEWS)) return new ViewsTableViewPopulatorStrategy(views);
         if (type.equals(TreeContentView.ROUTINES)) return new RoutinesTableViewPopulatorStrategy(routines);
         return null;
