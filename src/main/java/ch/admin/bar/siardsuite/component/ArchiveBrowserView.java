@@ -4,7 +4,7 @@ import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.database.*;
-import ch.admin.bar.siardsuite.presenter.Priviliges;
+import ch.admin.bar.siardsuite.presenter.Privileges;
 import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -51,7 +51,6 @@ public class ArchiveBrowserView {
                                                                                             TreeContentView.SCHEMA,
                                                                                             schema));
         schemaItem.setExpanded(true);
-
 
         addTypes(schemaItem, schema);
         addIfNotEmpty(schemaItem, createTablesItem(schema));
@@ -107,7 +106,7 @@ public class ArchiveBrowserView {
         if (priviliges.size() > 0) {
             rootItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.priviliges",
                                                               TreeContentView.PRIVILIGES,
-                                                              new Priviliges(priviliges),
+                                                              new Privileges(priviliges),
                                                               priviliges));
         }
     }

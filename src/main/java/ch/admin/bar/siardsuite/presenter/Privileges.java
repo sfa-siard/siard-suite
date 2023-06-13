@@ -18,12 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Priviliges extends DatabaseObject {
+public class Privileges extends DatabaseObject {
 
-    private final List<Privilige> priviliges;
+    private final List<Privilige> privileges;
 
-    public Priviliges(List<Privilige> priviliges) {
-        this.priviliges = priviliges;
+    public Privileges(List<Privilige> privileges) {
+        this.privileges = privileges;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class Priviliges extends DatabaseObject {
     private ObservableList<Map> items() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         PriviligeToMapVisitor visitor = new PriviligeToMapVisitor();
-        for (Privilige privilige : priviliges) {
+        for (Privilige privilige : privileges) {
             items.add(privilige.accept(visitor));
         }
         return items;

@@ -50,10 +50,10 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         if (tableView == null) return;
         if (!TreeContentView.COLUMNS.equals(type) && !TreeContentView.VIEW.equals(type)) return;
         new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, POSITION)
-                                     .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME, NAME)
-                                     .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE, TYPE)
-                                     .withColumn(TABLE_CONTAINER_TABLE_HEADER_CARDINALITY, CARDINALITY)
-                                     .withItems(colItems());
+                .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME, NAME)
+                .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE, TYPE)
+                .withColumn(TABLE_CONTAINER_TABLE_HEADER_CARDINALITY, CARDINALITY)
+                .withItems(colItems());
     }
 
     @Override
@@ -62,8 +62,8 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
 
     private ObservableList<Map> colItems() {
         return FXCollections.observableArrayList(columns.stream()
-                                                        .map(DatabaseView::createItem)
-                                                        .collect(Collectors.toList()));
+                .map(DatabaseView::createItem)
+                .collect(Collectors.toList()));
     }
 
     private static Map<String, String> createItem(DatabaseColumn column) {
@@ -85,9 +85,9 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         if (nodeIds.size() > 0) {
             List<MetaSearchHit> metaSearchHits = new ArrayList<>();
             metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", View " + metaView.getName(),
-                                                 this,
-                                                 TreeContentView.VIEW,
-                                                 nodeIds));
+                    this,
+                    TreeContentView.VIEW,
+                    nodeIds));
             hits = new TreeSet<>(
                     metaSearchHits);
         }
