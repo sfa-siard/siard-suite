@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.component;
 
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.view.TableSize;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -24,6 +25,7 @@ public class SiardTableView {
     public SiardTableView withItems(ObservableList<Map> items) {
         if (items.isEmpty()) tableView.setVisible(false);
         tableView.setItems(items);
+        new TableSize(tableView).resize();
         return this;
     }
 
