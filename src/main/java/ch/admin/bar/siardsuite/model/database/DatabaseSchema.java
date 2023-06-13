@@ -4,10 +4,7 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
-import ch.admin.bar.siardsuite.presenter.tree.RoutinesTableViewPopulatorStrategy;
-import ch.admin.bar.siardsuite.presenter.tree.TableViewPopulatorStrategy;
-import ch.admin.bar.siardsuite.presenter.tree.TablesTableViewPopulatorStrategy;
-import ch.admin.bar.siardsuite.presenter.tree.ViewsTableViewPopulatorStrategy;
+import ch.admin.bar.siardsuite.presenter.tree.*;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
@@ -68,6 +65,7 @@ public class DatabaseSchema extends DatabaseObject {
             return new TablesTableViewPopulatorStrategy(tables);
         if (type.equals(TreeContentView.VIEWS)) return new ViewsTableViewPopulatorStrategy(views);
         if (type.equals(TreeContentView.ROUTINES)) return new RoutinesTableViewPopulatorStrategy(routines);
+        if (type.equals(TreeContentView.TYPES)) return new TypesTableViewPopulatorStrategy(types);
         return null;
     }
 

@@ -65,22 +65,17 @@ public class ArchiveBrowserView {
         if (types.size() == 0) return;
         TreeItem<TreeAttributeWrapper> typesItem = TreeItemFactory.create("archive.tree.view.node.types",
                                                                           TreeContentView.TYPES,
-                                                                          new DatabaseTypes(types),
+                                                                          schema,
                                                                           types);
 
-        types.forEach(type ->
-                      {
-                          TreeItem<TreeAttributeWrapper> typeItem = TreeItemFactory.create(type.name(),
-                                                                                           TreeContentView.TYPE,
-                                                                                           type,
-
-                                                                                           String.valueOf(type.numberOfAttributes()));
-                          addAttributes(typeItem, type);
-
-
-                          typesItem.getChildren()
-                                   .add(typeItem);
-                      });
+        types.forEach(type -> {
+            TreeItem<TreeAttributeWrapper> typeItem = TreeItemFactory.create(type.name(),
+                                                                             TreeContentView.TYPE,
+                                                                             type,
+                                                                             String.valueOf(type.numberOfAttributes()));
+            addAttributes(typeItem, type);
+            typesItem.getChildren().add(typeItem);
+        });
         schemaItem.getChildren().add(typesItem);
     }
 

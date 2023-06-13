@@ -82,6 +82,4 @@ public class TableDetailsPresenter extends DetailsPresenter implements SiardArch
     @Override
     public void visit(String columnName) {
     }
-
-
 }

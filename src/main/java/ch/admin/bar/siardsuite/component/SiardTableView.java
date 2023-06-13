@@ -22,6 +22,7 @@ public class SiardTableView {
     }
 
     public SiardTableView withItems(ObservableList<Map> items) {
+        if (items.isEmpty()) tableView.setVisible(false);
         tableView.setItems(items);
         return this;
     }

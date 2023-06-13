@@ -1,37 +1,26 @@
-package ch.admin.bar.siardsuite.model.database;
+package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.component.SiardTableView;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import ch.admin.bar.siardsuite.model.database.DatabaseType;
+import ch.admin.bar.siardsuite.model.database.TypeVisitor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DatabaseTypes extends DatabaseObject {
+public class TypesTableViewPopulatorStrategy implements TableViewPopulatorStrategy {
 
-    private List<DatabaseType> types;
+    private final List<DatabaseType> types;
 
-    public DatabaseTypes(List<DatabaseType> types) {
+    public TypesTableViewPopulatorStrategy(List<DatabaseType> types) {
         this.types = types;
     }
 
     @Override
-    public String name() {
-        return null;
-    }
-
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-    }
-
-    @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView == null || type == null) return;
+    public void populate(TableView tableView, boolean onlyMetaData) {
         new SiardTableView(tableView)
                 .withColumn(TABLE_CONTAINER_TYPES_HEADER_NAME, NAME)
                 .withColumn(TABLE_CONTAINER_TYPES_HEADER_CATEGORY, CATEGORY)
@@ -49,10 +38,6 @@ public class DatabaseTypes extends DatabaseObject {
             items.add(type.accept(visitor));
         }
         return items;
-    }
-
-    @Override
-    protected void populate(VBox vBox, TreeContentView type) {
     }
 
     private class MapTypesVisitor implements TypeVisitor<Map<String, String>> {
