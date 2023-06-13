@@ -54,9 +54,9 @@ public class DatabaseType extends DatabaseObject {
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null || type == null) return;
-        new SiardTableView(tableView).withColumn(TYPE_ATTRIBUTE_NAME, NAME)
-                                     .withColumn(TYPE_ATTRIBUTE_TYPE, TYPE)
-                                     .withColumn(TYPE_ATTRIBUTE_CARDINALITY, CARDINALITY)
+        new SiardTableView(tableView).withColumn(ATTRIBUTE_NAME, NAME)
+                                     .withColumn(ATTRIBUTE_TYPE, TYPE)
+                                     .withColumn(ATTRIBUTE_CARDINALITY, CARDINALITY)
                                      .withItems(items());
     }
 
@@ -94,9 +94,9 @@ public class DatabaseType extends DatabaseObject {
     }
 
     private static final String NAME = "name";
-    private static final String TYPE_ATTRIBUTE_NAME = "type.attribute.name";
-    private static final String TYPE_ATTRIBUTE_TYPE = "type.attribute.type";
     private static final String TYPE = "type";
-    private static final String TYPE_ATTRIBUTE_CARDINALITY = "type.attribute.cardinality";
     private static final String CARDINALITY = "cardinality";
+    private static final String ATTRIBUTE_NAME = "attribute.name";
+    private static final String ATTRIBUTE_TYPE = "attribute.type";
+    private static final String ATTRIBUTE_CARDINALITY = "attribute.cardinality";
 }
