@@ -12,13 +12,24 @@ import java.util.Map;
 
 public class SiardTableView {
     private final TableView<Map> tableView;
+    private final boolean onlyMetaData;
+
+    public SiardTableView(TableView<Map> tableView, boolean onlyMetaData) {
+        this.tableView = tableView;
+        this.onlyMetaData = onlyMetaData;
+    }
 
     public SiardTableView(TableView<Map> tableView) {
-        this.tableView = tableView;
+        this(tableView, false);
     }
 
     public SiardTableView withColumn(String label, String key) {
         tableView.getColumns().add(column(label, key));
+        return this;
+    }
+
+    public SiardTableView withDataColumn(String label, String key) {
+        if (!this.onlyMetaData) return withColumn(label, key);
         return this;
     }
 

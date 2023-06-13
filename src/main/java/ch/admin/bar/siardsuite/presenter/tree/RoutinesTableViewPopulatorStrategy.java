@@ -1,19 +1,17 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
+import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.database.Routine;
-import ch.admin.bar.siardsuite.util.I18n;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RoutinesTableViewPopulatorStrategy implements TableViewPopulatorStrategy<Routine> {
+
     private final List<Routine> routines;
 
     public RoutinesTableViewPopulatorStrategy(List<Routine> routines) {
@@ -22,35 +20,41 @@ public class RoutinesTableViewPopulatorStrategy implements TableViewPopulatorStr
 
     @Override
     public void populate(TableView<Map> tableView, boolean onlyMetaData) {
-        tableView.getColumns().add(createColumn("tableContainer.table.header.row", "index"));
-        tableView.getColumns().add(createColumn("tableContainer.routine.header.name", "name"));
-        tableView.getColumns().add(createColumn("tableContainer.routine.header.specificName", "specificName"));
-        tableView.getColumns().add(createColumn("tableContainer.routine.header.characteristics", "characteristics"));
-        tableView.getColumns().add(createColumn("tableContainer.routine.header.returnType", "returnType"));
-        tableView.getColumns()
-                 .add(createColumn("tableContainer.routine.header.numberOfParameters", "numberOfParameters"));
-        tableView.setItems(items(routines));
+        new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_ROW, INDEX)
+                                     .withColumn(TABLE_CONTAINER_ROUTINE_HEADER_NAME, NAME)
+                                     .withColumn(TABLE_CONTAINER_ROUTINE_HEADER_SPECIFIC_NAME, SPECIFIC_NAME)
+                                     .withColumn(TABLE_CONTAINER_ROUTINE_HEADER_CHARACTERISTICS, CHARACTERISTICS)
+                                     .withColumn(TABLE_CONTAINER_ROUTINE_HEADER_RETURN_TYPE, RETURN_TYPE)
+                                     .withColumn(TABLE_CONTAINER_ROUTINE_HEADER_NUMBER_OF_PARAMETERS,
+                                                 NUMBER_OF_PARAMETERS)
+                                     .withItems(items(routines));
     }
 
     private ObservableList<Map> items(List<Routine> routines) {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         for (Routine routine : routines) {
             Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(routines.indexOf(routine) + 1));
-            item.put("name", routine.name());
-            item.put("specificName", routine.specificName());
-            item.put("characteristics", routine.characteristics());
-            item.put("returnType", routine.returnType());
-            item.put("numberOfParameters", routine.numberOfParameters());
+            item.put(INDEX, String.valueOf(routines.indexOf(routine) + 1));
+            item.put(NAME, routine.name());
+            item.put(SPECIFIC_NAME, routine.specificName());
+            item.put(CHARACTERISTICS, routine.characteristics());
+            item.put(RETURN_TYPE, routine.returnType());
+            item.put(NUMBER_OF_PARAMETERS, routine.numberOfParameters());
             items.add(item);
         }
         return items;
     }
 
-    private TableColumn<Map, ?> createColumn(String label, String valueName) {
-        final TableColumn<Map, StringProperty> column = new TableColumn<>();
-        column.textProperty().bind(I18n.createStringBinding(label));
-        column.setCellValueFactory(new MapValueFactory<>(valueName));
-        return column;
-    }
+    private static final String TABLE_CONTAINER_TABLE_HEADER_ROW = "tableContainer.table.header.row";
+    private static final String TABLE_CONTAINER_ROUTINE_HEADER_NAME = "tableContainer.routine.header.name";
+    private static final String TABLE_CONTAINER_ROUTINE_HEADER_SPECIFIC_NAME = "tableContainer.routine.header.specificName";
+    private static final String TABLE_CONTAINER_ROUTINE_HEADER_CHARACTERISTICS = "tableContainer.routine.header.characteristics";
+    private static final String TABLE_CONTAINER_ROUTINE_HEADER_RETURN_TYPE = "tableContainer.routine.header.returnType";
+    private static final String TABLE_CONTAINER_ROUTINE_HEADER_NUMBER_OF_PARAMETERS = "tableContainer.routine.header.numberOfParameters";
+    private static final String INDEX = "index";
+    private static final String NAME = "name";
+    private static final String SPECIFIC_NAME = "specificName";
+    private static final String CHARACTERISTICS = "characteristics";
+    private static final String RETURN_TYPE = "returnType";
+    private static final String NUMBER_OF_PARAMETERS = "numberOfParameters";
 }

@@ -1,13 +1,10 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
+import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
-import ch.admin.bar.siardsuite.util.I18n;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,38 +20,33 @@ public class TablesTableViewPopulatorStrategy implements TableViewPopulatorStrat
 
     @Override
     public void populate(TableView<Map> tableView, boolean onlyMetaData) {
-        final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-        final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
-        final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-        col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
-        col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.tableName"));
-        col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfColumns"));
-        col0.setCellValueFactory(new MapValueFactory<>("index"));
-        col1.setCellValueFactory(new MapValueFactory<>("name"));
-        col2.setCellValueFactory(new MapValueFactory<>("numberOfColumns"));
-        tableView.getColumns().add(col0);
-        tableView.getColumns().add(col1);
-        tableView.getColumns().add(col2);
-        if (!onlyMetaData) {
-            final TableColumn<Map, StringProperty> col3 = new TableColumn<>();
-            col3.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfRows"));
-            col3.setCellValueFactory(new MapValueFactory<>("numberOfRows"));
-            tableView.getColumns().add(col3);
-        }
-        tableView.setItems(items(tables));
+        new SiardTableView(tableView, onlyMetaData)
+                .withColumn(TABLE_CONTAINER_TABLE_HEADER_ROW, INDEX)
+                .withColumn(TABLE_CONTAINER_TABLE_HEADER_TABLE_NAME, NAME)
+                .withColumn(TABLE_CONTAINER_TABLE_HEADER_NUMBER_OF_COLUMNS, NUMBER_OF_COLUMNS)
+                .withDataColumn(TABLE_CONTAINER_TABLE_HEADER_NUMBER_OF_ROWS, NUMBER_OF_ROWS)
+                .withItems(items(tables));
     }
 
     private ObservableList<Map> items(List<DatabaseTable> tables) {
         final ObservableList<Map> items = FXCollections.observableArrayList();
         for (DatabaseTable table : tables) {
             Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(tables.indexOf(table) + 1));
-            item.put("name", table.name);
-            item.put("numberOfColumns", table.numberOfColumns);
-            item.put("numberOfRows", table.numberOfRows);
+            item.put(INDEX, String.valueOf(tables.indexOf(table) + 1));
+            item.put(NAME, table.name);
+            item.put(NUMBER_OF_COLUMNS, table.numberOfColumns);
+            item.put(NUMBER_OF_ROWS, table.numberOfRows);
             items.add(item);
         }
         return items;
     }
 
+    private static final String TABLE_CONTAINER_TABLE_HEADER_ROW = "tableContainer.table.header.row";
+    private static final String INDEX = "index";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_TABLE_NAME = "tableContainer.table.header.tableName";
+    private static final String NAME = "name";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_NUMBER_OF_COLUMNS = "tableContainer.table.header.numberOfColumns";
+    private static final String NUMBER_OF_COLUMNS = "numberOfColumns";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_NUMBER_OF_ROWS = "tableContainer.table.header.numberOfRows";
+    private static final String NUMBER_OF_ROWS = "numberOfRows";
 }

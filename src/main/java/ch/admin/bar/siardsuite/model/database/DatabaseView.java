@@ -105,7 +105,7 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
     }
 
     private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
-    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.viewName";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";
     private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE = "tableContainer.table.header.columnType";
     private static final String TABLE_CONTAINER_TABLE_HEADER_CARDINALITY = "tableContainer.view.header.cardinality";
     private static final String POSITION = "index";
