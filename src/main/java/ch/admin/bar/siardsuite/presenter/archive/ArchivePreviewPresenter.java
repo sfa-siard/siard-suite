@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
 import ch.admin.bar.siardsuite.component.ButtonBox;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -30,12 +29,12 @@ public class ArchivePreviewPresenter extends ArchiveBrowserPresenter {
     protected ButtonBox buttonsBox;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        super.init(controller, model, stage);
+    public void init(Controller controller, RootStage stage) {
+        super.init(controller, stage);
     }
 
-    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        init(controller, model, stage);
+    public void init(Controller controller,RootStage stage, MFXStepper stepper) {
+        init(controller, stage);
 
         I18n.bind(this.title.textProperty(), "archivePreview.view.title");
         I18n.bind(this.text.textProperty(), "archivePreview.view.text");

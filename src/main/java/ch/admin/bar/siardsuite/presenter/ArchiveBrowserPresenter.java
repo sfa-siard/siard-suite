@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.presenter;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
@@ -45,8 +44,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
 
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 
@@ -56,15 +54,15 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         this.refreshContentPane(archiveTreeView.rootItem().getValue());
 
         setListeners();
-        model.setCurrentPreviewPresenter(this);
+        controller.setCurrentPreviewPresenter(this);
         tableSearchButton.setVisible(false);
         bind(metaSearchButton, "tableContainer.metaSearchButton");
         bind(tableSearchButton, "tableContainer.tableSearchButton");
     }
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        this.init(controller, model, stage);
+    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
+        this.init(controller, stage);
     }
 
     protected void setListeners() {
@@ -72,16 +70,16 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         selection.selectedItemProperty()
                  .addListener(((observable, oldValue, newValue) -> refreshContentPane(newValue.getValue())));
         tableSearchButton.setOnAction(event -> {
-            if (model.getCurrentTableSearchButton() != null && tableSearchButton.equals(model.getCurrentTableSearchButton()
-                                                                                             .button()) && model.getCurrentTableSearchButton()
+            if (controller.getCurrentTableSearchButton() != null && tableSearchButton.equals(controller.getCurrentTableSearchButton()
+                                                                                             .button()) && controller.getCurrentTableSearchButton()
                                                                                                                 .active()) {
-                model.setCurrentTableSearchButton(tableSearchButton, false);
+                controller.setCurrentTableSearchButton(tableSearchButton, false);
                 tableSearchButton.setStyle("-fx-font-weight: normal;");
-                model.getCurrentTableSearchBase()
+                controller.getCurrentTableSearchBase()
                      .tableView()
-                     .setItems(FXCollections.observableArrayList(model.getCurrentTableSearchBase().rows()));
+                     .setItems(FXCollections.observableArrayList(controller.getCurrentTableSearchBase().rows()));
             } else {
-                model.setCurrentTableSearchButton(tableSearchButton, false);
+                controller.setCurrentTableSearchButton(tableSearchButton, false);
                 stage.openDialog(View.SEARCH_TABLE_DIALOG);
             }
         });
@@ -94,7 +92,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
             FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(wrapper.getType().getViewName()));
             Node container = loader.load();
             contentPane.getChildren().setAll(container);
-            loader.<DetailsPresenter>getController().init(this.controller, model, this.stage, wrapper);
+            loader.<DetailsPresenter>getController().init(this.controller, this.stage, wrapper);
             tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
             bind(this.titleTableContainer.textProperty(), wrapper.getType().getViewTitle());
             contentPane.prefWidthProperty().bind(rightTableBox.widthProperty());

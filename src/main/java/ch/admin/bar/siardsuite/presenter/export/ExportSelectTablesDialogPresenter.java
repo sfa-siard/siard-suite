@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.export;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -45,8 +44,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     public TreeView tableSelector;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 
@@ -63,7 +61,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         this.saveButton.textProperty().bind(I18n.createStringBinding("export.choose-location.text"));
 
         TreeItem root = new CheckBoxTreeItem("root");
-        this.model.populate(root);
+        this.controller.populate(root);
         root.setExpanded(true);
 
         this.tableSelector.setRoot(root);
@@ -81,7 +79,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
                 List<String> tables = new ArrayList<>();
                 this.findCheckedItems((CheckBoxTreeItem<String>) this.tableSelector.getRoot(), tables);
 
-                this.model.getSiardArchive().export(tables, file);
+                this.controller.getSiardArchive().export(tables, file);
                 this.stage.closeDialog();
                 this.stage.openDialog(View.EXPORT_SUCCESS);
             } catch (Exception e) {

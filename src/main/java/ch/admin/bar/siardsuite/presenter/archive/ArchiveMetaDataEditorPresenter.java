@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -87,8 +86,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     public MFXButton lobFolderButton;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 
@@ -100,8 +98,8 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        this.init(controller, model, stage);
+    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
+        this.init(controller, stage);
 
         this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
@@ -179,7 +177,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
 
 
     private void initFields() {
-        model.provideDatabaseArchiveMetaDataProperties(this);
+        controller.provideDatabaseArchiveMetaDataProperties(this);
     }
 
     private String removePlaceholder(String value) {

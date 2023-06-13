@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.view;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.Icon;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.presenter.Presenter;
@@ -19,7 +18,6 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class RootStage extends Stage {
-  private final Model model;
   private final Controller controller;
 
   @FXML
@@ -27,21 +25,20 @@ public class RootStage extends Stage {
   @FXML
   private final BorderPane dialogPane;
 
-  public RootStage(Model model, Controller controller) throws IOException {
-    this.model = model;
+  public RootStage(Controller controller) throws IOException {
     this.controller = controller;
 
     FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(View.ROOT.getName()));
     rootPane = loader.load();
-    loader.<RootPresenter>getController().init(controller, this.model,this);
+    loader.<RootPresenter>getController().init(controller,this);
 
     // load start view
-    navigate(model.getCurrentView());
+    navigate(controller.getCurrentView());
 
     // prepare for dialogs
     loader = new FXMLLoader(SiardApplication.class.getResource(View.DIALOG.getName()));
     dialogPane = loader.load();
-    loader.<DialogPresenter>getController().init(controller, this.model,this);
+    loader.<DialogPresenter>getController().init(controller, this);
     dialogPane.setVisible(false);
 
     // set overall stack pane
@@ -62,14 +59,14 @@ public class RootStage extends Stage {
     FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
     try {
       borderPane.setCenter(loader.load());
-      loader.<Presenter>getController().init(this.controller, this.model, this);
+      loader.<Presenter>getController().init(this.controller, this);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
   public void navigate(View view) {
-    model.setCurrentView(view);
+    controller.setCurrentView(view);
     setCenter(rootPane, view.getName());
   }
 

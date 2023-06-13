@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -27,9 +26,9 @@ public class TypeDetailsPresenter extends DetailsPresenter {
     public TableView tableView;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
-        super.init(controller, model, stage, wrapper);
-        model.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
+    public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
+        super.init(controller, stage, wrapper);
+        controller.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
     }
 
     @Override

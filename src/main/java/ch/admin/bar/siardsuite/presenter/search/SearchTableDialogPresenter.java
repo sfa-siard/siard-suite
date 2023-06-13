@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter.search;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -39,21 +38,20 @@ public class SearchTableDialogPresenter extends DialogPresenter {
     private final LinkedHashSet<Map> hits = new LinkedHashSet<>();
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 
         I18n.bind(title.textProperty(), "search.table.dialog.title");
         I18n.bind(text.textProperty(), "search.table.dialog.text");
 
-        if (model.getCurrentTableSearch() != null) {
-            searchField.setText(model.getCurrentTableSearch());
+        if (controller.getCurrentTableSearch() != null) {
+            searchField.setText(controller.getCurrentTableSearch());
         }
 
-        if (model.getCurrentTableSearchBase() != null) {
-            tableView = model.getCurrentTableSearchBase().tableView();
-            rows = model.getCurrentTableSearchBase().rows();
+        if (controller.getCurrentTableSearchBase() != null) {
+            tableView = controller.getCurrentTableSearchBase().tableView();
+            rows = controller.getCurrentTableSearchBase().rows();
         }
 
         if (tableView != null) {
@@ -84,9 +82,9 @@ public class SearchTableDialogPresenter extends DialogPresenter {
             } else {
                 stage.closeDialog();
             }
-            model.setCurrentTableSearch(s);
-            model.setCurrentTableSearchButton(model.getCurrentTableSearchButton().button(), true);
-            model.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: bold;");
+            controller.setCurrentTableSearch(s);
+            controller.setCurrentTableSearchButton(controller.getCurrentTableSearchButton().button(), true);
+            controller.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: bold;");
         }
     }
 

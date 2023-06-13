@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -72,15 +71,14 @@ public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardAr
     public Label archiverContact;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
         this.controller = controller;
         this.stage = stage;
 
         bindLabels();
 
         // TODO: align pattern with other SubClasses of DetailsPresenter
-        this.model.provideDatabaseArchiveMetaDataProperties(this);
+        this.controller.provideDatabaseArchiveMetaDataProperties(this);
     }
 
     @Override

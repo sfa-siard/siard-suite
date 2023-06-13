@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter.open;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -31,8 +30,8 @@ public class OpenPreviewPresenter extends ArchiveBrowserPresenter {
 
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        super.init(controller, model, stage);
+    public void init(Controller controller, RootStage stage) {
+        super.init(controller, stage);
 
         I18n.bind(title.textProperty(), "open.siard.archive.preview.title");
         I18n.bind(text.textProperty(), "open.siard.archive.preview.text");

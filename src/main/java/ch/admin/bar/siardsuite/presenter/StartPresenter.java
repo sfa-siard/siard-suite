@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.view.animations.Animation;
 import javafx.animation.PathTransition;
@@ -53,8 +52,7 @@ public class StartPresenter extends Presenter {
 
     Animation animation = new Animation(new PathTransition());
 
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 

@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.Step;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -27,7 +26,7 @@ public abstract class StepperPresenter extends Presenter {
   @FXML
   protected BorderPane borderPane;
 
-  public abstract void init(Controller controller, Model model, RootStage stage, MFXStepper stepper);
+  public abstract void init(Controller controller, RootStage stage, MFXStepper stepper);
 
   protected void createStepper(List<Step> steps, MFXStepper stepper) {
     boolean recentConnection = !Objects.isNull(this.controller.recentDatabaseConnection);
@@ -65,7 +64,7 @@ public abstract class StepperPresenter extends Presenter {
     try {
       FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName.getName()));
       Node container = loader.load();
-      loader.<StepperPresenter>getController().init(this.controller, this.model, this.stage, stepper);
+      loader.<StepperPresenter>getController().init(this.controller, this.stage, stepper);
       return container;
     } catch (IOException e) {
       throw new RuntimeException(e);

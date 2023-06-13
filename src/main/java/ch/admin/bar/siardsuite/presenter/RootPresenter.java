@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.FileUtils;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -47,8 +46,7 @@ public class RootPresenter extends Presenter {
     @FXML
     public MFXButton helpButton;
 
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 

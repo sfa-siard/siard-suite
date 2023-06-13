@@ -12,8 +12,7 @@ public class DialogPresenter extends Presenter {
   protected HBox windowHeader;
 
   @Override
-  public void init(Controller controller, Model model, RootStage stage) {
-    this.model = model;
+  public void init(Controller controller, RootStage stage) {
     this.controller = controller;
     this.stage = stage;
 

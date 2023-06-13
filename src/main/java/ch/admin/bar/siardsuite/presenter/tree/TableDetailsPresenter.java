@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -37,16 +36,16 @@ public class TableDetailsPresenter extends DetailsPresenter implements SiardArch
 
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, TreeAttributeWrapper wrapper) {
+    public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
         this.wrapper = wrapper;
-        super.init(controller, model, stage, wrapper);
+        super.init(controller, stage, wrapper);
 
-        model.provideDatabaseArchiveProperties(this, wrapper.getDatabaseObject());
-        model.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
-        model.setCurrentTableSearchBase(tableView, new LinkedHashSet<>(tableView.getItems()));
-        if (model.getCurrentTableSearchButton() != null && model.getCurrentTableSearchButton().button() != null) {
-            model.setCurrentTableSearchButton(model.getCurrentTableSearchButton().button(), false);
-            model.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: normal;");
+        controller.provideDatabaseArchiveProperties(this, wrapper.getDatabaseObject());
+        controller.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
+        controller.setCurrentTableSearchBase(tableView, new LinkedHashSet<>(tableView.getItems()));
+        if (controller.getCurrentTableSearchButton() != null && controller.getCurrentTableSearchButton().button() != null) {
+            controller.setCurrentTableSearchButton(controller.getCurrentTableSearchButton().button(), false);
+            controller.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: normal;");
         }
 
         tableContainer.prefHeightProperty().bind(stage.heightProperty().subtract(500.0));

@@ -4,10 +4,9 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
-import ch.admin.bar.siardsuite.component.ButtonBox;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -50,15 +49,14 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
   private Archive archive;
 
   @Override
-  public void init(Controller controller, Model model, RootStage stage) {
+  public void init(Controller controller, RootStage stage) {
     this.controller = controller;
-    this.model = model;
     this.stage = stage;
   }
 
   @Override
-  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-    this.init(controller, model, stage);
+  public void init(Controller controller, RootStage stage, MFXStepper stepper) {
+    this.init(controller, stage);
 
     stepper.addEventHandler(SiardEvent.UPLOAD_SUCCEDED, showResult(stepper));
     stepper.addEventHandler(SiardEvent.UPLOAD_FAILED, showFailed(stepper));
@@ -108,7 +106,7 @@ public class UploadResultPresenter extends StepperPresenter implements ArchiveVi
   }
 
   private void setResultData() {
-    this.model.provideArchiveObject(this);
+    this.controller.provideArchiveObject(this);
     this.subtitle1.setText(this.archive.getMetaData().getDbName());
     long total = 0;
     for (int i = 0; i < this.archive.getSchemas(); i++) {
