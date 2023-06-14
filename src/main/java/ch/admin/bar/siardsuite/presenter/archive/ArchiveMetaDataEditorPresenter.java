@@ -91,6 +91,9 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.stage = stage;
 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
+        MFXButton saveArchiveButton = new MFXButton();
+        I18n.bind(saveArchiveButton, "button.save.archive");
+        this.buttonsBox.append(saveArchiveButton);
         this.borderPane.setBottom(buttonsBox);
         this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
 
@@ -134,7 +137,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
 
     private void setListeners(MFXStepper stepper) {
         this.buttonsBox.next().setOnAction((event) -> {
-            if(this.validateProperties()) {
+            if (this.validateProperties()) {
                 File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
                 File lobFolder = new File(lobExportLocation.getText());
 
@@ -175,7 +178,6 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     }
 
 
-
     private void initFields() {
         controller.provideDatabaseArchiveMetaDataProperties(this);
     }
@@ -189,7 +191,8 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                       String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databseOwner,
                       String databaseCreationDate,
-                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive,
+                      URI lobFolder) {
         name.setText(databaseName);
         description.setText(databaseDescription);
         owner.setText(removePlaceholder(databseOwner));
