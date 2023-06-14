@@ -4,10 +4,9 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.presenter.tree.TreePresenter;
+import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -40,17 +39,16 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
     protected HBox buttonBox;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 
         I18n.bind(title.textProperty(), "search.metadata.dialog.title");
         I18n.bind(text.textProperty(), "search.metadata.dialog.text");
 
-        if (model.getCurrentMetaSearch() != null) {
-            searchField.setText(model.getCurrentMetaSearch());
-            metaSearch(model.getCurrentMetaSearch());
+        if (controller.getCurrentMetaSearch() != null) {
+            searchField.setText(controller.getCurrentMetaSearch());
+            metaSearch(controller.getCurrentMetaSearch());
         }
 
         closeButton.setOnAction(event -> stage.closeDialog());
@@ -65,7 +63,7 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
 
     private void metaSearch(String s) {
         searchHitsBox.getChildren().clear();
-        final Set<MetaSearchHit> hits = model.aggregatedMetaSearch(s);
+        final Set<MetaSearchHit> hits = controller.aggregatedMetaSearch(s);
         if (hits.size() > 0) {
             for (MetaSearchHit hit : hits) {
                 searchHitsBox.getChildren().add(getSearchHitBox(hit));
@@ -73,7 +71,7 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
         } else {
             showNoSearchHits();
         }
-        model.setCurrentMetaSearch(s);
+        controller.setCurrentMetaSearch(s);
     }
 
     private void showNoSearchHits() {
@@ -103,13 +101,17 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
     }
 
     private void show(MetaSearchHit hit) {
-        if (model.getCurrentPreviewPresenter() != null) {
+        if (controller.getCurrentPreviewPresenter() != null) {
             stage.closeDialog();
             try {
-                FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView().getViewName()));
+                FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView()
+                                                                                         .getViewName()));
                 Node node = loader.load();
-                model.getCurrentPreviewPresenter().getTableContainerContent().getChildren().setAll(node);
-                loader.<TreePresenter>getController().init(controller, model, stage, new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
+                controller.getCurrentPreviewPresenter().getContentPane().getChildren().setAll(node);
+                loader.<DetailsPresenter>getController()
+                      .init(controller,
+                            stage,
+                            new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

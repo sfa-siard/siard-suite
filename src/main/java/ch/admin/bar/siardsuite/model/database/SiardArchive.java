@@ -3,6 +3,8 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.facades.ArchiveFacade;
+import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -19,72 +21,73 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+// understands the content of a SIARD Archive
 public class SiardArchive extends DatabaseObject {
 
-    protected Archive archive;
-    protected String archiveName;
-    protected boolean onlyMetaData = false;
-    protected final List<DatabaseSchema> schemas = new ArrayList<>();
-    protected List<User> users = new ArrayList<>();
-    protected List<Privilige> priviliges = new ArrayList<>();
+    private Archive archive;
+    private String name;
+    private boolean onlyMetaData = false;
+    private List<DatabaseSchema> schemas = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
+    private List<Privilige> priviliges = new ArrayList<>();
+
+    // TODO: are these really needed?
     protected SiardArchiveMetaData metaData;
     protected final TreeContentView treeContentView = TreeContentView.ROOT;
 
-    public SiardArchive() {}
-
-    public SiardArchive(String archiveName, Archive archive) {
-        this(archiveName, archive, false);
+    public SiardArchive() {
     }
 
-    public SiardArchive(String archiveName, Archive archive, boolean onlyMetaData) {
+    public SiardArchive(String name, Archive archive) {
+        this(name, archive, false);
+    }
+
+    public SiardArchive(String name, Archive archive, boolean onlyMetaData) {
         this.archive = archive;
         this.onlyMetaData = onlyMetaData;
-        this.archiveName = archiveName;
-        MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
+        this.name = name;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
-        for (int i = 0; i < archive.getSchemas(); i++) {
-            schemas.add(new DatabaseSchema(this, archive.getSchema(i), onlyMetaData));
-        }
-
+        this.schemas = new ArchiveFacade(archive).schemas()
+                                                 .stream()
+                                                 .map(schema -> new DatabaseSchema(this, schema, onlyMetaData)).collect(
+                        Collectors.toList());
+        MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         this.users = metaDataFacade.users();
         this.priviliges = metaDataFacade.priviliges();
     }
 
-    public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner, String dataOriginTimespan,
+    public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner,
+                                   String dataOriginTimespan,
                                    String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
         this.metaData = new SiardArchiveMetaData(dbName, databaseDescription, databaseOwner, dataOriginTimespan,
-                archiverName, archiverContact, lobFolder, targetArchive);
+                                                 archiverName, archiverContact, lobFolder, targetArchive);
     }
 
     public void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(archiveName, onlyMetaData, schemas, users, priviliges);
+        visitor.visit(name, onlyMetaData, schemas, users, priviliges);
     }
 
-    public void shareProperties (SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
+    public void shareProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
         if (databaseObject != null) {
             databaseObject.shareProperties(visitor);
         }
     }
 
-    public void shareObject (ArchiveVisitor visitor) {
+    public void shareObject(ArchiveVisitor visitor) {
         if (archive != null) {
             visitor.visit(archive);
         }
     }
 
-    public void shareProperties (ArchiveVisitor visitor) {
+    public void shareProperties(ArchiveVisitor visitor) {
         if (archive != null) {
             visitor.visit(archive.getMetaData());
         }
     }
 
-    public void shareObject(SiardArchiveVisitor visitor) {
-        visitor.visit(this);
-    }
-
     public void shareProperties(SiardArchiveMetaDataVisitor visitor) {
         if (metaData != null) {
-            metaData.shareProperties(visitor);
+            metaData.accept(visitor);
         }
     }
 
@@ -95,7 +98,8 @@ public class SiardArchive extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView tableView, TreeContentView type) {}
+    protected void populate(TableView tableView, TreeContentView type) {
+    }
 
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
         if (databaseObject != null) {
@@ -110,16 +114,18 @@ public class SiardArchive extends DatabaseObject {
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {}
+    protected void populate(VBox vbox, TreeContentView type) {
+    }
 
     public void export(File directory) {
         List<String> allTables = this.schemas.stream()
-                                           .flatMap(schema -> schema.tables.stream())
-                                           .map(databaseTable -> databaseTable.name)
-                                           .collect(
-                                                   Collectors.toList());
+                                             .flatMap(schema -> schema.tables.stream())
+                                             .map(databaseTable -> databaseTable.name)
+                                             .collect(
+                                                     Collectors.toList());
         this.export(allTables, directory);
     }
+
     public void export(List<String> tablesToExport, File directory) {
         this.schemas.forEach(schema -> schema.export(tablesToExport, directory));
     }
@@ -185,9 +191,30 @@ public class SiardArchive extends DatabaseObject {
 
     public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(schemas.stream().flatMap(schema -> schema.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
+        hits.addAll(schemas.stream()
+                           .flatMap(schema -> schema.aggregatedMetaSearch(s).stream())
+                           .collect(Collectors.toList()));
         return hits;
     }
 
+    public String name() {
+        return name;
+    }
 
+    public List<User> users() {
+        return this.users;
+    }
+
+    public List<Privilige> priviliges() {
+        return this.priviliges;
+    }
+
+    public List<DatabaseSchema> schemas() {
+        return this.schemas;
+    }
+
+    public boolean onlyMetaData() {
+        return this.onlyMetaData;
+    }
 }
+

@@ -1,6 +1,8 @@
-package ch.admin.bar.siardsuite.model.database;
+package ch.admin.bar.siardsuite.model.facades;
 
+import ch.admin.bar.siard2.api.MetaType;
 import ch.admin.bar.siard2.api.Schema;
+import ch.admin.bar.siardsuite.model.database.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +39,13 @@ public class MetaSchemaFacade {
                         .collect(Collectors.toList());
     }
 
+    public List<Routine> routines(SiardArchive archive, DatabaseSchema databaseSchema) {
+        return IntStream.range(0, schema.getMetaSchema().getMetaRoutines())
+                        .mapToObj(schema.getMetaSchema()::getMetaRoutine)
+                        .map(metaRoutine -> new Routine(metaRoutine))
+                        .collect(Collectors.toList());
+    }
+
     public List<DatabaseType> types() {
         return IntStream.range(0, schema.getMetaSchema().getMetaTypes())
                         .mapToObj(schema.getMetaSchema()::getMetaType)
@@ -45,7 +54,17 @@ public class MetaSchemaFacade {
                                                       type.isInstantiable(),
                                                       type.isFinal(),
                                                       type.getBase(),
-                                                      type.getDescription()))
+                                                      type.getDescription(),
+                                                      getMetaAttributes(type)))
                         .collect(Collectors.toList());
     }
+
+    private List<DatabaseAttribute> getMetaAttributes(MetaType type) {
+        return IntStream.range(0, type.getMetaAttributes())
+                        .mapToObj(type::getMetaAttribute)
+                        .map(metaAttribute -> new DatabaseAttribute(metaAttribute))
+                        .collect(Collectors.toList());
+    }
+
+
 }

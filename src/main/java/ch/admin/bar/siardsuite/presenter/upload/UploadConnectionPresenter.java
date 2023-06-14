@@ -4,7 +4,6 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.*;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -119,16 +118,15 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
     }
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        this.init(controller, model, stage);
-        this.model.provideDatabaseArchiveProperties(this);
+    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
+        this.init(controller, stage);
+        this.controller.provideDatabaseArchiveProperties(this);
         addTextWithStyles();
         addFormText();
 
@@ -187,7 +185,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     private void setListeners(MFXStepper stepper) {
         stepper.addEventHandler(SiardEvent.UPLOAD_DBMS_SELECTED, event -> {
             // TODO MSAccess-DB needs different Fields for selecting File- #CR457
-            DatabaseProperties props = model.getDatabaseProps();
+            DatabaseProperties props = controller.getDatabaseProps();
             portField.setText(props.port());
             portField.setPromptText(props.port());
             urlField.setPromptText(props.jdbcUrl());
@@ -282,7 +280,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     private void initSchemaFields() {
         for (DatabaseSchema schema : schemas) {
-            model.provideDatabaseArchiveProperties(this, schema);
+            controller.provideDatabaseArchiveProperties(this, schema);
             Label currentName = new Label();
             Label iconLabel = new Label();
             TextField newName = new TextField();
@@ -306,7 +304,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     private void handleKeyEvent(KeyEvent event) {
         String inputText = event.getText();
         if (inputText != null) {
-            urlField.setText(model.getDatabaseProps()
+            urlField.setText(controller.getDatabaseProps()
                                   .jdbcUrl(dbServerField.getText(), portField.getText(), dbNameField.getText()));
         }
         event.consume();
@@ -320,7 +318,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     @Override
     public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
-                            List<DatabaseView> views, List<DatabaseType> types) {
+                            List<DatabaseView> views, List<DatabaseType> types, List<Routine> routines) {
         this.schemaName = schemaName;
     }
 
@@ -330,9 +328,5 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     @Override
     public void visit(String columnName) {
-    }
-
-    @Override
-    public void visit(SiardArchive archive) {
     }
 }

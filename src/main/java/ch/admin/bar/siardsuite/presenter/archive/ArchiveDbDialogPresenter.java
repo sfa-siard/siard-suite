@@ -1,10 +1,9 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -22,8 +21,8 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.STORAGE_DATE;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 import static ch.admin.bar.siardsuite.util.UserPreferences.sortedChildrenNames;
 
 public class ArchiveDbDialogPresenter extends DialogPresenter {
@@ -48,8 +47,7 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
     protected HBox buttonBox;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 

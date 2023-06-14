@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -43,15 +42,14 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
     private boolean next = true;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
     }
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        this.init(controller, model, stage);
+    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
+        this.init(controller, stage);
 
         I18n.bind(title.textProperty(), "archiveDb.view.title");
         I18n.bind(text.textProperty(), "archiveDb.view.text");
@@ -59,7 +57,7 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
         I18n.bind(errorMessage.textProperty(), "archiveDb.view.error");
 
 
-        this.model.getDatabaseTypes().forEach(this::createRadioToVBox);
+        this.controller.getDatabaseTypes().forEach(this::createRadioToVBox);
 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.borderPane.setBottom(buttonsBox);

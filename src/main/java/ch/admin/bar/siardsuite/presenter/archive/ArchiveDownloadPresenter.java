@@ -5,7 +5,6 @@ import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.*;
 import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -74,15 +73,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     private long total;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
-        this.model = model;
         this.stage = stage;
     }
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        this.init(controller, model, stage);
+    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
+        this.init(controller, stage);
         this.loader.setImage(Icon.loading);
         loadingSpinner = new Spinner(this.loader);
         this.bindTexts();
@@ -100,7 +98,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                     try {
                         final Archive archive = ArchiveImpl.newInstance();
                         archive.open(targetArchive);
-                        model.setSiardArchive(targetArchive.getName(), archive);
+                        controller.setSiardArchive(targetArchive.getName(), archive);
                         stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -126,7 +124,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
         return event -> {
             if (!event.isConsumed()) {
                 loadingSpinner.play();
-                model.provideDatabaseArchiveMetaDataProperties(this);
+                controller.provideDatabaseArchiveMetaDataProperties(this);
                 this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
                 this.archivePath.setText(targetArchive.getAbsolutePath());
                 this.subtitle1.setText(this.databaseName);

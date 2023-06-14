@@ -1,9 +1,10 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.*;
+import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.component.Icon;
+import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.ProgressItem;
 import ch.admin.bar.siardsuite.presenter.ProgressItems;
@@ -57,15 +58,14 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     private final ProgressItems progressItems = new ProgressItems();
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
     }
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-        this.init(controller, model, stage);
+    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
+        this.init(controller, stage);
 
         I18n.bind(this.title.textProperty(), "archiveLoadingPreview.view.title");
         I18n.bind(this.text.textProperty(), "archiveLoadingPreview.view.text");

@@ -6,9 +6,7 @@ import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
-import ch.admin.bar.siardsuite.util.FileUtils;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -22,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.model.View.ERROR_DIALOG;
@@ -44,9 +41,8 @@ public class UploadingPresenter extends StepperPresenter {
   public MFXProgressBar progressBar;
 
   @Override
-  public void init(Controller controller, Model model, RootStage stage) {
+  public void init(Controller controller, RootStage stage) {
     this.controller = controller;
-    this.model = model;
     this.stage = stage;
 
     this.loader.setImage(Icon.loading);
@@ -60,8 +56,8 @@ public class UploadingPresenter extends StepperPresenter {
   }
 
   @Override
-  public void init(Controller controller, Model model, RootStage stage, MFXStepper stepper) {
-    this.init(controller, model, stage);
+  public void init(Controller controller, RootStage stage, MFXStepper stepper) {
+    this.init(controller, stage);
     stepper.addEventHandler(SiardEvent.UPLOAD_CONNECTION_UPDATED, uploadDatabase(stepper));
   }
 

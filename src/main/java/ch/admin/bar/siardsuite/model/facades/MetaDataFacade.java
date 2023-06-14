@@ -1,6 +1,8 @@
-package ch.admin.bar.siardsuite.model.database;
+package ch.admin.bar.siardsuite.model.facades;
 
 import ch.admin.bar.siard2.api.MetaData;
+import ch.admin.bar.siardsuite.model.database.Privilige;
+import ch.admin.bar.siardsuite.model.database.User;
 
 import java.util.List;
 import java.util.stream.Collectors;

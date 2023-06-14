@@ -1,44 +1,47 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.*;
+import ch.admin.bar.siard2.api.RecordDispenser;
+import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import java.io.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class DatabaseTable extends DatabaseObject implements WithColumns {
 
+    public static final String TABLE_CONTAINER_TABLE_HEADER_ROW = "tableContainer.table.header.row";
     protected final SiardArchive archive;
     protected final DatabaseSchema schema;
     protected final Table table;
     protected final boolean onlyMetaData;
-    protected final String name;
+    public final String name;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
-    protected final String numberOfColumns;
+    public final String numberOfColumns;
     protected final List<DatabaseRow> rows = new ArrayList<>();
-    protected final String numberOfRows;
+    public final String numberOfRows;
     protected int loadBatchSize = 50;
     protected int lastRowLoadedIndex = -1;
     protected final TreeContentView treeContentView = TreeContentView.TABLE;
 
-    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
+    public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
         this(archive, schema, table, false);
     }
 
-    protected DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
+    public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
         this.archive = archive;
         this.schema = schema;
         this.table = table;
@@ -57,56 +60,45 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
 
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView != null) {
-            if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
-                final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-                final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
-                final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-                col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.position"));
-                col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnName"));
-                col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.columnType"));
-                col0.setCellValueFactory(new MapValueFactory<>("index"));
-                col1.setCellValueFactory(new MapValueFactory<>("name"));
-                col2.setCellValueFactory(new MapValueFactory<>("type"));
-                tableView.getColumns().add(col0);
-                tableView.getColumns().add(col1);
-                tableView.getColumns().add(col2);
-                tableView.setItems(colItems());
-            } else if (TreeContentView.ROWS.equals(type)) {
-                lastRowLoadedIndex = -1;
-                final List<TableRow<Map>> rows = new ArrayList<>();
-                final Callback<TableView<Map>, TableRow<Map>> rowFactory = o -> {
-                    TableRow<Map> row = new TableRow<>();
-                    rows.add(row);
-                    return row;
-                };
-                tableView.setRowFactory(rowFactory);
-                final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-                col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
-                col0.setCellValueFactory(new MapValueFactory<>("index"));
-                tableView.getColumns().add(col0);
-                TableColumn<Map, StringProperty> col;
-                for (DatabaseColumn column : columns) {
-                    col = new TableColumn<>();
-                    col.setText(column.name);
-                    col.setCellValueFactory(new MapValueFactory<>(column.index));
-                    tableView.getColumns().add(col);
-                }
-                try {
-                    final RecordDispenser recordDispenser = table.openRecords();
-                    loadRecords(recordDispenser);
-                    tableView.setItems(rowItems());
-                    tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
-                    tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE, event -> expand(recordDispenser, tableView));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+        if (tableView == null) return;
+
+        if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
+            new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, INDEX)
+                                         .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME, NAME)
+                                         .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE, TYPE)
+                                         .withItems(colItems());
+        }
+        if (TreeContentView.ROWS.equals(type)) {
+            lastRowLoadedIndex = -1;
+            final List<TableRow<Map>> rows = new ArrayList<>();
+            final Callback<TableView<Map>, TableRow<Map>> rowFactory = o -> {
+                TableRow<Map> row = new TableRow<>();
+                rows.add(row);
+                return row;
+            };
+            tableView.setRowFactory(rowFactory);
+
+            SiardTableView siardTableView = new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_ROW,
+                                                                                     INDEX);
+            for (DatabaseColumn column : columns) {
+                siardTableView.withColumn(column.name, column.index);
+            }
+            try {
+                final RecordDispenser recordDispenser = table.openRecords();
+                loadRecords(recordDispenser);
+                tableView.setItems(rowItems());
+                tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
+                tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE,
+                                          event -> expand(recordDispenser, tableView));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {}
+    protected void populate(VBox vbox, TreeContentView type) {
+    }
 
     private ObservableList<Map> colItems() {
         final ObservableList<Map> items = FXCollections.observableArrayList();
@@ -121,16 +113,12 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     }
 
     private ObservableList<Map> rowItems() {
-        final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseRow row : rows) {
+        return FXCollections.observableArrayList(rows.stream().map(row -> {
             Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(Integer.parseInt(row.index) + 1));
-            for (DatabaseCell cell : row.cells) {
-                item.put(cell.index, cell.value);
-            }
-            items.add(item);
-        }
-        return items;
+            item.put(INDEX, String.valueOf(Integer.parseInt(row.index) + 1));
+            row.cells.forEach(cell -> item.put(cell.index, cell.value));
+            return item;
+        }).collect(Collectors.toList()));
     }
 
     private void loadItems(RecordDispenser recordDispenser, TableView<Map> tableView, List<TableRow<Map>> rows) {
@@ -181,7 +169,11 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         File destination = new File(directory.getAbsolutePath(), this.name + ".html");
         File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
         OutputStream outPutStream = new FileOutputStream(destination);
-        this.table.getParentSchema().getParentArchive().getSchema(this.schema.name).getTable(this.name).exportAsHtml(outPutStream, lobFolder);
+        this.table.getParentSchema()
+                  .getParentArchive()
+                  .getSchema(this.schema.name)
+                  .getTable(this.name)
+                  .exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
     }
 
@@ -213,4 +205,19 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     public String name() {
         return name;
     }
+
+    public List<DatabaseColumn> columns() {
+        return this.columns;
+    }
+
+    public String numberOfRows() {
+        return this.numberOfRows;
+    }
+
+    private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";
+    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE = "tableContainer.table.header.columnType";
+    private static final String INDEX = "index";
+    private static final String NAME = "name";
+    private static final String TYPE = "type";
 }

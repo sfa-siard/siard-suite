@@ -3,20 +3,19 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
+import ch.admin.bar.siardsuite.presenter.tree.*;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
@@ -29,6 +28,7 @@ public class DatabaseSchema extends DatabaseObject {
     protected List<DatabaseTable> tables;
     protected List<DatabaseView> views;
     protected List<DatabaseType> types;
+    protected List<Routine> routines;
 
     protected final TreeContentView treeContentView = TreeContentView.SCHEMA;
 
@@ -43,51 +43,32 @@ public class DatabaseSchema extends DatabaseObject {
 
         this.tables = metaSchemaFacade.tables(archive, this, onlyMetaData);
         this.views = metaSchemaFacade.views(archive, this);
-        this.types = metaSchemaFacade.types();
+        this.routines = metaSchemaFacade.routines(archive, this);
 
+        this.types = metaSchemaFacade.types();
     }
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visitSchema(name, description, tables, views, types);
+        visitor.visitSchema(name, description, tables, views, types, routines);
     }
 
     @Override
     protected void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView != null && type != null) {
-            final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
-            final TableColumn<Map, StringProperty> col2 = new TableColumn<>();
-            col0.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.row"));
-            col1.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.tableName"));
-            col2.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfColumns"));
-            col0.setCellValueFactory(new MapValueFactory<>("index"));
-            col1.setCellValueFactory(new MapValueFactory<>("name"));
-            col2.setCellValueFactory(new MapValueFactory<>("numberOfColumns"));
-            tableView.getColumns().add(col0);
-            tableView.getColumns().add(col1);
-            tableView.getColumns().add(col2);
-            if (!onlyMetaData) {
-                final TableColumn<Map, StringProperty> col3 = new TableColumn<>();
-                col3.textProperty().bind(I18n.createStringBinding("tableContainer.table.header.numberOfRows"));
-                col3.setCellValueFactory(new MapValueFactory<>("numberOfRows"));
-                tableView.getColumns().add(col3);
-            }
-            tableView.setItems(items());
-        }
+        if (tableView == null || type == null) return;
+        TableViewPopulatorStrategy strategy = getStrategy(type);
+        if (strategy == null) return;
+        strategy.populate(tableView, onlyMetaData);
     }
 
-    private ObservableList<Map> items() {
-        final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseTable table : tables) {
-            Map<String, String> item = new HashMap<>();
-            item.put("index", String.valueOf(tables.indexOf(table) + 1));
-            item.put("name", table.name);
-            item.put("numberOfColumns", table.numberOfColumns);
-            item.put("numberOfRows", table.numberOfRows);
-            items.add(item);
-        }
-        return items;
+    private TableViewPopulatorStrategy getStrategy(TreeContentView type) {
+        if (type.equals(TreeContentView.TABLES) || type.equals(TreeContentView.SCHEMA))
+            return new TablesTableViewPopulatorStrategy(tables);
+        if (type.equals(TreeContentView.VIEWS)) return new ViewsTableViewPopulatorStrategy(views);
+        if (type.equals(TreeContentView.ROUTINES)) return new RoutinesTableViewPopulatorStrategy(routines);
+        if (type.equals(TreeContentView.TYPES)) return new TypesTableViewPopulatorStrategy(types);
+        return null;
     }
+
 
     public void export(List<String> tablesToExport, File directory) {
         this.tables.stream()
@@ -125,8 +106,7 @@ public class DatabaseSchema extends DatabaseObject {
         if (nodeIds.size() > 0) {
             List<MetaSearchHit> metaSearchHits = new ArrayList<>();
             metaSearchHits.add(new MetaSearchHit("Schema " + name, this, treeContentView, nodeIds));
-            hits = new TreeSet<>(
-                    metaSearchHits);
+            hits = new TreeSet<>(metaSearchHits);
         }
         return hits;
     }
@@ -136,7 +116,27 @@ public class DatabaseSchema extends DatabaseObject {
         hits.addAll(tables.stream()
                           .flatMap(table -> table.aggregatedMetaSearch(s).stream())
                           .collect(Collectors.toList()));
+        // TODO: search other aspects of the archive, not only tables...
         return hits;
     }
 
+    public String name() {
+        return name;
+    }
+
+    public List<DatabaseType> types() {
+        return this.types;
+    }
+
+    public List<Routine> routines() {
+        return this.routines;
+    }
+
+    public List<DatabaseView> views() {
+        return this.views;
+    }
+
+    public List<DatabaseTable> tables() {
+        return this.tables;
+    }
 }

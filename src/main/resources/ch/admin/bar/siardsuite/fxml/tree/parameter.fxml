@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.tree.ParameterDetailsPresenter">
+    <VBox fx:id="container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox>
+            <children>
+                <VBox fx:id="labels" prefWidth="270.0" prefHeight="400">
+                    <Label fx:id="name" styleClass="table-container-label-small"/>
+                    <Label fx:id="position" styleClass="table-container-label-small"/>
+                    <Label fx:id="mode" styleClass="table-container-label-small"/>
+                    <Label fx:id="sqlType" styleClass="table-container-label-small"/>
+                    <Label fx:id="udtSchema" styleClass="table-container-label-small"/>
+                    <Label fx:id="udtName" styleClass="table-container-label-small"/>
+                    <Label fx:id="originalDataType" styleClass="table-container-label-small"/>
+                    <Label fx:id="arrayParameterCardinality" styleClass="table-container-label-small"/>
+                    <Label fx:id="description" styleClass="table-container-label-small"/>
+                </VBox>
+                <VBox fx:id="texts" prefWidth="400.0" prefHeight="400"/>
+            </children>
+        </HBox>
+
+        <padding>
+            <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+        </padding>
+
+    </VBox>
+</AnchorPane>

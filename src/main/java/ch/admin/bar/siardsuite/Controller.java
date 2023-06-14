@@ -3,20 +3,35 @@ package ch.admin.bar.siardsuite;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
+import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
-import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.*;
+import ch.admin.bar.siardsuite.model.database.DatabaseObject;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
+import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
+import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Controller {
 
@@ -24,17 +39,11 @@ public class Controller {
     private Archive tmpArchive;
     private DatabaseLoadService databaseLoadService;
     private DatabaseUploadService databaseUploadService;
-
     private Workflow workflow;
-
     public String recentDatabaseConnection;
 
     public Controller(Model model) {
         this.model = model;
-    }
-
-    public void setDatabaseType(String databaseType) {
-        model.setDatabaseType(databaseType);
     }
 
     public void loadDatabase(boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
@@ -109,9 +118,6 @@ public class Controller {
         return workflow;
     }
 
-    public void setWorkflow(Workflow workflow) {
-        this.workflow = workflow;
-    }
 
     public void uploadArchive(EventHandler<WorkerStateEvent> onSuccess,
                               EventHandler<WorkerStateEvent> onFailure) throws SQLException {
@@ -167,10 +173,6 @@ public class Controller {
         return this.model.getFailure().stacktrace();
     }
 
-    public void clearSiardArchive() {
-        this.model.clearSiardArchive();
-    }
-
     public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
                                       String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
         this.model.updateArchiveMetaData(
@@ -182,5 +184,131 @@ public class Controller {
                 archiverContact,
                 lobFolder,
                 targetArchive);
+    }
+
+    public void initializeWorkflow(Workflow workflow, RootStage stage) {
+        this.model.clearSiardArchive();
+        this.workflow = workflow;
+        stage.openDialog(View.forWorkflow(workflow));
+    }
+
+    public void initializeExport(RootStage stage) {
+        this.workflow = Workflow.EXPORT;
+        stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
+    }
+
+    public void initializeUpload(RootStage stage) {
+        this.workflow = Workflow.UPLOAD;
+        stage.openDialog(View.EXPORT_SELECT_TABLES);
+    }
+
+    public void start(RootStage stage) {
+        this.model.clearSiardArchive();
+        stage.navigate(View.START);
+    }
+
+    public SiardArchive getSiardArchive() {
+        return model.getSiardArchive();
+    }
+
+    public void setCurrentView(View view) {
+        this.model.setCurrentView(view);
+    }
+
+    public View getCurrentView() {
+        return this.model.getCurrentView();
+    }
+
+    public String getCurrentTableSearch() {
+        return this.model.getCurrentTableSearch();
+    }
+
+    public TableSearchBase getCurrentTableSearchBase() {
+        return this.model.getCurrentTableSearchBase();
+    }
+
+    public void setCurrentTableSearch(String s) {
+        this.model.setCurrentTableSearch(s);
+    }
+
+    public TableSearchButton getCurrentTableSearchButton() {
+        return this.model.getCurrentTableSearchButton();
+    }
+
+    public void setCurrentTableSearchButton(MFXButton button, boolean active) {
+        this.model.setCurrentTableSearchButton(button, active);
+    }
+
+    public void setDatabaseType(String databaseType) {
+        model.setDatabaseType(databaseType);
+    }
+
+    public void populate(VBox texts, DatabaseObject databaseObject, TreeContentView type) {
+        this.model.populate(texts, databaseObject, type);
+    }
+
+    public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
+        this.model.populate(tableView, databaseObject, type);
+    }
+
+    public void populate(TreeItem root) {
+        this.model.populate(root);
+    }
+
+    public void provideArchiveObject(ArchiveVisitor visitor) {
+        this.model.provideArchiveObject(visitor);
+    }
+
+    public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
+        this.model.provideDatabaseArchiveProperties(visitor);
+    }
+
+    public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
+        this.model.provideDatabaseArchiveProperties(visitor, databaseObject);
+    }
+
+    public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
+        this.model.provideDatabaseArchiveMetaDataProperties(visitor);
+    }
+
+    public DatabaseProperties getDatabaseProps() {
+        return this.model.getDatabaseProps();
+    }
+
+    public StringProperty getDatabaseProduct() {
+        return this.model.getDatabaseProduct();
+    }
+
+    public List<String> getDatabaseTypes() {
+        return this.model.getDatabaseTypes();
+    }
+
+    public String getCurrentMetaSearch() {
+        return this.model.getCurrentMetaSearch();
+    }
+
+    public void setSiardArchive(String name, Archive archive) {
+        this.model.setSiardArchive(name, archive);
+    }
+
+
+    public void setCurrentMetaSearch(String s) {
+        this.model.setCurrentMetaSearch(s);
+    }
+
+    public Set<MetaSearchHit> aggregatedMetaSearch(String s) {
+        return this.model.aggregatedMetaSearch(s);
+    }
+
+    public ArchiveBrowserPresenter getCurrentPreviewPresenter() {
+        return this.model.getCurrentPreviewPresenter();
+    }
+
+    public void setCurrentPreviewPresenter(ArchiveBrowserPresenter archiveBrowserPresenter) {
+        this.model.setCurrentPreviewPresenter(archiveBrowserPresenter);
+    }
+
+    public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> maps) {
+        this.model.setCurrentTableSearchBase(tableView, maps);
     }
 }

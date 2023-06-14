@@ -6,7 +6,7 @@ import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.presenter.PreviewPresenter;
+import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -26,7 +26,7 @@ public class Model {
     private View currentView = View.START;
     private TableSearchBase currentTableSearchBase = null;
     private TableSearchButton currentTableSearchButton = null;
-    private PreviewPresenter currentPreviewPresenter = null;
+    private ArchiveBrowserPresenter currentPreviewPresenter = null;
     private String currentTableSearch = null;
     private String currentMetaSearch = null;
     private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
@@ -62,11 +62,11 @@ public class Model {
         currentTableSearchButton = new TableSearchButton(button, active);
     }
 
-    public PreviewPresenter getCurrentPreviewPresenter() {
+    public ArchiveBrowserPresenter getCurrentPreviewPresenter() {
         return currentPreviewPresenter;
     }
 
-    public void setCurrentPreviewPresenter(PreviewPresenter presenter) {
+    public void setCurrentPreviewPresenter(ArchiveBrowserPresenter presenter) {
         currentPreviewPresenter = presenter;
     }
 
@@ -119,6 +119,7 @@ public class Model {
     }
 
     public SiardArchive getSiardArchive() {
+        if (this.siardArchive == null) this.siardArchive = new SiardArchive();
         return siardArchive;
     }
 
@@ -187,33 +188,19 @@ public class Model {
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareProperties(visitor);
-        }
+        getSiardArchive().shareProperties(visitor);
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareProperties(visitor, databaseObject);
-        }
-    }
-
-    public void provideDatabaseArchiveObject(SiardArchiveVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareObject(visitor);
-        }
+        getSiardArchive().shareProperties(visitor, databaseObject);
     }
 
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().populate(tableView, databaseObject, type);
-        }
+        getSiardArchive().populate(tableView, databaseObject, type);
     }
 
     public void populate(VBox vBox, DatabaseObject databaseObject, TreeContentView type) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().populate(vBox, databaseObject, type);
-        }
+        getSiardArchive().populate(vBox, databaseObject, type);
     }
 
     public void populate(TreeItem root) {
@@ -221,35 +208,23 @@ public class Model {
     }
 
     public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareProperties(visitor);
-        }
+        getSiardArchive().shareProperties(visitor);
     }
 
     public void provideDatabaseArchiveMetaDataObject(SiardArchiveMetaDataVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareObject(visitor);
-        }
+        getSiardArchive().shareObject(visitor);
     }
 
     public void provideArchiveProperties(ArchiveVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareProperties(visitor);
-        }
+        getSiardArchive().shareProperties(visitor);
     }
 
     public void provideArchiveObject(ArchiveVisitor visitor) {
-        if (getSiardArchive() != null) {
-            getSiardArchive().shareObject(visitor);
-        }
+        getSiardArchive().shareObject(visitor);
     }
 
     public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
-        TreeSet<MetaSearchHit> hits = new TreeSet<>();
-        if (getSiardArchive() != null) {
-            hits = getSiardArchive().aggregatedMetaSearch(s);
-        }
-        return hits;
+        return getSiardArchive().aggregatedMetaSearch(s);
     }
 
     public void setSchemaMap(Map schemaMap) {

@@ -6,7 +6,6 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -69,8 +68,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
     protected HBox buttonBox;
 
     @Override
-    public void init(Controller controller, Model model, RootStage stage) {
-        this.model = model;
+    public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 
@@ -195,7 +193,7 @@ public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
             try {
                 final Archive archive = ArchiveImpl.newInstance();
                 archive.open(file);
-                model.setSiardArchive(file.getName(), archive);
+                controller.setSiardArchive(file.getName(), archive);
                 stage.closeDialog();
                 this.proceed();
             } catch (IOException e) {

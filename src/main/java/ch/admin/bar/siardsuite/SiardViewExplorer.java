@@ -23,7 +23,7 @@ public class SiardViewExplorer extends Application {
                 "Swiss Federal Archives, Berne, Switzerland, 2007-2022");
 
 
-        RootStage rootStage = new RootStage(model, controller);
+        RootStage rootStage = new RootStage(controller);
         rootStage.setResizable(true);
         rootStage.setHeight(1200);
         rootStage.setWidth(1800);
