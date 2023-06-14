@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
+import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -14,6 +15,7 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
@@ -25,6 +27,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -32,6 +35,7 @@ import java.util.List;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
+import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
 
@@ -91,9 +95,8 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.stage = stage;
 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
-        MFXButton saveArchiveButton = new MFXButton();
-        I18n.bind(saveArchiveButton, "button.save.archive");
-        this.buttonsBox.append(saveArchiveButton);
+
+
         this.borderPane.setBottom(buttonsBox);
         this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
 
@@ -106,7 +109,13 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
 
         this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+        MFXButton saveArchiveButton = new MFXButton();
+        I18n.bind(saveArchiveButton, "button.save.archive");
+        saveArchiveButton.setOnAction(event -> {
+            this.saveOnlyMetaData(stepper);
+        });
 
+        this.buttonsBox.append(saveArchiveButton);
         this.setListeners(stepper);
     }
 
@@ -175,6 +184,39 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         });
 
         stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initFields());
+    }
+
+    private void saveOnlyMetaData(MFXStepper stepper) {
+        if (this.validateProperties()) {
+            File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
+            File lobFolder = new File(lobExportLocation.getText());
+
+            if (targetArchive != null) {
+                this.controller.updateArchiveMetaData(
+                        this.name.getText(),
+                        this.description.getText(),
+                        this.owner.getText(),
+                        this.dataOriginTimespan.getText(),
+                        this.archiverName.getText(),
+                        this.archiverContact.getText(),
+                        lobFolder.toURI() != null ? lobFolder.toURI() : null,
+                        targetArchive);
+                try {
+                    this.controller.saveArchiveOnlyMetaData(targetArchive);
+                } catch (IOException e) {
+                    fail(stepper, e, ERROR_OCCURED);
+                }
+                //stepper.fireEvent(new SiardEvent(ARCHIVE_METADATA_UPDATED));
+            }
+        }
+    }
+
+    private void fail(MFXStepper stepper, Throwable e, EventType<SiardEvent> event) {
+        e.printStackTrace();
+        this.stage.openDialog(View.ERROR_DIALOG);
+        controller.cancelDownload();
+        controller.failure(new Failure(e));
+        stepper.fireEvent(new SiardEvent(event));
     }
 
 

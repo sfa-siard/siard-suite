@@ -14,6 +14,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -215,6 +216,10 @@ public class SiardArchive extends DatabaseObject {
 
     public boolean onlyMetaData() {
         return this.onlyMetaData;
+    }
+
+    public void save(File targetArchive) throws IOException {
+        this.archive.saveMetaData();
     }
 }
 

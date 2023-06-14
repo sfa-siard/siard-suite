@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
@@ -25,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -51,7 +53,7 @@ public class Controller {
     ) throws SQLException {
         tmpArchive = model.initArchive();
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(tmpArchive, onlyMetaData);
+                                                            .createDatabaseLoader(tmpArchive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -61,7 +63,7 @@ public class Controller {
                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
         final Archive archive = model.initArchive(target, onlyMetaData);
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(archive, onlyMetaData);
+                                                            .createDatabaseLoader(archive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -310,5 +312,12 @@ public class Controller {
 
     public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> maps) {
         this.model.setCurrentTableSearchBase(tableView, maps);
+    }
+
+    public void saveArchiveOnlyMetaData(File targetArchive) throws IOException {
+        ((ArchiveImpl) this.tmpArchive).isMetaDataDifferent("1",
+                                                            "2"); // hacky way to tell the archive that it has changed. it won't save it otherwise
+        this.getSiardArchive().save(targetArchive);
+
     }
 }
