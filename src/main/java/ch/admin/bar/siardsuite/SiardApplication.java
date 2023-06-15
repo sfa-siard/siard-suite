@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 
 public class SiardApplication extends Application {
 
@@ -19,13 +20,16 @@ public class SiardApplication extends Application {
     // trial to fix the bad font rendering issue from javafx
     System.setProperty("prism.lcdtext", "false");
     System.setProperty("prism.text", "t2k");
+    Properties props = new Properties();
+    props.load(SiardApplication.class.getResourceAsStream("version.properties"));
+    String version = (String) props.get("version");
 
     // needed for the api *eyes rolling*
     ProgramInfo.getProgramInfo(
             "SIARD Suite", getClass().getPackage().getImplementationVersion(),
-            "SiardGui", "0",
+            "SIARD Suite", version,
             "Program to download, view, upload database content and database edit meta data in a .siard file",
-            "Swiss Federal Archives, Berne, Switzerland, 2007-2022");
+            "Swiss Federal Archives, Berne, Switzerland, 2007-2023");
 
     if (SystemTray.isSupported()) {
       URL url = SiardApplication.class.getResource("icons/archive_red.png");

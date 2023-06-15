@@ -1,5 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
@@ -26,8 +28,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -137,7 +138,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
 
     private File showFileChooserToSelectTargetArchive(String databaseName) {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(I18n.get("open.siard.archive.dialog.choose.file.title"));
+        fileChooser.setTitle(I18n.get("export.choose-location.text"));
         fileChooser.setInitialFileName(databaseName + ".siard");
         final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
         fileChooser.getExtensionFilters().add(extensionFilter);
@@ -151,27 +152,19 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 File lobFolder = new File(lobExportLocation.getText());
 
                 if (targetArchive != null) {
-                    this.controller.updateArchiveMetaData(
-                            this.name.getText(),
-                            this.description.getText(),
-                            this.owner.getText(),
-                            this.dataOriginTimespan.getText(),
-                            this.archiverName.getText(),
-                            this.archiverContact.getText(),
-                            lobFolder.toURI() != null ? lobFolder.toURI() : null,
-                            targetArchive);
+                    updateMetaData(targetArchive, lobFolder);
+
                     stepper.next();
                     stepper.fireEvent(new SiardEvent(ARCHIVE_METADATA_UPDATED));
                 }
             }
-
         });
 
         infoButton.setOnMouseMoved(event -> {
             Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
             tooltip.show(infoButton,
-                         (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-                         boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
+                    (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
+                    boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
         });
 
         infoButton.setOnMouseExited(event -> tooltip.hide());
@@ -180,33 +173,75 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
             final DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setTitle(I18n.get("export.choose-location.text"));
             File file = directoryChooser.showDialog(stage);
-            this.lobExportLocation.setText(file.getAbsolutePath());
+            if (file != null) {
+                this.lobExportLocation.setText(file.getAbsolutePath());
+            }
         });
 
         stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initFields());
     }
 
-    private void saveOnlyMetaData(MFXStepper stepper) {
-        if (this.validateProperties()) {
+    /*
+    Most of this function is needed to hack around the old siard-api and to prevent another databaseLoad.
+     */
+    private void setupMetaArchive() {
+        try {
             File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
+            File tmp = new File(this.controller.getSiardArchive().getTmpPath().getFileName());
+            // Copy the tmp-archive created with the downloadTask to the user-selected export folder.
+            copyFileUsingStream(tmp, targetArchive);
+            // Create a new archive-instance pointing to the copied archive-file.
+            final Archive archive = ArchiveImpl.newInstance();
+            archive.open(targetArchive);
+            this.controller.setSiardArchive(this.name.getText(), archive);
+
             File lobFolder = new File(lobExportLocation.getText());
 
             if (targetArchive != null) {
-                this.controller.updateArchiveMetaData(
-                        this.name.getText(),
-                        this.description.getText(),
-                        this.owner.getText(),
-                        this.dataOriginTimespan.getText(),
-                        this.archiverName.getText(),
-                        this.archiverContact.getText(),
-                        lobFolder.toURI() != null ? lobFolder.toURI() : null,
-                        targetArchive);
-                try {
-                    this.controller.saveArchiveOnlyMetaData(targetArchive);
-                } catch (IOException e) {
-                    fail(stepper, e, ERROR_OCCURED);
-                }
-                //stepper.fireEvent(new SiardEvent(ARCHIVE_METADATA_UPDATED));
+                updateMetaData(targetArchive, lobFolder);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private void updateMetaData(File targetArchive, File lobFolder) {
+        this.controller.updateArchiveMetaData(
+                this.name.getText(),
+                this.description.getText(),
+                this.owner.getText(),
+                this.dataOriginTimespan.getText(),
+                this.archiverName.getText(),
+                this.archiverContact.getText(),
+                lobFolder.toURI() != null ? lobFolder.toURI() : null,
+                targetArchive);
+    }
+
+    private static void copyFileUsingStream(File source, File dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(source);
+            os = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            is.close();
+            os.close();
+        }
+    }
+
+    private void saveOnlyMetaData(MFXStepper stepper) {
+        if (this.validateProperties()) {
+            setupMetaArchive();
+            try {
+                this.controller.saveArchiveOnlyMetaData();
+            } catch (IOException e) {
+                fail(stepper, e, ERROR_OCCURED);
             }
         }
     }
@@ -249,11 +284,11 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
 
     private boolean validateProperties() {
         List<ValidationProperty> validationProperties = Arrays.asList(new ValidationProperty(owner,
-                                                                                             ownerValidationMsg,
-                                                                                             "archiveMetaData.owner.missing"),
-                                                                      new ValidationProperty(dataOriginTimespan,
-                                                                                             dataOriginTimespanValidationMsg,
-                                                                                             "archiveMetaData.timespan.missing"));
+                        ownerValidationMsg,
+                        "archiveMetaData.owner.missing"),
+                new ValidationProperty(dataOriginTimespan,
+                        dataOriginTimespanValidationMsg,
+                        "archiveMetaData.timespan.missing"));
 
         return new ValidationProperties(validationProperties).validate();
     }

@@ -101,6 +101,7 @@ public class Model {
         try {
             archive.create(fileArchive);
             if (metaLoad) {
+                // without tmpfiles are not deleted
                 fileArchive.deleteOnExit();
             }
         } catch (IOException e) {

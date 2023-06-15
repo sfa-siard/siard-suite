@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
@@ -305,10 +304,8 @@ public class Controller {
         this.model.setCurrentTableSearchBase(tableView, maps);
     }
 
-    public void saveArchiveOnlyMetaData(File targetArchive) throws IOException {
-        ((ArchiveImpl) this.tmpArchive).isMetaDataDifferent("1",
-                                                            "2"); // hacky way to tell the archive that it has changed. it won't save it otherwise
-        this.getSiardArchive().save(targetArchive);
+    public void saveArchiveOnlyMetaData() throws IOException {
+        this.getSiardArchive().save();
 
     }
 }
