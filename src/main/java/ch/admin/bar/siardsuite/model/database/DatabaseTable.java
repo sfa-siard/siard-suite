@@ -59,7 +59,7 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     }
 
     @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
+    public void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null) return;
 
         if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
@@ -97,7 +97,7 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {
+    public void populate(VBox vbox, TreeContentView type) {
     }
 
     private ObservableList<Map> colItems() {

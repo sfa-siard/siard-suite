@@ -99,7 +99,7 @@ public class SiardArchive extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView tableView, TreeContentView type) {
+    public void populate(TableView tableView, TreeContentView type) {
     }
 
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
@@ -115,7 +115,7 @@ public class SiardArchive extends DatabaseObject {
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {
+    public void populate(VBox vbox, TreeContentView type) {
     }
 
     public void export(File directory) {

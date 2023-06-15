@@ -24,12 +24,12 @@ public class DatabaseAttribute extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
+    public void populate(TableView<Map> tableView, TreeContentView type) {
 
     }
 
     @Override
-    protected void populate(VBox container, TreeContentView type) {
+    public void populate(VBox container, TreeContentView type) {
         new SiardLabelContainer(container).withLabel(metaAttribute.getName(), "name")
                                           .withLabel(String.valueOf(metaAttribute.getPosition()), "position")
                                           .withLabel(metaAttribute.getType(), "SQL_TYPE")

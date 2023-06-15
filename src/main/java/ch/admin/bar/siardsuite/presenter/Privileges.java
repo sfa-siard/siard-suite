@@ -36,7 +36,7 @@ public class Privileges extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
+    public void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView != null && type != null) {
             final TableColumn<Map, StringProperty> col0 = new TableColumn<>();
             final TableColumn<Map, StringProperty> col1 = new TableColumn<>();
@@ -76,7 +76,7 @@ public class Privileges extends DatabaseObject {
     }
 
     @Override
-    protected void populate(VBox vBox, TreeContentView type) {
+    public void populate(VBox vBox, TreeContentView type) {
 
     }
 

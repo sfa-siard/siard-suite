@@ -22,7 +22,6 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
-import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
 import java.io.File;
@@ -243,14 +242,6 @@ public class Controller {
 
     public void setDatabaseType(String databaseType) {
         model.setDatabaseType(databaseType);
-    }
-
-    public void populate(VBox texts, DatabaseObject databaseObject, TreeContentView type) {
-        this.model.populate(texts, databaseObject, type);
-    }
-
-    public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
-        this.model.populate(tableView, databaseObject, type);
     }
 
     public void populate(TreeItem root) {

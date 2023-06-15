@@ -19,7 +19,7 @@ public abstract class DetailsPresenter extends Presenter {
     protected VBox labels;
 
     @Override
-    public void init(Controller controller,RootStage stage) {
+    public void init(Controller controller, RootStage stage) {
     }
 
     public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
@@ -27,8 +27,7 @@ public abstract class DetailsPresenter extends Presenter {
         this.stage = stage;
 
         bindLabels();
-
-        controller.populate(texts, wrapper.getDatabaseObject(), wrapper.getType());
+        wrapper.getDatabaseObject().populate(texts, wrapper.getType());
     }
 
     protected abstract void bindLabels();
