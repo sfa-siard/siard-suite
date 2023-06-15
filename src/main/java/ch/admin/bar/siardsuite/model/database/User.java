@@ -1,12 +1,5 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
-
-import java.util.Map;
-
 public class User {
     private final String name;
 

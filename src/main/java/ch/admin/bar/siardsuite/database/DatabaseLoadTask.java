@@ -29,13 +29,15 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
   private final Archive archive;
   private SiardArchiveMetaData metaData;
   private final boolean onlyMetaData;
+  private boolean viewsAsTables;
   private String name;
 
-  public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData) {
+  public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData, boolean viewsAsTables) {
     this.connection = connection;
     this.model = model;
     this.archive = archive;
     this.onlyMetaData = onlyMetaData;
+    this.viewsAsTables = viewsAsTables;
   }
 
   @Override
@@ -49,7 +51,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
     metadata.setQueryTimeout(timeout);
     updateValue(FXCollections.observableArrayList(new Pair<>("Metadata", -1L)));
     updateProgress(0, 100);
-    metadata.download(true, false, this);
+    metadata.download(viewsAsTables, false, this);
 
     model.provideDatabaseArchiveMetaDataObject(this);
     if (metaData != null) {
@@ -93,7 +95,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
   @Override
   public void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                     String databaseUsername, String databaseDescription, String databaseOwner, String databaseCreationDate,
-                    LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
+                    LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder, boolean viewsAsTables) {
     this.name = targetArchive.getName();
   }
 

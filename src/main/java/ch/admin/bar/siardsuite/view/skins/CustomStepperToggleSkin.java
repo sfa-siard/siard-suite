@@ -27,7 +27,7 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
 
       if (visible) {
         this.container = new HBox(stepperToggle.getIcon(), this.label);
-        this.label.textProperty().bind(I18n.createStringBinding(stepperToggle.getText()));
+        I18n.bind(this.label.textProperty(), stepperToggle.getText());
         this.label.setManaged(false);
         this.icon.setMaxWidth(22);
         this.container.getStyleClass().setAll("custom-stepper-toggle");

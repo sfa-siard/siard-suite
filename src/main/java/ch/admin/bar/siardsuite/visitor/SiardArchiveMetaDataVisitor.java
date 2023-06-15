@@ -10,7 +10,8 @@ public interface SiardArchiveMetaDataVisitor {
 
     void visit(String siardFormatVersion, String databaseName, String databaseProduct, String databaseConnectionURL,
                String databaseUsername, String databaseDescription, String databseOwner, String databaseCreationDate,
-               LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder);
+               LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder,
+               boolean viewsAsTables);
 
     void visit(SiardArchiveMetaData metaData);
 }

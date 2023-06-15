@@ -71,6 +71,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     private File targetArchive;
     private String databaseName;
     private long total;
+    boolean viewsAsTables;
 
     @Override
     public void init(Controller controller, RootStage stage) {
@@ -130,13 +131,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                 this.subtitle1.setText(this.databaseName);
                 try {
                     controller.loadDatabase(targetArchive,
-                                            false,
-                                            handleDownloadSuccess(stepper),
-                                            handleDownloadFailure(stepper));
+                            false,
+                            this.viewsAsTables,
+                            handleDownloadSuccess(stepper),
+                            handleDownloadFailure(stepper));
                     controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
                         AtomicInteger pos = new AtomicInteger();
                         newValue.forEach(p ->
-                                                 addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
+                                addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
                         );
                     });
                     controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
@@ -246,9 +248,11 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                       String databaseConnectionURL,
                       String databaseUsername, String databaseDescription, String databaseOwner,
                       String databaseCreationDate,
-                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive, URI lobFolder) {
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive,
+                      URI lobFolder, boolean viewsAsTables) {
         this.targetArchive = targetArchive;
         this.databaseName = databaseName;
+        this.viewsAsTables = viewsAsTables;
     }
 
     @Override

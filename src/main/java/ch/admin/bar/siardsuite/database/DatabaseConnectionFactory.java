@@ -34,8 +34,8 @@ public class DatabaseConnectionFactory {
     return instance;
   }
 
-  public DatabaseLoadService createDatabaseLoader(final Archive archive, boolean onlyMetaData) {
-    return new DatabaseLoadService(connection, model, archive, onlyMetaData);
+  public DatabaseLoadService createDatabaseLoader(final Archive archive, boolean onlyMetaData, boolean viewsAsTables) {
+    return new DatabaseLoadService(connection, model, archive, onlyMetaData, viewsAsTables);
   }
 
   public DatabaseUploadService createDatabaseUploader() {

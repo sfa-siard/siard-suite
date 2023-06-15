@@ -28,9 +28,11 @@ public class SiardArchiveMetaData {
     protected final StringProperty archiverContact;
     protected File targetArchive; // not sure if this is the correct place here... maybe just use the model?
     protected URI lobFolder;
+    protected boolean viewsAsTables;
 
     public SiardArchiveMetaData(String dbName, String databaseDescription, String dataOwner, String dataOriginTimespan,
-                                String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
+                                String archiverName, String archiverContact, URI lobFolder, File targetArchive,
+                                boolean viewsAsTables) {
 
         siardFormatVersion = new SimpleStringProperty();
         databaseName = new SimpleStringProperty(dbName);
@@ -45,6 +47,7 @@ public class SiardArchiveMetaData {
         this.archiverContact = new SimpleStringProperty(archiverContact);
         this.targetArchive = targetArchive;
         this.lobFolder = lobFolder;
+        this.viewsAsTables = viewsAsTables;
     }
 
     public SiardArchiveMetaData(MetaData metaData) {
@@ -69,14 +72,13 @@ public class SiardArchiveMetaData {
         archiverName = new SimpleStringProperty(metaData.getArchiver());
         archiverContact = new SimpleStringProperty(metaData.getArchiverContact());
         lobFolder = metaData.getLobFolder();
-
     }
 
     public void accept(SiardArchiveMetaDataVisitor visitor) {
         visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
                       databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
                       dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,
-                      archiverName.getValue(), archiverContact.getValue(), targetArchive, lobFolder);
+                      archiverName.getValue(), archiverContact.getValue(), targetArchive, lobFolder, viewsAsTables);
     }
 
 
