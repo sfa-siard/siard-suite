@@ -34,6 +34,8 @@
         <Label fx:id="archivedBy" styleClass="table-container-text"/>
         <Label fx:id="labelContactArchiveUser" styleClass="table-container-label"/>
         <Label fx:id="archiverContact" styleClass="table-container-text"/>
+        <Label fx:id="labelLOBFolder" styleClass="table-container-label"/>
+        <Label fx:id="lobFolder" styleClass="table-container-text"/>
         <padding>
             <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
         </padding>
