@@ -24,8 +24,12 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -109,9 +113,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
         MFXButton saveArchiveButton = new MFXButton();
         I18n.bind(saveArchiveButton, "button.save.archive");
-        saveArchiveButton.setOnAction(event -> {
-            this.saveOnlyMetaData(stepper);
-        });
+        saveArchiveButton.setOnAction(event -> this.saveOnlyMetaData(stepper));
 
         this.buttonsBox.append(saveArchiveButton);
         this.setListeners(stepper);
@@ -212,25 +214,18 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 this.dataOriginTimespan.getText(),
                 this.archiverName.getText(),
                 this.archiverContact.getText(),
-                lobFolder.toURI() != null ? lobFolder.toURI() : null,
+                lobFolder.toURI(),
                 targetArchive,
                 exportViewsAsTables.isSelected());
     }
 
     private static void copyFileUsingStream(File source, File dest) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(source);
-            os = new FileOutputStream(dest);
+        try (InputStream is = Files.newInputStream(source.toPath()); OutputStream os = Files.newOutputStream(dest.toPath())) {
             byte[] buffer = new byte[1024];
             int length;
             while ((length = is.read(buffer)) > 0) {
                 os.write(buffer, 0, length);
             }
-        } finally {
-            is.close();
-            os.close();
         }
     }
 
@@ -265,13 +260,13 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     @Override
     public void visit(String siardFormatVersion, String databaseName, String databaseProduct,
                       String databaseConnectionURL,
-                      String databaseUsername, String databaseDescription, String databseOwner,
+                      String databaseUsername, String databaseDescription, String databaseOwner,
                       String databaseCreationDate,
                       LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive,
                       URI lobFolder, boolean viewsAsTables) {
         this.name.setText(databaseName);
         this.description.setText(databaseDescription);
-        this.owner.setText(removePlaceholder(databseOwner));
+        this.owner.setText(removePlaceholder(databaseOwner));
         this.dataOriginTimespan.setText(removePlaceholder(databaseCreationDate));
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
