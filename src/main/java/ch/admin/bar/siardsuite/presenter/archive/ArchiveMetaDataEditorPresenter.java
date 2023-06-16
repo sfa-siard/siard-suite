@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.component.SiardToolip;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
@@ -18,7 +19,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
@@ -160,14 +160,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
             }
         });
 
-        infoButton.setOnMouseMoved(event -> {
-            Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
-            tooltip.show(infoButton,
-                         (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-                         boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
-        });
-
-        infoButton.setOnMouseExited(event -> tooltip.hide());
+        new SiardToolip(infoButton, tooltip).setup();
 
         lobFolderButton.setOnAction(event -> {
             final DirectoryChooser directoryChooser = new DirectoryChooser();
