@@ -17,7 +17,6 @@ import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -36,7 +35,6 @@ import java.util.List;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
-import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataDetailsVisitor {
 
@@ -228,17 +226,17 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
             try {
                 this.controller.saveArchiveOnlyMetaData();
             } catch (IOException e) {
-                fail(stepper, e, ERROR_OCCURED);
+                fail(stepper, e);
             }
         }
     }
 
-    private void fail(MFXStepper stepper, Throwable e, EventType<SiardEvent> event) {
+    private void fail(MFXStepper stepper, Throwable e) {
         e.printStackTrace();
         this.stage.openDialog(View.ERROR_DIALOG);
         controller.cancelDownload();
         controller.failure(new Failure(e));
-        stepper.fireEvent(new SiardEvent(event));
+        stepper.fireEvent(new SiardEvent(SiardEvent.ERROR_OCCURED));
     }
 
 
