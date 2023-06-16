@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.ArchiveFacade;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -105,7 +106,7 @@ public class SiardArchive extends DatabaseObject {
         }
     }
 
-    public void shareProperties(SiardArchiveMetaDataVisitor visitor) {
+    public void shareProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
         if (metaData != null) {
             metaData.accept(visitor);
         }

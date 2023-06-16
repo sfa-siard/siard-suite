@@ -9,9 +9,9 @@ import ch.admin.bar.siardsuite.model.*;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.StringProperty;
@@ -51,17 +51,18 @@ public class Controller {
     ) throws SQLException {
         tmpArchive = model.initArchive();
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(tmpArchive, onlyMetaData, false);
+                                                            .createDatabaseLoader(tmpArchive, onlyMetaData, false);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
     }
 
-    public void loadDatabase(File target, boolean onlyMetaData, boolean viewsAsTables, EventHandler<WorkerStateEvent> onSuccess,
+    public void loadDatabase(File target, boolean onlyMetaData, boolean viewsAsTables,
+                             EventHandler<WorkerStateEvent> onSuccess,
                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
         final Archive archive = model.initArchive(target, onlyMetaData);
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
+                                                            .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -261,7 +262,7 @@ public class Controller {
         this.model.provideDatabaseArchiveProperties(visitor, databaseObject);
     }
 
-    public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
+    public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
         this.model.provideDatabaseArchiveMetaDataProperties(visitor);
     }
 

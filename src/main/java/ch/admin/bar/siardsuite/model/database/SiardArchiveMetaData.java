@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -74,7 +75,7 @@ public class SiardArchiveMetaData {
         lobFolder = metaData.getLobFolder();
     }
 
-    public void accept(SiardArchiveMetaDataVisitor visitor) {
+    public void accept(SiardArchiveMetaDataDetailsVisitor visitor) {
         visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
                       databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
                       dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,

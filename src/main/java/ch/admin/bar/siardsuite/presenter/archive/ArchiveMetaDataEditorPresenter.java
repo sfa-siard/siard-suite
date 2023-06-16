@@ -7,14 +7,13 @@ import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.ValidationProperties;
 import ch.admin.bar.siardsuite.presenter.ValidationProperty;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.event.EventType;
@@ -35,7 +34,7 @@ import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
-public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
+public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataDetailsVisitor {
 
     @FXML
     Text titleText = new Text();
@@ -162,8 +161,8 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         infoButton.setOnMouseMoved(event -> {
             Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
             tooltip.show(infoButton,
-                    (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-                    boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
+                         (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
+                         boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
         });
 
         infoButton.setOnMouseExited(event -> tooltip.hide());
@@ -278,17 +277,13 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.archiverContact.setText(archiverContact);
     }
 
-    @Override
-    public void visit(SiardArchiveMetaData metaData) {
-    }
-
     private boolean validateProperties() {
         List<ValidationProperty> validationProperties = Arrays.asList(new ValidationProperty(owner,
-                        ownerValidationMsg,
-                        "archiveMetaData.owner.missing"),
-                new ValidationProperty(dataOriginTimespan,
-                        dataOriginTimespanValidationMsg,
-                        "archiveMetaData.timespan.missing"));
+                                                                                             ownerValidationMsg,
+                                                                                             "archiveMetaData.owner.missing"),
+                                                                      new ValidationProperty(dataOriginTimespan,
+                                                                                             dataOriginTimespanValidationMsg,
+                                                                                             "archiveMetaData.timespan.missing"));
 
         return new ValidationProperties(validationProperties).validate();
     }

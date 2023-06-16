@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -176,16 +177,17 @@ public class Model {
 
     // TODO: maybe use some sort of visitor or provider or...
     public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
-                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive, boolean viewsAsTables) {
+                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive,
+                                      boolean viewsAsTables) {
         getSiardArchive().addArchiveMetaData(dbName,
-                description,
-                owner,
-                dataOriginTimespan,
-                archiverName,
-                archiverContact,
-                lobFolder,
-                targetArchive,
-                viewsAsTables);
+                                             description,
+                                             owner,
+                                             dataOriginTimespan,
+                                             archiverName,
+                                             archiverContact,
+                                             lobFolder,
+                                             targetArchive,
+                                             viewsAsTables);
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
@@ -200,7 +202,7 @@ public class Model {
         getSiardArchive().populate(root);
     }
 
-    public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataVisitor visitor) {
+    public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
         getSiardArchive().shareProperties(visitor);
     }
 
