@@ -14,7 +14,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
-import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
@@ -102,6 +101,7 @@ public class Model {
         try {
             archive.create(fileArchive);
             if (metaLoad) {
+                // without tmpfiles are not deleted
                 fileArchive.deleteOnExit();
             }
         } catch (IOException e) {
@@ -193,14 +193,6 @@ public class Model {
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
         getSiardArchive().shareProperties(visitor, databaseObject);
-    }
-
-    public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
-        getSiardArchive().populate(tableView, databaseObject, type);
-    }
-
-    public void populate(VBox vBox, DatabaseObject databaseObject, TreeContentView type) {
-        getSiardArchive().populate(vBox, databaseObject, type);
     }
 
     public void populate(TreeItem root) {

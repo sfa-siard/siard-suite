@@ -53,7 +53,7 @@ public class DatabaseSchema extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
+    public void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null || type == null) return;
         TableViewPopulatorStrategy strategy = getStrategy(type);
         if (strategy == null) return;
@@ -91,7 +91,7 @@ public class DatabaseSchema extends DatabaseObject {
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {
+    public void populate(VBox vbox, TreeContentView type) {
     }
 
     private TreeSet<MetaSearchHit> metaSearch(String s) {

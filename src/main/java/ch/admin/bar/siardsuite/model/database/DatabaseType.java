@@ -52,7 +52,7 @@ public class DatabaseType extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
+    public void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null || type == null) return;
         new SiardTableView(tableView).withColumn(ATTRIBUTE_NAME, NAME)
                                      .withColumn(ATTRIBUTE_TYPE, TYPE)
@@ -71,7 +71,7 @@ public class DatabaseType extends DatabaseObject {
     }
 
     @Override
-    protected void populate(VBox container, TreeContentView type) {
+    public void populate(VBox container, TreeContentView type) {
         new SiardLabelContainer(container)
                 .withLabel(name, "name")
                 .withLabel(category, "typeCategory")

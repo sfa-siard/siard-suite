@@ -41,9 +41,10 @@ public class TableDetailsPresenter extends DetailsPresenter implements SiardArch
         super.init(controller, stage, wrapper);
 
         controller.provideDatabaseArchiveProperties(this, wrapper.getDatabaseObject());
-        controller.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
+        wrapper.getDatabaseObject().populate(tableView, wrapper.getType());
         controller.setCurrentTableSearchBase(tableView, new LinkedHashSet<>(tableView.getItems()));
-        if (controller.getCurrentTableSearchButton() != null && controller.getCurrentTableSearchButton().button() != null) {
+        if (controller.getCurrentTableSearchButton() != null && controller.getCurrentTableSearchButton()
+                                                                          .button() != null) {
             controller.setCurrentTableSearchButton(controller.getCurrentTableSearchButton().button(), false);
             controller.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: normal;");
         }

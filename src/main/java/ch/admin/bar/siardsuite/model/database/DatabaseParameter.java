@@ -34,12 +34,12 @@ public class DatabaseParameter extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
+    public void populate(TableView<Map> tableView, TreeContentView type) {
 
     }
 
     @Override
-    protected void populate(VBox container, TreeContentView type) {
+    public void populate(VBox container, TreeContentView type) {
         new SiardLabelContainer(container).withLabel(metaParameter.getName(), NAME)
                                           .withLabel(String.valueOf(metaParameter.getPosition()), POSITION)
                                           .withLabel(metaParameter.getMode(), MODE)

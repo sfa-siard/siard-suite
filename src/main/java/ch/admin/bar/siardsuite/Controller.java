@@ -21,10 +21,10 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
-import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -51,7 +51,7 @@ public class Controller {
     ) throws SQLException {
         tmpArchive = model.initArchive();
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(tmpArchive, onlyMetaData);
+                                                            .createDatabaseLoader(tmpArchive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -61,7 +61,7 @@ public class Controller {
                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
         final Archive archive = model.initArchive(target, onlyMetaData);
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(archive, onlyMetaData);
+                                                            .createDatabaseLoader(archive, onlyMetaData);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -243,14 +243,6 @@ public class Controller {
         model.setDatabaseType(databaseType);
     }
 
-    public void populate(VBox texts, DatabaseObject databaseObject, TreeContentView type) {
-        this.model.populate(texts, databaseObject, type);
-    }
-
-    public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
-        this.model.populate(tableView, databaseObject, type);
-    }
-
     public void populate(TreeItem root) {
         this.model.populate(root);
     }
@@ -310,5 +302,10 @@ public class Controller {
 
     public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> maps) {
         this.model.setCurrentTableSearchBase(tableView, maps);
+    }
+
+    public void saveArchiveOnlyMetaData() throws IOException {
+        this.getSiardArchive().save();
+
     }
 }

@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.MetaData;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.ArchiveFacade;
@@ -8,12 +10,14 @@ import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import ch.enterag.utils.io.DiskFile;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +30,12 @@ public class SiardArchive extends DatabaseObject {
 
     private Archive archive;
     private String name;
+    // another hack to reuse tmp file for metadata export
+    private DiskFile tmpPath;
     private boolean onlyMetaData = false;
     private List<DatabaseSchema> schemas = new ArrayList<>();
     private List<User> users = new ArrayList<>();
     private List<Privilige> priviliges = new ArrayList<>();
-
-    // TODO: are these really needed?
     protected SiardArchiveMetaData metaData;
     protected final TreeContentView treeContentView = TreeContentView.ROOT;
 
@@ -44,12 +48,13 @@ public class SiardArchive extends DatabaseObject {
 
     public SiardArchive(String name, Archive archive, boolean onlyMetaData) {
         this.archive = archive;
+        this.tmpPath = ((ArchiveImpl) archive).getZipFile().getDiskFile();
         this.onlyMetaData = onlyMetaData;
         this.name = name;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         this.schemas = new ArchiveFacade(archive).schemas()
-                                                 .stream()
-                                                 .map(schema -> new DatabaseSchema(this, schema, onlyMetaData)).collect(
+                .stream()
+                .map(schema -> new DatabaseSchema(this, schema, onlyMetaData)).collect(
                         Collectors.toList());
         MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         this.users = metaDataFacade.users();
@@ -58,9 +63,24 @@ public class SiardArchive extends DatabaseObject {
 
     public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner,
                                    String dataOriginTimespan,
-                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
+                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive)  {
         this.metaData = new SiardArchiveMetaData(dbName, databaseDescription, databaseOwner, dataOriginTimespan,
-                                                 archiverName, archiverContact, lobFolder, targetArchive);
+                archiverName, archiverContact, lobFolder, targetArchive);
+        // set metadata in existing archive -> needed in metadata only export, otherwise metadata and archive is generated in DownloadTask
+        if (this.archive != null && this.archive.getMetaData() != null) {
+            MetaData meta = this.archive.getMetaData();
+            meta.setDbName(dbName);
+            meta.setDescription(databaseDescription);
+            meta.setDataOwner(databaseOwner);
+            meta.setDataOriginTimespan(dataOriginTimespan);
+            meta.setArchiver(archiverName);
+            meta.setArchiverContact(archiverContact);
+            try {
+                meta.setLobFolder(lobFolder);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void shareProperties(SiardArchiveVisitor visitor) {
@@ -98,7 +118,7 @@ public class SiardArchive extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView tableView, TreeContentView type) {
+    public void populate(TableView tableView, TreeContentView type) {
     }
 
     public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
@@ -114,15 +134,15 @@ public class SiardArchive extends DatabaseObject {
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {
+    public void populate(VBox vbox, TreeContentView type) {
     }
 
     public void export(File directory) {
         List<String> allTables = this.schemas.stream()
-                                             .flatMap(schema -> schema.tables.stream())
-                                             .map(databaseTable -> databaseTable.name)
-                                             .collect(
-                                                     Collectors.toList());
+                .flatMap(schema -> schema.tables.stream())
+                .map(databaseTable -> databaseTable.name)
+                .collect(
+                        Collectors.toList());
         this.export(allTables, directory);
     }
 
@@ -192,8 +212,8 @@ public class SiardArchive extends DatabaseObject {
     public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
         hits.addAll(schemas.stream()
-                           .flatMap(schema -> schema.aggregatedMetaSearch(s).stream())
-                           .collect(Collectors.toList()));
+                .flatMap(schema -> schema.aggregatedMetaSearch(s).stream())
+                .collect(Collectors.toList()));
         return hits;
     }
 
@@ -215,6 +235,15 @@ public class SiardArchive extends DatabaseObject {
 
     public boolean onlyMetaData() {
         return this.onlyMetaData;
+    }
+
+    public void save() throws IOException {
+        this.archive.saveMetaData();
+        this.archive.close();
+    }
+
+    public DiskFile getTmpPath() {
+        return tmpPath;
     }
 }
 

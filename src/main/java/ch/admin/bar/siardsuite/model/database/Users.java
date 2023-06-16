@@ -22,7 +22,7 @@ public class Users extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
+    public void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null || type == null) return;
         new SiardTableView(tableView)
                 .withColumn(TABLE_CONTAINER_USERS_HEADER_USERNAME, USERNAME)
@@ -33,12 +33,12 @@ public class Users extends DatabaseObject {
     private ObservableList<Map> items() {
         MapUserVisitor visitor = new MapUserVisitor();
         return FXCollections.observableArrayList(users.stream()
-                .map(user -> user.accept(visitor))
-                .collect(Collectors.toList()));
+                                                      .map(user -> user.accept(visitor))
+                                                      .collect(Collectors.toList()));
     }
 
     @Override
-    protected void populate(VBox vBox, TreeContentView type) {
+    public void populate(VBox vBox, TreeContentView type) {
     }
 
     @Override

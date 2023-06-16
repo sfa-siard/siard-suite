@@ -69,11 +69,11 @@ public class DatabaseColumn extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView tableView, TreeContentView type) {
+    public void populate(TableView tableView, TreeContentView type) {
     }
 
     @Override
-    protected void populate(VBox vBox, TreeContentView type) {
+    public void populate(VBox vBox, TreeContentView type) {
         new SiardLabelContainer(vBox).withLabel(name, "name")
                                      .withLabel(index, "index")
                                      .withLabel(lobFolder, "lobFolder")

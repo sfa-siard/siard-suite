@@ -35,7 +35,7 @@ public class Routine extends DatabaseObject implements WithColumns {
     }
 
     @Override
-    protected void populate(TableView<Map> tableView, TreeContentView type) {
+    public void populate(TableView<Map> tableView, TreeContentView type) {
         if (tableView == null) return;
         if (!TreeContentView.COLUMNS.equals(type) && !TreeContentView.ROUTINE.equals(type)) return;
         new SiardTableView(tableView)
@@ -67,7 +67,7 @@ public class Routine extends DatabaseObject implements WithColumns {
 
 
     @Override
-    protected void populate(VBox vBox, TreeContentView type) {
+    public void populate(VBox vBox, TreeContentView type) {
     }
 
     @Override

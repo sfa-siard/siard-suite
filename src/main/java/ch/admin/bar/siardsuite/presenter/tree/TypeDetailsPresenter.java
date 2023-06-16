@@ -28,7 +28,7 @@ public class TypeDetailsPresenter extends DetailsPresenter {
     @Override
     public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
         super.init(controller, stage, wrapper);
-        controller.populate(tableView, wrapper.getDatabaseObject(), wrapper.getType());
+        wrapper.getDatabaseObject().populate(tableView, wrapper.getType());
     }
 
     @Override

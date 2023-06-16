@@ -45,11 +45,11 @@ public class DatabaseRow extends DatabaseObject {
     }
 
     @Override
-    protected void populate(TableView tableView, TreeContentView type) {
+    public void populate(TableView tableView, TreeContentView type) {
     }
 
     @Override
-    protected void populate(VBox vbox, TreeContentView type) {
+    public void populate(VBox vbox, TreeContentView type) {
     }
 
 }

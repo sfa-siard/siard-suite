@@ -75,6 +75,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
     }
 
     model.setSiardArchive(name, archive, onlyMetaData);
+    // Closing is mandatory to write the archive to the filesystem
     archive.close();
     return progressData;
   }
