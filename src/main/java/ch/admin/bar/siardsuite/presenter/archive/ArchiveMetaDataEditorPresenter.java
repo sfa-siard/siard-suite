@@ -93,20 +93,15 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
-
         this.buttonsBox = new ButtonBox().make(DEFAULT);
-
-
         this.borderPane.setBottom(buttonsBox);
         this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
-
         this.bindTexts();
     }
 
     @Override
     public void init(Controller controller, RootStage stage, MFXStepper stepper) {
         this.init(controller, stage);
-
         this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
         MFXButton saveArchiveButton = new MFXButton();
@@ -122,9 +117,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         I18n.bind(this.descriptionText.textProperty(), "archiveMetadata.view.description");
         I18n.bind(this.titleWhat.textProperty(), "archiveMetadata.view.titleWhat");
         I18n.bind(this.titleWho.textProperty(), "archiveMetadata.view.titleWho");
-
         I18n.bind(this.nameLabel.textProperty(), "archiveMetadata.view.databaseName");
-
         I18n.bind(this.descriptionLabel.textProperty(), "archiveMetadata.view.databaseDescription");
         I18n.bind(this.ownerLabel.textProperty(), "archiveMetadata.view.deliveringOffice");
         I18n.bind(this.dataOriginTimespanLabel.textProperty(), "archiveMetadata.view.databaseCreationDate");
