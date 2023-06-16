@@ -176,15 +176,16 @@ public class Model {
 
     // TODO: maybe use some sort of visitor or provider or...
     public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
-                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
+                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive, boolean viewsAsTables) {
         getSiardArchive().addArchiveMetaData(dbName,
-                                             description,
-                                             owner,
-                                             dataOriginTimespan,
-                                             archiverName,
-                                             archiverContact,
-                                             lobFolder,
-                                             targetArchive);
+                description,
+                owner,
+                dataOriginTimespan,
+                archiverName,
+                archiverContact,
+                lobFolder,
+                targetArchive,
+                viewsAsTables);
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {

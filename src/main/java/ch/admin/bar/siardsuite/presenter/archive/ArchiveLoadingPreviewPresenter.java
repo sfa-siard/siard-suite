@@ -50,8 +50,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     public VBox scrollBox;
     @FXML
     public MFXProgressBar progressBar;
-    @FXML
-    private ButtonBox buttonsBox;
 
     private final Image loading = Icon.loading;
 
@@ -72,11 +70,11 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         this.loader.setImage(loading);
         new Spinner(this.loader).play();
 
-        this.buttonsBox = new ButtonBox().make(CANCEL);
+        ButtonBox buttonsBox = new ButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
 
-        this.buttonsBox.previous().setOnAction((event) -> cancel(stepper));
-        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+        buttonsBox.previous().setOnAction((event) -> cancel(stepper));
+        buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
 
         this.setListeners(stepper);
     }
@@ -111,9 +109,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         if (children.size() > 0) {
             ProgressItem previous = this.progressItems.last();
             previous.ok();
-            /*int itemPos = children.size() - 1;
-            LabelIcon label = (LabelIcon) children.get(itemPos);
-            label.setGraphic(new IconView(itemPos, IconView.IconType.OK));*/
         }
     }
 

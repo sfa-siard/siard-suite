@@ -72,7 +72,7 @@ public class ButtonBox extends HBox {
     private static class CancelButtonBox extends ButtonBox {
 
         public CancelButtonBox() {
-            this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
+            I18n.bind(this.cancelButton.textProperty(),"button.cancel");
             this.cancelButton.getStyleClass().setAll("button", "secondary");
             this.cancelButton.setManaged(true);
             this.getChildren().addAll(this.cancelButton);
@@ -99,10 +99,10 @@ public class ButtonBox extends HBox {
     private static class DownloadFinishedButtonBox extends ButtonBox {
 
         DownloadFinishedButtonBox() {
-            this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
+            I18n.bind(this.nextButton.textProperty(),"button.home");
             this.nextButton.getStyleClass().setAll("button", "primary");
             this.nextButton.setManaged(true);
-            this.cancelButton.textProperty().bind(I18n.createStringBinding("button.view-archive"));
+            I18n.bind(this.cancelButton.textProperty(),"button.view-archive");
             this.cancelButton.getStyleClass().setAll("button", "secondary");
             this.cancelButton.setManaged(true);
             this.getChildren().addAll(this.nextButton, this.cancelButton);
@@ -114,10 +114,10 @@ public class ButtonBox extends HBox {
     private static class FailedButtonBox extends ButtonBox {
 
         FailedButtonBox() {
-            this.nextButton.textProperty().bind(I18n.createStringBinding("button.close"));
+            I18n.bind(this.nextButton.textProperty(),"button.close");
             this.nextButton.getStyleClass().setAll("button", "primary");
             this.nextButton.setManaged(true);
-            this.cancelButton.textProperty().bind(I18n.createStringBinding("button.back"));
+            I18n.bind(this.cancelButton.textProperty(),"button.back");
             this.cancelButton.getStyleClass().setAll("button", "secondary");
             this.cancelButton.setManaged(true);
             this.getChildren().addAll(this.cancelButton, this.nextButton);
@@ -128,7 +128,7 @@ public class ButtonBox extends HBox {
     private static class StartButtonBox extends ButtonBox {
 
         StartButtonBox() {
-            this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
+            I18n.bind(this.nextButton.textProperty(),"button.home");
             this.nextButton.getStyleClass().setAll("button", "primary");
             this.nextButton.setManaged(true);
             this.getChildren().add(this.nextButton);
@@ -138,13 +138,13 @@ public class ButtonBox extends HBox {
 
     private static class OpenPreviewButtonBox extends ButtonBox {
         public OpenPreviewButtonBox() {
-            this.nextButton.textProperty().bind(I18n.createStringBinding("button.home"));
+            I18n.bind(this.nextButton.textProperty(),"button.home");
             this.nextButton.getStyleClass().setAll("button", "primary");
             this.nextButton.setManaged(true);
-            this.previousButton.textProperty().bind(I18n.createStringBinding("button.export"));
+            I18n.bind(this.previousButton.textProperty(),"button.export");
             this.previousButton.getStyleClass().setAll("button", "secondary", "export-icon", "icon-text-btn");
             this.previousButton.setManaged(true);
-            this.cancelButton.textProperty().bind(I18n.createStringBinding("button.upload"));
+            I18n.bind(this.cancelButton.textProperty(),"button.upload");
             this.cancelButton.getStyleClass().setAll("button", "secondary", "upload-icon", "icon-text-btn");
             this.cancelButton.setManaged(true);
             this.getChildren().addAll(this.previousButton, this.cancelButton, this.nextButton);

@@ -63,9 +63,9 @@ public class SiardArchive extends DatabaseObject {
 
     public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner,
                                    String dataOriginTimespan,
-                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive)  {
+                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive, boolean viewsAsTables) {
         this.metaData = new SiardArchiveMetaData(dbName, databaseDescription, databaseOwner, dataOriginTimespan,
-                archiverName, archiverContact, lobFolder, targetArchive);
+                archiverName, archiverContact, lobFolder, targetArchive, viewsAsTables);
         // set metadata in existing archive -> needed in metadata only export, otherwise metadata and archive is generated in DownloadTask
         if (this.archive != null && this.archive.getMetaData() != null) {
             MetaData meta = this.archive.getMetaData();

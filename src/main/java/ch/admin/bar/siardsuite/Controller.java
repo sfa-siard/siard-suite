@@ -51,17 +51,17 @@ public class Controller {
     ) throws SQLException {
         tmpArchive = model.initArchive();
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                                                            .createDatabaseLoader(tmpArchive, onlyMetaData);
+                .createDatabaseLoader(tmpArchive, onlyMetaData, false);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
     }
 
-    public void loadDatabase(File target, boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
+    public void loadDatabase(File target, boolean onlyMetaData, boolean viewsAsTables, EventHandler<WorkerStateEvent> onSuccess,
                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
         final Archive archive = model.initArchive(target, onlyMetaData);
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                                                            .createDatabaseLoader(archive, onlyMetaData);
+                .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -174,7 +174,8 @@ public class Controller {
     }
 
     public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
-                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive) {
+                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive,
+                                      boolean viewsAsTables) {
         this.model.updateArchiveMetaData(
                 dbName,
                 description,
@@ -183,7 +184,8 @@ public class Controller {
                 archiverName,
                 archiverContact,
                 lobFolder,
-                targetArchive);
+                targetArchive,
+                viewsAsTables);
     }
 
     public void initializeWorkflow(Workflow workflow, RootStage stage) {

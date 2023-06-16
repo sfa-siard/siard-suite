@@ -8,7 +8,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 public class CloseDialogButton extends MFXButton {
 
     public CloseDialogButton(RootStage rootStage) {
-        this.textProperty().bind(I18n.createStringBinding("button.cancel"));
+        I18n.bind(this.textProperty(),"button.cancel");
         this.getStyleClass().setAll("button", "secondary");
         this.setManaged(true);
         this.setOnAction(event -> rootStage.closeDialog());

@@ -20,10 +20,7 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -39,7 +36,6 @@ import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
-
 
     @FXML
     Text titleText = new Text();
@@ -89,6 +85,8 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     public TextField lobExportLocation;
     @FXML
     public MFXButton lobFolderButton;
+    @FXML
+    public CheckBox exportViewsAsTables;
 
     @Override
     public void init(Controller controller, RootStage stage) {
@@ -134,6 +132,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         I18n.bind(this.archiverLabel.textProperty(), "archiveMetadata.view.archiverName");
         I18n.bind(this.archiverContactLabel.textProperty(), "archiveMetadata.view.archiverContact");
         I18n.bind(this.lobExportLabel.textProperty(), "archiveMetadata.view.exportLocationLob");
+        I18n.bind(this.exportViewsAsTables.textProperty(), "archiveMetadata.view.exportViewsAsTables");
     }
 
     private File showFileChooserToSelectTargetArchive(String databaseName) {
@@ -215,7 +214,8 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 this.archiverName.getText(),
                 this.archiverContact.getText(),
                 lobFolder.toURI() != null ? lobFolder.toURI() : null,
-                targetArchive);
+                targetArchive,
+                exportViewsAsTables.isSelected());
     }
 
     private static void copyFileUsingStream(File source, File dest) throws IOException {
@@ -269,10 +269,10 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                       String databaseUsername, String databaseDescription, String databseOwner,
                       String databaseCreationDate,
                       LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive,
-                      URI lobFolder) {
-        name.setText(databaseName);
-        description.setText(databaseDescription);
-        owner.setText(removePlaceholder(databseOwner));
+                      URI lobFolder, boolean viewsAsTables) {
+        this.name.setText(databaseName);
+        this.description.setText(databaseDescription);
+        this.owner.setText(removePlaceholder(databseOwner));
         this.dataOriginTimespan.setText(removePlaceholder(databaseCreationDate));
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);

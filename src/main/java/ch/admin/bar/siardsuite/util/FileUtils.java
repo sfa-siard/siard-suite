@@ -25,7 +25,7 @@ public class FileUtils {
 
 
     public static Runnable getOpenFile(java.io.File p) {
-        Runnable runnable = new Runnable() {
+        return new Runnable() {
             public void run() {
                 if (Desktop.isDesktopSupported()) {
                     try {
@@ -44,6 +44,5 @@ public class FileUtils {
                 hostServices.showDocument(p.toURI().toString());
             }
         };
-        return runnable;
     }
 }

@@ -110,7 +110,8 @@ public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardAr
                       String archiverName,
                       String archiverContact,
                       File targetArchive,
-                      URI lobFolder) {
+                      URI lobFolder,
+                      boolean viewsAsTables) {
         this.siardFormatVersion.setText(emptyApiNull(siardFormatVersion));
         this.databaseName.setText(emptyApiNull(databaseName));
         this.databaseProduct.setText(emptyApiNull(databaseProduct));
@@ -120,8 +121,8 @@ public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardAr
         this.owner.setText(emptyApiNull(databaseOwner));
         this.dataOriginTimeSpan.setText(emptyApiNull(databaseCreationDate));
         this.archiveData.textProperty()
-                        .bind(Bindings.createStringBinding(() -> I18n.getLocaleDate(archivingDate),
-                                                           I18n.localeProperty()));
+                .bind(Bindings.createStringBinding(() -> I18n.getLocaleDate(archivingDate),
+                        I18n.localeProperty()));
         this.archivedBy.setText(emptyApiNull(archiverName));
         this.archiverContact.setText(emptyApiNull(archiverContact));
     }

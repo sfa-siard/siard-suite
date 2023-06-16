@@ -29,8 +29,8 @@ class FailureTest {
 
         // then
         assertNotNull(result);
+        String startOfExpectedStacktrace = "java.lang.IllegalArgumentException: illegal argument";
         assertTrue(result.startsWith(startOfExpectedStacktrace));
     }
 
-    private final String startOfExpectedStacktrace = "java.lang.IllegalArgumentException: illegal argument";
 }

@@ -3,6 +3,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataEditorPresenter">
+<ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveMetaDataEditorPresenter">
     <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white">
         <center>
             <VBox BorderPane.alignment="TOP_LEFT">
@@ -66,12 +67,12 @@
                         </TextField>
                         <Label fx:id="ownerValidationMsg" styleClass="error-text" visible="false">
                             <VBox.margin>
-                                <Insets bottom="20.0" />
+                                <Insets bottom="5.0" />
                             </VBox.margin>
                         </Label>
                         <Label fx:id="dataOriginTimespanLabel" styleClass="form-label">
                             <VBox.margin>
-                                <Insets bottom="10.0" top="10.0" />
+                                <Insets bottom="10.0" />
                             </VBox.margin>
                         </Label>
                         <TextField fx:id="dataOriginTimespan" maxWidth="410.0" styleClass="form-field">
@@ -125,9 +126,13 @@
                         <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <HBox styleClass="folder-container" VBox.vgrow="NEVER">
+                  <HBox styleClass="folder-container">
                      <children>
-                        <TextField fx:id="lobExportLocation" minWidth="-Infinity" prefHeight="48.0" prefWidth="410.0" styleClass="form-field" HBox.hgrow="NEVER" />
+                        <TextField fx:id="lobExportLocation" minWidth="-Infinity" prefHeight="48.0" prefWidth="410.0" styleClass="form-field" HBox.hgrow="NEVER">
+                           <padding>
+                              <Insets bottom="24.0" />
+                           </padding>
+                        </TextField>
                         <MFXButton fx:id="lobFolderButton" alignment="CENTER" maxHeight="32.0" maxWidth="-Infinity" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" rippleAnimateBackground="false" HBox.hgrow="NEVER">
                            <styleClass>
                               <String fx:value="folder-icon" />
@@ -138,7 +143,14 @@
                            </HBox.margin>
                         </MFXButton>
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="24.0" />
+                     </VBox.margin>
                   </HBox>
+                  <CheckBox fx:id="exportViewsAsTables" mnemonicParsing="false" styleClass="form-label">
+                     <VBox.margin>
+                        <Insets top="35.0" />
+                     </VBox.margin></CheckBox>
                         <HBox.margin>
                             <Insets bottom="25.0" left="25.0" right="25.0" top="30.0" />
                         </HBox.margin>

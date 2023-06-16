@@ -7,8 +7,8 @@ import org.testfx.framework.junit5.ApplicationExtension;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.*;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(ApplicationExtension.class)
