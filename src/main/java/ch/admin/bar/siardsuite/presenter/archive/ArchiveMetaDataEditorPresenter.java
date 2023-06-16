@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -140,7 +141,12 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.buttonsBox.next().setOnAction((event) -> {
             if (this.validateProperties()) {
                 File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
-                File lobFolder = new File(lobExportLocation.getText());
+                URI lobFolder = null;
+                try {
+                    lobFolder = new URI(lobExportLocation.getText());
+                } catch (URISyntaxException e) {
+                    //  throw new RuntimeException(e);
+                }
 
                 if (targetArchive != null) {
                     updateMetaData(targetArchive, lobFolder);
@@ -179,18 +185,20 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
             archive.open(targetArchive);
             this.controller.setSiardArchive(this.name.getText(), archive);
 
-            File lobFolder = new File(lobExportLocation.getText());
+            URI lobFolder = new URI(lobExportLocation.getText());
 
             if (targetArchive != null) {
                 updateMetaData(targetArchive, lobFolder);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
 
     }
 
-    private void updateMetaData(File targetArchive, File lobFolder) {
+    private void updateMetaData(File targetArchive, URI lobFolder) {
         this.controller.updateArchiveMetaData(
                 this.name.getText(),
                 this.description.getText(),
@@ -198,7 +206,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 this.dataOriginTimespan.getText(),
                 this.archiverName.getText(),
                 this.archiverContact.getText(),
-                lobFolder.toURI(),
+                lobFolder,
                 targetArchive,
                 exportViewsAsTables.isSelected());
     }
@@ -254,6 +262,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.dataOriginTimespan.setText(removePlaceholder(databaseCreationDate));
         this.archiverName.setText(archiverName);
         this.archiverContact.setText(archiverContact);
+        if (lobFolder != null) this.lobExportLocation.setText(lobFolder.toString());
     }
 
     private boolean validateProperties() {

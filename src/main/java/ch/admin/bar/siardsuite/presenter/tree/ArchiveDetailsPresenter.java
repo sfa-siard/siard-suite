@@ -129,7 +129,7 @@ public class ArchiveDetailsPresenter extends DetailsPresenter {
                                                                     I18n.localeProperty()));
             presenter.archivedBy.setText(emptyApiNull(archiverName));
             presenter.archiverContact.setText(emptyApiNull(archiverContact));
-            presenter.lobFolder.setText(emptyApiNull(lobFolder.getPath()));
+            if (lobFolder != null) presenter.lobFolder.setText(emptyApiNull(lobFolder.getPath()));
         }
     }
 }
