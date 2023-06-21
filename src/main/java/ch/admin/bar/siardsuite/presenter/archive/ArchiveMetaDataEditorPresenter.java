@@ -20,7 +20,6 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -85,8 +84,6 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
     public Label lobExportLabel;
     @FXML
     public TextField lobExportLocation;
-    @FXML
-    public MFXButton lobFolderButton;
     @FXML
     public CheckBox exportViewsAsTables;
 
@@ -158,15 +155,6 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         });
 
         new SiardToolip(infoButton, tooltip).setup();
-
-        lobFolderButton.setOnAction(event -> {
-            final DirectoryChooser directoryChooser = new DirectoryChooser();
-            directoryChooser.setTitle(I18n.get("export.choose-location.text"));
-            File file = directoryChooser.showDialog(stage);
-            if (file != null) {
-                this.lobExportLocation.setText(file.getAbsolutePath());
-            }
-        });
 
         stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initFields());
     }
