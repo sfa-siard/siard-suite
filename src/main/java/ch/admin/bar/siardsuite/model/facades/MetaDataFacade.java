@@ -7,7 +7,6 @@ import ch.admin.bar.siard2.api.MetaTable;
 import ch.admin.bar.siardsuite.model.database.Privilige;
 import ch.admin.bar.siardsuite.model.database.User;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -53,7 +52,7 @@ public class MetaDataFacade {
                     String columnName = metaColumn.getName().toLowerCase();
                     try {
                         if (!new PreTypeFacade(metaColumn.getPreType()).isBlob()) return;
-                        metaColumn.setLobFolder(new URI(root + File.separator + schemaName + File.separator + tableName + File.separator + columnName + File.separator));
+                        metaColumn.setLobFolder(new URI(root + "/" + schemaName + "/" + tableName + "/" + columnName + "/")); // do not use File.separator - does not work on windows!
                     } catch (IOException | URISyntaxException e) {
                         throw new RuntimeException(e);
                     }
