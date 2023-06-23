@@ -140,9 +140,11 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
                 URI lobFolder = null;
                 try {
-                    lobFolder = new URI(lobExportLocation.getText());
+                    lobFolder = new URI(lobExportLocation.getText()
+                                                         .replace("\\",
+                                                                  "/")); // replace backslashes with slashes that work on all platforms
                 } catch (URISyntaxException e) {
-                    //  throw new RuntimeException(e);
+                    fail(stepper, e);
                 }
 
                 if (targetArchive != null) {
