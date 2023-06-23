@@ -2,11 +2,14 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
+import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -74,7 +77,7 @@ public class SiardArchiveMetaData {
         lobFolder = metaData.getLobFolder();
     }
 
-    public void accept(SiardArchiveMetaDataVisitor visitor) {
+    public void accept(SiardArchiveMetaDataDetailsVisitor visitor) {
         visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
                       databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
                       dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,
@@ -93,6 +96,11 @@ public class SiardArchiveMetaData {
         archive.getMetaData().setDescription(databaseDescription.getValue());
         archive.getMetaData().setDataOwner(dataOwner.getValue());
         archive.getMetaData().setDataOriginTimespan(dataOriginTimespan.getValue());
+        try {
+            new MetaDataFacade(archive.getMetaData()).setLobFolder(this.lobFolder);
+        } catch (IOException e) {
+            //throw new RuntimeException(e);
+        }
     }
 
 }

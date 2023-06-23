@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.ArchiveFacade;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -53,8 +54,8 @@ public class SiardArchive extends DatabaseObject {
         this.name = name;
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         this.schemas = new ArchiveFacade(archive).schemas()
-                .stream()
-                .map(schema -> new DatabaseSchema(this, schema, onlyMetaData)).collect(
+                                                 .stream()
+                                                 .map(schema -> new DatabaseSchema(this, schema, onlyMetaData)).collect(
                         Collectors.toList());
         MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         this.users = metaDataFacade.users();
@@ -63,9 +64,17 @@ public class SiardArchive extends DatabaseObject {
 
     public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner,
                                    String dataOriginTimespan,
-                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive, boolean viewsAsTables) {
-        this.metaData = new SiardArchiveMetaData(dbName, databaseDescription, databaseOwner, dataOriginTimespan,
-                archiverName, archiverContact, lobFolder, targetArchive, viewsAsTables);
+                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive,
+                                   boolean viewsAsTables) {
+        this.metaData = new SiardArchiveMetaData(dbName,
+                                                 databaseDescription,
+                                                 databaseOwner,
+                                                 dataOriginTimespan,
+                                                 archiverName,
+                                                 archiverContact,
+                                                 lobFolder,
+                                                 targetArchive,
+                                                 viewsAsTables);
         // set metadata in existing archive -> needed in metadata only export, otherwise metadata and archive is generated in DownloadTask
         if (this.archive != null && this.archive.getMetaData() != null) {
             MetaData meta = this.archive.getMetaData();
@@ -76,7 +85,7 @@ public class SiardArchive extends DatabaseObject {
             meta.setArchiver(archiverName);
             meta.setArchiverContact(archiverContact);
             try {
-                meta.setLobFolder(lobFolder);
+                new MetaDataFacade(meta).setLobFolder(lobFolder);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -105,7 +114,7 @@ public class SiardArchive extends DatabaseObject {
         }
     }
 
-    public void shareProperties(SiardArchiveMetaDataVisitor visitor) {
+    public void shareProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
         if (metaData != null) {
             metaData.accept(visitor);
         }
@@ -139,10 +148,10 @@ public class SiardArchive extends DatabaseObject {
 
     public void export(File directory) {
         List<String> allTables = this.schemas.stream()
-                .flatMap(schema -> schema.tables.stream())
-                .map(databaseTable -> databaseTable.name)
-                .collect(
-                        Collectors.toList());
+                                             .flatMap(schema -> schema.tables.stream())
+                                             .map(databaseTable -> databaseTable.name)
+                                             .collect(
+                                                     Collectors.toList());
         this.export(allTables, directory);
     }
 
@@ -212,8 +221,8 @@ public class SiardArchive extends DatabaseObject {
     public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
         final TreeSet<MetaSearchHit> hits = metaSearch(s);
         hits.addAll(schemas.stream()
-                .flatMap(schema -> schema.aggregatedMetaSearch(s).stream())
-                .collect(Collectors.toList()));
+                           .flatMap(schema -> schema.aggregatedMetaSearch(s).stream())
+                           .collect(Collectors.toList()));
         return hits;
     }
 

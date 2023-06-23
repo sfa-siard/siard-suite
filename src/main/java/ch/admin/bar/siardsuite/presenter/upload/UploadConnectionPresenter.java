@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.component.SiardToolip;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.model.View;
@@ -17,7 +18,6 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -197,15 +197,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         portField.setOnKeyReleased(this::handleKeyEvent);
         usernameField.setOnKeyReleased(this::handleKeyEvent);
 
-
-        infoButton.setOnMouseMoved(event -> {
-            Bounds boundsInScreen = infoButton.localToScreen(infoButton.getBoundsInLocal());
-            tooltip.show(infoButton,
-                         (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - tooltip.getWidth() / 2,
-                         boundsInScreen.getMaxY() - boundsInScreen.getHeight() - tooltip.getHeight());
-        });
-
-        infoButton.setOnMouseExited(event -> tooltip.hide());
+        new SiardToolip(infoButton, tooltip).setup();
 
         buttonsBox.next().setOnAction((event) -> {
 
@@ -305,7 +297,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         String inputText = event.getText();
         if (inputText != null) {
             urlField.setText(controller.getDatabaseProps()
-                                  .jdbcUrl(dbServerField.getText(), portField.getText(), dbNameField.getText()));
+                                       .jdbcUrl(dbServerField.getText(), portField.getText(), dbNameField.getText()));
         }
         event.consume();
     }

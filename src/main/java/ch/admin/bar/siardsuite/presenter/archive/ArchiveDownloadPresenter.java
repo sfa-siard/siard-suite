@@ -8,6 +8,7 @@ import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -37,7 +38,7 @@ import static ch.admin.bar.siardsuite.model.View.START;
 import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOADED;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
-public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor {
+public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor, SiardArchiveMetaDataDetailsVisitor {
 
     @FXML
     public Label title;
@@ -131,14 +132,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                 this.subtitle1.setText(this.databaseName);
                 try {
                     controller.loadDatabase(targetArchive,
-                            false,
-                            this.viewsAsTables,
-                            handleDownloadSuccess(stepper),
-                            handleDownloadFailure(stepper));
+                                            false,
+                                            this.viewsAsTables,
+                                            handleDownloadSuccess(stepper),
+                                            handleDownloadFailure(stepper));
                     controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
                         AtomicInteger pos = new AtomicInteger();
                         newValue.forEach(p ->
-                                addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
+                                                 addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
                         );
                     });
                     controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {

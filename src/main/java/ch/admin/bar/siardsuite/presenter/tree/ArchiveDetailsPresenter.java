@@ -2,10 +2,8 @@ package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -21,7 +19,7 @@ import static ch.admin.bar.siardsuite.util.StringUtils.emptyApiNull;
 /**
  * Show details of the SIARD archive.
  */
-public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardArchiveMetaDataVisitor {
+public class ArchiveDetailsPresenter extends DetailsPresenter {
 
     @FXML
     private VBox container;
@@ -48,6 +46,8 @@ public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardAr
     @FXML
     private Label labelContactArchiveUser;
     @FXML
+    private Label labelLOBFolder;
+    @FXML
     private Label siardFormatVersion;
     @FXML
     private Label databaseName;
@@ -69,6 +69,8 @@ public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardAr
     public Label archivedBy;
     @FXML
     public Label archiverContact;
+    @FXML
+    public Label lobFolder;
 
     @Override
     public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
@@ -78,7 +80,7 @@ public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardAr
         bindLabels();
 
         // TODO: align pattern with other SubClasses of DetailsPresenter
-        this.controller.provideDatabaseArchiveMetaDataProperties(this);
+        this.controller.provideDatabaseArchiveMetaDataProperties(new ArchiveDetailsVisitor(this));
     }
 
     @Override
@@ -94,41 +96,40 @@ public class ArchiveDetailsPresenter extends DetailsPresenter implements SiardAr
         I18n.bind(labelArchiveDate, "archiveDetails.labelArchiveDate");
         I18n.bind(labelArchiveUser, "archiveDetails.labelArchiveUser");
         I18n.bind(labelContactArchiveUser, "archiveDetails.labelContactArchiveUser");
+        I18n.bind(labelLOBFolder, "archiveDetails.labelLOBFolder");
 
     }
 
-    @Override
-    public void visit(String siardFormatVersion,
-                      String databaseName,
-                      String databaseProduct,
-                      String databaseConnectionURL,
-                      String databaseUsername,
-                      String databaseDescription,
-                      String databaseOwner,
-                      String databaseCreationDate,
-                      LocalDate archivingDate,
-                      String archiverName,
-                      String archiverContact,
-                      File targetArchive,
-                      URI lobFolder,
-                      boolean viewsAsTables) {
-        this.siardFormatVersion.setText(emptyApiNull(siardFormatVersion));
-        this.databaseName.setText(emptyApiNull(databaseName));
-        this.databaseProduct.setText(emptyApiNull(databaseProduct));
-        this.jdbcConnectionUrl.setText(emptyApiNull(databaseConnectionURL));
-        this.username.setText(emptyApiNull(databaseUsername));
-        this.description.setText(emptyApiNull(databaseDescription));
-        this.owner.setText(emptyApiNull(databaseOwner));
-        this.dataOriginTimeSpan.setText(emptyApiNull(databaseCreationDate));
-        this.archiveData.textProperty()
-                .bind(Bindings.createStringBinding(() -> I18n.getLocaleDate(archivingDate),
-                        I18n.localeProperty()));
-        this.archivedBy.setText(emptyApiNull(archiverName));
-        this.archiverContact.setText(emptyApiNull(archiverContact));
-    }
+    private class ArchiveDetailsVisitor implements SiardArchiveMetaDataDetailsVisitor {
 
-    @Override
-    public void visit(SiardArchiveMetaData metaData) {
-        // TODO: should not be in interface SiardArchiveMetaDataVisitor
+
+        private final ArchiveDetailsPresenter presenter;
+
+        public ArchiveDetailsVisitor(
+                ArchiveDetailsPresenter archiveDetailsPresenter) {
+            this.presenter = archiveDetailsPresenter;
+        }
+
+        @Override
+        public void visit(String siardFormatVersion, String databaseName, String databaseProduct,
+                          String databaseConnectionURL, String databaseUsername, String databaseDescription,
+                          String databseOwner, String databaseCreationDate, LocalDate archivingDate,
+                          String archiverName, String archiverContact, File targetArchive, URI lobFolder,
+                          boolean viewsAsTables) {
+            presenter.siardFormatVersion.setText(emptyApiNull(siardFormatVersion));
+            presenter.databaseName.setText(emptyApiNull(databaseName));
+            presenter.databaseProduct.setText(emptyApiNull(databaseProduct));
+            presenter.jdbcConnectionUrl.setText(emptyApiNull(databaseConnectionURL));
+            presenter.username.setText(emptyApiNull(databaseUsername));
+            presenter.description.setText(emptyApiNull(databaseDescription));
+            presenter.owner.setText(emptyApiNull(databseOwner));
+            presenter.dataOriginTimeSpan.setText(emptyApiNull(databaseCreationDate));
+            presenter.archiveData.textProperty()
+                                 .bind(Bindings.createStringBinding(() -> I18n.getLocaleDate(archivingDate),
+                                                                    I18n.localeProperty()));
+            presenter.archivedBy.setText(emptyApiNull(archiverName));
+            presenter.archiverContact.setText(emptyApiNull(archiverContact));
+            if (lobFolder != null) presenter.lobFolder.setText(emptyApiNull(lobFolder.getPath()));
+        }
     }
 }
