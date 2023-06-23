@@ -52,11 +52,8 @@ public class MetaDataFacade {
                     String tableName = metaColumn.getParentMetaTable().getName().toLowerCase();
                     String columnName = metaColumn.getName().toLowerCase();
                     try {
-                        // TODO: only for lobs/ blobs?
-                        // TODO: also set mimetype?
-                        if (!metaColumn.getType().startsWith("BLOB")) return;
+                        if (!new PreTypeFacade(metaColumn.getPreType()).isBlob()) return;
                         metaColumn.setLobFolder(new URI(root + File.separator + schemaName + File.separator + tableName + File.separator + columnName + File.separator));
-                        metaColumn.setMimeType("application/text");
                     } catch (IOException | URISyntaxException e) {
                         throw new RuntimeException(e);
                     }
