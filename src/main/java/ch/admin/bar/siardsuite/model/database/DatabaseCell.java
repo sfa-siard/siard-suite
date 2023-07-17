@@ -2,7 +2,9 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import ch.enterag.utils.BU;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
@@ -39,10 +41,17 @@ public class DatabaseCell extends DatabaseObject {
         this.type = type;
         String value = null;
         try {
-            value = cell.getString();
+            value = getValue();
         } catch (IOException | IllegalArgumentException ignored) {
         }
         this.value = value;
+    }
+
+    private String getValue() throws IOException {
+        if (new PreTypeFacade(this.cell.getMetaColumn().getPreType()).isBlob()) {
+            return "0x" + BU.toHex(this.cell.getBytes()).substring(0, 16) + "...";
+        }
+        return this.cell.getString();
     }
 
     @Override
