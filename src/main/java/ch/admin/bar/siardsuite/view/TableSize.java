@@ -14,7 +14,7 @@ public class TableSize {
 
     public void resize() {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        table.getColumns().forEach((column) -> column.setPrefWidth(calculateMaxWidth(column) + 10.0d)
+        table.getColumns().forEach((column) -> column.setPrefWidth(calculateMaxWidth(column) + 20.0d)
         );
     }
 
