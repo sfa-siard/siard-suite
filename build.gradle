@@ -48,7 +48,7 @@ jar {
                         '            jdbcmssql.jar              woodstox-core-lgpl-4.1.2.jar\n' +
                         '            jdbcmysql.jar              woodstox-msv-rng-datatype-20020414.jar\n' +
                         '            jdbcoracle.jar             xdb6.jar\n' +
-                        '            jdbcpostgres.jar           xmlparserv2.jar\n' +
+                        '            jdbcpostgres.jar           \n' +
                         '            jfxrt.jar                  xsdlib-2010.1.jar\n' +
                         '            json-simple-1.1.1.jar      zip64.jar\n' +
                         '            jts-1.14.jar               tika-app-2.8.0.jar'
