@@ -136,20 +136,19 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
 
     private void loadRecords(RecordDispenser recordDispenser) {
         rows.clear();
-        if (!onlyMetaData) {
-            try {
-                final long numberOfRows = table.getMetaTable().getRows();
-                int j = 0;
-                while (j < numberOfRows && j < loadBatchSize) {
-                    if (recordDispenser.getPosition() < numberOfRows) {
-                        rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
-                    }
-                    j++;
-                    lastRowLoadedIndex++;
+        if (onlyMetaData) return;
+        try {
+            final long numberOfRows = table.getMetaTable().getRows();
+            int j = 0;
+            while (j < numberOfRows && j < loadBatchSize) {
+                if (recordDispenser.getPosition() < numberOfRows) {
+                    rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                j++;
+                lastRowLoadedIndex++;
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
