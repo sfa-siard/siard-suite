@@ -2,15 +2,22 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.RecordDispenser;
 import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
+import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import com.sun.javafx.application.HostServicesDelegate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -18,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -87,8 +95,37 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                 final RecordDispenser recordDispenser = table.openRecords();
                 loadRecords(recordDispenser);
                 tableView.setItems(rowItems());
-                tableView.setOnMouseClicked(event -> System.out.println("clicked on..." + tableView.getSelectionModel()
-                                                                                                   .getSelectedItem()));
+                EventHandler<MouseEvent> cellClickedHandler = event -> {
+                    TablePosition tablePosition = tableView.getSelectionModel().getSelectedCells().get(0);
+                    if (tablePosition.getColumn() == 0) return;
+                    int column = tablePosition.getColumn() - 1; // since we added an index column...
+                    int row = tablePosition.getRow();
+
+                    DatabaseRow databaseRow = this.rows.get(row);
+                    DatabaseCell databaseCell = databaseRow.cells.get(column);
+                    try {
+                        boolean isBlob = new PreTypeFacade(databaseCell.cell.getMetaColumn().getPreType()).isBlob();
+                        if (isBlob) {
+                            System.out.println("this is a blob... try to open it in native application");
+                            System.out.println("the mime type is..." + databaseCell.cell.getMetaColumn().getMimeType());
+                            URI absoluteLobFolder = databaseCell.cell.getMetaColumn()
+                                                                     .getAbsoluteLobFolder();
+                            System.out.println("its saved (externally)" + absoluteLobFolder);
+
+
+                            HostServicesDelegate hostServices = HostServicesFactory.getInstance(new SiardApplication()); // TODO: this seems to be really silly
+                            hostServices.showDocument(absoluteLobFolder.toString() + "/" + databaseCell.cell.getFilename());
+
+                        }
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println(databaseCell.value);
+
+
+                };
+                tableView.setOnMouseClicked(cellClickedHandler);
                 tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
                 tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE,
                                           event -> expand(recordDispenser, tableView));
