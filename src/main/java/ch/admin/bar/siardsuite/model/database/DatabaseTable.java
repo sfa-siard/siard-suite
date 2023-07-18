@@ -149,7 +149,9 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
             }
 
             if (OS.IS_WINDOWS) {
-                Runtime.getRuntime().exec("cmd.exe /C start " + path);
+                Runtime.getRuntime()
+                       .exec("cmd.exe /C start " + path.replaceFirst("/",
+                                                                     "")); // replace / in front of file path for windows
             }
 
             if (OS.IS_MAC) {
