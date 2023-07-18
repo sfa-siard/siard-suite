@@ -2,15 +2,14 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.RecordDispenser;
 import ch.admin.bar.siard2.api.Table;
-import ch.admin.bar.siardsuite.SiardApplication;
+import ch.admin.bar.siard2.api.primary.CellImpl;
 import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
-import com.sun.javafx.application.HostServicesDelegate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -20,12 +19,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -106,24 +108,18 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                     try {
                         boolean isBlob = new PreTypeFacade(databaseCell.cell.getMetaColumn().getPreType()).isBlob();
                         if (isBlob) {
-                            System.out.println("this is a blob... try to open it in native application");
-                            System.out.println("the mime type is..." + databaseCell.cell.getMetaColumn().getMimeType());
-                            URI absoluteLobFolder = databaseCell.cell.getMetaColumn()
-                                                                     .getAbsoluteLobFolder();
-                            System.out.println("its saved (externally)" + absoluteLobFolder);
-
-
-                            HostServicesDelegate hostServices = HostServicesFactory.getInstance(new SiardApplication()); // TODO: this seems to be really silly
-                            hostServices.showDocument(absoluteLobFolder.toString() + "/" + databaseCell.cell.getFilename());
-
+                            URI absoluteLobFolder = databaseCell.cell.getMetaColumn().getAbsoluteLobFolder();
+                            if (absoluteLobFolder == null) {
+                                Path tempFilePath = createTempFile(databaseCell);
+                                OS.openFile(String.valueOf(tempFilePath));
+                            } else {
+                                OS.openFile(absoluteLobFolder + databaseCell.cell.getFilename());
+                            }
                         }
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println(databaseCell.value);
-
-
                 };
                 tableView.setOnMouseClicked(cellClickedHandler);
                 tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
@@ -134,6 +130,7 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
             }
         }
     }
+
 
     @Override
     public void populate(VBox vbox, TreeContentView type) {
@@ -251,6 +248,23 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     public String numberOfRows() {
         return this.numberOfRows;
     }
+
+    @NotNull
+    private Path createTempFile(DatabaseCell databaseCell) throws IOException {
+        String filename = ((CellImpl) databaseCell.cell).getLobFilename();
+        String suffix = getExtensionByStringHandling(filename);
+        Path tempFilePath = Files.createTempFile(filename, "." + suffix);
+        Files.write(tempFilePath, databaseCell.cell.getBytes());
+        return tempFilePath;
+    }
+
+    // Taken from https://www.baeldung.com/java-file-extension
+    private String getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                       .filter(f -> f.contains("."))
+                       .map(f -> f.substring(filename.lastIndexOf(".") + 1)).orElse("bin");
+    }
+
 
     private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
     private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";
