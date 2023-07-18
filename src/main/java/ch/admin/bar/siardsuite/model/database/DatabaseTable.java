@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -107,41 +108,18 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                     try {
                         boolean isBlob = new PreTypeFacade(databaseCell.cell.getMetaColumn().getPreType()).isBlob();
                         if (isBlob) {
-                            System.out.println("this is a blob... try to open it in native application");
-                            System.out.println("the mime type is..." + databaseCell.cell.getMetaColumn().getMimeType());
-                            URI absoluteLobFolder = databaseCell.cell.getMetaColumn()
-                                                                     .getAbsoluteLobFolder();
-
+                            URI absoluteLobFolder = databaseCell.cell.getMetaColumn().getAbsoluteLobFolder();
                             if (absoluteLobFolder == null) {
-                                //
-
-                                System.out.println(
-                                        "not externally saved. i need to probably do some magic to open this file...");
-
-                                String filename = ((CellImpl) databaseCell.cell).getLobFilename();
-                                String suffix = getExtensionByStringHandling(filename);
-                                Path tempFilePath = Files.createTempFile(filename, "." + suffix);
-                                Files.write(tempFilePath, databaseCell.cell.getBytes());
-                                openFile(String.valueOf(tempFilePath));
+                                Path tempFilePath = createTempFile(databaseCell);
+                                OS.openFile(String.valueOf(tempFilePath));
                             } else {
-
-                                System.out.println("its saved (externally)" + absoluteLobFolder);
-
-
-                                String uri = absoluteLobFolder + databaseCell.cell.getFilename();
-                                openFile(uri);
+                                OS.openFile(absoluteLobFolder + databaseCell.cell.getFilename());
                             }
-
-
                         }
 
                     } catch (IOException e) {
-                        e.printStackTrace();
                         throw new RuntimeException(e);
                     }
-                    System.out.println(databaseCell.value);
-
-
                 };
                 tableView.setOnMouseClicked(cellClickedHandler);
                 tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
@@ -153,37 +131,6 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         }
     }
 
-    // Taken from https://www.baeldung.com/java-file-extension
-    public String getExtensionByStringHandling(String filename) {
-        return Optional.ofNullable(filename)
-                       .filter(f -> f.contains("."))
-                       .map(f -> f.substring(filename.lastIndexOf(".") + 1)).orElse("bin");
-    }
-
-    private void openFile(String uri) {
-
-        String path = uri.replaceAll(
-                "file:",
-                "");
-        try {
-            if (OS.IS_UNIX) {
-                Runtime.getRuntime()
-                       .exec("xdg-open " + path);
-            }
-
-            if (OS.IS_WINDOWS) {
-                Runtime.getRuntime()
-                       .exec("cmd.exe /C start " + path.replaceFirst("/",
-                                                                     "")); // replace / in front of file path for windows
-            }
-
-            if (OS.IS_MAC) {
-                Runtime.getRuntime().exec("open " + path);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void populate(VBox vbox, TreeContentView type) {
@@ -301,6 +248,23 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     public String numberOfRows() {
         return this.numberOfRows;
     }
+
+    @NotNull
+    private Path createTempFile(DatabaseCell databaseCell) throws IOException {
+        String filename = ((CellImpl) databaseCell.cell).getLobFilename();
+        String suffix = getExtensionByStringHandling(filename);
+        Path tempFilePath = Files.createTempFile(filename, "." + suffix);
+        Files.write(tempFilePath, databaseCell.cell.getBytes());
+        return tempFilePath;
+    }
+
+    // Taken from https://www.baeldung.com/java-file-extension
+    private String getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                       .filter(f -> f.contains("."))
+                       .map(f -> f.substring(filename.lastIndexOf(".") + 1)).orElse("bin");
+    }
+
 
     private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
     private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";
