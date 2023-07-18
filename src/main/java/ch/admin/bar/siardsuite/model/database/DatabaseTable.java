@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.RecordDispenser;
 import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siard2.api.primary.CellImpl;
 import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
@@ -24,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -108,13 +111,26 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                             System.out.println("the mime type is..." + databaseCell.cell.getMetaColumn().getMimeType());
                             URI absoluteLobFolder = databaseCell.cell.getMetaColumn()
                                                                      .getAbsoluteLobFolder();
-                            System.out.println("its saved (externally)" + absoluteLobFolder);
+
+                            if (absoluteLobFolder == null) {
+                                //
+
+                                System.out.println(
+                                        "not externally saved. i need to probably do some magic to open this file...");
+
+                                String filename = ((CellImpl) databaseCell.cell).getLobFilename();
+                                String suffix = getExtensionByStringHandling(filename);
+                                Path tempFilePath = Files.createTempFile(filename, "." + suffix);
+                                Files.write(tempFilePath, databaseCell.cell.getBytes());
+                                openFile(String.valueOf(tempFilePath));
+                            } else {
+
+                                System.out.println("its saved (externally)" + absoluteLobFolder);
 
 
-                            //HostServicesDelegate hostServices = HostServicesFactory.getInstance(new SiardApplication()); // TODO: this seems to be really silly
-                            String uri = absoluteLobFolder.toString() + databaseCell.cell.getFilename();
-                            openFile(uri);
-                            //hostServices.showDocument(uri.replaceAll("file:", ""));
+                                String uri = absoluteLobFolder + databaseCell.cell.getFilename();
+                                openFile(uri);
+                            }
 
 
                         }
@@ -135,6 +151,13 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    // Taken from https://www.baeldung.com/java-file-extension
+    public String getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                       .filter(f -> f.contains("."))
+                       .map(f -> f.substring(filename.lastIndexOf(".") + 1)).orElse("bin");
     }
 
     private void openFile(String uri) {
