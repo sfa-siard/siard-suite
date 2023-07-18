@@ -87,6 +87,8 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                 final RecordDispenser recordDispenser = table.openRecords();
                 loadRecords(recordDispenser);
                 tableView.setItems(rowItems());
+                tableView.setOnMouseClicked(event -> System.out.println("clicked on..." + tableView.getSelectionModel()
+                                                                                                   .getSelectedItem()));
                 tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
                 tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE,
                                           event -> expand(recordDispenser, tableView));
