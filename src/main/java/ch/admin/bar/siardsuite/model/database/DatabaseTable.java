@@ -2,15 +2,13 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.RecordDispenser;
 import ch.admin.bar.siard2.api.Table;
-import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
-import com.sun.javafx.application.HostServicesDelegate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -113,12 +111,16 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                             System.out.println("its saved (externally)" + absoluteLobFolder);
 
 
-                            HostServicesDelegate hostServices = HostServicesFactory.getInstance(new SiardApplication()); // TODO: this seems to be really silly
-                            hostServices.showDocument(absoluteLobFolder.toString() + "/" + databaseCell.cell.getFilename());
+                            //HostServicesDelegate hostServices = HostServicesFactory.getInstance(new SiardApplication()); // TODO: this seems to be really silly
+                            String uri = absoluteLobFolder.toString() + databaseCell.cell.getFilename();
+                            openFile(uri);
+                            //hostServices.showDocument(uri.replaceAll("file:", ""));
+
 
                         }
 
                     } catch (IOException e) {
+                        e.printStackTrace();
                         throw new RuntimeException(e);
                     }
                     System.out.println(databaseCell.value);
@@ -132,6 +134,29 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private void openFile(String uri) {
+
+        String path = uri.replaceAll(
+                "file:",
+                "");
+        try {
+            if (OS.IS_UNIX) {
+                Runtime.getRuntime()
+                       .exec("xdg-open " + path);
+            }
+
+            if (OS.IS_WINDOWS) {
+                Runtime.getRuntime().exec("cmd.exe /C start " + path);
+            }
+
+            if (OS.IS_MAC) {
+                Runtime.getRuntime().exec("open " + path);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
