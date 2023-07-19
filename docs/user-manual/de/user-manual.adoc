@@ -25,7 +25,7 @@ kann SIARD Suite auch SIARD-Archive in den Formaten SIARD 2.1 und SIARD
 
 Die Applikation SIARD Suite ist eine Java FX Applikation. Als solche
 kann sie grundsätzlich auf jedem System ausgeführt werden, auf welchem
-ein Java Runtime Environment 18 (JRE) mit der JavaFX Extension
+ein Java Runtime Environment 8 (JRE) mit der JavaFX Extension
 installiert ist.
 
 
@@ -49,7 +49,7 @@ Interface) nicht zur Verfügung.
 === Zip Archive
 
 Anstelle der nativen Installer kann auch eine als ZIP Archiv
-bereitgestellte Distribution verwendet werden. Es steht keine Distribution mit inkludierter Runtime zur Verfügung. Entsprechend muss eine JRE v18 mit Java FX Erweiterung auf dem System installiert sein. Entsprechende Distributionen sind u.a. hier erhältlich:
+bereitgestellte Distribution verwendet werden. Es steht keine Distribution mit inkludierter Runtime zur Verfügung. Entsprechend muss eine JRE v8 mit Java FX Erweiterung auf dem System installiert sein. Entsprechende Distributionen sind u.a. hier erhältlich:
 
 https://www.azul.com/downloads/?package=jdk-fx#download-openjdk
 
@@ -94,6 +94,18 @@ image::startscreen.png[]
 * Daten eines SIARD Archives exportieren
 
 Die Applikation führt den Benutzer durch die jeweiligen Prozesse.
+
+==== Archivieren von Datenbanken mit Binary Data
+
+Der Standard SIARD Format 2.2 hält fest, dass grosse Objekte (LOBs) einer Datenbank im externen Filesystem gespeichert werden können.
+
+Der Speicherort der Daten kann während der Archivierung im Schritt "Metadaten" erfasst werden.
+
+image::metadata.png[]
+
+Der Pfad kann absolut als File-URI (`file:/`) oder relativ angegeben werden, z.b. `../lobs/` - auf jeden Fall muss der Pfad mit einem Schrägstrich (`/`) abgeschlossen werden. Es wird empfohlen relative Pfade anzugeben, so dass das Archiv mitsamt der externen LOB Daten verschoben werden kann - dies ist nicht möglich mit absoluten Pfaden.
+Die Ordnerstruktur innerhalb des spezifizierten Ordners wird anschliessend automatisch generiert und folgt der Struktur der Datenbank: `schema/table/column`. SIARD Suite detektiert automatisch den MIME-Type, so dass die Dateiendungen automatisch korrekt gesetzt werden. Dies ermöglicht auch, dass die Binary-Daten direkt aus der SIARD Suite in der korrekten auf dem System installierten Applikation geöffnet werden können.
+
 
 ==== Einstellungen
 
