@@ -2,22 +2,32 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.RecordDispenser;
 import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siard2.api.primary.CellImpl;
 import ch.admin.bar.siardsuite.component.SiardTableView;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -87,6 +97,31 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                 final RecordDispenser recordDispenser = table.openRecords();
                 loadRecords(recordDispenser);
                 tableView.setItems(rowItems());
+                EventHandler<MouseEvent> cellClickedHandler = event -> {
+                    TablePosition tablePosition = tableView.getSelectionModel().getSelectedCells().get(0);
+                    if (tablePosition.getColumn() == 0) return;
+                    int column = tablePosition.getColumn() - 1; // since we added an index column...
+                    int row = tablePosition.getRow();
+
+                    DatabaseRow databaseRow = this.rows.get(row);
+                    DatabaseCell databaseCell = databaseRow.cells.get(column);
+                    try {
+                        boolean isBlob = new PreTypeFacade(databaseCell.cell.getMetaColumn().getPreType()).isBlob();
+                        if (isBlob) {
+                            URI absoluteLobFolder = databaseCell.cell.getMetaColumn().getAbsoluteLobFolder();
+                            if (absoluteLobFolder == null) {
+                                Path tempFilePath = createTempFile(databaseCell);
+                                OS.openFile(String.valueOf(tempFilePath));
+                            } else {
+                                OS.openFile(absoluteLobFolder + databaseCell.cell.getFilename());
+                            }
+                        }
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                };
+                tableView.setOnMouseClicked(cellClickedHandler);
                 tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
                 tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE,
                                           event -> expand(recordDispenser, tableView));
@@ -95,6 +130,7 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
             }
         }
     }
+
 
     @Override
     public void populate(VBox vbox, TreeContentView type) {
@@ -136,20 +172,19 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
 
     private void loadRecords(RecordDispenser recordDispenser) {
         rows.clear();
-        if (!onlyMetaData) {
-            try {
-                final long numberOfRows = table.getMetaTable().getRows();
-                int j = 0;
-                while (j < numberOfRows && j < loadBatchSize) {
-                    if (recordDispenser.getPosition() < numberOfRows) {
-                        rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
-                    }
-                    j++;
-                    lastRowLoadedIndex++;
+        if (onlyMetaData) return;
+        try {
+            final long numberOfRows = table.getMetaTable().getRows();
+            int j = 0;
+            while (j < numberOfRows && j < loadBatchSize) {
+                if (recordDispenser.getPosition() < numberOfRows) {
+                    rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                j++;
+                lastRowLoadedIndex++;
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -213,6 +248,23 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     public String numberOfRows() {
         return this.numberOfRows;
     }
+
+    @NotNull
+    private Path createTempFile(DatabaseCell databaseCell) throws IOException {
+        String filename = ((CellImpl) databaseCell.cell).getLobFilename();
+        String suffix = getExtensionByStringHandling(filename);
+        Path tempFilePath = Files.createTempFile(filename, "." + suffix);
+        Files.write(tempFilePath, databaseCell.cell.getBytes());
+        return tempFilePath;
+    }
+
+    // Taken from https://www.baeldung.com/java-file-extension
+    private String getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                       .filter(f -> f.contains("."))
+                       .map(f -> f.substring(filename.lastIndexOf(".") + 1)).orElse("bin");
+    }
+
 
     private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
     private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";

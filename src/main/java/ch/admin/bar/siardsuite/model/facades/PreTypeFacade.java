@@ -9,7 +9,11 @@ import java.util.List;
 public class PreTypeFacade {
 
 
-    private static List<PreType> BLOB_TYPES = Arrays.asList(PreType.BLOB, PreType.CLOB, PreType.NCLOB);
+    private static List<PreType> BLOB_TYPES = Arrays.asList(PreType.BLOB,
+                                                            PreType.CLOB,
+                                                            PreType.NCLOB,
+                                                            PreType.BINARY,
+                                                            PreType.VARBINARY);
     private final PreType preType;
 
     public PreTypeFacade(int sqlType) {
