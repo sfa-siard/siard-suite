@@ -4,68 +4,60 @@ include::../../theme/config.adoc[]
 
 == Einleitung
 
-Der Standard SIARD (Software-Independent Archival of
-Relational Databases) definiert ein Format, um Inhalte
-relationaler Datenbanken langfristig zu archivieren. Die Anwendung "SIARD Suite" bietet eine grafische Benutzeroberfläche zum Archivieren, Wiederherstellen, Durchsuchen und Exportieren von SIARD-Archiven.
+Der Standard SIARD (Software-Independent Archival of Relational Databases) definiert ein Format, um Inhalte relationaler Datenbanken langfristig zu archivieren. Die Anwendung "SIARD Suite" bietet eine grafische Benutzeroberfläche zum Archivieren, Wiederherstellen, Durchsuchen und Exportieren von SIARD-Archiven.
 
 == Kontext
 
-In Zusammenarbeit mit dem EU-Projekt E-ARK und der KOST wurde zwischen 2015 und 2018
-die Version 2.1 des SIARD-Formats spezifiziert. Wie schon zuvor die Version 1.0
-wurde auch SIARD-Format 2.1 als Standard eCH-0165 vom Verein "eCH E-Government
-Standards" homologiert. Im Jahr 2021 hat der DILCIS-Vorstand das
-erweiterte SIARD-Format 2.2 entwickelt und genehmigt.
+In Zusammenarbeit mit dem EU-Projekt E-ARK und der KOST wurde zwischen 2015 und 2018 die Version 2.1 des SIARD-Formats spezifiziert. Wie schon zuvor die Version 1.0 wurde auch SIARD-Format 2.1 als Standard eCH-0165 vom Verein "eCH E-Government Standards" homologiert. Im Jahr 2021 hat der DILCIS-Vorstand das erweiterte SIARD-Format 2.2 entwickelt und genehmigt.
 
-SIARD Suite ist die Referenzimplementation für das Archivieren
-relationaler Datenbanken im standardisierten SIARD-Format 2.2. Weiter
-kann SIARD Suite auch SIARD-Archive in den Formaten SIARD 2.1 und SIARD
-1.0 einlesen und zu SIARD 2.2 konvertieren.
+SIARD Suite ist die Referenzimplementation für das Archivieren relationaler Datenbanken im standardisierten SIARD-Format 2.2. Weiter kann SIARD Suite auch SIARD-Archive in den Formaten SIARD 2.1 und SIARD 1.0 einlesen und zu SIARD 2.2 konvertieren.
 
 == Systemanforderungen und Installation
 
-Die Applikation SIARD Suite ist eine Java FX Applikation. Als solche
-kann sie grundsätzlich auf jedem System ausgeführt werden, auf welchem
-ein Java Runtime Environment 8 (JRE) mit der JavaFX Extension
-installiert ist.
+Die Applikation SIARD Suite ist eine Java FX Applikation. Als solche kann sie grundsätzlich auf jedem System ausgeführt werden, auf welchem ein Java Runtime Environment 8 (JRE) mit der JavaFX Extension installiert ist.
+
+Zusätzlich stehen Distributionen mit inkludierter JRE sowie native Installer für Windows, Mac und Linux zur Verfügung, so dass keine JRE auf dem System installiert sein muss.
+
+In der Folge sind die einzelnen Distributionen aufgeführt. Alle Distributionen können hier heruntergeladen werden: https://github.com/sfa-siard/siard-suite/releases
 
 
-Zusätzlich stehen native Installer für Windows, Mac und Linux
-zur Verfügung, welche die entsprechende Runtime beinhalten, so dass
-nicht notwendigerweise eine eigene JRE installiert werden muss.
+|===
+|Distributionsname | Beschreibung
+
+|SIARD-Suite-v2.2.133
+|Distribution ohne Runtime, erfordert installierte JRE mit JavaFX auf dem System
+|SIARD-Suite-v2.2.133-Linux
+|Distribution mit inkludierter Runtime für Linux
+|SIARD-Suite-v2.2.133-Windows
+|Distribution mit inkludierter Runtime für Windows
+|SIARD-Suite-v2.2.133-macOS
+|Distribution mit inkludierter Runtime für MacOS
+|SIARD-Suite-v2.2.133-Linux-deb
+|Nativer Installer für Linux
+|SIARD-Suite-v2.2.133-win-exe
+|Nativer Installer für Windows (exe)
+|SIARD-Suite-v2.2.133-win-msi
+|Nativer Installer für Windows (msi)
+|SIARD-Suite-v2.2.133-macOS-dmg
+||Nativer Installer für MacOS
+|===
+
+*Hinweis:* Wird der native Installer verwendet, steht das Siard CLI (Command Line Interface) nicht zur Verfügung. Um das CLI verwenden zu können, sollte ein Distribution mit oder ohne inkludierter JRE verwendet werden.
 
 
-In der Folge sind die einzelnen Distributionen beschrieben. Alle Distributionen können hier heruntergeladen werden: https://github.com/sfa-siard/siard-suite/releases
+=== Installation und Ausführen der Applikation
 
-=== Native Installer
+ Werden die nativen Installer verwendet, erfolgt die Installation einfach über das System. Allenfalls werden dazu Administratorrechte verwendet. Die Installers erstellen auch die entsprechenden Verknüpfungen zum Starten der Applikation.
 
-Für Windows, Mac und Linux können installierbare Pakete heruntergeladen
-und damit die Applikation SIARD Suite auf dem System installiert werden.
-
-Allenfalls werden dazu auf dem System Administratorrechte benötigt.
-
-*Hinweis:* für diese Installationsart steht das Siard CLI (Command Line
-Interface) nicht zur Verfügung.
-
-=== Zip Archive
-
-Anstelle der nativen Installer kann auch eine als ZIP Archiv
-bereitgestellte Distribution verwendet werden. Es steht keine Distribution mit inkludierter Runtime zur Verfügung. Entsprechend muss eine JRE v8 mit Java FX Erweiterung auf dem System installiert sein. Entsprechende Distributionen sind u.a. hier erhältlich:
-
-https://www.azul.com/downloads/?package=jdk-fx#download-openjdk
-
-https://aws.amazon.com/correto
-
-Die heruntergeladenen ZIP-Archive können an einem beliebigen Ort entpackt werden und dann mittels der entsprechenden Startskripte ausgeführt werden:
-
+Die Distributionen mit und ohne inkludierter JRE werden als ZIP Archiv ausgeliefert. Dieses kann an einem beliebigen Ort entpackt werden. Anschliessend kann die Applikation über eines der Startskripte gestartet werden:
 
 |===
 | Skriptname | Beschreibung
 
 | siard-suite (.bat) | Starten der grafischen Benutzeroberfläche für Unix bzw. Windows Systeme
-| siard-from-db (.bat) | Archivieren einer Datenbank
-| siard-to-db (.bat) | Upload eines SIARD Archives in eine Datenbank
+| siard-from-db (.bat) | Archivieren einer Datenbank (CLI)
+| siard-to-db (.bat) | Upload eines SIARD Archives in eine Datenbank (CLI)
 |===
-
 
 
 == SIARD Suite verwenden
@@ -103,8 +95,8 @@ Der Speicherort der Daten kann während der Archivierung im Schritt "Metadaten" 
 
 image::metadata.png[]
 
-Der Pfad kann absolut als File-URI (`file:/`) oder relativ angegeben werden, z.b. `../lobs/` - auf jeden Fall muss der Pfad mit einem Schrägstrich (`/`) abgeschlossen werden. Es wird empfohlen relative Pfade anzugeben, so dass das Archiv mitsamt der externen LOB Daten verschoben werden kann - dies ist nicht möglich mit absoluten Pfaden.
-Die Ordnerstruktur innerhalb des spezifizierten Ordners wird anschliessend automatisch generiert und folgt der Struktur der Datenbank: `schema/table/column`. SIARD Suite detektiert automatisch den MIME-Type, so dass die Dateiendungen automatisch korrekt gesetzt werden. Dies ermöglicht auch, dass die Binary-Daten direkt aus der SIARD Suite in der korrekten auf dem System installierten Applikation geöffnet werden können.
+Der Pfad kann absolut als File-URI (`file:/`) oder relativ angegeben werden, z.b. `../lobs/` - auf jeden Fall muss der Pfad mit einem Schrägstrich (`/`) abgeschlossen werden. Es wird empfohlen relative Pfade anzugeben, so dass das Archiv mitsamt der externen LOB Daten verschoben werden kann - dies ist nicht möglich wenn absolute Pfade verwendet werden.
+Die Struktur innerhalb des spezifizierten Ordners wird anschliessend automatisch generiert und folgt der Struktur der Datenbank: `schema/table/column`. SIARD Suite detektiert automatisch den MIME-Type und die Dateiendungen werden automatisch korrekt gesetzt. Dies ermöglicht auch, dass die Binary-Daten direkt aus der SIARD Suite in der korrekten auf dem System installierten Applikation geöffnet werden können.
 
 
 ==== Einstellungen
@@ -194,7 +186,7 @@ Für grosse Datenbanken wird empfohlen, zuerst die Metadaten-XML herunterzuladen
 
 ==== Archivbenutzer
 
-Es ist generell keine gute Idee, den Datenbankadministrator (DBA, root, dbo, ...) mit allen Rechten für das Herunterladen eines SIARD-Archivs zu benutzen. Der Umfang der im SIARD-Archiv gespeicherten Daten ist durch die Objekte definiert, auf welche der Archivbenutzer lesend zugreifen darf. Der globale DBA kann normalerweise alle Datenbanken auf dem System und ausserdem viele Systemtabellen lesen, die nicht zu archivieren sind. Deshalb ist es wichtig, einen passenden, allenfalls neu zu erzeugenden, Archivbenutzer für das Herunterladen zu benutzen.
+Es ist generell keine gute Idee, den Datenbankadministrator (DBA, root, dbo, ...) mit allen Rechten für das Herunterladen eines SIARD-Archivs zu benutzen. Der Umfang der im SIARD-Archiv gespeicherten Daten ist durch die Objekte definiert, auf welche der Archivbenutzer lesend zugreifen darf. Der globale DBA kann normalerweise alle Datenbanken auf dem System und ausserdem viele Systemtabellen lesen, die nicht archiviert werden sollen. Deshalb ist es wichtig einen passenden Archivbenutzer für das Herunterladen zu benutzen - allenfalls muss dieser zu diesem Zweck neu erstellt werden.
 
 === SiardToDb
 
