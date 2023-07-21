@@ -47,7 +47,7 @@ In der Folge sind die einzelnen Distributionen aufgeführt. Alle Distributionen 
 
 === Installation und Ausführen der Applikation
 
- Werden die nativen Installer verwendet, erfolgt die Installation einfach über das System. Allenfalls werden dazu Administratorrechte verwendet. Die Installers erstellen auch die entsprechenden Verknüpfungen zum Starten der Applikation.
+Werden die nativen Installer verwendet, erfolgt die Installation einfach über das System. Allenfalls werden dazu Administratorrechte verwendet. Die Installers erstellen auch die entsprechenden Verknüpfungen zum Starten der Applikation.
 
 Die Distributionen mit und ohne inkludierter JRE werden als ZIP Archiv ausgeliefert. Dieses kann an einem beliebigen Ort entpackt werden. Anschliessend kann die Applikation über eines der Startskripte gestartet werden:
 
@@ -63,16 +63,16 @@ Die Distributionen mit und ohne inkludierter JRE werden als ZIP Archiv ausgelief
 == SIARD Suite verwenden
 
 Die SIARD Suite besteht aus folgenden Komponenten:
-    * Grafische Bentutzeroberfläche (GUI)
-    * SiardFromDb (CLI)
-    * SiardToDB (CLI)
+
+* Grafische Bentutzeroberfläche (GUI)
+* SiardFromDb (CLI)
+* SiardToDB (CLI)
 
 Zweck und Verwendung der Komponenten wird in der Folge erklärt.
 
 === SIARD Suite GUI
 
 Die grafische Benutzeroberfläche ist die zentrale Anwendung um SIARD-Archive zu erstellen und später auch wieder zu sichten, ohne dass die Primärdaten des Archivs geändert werden können. Für komplexe Analysen der archivierten Daten sollte das Archiv wieder in eine Datenbank hochgeladen werden.
-
 
 Der Startscreen bietet den Einstiegspunkt in die Applikation. Hier können die vier wesentlichen Funktionalitäten der Applikation initiiert werden:
 
@@ -98,38 +98,35 @@ image::metadata.png[]
 Der Pfad kann absolut als File-URI (`file:/`) oder relativ angegeben werden, z.b. `../lobs/` - auf jeden Fall muss der Pfad mit einem Schrägstrich (`/`) abgeschlossen werden. Es wird empfohlen relative Pfade anzugeben, so dass das Archiv mitsamt der externen LOB Daten verschoben werden kann - dies ist nicht möglich wenn absolute Pfade verwendet werden.
 Die Struktur innerhalb des spezifizierten Ordners wird anschliessend automatisch generiert und folgt der Struktur der Datenbank: `schema/table/column`. SIARD Suite detektiert automatisch den MIME-Type und die Dateiendungen werden automatisch korrekt gesetzt. Dies ermöglicht auch, dass die Binary-Daten direkt aus der SIARD Suite in der korrekten auf dem System installierten Applikation geöffnet werden können.
 
-
 ==== Einstellungen
 
-Unter dem Menupunkt "Optionen" kann die Applikation konfiguriert werden.
+Unter dem Menüpunkt "Optionen" kann die Anwendung konfiguriert werden.
 
 image::options.png[]
 
-Folgende Eintstellungen können vorgenommen werden:
+Folgende Einstellungen können vorgenommen werden:
 
 |===
 | Option | Beschreibung
+
 | Login Timeout (s) | Maximale Wartezeit auf eine Datenbankverbindung (in Sekunden). 0 für unbegrenzt
-| Query Timeout (s) | Maximale Wartezeit auf eine Datenbankabfrage (0 für unbegrenzt)
+| Query Timeout (s) | Maximale Wartezeit für eine Datenbankanfrage (0 für unbegrenzt).
 |===
 
 === SIARD Suite CLI
 
-Neben der grafischen Benutzeroberfläche können Datenbanken auch per Kommandozeile archiviert bzw. ein Archiv wieder in eine Datenbank eingelesen werden.
+Neben der grafischen Benutzeroberfläche können Datenbanken auch über die Kommandozeile archiviert bzw. ein Archiv wieder in eine Datenbank eingelesen werden.
 
-Dazu stehen in der ZIP Distribution die Scripte `siard-from-db` und `siard-to-db` zur Verfügung.
+Dazu stehen in der ZIP-Distribution die Scripte `siard-from-db` und `siard-to-db` zur Verfügung.
 
 === SiardFromDb
 
-Mit `siard-from-db`  kann man
+Mit `siard-from-db` kann eine Datenbank ohne Verwendung des GUIs archiviert werden.
 
-* ein SIARD-Archiv (Metadaten und Primärdaten) aus einer Datenbank (Option -s), und/oder
-* eine SIARD Metadaten XML mit der Definition des Datenbankschemas (option -e).
-erzeugen.
 
 ==== Aufruf
 
-In einem Terminal in das Verzeichnis wechseln, wo das ZIP Archiv entpackt wurde und dort das Verzeichnis `bin` öffnen und dann ausführen mit:
+Wechseln Sie in einem Terminal in das Verzeichnis, in dem das ZIP-Archiv entpackt wurde, öffnen Sie dort das Verzeichnis `bin` und führen Sie es aus mit
 
 ```
 siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<import meta data>] [-x=<external lob folder>] [-m=<mime type>] -j=<JDBC URL> -u=<database user> -p=<database password> -s=<siard file> -e=<export meta data>"
@@ -140,16 +137,16 @@ siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<im
 |===
 |Argument | Beschreibung
 
-| -o	| Überschreiben (overwrite) der Ausgabe Datei(en), wenn sie existieren
-| -v	| Views (Ansichten) als Tabellen archivieren
-| <login timeout> |	Timeout in Sekunden für die Anmeldung (login) (0 für unbeschränkt)
-| <query timeout> | Timeout in Sekunden für die Abfrage (0 für unbeschränkt)
-| <import meta data> |	Name der Metadaten XML-Datei, die als Muster zu berücksichtigen ist
-| <external LOB folder> | Ordner wo die Daten der grössten LOB (large object) Spalte der Datenbank extern zu speichern sind (gleichnamige Inhalte werden überschrieben!)
-| <mime type> |	MIME-Typ der Daten der grössten LOB-Spalte der Datenbank (beeinflusst die Wahl der Namenerweiterung der extern gespeicherten LOBs)
+| -o | Überschreibe (overwrite) die Ausgabedatei(en), falls vorhanden
+| -v | Sichten als Tabellen archivieren
+| <login timeout> | Timeout in Sekunden für die Anmeldung (login) (0 für unbegrenzt)
+| <query timeout> | Timeout in Sekunden für die Abfrage (0 für unbegrenzt)
+| <import meta data> | Name der Metadaten-XML-Datei, die als Vorlage verwendet werden soll
+| <external LOB folder> | Ordner, in dem die Daten der grössten LOB (large object) Spalte der Datenbank extern gespeichert werden sollen (gleichnamige Inhalte werden überschrieben!)
+| <mime type> | MIME-Typ der Daten der grössten LOB-Spalte der Datenbank (beeinflusst die Wahl der Namenserweiterung der extern gespeicherten LOBs)
 | <JDBC URL> | JDBC URL der Datenbank, die heruntergeladen werden soll
 
-Bespiele:
+Beispiele:
 
 *MS Access:* jdbc:access:<path>/<filename>.mdb
 
@@ -161,115 +158,112 @@ Bespiele:
 jdbc:oracle:thin:@<host>:1521:orcl
 
 *Postgres:*
-jdbc:postgresql://<host>:5432/<db-name>
+jdbc:postgresql://<host>:5432/<db-name>.
 
-*SQL Server:*
+*SQL-Server:*
 jdbc:sqlserver://<host>/<db-name>:1433
-| <database user> |	Datenbank User
-| <database password> |	Datenbank Passwort
-| <siard file> |	Name der zu erzeugenden .siard Datei
-| <export meta data> |	Name der zu exportierenden .xml Metadaten-Datei
+| <database user> | Datenbank Benutzer
+| <database password> | Datenbank Passwort
+| <siard file> | Name der zu erstellenden .siard Datei
+| <export meta data> | Name der zu exportierenden .xml Metadaten Datei
 
 |===
 
-==== Bemerkungen
+==== Anmerkungen
 
-Mindestens einer der beiden Parameter `siard-file` bzw. `export meta data` muss gesetzt sein (es ist auch möglich beide Parameter zu verwenden).
+Mindestens einer der beiden Parameter `siard-file` oder `export meta data` muss gesetzt sein (es ist auch möglich, beide Parameter zu verwenden).
 
-__Hinweis:__ Während des Archivierungsprozesses sollte der Inhalt der Datenbank nicht geändert werden - verwenden sie gegebenenfalls einen Snapshot der Datenbank.
+__Hinweis: Während des Archivierungsprozesses sollte der Inhalt der Datenbank nicht verändert werden - verwenden Sie ggf. einen Snapshot der Datenbank.__
 
-Die Option Views als Tabellen archivieren hat normalerweise redundante Speicherung derselben Daten zur Folge und ist deshalb nicht empfohlen. Sie ist dann nützlich, wenn der für das Archivieren genutzte Datenbank-User die Inhalte der Views (Ansichten) anzeigen kann, nicht aber die der Basistabellen.
+Die Option Views als Tabellen archivieren führt in der Regel zu einer redundanten Speicherung derselben Daten und wird daher nicht empfohlen. Sie ist dann sinnvoll, wenn der für die Archivierung verwendete Datenbankbenutzer zwar die Inhalte der Views, nicht aber die der Basistabellen anzeigen kann.
 
-Der Archivierungsprozess ist entweder gänzlich erfolgreich oder er scheitert gänzlich.
+Der Archivierungsprozess ist entweder vollständig erfolgreich oder schlägt fehl.
 
-Für grosse Datenbanken wird empfohlen, zuerst die Metadaten-XML herunterzuladen. Diese enthält alle Metadaten und Tabellengrössen und hilft so der Abschätzung der für den Download benötigten Ausführungszeit. Ausserdem sollte man die Option -q 0 für grosse Tabellen verwenden, da es unmöglich ist, abzuschätzen, wie viele Sekunden eine Grössenabfrage dauern wird.
+Bei großen Datenbanken wird empfohlen, zuerst das Metadaten-XML herunterzuladen. Diese enthält alle Metadaten und Tabellengrößen und hilft so, die für den Download benötigte Ausführungszeit abzuschätzen. Außerdem sollte bei großen Tabellen die Option -q 0 verwendet werden, da nicht abgeschätzt werden kann, wie viele Sekunden eine Größenabfrage dauern wird.
 
-==== Archivbenutzer
+==== Datenbank-Benutzer
 
-Es ist generell keine gute Idee, den Datenbankadministrator (DBA, root, dbo, ...) mit allen Rechten für das Herunterladen eines SIARD-Archivs zu benutzen. Der Umfang der im SIARD-Archiv gespeicherten Daten ist durch die Objekte definiert, auf welche der Archivbenutzer lesend zugreifen darf. Der globale DBA kann normalerweise alle Datenbanken auf dem System und ausserdem viele Systemtabellen lesen, die nicht archiviert werden sollen. Deshalb ist es wichtig einen passenden Archivbenutzer für das Herunterladen zu benutzen - allenfalls muss dieser zu diesem Zweck neu erstellt werden.
+Es ist generell nicht empfehlenswert, den Datenbankadministrator (DBA, root, dbo, ...) mit allen Rechten für den Download eines SIARD-Archivs zu verwenden. Der Umfang der im SIARD-Archiv gespeicherten Daten wird durch die Objekte definiert, auf die der Archivbenutzer lesend zugreifen darf. Der globale DBA kann normalerweise alle Datenbanken auf dem System und zusätzlich viele Systemtabellen lesen, die nicht archiviert werden sollen. Aus diesem Grund ist es wichtig, für den Download einen geeigneten Archivbenutzer zu verwenden, der gegebenenfalls für diesen Zweck neu angelegt werden muss.
 
 === SiardToDb
 
-SiardToDb ist ein Befehlszeilenprogramm, welches ein SIARD-Archiv zu Recherchezwecken in eine Datenbank-Instanz lädt.
+SiardToDb ist ein Kommandozeilenprogramm, das ein SIARD-Archiv zu Recherchezwecken in eine Datenbankinstanz lädt.
 
-Aufruf
+==== Aufruf
 ```shell
 siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
--s=<siard file> -j=<JDBC URL> -u=<database user> -p=<database password>
+-s=<siard-file> -j=<JDBC-URL> -u=<Datenbank-Benutzer> -p=<Datenbank-Passwort
 [<schema> <mappedschema>]
 ```
-
 
 ==== Argumente
 
 |===
 | Argument | Beschreibung
-|-o |	Überschreiben (overwrite) von gleichnamigen Typen und/oder Tabellen in der Datenbank, sofern solche existieren
-| <login timeout> |	Timeout in Sekunden für die Anmeldung (login) (0 für unbeschränkt)
-| <query timeout> |	Timeout in Sekunden für eine Abfrage (query) (0 für unbeschränkt)
-| <siard file> |	Name der hochzuladenden .siard Datei
-| <JDBC URL> |	JDBC URL der Zieldatenbank
+
+|-o | Überschreiben (overwrite) von gleichnamigen Typen und/oder Tabellen in der Datenbank, falls vorhanden
+| <login timeout> | Timeout in Sekunden für die Anmeldung (login) (0 für unbegrenzt)
+| <query timeout> | Timeout in Sekunden für eine Anfrage (query) (0 für unbegrenzt)
+| <siard file> | Name der hochzuladenden .siard Datei
+| <JDBC URL> | JDBC URL der Zieldatenbank
 Beispiele:
 
-*MS Access:*
-jdbc:access:<paht>/<file-name>.mdb
-*DB/2:*
-jdbc:<host>:50000/<db-name>
-*MySQL:*
-jdbc:mysql://dbserver.enterag.ch:3306/<db-name>
-*Oracle:*
-jdbc:oracle:thin:@<host>:1521:orcl
-*Postgres:*
-jdbc:postgres://<host>:5432/<db-name>
-*SQL Server:*
-jdbc:sqlserver://<host>\<db-name>:1433
-| <database user> |	Datenbank User
-| <database password> |	Datenbank Passwort
-| <schema> |	Schemaname im SIARD-Archiv
-| <mappedschema> |	in der Datenbank zu benutzender Schemaname
+*MS Access:* jdbc:access:<path>/<file-name>.mdb
+
+*DB/2:* jdbc:<host>:50000/<db-name>
+
+*MySQL:* jdbc:mysql://dbserver.enterag.ch:3306/<db-name>
+
+*Oracle:* jdbc:oracle:thin:@<host>:1521:orcl
+
+*Postgres:* jdbc:postgres://<host>:5432/<db-name>
+
+*SQL-Server:* jdbc:sqlserver://<host>\<db-name>:1433
+| <database user> | Datenbank Benutzer
+| <database password> | Datenbank Passwort
+| <schema> | Name des Schemas im SIARD-Archiv
+| <mappedschema> | in der Datenbank zu verwendender Schemaname
 |===
 
-==== Bemerkungen
+==== Anmerkungen
 
-Da ältere Datenbanken nicht SQL:2008-konform sind, ist es unvermeidlich, dass etliche manuelle Vorbereitungen für das Hochladen notwendig sind. Es gibt keine Schema-Objekte in MS Access. Benutzer und Schemas sind untrennbar in Oracle. Schemaobjekte und Datenbanken sind dasselbe in MySQL. Deshalb müssen alle Schemas vor dem Hochladen manuell erzeugt werden. Ausserdem muss der Datenbankbenutzer das Recht haben, Tabellen und Typen in diesen Schemas zu erzeugen. Da dies nicht immer einfach möglich ist, werden Datenbankschemas entsprechend der Abbildungsliste auf der Befehlszeile den Schemanamen zugeordnet.
+Da ältere Datenbanken nicht SQL:2008-konform sind, ist es unvermeidlich, dass einige manuelle Vorbereitungen für den Upload erforderlich sind. In MS Access gibt es keine Schemaobjekte. In Oracle sind Benutzer und Schemas untrennbar miteinander verbunden. In MySQL sind Schema-Objekte und Datenbanken dasselbe. Daher müssen alle Schemas vor dem Upload manuell erstellt werden. Außerdem muss der Datenbankbenutzer das Recht haben, Tabellen und Typen in diesen Schemas anzulegen. Da dies nicht immer einfach ist, werden die Datenbankschemas den Schemanamen entsprechend der Mapping-Liste auf der Kommandozeile zugeordnet.
 
-Das Hochladen erzeugt nur Tabellen und Typen und versucht Primär- und Fremdschlüssel zu aktivieren. Keine anderen Objekte werden in der Zieldatenbank erzeugt. Falls die Schlüssel nicht aktiviert werden konnten, wird eine Warnung ausgegeben, das Hochladen aber trotzdem als erfolgreich abgeschlossen betrachtet. Auch ohne diese Schlüssel kann man SQL SELECT Abfragen der Datenbank ausführen.
+Der Upload erzeugt nur Tabellen und Typen und versucht, Primär- und Fremdschlüssel zu aktivieren. Es werden keine weiteren Objekte in der Zieldatenbank erzeugt. Wenn die Schlüssel nicht aktiviert werden konnten, wird eine Warnung ausgegeben, aber der Upload gilt trotzdem als erfolgreich abgeschlossen. SQL-SELECT-Abfragen auf der Datenbank können auch ohne diese Schlüssel ausgeführt werden.
 
-Ausserdem werden beim Hochladen eventuell gewisse Abstriche gemacht. Bei MS Access landen alle Tabellen in derselben MDB/ACCDB. Bei Oracle werden alle Namen, die länger sind als 30 Zeichen gekürzt. Zur Vermeidung von Kollisionen werden Tabellen- und Spaltennamen um einen Zähler ergänzt. (So wird etwa aus der Tabelle „Ein viel zu langer Tabellenname für Oracle“ zum Beispiel „Ein viel zu langer Tabellen01“.)
+Darüber hinaus kann es beim Upload zu Einschränkungen kommen. Bei MS Access landen alle Tabellen in derselben MDB/ACCDB. Bei Oracle werden alle Namen, die länger als 30 Zeichen sind, gekürzt. Um Kollisionen zu vermeiden, werden Tabellen- und Spaltennamen mit einem Zähler versehen. (Zum Beispiel wird aus „Ein Tabellenname, der für Oracle viel zu lang ist“ „Ein Tabellenname, der Table01“).
 
-Wo die maximale Präzision und die maximale Anzahl Dezimalstellen (etwa unter MS Access) kleiner ist als benötigt, werden die Werte mit geringerer Präzision hinaufgeladen. SIARD behilft sich so gut es eben im Zieldatenbanksystem möglich ist. Wenn man die Metadaten der Datenbank mittels SiardGui konsultiert, wird man die korrekten Bezeichnungen und Werte zuordnen können.
+Wenn die maximale Genauigkeit und die maximale Anzahl Dezimalstellen (z.B. unter MS Access) kleiner sind als benötigt, werden die Werte mit geringerer Genauigkeit hochgeladen. SIARD behilft sich so gut es im Zieldatenbanksystem möglich ist. Wenn die Metadaten der Datenbank mit SiardGui konsultiert werden, können die korrekten Bezeichnungen und Werte zugeordnet werden.
 
-== Tips und Tricks
+== Tipps und Tricks
 
-=== Vorbereiten einer Datenbank für das Herunterladen
+=== Vorbereitung einer Datenbank für den Download
 
-SIARD Suite lädt alle Daten herunter, die für den Datenbank-User sichtbar sind, welcher für die Verbindung benutzt wird. Die Wahl eines geeigneten Datenbank-Users bestimmt deshalb den Umfang der archivierten Datenbank. Oft steht ein geeigneter "technischer Datenbank-User" einer Datenbank-Anwendung zur Verfügung, mit der die Datenbank bewirtschaftet wird. Dieser hat normalerweise genau die Zugriffsrechte, die für die Archivierung der Datenbank benötigt werden.
+SIARD Suite lädt alle Daten herunter, die für den für die Verbindung verwendeten Datenbankbenutzer sichtbar sind. Die Wahl eines geeigneten Datenbank-Benutzers bestimmt daher den Umfang der archivierten Datenbank. Häufig steht ein geeigneter "technischer Datenbank-Benutzer" einer Datenbankanwendung zur Verfügung, mit der die Datenbank verwaltet wird. Dieser hat in der Regel genau die Zugriffsrechte, die für die Archivierung der Datenbank benötigt werden.
 
-Wenn jedoch kein solcher Datenbank-User verfügbar ist, sollte nicht der Datenbank-Administrator (database administrator, DBA, dbo, root, SYSTEM, sa, ...) für das Herunterladen benutzt werden. Denn dieser hat lesend Zugriff auf viele Systemtabellen und Tabellen aus anderen Datenbanken, die nicht archiviert werden sollen. Stattdessen wird empfohlen, einen Datenbank-User zum Zweck der Archivierung zu erzeugen. Diesem Archivierungsuser sind Leseprivilegien auf alle Schemas, Tabellen, Views und Typen einzuräumen, die zur zu archivierenden Datenbank gehören. Die Dokumentation des DBMS gibt Auskunft, wie man einen User erzeugt und ihn mit den notwendigen Privilegien ausstattet.
+Steht jedoch kein solcher Datenbankbenutzer zur Verfügung, sollte für den Download nicht der Datenbankadministrator (database administrator, DBA, dbo, root, SYSTEM, sa, ...) verwendet werden. Denn dieser hat Lesezugriff auf viele Systemtabellen und Tabellen aus anderen Datenbanken, die nicht archiviert werden sollen. Stattdessen wird empfohlen, einen Datenbankbenutzer für die Archivierung anzulegen. Diesem Archivierungsbenutzer sind Leserechte auf alle Schemas, Tabellen, Views und Typen einzuräumen, die zu der zu archivierenden Datenbank gehören. Wie ein Benutzer angelegt und mit den notwendigen Privilegien ausgestattet wird, ist der Dokumentation des DBMS zu entnehmen.
 
-Wenn ein geeigneter User bestimmt oder erzeugt wurde, kann das Herunterladen der Datenbank mit dessen Anmeldeinformationen vorgenommen werden.
+Wenn ein geeigneter Benutzer bestimmt oder angelegt wurde, kann der Datenbank-Download mit dessen Anmeldedaten durchgeführt werden.
 
+=== Vorbereitung einer Datenbank für den Upload
 
-=== Vorbereiten einer Datenbank für das Hochladen
+Für den Upload einer Datenbank in eine Instanz eines DBMS mit SIARD Suite müssen geeignete Datenbankschemas in der Zieldatenbank vorhanden sein. Diese Schemas können dann im Schema-Mapping des Upload-Dialogs (oder im Schema-Mapping der Kommandozeile von SiardToDb) den Schemas im SIARD-Archiv zugeordnet werden.
 
-Für das Hochladen einer Datenbank in eine Instanz eines DBMS mit SIARD Suite müssen geeignete Datenbank-Schemas in der Zieldatenbank zur Verfügung stehen. Diese Schemas können dann in der Schema-Zuordnung im Dialog für das Hochladen (oder im Teil Schema-Zuordnung der Befehlszeile von SiardToDb) mit den Schemas im SIARD-Archiv assoziiert werden.
+Im Idealfall sind die Zielschemas leer. Je nach Sicherheitseinstellungen des DBMS ist es jedoch nicht immer möglich, Schemas nach Belieben zu erstellen oder auszuwählen. Sind die Zielschemas nicht leer, werden die archivierten Daten nur dann hochgeladen, wenn entweder keine Namenskollisionen bei den Typen und Tabellen auftreten oder explizit die Option Überschreiben gewählt wurde.
 
-Idealerweise sind die Zielschemas leer. Es ist aber je nach Sicherheitsvorgaben beim DBMS nicht immer möglich, Schemas nach Belieben zu erzeugen oder auszuwählen. Wenn die Zielschemas nicht leer sind, werden die archivierten Daten nur hochgeladen, wenn entweder keine Namenskollisionen bei den Typen und Tabellen vorkommen, oder aber explizit die Option Überschreiben gewählt wurde.
+Der Datenbankbenutzer, dessen Anmeldedaten für den Upload verwendet werden, muss das Recht haben, Typen und Tabellen in den Zielschemas anzulegen und Daten in diese Tabellen einzufügen. Die Dokumentation des DBMS enthält Informationen darüber, wie Schemas angelegt werden und wie dem Datenbankbenutzer die erforderlichen Rechte erteilt werden. Am einfachsten ist es, wenn möglich, die Zugangsdaten des Datenbankadministrators zu verwenden. Denn dieser hat in der Regel alle notwendigen Privilegien. In diesem Fall sollte jedoch nicht die Option Überschreiben gewählt werden. Sonst ist die Gefahr zu groß, dass wichtige Tabellen oder Typen im System überschrieben werden.
 
-Der Datenbank-User, dessen Anmeldeinformationen für das Hochladen benutzt werden, muss das Privileg haben, in den Zielschemas Typen und Tabellen zu erzeugen und Daten in diese Tabellen einzufügen. Die DBMS-Dokumentation gibt Auskunft, wie man Schemas erzeugt und wie man dem Datenbank-User die nötigen Privilegien einräumt. Bequemerweise nutzt man die Anmeldeinformationen des Datenbank-Administrators, sofern diese verfügbar sind. Denn dieser hat normalerweise alle notwendigen Privilegien. In diesem Fall sollte aber die Option Überschreiben nicht gewählt werden. Andernfalls ist das Risiko zu gross, dass wichtige Tabellen oder Typen im System überschrieben werden.
+=== Zeit, Zeitstempel und Zeitzonen
 
-=== Time, Timestamps und Zeitzonen
+Die Konvertierung von TIMEs und TIMESTAMPs in der Datenbank hängt von der lokalen Zeitzone ab. Die UTC-Zeit 14:30 im SIARD-Archiv wird beim Upload in Zürich als lokale Zeit 15:30 in die Datenbank geladen - im Winter. Um diese Konvertierung zu unterdrücken, muss SiardToDb mit der Option `-Duser.timezone=GMT` gestartet werden, was SIARD dazu veranlasst, alle Datenbankzeiten als UTC-Zeiten zu interpretieren.
 
-Die Konversion von TIMEs und TIMESTAMPs in der Datenbank hängt von der lokalen Zeitzone ab. Die UTC Zeit 14:30 im SIARD Archiv wird beim Hochladen in Zürich als lokale Zeit 15:30 in die Datenbank geladen – im Winter. Um diese Konversion zu unterdrücken, muss SiardToDb mit der Option `-Duser.timezone=GMT` gestartet werden, welche SIARD veranlasst, alle Datenbankzeiten als UTC-Zeiten zu interpretieren
+== Einschränkungen
 
-== Beschränkungen
+Das SIARD-Format unterliegt folgenden Einschränkungen
 
-
-Das SIARD Format unterliegt folgenden Beschränkungen:
-
-* Die Grösse einer SIARD-Datei kann 18’446’744’073’709’551’615 Bytes (ca. 18 ExaBytes) nicht überschreiten (ZIP64-Beschränkung).
-* Die Anzahl der (Tabellen- und LOB-) Dateien kann 4'294'967’295 (ca. 4 Milliarden) nicht überschreiten (ZIP64 Beschränkung).
+* Die Grösse einer SIARD-Datei darf 18’446’744’073’709’551’615 Bytes (ca. 18 ExaBytes) nicht überschreiten (ZIP64-Beschränkung).
+* Die Anzahl der Dateien (Tabellen und LOB) darf 4'294'967’295 (ca. 4 Milliarden) nicht überschreiten (ZIP64-Beschränkung).
 
 Die SIARD Suite ist ausserdem beschränkt durch
 
-* Die Gesamtheit der Metadaten der Datenbank muss im JAVA-Speicher (Heap) Platz haben. Diese Beschränkung kann bei einer ungünstigen Konstellation von verfügbarem Hauptspeicher und Komplexität der Datenbank-Metadaten durchaus einmal eintreten. Man kann ihr entgehen, indem man die SIARD-Anwendungen auf einer Maschine startet, die über genügend Hauptspeicher verfügt und allenfalls den JAVA-Heap mittels dem JAVA-Befehlszeilenparameter ‑Xmx2000m o.ä. auf der JAVA-Befehlszeile vergrössert.
+* Die gesamten Metadaten der Datenbank müssen im JAVA-Speicher (Heap) Platz finden. Diese Beschränkung kann bei einer ungünstigen Konstellation von verfügbarem Hauptspeicher und Komplexität der Datenbankmetadaten auftreten. Sie kann umgangen werden, indem die SIARD-Anwendungen auf einer Maschine mit genügend Hauptspeicher gestartet werden und allenfalls der JAVA-Heap mit dem JAVA-Kommandozeilenparameter -Xmx2000m oder einem ähnlichen Parameter auf der JAVA-Kommandozeile vergrössert wird.
