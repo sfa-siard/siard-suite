@@ -262,3 +262,14 @@ Der Datenbank-User, dessen Anmeldeinformationen für das Hochladen benutzt werde
 
 Die Konversion von TIMEs und TIMESTAMPs in der Datenbank hängt von der lokalen Zeitzone ab. Die UTC Zeit 14:30 im SIARD Archiv wird beim Hochladen in Zürich als lokale Zeit 15:30 in die Datenbank geladen – im Winter. Um diese Konversion zu unterdrücken, muss SiardToDb mit der Option `-Duser.timezone=GMT` gestartet werden, welche SIARD veranlasst, alle Datenbankzeiten als UTC-Zeiten zu interpretieren
 
+== Beschränkungen
+
+
+Das SIARD Format unterliegt folgenden Beschränkungen:
+
+* Die Grösse einer SIARD-Datei kann 18’446’744’073’709’551’615 Bytes (ca. 18 ExaBytes) nicht überschreiten (ZIP64-Beschränkung).
+* Die Anzahl der (Tabellen- und LOB-) Dateien kann 4'294'967’295 (ca. 4 Milliarden) nicht überschreiten (ZIP64 Beschränkung).
+
+Die SIARD Suite ist ausserdem beschränkt durch
+
+* Die Gesamtheit der Metadaten der Datenbank muss im JAVA-Speicher (Heap) Platz haben. Diese Beschränkung kann bei einer ungünstigen Konstellation von verfügbarem Hauptspeicher und Komplexität der Datenbank-Metadaten durchaus einmal eintreten. Man kann ihr entgehen, indem man die SIARD-Anwendungen auf einer Maschine startet, die über genügend Hauptspeicher verfügt und allenfalls den JAVA-Heap mittels dem JAVA-Befehlszeilenparameter ‑Xmx2000m o.ä. auf der JAVA-Befehlszeile vergrössert.
