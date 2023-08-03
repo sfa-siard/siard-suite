@@ -197,12 +197,12 @@ public class Controller {
 
     public void initializeExport(RootStage stage) {
         this.workflow = Workflow.EXPORT;
-        stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
+        stage.openDialog(View.EXPORT_SELECT_TABLES);
     }
 
     public void initializeUpload(RootStage stage) {
         this.workflow = Workflow.UPLOAD;
-        stage.openDialog(View.EXPORT_SELECT_TABLES);
+        stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG);
     }
 
     public void start(RootStage stage) {
