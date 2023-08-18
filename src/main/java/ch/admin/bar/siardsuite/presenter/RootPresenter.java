@@ -8,6 +8,7 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.enterag.utils.ProgramInfo;
 import ch.enterag.utils.io.SpecialFolder;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.application.Platform;
@@ -46,13 +47,17 @@ public class RootPresenter extends Presenter {
     @FXML
     public MFXButton helpButton;
 
+    @FXML
+    public Label applicationLabel;
+
     public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
 
         allowStageRepositioning(windowHeader);
 
-        I18n.bind(stage.titleProperty(), "window.title");
+        I18n.bind(stage.titleProperty(), "window.title", ProgramInfo.getProgramInfo().getVersion());
+        I18n.bind(applicationLabel, "window.title", ProgramInfo.getProgramInfo().getVersion());
 
         initMenu();
 
@@ -136,7 +141,9 @@ public class RootPresenter extends Presenter {
             });
 
             InputStream resourceAsStream = SiardApplication.class.getResourceAsStream("icons/archive_red.ico");
-            Files.copy(resourceAsStream, Paths.get(applicationFolder + File.separator +"archive_red.ico"), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(resourceAsStream,
+                       Paths.get(applicationFolder + File.separator + "archive_red.ico"),
+                       StandardCopyOption.REPLACE_EXISTING);
             String description = "SIARD Suite: view and modify archived data from relational databases";
 
             ShellLink shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
@@ -145,7 +152,7 @@ public class RootPresenter extends Presenter {
             shellLink.setWorkingDir(applicationFolder);
             shellLink.setIconLocation(applicationFolder + File.separator + "archive_red.ico");
             shellLink.setName(description); // TODO: why set the name to description?
-            shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite-"+ version + ".lnk");
+            shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite-" + version + ".lnk");
 
         } catch (IOException e) {
             e.printStackTrace();
