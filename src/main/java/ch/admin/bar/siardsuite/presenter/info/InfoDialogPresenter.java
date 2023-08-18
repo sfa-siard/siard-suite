@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
+import ch.enterag.utils.ProgramInfo;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -18,7 +19,6 @@ public class InfoDialogPresenter extends DialogPresenter {
     protected Text text;
     @FXML
     protected MFXButton closeButton;
-
     @FXML
     protected HBox buttonBox;
 
@@ -27,7 +27,7 @@ public class InfoDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        I18n.bind(title.textProperty(), "info.dialog.title");
+        I18n.bind(title.textProperty(), "info.dialog.title", ProgramInfo.getProgramInfo().getVersion());
         I18n.bind(text.textProperty(), "info.dialog.text");
         closeButton.setOnAction(event -> stage.closeDialog());
         buttonBox.getChildren().add(new CloseDialogButton(this.stage));
