@@ -174,8 +174,13 @@ siardFromDb {
 }
 
 distZip {
+
+    into("${applicationName}-${project.version}/licenses") {
+        from 'licenses'
+    }
     dependsOn(siardFromDb)
 }
+
 
 
 asciidoctor {

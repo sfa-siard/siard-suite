@@ -48,108 +48,108 @@ SIARD Suite 2.2 is the reference implementation for archiving relational databas
 
 === Intellectual Property Rights
 
-SIARD Suite has been developed by Enter AG and Puzzle ITC GmbH for the Swiss Federal Archives. The copyright holders release SIARD Suite as Open Source software under the CDDL-1.0 license (in the SIARD distribution as doc/licenses/CDDL-1.0.txt).
+SIARD Suite has been developed by Enter AG and Puzzle ITC GmbH for the Swiss Federal Archives. The copyright holders release SIARD Suite as Open Source software under the CDDL-1.0 license (in the SIARD distribution as licenses/CDDL-1.0.txt).
 
 
 SIARD Suite relies on the following third-party components:
 
 // TODO: wir müssen prüfen, ob das so noch stimmt.
 * JAVA SE 1.8 or higher from Oracle http://www.oracle.com/technetwork/java/javase/downloads/
-** License: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX in the SIARD distribution as doc/licenses/java-license.txt
+** License: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX in the SIARD distribution as licenses/java-license.txt
 
 * JavaFX 8 from Oracle as part of JAVA 8 http://www.oracle.com/technetwork/java/javase/downloads/
-** License: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX in the SIARD distribution as doc/licenses/java-license.txt
+** License: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX in the SIARD distribution as licenses/java-license.txt
 
 * ini4j
 ** INI file handler for LINUX desktop links from Apache http://ini4j.sourceforge.net/
-** License: Apache License 2.0 in the SIARD distribution as doc/licenses/Apache-license-2.0.txt
+** License: Apache License 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
 
 * mslinks
 ** LNK file handler for Windows desktop links from BlackOverlord666 https://github.com/BlackOverlord666/mslinks
-** License: WTFPL License in the SIARD distribution as doc/licenses/WTFPL.txt
+** License: WTFPL License in the SIARD distribution as licenses/WTFPL.txt
 
 * SiardApi from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * JavaBeans Activation Framework (Version 1.1.1)
 from Sun Microsystems Inc. http://www.java2s.com/Code/Jar/a/Downloadactivationjar.htm
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * Java Architecture for XML Binding (JAXB) (Version 2.3.0)
 from Oracle http://www.java2s.com/Code/Jar/j/Downloadjaxbapi22jar.htm
-** License: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)Version 1.11 and the GNU General Public License (GPL) Version 2 (CDDL+GPL 1.1) in the SIARD distribution as doc/licenses/CDDL+GPL_1.1.txt
+** License: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)Version 1.11 and the GNU General Public License (GPL) Version 2 (CDDL+GPL 1.1) in the SIARD distribution as licenses/CDDL+GPL_1.1.txt
 
 * Woodstox XML processor
 ** An implementation of the Streaming API for XML (StAX2) for fast XML streaming while validating against an XML schema from Codehaus https://mvnrepository.com/artifact/org.codehaus.woodstox/
-** License: GNU Lesser Public License 2.1 (LGPLv2.1) in the SIARD distribution as doc/licenses/LGPL2.1.txt
+** License: GNU Lesser Public License 2.1 (LGPLv2.1) in the SIARD distribution as licenses/LGPL2.1.txt
 
 * Multi-Schema Validator (MSV)
 from SUN/Apache https://github.com/kohsuke/msv/
-** License: BSD license (BSD-2) in the SIARD distribution as doc/licenses/BSD-2.txt.
+** License: BSD license (BSD-2) in the SIARD distribution as licenses/BSD-2.txt.
 
 * Zip64File from Enter AG
-** License: CDDL-1.0 license in der SIARD-Distribution als doc/licenses/CDDL-1.0.txt.
+** License: CDDL-1.0 license in der SIARD-Distribution als licenses/CDDL-1.0.txt.
 
 * SqlParser from Enter AG
-** License: CDDL-1.0 license in the SIARD-Distribution als doc/licenses/CDDL-1.0.txt.
+** License: CDDL-1.0 license in the SIARD-Distribution als licenses/CDDL-1.0.txt.
 
 * ANTLR4 (Version 4.5.2)
 ** Parser Generator from Terence Parr http://www.antlr.org/download.html
-** License: BSD License (BSD-3)) in the SIARD distribution as doc/licenses/BSD-3.txt
+** License: BSD License (BSD-3)) in the SIARD distribution as licenses/BSD-3.txt
 
 * SiardCmd from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * JTS Topology Suite (Version 1.14 - used by MySQL for the GEOMETRY extension) from Martin Davis http://tsusiatsoftware.net/
-** License: GNU Library General Public License (LGPLv2.0) in the SIARD distribution as doc/licenses/LGPLv2.0.txt.
+** License: GNU Library General Public License (LGPLv2.0) in the SIARD distribution as licenses/LGPLv2.0.txt.
 
 * JdbcBase from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * JdbcPostgres from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * JDBC Driver for Postgres (postresql-42.2.5.jar) from the PostgreSQL Global Development Group
-** License: Postgres License in the SIARD distribution as doc/licenses/licensePostgres.txt.
+** License: Postgres License in the SIARD distribution as licenses/licensePostgres.txt.
 
 * JdbcOracle from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * JDBC Driver for Oracle (ojdbc6.jar (version 12.1.0.1.0), xdb6.jar, xmlparserv2.jar) from Oracle
-** License: Oracle License in the SIARD distribution as doc/licenses/licenseOracle.txt.
+** License: Oracle License in the SIARD distribution as licenses/licenseOracle.txt.
 
 * JdbcMySql from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * JDBC Driver for MySQL (Version 8.0.18) from Oracle https://dev.mysql.com/downloads/connector/j/
-** License: GNU Generial Public License (GPLv2.0) in the SIARD distribution as doc/licenses/GPLv2.0.txt.
+** License: GNU Generial Public License (GPLv2.0) in the SIARD distribution as licenses/GPLv2.0.txt.
 
 * JdbcMsSql from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * JDBC Driver for SQL Server (Version 4.1) from Microsoft https://msdn.microsoft.com/library/mt484311.aspx
-** License: Microsoft License in the SIARD distribution as doc/licenses/license41.txt.
+** License: Microsoft License in the SIARD distribution as licenses/license41.txt.
 
 * JdbcDb2 from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * JDBC Driver for DB/2 (Version 4.1) from IBM http://www-01.ibm.com/support/docview.wss?uid=swg21363866
-** License: IBM license in the SIARD distribution as doc/licenses/IBM JDBC 4 License.txt and doc/licenses/IBM jdbc4_notices.txt.
+** License: IBM license in the SIARD distribution as licenses/IBM JDBC 4 License.txt and licenses/IBM jdbc4_notices.txt.
 ** This very long license essentially declares that IBM is the copyright holder of the software and makes it freely available for using, copying and redistributing. However, there are technical “licenses” which restrict its use for connecting to a DB/2 instance running on an operating system platform which is not Windows, LINUX, or UNIX. If you want to make use of SIARD Suite in such a context, you need to apply to the vendor of the DB/2 database instance for the appropriate technical license file from IBM and add it to the class path.
 
 * JdbcAccess from Swiss Federal Archives
-** License: CDDL-1.0 license in the SIARD distribution as doc/licenses/CDDL-1.0.txt
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
 * Jackcess (Version 2.1.6) from Health Market Science http://jackcess.sourceforge.net/
-** License: Apache License, Version 2.0 in the SIARD distribution as doc/licenses/Apache-license-2.0.txt
+** License: Apache License, Version 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
 
 * Two parts (commons-lang-2.6 6 and commons-logging-1.1.3 7 ) used by Jackcess from Apache Commons http://commons.apache.org/
-** License: Apache License, Version 2.0 in the SIARD distribution as doc/licenses/Apache-license-2.0.txt
+** License: Apache License, Version 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
 
 * EnterUtilities from Enter AG
-** License: CDDL-1.0 license in the SIARD Distribution as doc/licenses/CDDL-1.0.txt.
+** License: CDDL-1.0 license in the SIARD Distribution as licenses/CDDL-1.0.txt.
 
-A copy of all licenses can be found in the doc/licenses folder of the distribution ZIP file. A copy of all the third party binaries used by SIARD Suite can be found in the lib folder of the distribution.
+A copy of all licenses can be found in the licenses folder of the distribution ZIP file. A copy of all the third party binaries used by SIARD Suite can be found in the lib folder of the distribution.
 
 
 == SIARD Concept
