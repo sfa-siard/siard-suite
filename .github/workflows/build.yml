@@ -38,3 +38,8 @@ jobs:
         with:
           name: siard-suite-snapshot
           path: build/distributions/siard-suite-*.zip
+      - name: upload siard-manual.pdf
+        uses: actions/upload-artifact@v3
+        with:
+          name: siard-suit-manual
+          path: build/docs/pdf/siard-manual.pdf
