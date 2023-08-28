@@ -6,11 +6,16 @@ include::../../theme/config.adoc[]
 
 Der Standard SIARD (Software-Independent Archival of Relational Databases) definiert ein Format, um Inhalte relationaler Datenbanken langfristig zu archivieren. Die Anwendung "SIARD Suite" bietet eine grafische Benutzeroberfläche zum Archivieren, Wiederherstellen, Durchsuchen und Exportieren von SIARD-Archiven.
 
+
 == Kontext
 
 In Zusammenarbeit mit dem EU-Projekt E-ARK und der KOST wurde zwischen 2015 und 2018 die Version 2.1 des SIARD-Formats spezifiziert. Wie schon zuvor die Version 1.0 wurde auch SIARD-Format 2.1 als Standard eCH-0165 vom Verein "eCH E-Government Standards" homologiert. Im Jahr 2021 hat der DILCIS-Vorstand das erweiterte SIARD-Format 2.2 entwickelt und genehmigt.
 
 SIARD Suite ist die Referenzimplementation für das Archivieren relationaler Datenbanken im standardisierten SIARD-Format 2.2. Weiter kann SIARD Suite auch SIARD-Archive in den Formaten SIARD 2.1 und SIARD 1.0 einlesen und zu SIARD 2.2 konvertieren.
+
+== Über dieses Dokument
+
+Dieses Dokument gibt einen kurzen Überblick über die Anwendung und ihre Benutzung. Ein ausführliches Handbuch in englischer Sprache steht auf der Projektwebsite des Schweizerischen Bundesarchivs zur Verfügung: https://www.bar.admin.ch/bar/de/home/archivierung/tools---hilfsmittel/siard-suite.html
 
 == Systemanforderungen und Installation
 

@@ -12,6 +12,10 @@ In collaborazione con i progetti europei E-ARK e KOST, la versione 2.1 del forma
 
 SIARD Suite è l'implementazione di riferimento per l'archiviazione di database relazionali nel formato standardizzato SIARD 2.2. Inoltre, SIARD Suite può anche leggere archivi SIARD nei formati SIARD 2.1 e SIARD 1.0 e convertirli in SIARD 2.2.
 
+== Informazioni su questo documento
+
+Questo documento fornisce una breve panoramica dell'applicazione e del suo utilizzo. Un manuale dettagliato in inglese è disponibile sul sito web del progetto dell'Archivio federale svizzero: https://www.bar.admin.ch/bar/it/home/archiviazione/strumenti/siard-suite.html
+
 == Requisiti di sistema e installazione
 
 L'applicazione SIARD Suite è un'applicazione Java FX. Come tale, può essere eseguita su qualsiasi sistema su cui sia installato un Java Runtime Environment 8 (JRE) con l'estensione JavaFX.

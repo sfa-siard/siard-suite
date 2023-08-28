@@ -16,7 +16,7 @@ of the SIARD Suite and its components.
 
 === User Manual Language
 
-The user's manual is also available in French, German or Italian and can be found directly in SIARD-Suite.
+The extended version of the user’s manual is only available in English. A short version is also available in French, German or Italian and can be found directly in SIARD-Suite.
 
 === Latest release
 
@@ -247,6 +247,7 @@ The distributions with and without JRE are delivered as a ZIP archive. This can 
 | siard-to-db (.bat) | Upload a SIARD archive to a database (CLI)
 |===
 
+If the installation of SIARD-Suite is prevented due to security barriers on your computer, please follow the instructions in the additional document “SIARD-Suite – getting started”
 
 == Using the SIARD Suite
 
