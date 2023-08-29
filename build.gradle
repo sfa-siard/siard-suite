@@ -1,6 +1,3 @@
-import org.asciidoctor.gradle.jvm.AsciidoctorTask
-import org.asciidoctor.gradle.jvm.pdf.AsciidoctorPdfTask
-
 plugins {
     id 'java'
     id 'application'
@@ -184,8 +181,6 @@ distZip {
     dependsOn(siardFromDb)
 }
 
-
-
 asciidoctor {
     languages 'en', 'de', 'fr', 'it'
     baseDirFollowsSourceDir()
@@ -223,49 +218,11 @@ asciidoctorPdf {
     dependsOn(asciidoctor)
 }
 
-tasks.register('asciidoctorExtendedManual', AsciidoctorTask) {
-    baseDirFollowsSourceDir()
-
-    sourceDir 'docs/user-manual/extended'
-    outputDir file('build/docs')
-    sources {
-        include 'siard-manual.adoc'
-    }
-}
-
-
-tasks.register('asciidoctorExtendedManualPdf', AsciidoctorPdfTask) {
-    baseDirFollowsSourceDir()
-
-    outputDir 'build/docs/pdf'
-    sourceDir 'docs/user-manual/extended'
-
-    pdfThemes {
-        local 'basic', {
-            themeDir = 'docs/theme'
-            themeName = 'siard-theme'
-        }
-    }
-
-    asciidoctorj {
-        attributes 'media': 'press',
-                'styles-dir': 'docs/theme',
-                'stylesheet':  'siard-theme.css',
-                'source-highlighter': 'coderay',
-                'imagesdir': 'images',
-                'toc': 'left'
-    }
-    dependsOn(asciidoctorExtendedManual)
-}
-
-
 tasks.register('copyDocumentation', Copy) {
     from layout.buildDirectory.dir("docs/pdf")
     into layout.projectDirectory.dir('./src/main/resources/ch/admin/bar/siardsuite/doc')
 }
 
 tasks.named("asciidoctorPdf") { finalizedBy(copyDocumentation)}
-tasks.named("asciidoctorExtendedManualPdf") { finalizedBy(copyDocumentation)}
 tasks.named("build") { dependsOn(asciidoctorPdf)}
-tasks.named("build") { dependsOn(asciidoctorExtendedManualPdf)}
 tasks.named("processResources") { dependsOn(copyDocumentation)}

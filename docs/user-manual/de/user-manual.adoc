@@ -15,7 +15,7 @@ SIARD Suite ist die Referenzimplementation für das Archivieren relationaler Dat
 
 == Über dieses Dokument
 
-Dieses Dokument gibt einen kurzen Überblick über die Anwendung und ihre Benutzung. Ein ausführliches Handbuch in englischer Sprache steht auf der Projektwebsite des Schweizerischen Bundesarchivs zur Verfügung: https://www.bar.admin.ch/bar/de/home/archivierung/tools---hilfsmittel/siard-suite.html
+Dieses Dokument gibt einen kurzen Überblick über die Anwendung und ihre Benutzung. Ein ausführliches Handbuch in englischer Sprache steht in dieser Applikation sowie auf der Projektwebsite des Schweizerischen Bundesarchivs zur Verfügung: https://www.bar.admin.ch/bar/de/home/archivierung/tools---hilfsmittel/siard-suite.html
 
 == Systemanforderungen und Installation
 

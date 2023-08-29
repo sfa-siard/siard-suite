@@ -2,51 +2,236 @@ include::../../theme/config.adoc[]
 :toc-title: Table of contents
 = Siard Suite Manual
 
+== Summary
+
+This document is a technical user manual for the SIARD Suite (Software Independent Archival of Relational Databases) application of the Swiss Federal Archives.
+
+It describes the
+
+- technical requirements for use
+- installation
+- execution
+
+of the SIARD Suite and its components.
+
+=== User Manual Language
+
+The extended version of the user’s manual is only available in English. A short version is also available in French, German or Italian and can be found directly in SIARD-Suite.
+
+=== Latest release
+
+This version of the manual refers to the latest release of SIARD Suite {gradle-project-version}
+
 == Introduction
 
-The SIARD (Software-Independent Archival of Relational Databases) standard defines a format to archive contents of relational databases in the long term. The "SIARD Suite" application provides a graphical user interface for archiving, restoring, searching and exporting SIARD archives.
+The SIARD format and the SIARD Suite application were developed by the Swiss Federal Archives. SIARD (Software-Independent Archival of Relational Databases) is used for long-term archiving of relational database content.
 
-== Context
+On behalf of the Swiss Federal Archives, Enter AG developed SIARD Format 1.0 and SIARD Suite 1.0 in 2007 and SIARD Suite 2.1 in 2016-2018.
 
-In collaboration with the EU project E-ARK and KOST, version 2.1 of the SIARD format was specified between 2015 and 2018. Like version 1.0 before, SIARD format 2.1 was homologated as standard eCH-0165 by the association "eCH E-Government Standards". In 2021, the DILCIS Board developed and approved the extended SIARD Format 2.2.
+In 2015-2018, version 2.1 of the SIARD format was specified by the Swiss Federal Archives in collaboration with the EU project E-ARK and KOST. Like version 1.0, SIARD format 2.1 has been approved as standard eCH-0165 by the association eCH E-Government Standards. In 2021, the DILCIS Board has developed and approved the enhanced SIARD Format 2.2. Puzzle ITC has been commissioned by the Swiss Federal Archives to develop SIARD Suite 2.2 according to the enhanced format.
 
-SIARD Suite is the reference implementation for archiving relational databases in the standardized SIARD format 2.2. Furthermore, SIARD Suite can also read SIARD archives in the SIARD 2.1 and SIARD 1.0 formats and convert them to SIARD 2.2.
+SIARD Suite 2.2 is the reference implementation for the archiving of relational databases in the standard SIARD format 2.2.
 
-== About this document
+This document is the SIARD Suite 2.2 user manual.
 
-This document provides a brief overview of the application and its use. A detailed manual in English is available on the project website of the Swiss Federal Archives: https://www.bar.admin.ch/bar/en/home/archiving/tools/siard-suite.html
+=== New features of Version 2.2
 
-== System requirements and installation
+The main new features of SIARD format 2.2 compared to version 2.1 concern:
 
-The SIARD Suite application is a Java FX application. As such, it can basically run on any system where a Java Runtime Environment 8 (JRE) with the JavaFX extension is installed.
+- Large objects (LOBs) referenced by DATALINKs and stored as external files in the database, according to the SQL standard;
+- large objects (LOBs) stored outside the SIARD archive and segmented into several folders and file parts.
 
-In addition, there are distributions with JRE included as well as native installers for Windows, Mac and Linux, so that no JRE needs to be installed on the system.
+SIARD files conforming to SIARD formats prior to 2.2 can be read by SIARD Suite 2.2. However, by saving any changes, SIARD files are automatically converted to SIARD format 2.2.
+
+SIARD Suite 2.2 is the reference implementation for archiving relational databases in the standardized SIARD 2.2 format.
+
+
+=== Intellectual Property Rights
+
+SIARD Suite has been developed by Enter AG and Puzzle ITC GmbH for the Swiss Federal Archives. The copyright holders release SIARD Suite as Open Source software under the CDDL-1.0 license (in the SIARD distribution as licenses/CDDL-1.0.txt).
+
+
+SIARD Suite relies on the following third-party components:
+
+// TODO: wir müssen prüfen, ob das so noch stimmt.
+* JAVA SE 1.8 or higher from Oracle http://www.oracle.com/technetwork/java/javase/downloads/
+** License: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX in the SIARD distribution as licenses/java-license.txt
+
+* JavaFX 8 from Oracle as part of JAVA 8 http://www.oracle.com/technetwork/java/javase/downloads/
+** License: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX in the SIARD distribution as licenses/java-license.txt
+
+* ini4j
+** INI file handler for LINUX desktop links from Apache http://ini4j.sourceforge.net/
+** License: Apache License 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
+
+* mslinks
+** LNK file handler for Windows desktop links from BlackOverlord666 https://github.com/BlackOverlord666/mslinks
+** License: WTFPL License in the SIARD distribution as licenses/WTFPL.txt
+
+* SiardApi from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* JavaBeans Activation Framework (Version 1.1.1)
+from Sun Microsystems Inc. http://www.java2s.com/Code/Jar/a/Downloadactivationjar.htm
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* Java Architecture for XML Binding (JAXB) (Version 2.3.0)
+from Oracle http://www.java2s.com/Code/Jar/j/Downloadjaxbapi22jar.htm
+** License: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)Version 1.11 and the GNU General Public License (GPL) Version 2 (CDDL+GPL 1.1) in the SIARD distribution as licenses/CDDL+GPL_1.1.txt
+
+* Woodstox XML processor
+** An implementation of the Streaming API for XML (StAX2) for fast XML streaming while validating against an XML schema from Codehaus https://mvnrepository.com/artifact/org.codehaus.woodstox/
+** License: GNU Lesser Public License 2.1 (LGPLv2.1) in the SIARD distribution as licenses/LGPL2.1.txt
+
+* Multi-Schema Validator (MSV)
+from SUN/Apache https://github.com/kohsuke/msv/
+** License: BSD license (BSD-2) in the SIARD distribution as licenses/BSD-2.txt.
+
+* Zip64File from Enter AG
+** License: CDDL-1.0 license in der SIARD-Distribution als licenses/CDDL-1.0.txt.
+
+* SqlParser from Enter AG
+** License: CDDL-1.0 license in the SIARD-Distribution als licenses/CDDL-1.0.txt.
+
+* ANTLR4 (Version 4.5.2)
+** Parser Generator from Terence Parr http://www.antlr.org/download.html
+** License: BSD License (BSD-3)) in the SIARD distribution as licenses/BSD-3.txt
+
+* SiardCmd from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* JTS Topology Suite (Version 1.14 - used by MySQL for the GEOMETRY extension) from Martin Davis http://tsusiatsoftware.net/
+** License: GNU Library General Public License (LGPLv2.0) in the SIARD distribution as licenses/LGPLv2.0.txt.
+
+* JdbcBase from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* JdbcPostgres from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* JDBC Driver for Postgres (postresql-42.2.5.jar) from the PostgreSQL Global Development Group
+** License: Postgres License in the SIARD distribution as licenses/licensePostgres.txt.
+
+* JdbcOracle from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* JDBC Driver for Oracle (ojdbc6.jar (version 12.1.0.1.0), xdb6.jar, xmlparserv2.jar) from Oracle
+** License: Oracle License in the SIARD distribution as licenses/licenseOracle.txt.
+
+* JdbcMySql from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* JDBC Driver for MySQL (Version 8.0.18) from Oracle https://dev.mysql.com/downloads/connector/j/
+** License: GNU Generial Public License (GPLv2.0) in the SIARD distribution as licenses/GPLv2.0.txt.
+
+* JdbcMsSql from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* JDBC Driver for SQL Server (Version 4.1) from Microsoft https://msdn.microsoft.com/library/mt484311.aspx
+** License: Microsoft License in the SIARD distribution as licenses/license41.txt.
+
+* JdbcDb2 from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* JDBC Driver for DB/2 (Version 4.1) from IBM http://www-01.ibm.com/support/docview.wss?uid=swg21363866
+** License: IBM license in the SIARD distribution as licenses/IBM JDBC 4 License.txt and licenses/IBM jdbc4_notices.txt.
+** This very long license essentially declares that IBM is the copyright holder of the software and makes it freely available for using, copying and redistributing. However, there are technical “licenses” which restrict its use for connecting to a DB/2 instance running on an operating system platform which is not Windows, LINUX, or UNIX. If you want to make use of SIARD Suite in such a context, you need to apply to the vendor of the DB/2 database instance for the appropriate technical license file from IBM and add it to the class path.
+
+* JdbcAccess from Swiss Federal Archives
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
+
+* Jackcess (Version 2.1.6) from Health Market Science http://jackcess.sourceforge.net/
+** License: Apache License, Version 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
+
+* Two parts (commons-lang-2.6 6 and commons-logging-1.1.3 7 ) used by Jackcess from Apache Commons http://commons.apache.org/
+** License: Apache License, Version 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
+
+* EnterUtilities from Enter AG
+** License: CDDL-1.0 license in the SIARD Distribution as licenses/CDDL-1.0.txt.
+
+A copy of all licenses can be found in the licenses folder of the distribution ZIP file. A copy of all the third party binaries used by SIARD Suite can be found in the lib folder of the distribution.
+
+
+== SIARD Concept
+
+The Swiss Federal Archives are obliged to archive the documents of the federal administration regardless of the information medium. Therefore, the problem of long-term archiving of relational databases has to be solved.
+
+Since 2007, the SIARD format has been used by the Swiss Federal Archives and many other archives around the world as a normalization format for the long-term preservation of relational databases.
+
+With the SIARD format 2.2, the databases are stored according to the SQL:2008 standard in order to guarantee long-term availability. The data content is stored as a collection of XML files. Since the resulting archive format is based on these two ISO standards, it is assumed that the data will be readable in the long term.
+
+An important requirement of the data content archived in the SIARD format is that it should have a "documentary character", i.e. the content of the archived tables should be comprehensible independently of any front-end processing applications and should represent the enterprise information of the institutions operating the subject databases. Neither executable code nor objects are archived by the SIARD Suite, but only business information from database tables. This is explained in more detail in the report "Long-term Preservation of Relational Databases, What needs to be preserved how?" by Hartwig Thomas.
+
+The SIARD format stores the archived database schema definition in SQL:2008-compliant XML files, while the table and field documentation and the actual data are also stored in XML files. To avoid excessive XML file size inflation, Binary Large OBjects (BLOBs) and Character Large OBjects (CLOBs) referenced in the XML files are stored in separate (binary) files.
+
+This document does not further explain the SIARD format and structure, which are described in a separate document delivered with the SIARD Suite. In 2013, the SIARD format was approved as an eCH standard. In 2018, version 2.1 of the SIARD format was made available as standard eCH-0165. In 2021, the DILCIS Board developed and approved the extended SIARD Format 2.2.
+
+== Introduction to Database Archival
+
+This is a brief introduction to archiving databases with SIARD Suite. It also deals with organizational issues that should be taken into account.
+
+1. Make sure that you know which parts of the database need to be archived. If necessary, contact the person in charge, for example, the person in charge of the archives.
+2. Prepare the database for archiving: Create a new user on the database system with read-only privileges for the objects to be archived. If necessary, create a copy of your database (or specific tables/parts of it) or create views. The database must not be modified during the archiving process, otherwise the extraction with SIARD Suite will fail. Do not archive from a live system.
+3. Download the database with SIARD Suite.
+4. Quality control: check the SIARD file to make sure it contains everything you need, test some entries to make sure everything went well.
+5. Advanced quality control: reload the SIARD file on a database system. Execute some defined queries on the original database as well as on the archived one and compare the results.
+6. Add metadata to the SIARD file.
+7. Define which external documentation must be archived with the SIARD file to ensure the comprehensibility of the data (e.g. code tables, system documentation, entity relationship diagram, ...).
+
+
+== Requirements
+
+=== Java
+
+The SIARD Suite application is a Java FX application. As such, it can run on any system where a Java Runtime Environment 8 (JRE) with the JavaFX extension is installed.
+
+You can download a JRE 8 with the JavaFX extension from various sites:
+
+* https://www.azul.com/downloads/?version=java-8-lts&package=jre-fx#zulu
+* https://www.oracle.com/java/technologies/downloads/#jre8
+
+However, there are distributions of the SIARD Suite that already contain the required Java runtime and there are native Installers for Windows, Linux and Mac that you can use.
 
 Each distribution is listed below. All distributions can be downloaded from https://github.com/sfa-siard/siard-suite/releases.
-
 
 |===
 |Distribution Name | Description
 
-|SIARD-Suite-v2.2.133
+|SIARD-Suite-v{gradle-project-version}
 |Distribution without runtime, requires JRE with JavaFX installed on the system
-|SIARD-Suite-v2.2.133-Linux
+|SIARD-Suite-v{gradle-project-version}-Linux
 |Distribution with included runtime for Linux
-|SIARD-Suite-v2.2.133-Windows
+|SIARD-Suite-v{gradle-project-version}-Windows
 |Distribution with included runtime for Windows
-|SIARD-Suite-v2.2.133-macOS
+|SIARD-Suite-v{gradle-project-version}-macOS
 |Distribution with included runtime for MacOS
-|SIARD-Suite-v2.2.133-Linux-deb
+|SIARD-Suite-v{gradle-project-version}-Linux-deb
 |Native installer for Linux
-|SIARD-Suite-v2.2.133-win-exe
+|SIARD-Suite-v{gradle-project-version}-win-exe
 |Native installer for Windows (exe)
-|SIARD-Suite-v2.2.133-win-msi
+|SIARD-Suite-v{gradle-project-version}-win-msi
 |Native installer for Windows (msi)
-|SIARD-Suite-v2.2.133-macOS-dmg
+|SIARD-Suite-v{gradle-project-version}-macOS-dmg
 ||Native installer for MacOS
 |===
 
 *Note:* When using the native installer, the Siard CLI (Command Line Interface) is not available. To use the CLI, a distribution with or without an included JRE should be used.
+
+=== Architecture (32-bit/64-bit)
+In previous versions of SIARD Suite, the dependence on ODBC required the use of 32-bit JAVA to access MS Access databases. SIARD Suite 2.2 no longer uses ODBC to access MS Access databases. Therefore, these databases can be accessed on any platform (e.g. LINUX) and SIARD Suite 2.2 is compatible with both 32-bit and 64-bit JAVA. It is recommended to choose the JAVA architecture according to the architecture of your operating system.
+
+=== Databases
+
+SIARD Suite 2.2 currently supports the following database systems:
+
+    • MS Access 2007 or higher
+    • DB/2 8 or higher
+    • MySQL (or MariaDB) 5.5 or higher
+    • Oracle 10 or higher
+    • PostgreSQL 11 or higher
+    • SQL Server 2012 or higher
+
+Further database systems may be integrated at a later date. The JDBC drivers of the database vendors usually do not conform to SQL:2008. Most of them even fail to conform to the JDBC 4 standard with respect to metadata or advanced data types. Therefore a JDBC wrapper needs to be developed for each database system, which conforms to the standards at least to the extent required by SIARD Suite.
 
 === Installing and Running the Application
 
@@ -62,6 +247,7 @@ The distributions with and without JRE are delivered as a ZIP archive. This can 
 | siard-to-db (.bat) | Upload a SIARD archive to a database (CLI)
 |===
 
+If the installation of SIARD-Suite is prevented due to security barriers on your computer, please follow the instructions in the additional document “SIARD-Suite – getting started”
 
 == Using the SIARD Suite
 
@@ -255,7 +441,7 @@ The database user whose credentials are used for the upload must have the right 
 
 === Time, Timestamps and Time Zones.
 
-The conversion of TIMES and TIMESTAMPS in the database depends on the local time zone. The UTC time 14:30 in the SIARD archive is loaded into the database as local time 15:30 when uploading in Zurich - in winter. To suppress this conversion, SiardToDb must be started with the option `-Duser.timezone=GMT`, which causes SIARD to interpret all database times as UTC times.
+The conversion of `TIMES` and `TIMESTAMPS` in the database depends on the local time zone. The UTC time 14:30 in the SIARD archive is loaded into the database as local time 15:30 when uploading in Zurich - in winter. To suppress this conversion, SiardToDb must be started with the option `-Duser.timezone=GMT`, which causes SIARD to interpret all database times as UTC times.
 
 == Restrictions
 
@@ -266,4 +452,4 @@ The SIARD format has the following limitations
 
 The SIARD Suite is also limited by
 
-* All the metadata of the database must fit in the JAVA memory (heap). This limitation can occur with an unfavorable constellation of available main memory and complexity of the database metadata. It can be circumvented by starting the SIARD applications on a machine with sufficient main memory and, if necessary, enlarging the JAVA heap with the JAVA command line parameter -Xmx2000m or a similar parameter on the JAVA command line.
+* All the metadata of the database must fit in the JAVA memory (heap). This limitation can occur with an unfavorable constellation of available main memory and complexity of the database metadata. It can be circumvented by starting the SIARD applications on a machine with sufficient main memory and, if necessary, enlarging the JAVA heap with the JAVA command line parameter `-Xmx2000m` or a similar parameter on the JAVA command line.

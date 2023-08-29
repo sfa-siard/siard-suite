@@ -14,7 +14,7 @@ SIARD Suite est l'implémentation de référence pour l'archivage de bases de do
 
 == A propos de ce document
 
-Ce document donne un bref aperçu de l'application et de son utilisation. Un manuel détaillé en anglais est disponible sur le site du projet des Archives fédérales suisses : https://www.bar.admin.ch/bar/fr/home/archivage/outils-et-instruments/siard-suite.html
+Ce document donne un bref aperçu de l'application et de son utilisation. Un manuel détaillé en anglais est disponible dans cette application ainsi que sur le site web du projet des Archives fédérales suisses : https://www.bar.admin.ch/bar/fr/home/archivage/outils-et-instruments/siard-suite.html
 
 == Configuration requise et installation
 

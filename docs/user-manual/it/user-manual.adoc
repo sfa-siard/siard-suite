@@ -14,7 +14,7 @@ SIARD Suite è l'implementazione di riferimento per l'archiviazione di database 
 
 == Informazioni su questo documento
 
-Questo documento fornisce una breve panoramica dell'applicazione e del suo utilizzo. Un manuale dettagliato in inglese è disponibile sul sito web del progetto dell'Archivio federale svizzero: https://www.bar.admin.ch/bar/it/home/archiviazione/strumenti/siard-suite.html
+Questo documento fornisce una breve panoramica dell'applicazione e del suo utilizzo. Un manuale dettagliato in inglese è disponibile in questa applicazione e sul sito web del progetto dell'Archivio federale svizzero.: https://www.bar.admin.ch/bar/it/home/archiviazione/strumenti/siard-suite.html
 
 == Requisiti di sistema e installazione
 
