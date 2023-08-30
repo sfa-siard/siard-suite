@@ -33,6 +33,11 @@ jobs:
         with:
           name: ${{ env.NAME_TAG }}
           path: build/distributions/SIARD-Suite-*.zip
+      - name: upload siard-manual.pdf
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.NAME_TAG }}-user-manual.pdf
+          path: build/docs/pdf/en/user-manual.pdf
 
   native-packages:
     runs-on: ${{ matrix.os }}
