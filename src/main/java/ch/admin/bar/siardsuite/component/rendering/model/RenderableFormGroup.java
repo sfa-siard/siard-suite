@@ -8,7 +8,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class RenderableFormGroup {
+public class RenderableFormGroup<T> {
     @Singular
-    List<RenderableProperty> properties;
+    List<RenderableProperty<T>> properties;
 }

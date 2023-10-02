@@ -1,4 +1,4 @@
 package ch.admin.bar.siardsuite.component.rendering.model;
 
-public interface RenderableProperty {
+public interface RenderableProperty<T> {
 }

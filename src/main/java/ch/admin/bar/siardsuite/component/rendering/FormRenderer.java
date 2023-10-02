@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
+import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -36,30 +37,30 @@ public class FormRenderer extends DetailsPresenter {
         val renderableForm = wrapper.getRenderableForm()
                 .orElseThrow(() -> new IllegalArgumentException("No renderable form provided"));
 
-        controller.getSiardArchive().getMetaData();
+        val data = renderableForm.getDataExtractor().apply(controller);
 
-        renderForm(renderableForm);
+        renderForm(renderableForm, data);
     }
 
-    private void renderForm(final RenderableForm renderableForm) {
+    private <T> void renderForm(final RenderableForm<T> renderableForm, final T data) {
         val renderedGroups = renderableForm.getGroups().stream()
-                .map(this::createGroup)
+                .map(renderableGroup -> createGroup(renderableGroup, data))
                 .collect(Collectors.toList());
 
         container.getChildren().setAll(renderedGroups);
     }
 
-    private VBox createGroup(final RenderableFormGroup group) {
+    private <T> VBox createGroup(final RenderableFormGroup<T> group, final T data) {
         val vbox = new VBox();
         vbox.getChildren().setAll(
                 group.getProperties().stream()
                         .map(renderableProperty -> {
                             if (renderableProperty instanceof ReadWriteStringProperty) {
-                                return createField((ReadWriteStringProperty) renderableProperty);
+                                return createField((ReadWriteStringProperty<T>) renderableProperty, data);
                             }
 
                             if (renderableProperty instanceof ReadOnlyStringProperty) {
-                                return createField((ReadOnlyStringProperty) renderableProperty);
+                                return createField((ReadOnlyStringProperty<T>) renderableProperty, data);
                             }
 
                             throw new IllegalArgumentException(String.format(
@@ -72,15 +73,17 @@ public class FormRenderer extends DetailsPresenter {
         return vbox;
     }
 
-    private VBox createField(final ReadWriteStringProperty property) {
+    private <T> VBox createField(final ReadWriteStringProperty<T> property, final T data) {
         val vbox = new VBox();
 
         val titleLabel = new Label();
-        titleLabel.setText(property.getTitle());
+        titleLabel.setText(I18n.get(property.getTitle()));
         titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
 
         val valueTextField = new TextField();
-        valueTextField.setText(property.getValue());
+
+        val value = property.getPropertyExtractor().apply(data).get();
+        valueTextField.setText(value);
         valueTextField.getStyleClass().add(READONLY_VALUE_STYLE_CLASS); // TODO own style class
 
         final ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
@@ -93,15 +96,16 @@ public class FormRenderer extends DetailsPresenter {
         return vbox;
     }
 
-    private VBox createField(final ReadOnlyStringProperty property) {
+    private <T> VBox createField(final ReadOnlyStringProperty<T> property, final T data) {
         val vbox = new VBox();
 
         val titleLabel = new Label();
-        titleLabel.setText(property.getTitle());
+        titleLabel.setText(I18n.get(property.getTitle()));
         titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
 
         val valueLabel = new Label();
-        valueLabel.setText(property.getValue());
+        val value = property.getPropertyExtractor().apply(data).get();
+        valueLabel.setText(value);
         valueLabel.getStyleClass().add(READONLY_VALUE_STYLE_CLASS);
 
         vbox.getChildren().setAll(titleLabel, valueLabel);

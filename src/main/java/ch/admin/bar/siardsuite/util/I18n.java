@@ -54,6 +54,14 @@ public class I18n {
 
     private static final String BASE_NAME = "ch/admin/bar/siardsuite/i18n/messages";
 
+    public static String get(final I18nKey key, final Object... args) {
+        return get(key.getValue(), args);
+    }
+
+    /**
+     * Deprecation: Please use {@link #get(I18nKey, Object...)} instead.
+     */
+    @Deprecated
     public static String get(final String key, final Object... args) {
         ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, getLocale());
         String translation = bundle.containsKey(key) ? bundle.getString(key) : key;

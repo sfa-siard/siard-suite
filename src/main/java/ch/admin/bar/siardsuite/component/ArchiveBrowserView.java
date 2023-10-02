@@ -17,16 +17,21 @@ import ch.admin.bar.siardsuite.model.database.DatabaseView;
 import ch.admin.bar.siardsuite.model.database.Privilige;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
+import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.model.database.Users;
 import ch.admin.bar.siardsuite.presenter.Privileges;
 import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
+import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.I18nKey;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.ImageView;
 import lombok.val;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ArchiveBrowserView {
@@ -248,14 +253,57 @@ public class ArchiveBrowserView {
                 TreeAttributeWrapper.builder()
                         .name(this.siardArchive.name())
                         .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(RenderableForm.builder()
-                                .group(RenderableFormGroup.builder()
-                                        .property(new ReadOnlyStringProperty("Version", "2.2"))
-                                        .property(new ReadWriteStringProperty("Name", "testschema"))
+                        .renderableForm(RenderableForm.<SiardArchiveMetaData>builder()
+                                .dataExtractor(controller -> controller.getSiardArchive().getMetaData())
+                                .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
+                                        .property(new ReadOnlyStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelFormat"),
+                                                SiardArchiveMetaData::getSiardFormatVersion))
+                                        .property(new ReadWriteStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelDb"),
+                                                SiardArchiveMetaData::getDatabaseName
+                                        ))
+                                        .property(new ReadOnlyStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelProduct"),
+                                                SiardArchiveMetaData::getDatabaseProduct))
+                                        .property(new ReadOnlyStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelConnection"),
+                                                SiardArchiveMetaData::getDatabaseConnectionURL))
+                                        .property(new ReadOnlyStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelUsername"),
+                                                SiardArchiveMetaData::getDatabaseUsername))
                                         .build())
-                                .group(RenderableFormGroup.builder()
-                                        .property(new ReadOnlyStringProperty("Version", "2.2"))
-                                        .property(new ReadOnlyStringProperty("Name", "testschema"))
+                                .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
+                                        .property(new ReadWriteStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelDesc"),
+                                                SiardArchiveMetaData::getDatabaseDescription
+                                        ))
+                                        .property(new ReadWriteStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelOwner"),
+                                                SiardArchiveMetaData::getDataOwner
+                                        ))
+                                        .property(new ReadWriteStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelCreationDate"),
+                                                SiardArchiveMetaData::getDataOriginTimespan
+                                        ))
+                                        .property(new ReadOnlyStringProperty<>( // FIXME
+                                                I18nKey.of("archiveDetails.labelArchiveDate"),
+                                                siardArchiveMetaData -> new SimpleStringProperty(I18n.getLocaleDate(siardArchiveMetaData.getArchivingDate()))
+                                        ))
+                                        .property(new ReadWriteStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelArchiveUser"),
+                                                SiardArchiveMetaData::getArchiverName
+                                        ))
+                                        .property(new ReadWriteStringProperty<>(
+                                                I18nKey.of("archiveDetails.labelContactArchiveUser"),
+                                                SiardArchiveMetaData::getArchiverContact
+                                        ))
+                                        .property(new ReadOnlyStringProperty<>( // FIXME
+                                                I18nKey.of("archiveDetails.labelLOBFolder"),
+                                                siardArchiveMetaData -> new SimpleStringProperty(Optional.ofNullable(siardArchiveMetaData.getLobFolder())
+                                                        .map(URI::getPath)
+                                                        .orElse("N/A"))
+                                        ))
                                         .build())
                                 .build())
                         .build());
