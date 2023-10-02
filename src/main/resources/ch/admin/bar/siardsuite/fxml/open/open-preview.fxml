@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import java.lang.*?>
+<?import java.lang.String?>
 <AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.open.OpenPreviewPresenter">
@@ -65,6 +71,29 @@
                                                     <String fx:value="table-container-title"/>
                                                 </styleClass>
                                             </Label>
+
+                                            <MFXButton fx:id="saveChangesButton"
+                                                       alignment="CENTER_LEFT"
+                                                       rippleAnimateBackground="false"
+                                                       text="Save changes"
+                                                       visible="false">
+                                                <styleClass>
+                                                    <String fx:value="search-icon"/>
+                                                    <String fx:value="icon-text-button"/>
+                                                </styleClass>
+                                            </MFXButton>
+
+                                            <MFXButton fx:id="dropChangesButton"
+                                                       alignment="CENTER_LEFT"
+                                                       rippleAnimateBackground="false"
+                                                       text="Drop changes"
+                                                       visible="false">
+                                                <styleClass>
+                                                    <String fx:value="search-icon"/>
+                                                    <String fx:value="icon-text-button"/>
+                                                </styleClass>
+                                            </MFXButton>
+
                                             <MFXButton fx:id="tableSearchButton" alignment="CENTER_RIGHT"
                                                        rippleAnimateBackground="false">
                                                 <styleClass>

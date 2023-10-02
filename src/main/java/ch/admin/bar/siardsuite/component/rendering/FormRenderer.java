@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.presenter.tree.ChangeableDataPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -16,12 +17,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import lombok.val;
 
 import java.util.stream.Collectors;
 
-public class FormRenderer extends DetailsPresenter {
+public class FormRenderer extends DetailsPresenter implements ChangeableDataPresenter {
 
     private static final String TITLE_STYLE_CLASS = "table-container-label";
     private static final String READONLY_VALUE_STYLE_CLASS = "table-container-text";
@@ -29,8 +29,8 @@ public class FormRenderer extends DetailsPresenter {
     @FXML
     private VBox container;
 
-    @Getter
-    private BooleanProperty changed = new SimpleBooleanProperty(false);
+
+    private BooleanProperty hasChanged = new SimpleBooleanProperty(false);
 
     @Override
     public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
@@ -38,6 +38,8 @@ public class FormRenderer extends DetailsPresenter {
                 .orElseThrow(() -> new IllegalArgumentException("No renderable form provided"));
 
         val data = renderableForm.getDataExtractor().apply(controller);
+
+        controller.getSiardArchive();
 
         renderForm(renderableForm, data);
     }
@@ -86,9 +88,8 @@ public class FormRenderer extends DetailsPresenter {
         valueTextField.setText(value);
         valueTextField.getStyleClass().add(READONLY_VALUE_STYLE_CLASS); // TODO own style class
 
-        final ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
-            this.changed.set(true);
-        };
+        final ChangeListener<String> changeListener = (observable, oldValue, newValue) -> this.hasChanged
+                .set(true);
         valueTextField.textProperty().addListener(changeListener);
 
         vbox.getChildren().setAll(titleLabel, valueTextField);
@@ -115,6 +116,21 @@ public class FormRenderer extends DetailsPresenter {
 
     @Override
     protected void bindLabels() {
+
+    }
+
+    @Override
+    public BooleanProperty hasChanged() {
+        return hasChanged;
+    }
+
+    @Override
+    public void saveChanges() {
+
+    }
+
+    @Override
+    public void dropChanges() {
 
     }
 }

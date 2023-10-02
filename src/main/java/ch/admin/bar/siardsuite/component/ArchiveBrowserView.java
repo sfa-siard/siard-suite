@@ -249,73 +249,68 @@ public class ArchiveBrowserView {
     }
 
     private TreeItem<TreeAttributeWrapper> createRootItem() {
+        val form = RenderableForm.<SiardArchiveMetaData>builder()
+                .dataExtractor(controller -> controller.getSiardArchive().getMetaData())
+                .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
+                        .property(new ReadOnlyStringProperty<>(
+                                I18nKey.of("archiveDetails.labelFormat"),
+                                SiardArchiveMetaData::getSiardFormatVersion))
+                        .property(new ReadWriteStringProperty<>(
+                                I18nKey.of("archiveDetails.labelDb"),
+                                SiardArchiveMetaData::getDatabaseName
+                        ))
+                        .property(new ReadOnlyStringProperty<>(
+                                I18nKey.of("archiveDetails.labelProduct"),
+                                SiardArchiveMetaData::getDatabaseProduct))
+                        .property(new ReadOnlyStringProperty<>(
+                                I18nKey.of("archiveDetails.labelConnection"),
+                                SiardArchiveMetaData::getDatabaseConnectionURL))
+                        .property(new ReadOnlyStringProperty<>(
+                                I18nKey.of("archiveDetails.labelUsername"),
+                                SiardArchiveMetaData::getDatabaseUsername))
+                        .build())
+                .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
+                        .property(new ReadWriteStringProperty<>(
+                                I18nKey.of("archiveDetails.labelDesc"),
+                                SiardArchiveMetaData::getDatabaseDescription
+                        ))
+                        .property(new ReadWriteStringProperty<>(
+                                I18nKey.of("archiveDetails.labelOwner"),
+                                SiardArchiveMetaData::getDataOwner
+                        ))
+                        .property(new ReadWriteStringProperty<>(
+                                I18nKey.of("archiveDetails.labelCreationDate"),
+                                SiardArchiveMetaData::getDataOriginTimespan
+                        ))
+                        .property(new ReadOnlyStringProperty<>( // FIXME
+                                I18nKey.of("archiveDetails.labelArchiveDate"),
+                                siardArchiveMetaData -> new SimpleStringProperty(I18n.getLocaleDate(siardArchiveMetaData.getArchivingDate()))
+                        ))
+                        .property(new ReadWriteStringProperty<>(
+                                I18nKey.of("archiveDetails.labelArchiveUser"),
+                                SiardArchiveMetaData::getArchiverName
+                        ))
+                        .property(new ReadWriteStringProperty<>(
+                                I18nKey.of("archiveDetails.labelContactArchiveUser"),
+                                SiardArchiveMetaData::getArchiverContact
+                        ))
+                        .property(new ReadOnlyStringProperty<>( // FIXME
+                                I18nKey.of("archiveDetails.labelLOBFolder"),
+                                siardArchiveMetaData -> new SimpleStringProperty(Optional.ofNullable(siardArchiveMetaData.getLobFolder())
+                                        .map(URI::getPath)
+                                        .orElse("N/A"))
+                        ))
+                        .build())
+                .build();
+
         val item = new TreeItem<>(
                 TreeAttributeWrapper.builder()
                         .name(this.siardArchive.name())
                         .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(RenderableForm.<SiardArchiveMetaData>builder()
-                                .dataExtractor(controller -> controller.getSiardArchive().getMetaData())
-                                .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
-                                        .property(new ReadOnlyStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelFormat"),
-                                                SiardArchiveMetaData::getSiardFormatVersion))
-                                        .property(new ReadWriteStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelDb"),
-                                                SiardArchiveMetaData::getDatabaseName
-                                        ))
-                                        .property(new ReadOnlyStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelProduct"),
-                                                SiardArchiveMetaData::getDatabaseProduct))
-                                        .property(new ReadOnlyStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelConnection"),
-                                                SiardArchiveMetaData::getDatabaseConnectionURL))
-                                        .property(new ReadOnlyStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelUsername"),
-                                                SiardArchiveMetaData::getDatabaseUsername))
-                                        .build())
-                                .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
-                                        .property(new ReadWriteStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelDesc"),
-                                                SiardArchiveMetaData::getDatabaseDescription
-                                        ))
-                                        .property(new ReadWriteStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelOwner"),
-                                                SiardArchiveMetaData::getDataOwner
-                                        ))
-                                        .property(new ReadWriteStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelCreationDate"),
-                                                SiardArchiveMetaData::getDataOriginTimespan
-                                        ))
-                                        .property(new ReadOnlyStringProperty<>( // FIXME
-                                                I18nKey.of("archiveDetails.labelArchiveDate"),
-                                                siardArchiveMetaData -> new SimpleStringProperty(I18n.getLocaleDate(siardArchiveMetaData.getArchivingDate()))
-                                        ))
-                                        .property(new ReadWriteStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelArchiveUser"),
-                                                SiardArchiveMetaData::getArchiverName
-                                        ))
-                                        .property(new ReadWriteStringProperty<>(
-                                                I18nKey.of("archiveDetails.labelContactArchiveUser"),
-                                                SiardArchiveMetaData::getArchiverContact
-                                        ))
-                                        .property(new ReadOnlyStringProperty<>( // FIXME
-                                                I18nKey.of("archiveDetails.labelLOBFolder"),
-                                                siardArchiveMetaData -> new SimpleStringProperty(Optional.ofNullable(siardArchiveMetaData.getLobFolder())
-                                                        .map(URI::getPath)
-                                                        .orElse("N/A"))
-                                        ))
-                                        .build())
-                                .build())
+                        .renderableForm(form)
                         .build());
 
         return item;
-
-//        return new TreeItem<>(
-//                new TreeAttributeWrapper(
-//                        this.siardArchive.name(),
-//                        TreeContentView.ROOT,
-//                        null),
-//                new ImageView(Icon.db));
     }
 
     private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem,
