@@ -1,14 +1,30 @@
 package ch.admin.bar.siardsuite.component;
 
 import ch.admin.bar.siard2.api.MetaParameter;
+import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
+import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
+import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
+import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
+import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
+import ch.admin.bar.siardsuite.model.database.DatabaseParameter;
+import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
+import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siardsuite.model.database.DatabaseType;
+import ch.admin.bar.siardsuite.model.database.DatabaseView;
+import ch.admin.bar.siardsuite.model.database.Privilige;
+import ch.admin.bar.siardsuite.model.database.Routine;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
+import ch.admin.bar.siardsuite.model.database.User;
+import ch.admin.bar.siardsuite.model.database.Users;
 import ch.admin.bar.siardsuite.presenter.Privileges;
 import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
+import lombok.val;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,9 +50,9 @@ public class ArchiveBrowserView {
     private void addSchemas(TreeItem<TreeAttributeWrapper> rootItem) {
         List<DatabaseSchema> schemas = this.siardArchive.schemas();
         final TreeItem<TreeAttributeWrapper> schemasItem = TreeItemFactory.create("archive.tree.view.node.schemas",
-                                                                                  TreeContentView.SCHEMAS,
-                                                                                  null,
-                                                                                  schemas);
+                TreeContentView.SCHEMAS,
+                null,
+                schemas);
         schemasItem.setExpanded(true);
 
         schemas.forEach(schema -> {
@@ -48,8 +64,8 @@ public class ArchiveBrowserView {
 
     private void addSchema(TreeItem<TreeAttributeWrapper> schemasItem, DatabaseSchema schema) {
         TreeItem<TreeAttributeWrapper> schemaItem = new TreeItem<>(new TreeAttributeWrapper(schema.name(),
-                                                                                            TreeContentView.SCHEMA,
-                                                                                            schema));
+                TreeContentView.SCHEMA,
+                schema));
         schemaItem.setExpanded(true);
 
         addTypes(schemaItem, schema);
@@ -63,15 +79,15 @@ public class ArchiveBrowserView {
         List<DatabaseType> types = schema.types();
         if (types.size() == 0) return;
         TreeItem<TreeAttributeWrapper> typesItem = TreeItemFactory.create("archive.tree.view.node.types",
-                                                                          TreeContentView.TYPES,
-                                                                          schema,
-                                                                          types);
+                TreeContentView.TYPES,
+                schema,
+                types);
 
         types.forEach(type -> {
             TreeItem<TreeAttributeWrapper> typeItem = TreeItemFactory.create(type.name(),
-                                                                             TreeContentView.TYPE,
-                                                                             type,
-                                                                             String.valueOf(type.numberOfAttributes()));
+                    TreeContentView.TYPE,
+                    type,
+                    String.valueOf(type.numberOfAttributes()));
             addAttributes(typeItem, type);
             typesItem.getChildren().add(typeItem);
         });
@@ -88,16 +104,16 @@ public class ArchiveBrowserView {
                 String.valueOf(attributes.size()));
 
         attributes.forEach(attribute ->
-                                   addAttribute(attributesItem, attribute)
+                addAttribute(attributesItem, attribute)
         );
         typeItem.getChildren().add(attributesItem);
     }
 
     private void addAttribute(TreeItem<TreeAttributeWrapper> attributesItem, DatabaseAttribute attribute) {
         TreeItem<TreeAttributeWrapper> attributeItem = TreeItemFactory.create(attribute.name(),
-                                                                              TreeContentView.ATTRIBUTE,
-                                                                              attribute,
-                                                                              "");
+                TreeContentView.ATTRIBUTE,
+                attribute,
+                "");
         attributesItem.getChildren().add(attributeItem);
     }
 
@@ -105,9 +121,9 @@ public class ArchiveBrowserView {
         List<Privilige> priviliges = this.siardArchive.priviliges();
         if (priviliges.size() > 0) {
             rootItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.priviliges",
-                                                              TreeContentView.PRIVILIGES,
-                                                              new Privileges(priviliges),
-                                                              priviliges));
+                    TreeContentView.PRIVILIGES,
+                    new Privileges(priviliges),
+                    priviliges));
         }
     }
 
@@ -115,9 +131,9 @@ public class ArchiveBrowserView {
         List<User> users = this.siardArchive.users();
         if (users.size() > 0) {
             rootItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.users",
-                                                              TreeContentView.USERS,
-                                                              new Users(users),
-                                                              users));
+                    TreeContentView.USERS,
+                    new Users(users),
+                    users));
         }
     }
 
@@ -129,26 +145,26 @@ public class ArchiveBrowserView {
 
         List<Routine> routines = schema.routines();
         routinesItem = TreeItemFactory.create("archive.tree.view.node.routines",
-                                              TreeContentView.ROUTINES,
-                                              schema,
-                                              routines);
+                TreeContentView.ROUTINES,
+                schema,
+                routines);
 
         for (Routine routine : routines) {
             routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.ROUTINE, routine));
 
             List<MetaParameter> parameters = routine.parameters();
             parametersItem = TreeItemFactory.create("archive.tree.view.node.parameters",
-                                                    TreeContentView.COLUMNS,
-                                                    // TODO: maybe create treeContentView.PARAMETERS?
-                                                    routine,
-                                                    parameters);
+                    TreeContentView.COLUMNS,
+                    // TODO: maybe create treeContentView.PARAMETERS?
+                    routine,
+                    parameters);
 
             parametersItem.getChildren().addAll(parameters.stream().map(metaParameter ->
-                                                                                new TreeItem<>(new TreeAttributeWrapper(
-                                                                                        metaParameter.getName(),
-                                                                                        TreeContentView.PARAMETER,
-                                                                                        new DatabaseParameter(
-                                                                                                metaParameter)))
+                    new TreeItem<>(new TreeAttributeWrapper(
+                            metaParameter.getName(),
+                            TreeContentView.PARAMETER,
+                            new DatabaseParameter(
+                                    metaParameter)))
             ).collect(Collectors.toList()));
             routineItem.getChildren().add(parametersItem);
             routinesItem.getChildren().add(routineItem);
@@ -164,16 +180,16 @@ public class ArchiveBrowserView {
         TreeItem<TreeAttributeWrapper> columnItem;
         List<DatabaseView> views = schema.views();
         viewsItem = TreeItemFactory.create("archive.tree.view.node.views", TreeContentView.VIEWS,
-                                           schema, views);
+                schema, views);
 
         for (DatabaseView view : views) {
             viewItem = new TreeItem<>(new TreeAttributeWrapper(view.name(), TreeContentView.VIEW, view));
 
             List<DatabaseColumn> columns = view.columns();
             columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
-                                                 TreeContentView.COLUMNS,
-                                                 view,
-                                                 columns);
+                    TreeContentView.COLUMNS,
+                    view,
+                    columns);
 
 
             for (DatabaseColumn column : columns) {
@@ -195,7 +211,7 @@ public class ArchiveBrowserView {
 
         List<DatabaseTable> tables = schema.tables();
         tablesItem = TreeItemFactory.create("archive.tree.view.node.tables", TreeContentView.TABLES,
-                                            schema, tables);
+                schema, tables);
 
         for (DatabaseTable table : tables) {
             tableItem = new TreeItem<>(new TreeAttributeWrapper(table.name(), TreeContentView.TABLE, table));
@@ -203,9 +219,9 @@ public class ArchiveBrowserView {
 
             List<DatabaseColumn> columns = table.columns();
             columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
-                                                 TreeContentView.COLUMNS,
-                                                 table,
-                                                 columns);
+                    TreeContentView.COLUMNS,
+                    table,
+                    columns);
 
             for (DatabaseColumn column : columns) {
 
@@ -215,9 +231,9 @@ public class ArchiveBrowserView {
 
             if (!siardArchive.onlyMetaData()) {
                 tableItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.rows",
-                                                                   TreeContentView.ROWS,
-                                                                   table,
-                                                                   table.numberOfRows()));
+                        TreeContentView.ROWS,
+                        table,
+                        table.numberOfRows()));
             }
 
             tableItem.getChildren().add(columnsItem);
@@ -228,14 +244,30 @@ public class ArchiveBrowserView {
     }
 
     private TreeItem<TreeAttributeWrapper> createRootItem() {
-        final TreeItem<TreeAttributeWrapper> rootItem = new TreeItem<>(new TreeAttributeWrapper(this.siardArchive.name(),
-                                                                                                TreeContentView.ROOT,
-                                                                                                null),
-                                                                       new ImageView(Icon.db));
+        val item = new TreeItem<>(
+                TreeAttributeWrapper.builder()
+                        .name(this.siardArchive.name())
+                        .type(TreeContentView.FORM_RENDERER)
+                        .renderableForm(RenderableForm.builder()
+                                .group(RenderableFormGroup.builder()
+                                        .property(new ReadOnlyStringProperty("Version", "2.2"))
+                                        .property(new ReadWriteStringProperty("Name", "testschema"))
+                                        .build())
+                                .group(RenderableFormGroup.builder()
+                                        .property(new ReadOnlyStringProperty("Version", "2.2"))
+                                        .property(new ReadOnlyStringProperty("Name", "testschema"))
+                                        .build())
+                                .build())
+                        .build());
 
+        return item;
 
-        rootItem.setExpanded(true);
-        return rootItem;
+//        return new TreeItem<>(
+//                new TreeAttributeWrapper(
+//                        this.siardArchive.name(),
+//                        TreeContentView.ROOT,
+//                        null),
+//                new ImageView(Icon.db));
     }
 
     private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem,

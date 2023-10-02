@@ -10,6 +10,11 @@ public enum TreeContentView {
     /**
      * the content for the root of the tree
      */
+    FORM_RENDERER("fxml/tree/form-renderer.fxml",
+            "tableContainer.title.siardFile",
+            null,
+            null,
+            false),
     ROOT("fxml/tree/content-root.fxml",
             "tableContainer.title.siardFile",
             null,

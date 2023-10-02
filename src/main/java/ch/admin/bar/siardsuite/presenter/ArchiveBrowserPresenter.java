@@ -25,7 +25,8 @@ import java.io.IOException;
 import static ch.admin.bar.siardsuite.util.I18n.bind;
 
 /**
- * Presentes an archive - either when archiving a database (always only metadata) or when a SIARD Archive file was opened to browse the archive content
+ * Presentes an archive - either when archiving a database (always only metadata) or when a SIARD Archive
+ * file was opened to browse the archive content
  */
 public class ArchiveBrowserPresenter extends StepperPresenter {
 

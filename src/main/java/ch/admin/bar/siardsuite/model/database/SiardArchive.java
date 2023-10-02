@@ -16,6 +16,7 @@ import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class SiardArchive extends DatabaseObject {
     private List<DatabaseSchema> schemas = new ArrayList<>();
     private List<User> users = new ArrayList<>();
     private List<Privilige> priviliges = new ArrayList<>();
-    protected SiardArchiveMetaData metaData;
+    @Getter protected SiardArchiveMetaData metaData;
     protected final TreeContentView treeContentView = TreeContentView.ROOT;
 
     public SiardArchive() {

@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+@Getter
 // understands additional metadata of the archive
 public class SiardArchiveMetaData {
 
@@ -66,8 +68,8 @@ public class SiardArchiveMetaData {
         LocalDate date;
         try {
             date = LocalDate.of(calendar.get(Calendar.YEAR),
-                                calendar.get(Calendar.MONTH) + 1,
-                                calendar.get(Calendar.DATE));
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DATE));
         } catch (DateTimeException e) {
             date = LocalDate.now();
         }
@@ -78,10 +80,21 @@ public class SiardArchiveMetaData {
     }
 
     public void accept(SiardArchiveMetaDataDetailsVisitor visitor) {
-        visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
-                      databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
-                      dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,
-                      archiverName.getValue(), archiverContact.getValue(), targetArchive, lobFolder, viewsAsTables);
+        visitor.visit(
+                siardFormatVersion.getValue(),
+                databaseName.getValue(),
+                databaseProduct.getValue(),
+                databaseConnectionURL.getValue(),
+                databaseUsername.getValue(),
+                databaseDescription.getValue(),
+                dataOwner.getValue(),
+                dataOriginTimespan.getValue(),
+                archivingDate,
+                archiverName.getValue(),
+                archiverContact.getValue(),
+                targetArchive,
+                lobFolder,
+                viewsAsTables);
     }
 
 

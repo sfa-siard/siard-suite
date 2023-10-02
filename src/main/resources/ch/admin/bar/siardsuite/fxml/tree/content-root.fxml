@@ -3,7 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane stylesheets="@../../css/root.css"
+            xmlns="http://javafx.com/javafx/1.8"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.tree.ArchiveDetailsPresenter">
     <VBox fx:id="container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

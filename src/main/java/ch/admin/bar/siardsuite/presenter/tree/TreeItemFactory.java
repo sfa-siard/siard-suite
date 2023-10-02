@@ -33,10 +33,10 @@ public class TreeItemFactory {
                                                         String numberOfElements) {
         final TreeItem<TreeAttributeWrapper> item = new TreeItem<>();
         item.valueProperty()
-            .bind(createTreeAtributeWrapperBinding(label,
-                                                   view,
-                                                   dbObject,
-                                                   numberOfElements));
+                .bind(createTreeAtributeWrapperBinding(label,
+                        view,
+                        dbObject,
+                        numberOfElements));
         return item;
     }
 
@@ -46,6 +46,6 @@ public class TreeItemFactory {
                                                                                        DatabaseObject databaseObject,
                                                                                        final Object... args) {
         return Bindings.createObjectBinding(() -> new TreeAttributeWrapper(I18n.get(key, args), type, databaseObject),
-                                            I18n.locale);
+                I18n.locale);
     }
 }
