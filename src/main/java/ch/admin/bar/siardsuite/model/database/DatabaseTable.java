@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -38,10 +39,14 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     protected final DatabaseSchema schema;
     protected final Table table;
     protected final boolean onlyMetaData;
+    @Getter
     public final String name;
+    @Getter
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     public final String numberOfColumns;
+    @Getter
     protected final List<DatabaseRow> rows = new ArrayList<>();
+    @Getter
     public final String numberOfRows;
     protected int loadBatchSize = 50;
     protected int lastRowLoadedIndex = -1;

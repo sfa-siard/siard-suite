@@ -1,16 +1,22 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
-import ch.admin.bar.siardsuite.presenter.tree.*;
+import ch.admin.bar.siardsuite.presenter.tree.RoutinesTableViewPopulatorStrategy;
+import ch.admin.bar.siardsuite.presenter.tree.TableViewPopulatorStrategy;
+import ch.admin.bar.siardsuite.presenter.tree.TablesTableViewPopulatorStrategy;
+import ch.admin.bar.siardsuite.presenter.tree.TypesTableViewPopulatorStrategy;
+import ch.admin.bar.siardsuite.presenter.tree.ViewsTableViewPopulatorStrategy;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +36,8 @@ public class DatabaseSchema extends DatabaseObject {
     @Setter
     @Getter
     protected String description;
+
+    @Getter
     protected List<DatabaseTable> tables;
     protected List<DatabaseView> views;
     protected List<DatabaseType> types;
@@ -63,6 +71,11 @@ public class DatabaseSchema extends DatabaseObject {
         TableViewPopulatorStrategy strategy = getStrategy(type);
         if (strategy == null) return;
         strategy.populate(tableView, onlyMetaData);
+    }
+
+    public void write(Archive archive) {
+        val schema = archive.getSchema(name);
+        schema.getMetaSchema().setDescription(description);
     }
 
     private TableViewPopulatorStrategy getStrategy(TreeContentView type) {

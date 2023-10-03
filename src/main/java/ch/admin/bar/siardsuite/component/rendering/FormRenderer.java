@@ -5,14 +5,15 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
+import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.util.I18n;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,6 +55,7 @@ public class FormRenderer<T> {
                 .collect(Collectors.toList()));
 
         vbox.setSpacing(40);
+        VBox.setVgrow(vbox, Priority.ALWAYS);
         return vbox;
     }
 
@@ -70,6 +72,14 @@ public class FormRenderer<T> {
                                 return createField((ReadOnlyStringProperty<T>) renderableProperty, data);
                             }
 
+                            if (renderableProperty instanceof RenderableTable) {
+                                return TableRenderer.<T, Object>builder()
+                                        .data(data)
+                                        .renderableTable((RenderableTable<T, Object>) renderableProperty)
+                                        .build()
+                                        .render();
+                            }
+
                             throw new IllegalArgumentException(String.format(
                                     "Property type %s ins not supported yet.",
                                     renderableProperty.getClass().getName()
@@ -77,6 +87,7 @@ public class FormRenderer<T> {
                         })
                         .collect(Collectors.toList()));
         vbox.setSpacing(10);
+        VBox.setVgrow(vbox, Priority.ALWAYS);
 
         return vbox;
     }

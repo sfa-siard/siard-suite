@@ -10,6 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
+
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.OPEN_PREVIEW;
 
 public class OpenPreviewPresenter extends ArchiveBrowserPresenter {
@@ -44,6 +46,13 @@ public class OpenPreviewPresenter extends ArchiveBrowserPresenter {
         this.borderPane.setBottom(buttonsBox);
         buttonsBox.cancel().setOnAction(event -> this.controller.initializeUpload(stage));
         buttonsBox.previous().setOnAction(event -> this.controller.initializeExport(stage));
-        buttonsBox.next().setOnAction(event -> this.controller.start(stage));
+        buttonsBox.next().setOnAction(event -> {
+            try {
+                this.controller.saveArchiveOnlyMetaData();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            this.controller.start(stage);
+        });
     }
 }

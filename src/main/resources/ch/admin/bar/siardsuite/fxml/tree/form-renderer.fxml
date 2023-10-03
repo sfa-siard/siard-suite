@@ -6,7 +6,13 @@
 <AnchorPane stylesheets="@../../css/root.css"
             xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.component.rendering.FormRendererPresenter">
+            fx:controller="ch.admin.bar.siardsuite.component.rendering.FormRendererPresenter"
+            maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308"
+            AnchorPane.bottomAnchor="0.0"
+            AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0"
+            AnchorPane.topAnchor="0.0">
     <VBox fx:id="container"
           AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0"

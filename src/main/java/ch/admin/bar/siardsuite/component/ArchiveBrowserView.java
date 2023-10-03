@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
+import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
@@ -26,12 +27,10 @@ import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
 import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import lombok.val;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +72,10 @@ public class ArchiveBrowserView {
     private void addSchema(TreeItem<TreeAttributeWrapper> schemasItem, DatabaseSchema schema) {
         val form = RenderableForm.<DatabaseSchema>builder()
                 .dataExtractor(controller -> schema)
-                .saveAction((controller, siardArchiveMetaData) -> {})
+                .saveAction((controller, siardArchiveMetaData) -> {
+                    System.out.println("Speichern!");
+                    siardArchiveMetaData.write(siardArchive.getArchive());
+                })
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("tableContainer.labelSchema"),
@@ -83,6 +85,25 @@ public class ArchiveBrowserView {
                                 DatabaseSchema::getDescription,
                                 DatabaseSchema::setDescription
                         ))
+                        .property(RenderableTable.<DatabaseSchema, DatabaseTable>builder()
+                                .dataExtractor(DatabaseSchema::getTables)
+                                .property(new ReadOnlyStringProperty<>(
+                                        I18nKey.of("tableContainer.table.header.row"),
+                                        databaseTable -> (schema.getTables().indexOf(databaseTable) + 1) + ""
+                                ))
+                                .property(new ReadOnlyStringProperty<>(
+                                        I18nKey.of("tableContainer.table.header.tableName"),
+                                        DatabaseTable::getName
+                                ))
+                                .property(new ReadOnlyStringProperty<>(
+                                        I18nKey.of("tableContainer.table.header.numberOfColumns"),
+                                        databaseTable -> databaseTable.getColumns().size() + ""
+                                ))
+                                .property(new ReadOnlyStringProperty<>(
+                                        I18nKey.of("tableContainer.table.header.numberOfRows"),
+                                        databaseTable -> databaseTable.getRows().size() + ""
+                                ))
+                                .build())
                         .build())
                 .build();
 
@@ -280,13 +301,13 @@ public class ArchiveBrowserView {
 
                     // dirty hack: mark metadata as changed
                     CastHelper.tryCast(archive, ArchiveImpl.class)
-                                    .ifPresent(archiveImpl -> archiveImpl.isMetaDataDifferent(new Object(), new Object()));
+                            .ifPresent(archiveImpl -> archiveImpl.isMetaDataDifferent(new Object(), new Object()));
 
-                    try {
-                        archive.saveMetaData();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to store edited metadata", e);
-                    }
+//                    try {
+//                        //archive.saveMetaData();
+//                    } catch (IOException e) {
+//                        throw new RuntimeException("Failed to store edited metadata", e);
+//                    }
                 })
                 .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
                         .property(new ReadOnlyStringProperty<>(
