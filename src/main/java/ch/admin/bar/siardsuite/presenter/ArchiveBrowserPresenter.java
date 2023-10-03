@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
+import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.tree.ChangeableDataPresenter;
@@ -16,7 +17,10 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
@@ -38,9 +42,9 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
     @FXML
     protected TreeView<TreeAttributeWrapper> treeView;
     @FXML
-    protected MFXButton saveChangesButton;
+    protected IconButton saveChangesButton;
     @FXML
-    protected MFXButton dropChangesButton;
+    protected IconButton dropChangesButton;
     @FXML
     protected MFXButton tableSearchButton;
     @FXML
@@ -122,8 +126,8 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
                             }
                         });
 
-                        this.saveChangesButton.setOnAction(event -> changeableDataPresenter.saveChanges());
-                        this.dropChangesButton.setOnAction(event -> changeableDataPresenter.dropChanges());
+                        this.saveChangesButton.setOnAction(changeableDataPresenter::saveChanges);
+                        this.dropChangesButton.setOnAction(changeableDataPresenter::dropChanges);
                     },
                     () -> {
                         this.saveChangesButton.setVisible(false);

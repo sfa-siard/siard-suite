@@ -110,7 +110,9 @@ public class SiardArchiveMetaData {
         archive.getMetaData().setDataOwner(dataOwner.getValue());
         archive.getMetaData().setDataOriginTimespan(dataOriginTimespan.getValue());
         try {
-            new MetaDataFacade(archive.getMetaData()).setLobFolder(this.lobFolder);
+            if (lobFolder != null) {
+                new MetaDataFacade(archive.getMetaData()).setLobFolder(this.lobFolder);
+            }
         } catch (IOException e) {
             //throw new RuntimeException(e);
         }

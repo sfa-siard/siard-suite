@@ -7,6 +7,8 @@ import lombok.Singular;
 import lombok.Value;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Value
@@ -18,4 +20,7 @@ public class RenderableForm<T> {
 
     @NonNull
     Function<Controller, T> dataExtractor;
+
+    @NonNull
+    BiConsumer<Controller, T> saveAction;
 }

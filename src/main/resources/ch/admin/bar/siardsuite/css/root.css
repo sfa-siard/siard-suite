@@ -83,11 +83,16 @@
 
 .icon-button {
     -fx-background-color: transparent;
-    -fx-max-height: 24;
     -fx-content-display: graphic-only;
-    -fx-padding: 0 0.5em 0 0.5em;
+    -fx-padding: 0;
     -fx-cursor: HAND;
 
+    -fx-pref-height: 24;
+    -fx-pref-width: 24;
+    -fx-min-height: 24;
+    -fx-min-width: 24;
+    -fx-max-height: 24;
+    -fx-max-width: 24;
 }
 
 .menu-bar {
@@ -438,6 +443,12 @@
     -fx-graphic: url(../icons/search.png);
 }
 
+.download-icon {
+    -fx-graphic: url(../icons/download.png);
+    -fx-max-width: 24;
+    -fx-max-height: 24;
+}
+
 .upload-icon {
     -fx-graphic: url(../icons/upload.png);
 }
@@ -452,6 +463,12 @@
 
 .arrow-right-icon {
     -fx-graphic: url(../icons/right_arrow.png);
+    -fx-max-width: 48;
+    -fx-max-height: 48;
+}
+
+.arrow-left-icon {
+    -fx-graphic: url(../icons/left_arrow.png);
     -fx-max-width: 48;
     -fx-max-height: 48;
 }
@@ -690,6 +707,14 @@
     -fx-font-size: 14;
     -fx-text-fill: siard-text-color-black;
     -fx-label-padding: 6 0 14 0;
+    -fx-max-width: infinity;
+}
+
+.table-container-rendered-field {
+    -fx-font-family: siard-font-family;
+    -fx-font-size: 14;
+    -fx-text-fill: siard-text-color-black;
+    -fx-label-padding: 6 0 6 0;
     -fx-max-width: infinity;
 }
 

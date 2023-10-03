@@ -6,7 +6,7 @@
 <AnchorPane stylesheets="@../../css/root.css"
             xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.component.rendering.FormRenderer">
+            fx:controller="ch.admin.bar.siardsuite.component.rendering.FormRendererPresenter">
     <VBox fx:id="container"
           AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0"

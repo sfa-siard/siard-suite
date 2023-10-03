@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 // understands the content of a SIARD Archive
 public class SiardArchive extends DatabaseObject {
 
+    @Getter
     private Archive archive;
     private String name;
     // another hack to reuse tmp file for metadata export

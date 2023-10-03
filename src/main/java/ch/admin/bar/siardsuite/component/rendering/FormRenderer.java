@@ -5,54 +5,59 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.presenter.tree.ChangeableDataPresenter;
-import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FormRenderer extends DetailsPresenter implements ChangeableDataPresenter {
+public class FormRenderer<T> {
 
     private static final String TITLE_STYLE_CLASS = "table-container-label";
-    private static final String READONLY_VALUE_STYLE_CLASS = "table-container-text";
+    private static final String FIELD_STYLE_CLASS = "table-container-rendered-field";
+    private static final String FORM_FIELD_STYLE_CLASS = "form-field";
 
-    @FXML
-    private VBox container;
+    private final RenderableForm<T> renderableForm;
+    private final Controller controller;
+    private final T data;
 
+    private final List<ResetableStringPropertyHandler> resetableStringPropertyHandlers = new ArrayList<>();
 
-    private BooleanProperty hasChanged = new SimpleBooleanProperty(false);
+    @Getter
+    private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
 
-    @Override
-    public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
-        val renderableForm = wrapper.getRenderableForm()
-                .orElseThrow(() -> new IllegalArgumentException("No renderable form provided"));
-
-        val data = renderableForm.getDataExtractor().apply(controller);
-
-        controller.getSiardArchive();
-
-        renderForm(renderableForm, data);
+    public FormRenderer(RenderableForm<T> renderableForm, Controller controller) {
+        this.renderableForm = renderableForm;
+        this.controller = controller;
+        this.data = renderableForm.getDataExtractor().apply(controller);
     }
 
-    private <T> void renderForm(final RenderableForm<T> renderableForm, final T data) {
-        val renderedGroups = renderableForm.getGroups().stream()
+    public VBox renderForm() {
+        val vbox = new VBox();
+        vbox.getChildren().setAll(renderableForm.getGroups().stream()
                 .map(renderableGroup -> createGroup(renderableGroup, data))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
 
-        container.getChildren().setAll(renderedGroups);
+        vbox.setSpacing(40);
+        return vbox;
     }
 
-    private <T> VBox createGroup(final RenderableFormGroup<T> group, final T data) {
+    private VBox createGroup(final RenderableFormGroup<T> group, final T data) {
         val vbox = new VBox();
         vbox.getChildren().setAll(
                 group.getProperties().stream()
@@ -71,11 +76,12 @@ public class FormRenderer extends DetailsPresenter implements ChangeableDataPres
                             ));
                         })
                         .collect(Collectors.toList()));
+        vbox.setSpacing(10);
 
         return vbox;
     }
 
-    private <T> VBox createField(final ReadWriteStringProperty<T> property, final T data) {
+    private VBox createField(final ReadWriteStringProperty<T> property, final T data) {
         val vbox = new VBox();
 
         val titleLabel = new Label();
@@ -84,20 +90,26 @@ public class FormRenderer extends DetailsPresenter implements ChangeableDataPres
 
         val valueTextField = new TextField();
 
-        val value = property.getPropertyExtractor().apply(data).get();
-        valueTextField.setText(value);
-        valueTextField.getStyleClass().add(READONLY_VALUE_STYLE_CLASS); // TODO own style class
+        val propertyValue = property.getPropertyExtractor().apply(data);
+        val resetableStringPropertyHandler = new ResetableStringPropertyHandler<>(
+                propertyValue.get(),
+                property,
+                () -> propertyValue.set(valueTextField.getText()));
+        valueTextField.textProperty().bindBidirectional(resetableStringPropertyHandler.getStringProperty());
+        this.resetableStringPropertyHandlers.add(resetableStringPropertyHandler);
 
-        final ChangeListener<String> changeListener = (observable, oldValue, newValue) -> this.hasChanged
-                .set(true);
-        valueTextField.textProperty().addListener(changeListener);
+        valueTextField.getStyleClass()
+                .add(FORM_FIELD_STYLE_CLASS);
+        valueTextField.textProperty()
+                .addListener((observable, oldValue, newValue) -> this.hasChanged.set(true));
 
         vbox.getChildren().setAll(titleLabel, valueTextField);
+
 
         return vbox;
     }
 
-    private <T> VBox createField(final ReadOnlyStringProperty<T> property, final T data) {
+    private VBox createField(final ReadOnlyStringProperty<T> property, final T data) {
         val vbox = new VBox();
 
         val titleLabel = new Label();
@@ -107,30 +119,71 @@ public class FormRenderer extends DetailsPresenter implements ChangeableDataPres
         val valueLabel = new Label();
         val value = property.getPropertyExtractor().apply(data).get();
         valueLabel.setText(value);
-        valueLabel.getStyleClass().add(READONLY_VALUE_STYLE_CLASS);
+        valueLabel.getStyleClass().add(FIELD_STYLE_CLASS);
 
         vbox.getChildren().setAll(titleLabel, valueLabel);
+
 
         return vbox;
     }
 
-    @Override
-    protected void bindLabels() {
-
-    }
-
-    @Override
-    public BooleanProperty hasChanged() {
-        return hasChanged;
-    }
-
-    @Override
     public void saveChanges() {
+        this.hasChanged.set(false);
+        val changedValues = this.resetableStringPropertyHandlers.stream()
+                .filter(ResetableStringPropertyHandler::hasChanges)
+                .collect(Collectors.toList());
+
+        resetableStringPropertyHandlers.removeAll(changedValues);
+
+        val resetedOrigValue = changedValues.stream()
+                .map(resetableStringPropertyHandler -> resetableStringPropertyHandler.toBuilder()
+                        .originalValue(resetableStringPropertyHandler.getStringProperty().getValue())
+                        .build())
+                .collect(Collectors.toList());
+
+        resetableStringPropertyHandlers.addAll(resetedOrigValue);
+
+        changedValues.forEach(ResetableStringPropertyHandler::save);
+
+        this.renderableForm.getSaveAction().accept(controller, data);
 
     }
 
-    @Override
     public void dropChanges() {
+        this.resetableStringPropertyHandlers.forEach(ResetableStringPropertyHandler::reset);
+        this.hasChanged.set(false);
+    }
 
+
+    @Getter
+    @Builder(toBuilder = true)
+    @RequiredArgsConstructor
+    private static class ResetableStringPropertyHandler<T> {
+        private final StringProperty stringProperty;
+        private final ReadWriteStringProperty<T> renderableProperty;
+        private final String originalValue;
+        private final Runnable save;
+
+        public ResetableStringPropertyHandler(
+                String originalValue,
+                @NonNull final ReadWriteStringProperty<T> renderableProperty,
+                @NonNull Runnable save) {
+            this.originalValue = Optional.ofNullable(originalValue).orElse("");
+            this.stringProperty = new SimpleStringProperty(originalValue);
+            this.renderableProperty = renderableProperty;
+            this.save = save;
+        }
+
+        public void reset() {
+            this.stringProperty.set(originalValue);
+        }
+
+        public boolean hasChanges() {
+            return !Objects.equals(originalValue, stringProperty.getValue());
+        }
+
+        public void save() {
+            this.save.run();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.component;
 
 import ch.admin.bar.siard2.api.MetaParameter;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -22,6 +23,7 @@ import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.model.database.Users;
 import ch.admin.bar.siardsuite.presenter.Privileges;
 import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
+import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,6 +31,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import lombok.val;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -251,6 +254,20 @@ public class ArchiveBrowserView {
     private TreeItem<TreeAttributeWrapper> createRootItem() {
         val form = RenderableForm.<SiardArchiveMetaData>builder()
                 .dataExtractor(controller -> controller.getSiardArchive().getMetaData())
+                .saveAction((controller, siardArchiveMetaData) -> {
+                    val archive = controller.getSiardArchive().getArchive();
+                    siardArchiveMetaData.write(archive);
+
+                    // dirty hack: mark metadata as changed
+                    CastHelper.tryCast(archive, ArchiveImpl.class)
+                                    .ifPresent(archiveImpl -> archiveImpl.isMetaDataDifferent(new Object(), new Object()));
+
+                    try {
+                        archive.saveMetaData();
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to store edited metadata", e);
+                    }
+                })
                 .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("archiveDetails.labelFormat"),
