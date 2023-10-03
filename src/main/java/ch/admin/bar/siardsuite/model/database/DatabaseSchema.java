@@ -9,6 +9,8 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +26,10 @@ public class DatabaseSchema extends DatabaseObject {
     protected final Schema schema;
     protected final boolean onlyMetaData;
     protected final String name;
-    protected final String description;
+
+    @Setter
+    @Getter
+    protected String description;
     protected List<DatabaseTable> tables;
     protected List<DatabaseView> views;
     protected List<DatabaseType> types;

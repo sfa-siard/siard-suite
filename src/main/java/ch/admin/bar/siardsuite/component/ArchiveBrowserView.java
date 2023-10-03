@@ -71,9 +71,29 @@ public class ArchiveBrowserView {
     }
 
     private void addSchema(TreeItem<TreeAttributeWrapper> schemasItem, DatabaseSchema schema) {
-        TreeItem<TreeAttributeWrapper> schemaItem = new TreeItem<>(new TreeAttributeWrapper(schema.name(),
-                TreeContentView.SCHEMA,
-                schema));
+        val form = RenderableForm.<DatabaseSchema>builder()
+                .dataExtractor(controller -> schema)
+                .saveAction((controller, siardArchiveMetaData) -> {})
+                .group(RenderableFormGroup.<DatabaseSchema>builder()
+                        .property(new ReadOnlyStringProperty<>(
+                                I18nKey.of("tableContainer.labelSchema"),
+                                DatabaseSchema::name))
+                        .property(new ReadWriteStringProperty<>(
+                                I18nKey.of("tableContainer.labelDescSchema"),
+                                DatabaseSchema::getDescription,
+                                DatabaseSchema::setDescription
+                        ))
+                        .build())
+                .build();
+
+        val schemaItem = new TreeItem<>(
+                TreeAttributeWrapper.builder()
+                        .name(schema.name())
+                        .type(TreeContentView.FORM_RENDERER)
+                        .renderableForm(form)
+                        .databaseObject(schema)
+                        .build());
+
         schemaItem.setExpanded(true);
 
         addTypes(schemaItem, schema);
@@ -274,7 +294,8 @@ public class ArchiveBrowserView {
                                 SiardArchiveMetaData::getSiardFormatVersion))
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelDb"),
-                                SiardArchiveMetaData::getDatabaseName
+                                SiardArchiveMetaData::getDatabaseName,
+                                SiardArchiveMetaData::setDatabaseName
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("archiveDetails.labelProduct"),
@@ -289,33 +310,38 @@ public class ArchiveBrowserView {
                 .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelDesc"),
-                                SiardArchiveMetaData::getDatabaseDescription
+                                SiardArchiveMetaData::getDatabaseDescription,
+                                SiardArchiveMetaData::setDatabaseDescription
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelOwner"),
-                                SiardArchiveMetaData::getDataOwner
+                                SiardArchiveMetaData::getDataOwner,
+                                SiardArchiveMetaData::setDataOwner
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelCreationDate"),
-                                SiardArchiveMetaData::getDataOriginTimespan
+                                SiardArchiveMetaData::getDataOriginTimespan,
+                                SiardArchiveMetaData::setDataOriginTimespan
                         ))
-                        .property(new ReadOnlyStringProperty<>( // FIXME
+                        .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("archiveDetails.labelArchiveDate"),
-                                siardArchiveMetaData -> new SimpleStringProperty(I18n.getLocaleDate(siardArchiveMetaData.getArchivingDate()))
+                                siardArchiveMetaData -> I18n.getLocaleDate(siardArchiveMetaData.getArchivingDate())
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelArchiveUser"),
-                                SiardArchiveMetaData::getArchiverName
+                                SiardArchiveMetaData::getArchiverName,
+                                SiardArchiveMetaData::setArchiverName
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelContactArchiveUser"),
-                                SiardArchiveMetaData::getArchiverContact
+                                SiardArchiveMetaData::getArchiverContact,
+                                SiardArchiveMetaData::setArchiverContact
                         ))
-                        .property(new ReadOnlyStringProperty<>( // FIXME
+                        .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("archiveDetails.labelLOBFolder"),
-                                siardArchiveMetaData -> new SimpleStringProperty(Optional.ofNullable(siardArchiveMetaData.getLobFolder())
+                                siardArchiveMetaData -> Optional.ofNullable(siardArchiveMetaData.getLobFolder())
                                         .map(URI::getPath)
-                                        .orElse("N/A"))
+                                        .orElse("N/A")
                         ))
                         .build())
                 .build();

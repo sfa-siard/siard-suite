@@ -2,7 +2,15 @@ package ch.admin.bar.siardsuite.presenter.tree;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
+import ch.admin.bar.siardsuite.model.database.DatabaseRow;
+import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
+import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siardsuite.model.database.DatabaseType;
+import ch.admin.bar.siardsuite.model.database.DatabaseView;
+import ch.admin.bar.siardsuite.model.database.Privilige;
+import ch.admin.bar.siardsuite.model.database.Routine;
+import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.view.TableSize;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
@@ -44,7 +52,7 @@ public class TableDetailsPresenter extends DetailsPresenter implements SiardArch
         wrapper.getDatabaseObject().populate(tableView, wrapper.getType());
         controller.setCurrentTableSearchBase(tableView, new LinkedHashSet<>(tableView.getItems()));
         if (controller.getCurrentTableSearchButton() != null && controller.getCurrentTableSearchButton()
-                                                                          .button() != null) {
+                .button() != null) {
             controller.setCurrentTableSearchButton(controller.getCurrentTableSearchButton().button(), false);
             controller.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: normal;");
         }
@@ -67,8 +75,14 @@ public class TableDetailsPresenter extends DetailsPresenter implements SiardArch
     }
 
     @Override
-    public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
-                            List<DatabaseView> views, List<DatabaseType> types, List<Routine> routines) {
+    public void visitSchema(
+            String schemaName,
+            String schemaDescription,
+            List<DatabaseTable> tables,
+            List<DatabaseView> views,
+            List<DatabaseType> types,
+            List<Routine> routines
+    ) {
         nameText.setText(schemaName);
         infoText.setText(schemaDescription == null || schemaDescription.isEmpty() ? "(...)" : schemaDescription);
     }

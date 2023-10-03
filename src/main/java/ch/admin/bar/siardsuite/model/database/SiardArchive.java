@@ -175,40 +175,40 @@ public class SiardArchive extends DatabaseObject {
     private TreeSet<MetaSearchHit> metaSearch(String s) {
         TreeSet<MetaSearchHit> hits = new TreeSet<>();
         final List<String> nodeIds = new ArrayList<>();
-        if (contains(metaData.siardFormatVersion.get(), s)) {
+        if (contains(metaData.getSiardFormatVersion(), s)) {
             nodeIds.add("siardFormatVersion");
         }
-        if (contains(metaData.databaseName.get(), s)) {
+        if (contains(metaData.getDatabaseName(), s)) {
             nodeIds.add("databaseName");
         }
-        if (contains(metaData.databaseProduct.get(), s)) {
+        if (contains(metaData.getDatabaseProduct(), s)) {
             nodeIds.add("databaseName");
         }
-        if (contains(metaData.databaseProduct.get(), s)) {
+        if (contains(metaData.getDatabaseProduct(), s)) {
             nodeIds.add("databaseName");
         }
-        if (contains(metaData.databaseConnectionURL.get(), s)) {
+        if (contains(metaData.getDatabaseConnectionURL (), s)) {
             nodeIds.add("databaseConnectionURL");
         }
-        if (contains(metaData.databaseUsername.get(), s)) {
+        if (contains(metaData.getDatabaseUsername (), s)) {
             nodeIds.add("databaseUsername");
         }
-        if (contains(metaData.databaseDescription.get(), s)) {
+        if (contains(metaData.getDatabaseDescription (), s)) {
             nodeIds.add("databaseDescription");
         }
-        if (contains(metaData.dataOwner.get(), s)) {
+        if (contains(metaData.getDataOwner (), s)) {
             nodeIds.add("dataOwner");
         }
-        if (contains(metaData.dataOriginTimespan.get(), s)) {
+        if (contains(metaData.getDataOriginTimespan (), s)) {
             nodeIds.add("dataOriginTimespan");
         }
-        if (contains(metaData.archivingDate.toString(), s)) {
+        if (contains(metaData.getArchivingDate().toString(), s)) {
             nodeIds.add("archivingDate");
         }
-        if (contains(metaData.archiverName.get(), s)) {
+        if (contains(metaData.getArchiverName (), s)) {
             nodeIds.add("archiverName");
         }
-        if (contains(metaData.archiverContact.get(), s)) {
+        if (contains(metaData.getArchiverContact (), s)) {
             nodeIds.add("archiverContact");
         }
         if (nodeIds.size() > 0) {

@@ -9,5 +9,5 @@ import java.util.function.Function;
 @Value
 public class ReadOnlyStringProperty<T> implements RenderableProperty<T> {
     I18nKey title;
-    Function<T, StringProperty> propertyExtractor;
+    Function<T, String> valueExtractor;
 }

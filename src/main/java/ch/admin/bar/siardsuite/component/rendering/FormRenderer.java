@@ -90,11 +90,11 @@ public class FormRenderer<T> {
 
         val valueTextField = new TextField();
 
-        val propertyValue = property.getPropertyExtractor().apply(data);
+        val propertyValue = property.getValueExtractor().apply(data);
         val resetableStringPropertyHandler = new ResetableStringPropertyHandler<>(
-                propertyValue.get(),
+                propertyValue,
                 property,
-                () -> propertyValue.set(valueTextField.getText()));
+                () -> property.getValuePersistor().accept(data, valueTextField.getText()));
         valueTextField.textProperty().bindBidirectional(resetableStringPropertyHandler.getStringProperty());
         this.resetableStringPropertyHandlers.add(resetableStringPropertyHandler);
 
@@ -117,7 +117,7 @@ public class FormRenderer<T> {
         titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
 
         val valueLabel = new Label();
-        val value = property.getPropertyExtractor().apply(data).get();
+        val value = property.getValueExtractor().apply(data);
         valueLabel.setText(value);
         valueLabel.getStyleClass().add(FIELD_STYLE_CLASS);
 

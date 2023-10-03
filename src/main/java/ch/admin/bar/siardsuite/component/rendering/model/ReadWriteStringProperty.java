@@ -4,10 +4,12 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import javafx.beans.property.StringProperty;
 import lombok.Value;
 
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 @Value
 public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
     I18nKey title;
-    Function<T, StringProperty> propertyExtractor;
+    Function<T, String> valueExtractor;
+    BiConsumer<T, String> valuePersistor;
 }
