@@ -48,11 +48,9 @@ public class FormRendererPresenter extends DetailsPresenter implements Changeabl
         this.container.getChildren().addAll(formRenderer.renderForm());
     }
 
-
-
     @Override
     protected void bindLabels() {
-        // do nothing
+        // TODO re-render table (switch of language)
     }
 
     @Override

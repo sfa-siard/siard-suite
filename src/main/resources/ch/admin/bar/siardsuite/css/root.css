@@ -702,6 +702,12 @@
     -fx-max-width: infinity;
 }
 
+.validation-text {
+    -fx-font-size: 12;
+    -fx-text-fill: red;
+    -fx-max-width: infinity;
+}
+
 .table-container-text {
     -fx-font-family: siard-font-family;
     -fx-font-size: 14;

@@ -72,10 +72,7 @@ public class ArchiveBrowserView {
     private void addSchema(TreeItem<TreeAttributeWrapper> schemasItem, DatabaseSchema schema) {
         val form = RenderableForm.<DatabaseSchema>builder()
                 .dataExtractor(controller -> schema)
-                .saveAction((controller, siardArchiveMetaData) -> {
-                    System.out.println("Speichern!");
-                    siardArchiveMetaData.write(siardArchive.getArchive());
-                })
+                .saveAction((controller, siardArchiveMetaData) -> siardArchiveMetaData.write(siardArchive.getArchive()))
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("tableContainer.labelSchema"),
@@ -316,7 +313,8 @@ public class ArchiveBrowserView {
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelDb"),
                                 SiardArchiveMetaData::getDatabaseName,
-                                SiardArchiveMetaData::setDatabaseName
+                                SiardArchiveMetaData::setDatabaseName,
+                                ReadWriteStringProperty.IS_NOT_EMPTY_VALIDATOR
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("archiveDetails.labelProduct"),
@@ -337,12 +335,14 @@ public class ArchiveBrowserView {
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelOwner"),
                                 SiardArchiveMetaData::getDataOwner,
-                                SiardArchiveMetaData::setDataOwner
+                                SiardArchiveMetaData::setDataOwner,
+                                ReadWriteStringProperty.IS_NOT_EMPTY_VALIDATOR
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 I18nKey.of("archiveDetails.labelCreationDate"),
                                 SiardArchiveMetaData::getDataOriginTimespan,
-                                SiardArchiveMetaData::setDataOriginTimespan
+                                SiardArchiveMetaData::setDataOriginTimespan,
+                                ReadWriteStringProperty.IS_NOT_EMPTY_VALIDATOR
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("archiveDetails.labelArchiveDate"),

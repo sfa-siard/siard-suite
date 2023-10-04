@@ -7,29 +7,27 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.I18nKey;
+import ch.admin.bar.siardsuite.util.OptionalHelper;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FormRenderer<T> {
 
-    private static final String TITLE_STYLE_CLASS = "table-container-label";
+    private static final String TITLE_LABEL_STYLE_CLASS = "table-container-label";
+    private static final String VALIDATION_LABEL_STYLE_CLASS = "validation-text";
+
     private static final String FIELD_STYLE_CLASS = "table-container-rendered-field";
     private static final String FORM_FIELD_STYLE_CLASS = "form-field";
 
@@ -37,7 +35,7 @@ public class FormRenderer<T> {
     private final Controller controller;
     private final T data;
 
-    private final List<ResetableStringPropertyHandler> resetableStringPropertyHandlers = new ArrayList<>();
+    private final List<EditableFormField> editableFormFields = new ArrayList<>();
 
     @Getter
     private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
@@ -93,31 +91,10 @@ public class FormRenderer<T> {
     }
 
     private VBox createField(final ReadWriteStringProperty<T> property, final T data) {
-        val vbox = new VBox();
+        val formField = new EditableFormField<T>(property, data, hasChanged);
+        editableFormFields.add(formField);
 
-        val titleLabel = new Label();
-        titleLabel.setText(I18n.get(property.getTitle()));
-        titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
-
-        val valueTextField = new TextField();
-
-        val propertyValue = property.getValueExtractor().apply(data);
-        val resetableStringPropertyHandler = new ResetableStringPropertyHandler<>(
-                propertyValue,
-                property,
-                () -> property.getValuePersistor().accept(data, valueTextField.getText()));
-        valueTextField.textProperty().bindBidirectional(resetableStringPropertyHandler.getStringProperty());
-        this.resetableStringPropertyHandlers.add(resetableStringPropertyHandler);
-
-        valueTextField.getStyleClass()
-                .add(FORM_FIELD_STYLE_CLASS);
-        valueTextField.textProperty()
-                .addListener((observable, oldValue, newValue) -> this.hasChanged.set(true));
-
-        vbox.getChildren().setAll(titleLabel, valueTextField);
-
-
-        return vbox;
+        return formField;
     }
 
     private VBox createField(final ReadOnlyStringProperty<T> property, final T data) {
@@ -125,7 +102,7 @@ public class FormRenderer<T> {
 
         val titleLabel = new Label();
         titleLabel.setText(I18n.get(property.getTitle()));
-        titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
+        titleLabel.getStyleClass().add(TITLE_LABEL_STYLE_CLASS);
 
         val valueLabel = new Label();
         val value = property.getValueExtractor().apply(data);
@@ -139,62 +116,104 @@ public class FormRenderer<T> {
     }
 
     public void saveChanges() {
-        this.hasChanged.set(false);
-        val changedValues = this.resetableStringPropertyHandlers.stream()
-                .filter(ResetableStringPropertyHandler::hasChanges)
+        val invalidFields = this.editableFormFields.stream()
+                .filter(editableFormField -> !editableFormField.hasValidValue())
                 .collect(Collectors.toList());
 
-        resetableStringPropertyHandlers.removeAll(changedValues);
+        if (invalidFields.isEmpty()) {
+            this.hasChanged.set(false);
 
-        val resetedOrigValue = changedValues.stream()
-                .map(resetableStringPropertyHandler -> resetableStringPropertyHandler.toBuilder()
-                        .originalValue(resetableStringPropertyHandler.getStringProperty().getValue())
-                        .build())
-                .collect(Collectors.toList());
+            this.editableFormFields.stream()
+                    .filter(EditableFormField::hasChanges)
+                    .forEach(EditableFormField::save);
 
-        resetableStringPropertyHandlers.addAll(resetedOrigValue);
-
-        changedValues.forEach(ResetableStringPropertyHandler::save);
-
-        this.renderableForm.getSaveAction().accept(controller, data);
-
+            this.renderableForm.getSaveAction().accept(controller, data);
+        }
     }
 
     public void dropChanges() {
-        this.resetableStringPropertyHandlers.forEach(ResetableStringPropertyHandler::reset);
+        this.editableFormFields.forEach(EditableFormField::reset);
         this.hasChanged.set(false);
     }
 
+    private static class EditableFormField<T> extends VBox {
 
-    @Getter
-    @Builder(toBuilder = true)
-    @RequiredArgsConstructor
-    private static class ResetableStringPropertyHandler<T> {
-        private final StringProperty stringProperty;
-        private final ReadWriteStringProperty<T> renderableProperty;
-        private final String originalValue;
-        private final Runnable save;
+        private final Label title;
+        private final TextField value;
+        private final Label validationMsg;
 
-        public ResetableStringPropertyHandler(
-                String originalValue,
-                @NonNull final ReadWriteStringProperty<T> renderableProperty,
-                @NonNull Runnable save) {
-            this.originalValue = Optional.ofNullable(originalValue).orElse("");
-            this.stringProperty = new SimpleStringProperty(originalValue);
-            this.renderableProperty = renderableProperty;
-            this.save = save;
+        private final ReadWriteStringProperty<T> property;
+        private final T data;
+
+        public EditableFormField(
+                final ReadWriteStringProperty<T> property,
+                final T data,
+                final BooleanProperty hasChanged) {
+            this.property = property;
+            this.data = data;
+
+            title = new Label();
+            val titleSuffix = property.getValueValidators().stream()
+                    .map(validator -> validator.getTitleSuffix().orElse(""))
+                    .collect(Collectors.joining());
+            title.setText(I18n.get(property.getTitle()) + titleSuffix);
+            title.getStyleClass().add(TITLE_LABEL_STYLE_CLASS);
+
+            value = new TextField();
+            value.getStyleClass()
+                    .add(FORM_FIELD_STYLE_CLASS);
+
+            validationMsg = new Label();
+            validationMsg.getStyleClass().add(VALIDATION_LABEL_STYLE_CLASS);
+            hideValidationLabel();
+
+            reset();
+            value.textProperty()
+                    .addListener((observable, oldValue, newValue) -> hasChanged.set(true));
+
+            this.getChildren().setAll(title, value, validationMsg);
+        }
+
+        public boolean hasValidValue() {
+            val currentValue = value.getText();
+            val failedValidator = this.property.getValueValidators().stream()
+                    .filter(validator -> !validator.getIsValidCheck().test(currentValue))
+                    .findAny();
+
+            OptionalHelper.ifPresentOrElse(
+                    failedValidator,
+                    validator -> showValidationLabel(validator.getMessage()),
+                    this::hideValidationLabel
+            );
+
+            return !failedValidator.isPresent();
         }
 
         public void reset() {
-            this.stringProperty.set(originalValue);
+            val originalValue = property.getValueExtractor().apply(data);
+            value.setText(originalValue);
+            hideValidationLabel();
         }
 
         public boolean hasChanges() {
-            return !Objects.equals(originalValue, stringProperty.getValue());
+            val originalValue = property.getValueExtractor().apply(data);
+            return !Objects.equals(originalValue, value.getText());
         }
 
         public void save() {
-            this.save.run();
+            property.getValuePersistor()
+                    .accept(data, value.getText());
+        }
+
+        private void showValidationLabel(final I18nKey message) {
+            validationMsg.setText(I18n.get(message));
+            validationMsg.setVisible(true);
+            validationMsg.setManaged(true);
+        }
+
+        private void hideValidationLabel() {
+            validationMsg.setVisible(false);
+            validationMsg.setManaged(false); // otherwise, the VBox still does reserve space for the label
         }
     }
 }

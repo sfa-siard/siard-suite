@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.component.rendering.model;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
 
@@ -10,5 +11,6 @@ import java.util.List;
 @Builder
 public class RenderableFormGroup<T> {
     @Singular
+    @NonNull
     List<RenderableProperty<T>> properties;
 }
