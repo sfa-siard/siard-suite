@@ -1,12 +1,10 @@
 package ch.admin.bar.siardsuite.component;
 
 import ch.admin.bar.siard2.api.MetaParameter;
-import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendered.ColumnDetailsForm;
+import ch.admin.bar.siardsuite.component.rendered.MetadataDetailsForm;
+import ch.admin.bar.siardsuite.component.rendered.SchemaOverviewForm;
+import ch.admin.bar.siardsuite.component.rendered.TableOverviewForm;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
@@ -19,21 +17,17 @@ import ch.admin.bar.siardsuite.model.database.DatabaseView;
 import ch.admin.bar.siardsuite.model.database.Privilige;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.model.database.Users;
 import ch.admin.bar.siardsuite.presenter.Privileges;
 import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
-import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import lombok.val;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ArchiveBrowserView {
@@ -70,45 +64,11 @@ public class ArchiveBrowserView {
     }
 
     private void addSchema(TreeItem<TreeAttributeWrapper> schemasItem, DatabaseSchema schema) {
-        val form = RenderableForm.<DatabaseSchema>builder()
-                .dataExtractor(controller -> schema)
-                .saveAction((controller, siardArchiveMetaData) -> siardArchiveMetaData.write(siardArchive.getArchive()))
-                .group(RenderableFormGroup.<DatabaseSchema>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelSchema"),
-                                DatabaseSchema::name))
-                        .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("tableContainer.labelDescSchema"),
-                                DatabaseSchema::getDescription,
-                                DatabaseSchema::setDescription
-                        ))
-                        .property(RenderableTable.<DatabaseSchema, DatabaseTable>builder()
-                                .dataExtractor(DatabaseSchema::getTables)
-                                .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.row"),
-                                        databaseTable -> (schema.getTables().indexOf(databaseTable) + 1) + ""
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.tableName"),
-                                        DatabaseTable::getName
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.numberOfColumns"),
-                                        databaseTable -> databaseTable.getColumns().size() + ""
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.numberOfRows"),
-                                        databaseTable -> databaseTable.getRows().size() + ""
-                                ))
-                                .build())
-                        .build())
-                .build();
-
         val schemaItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
                         .name(schema.name())
                         .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(form)
+                        .renderableForm(SchemaOverviewForm.create(schema))
                         .databaseObject(schema)
                         .build());
 
@@ -250,30 +210,47 @@ public class ArchiveBrowserView {
     }
 
     private TreeItem<TreeAttributeWrapper> createTablesItem(DatabaseSchema schema) {
-        TreeItem<TreeAttributeWrapper> columnsItem;
-        TreeItem<TreeAttributeWrapper> tablesItem;
-        TreeItem<TreeAttributeWrapper> tableItem;
-        TreeItem<TreeAttributeWrapper> columnItem;
 
         List<DatabaseTable> tables = schema.tables();
-        tablesItem = TreeItemFactory.create("archive.tree.view.node.tables", TreeContentView.TABLES,
-                schema, tables);
+
+        val tablesItem = new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(I18n.get(I18nKey.of("archive.tree.view.node.tables"), tables.size()))
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(SchemaOverviewForm.create(schema))
+                .databaseObject(schema)
+                .build());
 
         for (DatabaseTable table : tables) {
-            tableItem = new TreeItem<>(new TreeAttributeWrapper(table.name(), TreeContentView.TABLE, table));
-
+            val tableItem = new TreeItem<>(TreeAttributeWrapper.builder()
+                    .name(table.name())
+                    .type(TreeContentView.FORM_RENDERER)
+                    .renderableForm(TableOverviewForm.create(table))
+                    .databaseObject(table)
+                    .build());
 
             List<DatabaseColumn> columns = table.columns();
-            columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
-                    TreeContentView.COLUMNS,
-                    table,
-                    columns);
+            val columnsItem = new TreeItem<>(TreeAttributeWrapper.builder()
+                    .name(I18n.get(I18nKey.of("archive.tree.view.node.columns"), columns.size()))
+                    .type(TreeContentView.FORM_RENDERER)
+                    .renderableForm(TableOverviewForm.create(table))
+                    .databaseObject(table)
+                    .build());
 
-            for (DatabaseColumn column : columns) {
+            val columnItems = columns.stream()
+                    .map(column -> new TreeItem<>(TreeAttributeWrapper.builder()
+                            .name(column.name())
+                            /*
+                            Caution: Mockups are showing different style for column details forms.
+                            For achieving that, a separate value renderer needs to be developed.
 
-                columnItem = new TreeItem<>(new TreeAttributeWrapper(column.name(), TreeContentView.COLUMN, column));
-                columnsItem.getChildren().add(columnItem);
-            }
+                            TODO Clarify requirements
+                             */
+                            .type(TreeContentView.FORM_RENDERER)
+                            .renderableForm(ColumnDetailsForm.create(column))
+                            .databaseObject(table)
+                            .build()))
+                    .collect(Collectors.toList());
+            columnsItem.getChildren().addAll(columnItems);
 
             if (!siardArchive.onlyMetaData()) {
                 tableItem.getChildren().add(TreeItemFactory.create("archive.tree.view.node.rows",
@@ -290,91 +267,12 @@ public class ArchiveBrowserView {
     }
 
     private TreeItem<TreeAttributeWrapper> createRootItem() {
-        val form = RenderableForm.<SiardArchiveMetaData>builder()
-                .dataExtractor(controller -> controller.getSiardArchive().getMetaData())
-                .saveAction((controller, siardArchiveMetaData) -> {
-                    val archive = controller.getSiardArchive().getArchive();
-                    siardArchiveMetaData.write(archive);
-
-                    // dirty hack: mark metadata as changed
-                    CastHelper.tryCast(archive, ArchiveImpl.class)
-                            .ifPresent(archiveImpl -> archiveImpl.isMetaDataDifferent(new Object(), new Object()));
-
-//                    try {
-//                        //archive.saveMetaData();
-//                    } catch (IOException e) {
-//                        throw new RuntimeException("Failed to store edited metadata", e);
-//                    }
-                })
-                .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("archiveDetails.labelFormat"),
-                                SiardArchiveMetaData::getSiardFormatVersion))
-                        .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("archiveDetails.labelDb"),
-                                SiardArchiveMetaData::getDatabaseName,
-                                SiardArchiveMetaData::setDatabaseName,
-                                ReadWriteStringProperty.IS_NOT_EMPTY_VALIDATOR
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("archiveDetails.labelProduct"),
-                                SiardArchiveMetaData::getDatabaseProduct))
-                        .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("archiveDetails.labelConnection"),
-                                SiardArchiveMetaData::getDatabaseConnectionURL))
-                        .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("archiveDetails.labelUsername"),
-                                SiardArchiveMetaData::getDatabaseUsername))
-                        .build())
-                .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
-                        .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("archiveDetails.labelDesc"),
-                                SiardArchiveMetaData::getDatabaseDescription,
-                                SiardArchiveMetaData::setDatabaseDescription
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("archiveDetails.labelOwner"),
-                                SiardArchiveMetaData::getDataOwner,
-                                SiardArchiveMetaData::setDataOwner,
-                                ReadWriteStringProperty.IS_NOT_EMPTY_VALIDATOR
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("archiveDetails.labelCreationDate"),
-                                SiardArchiveMetaData::getDataOriginTimespan,
-                                SiardArchiveMetaData::setDataOriginTimespan,
-                                ReadWriteStringProperty.IS_NOT_EMPTY_VALIDATOR
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("archiveDetails.labelArchiveDate"),
-                                siardArchiveMetaData -> I18n.getLocaleDate(siardArchiveMetaData.getArchivingDate())
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("archiveDetails.labelArchiveUser"),
-                                SiardArchiveMetaData::getArchiverName,
-                                SiardArchiveMetaData::setArchiverName
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("archiveDetails.labelContactArchiveUser"),
-                                SiardArchiveMetaData::getArchiverContact,
-                                SiardArchiveMetaData::setArchiverContact
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("archiveDetails.labelLOBFolder"),
-                                siardArchiveMetaData -> Optional.ofNullable(siardArchiveMetaData.getLobFolder())
-                                        .map(URI::getPath)
-                                        .orElse("N/A")
-                        ))
-                        .build())
-                .build();
-
-        val item = new TreeItem<>(
+        return new TreeItem<>(
                 TreeAttributeWrapper.builder()
                         .name(this.siardArchive.name())
                         .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(form)
+                        .renderableForm(MetadataDetailsForm.create())
                         .build());
-
-        return item;
     }
 
     private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem,

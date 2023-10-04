@@ -35,14 +35,10 @@ public class TableRenderer<T, I> {
                         .collect(Collectors.toList()));
 
         tableView.getStyleClass().add(TABLE_STYLE_CLASS);
-
         VBox.setVgrow(tableView, Priority.ALWAYS);
 
         tableView.autosize();
         new TableSize(tableView).resize();
-
-
-
 
         return tableView;
     }

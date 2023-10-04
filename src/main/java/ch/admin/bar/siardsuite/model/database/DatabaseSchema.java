@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
 
-    protected final SiardArchive archive;
+    protected final SiardArchive siardArchive;
     protected final Schema schema;
     protected final boolean onlyMetaData;
     protected final String name;
@@ -45,8 +45,8 @@ public class DatabaseSchema extends DatabaseObject {
 
     protected final TreeContentView treeContentView = TreeContentView.SCHEMA;
 
-    protected DatabaseSchema(SiardArchive archive, Schema schema, boolean onlyMetaData) {
-        this.archive = archive;
+    protected DatabaseSchema(SiardArchive siardArchive, Schema schema, boolean onlyMetaData) {
+        this.siardArchive = siardArchive;
         this.schema = schema;
         this.onlyMetaData = onlyMetaData;
 
@@ -54,9 +54,9 @@ public class DatabaseSchema extends DatabaseObject {
         name = metaSchemaFacade.name();
         description = metaSchemaFacade.description();
 
-        this.tables = metaSchemaFacade.tables(archive, this, onlyMetaData);
-        this.views = metaSchemaFacade.views(archive, this);
-        this.routines = metaSchemaFacade.routines(archive, this);
+        this.tables = metaSchemaFacade.tables(siardArchive, this, onlyMetaData);
+        this.views = metaSchemaFacade.views(siardArchive, this);
+        this.routines = metaSchemaFacade.routines(siardArchive, this);
 
         this.types = metaSchemaFacade.types();
     }
@@ -73,8 +73,9 @@ public class DatabaseSchema extends DatabaseObject {
         strategy.populate(tableView, onlyMetaData);
     }
 
-    public void write(Archive archive) {
-        val schema = archive.getSchema(name);
+    public void write() {
+        val schema = siardArchive.getArchive()
+                .getSchema(name);
         schema.getMetaSchema().setDescription(description);
     }
 

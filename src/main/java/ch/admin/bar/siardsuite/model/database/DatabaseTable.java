@@ -20,6 +20,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -35,12 +37,15 @@ import java.util.stream.Collectors;
 public class DatabaseTable extends DatabaseObject implements WithColumns {
 
     public static final String TABLE_CONTAINER_TABLE_HEADER_ROW = "tableContainer.table.header.row";
-    protected final SiardArchive archive;
+    protected final SiardArchive siardArchive;
     protected final DatabaseSchema schema;
     protected final Table table;
     protected final boolean onlyMetaData;
     @Getter
     public final String name;
+    @Getter
+    @Setter
+    public String description;
     @Getter
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     public final String numberOfColumns;
@@ -57,11 +62,12 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     }
 
     public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
-        this.archive = archive;
+        this.siardArchive = archive;
         this.schema = schema;
         this.table = table;
         this.onlyMetaData = onlyMetaData;
         name = table.getMetaTable().getName();
+        description = table.getMetaTable().getDescription();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
         }
@@ -183,7 +189,7 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
             int j = 0;
             while (j < numberOfRows && j < loadBatchSize) {
                 if (recordDispenser.getPosition() < numberOfRows) {
-                    rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
+                    rows.add(new DatabaseRow(siardArchive, schema, this, recordDispenser.get()));
                 }
                 j++;
                 lastRowLoadedIndex++;
@@ -277,4 +283,10 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     private static final String INDEX = "index";
     private static final String NAME = "name";
     private static final String TYPE = "type";
+
+    public void write() {
+        val schema = siardArchive.getArchive()
+                .getSchema(name);
+        schema.getMetaSchema().setDescription(description);
+    }
 }

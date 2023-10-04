@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.val;
 
 import java.util.ArrayList;
@@ -115,6 +116,7 @@ public class FormRenderer<T> {
         return vbox;
     }
 
+    @SneakyThrows // TODO
     public void saveChanges() {
         val invalidFields = this.editableFormFields.stream()
                 .filter(editableFormField -> !editableFormField.hasValidValue())
@@ -127,7 +129,7 @@ public class FormRenderer<T> {
                     .filter(EditableFormField::hasChanges)
                     .forEach(EditableFormField::save);
 
-            this.renderableForm.getSaveAction().accept(controller, data);
+            this.renderableForm.getSaveAction().doAfterSaveChanges(controller, data);
         }
     }
 

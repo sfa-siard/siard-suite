@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 @Value
 public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
     public static final Validator IS_NOT_EMPTY_VALIDATOR = Validator.builder()
-            .message(I18nKey.of("validation.can.not.be.empty"))
+            .message(I18nKey.of("valueValidation.canNotBeEmpty"))
             .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
                     .filter(value -> !value.isEmpty() && !value.trim().isEmpty())
                     .isPresent())
@@ -51,7 +53,7 @@ public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
         public Validator(
                 @NonNull final I18nKey message,
                 @NonNull final Predicate<String> isValidCheck,
-                @NonNull final String titleSuffix) {
+                final String titleSuffix) {
             this.message = message;
             this.isValidCheck = isValidCheck;
             this.titleSuffix = Optional.ofNullable(titleSuffix);

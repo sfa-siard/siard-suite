@@ -21,5 +21,9 @@ public class RenderableForm<T> {
     Function<Controller, T> dataExtractor;
 
     @NonNull
-    BiConsumer<Controller, T> saveAction;
+    AfterSaveChangesAction<T> saveAction;
+
+    public interface AfterSaveChangesAction<T> {
+        void doAfterSaveChanges(Controller controller, T edited) throws Exception;
+    }
 }

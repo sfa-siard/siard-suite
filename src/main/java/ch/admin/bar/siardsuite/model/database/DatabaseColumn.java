@@ -11,10 +11,14 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.TreeSet;
 
+@Getter
 public class DatabaseColumn extends DatabaseObject {
 
     protected final SiardArchive archive;
@@ -24,19 +28,30 @@ public class DatabaseColumn extends DatabaseObject {
     protected final String index;
     protected final String name;
     protected final String type;
-    protected final String lobFolder;
-    protected final String mimeType;
+
+    @Setter
+    protected String lobFolder;
+
+    @Setter
+    protected String mimeType;
     protected final String userDefinedTypeSchema;
     protected final String userDefinedTypeName;
     protected final String originalType;
     protected final String isNullable;
     protected final String defaultValue;
     protected String cardinality;
-    protected final String description;
+
+    @Setter
+    protected String description;
 
     protected final TreeContentView treeContentView = TreeContentView.COLUMN;
 
-    protected DatabaseColumn(SiardArchive archive, DatabaseSchema schema, WithColumns table, MetaColumn column) {
+    protected DatabaseColumn(
+            SiardArchive archive,
+            DatabaseSchema schema,
+            WithColumns table,
+            MetaColumn column
+    ) {
         this.archive = archive;
         this.schema = schema;
         this.table = table;
@@ -121,5 +136,11 @@ public class DatabaseColumn extends DatabaseObject {
 
     public String cardinality() {
         return cardinality;
+    }
+
+    public void write() throws IOException {
+        column.setLobFolder(URI.create(lobFolder));
+        column.setMimeType(mimeType);
+        column.setDescription(description);
     }
 }
