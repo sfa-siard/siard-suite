@@ -39,8 +39,14 @@ public class DatabaseSchema extends DatabaseObject {
 
     @Getter
     protected List<DatabaseTable> tables;
+
+    @Getter
     protected List<DatabaseView> views;
+
+    @Getter
     protected List<DatabaseType> types;
+
+    @Getter
     protected List<Routine> routines;
 
     protected final TreeContentView treeContentView = TreeContentView.SCHEMA;

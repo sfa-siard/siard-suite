@@ -1,5 +1,8 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import lombok.Getter;
+
+@Getter
 public class Privilige {
 
     private final String type;

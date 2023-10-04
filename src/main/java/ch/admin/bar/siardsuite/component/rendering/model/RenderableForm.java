@@ -21,7 +21,8 @@ public class RenderableForm<T> {
     Function<Controller, T> dataExtractor;
 
     @NonNull
-    AfterSaveChangesAction<T> saveAction;
+    @Builder.Default
+    AfterSaveChangesAction<T> saveAction = (controller, edited) -> {};
 
     public interface AfterSaveChangesAction<T> {
         void doAfterSaveChanges(Controller controller, T edited) throws Exception;

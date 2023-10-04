@@ -9,12 +9,15 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Getter
 public class DatabaseType extends DatabaseObject {
 
     private final String name;
@@ -22,7 +25,9 @@ public class DatabaseType extends DatabaseObject {
     private final boolean instantiable;
     private final boolean isFinal;
     private final String base;
-    private final String description;
+
+    @Setter
+    private String description;
 
     private final List<DatabaseAttribute> databaseAttributes;
 
@@ -99,4 +104,8 @@ public class DatabaseType extends DatabaseObject {
     private static final String ATTRIBUTE_NAME = "attribute.name";
     private static final String ATTRIBUTE_TYPE = "attribute.type";
     private static final String ATTRIBUTE_CARDINALITY = "attribute.cardinality";
+
+    public void write() {
+        throw new UnsupportedOperationException("Not implemented yet"); // TODO
+    }
 }

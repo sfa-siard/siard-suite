@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import ch.enterag.utils.BU;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 
 import java.io.IOException;
 
@@ -21,6 +22,7 @@ public class DatabaseCell extends DatabaseObject {
     protected final String index;
     protected final String name;
     protected final String type;
+    @Getter
     protected final String value;
 
     protected DatabaseCell(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, DatabaseRow row,
@@ -41,13 +43,13 @@ public class DatabaseCell extends DatabaseObject {
         this.type = type;
         String value = null;
         try {
-            value = getValue();
+            value = stringifyValueFromCell();
         } catch (IOException | IllegalArgumentException ignored) {
         }
         this.value = value;
     }
 
-    private String getValue() throws IOException {
+    private String stringifyValueFromCell() throws IOException {
         if (new PreTypeFacade(this.cell.getMetaColumn().getPreType()).isBlob()) {
             return "0x" + BU.toHex(this.cell.getBytes()).substring(0, 16) + "...";
         }

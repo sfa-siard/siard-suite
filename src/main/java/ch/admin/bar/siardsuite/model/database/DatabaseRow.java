@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class DatabaseRow extends DatabaseObject {
     protected final Record record;
     protected final String index;
     protected final String name;
+
+    @Getter
     protected final List<DatabaseCell> cells = new ArrayList<>();
 
     protected DatabaseRow(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, Record record) {
@@ -51,5 +54,4 @@ public class DatabaseRow extends DatabaseObject {
     @Override
     public void populate(VBox vbox, TreeContentView type) {
     }
-
 }
