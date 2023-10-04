@@ -4,7 +4,10 @@ import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siardsuite.component.rendered.AttributeDetailsForm;
 import ch.admin.bar.siardsuite.component.rendered.ColumnDetailsForm;
 import ch.admin.bar.siardsuite.component.rendered.MetadataDetailsForm;
+import ch.admin.bar.siardsuite.component.rendered.ParameterOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.PrivilegesOverviewForm;
+import ch.admin.bar.siardsuite.component.rendered.RoutineOverviewForm;
+import ch.admin.bar.siardsuite.component.rendered.RoutinesOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.RowsOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.SchemaOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.TableOverviewForm;
@@ -151,37 +154,59 @@ public class ArchiveBrowserView {
 
 
     private TreeItem<TreeAttributeWrapper> createRoutinesItem(DatabaseSchema schema) {
-        TreeItem<TreeAttributeWrapper> parametersItem;
-        TreeItem<TreeAttributeWrapper> routinesItem;
-        TreeItem<TreeAttributeWrapper> routineItem;
 
         List<Routine> routines = schema.routines();
-        routinesItem = TreeItemFactory.create("archive.tree.view.node.routines",
-                TreeContentView.ROUTINES,
-                schema,
-                routines);
 
-        for (Routine routine : routines) {
-            routineItem = new TreeItem<>(new TreeAttributeWrapper(routine.name(), TreeContentView.ROUTINE, routine));
+        val item = new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(I18n.get(I18nKey.of("archive.tree.view.node.routines"), routines.size()))
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(RoutinesOverviewForm.create(schema))
+                .build());
 
-            List<MetaParameter> parameters = routine.parameters();
-            parametersItem = TreeItemFactory.create("archive.tree.view.node.parameters",
-                    TreeContentView.COLUMNS,
-                    // TODO: maybe create treeContentView.PARAMETERS?
-                    routine,
-                    parameters);
+        val routineItems = routines.stream()
+                .map(this::createItemsForRoutine)
+                .collect(Collectors.toList());
 
-            parametersItem.getChildren().addAll(parameters.stream().map(metaParameter ->
-                    new TreeItem<>(new TreeAttributeWrapper(
-                            metaParameter.getName(),
-                            TreeContentView.PARAMETER,
-                            new DatabaseParameter(
-                                    metaParameter)))
-            ).collect(Collectors.toList()));
-            routineItem.getChildren().add(parametersItem);
-            routinesItem.getChildren().add(routineItem);
-        }
-        return routinesItem;
+        item.getChildren().addAll(routineItems);
+
+        return item;
+    }
+
+    private TreeItem<TreeAttributeWrapper> createItemsForRoutine(final Routine routine) {
+        val item = new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(routine.name())
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(RoutineOverviewForm.create(routine))
+                .build());
+
+        item.getChildren().add(createItemForParameters(routine));
+
+        return item;
+    }
+
+    private TreeItem<TreeAttributeWrapper> createItemForParameters(final Routine routine) {
+        val parameters = routine.parameters();
+        val item = new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(I18n.get(I18nKey.of("archive.tree.view.node.parameters"), parameters.size()))
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(RoutineOverviewForm.create(routine))
+                .build());
+
+        val parameterItems = parameters.stream()
+                .map(this::createItemsForParameter)
+                .collect(Collectors.toList());
+
+        item.getChildren().addAll(parameterItems);
+
+        return item;
+    }
+
+    private TreeItem<TreeAttributeWrapper> createItemsForParameter(final MetaParameter parameter) {
+        return new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(parameter.getName())
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(ParameterOverviewForm.create(parameter))
+                .build());
     }
 
     private TreeItem<TreeAttributeWrapper> createViewsItem(DatabaseSchema schema) {

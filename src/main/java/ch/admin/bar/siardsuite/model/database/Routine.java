@@ -11,6 +11,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +24,24 @@ public class Routine extends DatabaseObject implements WithColumns {
 
     private final MetaRoutine metaRoutine;
 
+    @Getter
+    @Setter
+    private String source;
+
+    @Getter
+    @Setter
+    private String body;
+
+    @Getter
+    @Setter
+    private String description;
+
     public Routine(MetaRoutine metaRoutine) {
         this.metaRoutine = metaRoutine;
+
+        this.source = metaRoutine.getSource();
+        this.body = metaRoutine.getBody();
+        this.description = metaRoutine.getBody();
     }
 
     @Override
@@ -84,7 +102,7 @@ public class Routine extends DatabaseObject implements WithColumns {
     }
 
     public String returnType() {
-        return metaRoutine.getSpecificName();
+        return metaRoutine.getReturnType();
     }
 
     public String numberOfParameters() {
@@ -105,4 +123,8 @@ public class Routine extends DatabaseObject implements WithColumns {
     private static final String PARAMETER_MODE = "parameterMode";
     private static final String PARAMETER_TYPE = "parameterType";
     private static final String CARDINALITY = "cardinality";
+
+    public void write() {
+        throw new UnsupportedOperationException("Not implemented yet"); // TODO
+    }
 }
