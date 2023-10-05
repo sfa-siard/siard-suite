@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import ch.admin.bar.siardsuite.component.IconButton?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -12,7 +13,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
-<?import ch.admin.bar.siardsuite.component.IconButton?>
 <AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.open.OpenPreviewPresenter">
@@ -84,12 +84,25 @@
                                                     </Label>
                                                     <IconButton fx:id="saveChangesButton"
                                                                 icon="DOWNLOAD"
-                                                                visible="false">
-                                                    </IconButton>
+                                                                visible="false"
+                                                                managed="false"
+                                                    />
                                                     <IconButton fx:id="dropChangesButton"
                                                                 icon="LEFT_ARROW"
-                                                                visible="false">
-                                                    </IconButton>
+                                                                visible="false"
+                                                                managed="false"
+                                                    />
+                                                    <Label fx:id="errorMessageLabel"
+                                                           maxHeight="42.0"
+                                                           alignment="CENTER_LEFT"
+                                                           text="Hi, i am a error message"
+                                                           visible="false"
+                                                           managed="false"
+                                                    >
+                                                        <styleClass>
+                                                            <String fx:value="validation-text"/>
+                                                        </styleClass>
+                                                    </Label>
                                                 </children>
                                             </HBox>
 

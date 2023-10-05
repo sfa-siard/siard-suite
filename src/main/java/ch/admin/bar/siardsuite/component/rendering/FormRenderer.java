@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.presenter.tree.ChangeableDataPresenter.SaveChangesReport;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
@@ -16,7 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class FormRenderer<T> {
 
     private static final String TITLE_STYLE_CLASS = "table-container-label";
@@ -108,44 +110,47 @@ public class FormRenderer<T> {
 
         val value = property.getValueExtractor().apply(data);
 
-        val tf = new TextField();
-        tf.setText(value);
-        tf.setEditable(false);
-        tf.getStyleClass().add(FIELD_STYLE_CLASS);
+        val valueTextField = new TextField();
+        valueTextField.setText(value);
+        valueTextField.setEditable(false);
+        valueTextField.getStyleClass().add(FIELD_STYLE_CLASS);
 
-
-        vbox.getChildren().setAll(titleLabel, tf);
-
+        vbox.getChildren().setAll(titleLabel, valueTextField);
 
         return vbox;
-    }
-
-    @SneakyThrows // TODO
-    public void saveChanges() {
-        val invalidFields = this.editableFormFields.stream()
-                .filter(editableFormField -> !editableFormField.hasValidValue())
-                .collect(Collectors.toList());
-
-        if (invalidFields.isEmpty()) {
-            this.hasChanged.set(false);
-
-            this.editableFormFields.stream()
-                    .filter(EditableFormField::hasChanges)
-                    .forEach(editableFormField -> {
-                        try {
-                            editableFormField.save();
-                        } catch (Exception e) {
-                            // TODO
-                        }
-                    });
-
-            this.renderableForm.getSaveAction().doAfterSaveChanges(controller, data);
-        }
     }
 
     public void dropChanges() {
         this.editableFormFields.forEach(EditableFormField::reset);
         this.hasChanged.set(false);
+    }
+
+    public SaveChangesReport saveChanges() {
+        val invalidFields = this.editableFormFields.stream()
+                .filter(editableFormField -> !editableFormField.hasValidValue())
+                .collect(Collectors.toList());
+
+        if (!invalidFields.isEmpty()) {
+            return new SaveChangesReport(I18n.get(I18nKey.of("storage.failed.validationErrors")));
+        }
+
+        val failedFields = this.editableFormFields.stream()
+                .filter(EditableFormField::save)
+                .collect(Collectors.toList());
+
+        try {
+            this.renderableForm.getSaveAction()
+                    .doAfterSaveChanges(controller, data);
+
+            if (failedFields.isEmpty()) {
+                hasChanged.set(false);
+                return new SaveChangesReport();
+            }
+        } catch (Exception e) {
+            log.error("Storage failed because of after-storage-action because {}",
+                    e.getMessage());
+        }
+        return new SaveChangesReport(I18n.get(I18nKey.of("storage.failed.unknownError")));
     }
 
     private static class EditableFormField<T> extends VBox {
@@ -211,9 +216,25 @@ public class FormRenderer<T> {
             return !Objects.equals(originalValue, value.getText());
         }
 
-        public void save() throws Exception {
-            property.getValuePersistor()
-                    .persist(data, value.getText());
+        public boolean save() {
+            if (!hasChanges()) {
+                return true;
+            }
+
+            val currentValue = value.getText();
+
+            try {
+                property.getValuePersistor()
+                        .persist(data, currentValue);
+                return true;
+            } catch (Exception e) {
+                log.error("Storage failed for field {} with value {} because {}",
+                        title.getText(),
+                        currentValue,
+                        e.getMessage());
+                showValidationLabel(I18nKey.of("storage.singleField.failed.unknownError"));
+                return false;
+            }
         }
 
         private void showValidationLabel(final I18nKey message) {

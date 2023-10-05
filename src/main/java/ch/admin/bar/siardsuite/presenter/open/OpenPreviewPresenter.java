@@ -20,7 +20,6 @@ public class OpenPreviewPresenter extends ArchiveBrowserPresenter {
     public VBox container;
     @FXML
     public VBox leftTreeBox;
-
     @FXML
     protected Label title;
     @FXML
