@@ -11,115 +11,93 @@ public enum TreeContentView {
      * the content for the root of the tree
      */
     FORM_RENDERER("fxml/tree/form-renderer.fxml",
-            "tableContainer.title.siardFile",
             null,
             null,
             false),
     ROOT("fxml/tree/content-root.fxml",
-            "tableContainer.title.siardFile",
             null,
             null,
             false),
     SCHEMAS("fxml/tree/content-root.fxml",
-            "tableContainer.title.schemas",
             null,
             null,
             false),
     SCHEMA("fxml/tree/table.fxml",
             "tableContainer.title.schema",
             "tableContainer.labelSchema",
-            "tableContainer.labelDescSchema",
             false),
     TABLES("fxml/tree/table.fxml",
-            "tableContainer.title.tables",
             "tableContainer.labelSchema",
             "tableContainer.labelDescSchema",
             false),
     TABLE("fxml/tree/table.fxml",
-            "tableContainer.title.table",
             "tableContainer.labelTable",
             "tableContainer.labelNumberOfRows",
             true),
     VIEWS("fxml/tree/table.fxml",
-            "tableContainer.title.views",
             "tableContainer.labelSchema",
             "tableContainer.labelDescSchema",
             false),
     VIEW("fxml/tree/table.fxml",
-            "tableContainer.title.view",
             "tableContainer.labelView",
             "tableContainer.labelNumberOfRows",
             true),
     COLUMNS("fxml/tree/table.fxml",
-            "tableContainer.title.columns",
             "tableContainer.labelTable",
             "tableContainer.labelNumberOfRows",
             true),
     COLUMN("fxml/tree/column.fxml",
-            "tableContainer.title.column",
             null,
             null,
             false),
     ROWS("fxml/tree/table.fxml",
-            "tableContainer.title.data",
             "tableContainer.labelTable",
             "tableContainer.labelNumberOfRows",
             true),
     USERS("fxml/tree/table.fxml",
-            "tableContainer.title.users",
             "tableContainer.users",
             "tableContainer.labelNumberOfRows",
             false),
     TYPES("fxml/tree/table.fxml",
-            "treeContent.types.title",
             "tableContainer.labelSchema",
             "tableContainer.labelDescSchema",
             false),
     TYPE("fxml/tree/type.fxml",
-            "tableContainer.title.type",
             "tableContainer.labelSchema",
             "tableContainer.labelDescSchema",
             false),
     ATTRIBUTES("fxml/tree/type.fxml",
-            "tableContainer.title.attributes",
             "tableContainer.attributes",
             "tableContainer.labelNumerOfRows",
             false),
     ATTRIBUTE("fxml/tree/attribute.fxml",
-            "tableContainer.title.attribute",
             null,
             null,
             false),
     PRIVILIGES("fxml/tree/table.fxml",
-            "tableContainer.title.priviliges",
             "tableContainer.priviliges",
             "tableContainer.labelNumberOfRows",
             false),
     ROUTINES("fxml/tree/table.fxml",
-            "tableContainer.title.routines",
             "tableContainer.labelSchema",
             "tableContainer.labelDescSchema",
             false),
     ROUTINE("fxml/tree/table.fxml",
-            "tableContainer.title.routine",
             "tableContainer.labelRoutine",
             "tableContainer.labelNumberOfRows",
             true),
     PARAMETER("fxml/tree/parameter.fxml",
-            "tableContainer.title.parameter",
             null,
             null,
             false);
 
     private final String viewName;
-    private final String viewTitle;
     private final String nameLabel;
     private final String infoLabel;
     private final Boolean hasTableSearch;
 
-    TreeContentView(String viewName, String viewTitle, String nameLabel, String infoLabel, Boolean hasTableSearch) {
+    TreeContentView(String viewName, String nameLabel, String infoLabel, Boolean hasTableSearch) {
         this.viewName = viewName;
-        this.viewTitle = viewTitle;
         this.nameLabel = nameLabel;
         this.infoLabel = infoLabel;
         this.hasTableSearch = hasTableSearch;
@@ -127,10 +105,6 @@ public enum TreeContentView {
 
     public String getViewName() {
         return viewName;
-    }
-
-    public String getViewTitle() {
-        return viewTitle;
     }
 
     public String getNameLabel() {

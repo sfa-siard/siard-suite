@@ -63,14 +63,15 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         this.controller = controller;
         this.stage = stage;
 
-
         ArchiveBrowserView archiveTreeView = new ArchiveBrowserView(controller.getSiardArchive(), treeView);
-        archiveTreeView.init();
+        archiveTreeView.init(); // TODO: Why not in constructor?
+
         this.refreshContentPane(archiveTreeView.rootItem().getValue());
 
         setListeners();
         controller.setCurrentPreviewPresenter(this);
         tableSearchButton.setVisible(false);
+
         bind(metaSearchButton, "tableContainer.metaSearchButton");
         bind(tableSearchButton, "tableContainer.tableSearchButton");
     }
@@ -109,7 +110,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         hideSaveAndDropButtons();
         hideErrorMessage();
 
-        this.titleTableContainer.setText(I18n.get(wrapper.getType().getViewTitle()));
+        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
 
         val newContent = FXMLLoadHelper.load(wrapper.getType().getViewName());
         contentPane.getChildren().setAll(newContent.getNode());
@@ -147,7 +148,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
     private void refreshForNonChangeableContent(final TreeAttributeWrapper wrapper) {
         hideSaveAndDropButtons();
         hideErrorMessage();
-        this.titleTableContainer.setText(I18n.get(wrapper.getType().getViewTitle()));
+        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
     }
 
     private void refreshContentPane(
@@ -159,10 +160,10 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
                 .addListener((observable, oldValue, hasChanges) -> {
             if (hasChanges) {
                 showSaveAndDropButtons();
-                this.titleTableContainer.setText(I18n.get(wrapper.getType().getViewTitle()) + " (edited)");
+                this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()) + " (edited)");
             } else {
                 hideSaveAndDropButtons();
-                this.titleTableContainer.setText(I18n.get(wrapper.getType().getViewTitle()));
+                this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
             }
         });
 
