@@ -19,6 +19,9 @@
     siard-font-family: 'Roboto Regular';
     siard-text-color: #52606D;
     siard-text-color-black: #1e2731;
+    siard-bright-background-color: #F5F7FA;
+
+    siard-details-fields-border-color: #b0afaf;
 }
 
 .root {
@@ -508,6 +511,23 @@
     -fx-border-width: 1;
     -fx-border-radius: 0;
     -fx-text-fill: siard-text-color-black;
+}
+
+.rendered-field {
+    -fx-padding: 2 2 2 10;
+    -fx-max-height: 30;
+    -fx-min-height: 30;
+    -fx-border-width: 1;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: siard-details-fields-border-color;
+    -fx-text-fill: siard-text-color-black;
+    -fx-background-color: white;
+}
+
+.rendered-field:readonly {
+    -fx-opacity: 1.0;
+    -fx-background-color: siard-bright-background-color;
 }
 
 .form-label {

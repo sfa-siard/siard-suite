@@ -26,11 +26,9 @@ import java.util.stream.Collectors;
 
 public class FormRenderer<T> {
 
-    private static final String TITLE_LABEL_STYLE_CLASS = "table-container-label";
-    private static final String VALIDATION_LABEL_STYLE_CLASS = "validation-text";
-
-    private static final String FIELD_STYLE_CLASS = "table-container-rendered-field";
-    private static final String FORM_FIELD_STYLE_CLASS = "form-field";
+    private static final String TITLE_STYLE_CLASS = "table-container-label";
+    private static final String VALIDATION_STYLE_CLASS = "validation-text";
+    private static final String FIELD_STYLE_CLASS = "rendered-field";
 
     private final RenderableForm<T> renderableForm;
     private final Controller controller;
@@ -49,42 +47,45 @@ public class FormRenderer<T> {
 
     public VBox renderForm() {
         val vbox = new VBox();
-        vbox.getChildren().setAll(renderableForm.getGroups().stream()
+        val groups = renderableForm.getGroups().stream()
                 .map(renderableGroup -> createGroup(renderableGroup, data))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
 
-        vbox.setSpacing(40);
+        vbox.getChildren().setAll(groups);
+        vbox.setSpacing(40); // space between groups
         VBox.setVgrow(vbox, Priority.ALWAYS);
+
         return vbox;
     }
 
     private VBox createGroup(final RenderableFormGroup<T> group, final T data) {
         val vbox = new VBox();
-        vbox.getChildren().setAll(
-                group.getProperties().stream()
-                        .map(renderableProperty -> {
-                            if (renderableProperty instanceof ReadWriteStringProperty) {
-                                return createField((ReadWriteStringProperty<T>) renderableProperty, data);
-                            }
+        val fields = group.getProperties().stream()
+                .map(renderableProperty -> {
+                    if (renderableProperty instanceof ReadWriteStringProperty) {
+                        return createField((ReadWriteStringProperty<T>) renderableProperty, data);
+                    }
 
-                            if (renderableProperty instanceof ReadOnlyStringProperty) {
-                                return createField((ReadOnlyStringProperty<T>) renderableProperty, data);
-                            }
+                    if (renderableProperty instanceof ReadOnlyStringProperty) {
+                        return createField((ReadOnlyStringProperty<T>) renderableProperty, data);
+                    }
 
-                            if (renderableProperty instanceof RenderableTable) {
-                                return TableRenderer.<T, Object>builder()
-                                        .data(data)
-                                        .renderableTable((RenderableTable<T, Object>) renderableProperty)
-                                        .build()
-                                        .render();
-                            }
+                    if (renderableProperty instanceof RenderableTable) {
+                        return TableRenderer.<T, Object>builder()
+                                .data(data)
+                                .renderableTable((RenderableTable<T, Object>) renderableProperty)
+                                .build()
+                                .render();
+                    }
 
-                            throw new IllegalArgumentException(String.format(
-                                    "Property type %s ins not supported yet.",
-                                    renderableProperty.getClass().getName()
-                            ));
-                        })
-                        .collect(Collectors.toList()));
+                    throw new IllegalArgumentException(String.format(
+                            "Property type %s ins not supported yet.",
+                            renderableProperty.getClass().getName()
+                    ));
+                })
+                .collect(Collectors.toList());
+
+        vbox.getChildren().setAll(fields);
         vbox.setSpacing(10);
         VBox.setVgrow(vbox, Priority.ALWAYS);
 
@@ -103,14 +104,17 @@ public class FormRenderer<T> {
 
         val titleLabel = new Label();
         titleLabel.setText(I18n.get(property.getTitle()));
-        titleLabel.getStyleClass().add(TITLE_LABEL_STYLE_CLASS);
+        titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
 
-        val valueLabel = new Label();
         val value = property.getValueExtractor().apply(data);
-        valueLabel.setText(value);
-        valueLabel.getStyleClass().add(FIELD_STYLE_CLASS);
 
-        vbox.getChildren().setAll(titleLabel, valueLabel);
+        val tf = new TextField();
+        tf.setText(value);
+        tf.setEditable(false);
+        tf.getStyleClass().add(FIELD_STYLE_CLASS);
+
+
+        vbox.getChildren().setAll(titleLabel, tf);
 
 
         return vbox;
@@ -165,14 +169,13 @@ public class FormRenderer<T> {
                     .map(validator -> validator.getTitleSuffix().orElse(""))
                     .collect(Collectors.joining());
             title.setText(I18n.get(property.getTitle()) + titleSuffix);
-            title.getStyleClass().add(TITLE_LABEL_STYLE_CLASS);
+            title.getStyleClass().add(TITLE_STYLE_CLASS);
 
             value = new TextField();
-            value.getStyleClass()
-                    .add(FORM_FIELD_STYLE_CLASS);
+            value.getStyleClass().add(FIELD_STYLE_CLASS);
 
             validationMsg = new Label();
-            validationMsg.getStyleClass().add(VALIDATION_LABEL_STYLE_CLASS);
+            validationMsg.getStyleClass().add(VALIDATION_STYLE_CLASS);
             hideValidationLabel();
 
             reset();

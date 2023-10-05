@@ -76,7 +76,7 @@ public class MetadataDetailsForm {
                                 I18nKey.of("archiveDetails.labelLOBFolder"),
                                 siardArchiveMetaData -> Optional.ofNullable(siardArchiveMetaData.getLobFolder())
                                         .map(URI::getPath)
-                                        .orElse("N/A")
+                                        .orElse("")
                         ))
                         .build())
                 .build();
