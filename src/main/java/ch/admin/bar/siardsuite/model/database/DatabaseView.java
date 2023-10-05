@@ -9,12 +9,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class DatabaseView extends DatabaseObject implements WithColumns {
 
+    @Getter
     protected final MetaView metaView;
     protected final List<DatabaseColumn> columns = new ArrayList<>();
     private DatabaseSchema schema;

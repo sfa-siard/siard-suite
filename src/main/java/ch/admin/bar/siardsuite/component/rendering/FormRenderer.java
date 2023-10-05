@@ -127,7 +127,13 @@ public class FormRenderer<T> {
 
             this.editableFormFields.stream()
                     .filter(EditableFormField::hasChanges)
-                    .forEach(EditableFormField::save);
+                    .forEach(editableFormField -> {
+                        try {
+                            editableFormField.save();
+                        } catch (Exception e) {
+                            // TODO
+                        }
+                    });
 
             this.renderableForm.getSaveAction().doAfterSaveChanges(controller, data);
         }
@@ -202,9 +208,9 @@ public class FormRenderer<T> {
             return !Objects.equals(originalValue, value.getText());
         }
 
-        public void save() {
+        public void save() throws Exception {
             property.getValuePersistor()
-                    .accept(data, value.getText());
+                    .persist(data, value.getText());
         }
 
         private void showValidationLabel(final I18nKey message) {

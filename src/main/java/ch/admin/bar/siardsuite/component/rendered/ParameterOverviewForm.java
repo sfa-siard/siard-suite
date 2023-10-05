@@ -9,11 +9,9 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 
 import java.util.function.Function;
 
-public class ParameterOverviewForm {
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
 
-    public static <T> Function<T, String> intToString(Function<T, Integer> intGetter) {
-        return t -> String.valueOf(intGetter.apply(t));
-    }
+public class ParameterOverviewForm {
 
     public static RenderableForm create(final MetaParameter metaParameter) {
         return RenderableForm.<MetaParameter>builder()

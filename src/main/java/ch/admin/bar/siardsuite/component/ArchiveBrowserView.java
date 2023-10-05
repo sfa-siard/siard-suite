@@ -14,6 +14,8 @@ import ch.admin.bar.siardsuite.component.rendered.TableOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.TypeDetailsForm;
 import ch.admin.bar.siardsuite.component.rendered.TypesOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.UsersOverviewForm;
+import ch.admin.bar.siardsuite.component.rendered.ViewOverviewForm;
+import ch.admin.bar.siardsuite.component.rendered.ViewsOverviewForm;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
@@ -49,6 +51,8 @@ public class ArchiveBrowserView {
 
     public void init() {
         final TreeItem<TreeAttributeWrapper> rootItem = createRootItem();
+        rootItem.setExpanded(true);
+
         addSchemas(rootItem);
         addUsers(rootItem);
         addPriviliges(rootItem);
@@ -57,15 +61,16 @@ public class ArchiveBrowserView {
 
     private void addSchemas(TreeItem<TreeAttributeWrapper> rootItem) {
         List<DatabaseSchema> schemas = this.siardArchive.schemas();
-        final TreeItem<TreeAttributeWrapper> schemasItem = TreeItemFactory.create("archive.tree.view.node.schemas",
-                TreeContentView.SCHEMAS,
-                null,
-                schemas);
+
+        val schemasItem = new TreeItem<>(
+                TreeAttributeWrapper.builder()
+                        .name(I18n.get(I18nKey.of("archive.tree.view.node.schemas"), schemas.size()))
+                        .type(TreeContentView.FORM_RENDERER)
+                        .renderableForm(MetadataDetailsForm.create())
+                        .build());
         schemasItem.setExpanded(true);
 
-        schemas.forEach(schema -> {
-            addSchema(schemasItem, schema);
-        });
+        schemas.forEach(schema -> addSchema(schemasItem, schema));
 
         rootItem.getChildren().add(schemasItem);
     }
@@ -210,34 +215,43 @@ public class ArchiveBrowserView {
     }
 
     private TreeItem<TreeAttributeWrapper> createViewsItem(DatabaseSchema schema) {
-        TreeItem<TreeAttributeWrapper> viewsItem;
-        TreeItem<TreeAttributeWrapper> viewItem;
-
-        TreeItem<TreeAttributeWrapper> columnsItem;
-        TreeItem<TreeAttributeWrapper> columnItem;
         List<DatabaseView> views = schema.views();
-        viewsItem = TreeItemFactory.create("archive.tree.view.node.views", TreeContentView.VIEWS,
-                schema, views);
+        val item = new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(I18n.get(I18nKey.of("archive.tree.view.node.views"), views.size()))
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(ViewsOverviewForm.create(schema))
+                .build());
 
-        for (DatabaseView view : views) {
-            viewItem = new TreeItem<>(new TreeAttributeWrapper(view.name(), TreeContentView.VIEW, view));
+        val viewItems = views.stream()
+                .map(this::createViewItem)
+                .collect(Collectors.toList());
 
-            List<DatabaseColumn> columns = view.columns();
-            columnsItem = TreeItemFactory.create("archive.tree.view.node.columns",
-                    TreeContentView.COLUMNS,
-                    view,
-                    columns);
+        item.getChildren().addAll(viewItems);
 
+        return item;
+    }
 
-            for (DatabaseColumn column : columns) {
+    private TreeItem<TreeAttributeWrapper> createViewItem(DatabaseView view) {
+        val item = new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(view.name())
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(ViewOverviewForm.create(view.getMetaView()))
+                .build());
 
-                columnItem = new TreeItem<>(new TreeAttributeWrapper(column.name(), TreeContentView.COLUMN, column));
-                columnsItem.getChildren().add(columnItem);
-            }
-            viewItem.getChildren().add(columnsItem);
-            viewsItem.getChildren().add(viewItem);
-        }
-        return viewsItem;
+        val columnsItem = new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(I18n.get(I18nKey.of("archive.tree.view.node.columns"), view.columns().size()))
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(ViewOverviewForm.create(view.getMetaView()))
+                .build());
+
+        val columnItems = view.columns().stream()
+                .map(this::createColumnItem)
+                .collect(Collectors.toList());
+
+        columnsItem.getChildren().addAll(columnItems);
+        item.getChildren().add(columnsItem);
+
+        return item;
     }
 
     private TreeItem<TreeAttributeWrapper> createTablesItem(DatabaseSchema schema) {
@@ -295,22 +309,25 @@ public class ArchiveBrowserView {
                 .build());
 
         val columnItems = columns.stream()
-                .map(column -> new TreeItem<>(TreeAttributeWrapper.builder()
-                        .name(column.name())
-                        /*
-                        Caution: Mockups are showing different style for column details forms.
-                        For achieving that, a separate value renderer needs to be developed.
-
-                        TODO: Clarify requirements
-                         */
-                        .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(ColumnDetailsForm.create(column))
-                        .databaseObject(table)
-                        .build()))
+                .map(this::createColumnItem)
                 .collect(Collectors.toList());
         columnsItem.getChildren().addAll(columnItems);
 
         return columnsItem;
+    }
+
+    private TreeItem<TreeAttributeWrapper> createColumnItem(DatabaseColumn column) {
+        return new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(column.name())
+                /*
+                Caution: Mockups are showing different style for column details forms.
+                For achieving that, a separate value renderer needs to be developed.
+
+                TODO: Clarify requirements
+                 */
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(ColumnDetailsForm.create(column))
+                .build());
     }
 
     private TreeItem<TreeAttributeWrapper> createRootItem() {

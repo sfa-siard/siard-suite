@@ -27,20 +27,24 @@ public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
 
     @NonNull I18nKey title;
     @NonNull Function<T, String> valueExtractor;
-    @NonNull BiConsumer<T, String> valuePersistor;
+    @NonNull Persistor<T> valuePersistor;
 
     @NonNull Set<Validator> valueValidators;
 
     public ReadWriteStringProperty(
             @NonNull I18nKey title,
             @NonNull Function<T, String> valueExtractor,
-            @NonNull BiConsumer<T, String> valuePersistor,
+            @NonNull Persistor<T> valuePersistor,
             @NonNull Validator... valueValidators) {
         this.title = title;
         this.valueExtractor = valueExtractor;
         this.valuePersistor = valuePersistor;
         this.valueValidators = Arrays.stream(valueValidators)
                 .collect(Collectors.toSet());
+    }
+
+    public interface Persistor<T> {
+        void persist(T valueHolder, String value) throws Exception;
     }
 
     @Value
