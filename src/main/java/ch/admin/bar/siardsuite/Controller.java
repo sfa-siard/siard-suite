@@ -8,7 +8,7 @@ import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.model.*;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;

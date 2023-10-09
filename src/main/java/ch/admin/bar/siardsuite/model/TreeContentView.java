@@ -13,7 +13,7 @@ public enum TreeContentView {
     FORM_RENDERER("fxml/tree/form-renderer.fxml",
             null,
             null,
-            false),
+            true),
     ROOT("fxml/tree/content-root.fxml",
             null,
             null,

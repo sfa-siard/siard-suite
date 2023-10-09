@@ -39,6 +39,8 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     public static final String TABLE_CONTAINER_TABLE_HEADER_ROW = "tableContainer.table.header.row";
     protected final SiardArchive siardArchive;
     protected final DatabaseSchema schema;
+
+    @Getter
     protected final Table table;
     protected final boolean onlyMetaData;
     @Getter
@@ -99,8 +101,8 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
             };
             tableView.setRowFactory(rowFactory);
 
-            SiardTableView siardTableView = new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_ROW,
-                                                                                     INDEX);
+            SiardTableView siardTableView = new SiardTableView(tableView)
+                    .withColumn(TABLE_CONTAINER_TABLE_HEADER_ROW, INDEX);
             for (DatabaseColumn column : columns) {
                 siardTableView.withColumn(column.name, column.index);
             }
@@ -141,7 +143,6 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
             }
         }
     }
-
 
     @Override
     public void populate(VBox vbox, TreeContentView type) {

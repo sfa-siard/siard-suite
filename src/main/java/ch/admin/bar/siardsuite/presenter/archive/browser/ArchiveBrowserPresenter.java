@@ -1,12 +1,11 @@
-package ch.admin.bar.siardsuite.presenter;
+package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.tree.ChangeableDataPresenter;
+import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.FXMLLoadHelper;
@@ -17,8 +16,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
@@ -26,8 +23,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import lombok.val;
-
-import java.io.IOException;
 
 import static ch.admin.bar.siardsuite.util.I18n.bind;
 import static ch.admin.bar.siardsuite.util.OptionalHelper.ifPresentOrElse;
@@ -70,7 +65,6 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
 
         setListeners();
         controller.setCurrentPreviewPresenter(this);
-        tableSearchButton.setVisible(false);
 
         bind(metaSearchButton, "tableContainer.metaSearchButton");
         bind(tableSearchButton, "tableContainer.tableSearchButton");
@@ -85,23 +79,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
         selection.selectedItemProperty()
                 .addListener(((observable, oldValue, newValue) -> refreshContentPane(newValue.getValue())));
-        tableSearchButton.setOnAction(event -> {
 
-            if (controller.getCurrentTableSearchButton() != null &&
-                    tableSearchButton.equals(controller.getCurrentTableSearchButton().button()) &&
-                    controller.getCurrentTableSearchButton().active()
-            ) {
-                controller.setCurrentTableSearchButton(tableSearchButton, false);
-                tableSearchButton.setStyle("-fx-font-weight: normal;");
-
-                controller.getCurrentTableSearchBase()
-                        .tableView()
-                        .setItems(FXCollections.observableArrayList(controller.getCurrentTableSearchBase().rows()));
-            } else {
-                controller.setCurrentTableSearchButton(tableSearchButton, false);
-                stage.openDialog(View.SEARCH_TABLE_DIALOG);
-            }
-        });
         metaSearchButton.setOnAction(event -> stage.openDialog(View.SEARCH_METADATA_DIALOG));
     }
 
@@ -127,6 +105,9 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
 
         CastHelper.tryCast(newContent.getController(), ChangeableDataPresenter.class)
                 .ifPresent(detailsPresenter -> refreshContentPane(wrapper, detailsPresenter));
+
+        CastHelper.tryCast(newContent.getController(), SearchableTableContainer.class)
+                .ifPresent(searchableTableContainer -> refreshContentPane(wrapper, searchableTableContainer));
     }
 
     @Deprecated // TODO: Refactore table search to avoid this
@@ -142,7 +123,6 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
                 this.controller,
                 this.stage,
                 wrapper);
-        tableSearchButton.setVisible(wrapper.getType().getHasTableSearch());
     }
 
     private void refreshForNonChangeableContent(final TreeAttributeWrapper wrapper) {
@@ -179,6 +159,31 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         this.dropChangesButton.setOnAction(() -> {
             hideErrorMessage();
             changeableDataPresenter.dropChanges();
+        });
+    }
+
+    private void refreshContentPane(
+            final TreeAttributeWrapper wrapper,
+            final SearchableTableContainer searchableTableContainer
+    ) {
+        tableSearchButton.setVisible(true);
+
+        tableSearchButton.setOnAction(event -> {
+
+            if (controller.getCurrentTableSearchButton() != null &&
+                    tableSearchButton.equals(controller.getCurrentTableSearchButton().button()) &&
+                    controller.getCurrentTableSearchButton().active()
+            ) {
+                controller.setCurrentTableSearchButton(tableSearchButton, false);
+                tableSearchButton.setStyle("-fx-font-weight: normal;");
+
+                controller.getCurrentTableSearchBase()
+                        .tableView()
+                        .setItems(FXCollections.observableArrayList(controller.getCurrentTableSearchBase().rows()));
+            } else {
+                controller.setCurrentTableSearchButton(tableSearchButton, false);
+                stage.openDialog(View.SEARCH_TABLE_DIALOG);
+            }
         });
     }
 

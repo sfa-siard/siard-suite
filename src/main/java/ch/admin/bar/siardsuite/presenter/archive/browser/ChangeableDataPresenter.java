@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.presenter.tree;
+package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import javafx.beans.property.BooleanProperty;
 import lombok.Value;

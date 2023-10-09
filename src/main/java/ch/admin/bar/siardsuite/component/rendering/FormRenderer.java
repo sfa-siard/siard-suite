@@ -5,8 +5,9 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
+import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.presenter.tree.ChangeableDataPresenter.SaveChangesReport;
+import ch.admin.bar.siardsuite.presenter.archive.browser.ChangeableDataPresenter.SaveChangesReport;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
@@ -76,6 +77,14 @@ public class FormRenderer<T> {
                         return TableRenderer.<T, Object>builder()
                                 .data(data)
                                 .renderableTable((RenderableTable<T, Object>) renderableProperty)
+                                .build()
+                                .render();
+                    }
+
+                    if (renderableProperty instanceof RenderableLazyLoadingTable) {
+                        return LazyLoadingTableRenderer.<T, Object>builder()
+                                .dataHolder(data)
+                                .renderableTable((RenderableLazyLoadingTable<T, Object>) renderableProperty)
                                 .build()
                                 .render();
                     }

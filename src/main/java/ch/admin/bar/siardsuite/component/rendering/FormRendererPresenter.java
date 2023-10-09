@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.component.rendering;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.presenter.tree.ChangeableDataPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.ChangeableDataPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.beans.property.BooleanProperty;
