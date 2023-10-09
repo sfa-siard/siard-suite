@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-@RequiredArgsConstructor
 public class LoadingBatchManager<T> {
 
     @Getter
@@ -21,6 +20,11 @@ public class LoadingBatchManager<T> {
     private final Set<LoadingBatch> loadedBatches = new HashSet<>();
 
     private final LazyLoadingDataSource<T> dataSource;
+
+    public LoadingBatchManager(LazyLoadingDataSource<T> dataSource) {
+        this.dataSource = dataSource;
+        this.loadDataIfNecessary(0);
+    }
 
     public void loadDataIfNecessary(final long index) {
         val matchingBatch = LoadingBatch.createMatchingLoadingBatch(index + 2);

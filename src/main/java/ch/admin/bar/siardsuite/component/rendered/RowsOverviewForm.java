@@ -10,23 +10,20 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
-import ch.admin.bar.siardsuite.model.database.DatabaseCell;
-import ch.admin.bar.siardsuite.model.database.DatabaseRow;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import ch.enterag.utils.BU;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.Value;
 import lombok.val;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -61,15 +58,12 @@ public class RowsOverviewForm {
         private final Record record;
         private final Map<String, Cell> cellsByName;
 
-        @SneakyThrows // TODO Remove
         public RecordWrapper(@NonNull Record record) {
             this.record = record;
 
-            val nrOfCells = record.getCells();
-
             val cells = new ListAssembler<>(
-                    Converter.catchExceptions(() -> (int)record.getCells(), 0),
-                    Converter.catchExceptions(record::getCell, null) // TODO remove "null"
+                    Converter.catchExceptions(record::getCells),
+                    Converter.catchExceptions(record::getCell)
             ).assemble();
 
             this.cellsByName = cells.stream()
@@ -87,38 +81,34 @@ public class RowsOverviewForm {
 
             try {
                 if (new PreTypeFacade(cell.getMetaColumn().getPreType()).isBlob()) {
+                    val bytes = cell.getBytes();
+
+                    if (bytes.length == 0) {
+                        return "";
+                    }
+
+                    if (bytes.length < 16) {
+                        return "0x" + BU.toHex(cell.getBytes());
+                    }
+
                     return "0x" + BU.toHex(cell.getBytes()).substring(0, 16) + "...";
                 }
                 return cell.getString();
             } catch (IOException e) {
-                return "ERROR"; // TODO
+                return "";
             }
         }
     }
 
-    @Value
+    @RequiredArgsConstructor
     public static class RecordDataSource implements LazyLoadingDataSource<RecordWrapper> {
         private final Table table;
-        private final long nrOfRows;
 
-        public RecordDataSource(Table table) {
-            this.table = table;
-            this.nrOfRows = table.getMetaTable().getRows();
-        }
-
-        @Override
-        public long getNrOfEntries() {
-            return nrOfRows;
-        }
-
-        @SneakyThrows // TODO temp
+        @SneakyThrows
         @Override
         public List<RecordWrapper> load(int startIndex, int nrOfItems) {
-            val recordDispenser = table.openRecords(); // TODO: not always open new dispenser
-
-            if (startIndex != 0) {
-                recordDispenser.skip(startIndex - 1);
-            }
+            val recordDispenser = table.openRecords();
+            recordDispenser.skip(startIndex);
 
             final List<RecordWrapper> collected = new ArrayList<>();
             for (int x = 0; x < nrOfItems; x++) {

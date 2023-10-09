@@ -20,7 +20,6 @@ import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
 import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
-import ch.admin.bar.siardsuite.model.database.DatabaseParameter;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.database.DatabaseType;
@@ -29,7 +28,6 @@ import ch.admin.bar.siardsuite.model.database.Privilige;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.model.database.User;
-import ch.admin.bar.siardsuite.presenter.tree.TreeItemFactory;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import javafx.scene.control.TreeItem;
@@ -301,7 +299,7 @@ public class ArchiveBrowserView {
 
         if (!siardArchive.onlyMetaData()) {
             val rowsItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                    .name(I18n.get(I18nKey.of("archive.tree.view.node.rows"), table.getRows().size()))
+                    .name(I18n.get(I18nKey.of("archive.tree.view.node.rows"), table.getTable().getMetaTable().getRows()))
                     .viewTitle(I18nKey.of("tableContainer.title.data"))
                     .type(TreeContentView.FORM_RENDERER)
                     .renderableForm(RowsOverviewForm.create(table))

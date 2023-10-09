@@ -18,6 +18,17 @@ public class Converter {
         return t -> String.valueOf(longGetter.apply(t));
     }
 
+    public static <T, P> Function<T, P> catchExceptions(ThrowingFunction<T, P> throwingFunction) {
+        return t -> {
+            try {
+                return throwingFunction.apply(t);
+            } catch (Exception e) {
+                log.error("Exception thrown by a supplier (probably a bad designed getter)", e);
+                throw new RuntimeException(e);
+            }
+        };
+    }
+
     public static <T, P> Function<T, P> catchExceptions(ThrowingFunction<T, P> throwingFunction, P defaultValue) {
         return t -> {
             try {
@@ -25,6 +36,17 @@ public class Converter {
             } catch (Exception e) {
                 log.error("Exception thrown by a supplier (probably a bad designed getter) caught and suppressed", e);
                 return defaultValue;
+            }
+        };
+    }
+
+    public static <T> Supplier<T> catchExceptions(ThrowingSupplier<T> throwingSupplier) {
+        return () -> {
+            try {
+                return throwingSupplier.get();
+            } catch (Exception e) {
+                log.error("Exception thrown by a supplier (probably a bad designed getter)", e);
+                throw new RuntimeException(e);
             }
         };
     }

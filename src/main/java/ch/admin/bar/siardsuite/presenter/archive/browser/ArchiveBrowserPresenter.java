@@ -106,8 +106,10 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         CastHelper.tryCast(newContent.getController(), ChangeableDataPresenter.class)
                 .ifPresent(detailsPresenter -> refreshContentPane(wrapper, detailsPresenter));
 
-        CastHelper.tryCast(newContent.getController(), SearchableTableContainer.class)
-                .ifPresent(searchableTableContainer -> refreshContentPane(wrapper, searchableTableContainer));
+        OptionalHelper.ifPresentOrElse(
+                CastHelper.tryCast(newContent.getController(), SearchableTableContainer.class),
+                searchableTableContainer -> refreshContentPane(wrapper, searchableTableContainer),
+                () -> tableSearchButton.setVisible(false));
     }
 
     @Deprecated // TODO: Refactore table search to avoid this
@@ -138,14 +140,14 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         changeableDataPresenter
                 .hasChanged()
                 .addListener((observable, oldValue, hasChanges) -> {
-            if (hasChanges) {
-                showSaveAndDropButtons();
-                this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()) + " (edited)");
-            } else {
-                hideSaveAndDropButtons();
-                this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
-            }
-        });
+                    if (hasChanges) {
+                        showSaveAndDropButtons();
+                        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()) + " (edited)");
+                    } else {
+                        hideSaveAndDropButtons();
+                        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
+                    }
+                });
 
         this.saveChangesButton.setOnAction(() -> {
             val report = changeableDataPresenter.saveChanges();
