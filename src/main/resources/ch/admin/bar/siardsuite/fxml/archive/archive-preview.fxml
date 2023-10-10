@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import ch.admin.bar.siardsuite.component.TwoStatesButton?>
 <ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchivePreviewPresenter"
@@ -65,14 +66,14 @@
                                                 <String fx:value="table-container-title"/>
                                             </styleClass>
                                         </Label>
-                                        <MFXButton fx:id="tableSearchButton"
-                                                   alignment="CENTER_RIGHT"
-                                                   rippleAnimateBackground="false">
+                                        <TwoStatesButton fx:id="tableSearchButton"
+                                                         alignment="CENTER_RIGHT"
+                                                         rippleAnimateBackground="false">
                                             <styleClass>
                                                 <String fx:value="search-icon"/>
                                                 <String fx:value="icon-text-button"/>
                                             </styleClass>
-                                        </MFXButton>
+                                        </TwoStatesButton>
                                         <MFXButton fx:id="metaSearchButton"
                                                    alignment="CENTER_RIGHT"
                                                    rippleAnimateBackground="false">

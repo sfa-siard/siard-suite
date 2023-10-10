@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
+<?import ch.admin.bar.siardsuite.component.TwoStatesButton?>
 <AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.open.OpenPreviewPresenter">
@@ -106,13 +107,13 @@
                                                 </children>
                                             </HBox>
 
-                                            <MFXButton fx:id="tableSearchButton" alignment="CENTER_RIGHT"
+                                            <TwoStatesButton fx:id="tableSearchButton" alignment="CENTER_RIGHT"
                                                        rippleAnimateBackground="false">
                                                 <styleClass>
                                                     <String fx:value="search-icon"/>
                                                     <String fx:value="icon-text-button"/>
                                                 </styleClass>
-                                            </MFXButton>
+                                            </TwoStatesButton>
                                             <MFXButton fx:id="metaSearchButton" alignment="CENTER_RIGHT"
                                                        rippleAnimateBackground="false">
                                                 <styleClass>

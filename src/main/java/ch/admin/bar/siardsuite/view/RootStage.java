@@ -7,6 +7,8 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.presenter.RootPresenter;
+import ch.admin.bar.siardsuite.presenter.search.SearchTableDialogPresenter;
+import ch.admin.bar.siardsuite.util.CastHelper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,8 +16,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.val;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class RootStage extends Stage {
   private final Controller controller;
@@ -55,11 +60,14 @@ public class RootStage extends Stage {
     this.show();
   }
 
-  private void setCenter(BorderPane borderPane, String viewName) {
+  private Presenter setCenter(BorderPane borderPane, String viewName) {
     FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
     try {
       borderPane.setCenter(loader.load());
-      loader.<Presenter>getController().init(this.controller, this);
+      val presenter = loader.<Presenter>getController();
+      presenter.init(this.controller, this);
+
+      return presenter;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -75,10 +83,28 @@ public class RootStage extends Stage {
     dialogPane.setVisible(true);
   }
 
+  public <T> T openDialogAndReturnPresenter(View view, Class<T> presenterClass) {
+    val presenter = setCenter(dialogPane, view.getName());
+    dialogPane.setVisible(true);
+
+    return CastHelper.tryCast(presenter, presenterClass)
+            .orElseThrow(() -> new IllegalArgumentException(
+                    String.format(
+                            "Presenter type %s is not supported by view %s",
+                            presenterClass,
+                            view.getName()
+                    )));
+  }
+
+  public void openSearchTableDialog(Consumer<Optional<String>> searchTermConsumer) {
+    val presenter = openDialogAndReturnPresenter(
+            View.SEARCH_TABLE_DIALOG,
+            SearchTableDialogPresenter.class);
+
+    presenter.registerResultListener(searchTermConsumer);
+  }
 
   public void closeDialog() {
     dialogPane.setVisible(false);
   }
-
-
 }

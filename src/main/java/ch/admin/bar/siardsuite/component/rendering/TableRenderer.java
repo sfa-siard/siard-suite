@@ -6,6 +6,8 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.TableSize;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Priority;
@@ -14,20 +16,28 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Builder
-public class TableRenderer<T, I> {
+public class TableRenderer<T, I> implements SearchableFormEntry{
 
     private static final String TABLE_STYLE_CLASS = "tree-table-view";
 
     private final RenderableTable<T, I> renderableTable;
     private final T data;
 
+    private final ObservableList<I> tableItems = FXCollections.observableArrayList();
+    private final Predicate<I> doNotFilter = i -> true;
+    private final FilteredList<I> filteredTableItems = tableItems
+            .filtered(doNotFilter);
+
     public TableView<I> render() {
         val entries = renderableTable.getDataExtractor().apply(data);
-        val tableView = new TableView<I>(FXCollections.observableArrayList(entries));
+        tableItems.setAll(entries);
+
+        val tableView = new TableView<>(filteredTableItems);
 
         tableView.getColumns().addAll(
                 renderableTable.getProperties().stream()
@@ -41,6 +51,18 @@ public class TableRenderer<T, I> {
         new TableSize(tableView).resize();
 
         return tableView;
+    }
+
+    @Override
+    public void applySearchTerm(final String searchTerm) {
+        filteredTableItems.setPredicate(i -> renderableTable.getProperties().stream()
+                    .map(iReadOnlyStringProperty -> iReadOnlyStringProperty.getValueExtractor().apply(i))
+                    .anyMatch(s -> s.contains(searchTerm)));
+    }
+
+    @Override
+    public void clearSearchTerm() {
+        filteredTableItems.setPredicate(doNotFilter);
     }
 
     private TableColumn<I, String> column(final ReadOnlyStringProperty<I> columnProperty) {

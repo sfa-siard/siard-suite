@@ -17,6 +17,8 @@ import javafx.scene.text.Text;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static ch.admin.bar.siardsuite.model.database.DatabaseObject.contains;
@@ -28,7 +30,8 @@ public class SearchTableDialogPresenter extends DialogPresenter {
     @FXML
     protected Text text;
     @FXML
-    protected MFXButton closeButton; // seems redundant
+    protected MFXButton closeButton;
+    private MFXButton searchButton;
     @FXML
     protected TextField searchField;
     @FXML
@@ -66,11 +69,23 @@ public class SearchTableDialogPresenter extends DialogPresenter {
         closeButton.setOnAction(event -> stage.closeDialog());
         buttonBox.getChildren().add(new CloseDialogButton(this.stage));
 
-        final MFXButton searchButton = new MFXButton();
+        searchButton = new MFXButton();
         I18n.bind(searchButton.textProperty(), "search.table.dialog.search");
         searchButton.getStyleClass().add("primary");
         searchButton.setOnAction(event -> tableSearch(searchField.getText()));
         buttonBox.getChildren().add(searchButton);
+    }
+
+    public void registerResultListener(Consumer<Optional<String>> resultConsumer) {
+        closeButton.setOnAction(event -> {
+            stage.closeDialog();
+            resultConsumer.accept(Optional.empty());
+        });
+
+        searchButton.setOnAction(event -> {
+            stage.closeDialog();
+            resultConsumer.accept(Optional.ofNullable(searchField.getText()));
+        });
     }
 
     private void tableSearch(String s) {

@@ -38,9 +38,10 @@ public class FormRenderer<T> {
     private final T data;
 
     private final List<EditableFormField> editableFormFields = new ArrayList<>();
+    private final List<SearchableFormEntry> searchableFormEntries = new ArrayList<>();
 
-    @Getter
-    private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
+    @Getter private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
+    @Getter private final BooleanProperty hasSearchableData = new SimpleBooleanProperty(false);
 
     public FormRenderer(RenderableForm<T> renderableForm, Controller controller) {
         this.renderableForm = renderableForm;
@@ -74,10 +75,14 @@ public class FormRenderer<T> {
                     }
 
                     if (renderableProperty instanceof RenderableTable) {
-                        return TableRenderer.<T, Object>builder()
+                        hasSearchableData.set(true);
+                        val renderer = TableRenderer.<T, Object>builder()
                                 .data(data)
                                 .renderableTable((RenderableTable<T, Object>) renderableProperty)
-                                .build()
+                                .build();
+                        searchableFormEntries.add(renderer);
+
+                        return renderer
                                 .render();
                     }
 
@@ -144,7 +149,7 @@ public class FormRenderer<T> {
         }
 
         val failedFields = this.editableFormFields.stream()
-                .filter(EditableFormField::save)
+                .filter(editableFormField -> !editableFormField.save())
                 .collect(Collectors.toList());
 
         try {
@@ -160,6 +165,14 @@ public class FormRenderer<T> {
                     e.getMessage());
         }
         return new SaveChangesReport(I18n.get(I18nKey.of("storage.failed.unknownError")));
+    }
+
+    public void applySearchTerm(final String searchTerm) {
+        searchableFormEntries.forEach(entry -> entry.applySearchTerm(searchTerm));
+    }
+
+    public void clearSearchTerm() {
+        searchableFormEntries.forEach(SearchableFormEntry::clearSearchTerm);
     }
 
     private static class EditableFormField<T> extends VBox {

@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.archive.browser;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
 import ch.admin.bar.siardsuite.component.IconButton;
+import ch.admin.bar.siardsuite.component.TwoStatesButton;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
@@ -10,11 +11,9 @@ import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
@@ -40,7 +39,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
     @FXML
     protected IconButton dropChangesButton;
     @FXML
-    protected MFXButton tableSearchButton;
+    protected TwoStatesButton tableSearchButton;
     @FXML
     protected MFXButton metaSearchButton;
     @FXML
@@ -97,7 +96,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         CastHelper.tryCast(newContent.getController(), DetailsPresenter.class)
                 .ifPresent(detailsPresenter -> refreshContentPane(wrapper, detailsPresenter));
 
-        OptionalHelper.ifPresentOrElse(
+        ifPresentOrElse(
                 CastHelper.tryCast(newContent.getController(), ChangeableDataPresenter.class),
                 detailsPresenter -> refreshContentPane(wrapper, detailsPresenter),
                 () -> refreshForNonChangeableContent(wrapper)
@@ -106,9 +105,9 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         CastHelper.tryCast(newContent.getController(), ChangeableDataPresenter.class)
                 .ifPresent(detailsPresenter -> refreshContentPane(wrapper, detailsPresenter));
 
-        OptionalHelper.ifPresentOrElse(
+        ifPresentOrElse(
                 CastHelper.tryCast(newContent.getController(), SearchableTableContainer.class),
-                searchableTableContainer -> refreshContentPane(wrapper, searchableTableContainer),
+                this::refreshContentPane,
                 () -> tableSearchButton.setVisible(false));
     }
 
@@ -164,29 +163,18 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         });
     }
 
-    private void refreshContentPane(
-            final TreeAttributeWrapper wrapper,
-            final SearchableTableContainer searchableTableContainer
-    ) {
-        tableSearchButton.setVisible(true);
+    private void refreshContentPane(final SearchableTableContainer searchableTableContainer) {
+        tableSearchButton.visibleProperty()
+                .bind(searchableTableContainer.hasSearchableData());
 
-        tableSearchButton.setOnAction(event -> {
-
-            if (controller.getCurrentTableSearchButton() != null &&
-                    tableSearchButton.equals(controller.getCurrentTableSearchButton().button()) &&
-                    controller.getCurrentTableSearchButton().active()
-            ) {
-                controller.setCurrentTableSearchButton(tableSearchButton, false);
-                tableSearchButton.setStyle("-fx-font-weight: normal;");
-
-                controller.getCurrentTableSearchBase()
-                        .tableView()
-                        .setItems(FXCollections.observableArrayList(controller.getCurrentTableSearchBase().rows()));
-            } else {
-                controller.setCurrentTableSearchButton(tableSearchButton, false);
-                stage.openDialog(View.SEARCH_TABLE_DIALOG);
-            }
+        tableSearchButton.setState(TwoStatesButton.State.NORMAL);
+        tableSearchButton.setNormalStateAction(event -> {
+            stage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
+                    searchableTableContainer::applySearchTerm,
+                    () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
+            ));
         });
+        tableSearchButton.setBoldStateAction(event -> searchableTableContainer.clearSearchTerm());
     }
 
     private void showSaveAndDropButtons() {
