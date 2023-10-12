@@ -8,13 +8,14 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseView;
 import ch.admin.bar.siardsuite.util.I18nKey;
+import lombok.NonNull;
 
 public class ViewsOverviewForm {
-    public static RenderableForm create(final DatabaseSchema schema) {
+    public static RenderableForm create(@NonNull final DatabaseSchema schema) {
 
         return RenderableForm.<DatabaseSchema>builder()
-                .dataExtractor(controller -> schema)
-                .saveAction((controller, editedSchema) -> editedSchema.write())
+                .dataSupplier(() -> schema)
+                .afterSaveAction(DatabaseSchema::write)
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("tableContainer.labelSchema"),

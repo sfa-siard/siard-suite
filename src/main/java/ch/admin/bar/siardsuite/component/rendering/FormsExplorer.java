@@ -39,11 +39,8 @@ public class FormsExplorer {
                 .collect(Collectors.toList());
     }
 
-    public static FormsExplorer from(
-            final TreeItem<TreeAttributeWrapper> rootItem,
-            final Controller controller // TODO Remove
-    ) {
-        val relations = extractForms(rootItem, new ArrayList<>(), controller)
+    public static FormsExplorer from(final TreeItem<TreeAttributeWrapper> rootItem) {
+        val relations = extractForms(rootItem, new ArrayList<>())
                 .collect(Collectors.toSet());
 
         return new FormsExplorer(relations);
@@ -51,8 +48,7 @@ public class FormsExplorer {
 
     private static Stream<FormField2TreeItemRelation> extractForms(
             final TreeItem<TreeAttributeWrapper> treeItem,
-            final List<String> pathToTreeItem,
-            final Controller controller // TODO Remove
+            final List<String> pathToTreeItem
     ) {
         val updatedPathToTreeItem = copyAndAddElement(
                 pathToTreeItem,
@@ -60,7 +56,7 @@ public class FormsExplorer {
 
         val formFields = treeItem.getValue()
                 .getRenderableForm()
-                .map(renderableForm -> findFormFields(renderableForm, controller));
+                .map(renderableForm -> findFormFields(renderableForm));
 
         val itemForm = OptionalHelper.stream(formFields)
                 .flatMap(Collection::stream)
@@ -74,8 +70,7 @@ public class FormsExplorer {
         val childForms = treeItem.getChildren().stream()
                 .flatMap(childItem -> extractForms(
                         childItem,
-                        updatedPathToTreeItem,
-                        controller));
+                        updatedPathToTreeItem));
 
         return Stream.concat(itemForm, childForms);
     }
@@ -88,10 +83,9 @@ public class FormsExplorer {
     }
 
     private static <T> List<FormField> findFormFields(
-            final RenderableForm<T> form,
-            final Controller controller // TODO Remove
+            final RenderableForm<T> form
     ) {
-        val data = form.getDataExtractor().apply(controller);
+        val data = form.getDataSupplier().get();
 
         return Stream.concat(
                         findReadOnlyStringProperties(form).stream()

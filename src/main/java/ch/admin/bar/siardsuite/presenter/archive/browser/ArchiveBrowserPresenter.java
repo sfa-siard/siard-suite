@@ -62,7 +62,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         treeView.setRoot(rootTreeItem);
         this.refreshContentPane(rootTreeItem.getValue());
 
-        val explorer = FormsExplorer.from(rootTreeItem, controller);
+        val explorer = FormsExplorer.from(rootTreeItem);
         metaSearchButton.setOnAction(event -> stage.openSearchMetaDataDialog(
                 explorer,
                 treeItem -> treeView.getSelectionModel().select(treeItem)
@@ -152,19 +152,23 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
                     }
                 });
 
-        this.saveChangesButton.setOnAction(() -> {
-            val report = changeableDataPresenter.saveChanges();
-            ifPresentOrElse(
-                    report.getFailedMessage(),
-                    this::showErrorMessage,
-                    this::hideErrorMessage
-            );
-        });
+        if (saveChangesButton != null) { // TODO
+            this.saveChangesButton.setOnAction(() -> {
+                val report = changeableDataPresenter.saveChanges();
+                ifPresentOrElse(
+                        report.getFailedMessage(),
+                        this::showErrorMessage,
+                        this::hideErrorMessage
+                );
+            });
+        }
 
-        this.dropChangesButton.setOnAction(() -> {
-            hideErrorMessage();
-            changeableDataPresenter.dropChanges();
-        });
+        if (dropChangesButton != null) { // TODO
+            this.dropChangesButton.setOnAction(() -> {
+                hideErrorMessage();
+                changeableDataPresenter.dropChanges();
+            });
+        }
     }
 
     private void refreshContentPane(final SearchableTableContainer searchableTableContainer) {
@@ -182,27 +186,39 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
     }
 
     private void showSaveAndDropButtons() {
-        this.saveChangesButton.setVisible(true);
-        this.saveChangesButton.setManaged(true);
-        this.dropChangesButton.setVisible(true);
-        this.dropChangesButton.setManaged(true);
+        if (saveChangesButton != null) { // TODO
+            this.saveChangesButton.setVisible(true);
+            this.saveChangesButton.setManaged(true);
+        }
+        if (dropChangesButton != null) { // TODO
+            this.dropChangesButton.setVisible(true);
+            this.dropChangesButton.setManaged(true);
+        }
     }
 
     private void hideSaveAndDropButtons() {
-        this.saveChangesButton.setVisible(false);
-        this.saveChangesButton.setManaged(false);
-        this.dropChangesButton.setVisible(false);
-        this.dropChangesButton.setManaged(false);
+        if (saveChangesButton != null) { // TODO
+            this.saveChangesButton.setVisible(false);
+            this.saveChangesButton.setManaged(false);
+        }
+        if (dropChangesButton != null) { // TODO
+            this.dropChangesButton.setVisible(false);
+            this.dropChangesButton.setManaged(false);
+        }
     }
 
     private void showErrorMessage(final String message) {
-        this.errorMessageLabel.setText(message);
-        this.errorMessageLabel.setVisible(true);
-        this.errorMessageLabel.setManaged(true);
+        if (errorMessageLabel != null) { // TODO
+            this.errorMessageLabel.setText(message);
+            this.errorMessageLabel.setVisible(true);
+            this.errorMessageLabel.setManaged(true);
+        }
     }
 
     private void hideErrorMessage() {
-        this.errorMessageLabel.setVisible(false);
-        this.errorMessageLabel.setManaged(false);
+        if (errorMessageLabel != null) { // TODO
+            this.errorMessageLabel.setVisible(false);
+            this.errorMessageLabel.setManaged(false);
+        }
     }
 }

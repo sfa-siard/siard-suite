@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RowsOverviewForm {
-    public static RenderableForm<DatabaseTable> create(final DatabaseTable table) {
+    public static RenderableForm<DatabaseTable> create(@NonNull final DatabaseTable table) {
         val tableProperties = table.getColumns().stream()
                 .map(column -> new ReadOnlyStringProperty<RecordWrapper>(
                         I18nKey.of(column.getName()),
@@ -37,7 +37,7 @@ public class RowsOverviewForm {
 
 
         return RenderableForm.<DatabaseTable>builder()
-                .dataExtractor(controller -> table)
+                .dataSupplier(() -> table)
                 .group(RenderableFormGroup.<DatabaseTable>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("tableContainer.labelTable"),

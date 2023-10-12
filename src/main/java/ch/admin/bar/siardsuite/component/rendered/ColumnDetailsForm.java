@@ -5,14 +5,11 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
-import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
-import lombok.val;
+import lombok.NonNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Optional;
 
 public class ColumnDetailsForm {
     public static final ReadWriteStringProperty.Validator IS_VALID_PATH_TO_LOB_FOLDER_VALIDATOR = ReadWriteStringProperty.Validator.builder()
@@ -31,10 +28,10 @@ public class ColumnDetailsForm {
             })
             .build();
 
-    public static RenderableForm<DatabaseColumn> create(final DatabaseColumn column) {
+    public static RenderableForm<DatabaseColumn> create(@NonNull final DatabaseColumn column) {
         return RenderableForm.<DatabaseColumn>builder()
-                .dataExtractor(controller -> column)
-                .saveAction((controller, editedColumn) -> editedColumn.write())
+                .dataSupplier(() -> column)
+                .afterSaveAction(DatabaseColumn::write)
                 .group(RenderableFormGroup.<DatabaseColumn>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("columnDetails.name"),

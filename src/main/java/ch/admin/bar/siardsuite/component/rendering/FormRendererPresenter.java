@@ -21,8 +21,7 @@ public class FormRendererPresenter extends DetailsPresenter implements Changeabl
     public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
 
         this.formRenderer = new FormRenderer<>(wrapper.getRenderableForm()
-                .orElseThrow(() -> new IllegalArgumentException("No renderable form provided")),
-                controller);
+                .orElseThrow(() -> new IllegalArgumentException("No renderable form provided")));
 
         this.container.getChildren().addAll(formRenderer.renderForm());
     }

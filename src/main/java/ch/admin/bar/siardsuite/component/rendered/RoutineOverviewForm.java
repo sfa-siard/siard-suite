@@ -8,12 +8,13 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.util.I18nKey;
+import lombok.NonNull;
 
 public class RoutineOverviewForm {
-    public static RenderableForm create(final Routine routine) {
+    public static RenderableForm create(@NonNull final Routine routine) {
         return RenderableForm.<Routine>builder()
-                .dataExtractor(controller -> routine)
-                .saveAction((controller, edited) -> edited.write())
+                .dataSupplier(() -> routine)
+                .afterSaveAction(Routine::write)
                 .group(RenderableFormGroup.<Routine>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("details.routine.name"),

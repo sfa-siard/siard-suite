@@ -8,11 +8,12 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.util.I18nKey;
+import lombok.NonNull;
 
 public class UsersOverviewForm {
-    public static RenderableForm<SiardArchive> create() {
+    public static RenderableForm<SiardArchive> create(@NonNull final SiardArchive siardArchive) {
         return RenderableForm.<SiardArchive>builder()
-                .dataExtractor(Controller::getSiardArchive)
+                .dataSupplier(() -> siardArchive)
                 .group(RenderableFormGroup.<SiardArchive>builder()
                         .property(RenderableTable.<SiardArchive, User>builder()
                                 .dataExtractor(SiardArchive::users)

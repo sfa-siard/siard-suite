@@ -6,16 +6,15 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.util.I18nKey;
-
-import java.util.function.Function;
+import lombok.NonNull;
 
 import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
 
 public class ParameterOverviewForm {
 
-    public static RenderableForm create(final MetaParameter metaParameter) {
+    public static RenderableForm create(@NonNull final MetaParameter metaParameter) {
         return RenderableForm.<MetaParameter>builder()
-                .dataExtractor(controller -> metaParameter)
+                .dataSupplier(() -> metaParameter)
                 .group(RenderableFormGroup.<MetaParameter>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("details.routine.parameter.name"),

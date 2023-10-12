@@ -1,14 +1,12 @@
 package ch.admin.bar.siardsuite.component.rendering.model;
 
-import ch.admin.bar.siardsuite.Controller;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
 
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Value
 @Builder
@@ -18,13 +16,13 @@ public class RenderableForm<T> {
     List<RenderableFormGroup<T>> groups;
 
     @NonNull
-    Function<Controller, T> dataExtractor;
+    Supplier<T> dataSupplier;
 
     @NonNull
     @Builder.Default
-    AfterSaveChangesAction<T> saveAction = (controller, edited) -> {};
+    AfterSaveChangesAction<T> afterSaveAction = edited -> {};
 
     public interface AfterSaveChangesAction<T> {
-        void doAfterSaveChanges(Controller controller, T edited) throws Exception;
+        void doAfterSaveChanges(T edited) throws Exception;
     }
 }

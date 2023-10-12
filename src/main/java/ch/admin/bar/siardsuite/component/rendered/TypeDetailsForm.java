@@ -8,12 +8,13 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
 import ch.admin.bar.siardsuite.model.database.DatabaseType;
 import ch.admin.bar.siardsuite.util.I18nKey;
+import lombok.NonNull;
 
 public class TypeDetailsForm {
-    public static RenderableForm create(final DatabaseType type) {
+    public static RenderableForm create(@NonNull final DatabaseType type) {
         return RenderableForm.<DatabaseType>builder()
-                .dataExtractor(controller -> type)
-                .saveAction((controller, edited) -> edited.write())
+                .dataSupplier(() -> type)
+                .afterSaveAction(DatabaseType::write)
                 .group(RenderableFormGroup.<DatabaseType>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("type.name.label"),

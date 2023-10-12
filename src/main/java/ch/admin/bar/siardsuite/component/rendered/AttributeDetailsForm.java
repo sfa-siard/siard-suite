@@ -6,13 +6,14 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
 import ch.admin.bar.siardsuite.util.I18nKey;
+import lombok.NonNull;
 
 public class AttributeDetailsForm {
-    public static RenderableForm create(final DatabaseAttribute attribute) {
+    public static RenderableForm create(@NonNull final DatabaseAttribute attribute) {
 
         return RenderableForm.<DatabaseAttribute>builder()
-                .dataExtractor(controller -> attribute)
-                .saveAction((controller, edited) -> edited.write())
+                .dataSupplier(() -> attribute)
+                .afterSaveAction(DatabaseAttribute::write)
                 .group(RenderableFormGroup.<DatabaseAttribute>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("attribute.name"),

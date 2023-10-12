@@ -5,18 +5,16 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.util.I18nKey;
-import javafx.scene.control.TreeItem;
+import lombok.NonNull;
 
 public class TableOverviewForm {
-    public static RenderableForm<DatabaseTable> create(final DatabaseTable table) {
+    public static RenderableForm<DatabaseTable> create(@NonNull final DatabaseTable table) {
         return RenderableForm.<DatabaseTable>builder()
-                .dataExtractor(controller -> table)
-                .saveAction((controller, editedTable) -> editedTable.write())
+                .dataSupplier(() -> table)
+                .afterSaveAction(DatabaseTable::write)
                 .group(RenderableFormGroup.<DatabaseTable>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("tableContainer.labelTable"),

@@ -24,6 +24,7 @@ import lombok.val;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,7 +35,6 @@ public class FormRenderer<T> {
     private static final String FIELD_STYLE_CLASS = "rendered-field";
 
     private final RenderableForm<T> renderableForm;
-    private final Controller controller;
     private final T data;
 
     private final List<EditableFormField> editableFormFields = new ArrayList<>();
@@ -43,10 +43,9 @@ public class FormRenderer<T> {
     @Getter private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
     @Getter private final BooleanProperty hasSearchableData = new SimpleBooleanProperty(false);
 
-    public FormRenderer(RenderableForm<T> renderableForm, Controller controller) {
+    public FormRenderer(RenderableForm<T> renderableForm) {
         this.renderableForm = renderableForm;
-        this.controller = controller;
-        this.data = renderableForm.getDataExtractor().apply(controller);
+        this.data = renderableForm.getDataSupplier().get();
     }
 
     public VBox renderForm() {
@@ -122,7 +121,17 @@ public class FormRenderer<T> {
         titleLabel.setText(I18n.get(property.getTitle()));
         titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
 
-        val value = property.getValueExtractor().apply(data);
+        val value = Optional.ofNullable(property.getValueExtractor())
+                .map(getter -> {
+                    try {
+                        return getter.apply(data);
+                    } catch(Exception ex) {
+                        System.out.println(property);
+                        return "ERROR"; // FIXME
+                    }
+
+                }) // FIXME
+                .orElse("NULL"); // FIXME
 
         val valueTextField = new TextField();
         valueTextField.setText(value);
@@ -153,8 +162,8 @@ public class FormRenderer<T> {
                 .collect(Collectors.toList());
 
         try {
-            this.renderableForm.getSaveAction()
-                    .doAfterSaveChanges(controller, data);
+            this.renderableForm.getAfterSaveAction()
+                    .doAfterSaveChanges(data);
 
             if (failedFields.isEmpty()) {
                 hasChanged.set(false);

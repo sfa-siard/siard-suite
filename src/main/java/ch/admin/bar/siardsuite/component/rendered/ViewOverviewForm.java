@@ -11,15 +11,16 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.util.I18nKey;
+import lombok.NonNull;
 
 import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.catchExceptions;
 import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
 
 public class ViewOverviewForm {
-    public static RenderableForm create(final MetaView view) {
+    public static RenderableForm create(@NonNull final MetaView view) {
 
         return RenderableForm.<MetaView>builder()
-                .dataExtractor(controller -> view)
+                .dataSupplier(() -> view)
                 .group(RenderableFormGroup.<MetaView>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 I18nKey.of("details.view.name"),

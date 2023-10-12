@@ -43,6 +43,8 @@ public class SiardArchive extends DatabaseObject {
     protected final TreeContentView treeContentView = TreeContentView.ROOT;
 
     public SiardArchive() {
+        System.out.println("FCK");
+        this.metaData = new SiardArchiveMetaData();
     }
 
     public SiardArchive(String name, Archive archive) {

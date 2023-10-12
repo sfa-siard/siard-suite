@@ -23,7 +23,7 @@ public class TreeAttributeWrapper {
 
     @Builder
     public TreeAttributeWrapper(
-            @NonNull String name,
+            String name, // FIXME: NonNull?
             @NonNull I18nKey viewTitle,
             @NonNull TreeContentView type,
             DatabaseObject databaseObject,

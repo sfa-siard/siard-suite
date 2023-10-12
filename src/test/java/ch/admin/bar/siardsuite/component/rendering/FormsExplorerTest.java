@@ -25,7 +25,7 @@ class FormsExplorerTest {
     private static final I18nKey PROPERTY_C1 = I18nKey.of("form.c");
 
     private static final RenderableForm<DummyData> FORM_A = RenderableForm.<DummyData>builder()
-            .dataExtractor(controller -> DATA_A)
+            .dataSupplier(() -> DATA_A)
             .group(RenderableFormGroup.<DummyData>builder()
                     .property(new ReadOnlyStringProperty<>(
                             PROPERTY_A1,
@@ -35,7 +35,7 @@ class FormsExplorerTest {
             .build();
 
     private static final RenderableForm<DummyData> FORM_B = RenderableForm.<DummyData>builder()
-            .dataExtractor(controller -> DATA_B)
+            .dataSupplier(() -> DATA_B)
             .group(RenderableFormGroup.<DummyData>builder()
                     .property(new ReadOnlyStringProperty<>(
                             PROPERTY_B1,
@@ -45,7 +45,7 @@ class FormsExplorerTest {
             .build();
 
     private static final RenderableForm<DummyData> FORM_C = RenderableForm.<DummyData>builder()
-            .dataExtractor(controller -> DATA_C)
+            .dataSupplier(() -> DATA_C)
             .group(RenderableFormGroup.<DummyData>builder()
                     .property(new ReadOnlyStringProperty<>(
                             PROPERTY_C1,
@@ -82,7 +82,7 @@ class FormsExplorerTest {
         TREE_ITEM_B.getChildren().setAll();
         TREE_ITEM_C.getChildren().setAll();
 
-        val explorer = FormsExplorer.from(TREE_ITEM_A, null);
+        val explorer = FormsExplorer.from(TREE_ITEM_A);
 
         // when
         val result = explorer.find(new MetaSearchTerm("Dummy"));
@@ -114,7 +114,7 @@ class FormsExplorerTest {
         TREE_ITEM_B.getChildren().setAll(TREE_ITEM_C);
         TREE_ITEM_C.getChildren().setAll();
 
-        val explorer = FormsExplorer.from(TREE_ITEM_A, null);
+        val explorer = FormsExplorer.from(TREE_ITEM_A);
 
         // when
         val result = explorer.find(new MetaSearchTerm("Dummy"));

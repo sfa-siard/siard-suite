@@ -48,7 +48,7 @@ public class ArchiveBrowserView {
                         .name(this.siardArchive.name())
                         .viewTitle(I18nKey.of("tableContainer.title.siardFile"))
                         .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(MetadataDetailsForm.create())
+                        .renderableForm(MetadataDetailsForm.create(siardArchive))
                         .build());
 
         rootItem.getChildren().add(createItemForSchemas());
@@ -69,7 +69,7 @@ public class ArchiveBrowserView {
                 .name(I18n.get(I18nKey.of("archive.tree.view.node.priviliges"), priviliges.size()))
                 .viewTitle(I18nKey.of("tableContainer.title.priviliges"))
                 .type(TreeContentView.FORM_RENDERER)
-                .renderableForm(PrivilegesOverviewForm.create())
+                .renderableForm(PrivilegesOverviewForm.create(siardArchive))
                 .build());
     }
 
@@ -78,7 +78,7 @@ public class ArchiveBrowserView {
                 .name(I18n.get(I18nKey.of("archive.tree.view.node.users"), users.size()))
                 .viewTitle(I18nKey.of("tableContainer.title.users"))
                 .type(TreeContentView.FORM_RENDERER)
-                .renderableForm(UsersOverviewForm.create())
+                .renderableForm(UsersOverviewForm.create(siardArchive))
                 .build());
     }
 
@@ -90,7 +90,7 @@ public class ArchiveBrowserView {
                         .name(I18n.get(I18nKey.of("archive.tree.view.node.schemas"), schemas.size()))
                         .viewTitle(I18nKey.of("tableContainer.title.schemas"))
                         .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(MetadataDetailsForm.create())
+                        .renderableForm(MetadataDetailsForm.create(siardArchive))
                         .build());
 
         val schemaItems = schemas.stream()
@@ -109,7 +109,7 @@ public class ArchiveBrowserView {
                         .name(I18n.get(I18nKey.of("archive.tree.view.node.schemas"), schemas.size()))
                         .viewTitle(I18nKey.of("tableContainer.title.schemas"))
                         .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(MetadataDetailsForm.create())
+                        .renderableForm(MetadataDetailsForm.create(siardArchive))
                         .build());
         schemasItem.setExpanded(true);
 
@@ -239,7 +239,7 @@ public class ArchiveBrowserView {
                     .name(I18n.get(I18nKey.of("archive.tree.view.node.priviliges"), priviliges.size()))
                     .viewTitle(I18nKey.of("tableContainer.title.priviliges"))
                     .type(TreeContentView.FORM_RENDERER)
-                    .renderableForm(PrivilegesOverviewForm.create())
+                    .renderableForm(PrivilegesOverviewForm.create(siardArchive))
                     .build()));
         }
     }
@@ -251,7 +251,7 @@ public class ArchiveBrowserView {
                     .name(I18n.get(I18nKey.of("archive.tree.view.node.users"), users.size()))
                     .viewTitle(I18nKey.of("tableContainer.title.users"))
                     .type(TreeContentView.FORM_RENDERER)
-                    .renderableForm(UsersOverviewForm.create())
+                    .renderableForm(UsersOverviewForm.create(siardArchive))
                     .build()));
         }
     }

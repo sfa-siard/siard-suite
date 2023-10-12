@@ -4,21 +4,24 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
+import lombok.NonNull;
 import lombok.val;
 
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 public class MetadataDetailsForm {
-    public static RenderableForm<SiardArchiveMetaData> create() {
+    public static RenderableForm create(@NonNull final SiardArchive siardArchive) {
         return RenderableForm.<SiardArchiveMetaData>builder()
-                .dataExtractor(controller -> controller.getSiardArchive().getMetaData())
-                .saveAction((controller, siardArchiveMetaData) -> {
-                    val archive = controller.getSiardArchive().getArchive();
-                    siardArchiveMetaData.write(archive);
+                .dataSupplier(() -> Objects.requireNonNull(siardArchive.getMetaData())) // FIXME
+                .afterSaveAction(siardArchiveMetaData -> {
+                    val metadata = siardArchive.getMetaData();
+                    metadata.write(siardArchive.getArchive());
                 })
                 .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
                         .property(new ReadOnlyStringProperty<>(

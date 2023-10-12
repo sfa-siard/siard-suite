@@ -1,9 +1,16 @@
 package ch.admin.bar.siardsuite.component.rendered.utils;
 
+import ch.admin.bar.siardsuite.util.I18n;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 
+import java.net.URI;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -16,6 +23,31 @@ public class Converter {
 
     public static <T> Function<T, String> longToString(Function<T, Long> longGetter) {
         return t -> String.valueOf(longGetter.apply(t));
+    }
+
+    public static <T> Function<T, String> localDateToString(Function<T, LocalDate> getter) {
+        return t -> I18n.getLocaleDate(getter.apply(t));
+    }
+
+    public static <T> Function<T, String> uriToString(Function<T, URI> getter) {
+        return t -> Optional.ofNullable(getter.apply(t))
+                .map(URI::getPath)
+                .orElse("");
+    }
+
+    public static <T> Function<T, LocalDate> calendarToLocalDate(Function<T, Calendar> getter) {
+        return t -> {
+            val calendar = getter.apply(t);
+            try {
+                return LocalDate.of(
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH) + 1,
+                        calendar.get(Calendar.DATE));
+            } catch (DateTimeException e) {
+                log.error("Failed to convert calendar into local date", e);
+                return LocalDate.now();
+            }
+        };
     }
 
     public static <T, P> Function<T, P> catchExceptions(ThrowingFunction<T, P> throwingFunction) {
