@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.component.rendering;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -12,19 +11,19 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -40,11 +39,15 @@ public class FormRenderer<T> {
     private final List<EditableFormField> editableFormFields = new ArrayList<>();
     private final List<SearchableFormEntry> searchableFormEntries = new ArrayList<>();
 
-    @Getter private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
-    @Getter private final BooleanProperty hasSearchableData = new SimpleBooleanProperty(false);
+    private final BooleanProperty hasChanged;
+    private final BooleanProperty hasSearchableData;
 
-    public FormRenderer(RenderableForm<T> renderableForm) {
+    @Builder
+    public FormRenderer(RenderableForm<T> renderableForm, BooleanProperty hasChanged, BooleanProperty hasSearchableData) {
         this.renderableForm = renderableForm;
+        this.hasChanged = hasChanged;
+        this.hasSearchableData = hasSearchableData;
+
         this.data = renderableForm.getDataSupplier().get();
     }
 
@@ -108,6 +111,13 @@ public class FormRenderer<T> {
     }
 
     private VBox createField(final ReadWriteStringProperty<T> property, final T data) {
+        if (renderableForm.isReadOnlyForm()) {
+            return new ReadOnlyFormField<>(
+                    property.getTitle(),
+                    property.getValueExtractor(),
+                    data);
+        }
+
         val formField = new EditableFormField<T>(property, data, hasChanged);
         editableFormFields.add(formField);
 
@@ -115,32 +125,7 @@ public class FormRenderer<T> {
     }
 
     private VBox createField(final ReadOnlyStringProperty<T> property, final T data) {
-        val vbox = new VBox();
-
-        val titleLabel = new Label();
-        titleLabel.setText(I18n.get(property.getTitle()));
-        titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
-
-        val value = Optional.ofNullable(property.getValueExtractor())
-                .map(getter -> {
-                    try {
-                        return getter.apply(data);
-                    } catch(Exception ex) {
-                        System.out.println(property);
-                        return "ERROR"; // FIXME
-                    }
-
-                }) // FIXME
-                .orElse("NULL"); // FIXME
-
-        val valueTextField = new TextField();
-        valueTextField.setText(value);
-        valueTextField.setEditable(false);
-        valueTextField.getStyleClass().add(FIELD_STYLE_CLASS);
-
-        vbox.getChildren().setAll(titleLabel, valueTextField);
-
-        return vbox;
+        return new ReadOnlyFormField<>(property, data);
     }
 
     public void dropChanges() {
@@ -182,6 +167,37 @@ public class FormRenderer<T> {
 
     public void clearSearchTerm() {
         searchableFormEntries.forEach(SearchableFormEntry::clearSearchTerm);
+    }
+
+    private static class ReadOnlyFormField<T> extends VBox {
+
+        private final Label titleLabel;
+        private final TextField valueTextField;
+
+        public ReadOnlyFormField(
+                @NonNull final I18nKey title,
+                @NonNull final Function<T, String> valueExtractor,
+                @NonNull final T data) {
+
+            titleLabel = new Label();
+            titleLabel.setText(I18n.get(title));
+            titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
+
+            val value = valueExtractor.apply(data);
+
+            valueTextField = new TextField();
+            valueTextField.setText(value);
+            valueTextField.setEditable(false);
+            valueTextField.getStyleClass().add(FIELD_STYLE_CLASS);
+
+            this.getChildren().setAll(titleLabel, valueTextField);
+        }
+
+        public ReadOnlyFormField(
+                @NonNull final ReadOnlyStringProperty<T> property,
+                @NonNull final T data) {
+            this(property.getTitle(), property.getValueExtractor(), data);
+        }
     }
 
     private static class EditableFormField<T> extends VBox {

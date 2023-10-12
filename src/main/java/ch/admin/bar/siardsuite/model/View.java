@@ -1,6 +1,17 @@
 package ch.admin.bar.siardsuite.model;
 
+import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.Workflow;
+import ch.admin.bar.siardsuite.presenter.Presenter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.OpenArchiveBrowser;
+import ch.admin.bar.siardsuite.presenter.archive.browser.PreviewArchiveBrowser;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.view.RootStage;
+import lombok.Getter;
+import lombok.val;
+
+import java.util.function.BiFunction;
 
 public enum View {
 
@@ -12,12 +23,12 @@ public enum View {
     DIALOG("fxml/dialog.fxml"),
     ARCHIVE_DB_DIALOG("fxml/archive/archive-db-dialog.fxml"),
     ARCHIVE_ABORT_DIALOG("fxml/archive/archive-abort-dialog.fxml"),
-    ARCHIVE_PREVIEW("fxml/archive/archive-preview.fxml"),
+    ARCHIVE_PREVIEW(PreviewArchiveBrowser.VIEW_CREATOR),
     ARCHIVE_LOADING_PREVIEW("fxml/archive/archive-loading-preview.fxml"),
     ARCHIVE_METADATA_EDITOR("fxml/archive/archive-metadata-editor.fxml"),
     ARCHIVE_DOWNLOAD("fxml/archive/archive-download.fxml"),
     OPEN_SIARD_ARCHIVE_DIALOG("fxml/open/open-siard-archive-dialog.fxml"),
-    OPEN_SIARD_ARCHIVE_PREVIEW("fxml/open/open-preview.fxml"),
+    OPEN_SIARD_ARCHIVE_PREVIEW(OpenArchiveBrowser.VIEW_CREATOR),
     EXPORT_SELECT_TABLES("fxml/export/export-select-tables-dialog.fxml"),
     EXPORT_SUCCESS("fxml/export/export-success-dialog.fxml"),
     INFO_DIALOG("fxml/info/info-dialog.fxml"),
@@ -33,19 +44,23 @@ public enum View {
     SEARCH_METADATA_DIALOG("fxml/search/search-metadata-dialog.fxml"),
     ERROR_DIALOG("fxml/error-dialog.fxml");
 
-    private final String viewName;
+    @Getter
+    private final BiFunction<Controller, RootStage, LoadedFxml<Presenter>> viewCreator; // FIXME: Muss kein verfickter Presenter sein...
 
     View(String v) {
-        this.viewName = v;
+        this.viewCreator = (controller, rootStage) -> {
+            val loaded = FXMLLoadHelper.<Presenter>load(v);
+            loaded.getController().init(controller, rootStage);
+            return loaded;
+        };
+    }
+
+    View(BiFunction<Controller, RootStage, LoadedFxml<Presenter>> viewCreator) {
+        this.viewCreator = viewCreator;
     }
 
     public static View forWorkflow(Workflow workflow) {
         if (Workflow.ARCHIVE.equals(workflow)) return ARCHIVE_DB_DIALOG;
         return OPEN_SIARD_ARCHIVE_DIALOG;
     }
-
-    public String getName() {
-        return viewName;
-    }
-
 }

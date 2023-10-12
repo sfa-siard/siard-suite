@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class RenderableForm<T> {
     @Singular
     @NonNull
@@ -21,6 +21,9 @@ public class RenderableForm<T> {
     @NonNull
     @Builder.Default
     AfterSaveChangesAction<T> afterSaveAction = edited -> {};
+
+    @Builder.Default
+    boolean readOnlyForm = false;
 
     public interface AfterSaveChangesAction<T> {
         void doAfterSaveChanges(T edited) throws Exception;

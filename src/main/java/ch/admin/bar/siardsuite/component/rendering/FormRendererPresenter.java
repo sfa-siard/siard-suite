@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.presenter.archive.browser.SearchableTableContaine
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
@@ -17,11 +18,16 @@ public class FormRendererPresenter extends DetailsPresenter implements Changeabl
 
     private FormRenderer<?> formRenderer;
 
+    private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
+    private final BooleanProperty hasSearchableData = new SimpleBooleanProperty(false);
+
     @Override
     public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
 
         this.formRenderer = new FormRenderer<>(wrapper.getRenderableForm()
-                .orElseThrow(() -> new IllegalArgumentException("No renderable form provided")));
+                .orElseThrow(() -> new IllegalArgumentException("No renderable form provided")),
+                hasChanged,
+                hasSearchableData);
 
         this.container.getChildren().addAll(formRenderer.renderForm());
     }
@@ -33,7 +39,7 @@ public class FormRendererPresenter extends DetailsPresenter implements Changeabl
 
     @Override
     public BooleanProperty hasChanged() {
-        return formRenderer.getHasChanged();
+        return hasChanged;
     }
 
     @Override
@@ -48,7 +54,7 @@ public class FormRendererPresenter extends DetailsPresenter implements Changeabl
 
     @Override
     public BooleanProperty hasSearchableData() {
-        return formRenderer.getHasSearchableData();
+        return hasSearchableData;
     }
 
     @Override

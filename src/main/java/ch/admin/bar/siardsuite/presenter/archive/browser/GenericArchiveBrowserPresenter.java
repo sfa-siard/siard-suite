@@ -1,29 +1,30 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
-import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.component.TwoStatesButton;
 import ch.admin.bar.siardsuite.component.rendering.FormsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
-import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.I18nKey;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import lombok.val;
 
+import static ch.admin.bar.siardsuite.util.CastHelper.tryCast;
 import static ch.admin.bar.siardsuite.util.I18n.bind;
 import static ch.admin.bar.siardsuite.util.OptionalHelper.ifPresentOrElse;
 
@@ -31,66 +32,80 @@ import static ch.admin.bar.siardsuite.util.OptionalHelper.ifPresentOrElse;
  * Presentes an archive - either when archiving a database (always only metadata) or when a SIARD Archive
  * file was opened to browse the archive content
  */
-public class ArchiveBrowserPresenter extends StepperPresenter {
+public class GenericArchiveBrowserPresenter {
 
     @FXML
-    protected TreeView<TreeAttributeWrapper> treeView;
+    public VBox container;
     @FXML
-    protected IconButton saveChangesButton;
+    private BorderPane borderPane;
+
     @FXML
-    protected IconButton dropChangesButton;
+    private Label title;
     @FXML
-    protected TwoStatesButton tableSearchButton;
+    private Text text;
+
     @FXML
-    protected MFXButton metaSearchButton;
+    private TreeView<TreeAttributeWrapper> treeView;
     @FXML
-    protected AnchorPane contentPane;
+    public VBox leftTreeBox;
     @FXML
-    public Label titleTableContainer;
+    private StackPane rightTableBox;
+
     @FXML
-    public Label errorMessageLabel;
+    private IconButton saveChangesButton;
     @FXML
-    public StackPane rightTableBox;
+    private IconButton dropChangesButton;
     @FXML
-    private ButtonBox buttonBox;
+    private TwoStatesButton tableSearchButton;
+    @FXML
+    private MFXButton metaSearchButton;
+    @FXML
+    private Label titleTableContainer;
+    @FXML
+    private Label errorMessageLabel;
+    @FXML
+    private AnchorPane contentPane;
 
 
-    @Override
-    public void init(Controller controller, RootStage stage) {
+    private RootStage rootStage;
+    private Controller controller;
+
+    public void init(
+            final RootStage rootStage,
+            final Controller controller,
+            final I18nKey title,
+            final I18nKey text,
+            final Node footerNode,
+            final TreeItem<TreeAttributeWrapper> rootTreeItem
+    ) {
+        this.rootStage = rootStage;
         this.controller = controller;
-        this.stage = stage;
 
-        ArchiveBrowserView archiveTreeView = new ArchiveBrowserView(controller.getSiardArchive());
-        val rootTreeItem = archiveTreeView.createRootItem();
-        treeView.setRoot(rootTreeItem);
-        this.refreshContentPane(rootTreeItem.getValue());
+        this.title.setText(I18n.get(title));
+        this.text.setText(I18n.get(text));
+
+        this.borderPane.setBottom(footerNode);
+        this.leftTreeBox.prefHeightProperty().bind(container.heightProperty());
+
+        this.treeView.setRoot(rootTreeItem);
 
         val explorer = FormsExplorer.from(rootTreeItem);
-        metaSearchButton.setOnAction(event -> stage.openSearchMetaDataDialog(
+
+        metaSearchButton.setOnAction(event -> rootStage.openSearchMetaDataDialog(
                 explorer,
                 treeItem -> treeView.getSelectionModel().select(treeItem)
         ));
-
-        setListeners();
-        controller.setCurrentPreviewPresenter(this);
+        treeView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(((observable, oldValue, newValue) -> refreshContentPane(newValue.getValue())));
 
         bind(metaSearchButton, "tableContainer.metaSearchButton");
         bind(tableSearchButton, "tableContainer.tableSearchButton");
+
+        treeView.getSelectionModel().select(rootTreeItem);
     }
 
-    @Override
-    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
-        this.init(controller, stage);
-    }
-
-    protected void setListeners() {
-        MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
-        selection.selectedItemProperty()
-                .addListener(((observable, oldValue, newValue) -> refreshContentPane(newValue.getValue())));
-    }
-
-    // Refresh the content view based on the selected item in the tree (e.g. tables, users...)
-    protected void refreshContentPane(TreeAttributeWrapper wrapper) {
+    private void refreshContentPane(TreeAttributeWrapper wrapper) {
         hideSaveAndDropButtons();
         hideErrorMessage();
 
@@ -101,27 +116,22 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         contentPane.getChildren().add(newContent.getNode());
         contentPane.prefWidthProperty().bind(rightTableBox.widthProperty());
 
-        CastHelper.tryCast(newContent.getController(), DetailsPresenter.class)
+        tryCast(newContent.getController(), DetailsPresenter.class)
                 .ifPresent(detailsPresenter -> refreshContentPane(wrapper, detailsPresenter));
 
         ifPresentOrElse(
-                CastHelper.tryCast(newContent.getController(), ChangeableDataPresenter.class),
+                tryCast(newContent.getController(), ChangeableDataPresenter.class),
                 detailsPresenter -> refreshContentPane(wrapper, detailsPresenter),
                 () -> refreshForNonChangeableContent(wrapper)
         );
 
-        CastHelper.tryCast(newContent.getController(), ChangeableDataPresenter.class)
+        tryCast(newContent.getController(), ChangeableDataPresenter.class)
                 .ifPresent(detailsPresenter -> refreshContentPane(wrapper, detailsPresenter));
 
         ifPresentOrElse(
-                CastHelper.tryCast(newContent.getController(), SearchableTableContainer.class),
+                tryCast(newContent.getController(), SearchableTableContainer.class),
                 this::refreshContentPane,
                 () -> tableSearchButton.setVisible(false));
-    }
-
-    @Deprecated // TODO: Refactore table search to avoid this
-    public AnchorPane getContentPane() {
-        return contentPane;
     }
 
     private void refreshContentPane(
@@ -130,7 +140,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
     ) {
         detailsPresenter.init(
                 this.controller,
-                this.stage,
+                this.rootStage,
                 wrapper);
     }
 
@@ -156,32 +166,27 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
                     }
                 });
 
-        if (saveChangesButton != null) { // TODO
-            this.saveChangesButton.setOnAction(() -> {
-                val report = changeableDataPresenter.saveChanges();
-                ifPresentOrElse(
-                        report.getFailedMessage(),
-                        this::showErrorMessage,
-                        this::hideErrorMessage
-                );
-            });
-        }
+        this.saveChangesButton.setOnAction(() -> {
+            val report = changeableDataPresenter.saveChanges();
+            ifPresentOrElse(
+                    report.getFailedMessage(),
+                    this::showErrorMessage,
+                    this::hideErrorMessage
+            );
+        });
 
-        if (dropChangesButton != null) { // TODO
-            this.dropChangesButton.setOnAction(() -> {
-                hideErrorMessage();
-                changeableDataPresenter.dropChanges();
-            });
-        }
+        this.dropChangesButton.setOnAction(() -> {
+            hideErrorMessage();
+            changeableDataPresenter.dropChanges();
+        });
     }
 
     private void refreshContentPane(final SearchableTableContainer searchableTableContainer) {
         tableSearchButton.visibleProperty()
                 .bind(searchableTableContainer.hasSearchableData());
-
         tableSearchButton.setState(TwoStatesButton.State.NORMAL);
         tableSearchButton.setNormalStateAction(event -> {
-            stage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
+            rootStage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
                     searchableTableContainer::applySearchTerm,
                     () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
             ));
@@ -190,39 +195,47 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
     }
 
     private void showSaveAndDropButtons() {
-        if (saveChangesButton != null) { // TODO
-            this.saveChangesButton.setVisible(true);
-            this.saveChangesButton.setManaged(true);
-        }
-        if (dropChangesButton != null) { // TODO
-            this.dropChangesButton.setVisible(true);
-            this.dropChangesButton.setManaged(true);
-        }
+        this.saveChangesButton.setVisible(true);
+        this.saveChangesButton.setManaged(true);
+        this.dropChangesButton.setVisible(true);
+        this.dropChangesButton.setManaged(true);
     }
 
     private void hideSaveAndDropButtons() {
-        if (saveChangesButton != null) { // TODO
-            this.saveChangesButton.setVisible(false);
-            this.saveChangesButton.setManaged(false);
-        }
-        if (dropChangesButton != null) { // TODO
-            this.dropChangesButton.setVisible(false);
-            this.dropChangesButton.setManaged(false);
-        }
+        this.saveChangesButton.setVisible(false);
+        this.saveChangesButton.setManaged(false);
+        this.dropChangesButton.setVisible(false);
+        this.dropChangesButton.setManaged(false);
     }
 
     private void showErrorMessage(final String message) {
-        if (errorMessageLabel != null) { // TODO
-            this.errorMessageLabel.setText(message);
-            this.errorMessageLabel.setVisible(true);
-            this.errorMessageLabel.setManaged(true);
-        }
+        this.errorMessageLabel.setText(message);
+        this.errorMessageLabel.setVisible(true);
+        this.errorMessageLabel.setManaged(true);
     }
 
     private void hideErrorMessage() {
-        if (errorMessageLabel != null) { // TODO
-            this.errorMessageLabel.setVisible(false);
-            this.errorMessageLabel.setManaged(false);
-        }
+        this.errorMessageLabel.setVisible(false);
+        this.errorMessageLabel.setManaged(false);
+    }
+
+    public static LoadedFxml<GenericArchiveBrowserPresenter> load(
+            final RootStage rootStage,
+            final Controller controller,
+            final I18nKey title,
+            final I18nKey text,
+            final Node footer,
+            final TreeItem<TreeAttributeWrapper> rootTreeItem
+    ) {
+        val loaded = FXMLLoadHelper.<GenericArchiveBrowserPresenter>load("fxml/archive-browser.fxml");
+        loaded.getController()
+                .init(rootStage,
+                        controller,
+                        title,
+                        text,
+                        footer,
+                        rootTreeItem);
+
+        return loaded;
     }
 }
