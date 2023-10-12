@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.component;
 
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.view.DialogCloser;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 
@@ -8,9 +9,15 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 public class CloseDialogButton extends MFXButton {
 
     public CloseDialogButton(RootStage rootStage) {
+        this(rootStage::closeDialog);
+    }
+
+    public CloseDialogButton(DialogCloser dialogCloser) {
         I18n.bind(this.textProperty(),"button.cancel");
         this.getStyleClass().setAll("button", "secondary");
         this.setManaged(true);
-        this.setOnAction(event -> rootStage.closeDialog());
+        this.setOnAction(event -> dialogCloser.closeDialog());
     }
+
+
 }

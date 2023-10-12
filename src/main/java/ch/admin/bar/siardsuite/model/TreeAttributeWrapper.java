@@ -19,7 +19,7 @@ public class TreeAttributeWrapper {
     TreeContentView type;
     DatabaseObject databaseObject;
 
-    Optional<RenderableForm> renderableForm;
+    Optional<RenderableForm<?>> renderableForm;
 
     @Builder
     public TreeAttributeWrapper(
@@ -27,7 +27,7 @@ public class TreeAttributeWrapper {
             @NonNull I18nKey viewTitle,
             @NonNull TreeContentView type,
             DatabaseObject databaseObject,
-            RenderableForm renderableForm
+            RenderableForm<?> renderableForm
     ) {
         this.name = name;
         this.viewTitle = viewTitle;

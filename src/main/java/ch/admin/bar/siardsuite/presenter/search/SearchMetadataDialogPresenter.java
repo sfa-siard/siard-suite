@@ -1,36 +1,42 @@
 package ch.admin.bar.siardsuite.presenter.search;
 
-import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.model.MetaSearchHit;
+import ch.admin.bar.siardsuite.component.SearchButton;
+import ch.admin.bar.siardsuite.component.rendering.FormsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.util.MetaSearchTerm;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.view.DialogCloser;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.val;
 
-import java.io.IOException;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-public class SearchMetadataDialogPresenter extends DialogPresenter {
+public class SearchMetadataDialogPresenter {
 
     @FXML
     protected Label title;
     @FXML
     protected Text text;
     @FXML
-    protected MFXButton closeButton; // seems redundant
+    protected MFXButton closeButton;
     @FXML
     protected TextField searchField;
     @FXML
@@ -38,84 +44,114 @@ public class SearchMetadataDialogPresenter extends DialogPresenter {
     @FXML
     protected HBox buttonBox;
 
-    @Override
-    public void init(Controller controller, RootStage stage) {
-        this.controller = controller;
-        this.stage = stage;
+    protected DialogCloser dialogCloser;
+    private Consumer<TreeItem<TreeAttributeWrapper>> onSelected;
+    private FormsExplorer formsExplorer;
+
+    public void init(
+            final DialogCloser dialogCloser,
+            final FormsExplorer formsExplorer,
+            final Consumer<TreeItem<TreeAttributeWrapper>> onSelected
+    ) {
+        this.dialogCloser = dialogCloser;
+        this.onSelected = onSelected;
+        this.formsExplorer = formsExplorer;
 
         I18n.bind(title.textProperty(), "search.metadata.dialog.title");
         I18n.bind(text.textProperty(), "search.metadata.dialog.text");
 
-        if (controller.getCurrentMetaSearch() != null) {
-            searchField.setText(controller.getCurrentMetaSearch());
-            metaSearch(controller.getCurrentMetaSearch());
-        }
-
-        closeButton.setOnAction(event -> stage.closeDialog());
-        buttonBox.getChildren().add(new CloseDialogButton(this.stage));
-
-        final MFXButton searchButton = new MFXButton();
-        I18n.bind(searchButton.textProperty(), "search.metadata.dialog.search");
-        searchButton.getStyleClass().add("primary");
-        searchButton.setOnAction(event -> metaSearch(searchField.getText()));
-        buttonBox.getChildren().add(searchButton);
+        closeButton.setOnAction(event -> dialogCloser.closeDialog());
+        buttonBox.getChildren().add(new CloseDialogButton(dialogCloser));
+        buttonBox.getChildren().add(new SearchButton(event -> search(new MetaSearchTerm(searchField.getText()))));
     }
 
-    private void metaSearch(String s) {
-        searchHitsBox.getChildren().clear();
-        final Set<MetaSearchHit> hits = controller.aggregatedMetaSearch(s);
-        if (hits.size() > 0) {
-            for (MetaSearchHit hit : hits) {
-                searchHitsBox.getChildren().add(getSearchHitBox(hit));
-            }
+    public static LoadedFxml<SearchMetadataDialogPresenter> load(
+            final DialogCloser dialogCloser,
+            final FormsExplorer formsExplorer,
+            final Consumer<TreeItem<TreeAttributeWrapper>> onSelected
+    ) {
+        val loaded = FXMLLoadHelper.<SearchMetadataDialogPresenter>load("fxml/search/search-metadata-dialog.fxml");
+        loaded.getController().init(dialogCloser, formsExplorer, onSelected);
+
+        return loaded;
+    }
+
+    private void search(final MetaSearchTerm searchTerm) {
+        val results = formsExplorer.find(searchTerm);
+
+        if (!results.isEmpty()) {
+            val grouped = results.stream()
+                    .collect(Collectors.groupingBy(result -> new ResultTarget(
+                            joinPath(result.getPathToTreeItem()),
+                            result.getTreeItem())));
+
+            val boxes = grouped.entrySet().stream()
+                    .map(entry -> createSearchHitBox(
+                            entry.getKey(),
+                            entry.getValue().size()))
+                    .collect(Collectors.toList());
+
+            searchHitsBox.getChildren().setAll(boxes);
         } else {
-            showNoSearchHits();
+            searchHitsBox.getChildren().setAll(createNoSearchHitsLabel());
         }
-        controller.setCurrentMetaSearch(s);
     }
 
-    private void showNoSearchHits() {
+    private Label createNoSearchHitsLabel() {
         final Label label = new Label(I18n.get("search.metadata.dialog.nodata"));
-        searchHitsBox.getChildren().add(label);
         label.setStyle("-fx-text-fill: #2a2a2a82");
+
+        return label;
     }
 
-    private HBox getSearchHitBox(MetaSearchHit hit) {
+    private HBox createSearchHitBox(
+            final ResultTarget resultTarget,
+            final int nrOfMatches
+    ) {
         final HBox searchHitBox = new HBox();
 
-        if (hit != null) {
-            final Label nameLabel = new Label(hit.displayName());
-            nameLabel.getStyleClass().add("name-label");
+        final Label nameLabel = new Label(resultTarget.getPath());
+        nameLabel.getStyleClass().add("name-label");
+        HBox.setHgrow(nameLabel, Priority.ALWAYS); // FIXME ?
 
-            final Label numberLabel = new Label(String.valueOf(hit.nodeIds().size()));
-            numberLabel.getStyleClass().add("number-label");
+        final Label numberLabel = new Label(String.valueOf(nrOfMatches));
+        numberLabel.getStyleClass().add("number-label");
 
-            searchHitBox.getChildren().addAll(numberLabel, nameLabel);
-            searchHitBox.getStyleClass().add("search-hit-hbox");
-            VBox.setMargin(searchHitBox, new Insets(5, 0, 5, 0));
+        searchHitBox.getChildren().addAll(numberLabel, nameLabel);
+        searchHitBox.getStyleClass().add("search-hit-hbox");
+        VBox.setMargin(searchHitBox, new Insets(5, 0, 5, 0));
 
-            searchHitBox.setOnMouseClicked(event -> show(hit));
-        }
+        searchHitBox.setOnMouseClicked(event -> {
+            dialogCloser.closeDialog();
+            onSelected.accept(resultTarget.getTreeItem());
+        });
 
         return searchHitBox;
     }
 
-    private void show(MetaSearchHit hit) {
-        if (controller.getCurrentPreviewPresenter() != null) {
-            stage.closeDialog();
-            try {
-                FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(hit.treeContentView()
-                                                                                         .getViewName()));
-                Node node = loader.load();
-                controller.getCurrentPreviewPresenter().getContentPane().getChildren().setAll(node);
-                loader.<DetailsPresenter>getController()
-                      .init(controller,
-                            stage,
-                            new TreeAttributeWrapper(null, hit.treeContentView(), hit.databaseObject()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    private String joinPath(final List<String> path) {
+        val editedPath = replaceOrAddFirstElement(path, "SIARD");
+        return String.join(" > ", editedPath);
     }
 
+    private List<String> replaceOrAddFirstElement(final List<String> path, String firstElement) {
+        if (path.isEmpty()) {
+            return Arrays.asList(firstElement);
+        }
+
+        val copiedPath = path.subList(0, path.size());
+        copiedPath.set(0, firstElement);
+
+        return copiedPath;
+    }
+
+    @Value
+    private static class ResultTarget {
+        @NonNull
+        String path;
+
+        @EqualsAndHashCode.Exclude
+        @NonNull
+        TreeItem<TreeAttributeWrapper> treeItem;
+    }
 }

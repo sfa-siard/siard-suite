@@ -4,13 +4,13 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.component.TwoStatesButton;
+import ch.admin.bar.siardsuite.component.rendering.FormsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.CastHelper;
-import ch.admin.bar.siardsuite.util.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -57,10 +57,16 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        ArchiveBrowserView archiveTreeView = new ArchiveBrowserView(controller.getSiardArchive(), treeView);
-        archiveTreeView.init(); // TODO: Why not in constructor?
+        ArchiveBrowserView archiveTreeView = new ArchiveBrowserView(controller.getSiardArchive());
+        val rootTreeItem = archiveTreeView.createRootItem();
+        treeView.setRoot(rootTreeItem);
+        this.refreshContentPane(rootTreeItem.getValue());
 
-        this.refreshContentPane(archiveTreeView.rootItem().getValue());
+        val explorer = FormsExplorer.from(rootTreeItem, controller);
+        metaSearchButton.setOnAction(event -> stage.openSearchMetaDataDialog(
+                explorer,
+                treeItem -> treeView.getSelectionModel().select(treeItem)
+        ));
 
         setListeners();
         controller.setCurrentPreviewPresenter(this);
@@ -78,8 +84,6 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         MultipleSelectionModel<TreeItem<TreeAttributeWrapper>> selection = treeView.getSelectionModel();
         selection.selectedItemProperty()
                 .addListener(((observable, oldValue, newValue) -> refreshContentPane(newValue.getValue())));
-
-        metaSearchButton.setOnAction(event -> stage.openDialog(View.SEARCH_METADATA_DIALOG));
     }
 
     // Refresh the content view based on the selected item in the tree (e.g. tables, users...)

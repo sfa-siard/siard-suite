@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.util;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class OptionalHelper {
 
@@ -14,5 +15,14 @@ public class OptionalHelper {
         } else {
             emptyAction.run();
         }
+    }
+
+    /**
+     * Helper method, because the stream-method on an {@link Optional} is not available in Java 8
+     */
+    public static <T> Stream<T> stream(final Optional<T> optional) {
+        return optional
+                .map(Stream::of)
+                .orElse(Stream.empty());
     }
 }

@@ -31,30 +31,74 @@ import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class ArchiveBrowserView {
 
     private final SiardArchive siardArchive;
-    private final TreeView<TreeAttributeWrapper> treeView;
 
-    public ArchiveBrowserView(SiardArchive siardArchive, TreeView<TreeAttributeWrapper> treeView) {
-        this.siardArchive = siardArchive;
-        this.treeView = treeView;
+    public TreeItem<TreeAttributeWrapper> createRootItem() {
+        val rootItem = new TreeItem<>(
+                TreeAttributeWrapper.builder()
+                        .name(this.siardArchive.name())
+                        .viewTitle(I18nKey.of("tableContainer.title.siardFile"))
+                        .type(TreeContentView.FORM_RENDERER)
+                        .renderableForm(MetadataDetailsForm.create())
+                        .build());
+
+        rootItem.getChildren().add(createItemForSchemas());
+
+        if (!siardArchive.users().isEmpty()) {
+            rootItem.getChildren().add(createItemForUsers(siardArchive.users()));
+        }
+
+        if (!siardArchive.priviliges().isEmpty()) {
+            rootItem.getChildren().add(createItemForPrivileges(siardArchive.priviliges()));
+        }
+
+        return rootItem;
     }
 
-    public void init() {
-        final TreeItem<TreeAttributeWrapper> rootItem = createRootItem();
-        rootItem.setExpanded(true);
+    private TreeItem<TreeAttributeWrapper> createItemForPrivileges(List<Privilige> priviliges) {
+        return new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(I18n.get(I18nKey.of("archive.tree.view.node.priviliges"), priviliges.size()))
+                .viewTitle(I18nKey.of("tableContainer.title.priviliges"))
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(PrivilegesOverviewForm.create())
+                .build());
+    }
 
-        addSchemas(rootItem);
-        addUsers(rootItem);
-        addPriviliges(rootItem);
-        treeView.setRoot(rootItem);
+    private TreeItem<TreeAttributeWrapper> createItemForUsers(final List<User> users) {
+        return new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(I18n.get(I18nKey.of("archive.tree.view.node.users"), users.size()))
+                .viewTitle(I18nKey.of("tableContainer.title.users"))
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(UsersOverviewForm.create())
+                .build());
+    }
+
+    private TreeItem<TreeAttributeWrapper> createItemForSchemas() {
+        List<DatabaseSchema> schemas = this.siardArchive.schemas();
+
+        val schemasItem = new TreeItem<>(
+                TreeAttributeWrapper.builder()
+                        .name(I18n.get(I18nKey.of("archive.tree.view.node.schemas"), schemas.size()))
+                        .viewTitle(I18nKey.of("tableContainer.title.schemas"))
+                        .type(TreeContentView.FORM_RENDERER)
+                        .renderableForm(MetadataDetailsForm.create())
+                        .build());
+
+        val schemaItems = schemas.stream()
+                .map(this::createItemsForSchema)
+                .collect(Collectors.toList());
+        schemasItem.getChildren().setAll(schemaItems);
+
+        return schemasItem;
     }
 
     private void addSchemas(TreeItem<TreeAttributeWrapper> rootItem) {
@@ -74,6 +118,37 @@ public class ArchiveBrowserView {
         rootItem.getChildren().add(schemasItem);
     }
 
+    private TreeItem<TreeAttributeWrapper> createItemsForSchema(DatabaseSchema schema) {
+        val schemaItem = new TreeItem<>(
+                TreeAttributeWrapper.builder()
+                        .name(schema.name())
+                        .viewTitle(I18nKey.of("tableContainer.title.schema"))
+                        .type(TreeContentView.FORM_RENDERER)
+                        .renderableForm(SchemaOverviewForm.create(schema))
+                        .databaseObject(schema)
+                        .build());
+
+        schemaItem.setExpanded(true);
+
+        if (!schema.getTypes().isEmpty()) {
+            schemaItem.getChildren().add(createItemForTypes(schema));
+        }
+
+        if (!schema.getTables().isEmpty()) {
+            schemaItem.getChildren().add(createItemForTables(schema));
+        }
+
+        if (!schema.getRoutines().isEmpty()) {
+            schemaItem.getChildren().add(createItemForRoutines(schema));
+        }
+
+        if (!schema.getViews().isEmpty()) {
+            schemaItem.getChildren().add(createItemForViews(schema));
+        }
+
+        return schemaItem;
+    }
+
     private void addSchema(TreeItem<TreeAttributeWrapper> schemasItem, DatabaseSchema schema) {
         val schemaItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
@@ -87,10 +162,29 @@ public class ArchiveBrowserView {
         schemaItem.setExpanded(true);
 
         addTypes(schemaItem, schema);
-        addIfNotEmpty(schemaItem, createTablesItem(schema));
-        addIfNotEmpty(schemaItem, createRoutinesItem(schema));
-        addIfNotEmpty(schemaItem, createViewsItem(schema));
+        addIfNotEmpty(schemaItem, createItemForTables(schema));
+        addIfNotEmpty(schemaItem, createItemForRoutines(schema));
+        addIfNotEmpty(schemaItem, createItemForViews(schema));
         schemasItem.getChildren().add(schemaItem);
+    }
+
+    private TreeItem<TreeAttributeWrapper> createItemForTypes(final DatabaseSchema schema) {
+        val types = schema.types();
+
+        val typesItem = new TreeItem<>(TreeAttributeWrapper.builder()
+                .name(I18n.get(I18nKey.of("archive.tree.view.node.types"), types.size()))
+                .viewTitle(I18nKey.of("treeContent.types.title"))
+                .type(TreeContentView.FORM_RENDERER)
+                .renderableForm(TypesOverviewForm.create(schema))
+                .build());
+
+        val typeItems = types.stream()
+                .map(this::createItemsForType)
+                .collect(Collectors.toList());
+
+        typesItem.getChildren().addAll(typeItems);
+
+        return typesItem;
     }
 
     private void addTypes(TreeItem<TreeAttributeWrapper> schemaItem, DatabaseSchema schema) {
@@ -163,8 +257,7 @@ public class ArchiveBrowserView {
     }
 
 
-    private TreeItem<TreeAttributeWrapper> createRoutinesItem(DatabaseSchema schema) {
-
+    private TreeItem<TreeAttributeWrapper> createItemForRoutines(DatabaseSchema schema) {
         List<Routine> routines = schema.routines();
 
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
@@ -223,7 +316,7 @@ public class ArchiveBrowserView {
                 .build());
     }
 
-    private TreeItem<TreeAttributeWrapper> createViewsItem(DatabaseSchema schema) {
+    private TreeItem<TreeAttributeWrapper> createItemForViews(DatabaseSchema schema) {
         List<DatabaseView> views = schema.views();
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(I18n.get(I18nKey.of("archive.tree.view.node.views"), views.size()))
@@ -233,7 +326,7 @@ public class ArchiveBrowserView {
                 .build());
 
         val viewItems = views.stream()
-                .map(this::createViewItem)
+                .map(this::createItemForView)
                 .collect(Collectors.toList());
 
         item.getChildren().addAll(viewItems);
@@ -241,7 +334,7 @@ public class ArchiveBrowserView {
         return item;
     }
 
-    private TreeItem<TreeAttributeWrapper> createViewItem(DatabaseView view) {
+    private TreeItem<TreeAttributeWrapper> createItemForView(DatabaseView view) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(view.name())
                 .viewTitle(I18nKey.of("tableContainer.title.view"))
@@ -266,7 +359,7 @@ public class ArchiveBrowserView {
         return item;
     }
 
-    private TreeItem<TreeAttributeWrapper> createTablesItem(DatabaseSchema schema) {
+    private TreeItem<TreeAttributeWrapper> createItemForTables(DatabaseSchema schema) {
 
         List<DatabaseTable> tables = schema.tables();
 
@@ -280,7 +373,7 @@ public class ArchiveBrowserView {
 
         tablesItem.getChildren()
                 .addAll(tables.stream()
-                        .map(this::createTableItems)
+                        .map(this::createItemForTable)
                         .collect(Collectors.toList()));
 
         tablesItem.setExpanded(true);
@@ -288,7 +381,7 @@ public class ArchiveBrowserView {
         return tablesItem;
     }
 
-    private TreeItem<TreeAttributeWrapper> createTableItems(DatabaseTable table) {
+    private TreeItem<TreeAttributeWrapper> createItemForTable(DatabaseTable table) {
         val tableItem = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(table.name())
                 .viewTitle(I18nKey.of("tableContainer.title.table"))
@@ -347,23 +440,9 @@ public class ArchiveBrowserView {
                 .build());
     }
 
-    private TreeItem<TreeAttributeWrapper> createRootItem() {
-        return new TreeItem<>(
-                TreeAttributeWrapper.builder()
-                        .name(this.siardArchive.name())
-                        .viewTitle(I18nKey.of("tableContainer.title.siardFile"))
-                        .type(TreeContentView.FORM_RENDERER)
-                        .renderableForm(MetadataDetailsForm.create())
-                        .build());
-    }
-
     private void addIfNotEmpty(TreeItem<TreeAttributeWrapper> rootItem,
                                TreeItem<TreeAttributeWrapper> item) {
         if (item.getChildren().size() == 0) return;
         rootItem.getChildren().add(item);
-    }
-
-    public TreeItem<TreeAttributeWrapper> rootItem() {
-        return this.treeView.getRoot();
     }
 }
