@@ -11,62 +11,77 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class RoutineOverviewForm {
+
+    private static final I18nKey NAME = I18nKey.of("details.routine.name");
+    private static final I18nKey SPECIFIC_NAME = I18nKey.of("details.routine.specificName");
+    private static final I18nKey SOURCE = I18nKey.of("details.routine.source");
+    private static final I18nKey BODY = I18nKey.of("details.routine.body");
+    private static final I18nKey CHARACTERISTICS = I18nKey.of("details.routine.characteristics");
+    private static final I18nKey RETURN_TYPE = I18nKey.of("details.routine.returnType");
+    private static final I18nKey DESCRIPTION = I18nKey.of("details.routine.description");
+
+    private static final I18nKey POSITION = I18nKey.of("tableContainer.table.header.position");
+    private static final I18nKey PARAMETER_NAME = I18nKey.of("tableContainer.parameter.header.parameterName");
+    private static final I18nKey PARAMETER_MODE = I18nKey.of("tableContainer.parameter.header.parameterMode");
+    private static final I18nKey PARAMETER_TYPE = I18nKey.of("tableContainer.parameter.header.parameterType");
+    private static final I18nKey CARDINALITY = I18nKey.of("tableContainer.parameter.header.cardinality");
+
     public static RenderableForm create(@NonNull final Routine routine) {
         return RenderableForm.<Routine>builder()
                 .dataSupplier(() -> routine)
                 .afterSaveAction(Routine::write)
                 .group(RenderableFormGroup.<Routine>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.name"),
+                                NAME,
                                 Routine::name
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.specificName"),
+                                SPECIFIC_NAME,
                                 Routine::specificName
                         ))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("details.routine.source"),
+                                SOURCE,
                                 Routine::getSource,
                                 Routine::setSource
                         ))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("details.routine.body"),
+                                BODY,
                                 Routine::getBody,
                                 Routine::setBody
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.characteristics"),
+                                CHARACTERISTICS,
                                 Routine::characteristics
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.returnType"),
+                                RETURN_TYPE,
                                 Routine::returnType
                         ))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("details.routine.description"),
+                                DESCRIPTION,
                                 Routine::getDescription,
                                 Routine::setDescription
                         ))
                         .property(RenderableTable.<Routine, MetaParameter>builder()
                                 .dataExtractor(Routine::parameters)
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.position"),
+                                        POSITION,
                                         metaParameter -> String.valueOf(metaParameter.getPosition())
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.parameter.header.parameterName"),
+                                        PARAMETER_NAME,
                                         MetaParameter::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.parameter.header.parameterMode"),
+                                        PARAMETER_MODE,
                                         MetaParameter::getMode
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.parameter.header.parameterType"),
+                                        PARAMETER_TYPE,
                                         MetaParameter::getType
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.parameter.header.cardinality"),
+                                        CARDINALITY,
                                         metaParameter -> String.valueOf(metaParameter.getCardinality())
                                 ))
                                 .build())

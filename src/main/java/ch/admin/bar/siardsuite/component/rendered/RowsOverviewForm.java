@@ -28,10 +28,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RowsOverviewForm {
+
+    private static final I18nKey LABEL_TABLE = I18nKey.of("tableContainer.labelTable");
+    private static final I18nKey LABEL_NUMBER_OF_ROWS = I18nKey.of("tableContainer.labelNumberOfRows");
+
     public static RenderableForm<DatabaseTable> create(@NonNull final DatabaseTable table) {
         val tableProperties = table.getColumns().stream()
                 .map(column -> new ReadOnlyStringProperty<RecordWrapper>(
-                        I18nKey.of(column.getName()),
+                        I18nKey.of(column.getName()), // TODO FIXME: Is not a key, will not be translated
                         row -> row.findCellValue(column.name())))
                 .collect(Collectors.toList());
 
@@ -40,10 +44,10 @@ public class RowsOverviewForm {
                 .dataSupplier(() -> table)
                 .group(RenderableFormGroup.<DatabaseTable>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelTable"),
+                                LABEL_TABLE,
                                 DatabaseTable::name))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelNumberOfRows"),
+                                LABEL_NUMBER_OF_ROWS,
                                 DatabaseTable::getNumberOfRows))
                         .property(RenderableLazyLoadingTable.<DatabaseTable, RecordWrapper>builder()
                                 .dataExtractor(databaseTable -> new RecordDataSource(table.getTable()))

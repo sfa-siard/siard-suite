@@ -11,6 +11,17 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class TypesOverviewForm {
+
+    private static final I18nKey LABEL_SCHEMA = I18nKey.of("tableContainer.labelSchema");
+    private static final I18nKey LABEL_DESC_SCHEMA = I18nKey.of("tableContainer.labelDescSchema");
+    
+    private static final I18nKey NAME = I18nKey.of("tableContainer.types.header.name");
+    private static final I18nKey CATEGORY = I18nKey.of("tableContainer.types.header.category");
+    private static final I18nKey IS_INSTANTIABLE = I18nKey.of("tableContainer.types.header.instantiable");
+    private static final I18nKey IS_FINAL = I18nKey.of("tableContainer.types.header.final");
+    private static final I18nKey BASE = I18nKey.of("tableContainer.types.header.base");
+    private static final I18nKey DESCRIPTION = I18nKey.of("tableContainer.types.header.description");
+
     public static RenderableForm<DatabaseSchema> create(@NonNull final DatabaseSchema schema) {
 
         return RenderableForm.<DatabaseSchema>builder()
@@ -18,37 +29,37 @@ public class TypesOverviewForm {
                 .afterSaveAction(DatabaseSchema::write)
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelSchema"),
+                                LABEL_SCHEMA,
                                 DatabaseSchema::name))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("tableContainer.labelDescSchema"),
+                                LABEL_DESC_SCHEMA,
                                 DatabaseSchema::getDescription,
                                 DatabaseSchema::setDescription
                         ))
                         .property(RenderableTable.<DatabaseSchema, DatabaseType>builder()
                                 .dataExtractor(DatabaseSchema::getTypes)
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.types.header.name"),
+                                        NAME,
                                         DatabaseType::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.types.header.category"),
+                                        CATEGORY,
                                         DatabaseType::getCategory
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.types.header.instantiable"),
+                                        IS_INSTANTIABLE,
                                         databaseType -> Boolean.valueOf(databaseType.isInstantiable()).toString()
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.types.header.final"),
+                                        IS_FINAL,
                                         databaseType -> Boolean.valueOf(databaseType.isFinal()).toString()
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.types.header.base"),
+                                        BASE,
                                         DatabaseType::getBase
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.types.header.description"),
+                                        DESCRIPTION,
                                         DatabaseType::getDescription
                                 ))
                                 .build())

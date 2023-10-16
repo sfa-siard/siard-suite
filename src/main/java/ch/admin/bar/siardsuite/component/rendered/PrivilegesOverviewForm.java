@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
@@ -11,6 +10,14 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class PrivilegesOverviewForm {
+
+    private static final I18nKey TYPE = I18nKey.of("tableContainer.priviliges.header.type");
+    private static final I18nKey OBJECT = I18nKey.of("tableContainer.priviliges.header.object");
+    private static final I18nKey GRANTOR = I18nKey.of("tableContainer.priviliges.header.grantor");
+    private static final I18nKey RECEIVER = I18nKey.of("tableContainer.priviliges.header.receiver");
+    private static final I18nKey OPTION = I18nKey.of("tableContainer.priviliges.header.option");
+    private static final I18nKey DESCRIPTION = I18nKey.of("tableContainer.priviliges.header.description");
+
     public static RenderableForm<SiardArchive> create(@NonNull final SiardArchive siardArchive) {
         return RenderableForm.<SiardArchive>builder()
                 .dataSupplier(() -> siardArchive)
@@ -18,27 +25,27 @@ public class PrivilegesOverviewForm {
                         .property(RenderableTable.<SiardArchive, Privilige>builder()
                                 .dataExtractor(SiardArchive::priviliges)
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.priviliges.header.type"),
+                                        TYPE,
                                         Privilige::getType
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.priviliges.header.object"),
+                                        OBJECT,
                                         Privilige::getObject
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.priviliges.header.grantor"),
+                                        GRANTOR,
                                         Privilige::getGrantor
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.priviliges.header.receiver"),
+                                        RECEIVER,
                                         Privilige::getGrantee
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.priviliges.header.option"),
+                                        OPTION,
                                         Privilige::getOption
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.priviliges.header.description"),
+                                        DESCRIPTION,
                                         Privilige::getDescription
                                 ))
                                 .build())

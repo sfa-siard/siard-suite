@@ -11,6 +11,10 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class UsersOverviewForm {
+
+    private static final I18nKey USERNAME = I18nKey.of("tableContainer.users.header.username");
+    private static final I18nKey DESCRIPTION = I18nKey.of("tableContainer.users.header.description");
+
     public static RenderableForm<SiardArchive> create(@NonNull final SiardArchive siardArchive) {
         return RenderableForm.<SiardArchive>builder()
                 .dataSupplier(() -> siardArchive)
@@ -18,11 +22,11 @@ public class UsersOverviewForm {
                         .property(RenderableTable.<SiardArchive, User>builder()
                                 .dataExtractor(SiardArchive::users)
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.users.header.username"),
+                                        USERNAME,
                                         User::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.users.header.description"),
+                                        DESCRIPTION,
                                         User::getDescription
                                 ))
                                 .build())

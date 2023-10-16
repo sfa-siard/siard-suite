@@ -17,31 +17,43 @@ import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.catchEx
 import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
 
 public class ViewOverviewForm {
+
+    private static final I18nKey NAME = I18nKey.of("details.view.name");
+    private static final I18nKey QUERY_ORIGINAL = I18nKey.of("details.view.queryOriginal");
+    private static final I18nKey QUERY = I18nKey.of("details.view.query");
+    private static final I18nKey NR_RECORDS = I18nKey.of("details.view.nrRecords");
+    private static final I18nKey DESCRIPTION = I18nKey.of("details.view.description");
+
+    private static final I18nKey POSITION = I18nKey.of("tableContainer.table.header.position");
+    private static final I18nKey COLUMN_NAME = I18nKey.of("tableContainer.table.header.columnName");
+    private static final I18nKey COLUMN_TYPE = I18nKey.of("tableContainer.table.header.columnType");
+    private static final I18nKey CARDINALITY = I18nKey.of("tableContainer.view.header.cardinality");
+
     public static RenderableForm create(@NonNull final MetaView view) {
 
         return RenderableForm.<MetaView>builder()
                 .dataSupplier(() -> view)
                 .group(RenderableFormGroup.<MetaView>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.view.name"),
+                                NAME,
                                 MetaView::getName
                         ))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("details.view.queryOriginal"),
+                                QUERY_ORIGINAL,
                                 MetaView::getQueryOriginal,
                                 MetaView::setQueryOriginal
                         ))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("details.view.query"),
+                                QUERY,
                                 MetaView::getQuery,
                                 MetaView::setQuery
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.view.nrRecords"),
+                                NR_RECORDS,
                                 Converter.longToString(MetaView::getRows)
                         ))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("details.view.description"),
+                                DESCRIPTION,
                                 MetaView::getDescription,
                                 MetaView::setDescription
                         ))
@@ -51,19 +63,19 @@ public class ViewOverviewForm {
                                         metaView::getMetaColumn
                                 ).assemble())
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.position"),
+                                        POSITION,
                                         intToString(MetaValue::getPosition)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.columnName"),
+                                        COLUMN_NAME,
                                         MetaColumn::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.columnType"),
+                                        COLUMN_TYPE,
                                         catchExceptions(MetaValue::getType, "")
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.view.header.cardinality"),
+                                        CARDINALITY,
                                         intToString(catchExceptions(MetaValue::getCardinality, 0))
                                 ))
                                 .build())

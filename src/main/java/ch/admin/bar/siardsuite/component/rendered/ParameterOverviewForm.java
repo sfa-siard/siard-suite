@@ -12,44 +12,54 @@ import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToSt
 
 public class ParameterOverviewForm {
 
+    private static final I18nKey NAME = I18nKey.of("details.routine.parameter.name");
+    private static final I18nKey POSITION = I18nKey.of("details.routine.parameter.position");
+    private static final I18nKey MODE = I18nKey.of("details.routine.parameter.mode");
+    private static final I18nKey TYPE = I18nKey.of("details.routine.parameter.type");
+    private static final I18nKey TYPE_SCHEMA = I18nKey.of("details.routine.parameter.typeSchema");
+    private static final I18nKey TYPE_NAME = I18nKey.of("details.routine.parameter.typeName");
+    private static final I18nKey TYPE_ORIGINAL = I18nKey.of("details.routine.parameter.typeOriginal");
+    private static final I18nKey CARDINALITY = I18nKey.of("details.routine.parameter.cardinality");
+    private static final I18nKey DESCRIPTION = I18nKey.of("details.routine.parameter.description");
+
     public static RenderableForm create(@NonNull final MetaParameter metaParameter) {
         return RenderableForm.<MetaParameter>builder()
                 .dataSupplier(() -> metaParameter)
                 .group(RenderableFormGroup.<MetaParameter>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.parameter.name"),
+                                NAME,
                                 MetaParameter::getName
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.parameter.position"),
+                                POSITION,
                                 intToString(MetaParameter::getPosition)
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.parameter.mode"),
+                                MODE,
                                 MetaParameter::getMode
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.parameter.type"),
+                                TYPE,
                                 MetaParameter::getType
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.parameter.typeSchema"),
+                                TYPE_SCHEMA,
                                 MetaParameter::getTypeSchema
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.parameter.typeName"),
+                                TYPE_NAME,
                                 MetaParameter::getTypeName
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.parameter.typeOriginal"),
+                                TYPE_ORIGINAL,
                                 MetaParameter::getTypeOriginal
                         ))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("details.routine.parameter.cardinality"),
+                                CARDINALITY,
                                 intToString(MetaParameter::getCardinality)
                         ))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("details.routine.parameter.name"),
+                                DESCRIPTION,
                                 MetaParameter::getDescription,
                                 MetaParameter::setDescription
                         ))

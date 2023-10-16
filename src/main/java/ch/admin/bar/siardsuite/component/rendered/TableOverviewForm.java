@@ -11,34 +11,43 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class TableOverviewForm {
+
+    private static final I18nKey LABEL_TABLE = I18nKey.of("tableContainer.labelTable");
+    private static final I18nKey LABEL_NUMBER_OF_ROWS = I18nKey.of("tableContainer.labelNumberOfRows");
+    private static final I18nKey LABEL_DESC_TABLE = I18nKey.of("tableContainer.labelDescTable");
+
+    private static final I18nKey POSITION = I18nKey.of("tableContainer.table.header.position");
+    private static final I18nKey COLUMN_NAME = I18nKey.of("tableContainer.table.header.columnName");
+    private static final I18nKey COLUMN_TYPE = I18nKey.of("tableContainer.table.header.columnType");
+
     public static RenderableForm<DatabaseTable> create(@NonNull final DatabaseTable table) {
         return RenderableForm.<DatabaseTable>builder()
                 .dataSupplier(() -> table)
                 .afterSaveAction(DatabaseTable::write)
                 .group(RenderableFormGroup.<DatabaseTable>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelTable"),
+                                LABEL_TABLE,
                                 DatabaseTable::name))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelNumberOfRows"),
+                                LABEL_NUMBER_OF_ROWS,
                                 DatabaseTable::getNumberOfRows))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("tableContainer.labelDescTable"),
+                                LABEL_DESC_TABLE,
                                 DatabaseTable::getDescription,
                                 DatabaseTable::setDescription
                         ))
                         .property(RenderableTable.<DatabaseTable, DatabaseColumn>builder()
                                 .dataExtractor(DatabaseTable::getColumns)
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.position"),
+                                        POSITION,
                                         DatabaseColumn::index
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.columnName"),
+                                        COLUMN_NAME,
                                         DatabaseColumn::name
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.columnType"),
+                                        COLUMN_TYPE,
                                         DatabaseColumn::type
                                 ))
                                 .build())

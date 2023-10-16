@@ -17,8 +17,11 @@ import java.util.stream.Collectors;
 
 @Value
 public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
+
+    private static final I18nKey CAN_NOT_BE_EMPTY = I18nKey.of("valueValidation.canNotBeEmpty");
+
     public static final Validator IS_NOT_EMPTY_VALIDATOR = Validator.builder()
-            .message(I18nKey.of("valueValidation.canNotBeEmpty"))
+            .message(CAN_NOT_BE_EMPTY)
             .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
                     .filter(value -> !value.isEmpty() && !value.trim().isEmpty())
                     .isPresent())

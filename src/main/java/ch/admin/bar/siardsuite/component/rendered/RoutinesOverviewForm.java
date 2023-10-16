@@ -11,43 +11,54 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class RoutinesOverviewForm {
+
+    private static final I18nKey LABEL_SCHEMA = I18nKey.of("tableContainer.labelSchema");
+    private static final I18nKey LABEL_DESC_SCHEMA = I18nKey.of("tableContainer.labelDescSchema");
+
+    private static final I18nKey ROW = I18nKey.of("tableContainer.table.header.row");
+    private static final I18nKey NAME = I18nKey.of("tableContainer.routine.header.name");
+    private static final I18nKey SPECIFIC_NAME = I18nKey.of("tableContainer.routine.header.specificName");
+    private static final I18nKey CHARACTERISTICS = I18nKey.of("tableContainer.routine.header.characteristics");
+    private static final I18nKey RETURN_TYPE = I18nKey.of("tableContainer.routine.header.returnType");
+    private static final I18nKey NUMBER_OF_PARAMETERS = I18nKey.of("tableContainer.routine.header.numberOfParameters");
+
     public static RenderableForm create(@NonNull final DatabaseSchema schema) {
         return RenderableForm.<DatabaseSchema>builder()
                 .dataSupplier(() -> schema)
                 .afterSaveAction(DatabaseSchema::write)
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelSchema"),
+                                LABEL_SCHEMA,
                                 DatabaseSchema::name))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("tableContainer.labelDescSchema"),
+                                LABEL_DESC_SCHEMA,
                                 DatabaseSchema::getDescription,
                                 DatabaseSchema::setDescription
                         ))
                         .property(RenderableTable.<DatabaseSchema, Routine>builder()
                                 .dataExtractor(DatabaseSchema::getRoutines)
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.row"),
+                                        ROW,
                                         routine -> String.valueOf(schema.getRoutines().indexOf(routine) + 1)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.routine.header.name"),
+                                        NAME,
                                         Routine::name
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.routine.header.specificName"),
+                                        SPECIFIC_NAME,
                                         Routine::specificName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.routine.header.characteristics"),
+                                        CHARACTERISTICS,
                                         Routine::characteristics
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.routine.header.returnType"),
+                                        RETURN_TYPE,
                                         Routine::returnType
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.routine.header.numberOfParameters"),
+                                        NUMBER_OF_PARAMETERS,
                                         Routine::numberOfParameters
                                 ))
                                 .build())

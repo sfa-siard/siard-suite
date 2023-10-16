@@ -9,6 +9,18 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class AttributeDetailsForm {
+
+    private static final I18nKey NAME = I18nKey.of("attribute.name");
+    private static final I18nKey POSITION = I18nKey.of("attribute.position");
+    private static final I18nKey SQL_TYPE = I18nKey.of("attribute.sqlType");
+    private static final I18nKey UDT_SCHEMA = I18nKey.of("attribute.udtSchema");
+    private static final I18nKey UDT_NAME = I18nKey.of("attribute.udtName");
+    private static final I18nKey ORIGINAL_DATA_TYPE = I18nKey.of("attribute.originalDataType");
+    private static final I18nKey ALLOWS_NULL = I18nKey.of("attribute.allowsNull");
+    private static final I18nKey DEFAULT_VALUE = I18nKey.of("attribute.defaultValue");
+    private static final I18nKey ARRAY_CARDINALITY = I18nKey.of("attribute.arrayCardinality");
+    private static final I18nKey DESCRIPTION = I18nKey.of("attribute.description");
+
     public static RenderableForm create(@NonNull final DatabaseAttribute attribute) {
 
         return RenderableForm.<DatabaseAttribute>builder()
@@ -16,34 +28,34 @@ public class AttributeDetailsForm {
                 .afterSaveAction(DatabaseAttribute::write)
                 .group(RenderableFormGroup.<DatabaseAttribute>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.name"),
+                                NAME,
                                 DatabaseAttribute::getName))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.position"),
+                                POSITION,
                                 it -> String.valueOf(it.getPosition())))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.sqlType"),
+                                SQL_TYPE,
                                 DatabaseAttribute::getType))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.udtSchema"),
+                                UDT_SCHEMA,
                                 DatabaseAttribute::getTypeSchema))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.udtName"),
+                                UDT_NAME,
                                 DatabaseAttribute::getTypeName))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.originalDataType"),
+                                ORIGINAL_DATA_TYPE,
                                 DatabaseAttribute::getTypeOriginal))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.allowsNull"),
+                                ALLOWS_NULL,
                                 it -> String.valueOf(it.isNullable())))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.defaultValue"),
+                                DEFAULT_VALUE,
                                 DatabaseAttribute::getDefaultValue))
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("attribute.arrayCardinality"),
+                                ARRAY_CARDINALITY,
                                 it -> String.valueOf(it.getCardinality())))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("attribute.description"),
+                                DESCRIPTION,
                                 DatabaseAttribute::getDescription,
                                 DatabaseAttribute::setDescription
                         ))

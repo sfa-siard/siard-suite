@@ -11,35 +11,44 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class SchemaOverviewForm {
+
+    private static final I18nKey LABEL_SCHEMA = I18nKey.of("tableContainer.labelSchema");
+    private static final I18nKey LABEL_DESC_SCHEMA = I18nKey.of("tableContainer.labelDescSchema");
+
+    private static final I18nKey ROW = I18nKey.of("tableContainer.table.header.row");
+    private static final I18nKey TABLE_NAME = I18nKey.of("tableContainer.table.header.tableName");
+    private static final I18nKey NUMBER_OF_COLUMNS = I18nKey.of("tableContainer.table.header.numberOfColumns");
+    private static final I18nKey NUMBER_OF_ROWS = I18nKey.of("tableContainer.table.header.numberOfRows");
+
     public static RenderableForm<DatabaseSchema> create(@NonNull final DatabaseSchema schema) {
         return RenderableForm.<DatabaseSchema>builder()
                 .dataSupplier(() -> schema)
                 .afterSaveAction(DatabaseSchema::write)
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelSchema"),
+                                LABEL_SCHEMA,
                                 DatabaseSchema::name))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("tableContainer.labelDescSchema"),
+                                LABEL_DESC_SCHEMA,
                                 DatabaseSchema::getDescription,
                                 DatabaseSchema::setDescription
                         ))
                         .property(RenderableTable.<DatabaseSchema, DatabaseTable>builder()
                                 .dataExtractor(DatabaseSchema::getTables)
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.row"),
+                                        ROW,
                                         databaseTable -> (schema.getTables().indexOf(databaseTable) + 1) + ""
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.tableName"),
+                                        TABLE_NAME,
                                         DatabaseTable::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.numberOfColumns"),
+                                        NUMBER_OF_COLUMNS,
                                         databaseTable -> databaseTable.getColumns().size() + ""
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.numberOfRows"),
+                                        NUMBER_OF_ROWS,
                                         databaseTable -> databaseTable.getRows().size() + ""
                                 ))
                                 .build())

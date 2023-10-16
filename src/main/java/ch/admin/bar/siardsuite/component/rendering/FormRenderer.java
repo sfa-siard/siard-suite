@@ -29,6 +29,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class FormRenderer<T> {
 
+    private static final I18nKey VALIDATION_ERRORS = I18nKey.of("storage.failed.validationErrors");
+    private static final I18nKey UNKNOWN_ERROR = I18nKey.of("storage.failed.unknownError");
+    private static final I18nKey SINGLE_FIELD_UNKNOWN_ERROR = I18nKey.of("storage.singleField.failed.unknownError");
+
     private static final String TITLE_STYLE_CLASS = "table-container-label";
     private static final String VALIDATION_STYLE_CLASS = "validation-text";
     private static final String FIELD_STYLE_CLASS = "rendered-field";
@@ -139,7 +143,7 @@ public class FormRenderer<T> {
                 .collect(Collectors.toList());
 
         if (!invalidFields.isEmpty()) {
-            return new SaveChangesReport(I18n.get(I18nKey.of("storage.failed.validationErrors")));
+            return new SaveChangesReport(I18n.get(VALIDATION_ERRORS));
         }
 
         val failedFields = this.editableFormFields.stream()
@@ -158,7 +162,7 @@ public class FormRenderer<T> {
             log.error("Storage failed because of after-storage-action because {}",
                     e.getMessage());
         }
-        return new SaveChangesReport(I18n.get(I18nKey.of("storage.failed.unknownError")));
+        return new SaveChangesReport(I18n.get(UNKNOWN_ERROR));
     }
 
     public void applySearchTerm(final String searchTerm) {
@@ -279,7 +283,7 @@ public class FormRenderer<T> {
                         title.getText(),
                         currentValue,
                         e.getMessage());
-                showValidationLabel(I18nKey.of("storage.singleField.failed.unknownError"));
+                showValidationLabel(SINGLE_FIELD_UNKNOWN_ERROR);
                 return false;
             }
         }

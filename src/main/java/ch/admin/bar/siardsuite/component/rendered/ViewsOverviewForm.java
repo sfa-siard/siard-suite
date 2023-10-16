@@ -11,6 +11,15 @@ import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.NonNull;
 
 public class ViewsOverviewForm {
+
+    private static final I18nKey LABEL_SCHEMA = I18nKey.of("tableContainer.labelSchema");
+    private static final I18nKey LABEL_DESC_SCHEMA = I18nKey.of("tableContainer.labelDescSchema");
+
+    private static final I18nKey ROW = I18nKey.of("tableContainer.table.header.row");
+    private static final I18nKey VIEW_NAME = I18nKey.of("tableContainer.table.header.viewName");
+    private static final I18nKey NUMBER_OF_COLUMNS = I18nKey.of("tableContainer.table.header.numberOfColumns");
+    private static final I18nKey NUMBER_OF_ROWS = I18nKey.of("tableContainer.table.header.numberOfRows");
+
     public static RenderableForm create(@NonNull final DatabaseSchema schema) {
 
         return RenderableForm.<DatabaseSchema>builder()
@@ -18,29 +27,29 @@ public class ViewsOverviewForm {
                 .afterSaveAction(DatabaseSchema::write)
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
-                                I18nKey.of("tableContainer.labelSchema"),
+                                LABEL_SCHEMA,
                                 DatabaseSchema::name))
                         .property(new ReadWriteStringProperty<>(
-                                I18nKey.of("tableContainer.labelDescSchema"),
+                                LABEL_DESC_SCHEMA,
                                 DatabaseSchema::getDescription,
                                 DatabaseSchema::setDescription
                         ))
                         .property(RenderableTable.<DatabaseSchema, DatabaseView>builder()
                                 .dataExtractor(DatabaseSchema::getViews)
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.row"),
+                                        ROW,
                                         databaseView -> String.valueOf(schema.getViews().indexOf(databaseView) + 1)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.viewName"),
+                                        VIEW_NAME,
                                         DatabaseView::name
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.numberOfColumns"),
+                                        NUMBER_OF_COLUMNS,
                                         DatabaseView::getNumberOfColumns
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
-                                        I18nKey.of("tableContainer.table.header.numberOfRows"),
+                                        NUMBER_OF_ROWS,
                                         DatabaseView::getNumberOfRows
                                 ))
                                 .build())

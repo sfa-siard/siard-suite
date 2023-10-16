@@ -40,7 +40,7 @@ public class TreeAttributeWrapper {
     public TreeAttributeWrapper(String name, TreeContentView type, DatabaseObject databaseObject) {
         // constructor is needed because of compatibility reasons
         this.name = name;
-        this.viewTitle = I18nKey.of("");
+        this.viewTitle = I18nKey.of(""); // FIXME
         this.type = type;
         this.databaseObject = databaseObject;
         this.renderableForm = Optional.empty();
