@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaView;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -34,10 +33,6 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
 
     public String getNumberOfRows() {
         return String.valueOf(metaView.getRows());
-    }
-
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(name(), getNumberOfRows(), columns, new ArrayList<>());
     }
 
     public List<DatabaseColumn> columns() {

@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,11 +37,6 @@ public class DatabaseType extends DatabaseObject {
     @Override
     public String name() {
         return name;
-    }
-
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-
     }
 
     public List<DatabaseAttribute> attributes() {

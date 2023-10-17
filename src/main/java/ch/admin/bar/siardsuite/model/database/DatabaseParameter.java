@@ -1,15 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaParameter;
-import ch.admin.bar.siardsuite.component.SiardLabelContainer;
-import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.MetaParameterFacade;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.scene.Node;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
-
-import java.util.Map;
 
 public class DatabaseParameter extends DatabaseObject {
 
@@ -28,8 +20,4 @@ public class DatabaseParameter extends DatabaseObject {
         return metaParameter.getName();
     }
 
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-
-    }
 }

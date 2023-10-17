@@ -168,7 +168,6 @@ public class ArchiveBrowserView {
                         .renderableForm(SchemaOverviewForm.create(schema).toBuilder()
                                 .readOnlyForm(readonly)
                                 .build())
-                        .databaseObject(schema)
                         .build());
 
         schemaItem.setExpanded(true);
@@ -392,7 +391,6 @@ public class ArchiveBrowserView {
                 .renderableForm(SchemaOverviewForm.create(schema).toBuilder()
                         .readOnlyForm(readonly)
                         .build())
-                .databaseObject(schema)
                 .build());
 
         tablesItem.getChildren()
@@ -413,7 +411,6 @@ public class ArchiveBrowserView {
                 .renderableForm(TableOverviewForm.create(table).toBuilder()
                         .readOnlyForm(readonly)
                         .build())
-                .databaseObject(table)
                 .build());
 
         if (!siardArchive.onlyMetaData()) {
@@ -445,7 +442,6 @@ public class ArchiveBrowserView {
                 .renderableForm(TableOverviewForm.create(table).toBuilder()
                         .readOnlyForm(readonly)
                         .build())
-                .databaseObject(table)
                 .build());
 
         val columnItems = columns.stream()

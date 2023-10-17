@@ -1,9 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaColumn;
-import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.Cardinality;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,8 +34,6 @@ public class DatabaseColumn extends DatabaseObject {
     @Setter
     protected String description;
 
-    protected final TreeContentView treeContentView = TreeContentView.COLUMN;
-
     protected DatabaseColumn(
             SiardArchive archive,
             DatabaseSchema schema,
@@ -69,10 +65,6 @@ public class DatabaseColumn extends DatabaseObject {
             cardinality = "";
         }
         description = column.getDescription();
-    }
-
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(name);
     }
 
     @Override

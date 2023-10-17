@@ -73,8 +73,7 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         numberOfRows = String.valueOf(table.getMetaTable().getRows());
     }
 
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(name, numberOfRows, columns, rows);
+    protected void shareProperties(SiardArchiveVisitor visitor) { // TODO Remove
     }
 
     protected void export(File directory) throws IOException {

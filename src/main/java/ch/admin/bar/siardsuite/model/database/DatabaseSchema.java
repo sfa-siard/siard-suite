@@ -1,17 +1,8 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Schema;
-import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
-import ch.admin.bar.siardsuite.presenter.tree.RoutinesTableViewPopulatorStrategy;
-import ch.admin.bar.siardsuite.presenter.tree.TableViewPopulatorStrategy;
-import ch.admin.bar.siardsuite.presenter.tree.TablesTableViewPopulatorStrategy;
-import ch.admin.bar.siardsuite.presenter.tree.TypesTableViewPopulatorStrategy;
-import ch.admin.bar.siardsuite.presenter.tree.ViewsTableViewPopulatorStrategy;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -19,7 +10,6 @@ import lombok.val;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DatabaseSchema extends DatabaseObject {
@@ -59,10 +49,6 @@ public class DatabaseSchema extends DatabaseObject {
         this.routines = metaSchemaFacade.routines(siardArchive, this);
 
         this.types = metaSchemaFacade.types();
-    }
-
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visitSchema(name, description, tables, views, types, routines);
     }
 
     public void write() {

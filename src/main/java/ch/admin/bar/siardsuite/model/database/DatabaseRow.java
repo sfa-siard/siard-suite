@@ -1,10 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Record;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -43,7 +39,4 @@ public class DatabaseRow extends DatabaseObject {
         return name;
     }
 
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-    }
 }

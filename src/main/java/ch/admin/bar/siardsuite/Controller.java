@@ -231,14 +231,6 @@ public class Controller {
         this.model.provideArchiveObject(visitor);
     }
 
-    public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
-        this.model.provideDatabaseArchiveProperties(visitor);
-    }
-
-    public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
-        this.model.provideDatabaseArchiveProperties(visitor, databaseObject);
-    }
-
     public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
         this.model.provideDatabaseArchiveMetaDataProperties(visitor);
     }

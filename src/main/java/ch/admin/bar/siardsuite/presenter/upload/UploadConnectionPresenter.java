@@ -39,10 +39,9 @@ import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
-public class UploadConnectionPresenter extends StepperPresenter implements SiardArchiveVisitor {
+public class UploadConnectionPresenter extends StepperPresenter {
 
     private List<DatabaseSchema> schemas = new ArrayList<>();
-    private String schemaName = "";
     private final Map<String, String> schemaMap = new HashMap<>();
     @FXML
     public Text title;
@@ -126,7 +125,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     @Override
     public void init(Controller controller, RootStage stage, MFXStepper stepper) {
         this.init(controller, stage);
-        this.controller.provideDatabaseArchiveProperties(this);
+        this.schemas = controller.getSiardArchive().schemas();
         addTextWithStyles();
         addFormText();
 
@@ -272,12 +271,11 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     private void initSchemaFields() {
         for (DatabaseSchema schema : schemas) {
-            controller.provideDatabaseArchiveProperties(this, schema);
             Label currentName = new Label();
             Label iconLabel = new Label();
             TextField newName = new TextField();
-            currentName.setText(schemaName);
-            newName.setText(schemaName);
+            currentName.setText(schema.name());
+            newName.setText(schema.name());
             HBox container = new HBox();
             container.setPrefSize(200.0, 48.0);
             currentName.setPrefSize(253.0, 48.0);
@@ -300,25 +298,5 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
                                        .jdbcUrl(dbServerField.getText(), portField.getText(), dbNameField.getText()));
         }
         event.consume();
-    }
-
-    @Override
-    public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users,
-                      List<Privilige> priviliges) {
-        this.schemas = schemas;
-    }
-
-    @Override
-    public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
-                            List<DatabaseView> views, List<DatabaseType> types, List<Routine> routines) {
-        this.schemaName = schemaName;
-    }
-
-    @Override
-    public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) {
-    }
-
-    @Override
-    public void visit(String columnName) {
     }
 }

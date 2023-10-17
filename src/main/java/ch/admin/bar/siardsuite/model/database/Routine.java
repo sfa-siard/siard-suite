@@ -3,11 +3,9 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siard2.api.MetaRoutine;
 import ch.admin.bar.siardsuite.model.facades.MetaRoutineFacade;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,14 +31,6 @@ public class Routine extends DatabaseObject implements WithColumns {
         this.source = metaRoutine.getSource();
         this.body = metaRoutine.getBody();
         this.description = metaRoutine.getBody();
-    }
-
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(metaRoutine.getName(),
-                String.valueOf(metaRoutine.getMetaParameters()),
-                new ArrayList<>(),
-                new ArrayList<>());
     }
 
     @Override

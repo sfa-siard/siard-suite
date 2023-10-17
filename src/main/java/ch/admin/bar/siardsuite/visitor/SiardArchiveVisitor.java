@@ -8,11 +8,4 @@ public interface SiardArchiveVisitor {
 
     void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users,
                List<Privilige> priviliges);
-
-    void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables, List<DatabaseView> views,
-                     List<DatabaseType> types, List<Routine> routines);
-
-    void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows);
-
-    void visit(String columnName);
 }

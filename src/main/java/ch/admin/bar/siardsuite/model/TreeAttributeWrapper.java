@@ -15,10 +15,7 @@ public class TreeAttributeWrapper {
 
     String name;
     I18nKey viewTitle;
-
     TreeContentView type;
-    DatabaseObject databaseObject;
-
     Optional<RenderableForm<?>> renderableForm;
 
     @Builder
@@ -26,26 +23,13 @@ public class TreeAttributeWrapper {
             String name, // FIXME: NonNull?
             @NonNull I18nKey viewTitle,
             @NonNull TreeContentView type,
-            DatabaseObject databaseObject,
             RenderableForm<?> renderableForm
     ) {
         this.name = name;
         this.viewTitle = viewTitle;
         this.type = type;
-        this.databaseObject = databaseObject;
         this.renderableForm = Optional.ofNullable(renderableForm);
     }
-
-    @Deprecated
-    public TreeAttributeWrapper(String name, TreeContentView type, DatabaseObject databaseObject) {
-        // constructor is needed because of compatibility reasons
-        this.name = name;
-        this.viewTitle = I18nKey.of(""); // FIXME
-        this.type = type;
-        this.databaseObject = databaseObject;
-        this.renderableForm = Optional.empty();
-    }
-
     @Override
     public String toString() {
         return name;

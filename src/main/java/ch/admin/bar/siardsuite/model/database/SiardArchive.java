@@ -8,7 +8,6 @@ import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import ch.enterag.utils.io.DiskFile;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeItem;
@@ -85,16 +84,6 @@ public class SiardArchive extends DatabaseObject {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    public void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(name, onlyMetaData, schemas, users, priviliges);
-    }
-
-    public void shareProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
-        if (databaseObject != null) {
-            databaseObject.shareProperties(visitor);
         }
     }
 

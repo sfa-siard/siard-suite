@@ -26,9 +26,6 @@ import java.util.Map;
 public class Model {
 
     private View currentView = View.START;
-    private TableSearchBase currentTableSearchBase = null;
-    private TableSearchButton currentTableSearchButton = null;
-    private String currentTableSearch = null;
     private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
     private Map<String, String> schemaMap = new HashMap<>();
     private SiardArchive siardArchive = new SiardArchive();
@@ -44,30 +41,6 @@ public class Model {
 
     public void setCurrentView(View view) {
         this.currentView = view;
-    }
-
-    public TableSearchBase getCurrentTableSearchBase() {
-        return currentTableSearchBase;
-    }
-
-    public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> rows) {
-        currentTableSearchBase = new TableSearchBase(tableView, rows);
-    }
-
-    public TableSearchButton getCurrentTableSearchButton() {
-        return currentTableSearchButton;
-    }
-
-    public void setCurrentTableSearchButton(MFXButton button, Boolean active) {
-        currentTableSearchButton = new TableSearchButton(button, active);
-    }
-
-    public String getCurrentTableSearch() {
-        return currentTableSearch;
-    }
-
-    public void setCurrentTableSearch(String s) {
-        currentTableSearch = s;
     }
 
     public Archive initArchive() {
@@ -172,14 +145,6 @@ public class Model {
                 lobFolder,
                 targetArchive,
                 viewsAsTables);
-    }
-
-    public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
-        getSiardArchive().shareProperties(visitor);
-    }
-
-    public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
-        getSiardArchive().shareProperties(visitor, databaseObject);
     }
 
     public void populate(TreeItem root) {

@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaAttribute;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +16,6 @@ public class DatabaseAttribute extends DatabaseObject {
         this.metaAttribute = metaAttribute;
 
         this.description = metaAttribute.getDescription();
-    }
-
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-
     }
 
     @Deprecated
