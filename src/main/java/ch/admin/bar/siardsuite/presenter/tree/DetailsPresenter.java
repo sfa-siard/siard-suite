@@ -27,7 +27,6 @@ public abstract class DetailsPresenter extends Presenter {
         this.stage = stage;
 
         bindLabels();
-        wrapper.getDatabaseObject().populate(texts, wrapper.getType());
     }
 
     protected abstract void bindLabels();

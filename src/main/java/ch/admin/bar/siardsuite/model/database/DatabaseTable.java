@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 
 public class DatabaseTable extends DatabaseObject implements WithColumns {
 
-    public static final String TABLE_CONTAINER_TABLE_HEADER_ROW = "tableContainer.table.header.row";
     protected final SiardArchive siardArchive;
     protected final DatabaseSchema schema;
 
@@ -55,9 +54,6 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     protected final List<DatabaseRow> rows = new ArrayList<>();
     @Getter
     public final String numberOfRows;
-    protected int loadBatchSize = 50;
-    protected int lastRowLoadedIndex = -1;
-    protected final TreeContentView treeContentView = TreeContentView.TABLE;
 
     public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
         this(archive, schema, table, false);
@@ -81,137 +77,6 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         visitor.visit(name, numberOfRows, columns, rows);
     }
 
-    @Override
-    public void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView == null) return;
-
-        if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
-            new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, INDEX)
-                                         .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME, NAME)
-                                         .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE, TYPE)
-                                         .withItems(colItems());
-        }
-        if (TreeContentView.ROWS.equals(type)) {
-            lastRowLoadedIndex = -1;
-            final List<TableRow<Map>> rows = new ArrayList<>();
-            final Callback<TableView<Map>, TableRow<Map>> rowFactory = o -> {
-                TableRow<Map> row = new TableRow<>();
-                rows.add(row);
-                return row;
-            };
-            tableView.setRowFactory(rowFactory);
-
-            SiardTableView siardTableView = new SiardTableView(tableView)
-                    .withColumn(TABLE_CONTAINER_TABLE_HEADER_ROW, INDEX);
-            for (DatabaseColumn column : columns) {
-                siardTableView.withColumn(column.name, column.index);
-            }
-            try {
-                final RecordDispenser recordDispenser = table.openRecords();
-                loadRecords(recordDispenser);
-                tableView.setItems(rowItems());
-                EventHandler<MouseEvent> cellClickedHandler = event -> {
-                    TablePosition tablePosition = tableView.getSelectionModel().getSelectedCells().get(0);
-                    if (tablePosition.getColumn() == 0) return;
-                    int column = tablePosition.getColumn() - 1; // since we added an index column...
-                    int row = tablePosition.getRow();
-
-                    DatabaseRow databaseRow = this.rows.get(row);
-                    DatabaseCell databaseCell = databaseRow.cells.get(column);
-                    try {
-                        boolean isBlob = new PreTypeFacade(databaseCell.cell.getMetaColumn().getPreType()).isBlob();
-                        if (isBlob) {
-                            URI absoluteLobFolder = databaseCell.cell.getMetaColumn().getAbsoluteLobFolder();
-                            if (absoluteLobFolder == null) {
-                                Path tempFilePath = createTempFile(databaseCell);
-                                OS.openFile(String.valueOf(tempFilePath));
-                            } else {
-                                OS.openFile(absoluteLobFolder + databaseCell.cell.getFilename());
-                            }
-                        }
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                };
-                tableView.setOnMouseClicked(cellClickedHandler);
-                tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
-                tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE,
-                                          event -> expand(recordDispenser, tableView));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    @Override
-    public void populate(VBox vbox, TreeContentView type) {
-    }
-
-    private ObservableList<Map> colItems() {
-        final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseColumn column : columns) {
-            Map<String, String> item = new HashMap<>();
-            item.put("index", column.index);
-            item.put("name", column.name);
-            item.put("type", column.type);
-            items.add(item);
-        }
-        return items;
-    }
-
-    private ObservableList<Map> rowItems() {
-        return FXCollections.observableArrayList(rows.stream().map(row -> {
-            Map<String, String> item = new HashMap<>();
-            item.put(INDEX, String.valueOf(Integer.parseInt(row.index) + 1));
-            row.cells.forEach(cell -> item.put(cell.index, cell.value));
-            return item;
-        }).collect(Collectors.toList()));
-    }
-
-    private void loadItems(RecordDispenser recordDispenser, TableView<Map> tableView, List<TableRow<Map>> rows) {
-        boolean reload = false;
-        for (TableRow<Map> row : rows) {
-            if (lastRowLoadedIndex <= row.getIndex()) {
-                reload = true;
-            }
-        }
-        if (reload) {
-            loadRecords(recordDispenser);
-            tableView.getItems().addAll(rowItems());
-        }
-    }
-
-    private void loadRecords(RecordDispenser recordDispenser) {
-        rows.clear();
-        if (onlyMetaData) return;
-        try {
-            final long numberOfRows = table.getMetaTable().getRows();
-            int j = 0;
-            while (j < numberOfRows && j < loadBatchSize) {
-                if (recordDispenser.getPosition() < numberOfRows) {
-                    rows.add(new DatabaseRow(siardArchive, schema, this, recordDispenser.get()));
-                }
-                j++;
-                lastRowLoadedIndex++;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void expand(RecordDispenser recordDispenser, TableView<Map> tableView) {
-        final int loadBatchSize = this.loadBatchSize;
-        final long numberOfRows = table.getMetaTable().getRows();
-        this.loadBatchSize = (int) numberOfRows / 50;
-        while (recordDispenser.getPosition() < numberOfRows) {
-            loadRecords(recordDispenser);
-            tableView.getItems().addAll(rowItems());
-            System.out.println(numberOfRows - recordDispenser.getPosition() + " rows remaining");
-        }
-        this.loadBatchSize = loadBatchSize;
-    }
-
     protected void export(File directory) throws IOException {
         File destination = new File(directory.getAbsolutePath(), this.name + ".html");
         File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
@@ -222,30 +87,6 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
                   .getTable(this.name)
                   .exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
-    }
-
-    private TreeSet<MetaSearchHit> metaSearch(String s) {
-        TreeSet<MetaSearchHit> hits = new TreeSet<>();
-        final List<String> nodeIds = new ArrayList<>();
-        if (contains(name, s)) {
-            nodeIds.add("name");
-        }
-        if (nodeIds.size() > 0) {
-            List<MetaSearchHit> metaSearchHits = new ArrayList<>();
-            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", Table " + name,
-                                                 this,
-                                                 treeContentView,
-                                                 nodeIds));
-            hits = new TreeSet<>(
-                    metaSearchHits);
-        }
-        return hits;
-    }
-
-    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
-        final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
-        return hits;
     }
 
     @Override
@@ -260,30 +101,6 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
     public String numberOfRows() {
         return this.numberOfRows;
     }
-
-    @NotNull
-    private Path createTempFile(DatabaseCell databaseCell) throws IOException {
-        String filename = ((CellImpl) databaseCell.cell).getLobFilename();
-        String suffix = getExtensionByStringHandling(filename);
-        Path tempFilePath = Files.createTempFile(filename, "." + suffix);
-        Files.write(tempFilePath, databaseCell.cell.getBytes());
-        return tempFilePath;
-    }
-
-    // Taken from https://www.baeldung.com/java-file-extension
-    private String getExtensionByStringHandling(String filename) {
-        return Optional.ofNullable(filename)
-                       .filter(f -> f.contains("."))
-                       .map(f -> f.substring(filename.lastIndexOf(".") + 1)).orElse("bin");
-    }
-
-
-    private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
-    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";
-    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE = "tableContainer.table.header.columnType";
-    private static final String INDEX = "index";
-    private static final String NAME = "name";
-    private static final String TYPE = "type";
 
     public void write() {
         val schema = siardArchive.getArchive()

@@ -64,13 +64,4 @@ public class DatabaseCell extends DatabaseObject {
     @Override
     protected void shareProperties(SiardArchiveVisitor visitor) {
     }
-
-    @Override
-    public void populate(TableView tableView, TreeContentView type) {
-    }
-
-    @Override
-    public void populate(VBox vbox, TreeContentView type) {
-    }
-
 }

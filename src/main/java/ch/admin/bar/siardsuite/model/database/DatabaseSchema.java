@@ -65,29 +65,11 @@ public class DatabaseSchema extends DatabaseObject {
         visitor.visitSchema(name, description, tables, views, types, routines);
     }
 
-    @Override
-    public void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView == null || type == null) return;
-        TableViewPopulatorStrategy strategy = getStrategy(type);
-        if (strategy == null) return;
-        strategy.populate(tableView, onlyMetaData);
-    }
-
     public void write() {
         val schema = siardArchive.getArchive()
                 .getSchema(name);
         schema.getMetaSchema().setDescription(description);
     }
-
-    private TableViewPopulatorStrategy getStrategy(TreeContentView type) {
-        if (type.equals(TreeContentView.TABLES) || type.equals(TreeContentView.SCHEMA))
-            return new TablesTableViewPopulatorStrategy(tables);
-        if (type.equals(TreeContentView.VIEWS)) return new ViewsTableViewPopulatorStrategy(views);
-        if (type.equals(TreeContentView.ROUTINES)) return new RoutinesTableViewPopulatorStrategy(routines);
-        if (type.equals(TreeContentView.TYPES)) return new TypesTableViewPopulatorStrategy(types);
-        return null;
-    }
-
 
     public void export(List<String> tablesToExport, File directory) {
         this.tables.stream()
@@ -107,10 +89,6 @@ public class DatabaseSchema extends DatabaseObject {
                 .map(table -> new CheckBoxTreeItem<>(table.name))
                 .collect(Collectors.toList());
         schemaItem.getChildren().setAll(checkBoxTreeItems);
-    }
-
-    @Override
-    public void populate(VBox vbox, TreeContentView type) {
     }
 
     public String name() {

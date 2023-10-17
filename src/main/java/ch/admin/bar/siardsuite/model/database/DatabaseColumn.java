@@ -1,22 +1,14 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaColumn;
-import ch.admin.bar.siardsuite.component.SiardLabelContainer;
-import ch.admin.bar.siardsuite.model.MetaSearchHit;
 import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.Cardinality;
-import ch.admin.bar.siardsuite.util.MetaSearch;
-import ch.admin.bar.siardsuite.util.MetaSearchTerm;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.scene.Node;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.TreeSet;
 
 @Getter
 public class DatabaseColumn extends DatabaseObject {
@@ -81,44 +73,6 @@ public class DatabaseColumn extends DatabaseObject {
 
     protected void shareProperties(SiardArchiveVisitor visitor) {
         visitor.visit(name);
-    }
-
-    @Override
-    public void populate(TableView tableView, TreeContentView type) {
-    }
-
-    @Override
-    public void populate(VBox vBox, TreeContentView type) {
-        new SiardLabelContainer(vBox).withLabel(name, "name")
-                                     .withLabel(index, "index")
-                                     .withLabel(lobFolder, "lobFolder")
-                                     .withLabel(mimeType, "mimeType")
-                                     .withLabel(this.type, "type")
-                                     .withLabel(userDefinedTypeSchema, "userDefinedTypeSchema")
-                                     .withLabel(userDefinedTypeName, "userDefinedTypeName")
-                                     .withLabel(originalType, "originalType")
-                                     .withLabel(isNullable, "isNullable")
-                                     .withLabel(defaultValue, "defaultValue")
-                                     .withLabel(cardinality, "cardinality")
-                                     .withLabel(description, "description");
-
-        for (Node node : vBox.getChildren()) {
-            node.getStyleClass().add("table-container-label-small");
-        }
-    }
-
-    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
-        return new MetaSearch(new MetaSearchTerm(s))
-                .check(name, "name")
-                .check(lobFolder, "lobFolder")
-                .check(mimeType, "mimeType")
-                .check(type, "type")
-                .check(userDefinedTypeSchema, "userDefinedTypeSchema")
-                .check(userDefinedTypeName, "userDefinedTypeName")
-                .check(originalType, "originalType")
-                .check(defaultValue, "defaultValue")
-                .check(description, description)
-                .hits("Schema " + schema.name + ", Table " + table.name() + ", Column " + name, this, treeContentView);
     }
 
     @Override

@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.model.facades.ArchiveFacade;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
@@ -12,9 +11,7 @@ import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import ch.enterag.utils.io.DiskFile;
 import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
-import javafx.scene.layout.VBox;
 import lombok.Getter;
 
 import java.io.File;
@@ -22,7 +19,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 // understands the content of a SIARD Archive
@@ -124,26 +120,6 @@ public class SiardArchive extends DatabaseObject {
         if (metaData != null) {
             metaData.shareObject(visitor);
         }
-    }
-
-    @Override
-    public void populate(TableView tableView, TreeContentView type) {
-    }
-
-    public void populate(TableView<Map> tableView, DatabaseObject databaseObject, TreeContentView type) {
-        if (databaseObject != null) {
-            databaseObject.populate(tableView, type);
-        }
-    }
-
-    public void populate(VBox vBox, DatabaseObject databaseObject, TreeContentView type) {
-        if (databaseObject != null) {
-            databaseObject.populate(vBox, type);
-        }
-    }
-
-    @Override
-    public void populate(VBox vbox, TreeContentView type) {
     }
 
     public void export(File directory) {

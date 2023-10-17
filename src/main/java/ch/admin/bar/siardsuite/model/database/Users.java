@@ -22,26 +22,6 @@ public class Users extends DatabaseObject {
     }
 
     @Override
-    public void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView == null || type == null) return;
-        new SiardTableView(tableView)
-                .withColumn(TABLE_CONTAINER_USERS_HEADER_USERNAME, USERNAME)
-                .withColumn(TABLE_CONTAINER_USERS_HEADER_DESCRIPTION, DESCRIPTION)
-                .withItems(items());
-    }
-
-    private ObservableList<Map> items() {
-        MapUserVisitor visitor = new MapUserVisitor();
-        return FXCollections.observableArrayList(users.stream()
-                                                      .map(user -> user.accept(visitor))
-                                                      .collect(Collectors.toList()));
-    }
-
-    @Override
-    public void populate(VBox vBox, TreeContentView type) {
-    }
-
-    @Override
     public String name() {
         return null;
     }
@@ -49,19 +29,4 @@ public class Users extends DatabaseObject {
     @Override
     protected void shareProperties(SiardArchiveVisitor visitor) {
     }
-
-    private class MapUserVisitor implements UserVisitor<Map<String, String>> {
-        @Override
-        public Map<String, String> visit(String name, String description) {
-            Map<String, String> item = new HashMap<>();
-            item.put(USERNAME, name);
-            item.put(DESCRIPTION, description);
-            return item;
-        }
-    }
-
-    private static final String TABLE_CONTAINER_USERS_HEADER_USERNAME = "tableContainer.users.header.username";
-    private static final String TABLE_CONTAINER_USERS_HEADER_DESCRIPTION = "tableContainer.users.header.description";
-    private static final String USERNAME = "username";
-    private static final String DESCRIPTION = "description";
 }

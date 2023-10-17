@@ -32,38 +32,4 @@ public class DatabaseParameter extends DatabaseObject {
     protected void shareProperties(SiardArchiveVisitor visitor) {
 
     }
-
-    @Override
-    public void populate(TableView<Map> tableView, TreeContentView type) {
-
-    }
-
-    @Override
-    public void populate(VBox container, TreeContentView type) {
-        new SiardLabelContainer(container).withLabel(metaParameter.getName(), NAME)
-                                          .withLabel(String.valueOf(metaParameter.getPosition()), POSITION)
-                                          .withLabel(metaParameter.getMode(), MODE)
-                                          .withLabel(metaParameter.getType(), SQL_TYPE)
-                                          .withLabel(metaParameter.getTypeSchema(), UDT_SCHEMA)
-                                          .withLabel(metaParameter.getTypeName(), TYPE_NAME)
-                                          .withLabel(metaParameter.getTypeOriginal(), ORIGINAL_DATA_TYPE)
-                                          .withLabel(String.valueOf(metaParameterFacade.formattedCardinality()),
-                                                     CARDINALITY)
-                                          .withLabel(metaParameter.getDescription(), DESCRIPTION);
-
-        for (Node node : container.getChildren()) {
-            node.getStyleClass().add("table-container-label-small");
-        }
-    }
-
-    private static final String NAME = "name";
-    private static final String POSITION = "position";
-    private static final String MODE = "mode";
-    private static final String SQL_TYPE = "sqlType";
-    private static final String UDT_SCHEMA = "udtSchema";
-    private static final String TYPE_NAME = "udtName";
-    private static final String ORIGINAL_DATA_TYPE = "originalDataType";
-    private static final String CARDINALITY = "cardinality";
-    private static final String DESCRIPTION = "description";
-
 }

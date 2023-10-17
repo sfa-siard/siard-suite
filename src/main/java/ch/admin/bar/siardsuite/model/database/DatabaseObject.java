@@ -39,8 +39,4 @@ public abstract class DatabaseObject {
     }
 
     protected abstract void shareProperties(SiardArchiveVisitor visitor);
-
-    public abstract void populate(TableView<Map> tableView, TreeContentView type);
-
-    public abstract void populate(VBox vBox, TreeContentView type);
 }
