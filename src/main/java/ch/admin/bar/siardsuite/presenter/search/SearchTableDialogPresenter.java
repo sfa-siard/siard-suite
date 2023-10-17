@@ -6,39 +6,29 @@ import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import static ch.admin.bar.siardsuite.model.database.DatabaseObject.contains;
 
 public class SearchTableDialogPresenter extends DialogPresenter {
 
     @FXML
-    protected Label title;
+    private Label title;
     @FXML
-    protected Text text;
+    private Text text;
     @FXML
-    protected MFXButton closeButton;
+    private MFXButton closeButton;
+
     private MFXButton searchButton;
     @FXML
-    protected TextField searchField;
+    private TextField searchField;
     @FXML
-    protected HBox buttonBox;
-    private TableView<Map> tableView;
-    private LinkedHashSet<Map> rows;
-    private final LinkedHashSet<Map> hits = new LinkedHashSet<>();
+    private HBox buttonBox;
 
     @Override
     public void init(Controller controller, RootStage stage) {
@@ -48,31 +38,12 @@ public class SearchTableDialogPresenter extends DialogPresenter {
         I18n.bind(title.textProperty(), "search.table.dialog.title");
         I18n.bind(text.textProperty(), "search.table.dialog.text");
 
-        if (controller.getCurrentTableSearch() != null) {
-            searchField.setText(controller.getCurrentTableSearch());
-        }
-
-        if (controller.getCurrentTableSearchBase() != null) {
-            tableView = controller.getCurrentTableSearchBase().tableView();
-            rows = controller.getCurrentTableSearchBase().rows();
-        }
-
-        if (tableView != null) {
-            // ability to search whole table:
-            // tableView.fireEvent(new SiardEvent(SiardEvent.EXPAND_DATABASE_TABLE));
-            hits.addAll(tableView.getItems());
-            if (rows != null) {
-                rows.addAll(tableView.getItems());
-            }
-        }
-
         closeButton.setOnAction(event -> stage.closeDialog());
         buttonBox.getChildren().add(new CloseDialogButton(this.stage));
 
         searchButton = new MFXButton();
         I18n.bind(searchButton.textProperty(), "search.table.dialog.search");
         searchButton.getStyleClass().add("primary");
-        searchButton.setOnAction(event -> tableSearch(searchField.getText()));
         buttonBox.getChildren().add(searchButton);
     }
 
@@ -87,20 +58,4 @@ public class SearchTableDialogPresenter extends DialogPresenter {
             resultConsumer.accept(Optional.ofNullable(searchField.getText()));
         });
     }
-
-    private void tableSearch(String s) {
-        if (tableView != null) {
-            if (!s.isEmpty() && !s.equals(" ")) {
-                final List<Map> hits = this.hits.stream().filter(row -> contains(row, s)).collect(Collectors.toList());
-                tableView.setItems(FXCollections.observableArrayList(hits));
-                stage.closeDialog();
-            } else {
-                stage.closeDialog();
-            }
-            controller.setCurrentTableSearch(s);
-            controller.setCurrentTableSearchButton(controller.getCurrentTableSearchButton().button(), true);
-            controller.getCurrentTableSearchButton().button().setStyle("-fx-font-weight: bold;");
-        }
-    }
-
 }

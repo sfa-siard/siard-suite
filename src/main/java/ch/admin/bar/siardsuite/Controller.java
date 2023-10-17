@@ -7,8 +7,6 @@ import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.TableSearchBase;
-import ch.admin.bar.siardsuite.model.TableSearchButton;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
@@ -16,13 +14,11 @@ import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.util.Pair;
 
@@ -31,7 +27,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -224,26 +219,6 @@ public class Controller {
         return this.model.getCurrentView();
     }
 
-    public String getCurrentTableSearch() {
-        return this.model.getCurrentTableSearch();
-    }
-
-    public TableSearchBase getCurrentTableSearchBase() {
-        return this.model.getCurrentTableSearchBase();
-    }
-
-    public void setCurrentTableSearch(String s) {
-        this.model.setCurrentTableSearch(s);
-    }
-
-    public TableSearchButton getCurrentTableSearchButton() {
-        return this.model.getCurrentTableSearchButton();
-    }
-
-    public void setCurrentTableSearchButton(MFXButton button, boolean active) {
-        this.model.setCurrentTableSearchButton(button, active);
-    }
-
     public void setDatabaseType(String databaseType) {
         model.setDatabaseType(databaseType);
     }
@@ -282,10 +257,6 @@ public class Controller {
 
     public void setSiardArchive(String name, Archive archive) {
         this.model.setSiardArchive(name, archive);
-    }
-
-    public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> maps) {
-        this.model.setCurrentTableSearchBase(tableView, maps);
     }
 
     public void saveArchiveOnlyMetaData() throws IOException {
