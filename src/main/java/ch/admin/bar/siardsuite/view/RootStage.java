@@ -1,20 +1,14 @@
 package ch.admin.bar.siardsuite.view;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.Icon;
-import ch.admin.bar.siardsuite.component.rendering.FormsExplorer;
+import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.presenter.Presenter;
-import ch.admin.bar.siardsuite.presenter.RootPresenter;
 import ch.admin.bar.siardsuite.presenter.search.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.search.SearchTableDialogPresenter;
 import ch.admin.bar.siardsuite.util.CastHelper;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
@@ -100,11 +94,11 @@ public class RootStage extends Stage {
   }
 
   public void openSearchMetaDataDialog(
-          final FormsExplorer formsExplorer,
+          final TreeItemsExplorer treeItemsExplorer,
           final Consumer<TreeItem<TreeAttributeWrapper>> onSelected) {
     val loaded = SearchMetadataDialogPresenter.load(
             this::closeDialog,
-            formsExplorer,
+            treeItemsExplorer,
             onSelected
     );
 

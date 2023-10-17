@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-class FormsExplorerTest {
+class TreeItemsExplorerTest {
     private static final DummyData DATA_A = new DummyData("Dummy A");
     private static final DummyData DATA_B = new DummyData("Dummy B");
     private static final DummyData DATA_C = new DummyData("Dummy C");
@@ -82,26 +82,30 @@ class FormsExplorerTest {
         TREE_ITEM_B.getChildren().setAll();
         TREE_ITEM_C.getChildren().setAll();
 
-        val explorer = FormsExplorer.from(TREE_ITEM_A);
+        val explorer = TreeItemsExplorer.from(TREE_ITEM_A);
 
         // when
         val result = explorer.find(new MetaSearchTerm("Dummy"));
 
         //then
         Assertions.assertThat(result).containsExactlyInAnyOrder(
-                FormsExplorer.Result.builder()
+                TreeItemsExplorer.Result.builder()
                         .propertyName(PROPERTY_A1)
-                        .pathToTreeItem(Arrays.asList())
+                        .pathToTreeItem(Arrays.asList(TREE_ITEM_A.getValue().getName()))
                         .treeItem(TREE_ITEM_A)
                         .build(),
-                FormsExplorer.Result.builder()
+                TreeItemsExplorer.Result.builder()
                         .propertyName(PROPERTY_B1)
-                        .pathToTreeItem(Arrays.asList(TREE_ITEM_A.getValue().getName()))
+                        .pathToTreeItem(Arrays.asList(
+                                TREE_ITEM_A.getValue().getName(),
+                                TREE_ITEM_B.getValue().getName()))
                         .treeItem(TREE_ITEM_B)
                         .build(),
-                FormsExplorer.Result.builder()
+                TreeItemsExplorer.Result.builder()
                         .propertyName(PROPERTY_C1)
-                        .pathToTreeItem(Arrays.asList(TREE_ITEM_A.getValue().getName()))
+                        .pathToTreeItem(Arrays.asList(
+                                TREE_ITEM_A.getValue().getName(),
+                                TREE_ITEM_C.getValue().getName()))
                         .treeItem(TREE_ITEM_C)
                         .build()
         );
@@ -114,26 +118,31 @@ class FormsExplorerTest {
         TREE_ITEM_B.getChildren().setAll(TREE_ITEM_C);
         TREE_ITEM_C.getChildren().setAll();
 
-        val explorer = FormsExplorer.from(TREE_ITEM_A);
+        val explorer = TreeItemsExplorer.from(TREE_ITEM_A);
 
         // when
         val result = explorer.find(new MetaSearchTerm("Dummy"));
 
         //then
         Assertions.assertThat(result).containsExactlyInAnyOrder(
-                FormsExplorer.Result.builder()
+                TreeItemsExplorer.Result.builder()
                         .propertyName(PROPERTY_A1)
-                        .pathToTreeItem(Arrays.asList())
+                        .pathToTreeItem(Arrays.asList(TREE_ITEM_A.getValue().getName()))
                         .treeItem(TREE_ITEM_A)
                         .build(),
-                FormsExplorer.Result.builder()
+                TreeItemsExplorer.Result.builder()
                         .propertyName(PROPERTY_B1)
-                        .pathToTreeItem(Arrays.asList(TREE_ITEM_A.getValue().getName()))
+                        .pathToTreeItem(Arrays.asList(
+                                TREE_ITEM_A.getValue().getName(),
+                                TREE_ITEM_B.getValue().getName()))
                         .treeItem(TREE_ITEM_B)
                         .build(),
-                FormsExplorer.Result.builder()
+                TreeItemsExplorer.Result.builder()
                         .propertyName(PROPERTY_C1)
-                        .pathToTreeItem(Arrays.asList(TREE_ITEM_A.getValue().getName(), TREE_ITEM_B.getValue().getName()))
+                        .pathToTreeItem(Arrays.asList(
+                                TREE_ITEM_A.getValue().getName(),
+                                TREE_ITEM_B.getValue().getName(),
+                                TREE_ITEM_C.getValue().getName()))
                         .treeItem(TREE_ITEM_C)
                         .build()
         );

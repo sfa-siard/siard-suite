@@ -1,13 +1,11 @@
 package ch.admin.bar.siardsuite.component.rendering;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import ch.admin.bar.siardsuite.util.MetaSearchTerm;
-import ch.admin.bar.siardsuite.util.OptionalHelper;
 import javafx.scene.control.TreeItem;
 import lombok.Builder;
 import lombok.NonNull;
@@ -17,14 +15,18 @@ import lombok.val;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Class which helps to explore {@link TreeItem} structures.
+ */
 @RequiredArgsConstructor
-public class FormsExplorer {
+public class TreeItemsExplorer {
 
     private final Set<FormField2TreeItemRelation> formFields;
 
@@ -39,11 +41,11 @@ public class FormsExplorer {
                 .collect(Collectors.toList());
     }
 
-    public static FormsExplorer from(final TreeItem<TreeAttributeWrapper> rootItem) {
+    public static TreeItemsExplorer from(final TreeItem<TreeAttributeWrapper> rootItem) {
         val relations = extractForms(rootItem, new ArrayList<>())
                 .collect(Collectors.toSet());
 
-        return new FormsExplorer(relations);
+        return new TreeItemsExplorer(relations);
     }
 
     private static Stream<FormField2TreeItemRelation> extractForms(
@@ -56,10 +58,10 @@ public class FormsExplorer {
 
         val formFields = treeItem.getValue()
                 .getRenderableForm()
-                .map(renderableForm -> findFormFields(renderableForm));
+                .map(TreeItemsExplorer::findFormFields)
+                .orElse(Collections.emptyList());
 
-        val itemForm = OptionalHelper.stream(formFields)
-                .flatMap(Collection::stream)
+        val itemForm = formFields.stream()
                 .map(field -> FormField2TreeItemRelation.builder()
                         .treeItem(treeItem)
                         .pathToTreeItem(updatedPathToTreeItem)
@@ -116,6 +118,14 @@ public class FormsExplorer {
     }
 
     @Value
+    @Builder
+    public static class Result {
+        @NonNull TreeItem<TreeAttributeWrapper> treeItem;
+        @NonNull List<String> pathToTreeItem;
+        @NonNull I18nKey propertyName;
+    }
+
+    @Value
     private static class FormField {
         I18nKey title;
         Supplier<String> valueSupplier;
@@ -123,18 +133,10 @@ public class FormsExplorer {
 
     @Value
     @Builder
-    public static class FormField2TreeItemRelation {
+    private static class FormField2TreeItemRelation {
         Supplier<String> valueSupplier;
         TreeItem<TreeAttributeWrapper> treeItem;
         I18nKey propertyTitle;
         List<String> pathToTreeItem;
-    }
-
-    @Value
-    @Builder
-    public static class Result {
-        @NonNull TreeItem<TreeAttributeWrapper> treeItem;
-        @NonNull List<String> pathToTreeItem;
-        @NonNull I18nKey propertyName;
     }
 }

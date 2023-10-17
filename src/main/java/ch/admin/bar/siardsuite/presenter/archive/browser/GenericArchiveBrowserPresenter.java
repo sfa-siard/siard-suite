@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.presenter.archive.browser;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.component.TwoStatesButton;
-import ch.admin.bar.siardsuite.component.rendering.FormsExplorer;
+import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -89,7 +89,7 @@ public class GenericArchiveBrowserPresenter {
 
         this.treeView.setRoot(rootTreeItem);
 
-        val explorer = FormsExplorer.from(rootTreeItem);
+        val explorer = TreeItemsExplorer.from(rootTreeItem);
 
         metaSearchButton.setOnAction(event -> rootStage.openSearchMetaDataDialog(
                 explorer,

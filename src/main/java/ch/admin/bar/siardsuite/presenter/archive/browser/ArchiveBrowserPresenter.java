@@ -5,7 +5,7 @@ import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.component.TwoStatesButton;
-import ch.admin.bar.siardsuite.component.rendering.FormsExplorer;
+import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
@@ -65,7 +65,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         treeView.setRoot(rootTreeItem);
         this.refreshContentPane(rootTreeItem.getValue());
 
-        val explorer = FormsExplorer.from(rootTreeItem);
+        val explorer = TreeItemsExplorer.from(rootTreeItem);
         metaSearchButton.setOnAction(event -> stage.openSearchMetaDataDialog(
                 explorer,
                 treeItem -> treeView.getSelectionModel().select(treeItem)

@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.presenter.search;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.component.SearchButton;
-import ch.admin.bar.siardsuite.component.rendering.FormsExplorer;
+import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.MetaSearchTerm;
@@ -46,16 +46,16 @@ public class SearchMetadataDialogPresenter {
 
     protected DialogCloser dialogCloser;
     private Consumer<TreeItem<TreeAttributeWrapper>> onSelected;
-    private FormsExplorer formsExplorer;
+    private TreeItemsExplorer treeItemsExplorer;
 
     public void init(
             final DialogCloser dialogCloser,
-            final FormsExplorer formsExplorer,
+            final TreeItemsExplorer treeItemsExplorer,
             final Consumer<TreeItem<TreeAttributeWrapper>> onSelected
     ) {
         this.dialogCloser = dialogCloser;
         this.onSelected = onSelected;
-        this.formsExplorer = formsExplorer;
+        this.treeItemsExplorer = treeItemsExplorer;
 
         I18n.bind(title.textProperty(), "search.metadata.dialog.title");
         I18n.bind(text.textProperty(), "search.metadata.dialog.text");
@@ -67,17 +67,17 @@ public class SearchMetadataDialogPresenter {
 
     public static LoadedFxml<SearchMetadataDialogPresenter> load(
             final DialogCloser dialogCloser,
-            final FormsExplorer formsExplorer,
+            final TreeItemsExplorer treeItemsExplorer,
             final Consumer<TreeItem<TreeAttributeWrapper>> onSelected
     ) {
         val loaded = FXMLLoadHelper.<SearchMetadataDialogPresenter>load("fxml/search/search-metadata-dialog.fxml");
-        loaded.getController().init(dialogCloser, formsExplorer, onSelected);
+        loaded.getController().init(dialogCloser, treeItemsExplorer, onSelected);
 
         return loaded;
     }
 
     private void search(final MetaSearchTerm searchTerm) {
-        val results = formsExplorer.find(searchTerm);
+        val results = treeItemsExplorer.find(searchTerm);
 
         if (!results.isEmpty()) {
             val grouped = results.stream()
