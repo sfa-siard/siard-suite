@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ArchiveBrowserView {
+public class TreeBuilder {
 
     private static final I18nKey ROOT_ELEMENT_NAME = I18nKey.of("tableContainer.title.siardFile");
 
@@ -84,7 +84,7 @@ public class ArchiveBrowserView {
     private final SiardArchive siardArchive;
     private final boolean readonly;
 
-    public ArchiveBrowserView(SiardArchive siardArchive) {
+    public TreeBuilder(SiardArchive siardArchive) {
         this.siardArchive = siardArchive;
         this.readonly = false;
     }

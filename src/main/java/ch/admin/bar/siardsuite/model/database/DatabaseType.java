@@ -30,10 +30,6 @@ public class DatabaseType extends DatabaseObject {
         this.databaseAttributes = metaAttributes;
     }
 
-    public <T> T accept(TypeVisitor<T> visitor) {
-        return visitor.visit(name, category, instantiable, isFinal, base, description);
-    }
-
     @Override
     public String name() {
         return name;

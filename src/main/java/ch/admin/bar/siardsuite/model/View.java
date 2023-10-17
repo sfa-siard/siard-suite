@@ -45,7 +45,7 @@ public enum View {
     ERROR_DIALOG("fxml/error-dialog.fxml");
 
     @Getter
-    private final BiFunction<Controller, RootStage, LoadedFxml<Presenter>> viewCreator; // FIXME: Muss kein verfickter Presenter sein...
+    private final BiFunction<Controller, RootStage, LoadedFxml<Presenter>> viewCreator;
 
     View(String v) {
         this.viewCreator = (controller, rootStage) -> {

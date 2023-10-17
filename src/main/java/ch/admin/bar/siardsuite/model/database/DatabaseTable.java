@@ -1,40 +1,18 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.RecordDispenser;
 import ch.admin.bar.siard2.api.Table;
-import ch.admin.bar.siard2.api.primary.CellImpl;
-import ch.admin.bar.siardsuite.component.SiardTableView;
-import ch.admin.bar.siardsuite.model.MetaSearchHit;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
-import ch.admin.bar.siardsuite.util.OS;
-import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DatabaseTable extends DatabaseObject implements WithColumns {
+public class DatabaseTable extends DatabaseObject {
 
     protected final SiardArchive siardArchive;
     protected final DatabaseSchema schema;
@@ -67,13 +45,10 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         name = table.getMetaTable().getName();
         description = table.getMetaTable().getDescription();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
+            columns.add(new DatabaseColumn(archive, schema, table.getMetaTable().getMetaColumn(i)));
         }
         numberOfColumns = String.valueOf(columns.size());
         numberOfRows = String.valueOf(table.getMetaTable().getRows());
-    }
-
-    protected void shareProperties(SiardArchiveVisitor visitor) { // TODO Remove
     }
 
     protected void export(File directory) throws IOException {
@@ -81,10 +56,10 @@ public class DatabaseTable extends DatabaseObject implements WithColumns {
         File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
         OutputStream outPutStream = new FileOutputStream(destination);
         this.table.getParentSchema()
-                  .getParentArchive()
-                  .getSchema(this.schema.name)
-                  .getTable(this.name)
-                  .exportAsHtml(outPutStream, lobFolder);
+                .getParentArchive()
+                .getSchema(this.schema.name)
+                .getTable(this.name)
+                .exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
     }
 

@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
+import ch.admin.bar.siardsuite.component.TreeBuilder;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.util.I18nKey;
@@ -32,7 +32,7 @@ public class OpenArchiveBrowser extends Presenter {
     public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
-        val archiveBrowserView = new ArchiveBrowserView(controller.getSiardArchive(), false);
+        val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), false);
 
         this.buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
         buttonsBox.cancel().setOnAction(event -> this.controller.initializeUpload(stage));

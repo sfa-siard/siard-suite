@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Routine extends DatabaseObject implements WithColumns {
+public class Routine extends DatabaseObject {
 
     private final MetaRoutine metaRoutine;
 

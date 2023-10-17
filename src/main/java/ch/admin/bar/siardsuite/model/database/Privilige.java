@@ -20,8 +20,4 @@ public class Privilige {
         this.option = option;
         this.description = description;
     }
-
-    public <T> T accept(PriviligeVisitor<T> visitor) {
-        return visitor.visit(type, object, grantor, grantee, option, description);
-    }
 }

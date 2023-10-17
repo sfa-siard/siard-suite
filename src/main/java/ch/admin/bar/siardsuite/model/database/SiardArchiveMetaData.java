@@ -35,14 +35,6 @@ public class SiardArchiveMetaData {
     private URI lobFolder;
     private boolean viewsAsTables;
 
-    public SiardArchiveMetaData() {
-        siardFormatVersion = "";
-        databaseProduct = "";
-        databaseConnectionURL = "";
-        databaseUsername = "";
-        archivingDate = LocalDate.now();
-    }
-
     public SiardArchiveMetaData(
             String databaseName,
             String databaseDescription,

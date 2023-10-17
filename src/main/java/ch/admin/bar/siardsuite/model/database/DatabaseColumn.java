@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaColumn;
-import ch.admin.bar.siardsuite.model.facades.Cardinality;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,6 @@ public class DatabaseColumn extends DatabaseObject {
 
     protected final SiardArchive archive;
     protected final DatabaseSchema schema;
-    protected final WithColumns table;
     protected final MetaColumn column;
     protected final String index;
     protected final String name;
@@ -37,12 +35,10 @@ public class DatabaseColumn extends DatabaseObject {
     protected DatabaseColumn(
             SiardArchive archive,
             DatabaseSchema schema,
-            WithColumns table,
             MetaColumn column
     ) {
         this.archive = archive;
         this.schema = schema;
-        this.table = table;
         this.column = column;
         this.index = String.valueOf(column.getPosition());
         name = column.getName();
@@ -59,11 +55,13 @@ public class DatabaseColumn extends DatabaseObject {
         originalType = column.getTypeOriginal();
         isNullable = String.valueOf(column.isNullable());
         defaultValue = column.getDefaultValue();
+
         try {
-            cardinality = new Cardinality(column.getCardinality()).format();
+            cardinality = formatCardinality(column.getCardinality());
         } catch (IOException e) {
             cardinality = "";
         }
+
         description = column.getDescription();
     }
 
@@ -88,5 +86,10 @@ public class DatabaseColumn extends DatabaseObject {
         column.setLobFolder(URI.create(lobFolder));
         column.setMimeType(mimeType);
         column.setDescription(description);
+    }
+
+    private String formatCardinality(final int cardinality) {
+        if (cardinality == -1) return "";
+        return String.valueOf(cardinality);
     }
 }

@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseView extends DatabaseObject implements WithColumns {
+public class DatabaseView extends DatabaseObject {
 
     @Getter
     protected final MetaView metaView;
@@ -18,7 +18,7 @@ public class DatabaseView extends DatabaseObject implements WithColumns {
         this.schema = schema;
 
         for (int i = 0; i < metaView.getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(archive, schema, this, metaView.getMetaColumn(i)));
+            columns.add(new DatabaseColumn(archive, schema, metaView.getMetaColumn(i)));
         }
     }
 

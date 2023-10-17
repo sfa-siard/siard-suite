@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.model;
 
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.util.I18nKey;
 import lombok.Builder;
 import lombok.NonNull;
@@ -30,6 +29,7 @@ public class TreeAttributeWrapper {
         this.type = type;
         this.renderableForm = Optional.ofNullable(renderableForm);
     }
+
     @Override
     public String toString() {
         return name;

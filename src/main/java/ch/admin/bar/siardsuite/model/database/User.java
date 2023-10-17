@@ -12,9 +12,4 @@ public class User {
         this.name = name;
         this.description = description;
     }
-
-    public <T> T accept(UserVisitor<T> visitor) {
-        return visitor.visit(this.name, this.description);
-    }
-
 }

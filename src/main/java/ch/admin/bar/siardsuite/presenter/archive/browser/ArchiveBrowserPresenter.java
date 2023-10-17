@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
+import ch.admin.bar.siardsuite.component.TreeBuilder;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.component.TwoStatesButton;
@@ -60,7 +60,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         this.controller = controller;
         this.stage = stage;
 
-        ArchiveBrowserView archiveTreeView = new ArchiveBrowserView(controller.getSiardArchive());
+        TreeBuilder archiveTreeView = new TreeBuilder(controller.getSiardArchive());
         val rootTreeItem = archiveTreeView.createRootItem();
         treeView.setRoot(rootTreeItem);
         this.refreshContentPane(rootTreeItem.getValue());

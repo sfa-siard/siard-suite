@@ -26,7 +26,7 @@ public class DatabaseCell extends DatabaseObject {
         this.archive = archive;
         this.schema = schema;
         this.table = table;
-        column = new DatabaseColumn(archive, schema, table, cell.getMetaColumn());
+        column = new DatabaseColumn(archive, schema, cell.getMetaColumn());
         this.row = row;
         this.cell = cell;
         index = String.valueOf(cell.getMetaColumn().getPosition());

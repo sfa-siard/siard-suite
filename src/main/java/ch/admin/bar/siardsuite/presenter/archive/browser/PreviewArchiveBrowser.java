@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.ArchiveBrowserView;
+import ch.admin.bar.siardsuite.component.TreeBuilder;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.Presenter;
@@ -38,7 +38,7 @@ public class PreviewArchiveBrowser extends Presenter implements StepperDependant
     public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
-        val archiveBrowserView = new ArchiveBrowserView(controller.getSiardArchive(), true);
+        val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), true);
 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.loadedFxml = GenericArchiveBrowserPresenter.load(
