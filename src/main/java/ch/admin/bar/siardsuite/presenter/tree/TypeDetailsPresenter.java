@@ -1,9 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.tree;
 
-import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -24,12 +21,6 @@ public class TypeDetailsPresenter extends DetailsPresenter {
     public Label descriptionLabel;
     @FXML
     public TableView tableView;
-
-    @Override
-    public void init(Controller controller, RootStage stage, TreeAttributeWrapper wrapper) {
-        super.init(controller, stage, wrapper);
-        wrapper.getDatabaseObject().populate(tableView, wrapper.getType());
-    }
 
     @Override
     protected void bindLabels() {

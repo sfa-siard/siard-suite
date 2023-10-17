@@ -72,7 +72,6 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         ));
 
         setListeners();
-        controller.setCurrentPreviewPresenter(this);
 
         bind(metaSearchButton, "tableContainer.metaSearchButton");
         bind(tableSearchButton, "tableContainer.tableSearchButton");

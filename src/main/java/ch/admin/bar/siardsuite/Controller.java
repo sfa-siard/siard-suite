@@ -5,10 +5,13 @@ import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
-import ch.admin.bar.siardsuite.model.*;
+import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.model.Model;
+import ch.admin.bar.siardsuite.model.TableSearchBase;
+import ch.admin.bar.siardsuite.model.TableSearchButton;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.presenter.archive.browser.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
@@ -31,7 +34,6 @@ import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Controller {
 
@@ -51,7 +53,7 @@ public class Controller {
     ) throws SQLException {
         tmpArchive = model.initArchive();
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                                                            .createDatabaseLoader(tmpArchive, onlyMetaData, false);
+                .createDatabaseLoader(tmpArchive, onlyMetaData, false);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -62,7 +64,7 @@ public class Controller {
                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
         final Archive archive = model.initArchive(target, onlyMetaData);
         this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                                                            .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
+                .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
@@ -278,29 +280,8 @@ public class Controller {
         return this.model.getDatabaseTypes();
     }
 
-    public String getCurrentMetaSearch() {
-        return this.model.getCurrentMetaSearch();
-    }
-
     public void setSiardArchive(String name, Archive archive) {
         this.model.setSiardArchive(name, archive);
-    }
-
-
-    public void setCurrentMetaSearch(String s) {
-        this.model.setCurrentMetaSearch(s);
-    }
-
-    public Set<MetaSearchHit> aggregatedMetaSearch(String s) {
-        return this.model.aggregatedMetaSearch(s);
-    }
-
-    public ArchiveBrowserPresenter getCurrentPreviewPresenter() {
-        return this.model.getCurrentPreviewPresenter();
-    }
-
-    public void setCurrentPreviewPresenter(ArchiveBrowserPresenter archiveBrowserPresenter) {
-        this.model.setCurrentPreviewPresenter(archiveBrowserPresenter);
     }
 
     public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> maps) {

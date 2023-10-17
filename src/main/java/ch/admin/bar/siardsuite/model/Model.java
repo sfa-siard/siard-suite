@@ -6,7 +6,6 @@ import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.presenter.archive.browser.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
@@ -19,16 +18,17 @@ import javafx.scene.control.TreeItem;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
 public class Model {
 
     private View currentView = View.START;
     private TableSearchBase currentTableSearchBase = null;
     private TableSearchButton currentTableSearchButton = null;
-    private ArchiveBrowserPresenter currentPreviewPresenter = null;
     private String currentTableSearch = null;
-    private String currentMetaSearch = null;
     private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
     private Map<String, String> schemaMap = new HashMap<>();
     private SiardArchive siardArchive = new SiardArchive();
@@ -62,28 +62,12 @@ public class Model {
         currentTableSearchButton = new TableSearchButton(button, active);
     }
 
-    public ArchiveBrowserPresenter getCurrentPreviewPresenter() {
-        return currentPreviewPresenter;
-    }
-
-    public void setCurrentPreviewPresenter(ArchiveBrowserPresenter presenter) {
-        currentPreviewPresenter = presenter;
-    }
-
     public String getCurrentTableSearch() {
         return currentTableSearch;
     }
 
     public void setCurrentTableSearch(String s) {
         currentTableSearch = s;
-    }
-
-    public String getCurrentMetaSearch() {
-        return currentMetaSearch;
-    }
-
-    public void setCurrentMetaSearch(String s) {
-        currentMetaSearch = s;
     }
 
     public Archive initArchive() {
@@ -180,14 +164,14 @@ public class Model {
                                       String archiverName, String archiverContact, URI lobFolder, File targetArchive,
                                       boolean viewsAsTables) {
         getSiardArchive().addArchiveMetaData(dbName,
-                                             description,
-                                             owner,
-                                             dataOriginTimespan,
-                                             archiverName,
-                                             archiverContact,
-                                             lobFolder,
-                                             targetArchive,
-                                             viewsAsTables);
+                description,
+                owner,
+                dataOriginTimespan,
+                archiverName,
+                archiverContact,
+                lobFolder,
+                targetArchive,
+                viewsAsTables);
     }
 
     public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
@@ -216,10 +200,6 @@ public class Model {
 
     public void provideArchiveObject(ArchiveVisitor visitor) {
         getSiardArchive().shareObject(visitor);
-    }
-
-    public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
-        return getSiardArchive().aggregatedMetaSearch(s);
     }
 
     public void setSchemaMap(Map schemaMap) {
