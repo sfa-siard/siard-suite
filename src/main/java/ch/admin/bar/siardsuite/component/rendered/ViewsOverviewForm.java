@@ -1,14 +1,17 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
+import ch.admin.bar.siard2.api.MetaSchema;
+import ch.admin.bar.siard2.api.MetaView;
+import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
-import ch.admin.bar.siardsuite.model.database.DatabaseView;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
+
+import java.util.List;
 
 public class ViewsOverviewForm {
 
@@ -20,37 +23,36 @@ public class ViewsOverviewForm {
     private static final I18nKey NUMBER_OF_COLUMNS = I18nKey.of("tableContainer.table.header.numberOfColumns");
     private static final I18nKey NUMBER_OF_ROWS = I18nKey.of("tableContainer.table.header.numberOfRows");
 
-    public static RenderableForm create(@NonNull final DatabaseSchema schema) {
+    public static RenderableForm create(@NonNull final MetaSchema schema, @NonNull final List<MetaView> views) {
 
-        return RenderableForm.<DatabaseSchema>builder()
+        return RenderableForm.<MetaSchema>builder()
                 .dataSupplier(() -> schema)
-                .afterSaveAction(DatabaseSchema::write)
-                .group(RenderableFormGroup.<DatabaseSchema>builder()
+                .group(RenderableFormGroup.<MetaSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_SCHEMA,
-                                DatabaseSchema::name))
+                                MetaSchema::getName))
                         .property(new ReadWriteStringProperty<>(
                                 LABEL_DESC_SCHEMA,
-                                DatabaseSchema::getDescription,
-                                DatabaseSchema::setDescription
+                                MetaSchema::getDescription,
+                                MetaSchema::setDescription
                         ))
-                        .property(RenderableTable.<DatabaseSchema, DatabaseView>builder()
-                                .dataExtractor(DatabaseSchema::getViews)
+                        .property(RenderableTable.<MetaSchema, MetaView>builder()
+                                .dataExtractor(metaSchema -> views)
                                 .property(new ReadOnlyStringProperty<>(
                                         ROW,
-                                        databaseView -> String.valueOf(schema.getViews().indexOf(databaseView) + 1)
+                                        databaseView -> String.valueOf(views.indexOf(databaseView) + 1)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         VIEW_NAME,
-                                        DatabaseView::name
+                                        MetaView::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         NUMBER_OF_COLUMNS,
-                                        DatabaseView::getNumberOfColumns
+                                        Converter.intToString(MetaView::getMetaColumns)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         NUMBER_OF_ROWS,
-                                        DatabaseView::getNumberOfRows
+                                        Converter.longToString(MetaView::getRows)
                                 ))
                                 .build())
                         .build())

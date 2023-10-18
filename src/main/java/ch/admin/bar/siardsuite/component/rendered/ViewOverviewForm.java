@@ -59,7 +59,7 @@ public class ViewOverviewForm {
                         ))
                         .property(RenderableTable.<MetaView, MetaColumn>builder()
                                 .dataExtractor(metaView -> new ListAssembler<>(
-                                        metaView::getMetaColumns,
+                                        metaView.getMetaColumns(),
                                         metaView::getMetaColumn
                                 ).assemble())
                                 .property(new ReadOnlyStringProperty<>(

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class DatabaseSchema extends DatabaseObject {
 
     protected final SiardArchive siardArchive;
-    protected final Schema schema;
+    @Getter protected final Schema schema;
     protected final boolean onlyMetaData;
     protected final String name;
 
@@ -26,11 +26,6 @@ public class DatabaseSchema extends DatabaseObject {
     @Getter
     protected List<DatabaseTable> tables;
 
-    @Getter
-    protected List<DatabaseView> views;
-
-    @Getter
-    protected List<DatabaseType> types;
 
     @Getter
     protected List<Routine> routines;
@@ -45,10 +40,7 @@ public class DatabaseSchema extends DatabaseObject {
         description = metaSchemaFacade.description();
 
         this.tables = metaSchemaFacade.tables(siardArchive, this, onlyMetaData);
-        this.views = metaSchemaFacade.views(siardArchive, this);
         this.routines = metaSchemaFacade.routines(siardArchive, this);
-
-        this.types = metaSchemaFacade.types();
     }
 
     public void write() {
@@ -81,17 +73,10 @@ public class DatabaseSchema extends DatabaseObject {
         return name;
     }
 
-    public List<DatabaseType> types() {
-        return this.types;
-    }
-
     public List<Routine> routines() {
         return this.routines;
     }
 
-    public List<DatabaseView> views() {
-        return this.views;
-    }
 
     public List<DatabaseTable> tables() {
         return this.tables;
