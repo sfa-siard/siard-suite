@@ -1,10 +1,11 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
+import ch.admin.bar.siard2.api.MetaAttribute;
+import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
@@ -21,43 +22,49 @@ public class AttributeDetailsForm {
     private static final I18nKey ARRAY_CARDINALITY = I18nKey.of("attribute.arrayCardinality");
     private static final I18nKey DESCRIPTION = I18nKey.of("attribute.description");
 
-    public static RenderableForm create(@NonNull final DatabaseAttribute attribute) {
+    public static RenderableForm create(@NonNull final MetaAttribute attribute) {
 
-        return RenderableForm.<DatabaseAttribute>builder()
+        return RenderableForm.<MetaAttribute>builder()
                 .dataSupplier(() -> attribute)
-                .afterSaveAction(DatabaseAttribute::write)
-                .group(RenderableFormGroup.<DatabaseAttribute>builder()
+                .group(RenderableFormGroup.<MetaAttribute>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 NAME,
-                                DatabaseAttribute::getName))
+                                MetaAttribute::getName))
                         .property(new ReadOnlyStringProperty<>(
                                 POSITION,
-                                it -> String.valueOf(it.getPosition())))
+                                it -> String.valueOf(it.getPosition())
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 SQL_TYPE,
-                                DatabaseAttribute::getType))
+                                MetaAttribute::getType
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 UDT_SCHEMA,
-                                DatabaseAttribute::getTypeSchema))
+                                MetaAttribute::getTypeSchema
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 UDT_NAME,
-                                DatabaseAttribute::getTypeName))
+                                MetaAttribute::getTypeName
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 ORIGINAL_DATA_TYPE,
-                                DatabaseAttribute::getTypeOriginal))
+                                MetaAttribute::getTypeOriginal))
                         .property(new ReadOnlyStringProperty<>(
                                 ALLOWS_NULL,
-                                it -> String.valueOf(it.isNullable())))
+                                it -> String.valueOf(it.isNullable())
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 DEFAULT_VALUE,
-                                DatabaseAttribute::getDefaultValue))
+                                MetaAttribute::getDefaultValue
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 ARRAY_CARDINALITY,
-                                it -> String.valueOf(it.getCardinality())))
+                                Converter.cardinalityToString(MetaAttribute::getCardinality)
+                        ))
                         .property(new ReadWriteStringProperty<>(
                                 DESCRIPTION,
-                                DatabaseAttribute::getDescription,
-                                DatabaseAttribute::setDescription
+                                MetaAttribute::getDescription,
+                                MetaAttribute::setDescription
                         ))
                         .build())
                 .build();

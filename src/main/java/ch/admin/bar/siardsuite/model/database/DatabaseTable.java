@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siard2.api.MetaColumn;
 import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -9,7 +11,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseTable extends DatabaseObject {
@@ -26,29 +27,23 @@ public class DatabaseTable extends DatabaseObject {
     @Setter
     public String description;
     @Getter
-    protected final List<DatabaseColumn> columns = new ArrayList<>();
-    public final String numberOfColumns;
+    private final List<MetaColumn> columns;
     @Getter
-    protected final List<DatabaseRow> rows = new ArrayList<>();
-    @Getter
-    public final String numberOfRows;
-
-    public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
-        this(archive, schema, table, false);
-    }
+    public final long numberOfRows;
 
     public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
         this.siardArchive = archive;
         this.schema = schema;
         this.table = table;
         this.onlyMetaData = onlyMetaData;
+
+        val metaTable = table.getMetaTable();
+
         name = table.getMetaTable().getName();
         description = table.getMetaTable().getDescription();
-        for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(archive, schema, table.getMetaTable().getMetaColumn(i)));
-        }
-        numberOfColumns = String.valueOf(columns.size());
-        numberOfRows = String.valueOf(table.getMetaTable().getRows());
+
+        columns = new ListAssembler<>(metaTable.getMetaColumns(), metaTable::getMetaColumn).assemble();
+        numberOfRows = table.getMetaTable().getRows();
     }
 
     protected void export(File directory) throws IOException {
@@ -66,14 +61,6 @@ public class DatabaseTable extends DatabaseObject {
     @Override
     public String name() {
         return name;
-    }
-
-    public List<DatabaseColumn> columns() {
-        return this.columns;
-    }
-
-    public String numberOfRows() {
-        return this.numberOfRows;
     }
 
     public void write() {

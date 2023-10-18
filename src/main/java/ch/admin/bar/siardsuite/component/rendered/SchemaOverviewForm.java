@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
+import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -9,6 +10,9 @@ import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
+
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.longToString;
 
 public class SchemaOverviewForm {
 
@@ -45,11 +49,11 @@ public class SchemaOverviewForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         NUMBER_OF_COLUMNS,
-                                        databaseTable -> databaseTable.getColumns().size() + ""
+                                        intToString(databaseTable -> databaseTable.getColumns().size())
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         NUMBER_OF_ROWS,
-                                        databaseTable -> databaseTable.getRows().size() + ""
+                                        longToString(DatabaseTable::getNumberOfRows)
                                 ))
                                 .build())
                         .build())

@@ -1,14 +1,19 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
+import ch.admin.bar.siard2.api.MetaAttribute;
+import ch.admin.bar.siard2.api.MetaType;
+import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
-import ch.admin.bar.siardsuite.model.database.DatabaseType;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
+
+import java.util.List;
+
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.cardinalityToString;
 
 public class TypeDetailsForm {
 
@@ -23,17 +28,16 @@ public class TypeDetailsForm {
     private static final I18nKey ATTRIBUTE_TYPE = I18nKey.of("attribute.type");
     private static final I18nKey ATTRIBUTE_CARDINALITY = I18nKey.of("attribute.cardinality");
 
-    public static RenderableForm create(@NonNull final DatabaseType type) {
-        return RenderableForm.<DatabaseType>builder()
+    public static RenderableForm create(@NonNull final MetaType type, @NonNull final List<MetaAttribute> attributes) {
+        return RenderableForm.<MetaType>builder()
                 .dataSupplier(() -> type)
-                .afterSaveAction(DatabaseType::write)
-                .group(RenderableFormGroup.<DatabaseType>builder()
+                .group(RenderableFormGroup.<MetaType>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 NAME,
-                                DatabaseType::getName))
+                                MetaType::getName))
                         .property(new ReadOnlyStringProperty<>(
                                 CATEGORY,
-                                DatabaseType::getCategory))
+                                MetaType::getCategory))
                         .property(new ReadOnlyStringProperty<>(
                                 IS_INSTANTIABLE,
                                 it -> Boolean.valueOf(it.isInstantiable()).toString()))
@@ -42,25 +46,25 @@ public class TypeDetailsForm {
                                 it -> Boolean.valueOf(it.isFinal()).toString()))
                         .property(new ReadOnlyStringProperty<>(
                                 BASE_CATEGORY,
-                                DatabaseType::getCategory))
+                                MetaType::getCategory))
                         .property(new ReadWriteStringProperty<>(
                                 DESCRIPTION,
-                                DatabaseType::getDescription,
-                                DatabaseType::setDescription
+                                MetaType::getDescription,
+                                MetaType::setDescription
                         ))
-                        .property(RenderableTable.<DatabaseType, DatabaseAttribute>builder()
-                                .dataExtractor(DatabaseType::getDatabaseAttributes)
+                        .property(RenderableTable.<MetaType, MetaAttribute>builder()
+                                .dataExtractor(metaType -> attributes)
                                 .property(new ReadOnlyStringProperty<>(
                                         ATTRIBUTE_NAME,
-                                        DatabaseAttribute::name
+                                        MetaAttribute::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         ATTRIBUTE_TYPE,
-                                        DatabaseAttribute::type
+                                        MetaAttribute::getType
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         ATTRIBUTE_CARDINALITY,
-                                        DatabaseAttribute::cardinality
+                                        cardinalityToString(MetaAttribute::getCardinality)
                                 ))
                                 .build())
                         .build())
