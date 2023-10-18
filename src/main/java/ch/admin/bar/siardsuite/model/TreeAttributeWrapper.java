@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.model;
 
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.util.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
@@ -12,15 +12,15 @@ import java.util.Optional;
 @Value
 public class TreeAttributeWrapper {
 
-    String name;
-    I18nKey viewTitle;
+    DisplayableText name;
+    DisplayableText viewTitle;
     TreeContentView type;
     Optional<RenderableForm<?>> renderableForm;
 
     @Builder
     public TreeAttributeWrapper(
-            String name, // FIXME: NonNull?
-            @NonNull I18nKey viewTitle,
+            @NonNull DisplayableText name,
+            @NonNull DisplayableText viewTitle,
             @NonNull TreeContentView type,
             RenderableForm<?> renderableForm
     ) {
@@ -32,6 +32,6 @@ public class TreeAttributeWrapper {
 
     @Override
     public String toString() {
-        return name;
+        return name.getText();
     }
 }

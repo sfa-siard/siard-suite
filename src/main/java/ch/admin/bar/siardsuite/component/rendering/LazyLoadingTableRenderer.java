@@ -4,7 +4,6 @@ import ch.admin.bar.siardsuite.component.rendering.model.LazyLoadingDataSource;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
 import ch.admin.bar.siardsuite.component.rendering.utils.LoadingBatchManager;
-import ch.admin.bar.siardsuite.util.I18n;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -62,7 +61,7 @@ public class LazyLoadingTableRenderer<T, I> {
     }
 
     private TableColumn<I, String> column(final ReadOnlyStringProperty<I> columnProperty) {
-        val column = new TableColumn<I, String>(I18n.get(columnProperty.getTitle()));
+        val column = new TableColumn<I, String>(columnProperty.getTitle().getText());
 
         column.setSortable(false); // Not sortable because of lazy loading
         column.setMinWidth(100);

@@ -1,5 +1,7 @@
 package ch.admin.bar.siardsuite.util;
 
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.keys.Key;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
@@ -54,6 +56,11 @@ public class I18n {
 
     private static final String BASE_NAME = "ch/admin/bar/siardsuite/i18n/messages";
 
+    public static String get(final Key key, final Object... args) {
+        return get(key.getValue(), args);
+    }
+
+    @Deprecated
     public static String get(final I18nKey key, final Object... args) {
         return get(key.getValue(), args);
     }

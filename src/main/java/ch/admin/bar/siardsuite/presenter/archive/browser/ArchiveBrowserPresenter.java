@@ -93,7 +93,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
         hideSaveAndDropButtons();
         hideErrorMessage();
 
-        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
+        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
 
         val newContent = FXMLLoadHelper.load(wrapper.getType().getViewName());
         contentPane.getChildren().clear();
@@ -136,7 +136,7 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
     private void refreshForNonChangeableContent(final TreeAttributeWrapper wrapper) {
         hideSaveAndDropButtons();
         hideErrorMessage();
-        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
+        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
     }
 
     private void refreshContentPane(
@@ -148,10 +148,10 @@ public class ArchiveBrowserPresenter extends StepperPresenter {
                 .addListener((observable, oldValue, hasChanges) -> {
                     if (hasChanges) {
                         showSaveAndDropButtons();
-                        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()) + " (edited)");
+                        this.titleTableContainer.setText(wrapper.getViewTitle().getText() + " (*)");
                     } else {
                         hideSaveAndDropButtons();
-                        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
+                        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
                     }
                 });
 

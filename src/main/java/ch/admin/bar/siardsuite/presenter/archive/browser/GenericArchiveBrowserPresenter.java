@@ -6,10 +6,9 @@ import ch.admin.bar.siardsuite.component.TwoStatesButton;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.I18nKey;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -73,16 +72,16 @@ public class GenericArchiveBrowserPresenter {
     public void init(
             final RootStage rootStage,
             final Controller controller,
-            final I18nKey title,
-            final I18nKey text,
+            final DisplayableText title,
+            final DisplayableText text,
             final Node footerNode,
             final TreeItem<TreeAttributeWrapper> rootTreeItem
     ) {
         this.rootStage = rootStage;
         this.controller = controller;
 
-        this.title.setText(I18n.get(title));
-        this.text.setText(I18n.get(text));
+        this.title.setText(title.getText());
+        this.text.setText(text.getText());
 
         this.borderPane.setBottom(footerNode);
         this.leftTreeBox.prefHeightProperty().bind(container.heightProperty());
@@ -109,7 +108,7 @@ public class GenericArchiveBrowserPresenter {
         hideSaveAndDropButtons();
         hideErrorMessage();
 
-        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
+        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
 
         val newContent = FXMLLoadHelper.load(wrapper.getType().getViewName());
         contentPane.getChildren().clear();
@@ -147,7 +146,7 @@ public class GenericArchiveBrowserPresenter {
     private void refreshForNonChangeableContent(final TreeAttributeWrapper wrapper) {
         hideSaveAndDropButtons();
         hideErrorMessage();
-        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
+        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
     }
 
     private void refreshContentPane(
@@ -159,10 +158,10 @@ public class GenericArchiveBrowserPresenter {
                 .addListener((observable, oldValue, hasChanges) -> {
                     if (hasChanges) {
                         showSaveAndDropButtons();
-                        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()) + " (edited)");
+                        this.titleTableContainer.setText(wrapper.getViewTitle().getText() + " (edited)");
                     } else {
                         hideSaveAndDropButtons();
-                        this.titleTableContainer.setText(I18n.get(wrapper.getViewTitle()));
+                        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
                     }
                 });
 
@@ -222,8 +221,8 @@ public class GenericArchiveBrowserPresenter {
     public static LoadedFxml<GenericArchiveBrowserPresenter> load(
             final RootStage rootStage,
             final Controller controller,
-            final I18nKey title,
-            final I18nKey text,
+            final DisplayableText title,
+            final DisplayableText text,
             final Node footer,
             final TreeItem<TreeAttributeWrapper> rootTreeItem
     ) {

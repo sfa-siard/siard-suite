@@ -28,8 +28,9 @@ import ch.admin.bar.siardsuite.model.database.Privilige;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.model.database.User;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKeyArg;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import lombok.RequiredArgsConstructor;
@@ -43,42 +44,42 @@ public class TreeBuilder {
 
     private static final I18nKey ROOT_ELEMENT_NAME = I18nKey.of("tableContainer.title.siardFile");
 
-    private static final I18nKey PRIVILEGES_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.priviliges");
+    private static final I18nKeyArg<Number> PRIVILEGES_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.priviliges");
     private static final I18nKey PRIVILEGES_VIEW_TITLE = I18nKey.of("tableContainer.title.priviliges");
 
-    private static final I18nKey USERS_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.users");
+    private static final I18nKeyArg<Number> USERS_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.users");
     private static final I18nKey USERS_VIEW_TITLE = I18nKey.of("tableContainer.title.users");
 
-    private static final I18nKey SCHEMAS_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.schemas");
+    private static final I18nKeyArg<Number> SCHEMAS_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.schemas");
     private static final I18nKey SCHEMAS_VIEW_TITLE = I18nKey.of("tableContainer.title.schemas");
     private static final I18nKey SCHEMA_VIEW_TITLE = I18nKey.of("tableContainer.title.schema");
 
-    private static final I18nKey TYPES_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.types");
+    private static final I18nKeyArg<Number> TYPES_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.types");
     private static final I18nKey TYPES_VIEW_TITLE = I18nKey.of("treeContent.types.title");
     private static final I18nKey TYPE_VIEW_TITLE = I18nKey.of("tableContainer.title.type");
 
     private static final I18nKey ATTRIBUTE_VIEW_TITLE = I18nKey.of("tableContainer.title.attribute");
 
-    private static final I18nKey ROUTINES_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.routines");
+    private static final I18nKeyArg<Number> ROUTINES_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.routines");
     private static final I18nKey ROUTINES_VIEW_TITLE = I18nKey.of("tableContainer.title.routines");
     private static final I18nKey ROUTINE_VIEW_TITLE = I18nKey.of("tableContainer.title.routine");
 
-    private static final I18nKey PARAMETERS_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.parameters");
+    private static final I18nKeyArg<Number> PARAMETERS_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.parameters");
     private static final I18nKey PARAMETER_VIEW_TITLE = I18nKey.of("tableContainer.title.parameter");
 
-    private static final I18nKey VIEWS_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.views");
+    private static final I18nKeyArg<Number> VIEWS_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.views");
     private static final I18nKey VIEWS_VIEW_TITLE = I18nKey.of("tableContainer.title.views");
     private static final I18nKey VIEW_VIEW_TITLE = I18nKey.of("tableContainer.title.view");
 
-    private static final I18nKey COLUMNS_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.columns");
+    private static final I18nKeyArg<Number> COLUMNS_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.columns");
     private static final I18nKey COLUMNS_VIEW_TITLE = I18nKey.of("tableContainer.title.columns");
     private static final I18nKey COLUMN_VIEW_TITLE = I18nKey.of("tableContainer.title.column");
 
-    private static final I18nKey TABLES_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.tables");
+    private static final I18nKeyArg<Number> TABLES_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.tables");
     private static final I18nKey TABLES_VIEW_TITLE = I18nKey.of("tableContainer.title.tables");
     private static final I18nKey TABLE_VIEW_TITLE = I18nKey.of("tableContainer.title.table");
 
-    private static final I18nKey ROWS_ELEMENT_NAME = I18nKey.of("archive.tree.view.node.rows");
+    private static final I18nKeyArg<Number> ROWS_ELEMENT_NAME = I18nKeyArg.of("archive.tree.view.node.rows");
     private static final I18nKey ROWS_VIEW_TITLE = I18nKey.of("tableContainer.title.data");
 
     private final SiardArchive siardArchive;
@@ -92,8 +93,8 @@ public class TreeBuilder {
     public TreeItem<TreeAttributeWrapper> createRootItem() {
         val rootItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
-                        .name(this.siardArchive.name())
-                        .viewTitle(ROOT_ELEMENT_NAME)
+                        .name(DisplayableText.of(this.siardArchive.name()))
+                        .viewTitle(DisplayableText.of(ROOT_ELEMENT_NAME))
                         .type(TreeContentView.FORM_RENDERER)
                         .renderableForm(MetadataDetailsForm.create(siardArchive)
                                 .toBuilder()
@@ -118,8 +119,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemForPrivileges(List<Privilige> priviliges) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(PRIVILEGES_ELEMENT_NAME, priviliges.size()))
-                .viewTitle(PRIVILEGES_VIEW_TITLE)
+                .name(DisplayableText.of(PRIVILEGES_ELEMENT_NAME, priviliges.size()))
+                .viewTitle(DisplayableText.of(PRIVILEGES_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(PrivilegesOverviewForm.create(siardArchive).toBuilder()
                         .readOnlyForm(readonly)
@@ -129,8 +130,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemForUsers(final List<User> users) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(USERS_ELEMENT_NAME, users.size()))
-                .viewTitle(USERS_VIEW_TITLE)
+                .name(DisplayableText.of(USERS_ELEMENT_NAME, users.size()))
+                .viewTitle(DisplayableText.of(USERS_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(UsersOverviewForm.create(siardArchive).toBuilder()
                         .readOnlyForm(readonly)
@@ -143,8 +144,8 @@ public class TreeBuilder {
 
         val schemasItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
-                        .name(I18n.get(SCHEMAS_ELEMENT_NAME, schemas.size()))
-                        .viewTitle(SCHEMAS_VIEW_TITLE)
+                        .name(DisplayableText.of(SCHEMAS_ELEMENT_NAME, schemas.size()))
+                        .viewTitle(DisplayableText.of(SCHEMAS_VIEW_TITLE))
                         .type(TreeContentView.FORM_RENDERER)
                         .renderableForm(MetadataDetailsForm.create(siardArchive).toBuilder()
                                 .readOnlyForm(readonly)
@@ -162,8 +163,8 @@ public class TreeBuilder {
     private TreeItem<TreeAttributeWrapper> createItemsForSchema(DatabaseSchema schema) {
         val schemaItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
-                        .name(schema.name())
-                        .viewTitle(SCHEMA_VIEW_TITLE)
+                        .name(DisplayableText.of(schema.name()))
+                        .viewTitle(DisplayableText.of(SCHEMA_VIEW_TITLE))
                         .type(TreeContentView.FORM_RENDERER)
                         .renderableForm(SchemaOverviewForm.create(schema).toBuilder()
                                 .readOnlyForm(readonly)
@@ -195,8 +196,8 @@ public class TreeBuilder {
         val types = schema.types();
 
         val typesItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(TYPES_ELEMENT_NAME, types.size()))
-                .viewTitle(TYPES_VIEW_TITLE)
+                .name(DisplayableText.of(TYPES_ELEMENT_NAME, types.size()))
+                .viewTitle(DisplayableText.of(TYPES_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(TypesOverviewForm.create(schema).toBuilder()
                         .readOnlyForm(readonly)
@@ -214,8 +215,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemsForType(final DatabaseType type) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(type.name())
-                .viewTitle(TYPE_VIEW_TITLE)
+                .name(DisplayableText.of(type.name()))
+                .viewTitle(DisplayableText.of(TYPE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(TypeDetailsForm.create(type).toBuilder()
                         .readOnlyForm(readonly)
@@ -233,8 +234,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemsForAttribute(final DatabaseAttribute attribute) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(attribute.getName())
-                .viewTitle(ATTRIBUTE_VIEW_TITLE)
+                .name(DisplayableText.of(attribute.getName()))
+                .viewTitle(DisplayableText.of(ATTRIBUTE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(AttributeDetailsForm.create(attribute).toBuilder()
                         .readOnlyForm(readonly)
@@ -246,8 +247,8 @@ public class TreeBuilder {
         List<Routine> routines = schema.routines();
 
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(ROUTINES_ELEMENT_NAME, routines.size()))
-                .viewTitle(ROUTINES_VIEW_TITLE)
+                .name(DisplayableText.of(ROUTINES_ELEMENT_NAME, routines.size()))
+                .viewTitle(DisplayableText.of(ROUTINES_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(RoutinesOverviewForm.create(schema).toBuilder()
                         .readOnlyForm(readonly)
@@ -265,8 +266,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemsForRoutine(final Routine routine) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(routine.name())
-                .viewTitle(ROUTINE_VIEW_TITLE)
+                .name(DisplayableText.of(routine.name()))
+                .viewTitle(DisplayableText.of(ROUTINE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(RoutineOverviewForm.create(routine).toBuilder()
                         .readOnlyForm(readonly)
@@ -281,8 +282,8 @@ public class TreeBuilder {
     private TreeItem<TreeAttributeWrapper> createItemForParameters(final Routine routine) {
         val parameters = routine.parameters();
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(PARAMETERS_ELEMENT_NAME, parameters.size()))
-                .viewTitle(ROUTINE_VIEW_TITLE)
+                .name(DisplayableText.of(PARAMETERS_ELEMENT_NAME, parameters.size()))
+                .viewTitle(DisplayableText.of(ROUTINE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(RoutineOverviewForm.create(routine).toBuilder()
                         .readOnlyForm(readonly)
@@ -300,8 +301,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemsForParameter(final MetaParameter parameter) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(parameter.getName())
-                .viewTitle(PARAMETER_VIEW_TITLE)
+                .name(DisplayableText.of(parameter.getName()))
+                .viewTitle(DisplayableText.of(PARAMETER_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(ParameterOverviewForm.create(parameter).toBuilder()
                         .readOnlyForm(readonly)
@@ -312,8 +313,8 @@ public class TreeBuilder {
     private TreeItem<TreeAttributeWrapper> createItemForViews(DatabaseSchema schema) {
         List<DatabaseView> views = schema.views();
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(VIEWS_ELEMENT_NAME, views.size()))
-                .viewTitle(VIEWS_VIEW_TITLE)
+                .name(DisplayableText.of(VIEWS_ELEMENT_NAME, views.size()))
+                .viewTitle(DisplayableText.of(VIEWS_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(ViewsOverviewForm.create(schema).toBuilder()
                         .readOnlyForm(readonly)
@@ -331,8 +332,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemForView(DatabaseView view) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(view.name())
-                .viewTitle(VIEW_VIEW_TITLE)
+                .name(DisplayableText.of(view.name()))
+                .viewTitle(DisplayableText.of(VIEW_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(ViewOverviewForm.create(view.getMetaView()).toBuilder()
                         .readOnlyForm(readonly)
@@ -346,8 +347,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemForColumns(DatabaseView view) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(COLUMNS_ELEMENT_NAME, view.columns().size()))
-                .viewTitle(COLUMNS_VIEW_TITLE)
+                .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, view.columns().size()))
+                .viewTitle(DisplayableText.of(COLUMNS_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(ViewOverviewForm.create(view.getMetaView()).toBuilder()
                         .readOnlyForm(readonly)
@@ -365,8 +366,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createColumnItem(DatabaseColumn column) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(column.name())
-                .viewTitle(COLUMN_VIEW_TITLE)
+                .name(DisplayableText.of(column.name()))
+                .viewTitle(DisplayableText.of(COLUMN_VIEW_TITLE))
                 /*
                 Caution: Mockups are showing different style for column details forms.
                 For achieving that, a separate value renderer needs to be developed.
@@ -385,8 +386,8 @@ public class TreeBuilder {
         List<DatabaseTable> tables = schema.tables();
 
         val tablesItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(TABLES_ELEMENT_NAME, tables.size()))
-                .viewTitle(TABLES_VIEW_TITLE)
+                .name(DisplayableText.of(TABLES_ELEMENT_NAME, tables.size()))
+                .viewTitle(DisplayableText.of(TABLES_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(SchemaOverviewForm.create(schema).toBuilder()
                         .readOnlyForm(readonly)
@@ -405,8 +406,8 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemForTable(DatabaseTable table) {
         val tableItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(table.name())
-                .viewTitle(TABLE_VIEW_TITLE)
+                .name(DisplayableText.of(table.name()))
+                .viewTitle(DisplayableText.of(TABLE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(TableOverviewForm.create(table).toBuilder()
                         .readOnlyForm(readonly)
@@ -415,8 +416,8 @@ public class TreeBuilder {
 
         if (!siardArchive.onlyMetaData()) {
             val rowsItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                    .name(I18n.get(ROWS_ELEMENT_NAME, table.getTable().getMetaTable().getRows()))
-                    .viewTitle(ROWS_VIEW_TITLE)
+                    .name(DisplayableText.of(ROWS_ELEMENT_NAME, table.getTable().getMetaTable().getRows()))
+                    .viewTitle(DisplayableText.of(ROWS_VIEW_TITLE))
                     .type(TreeContentView.FORM_RENDERER)
                     .renderableForm(RowsOverviewForm.create(table)
                             .toBuilder()
@@ -436,8 +437,8 @@ public class TreeBuilder {
         List<DatabaseColumn> columns = table.columns();
 
         val columnsItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(I18n.get(COLUMNS_ELEMENT_NAME, columns.size()))
-                .viewTitle(COLUMNS_VIEW_TITLE)
+                .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, columns.size()))
+                .viewTitle(DisplayableText.of(COLUMNS_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(TableOverviewForm.create(table).toBuilder()
                         .readOnlyForm(readonly)

@@ -6,7 +6,8 @@ import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.presenter.StepperDependant;
-import ch.admin.bar.siardsuite.util.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -44,8 +45,8 @@ public class PreviewArchiveBrowser extends Presenter implements StepperDependant
         this.loadedFxml = GenericArchiveBrowserPresenter.load(
                 stage,
                 controller,
-                TITLE,
-                TEXT,
+                DisplayableText.of(TITLE),
+                DisplayableText.of(TEXT),
                 this.buttonsBox,
                 archiveBrowserView.createRootItem());
     }

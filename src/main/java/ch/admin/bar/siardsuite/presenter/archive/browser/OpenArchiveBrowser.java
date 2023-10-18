@@ -4,7 +4,8 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.TreeBuilder;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.presenter.Presenter;
-import ch.admin.bar.siardsuite.util.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.scene.Node;
@@ -35,7 +36,7 @@ public class OpenArchiveBrowser extends Presenter {
         val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), false);
 
         this.buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
-        buttonsBox.cancel().setOnAction(event -> this.controller.initializeUpload(stage));
+        buttonsBox.cancel().setOnAction(event -> this.controller.initializeUpload(stage)); // FIXME Duplication?
         buttonsBox.previous().setOnAction(event -> this.controller.initializeExport(stage));
         buttonsBox.next().setOnAction(event -> {
             try {
@@ -49,8 +50,8 @@ public class OpenArchiveBrowser extends Presenter {
         this.loadedFxml = GenericArchiveBrowserPresenter.load(
                 stage,
                 controller,
-                TITLE,
-                TEXT,
+                DisplayableText.of(TITLE),
+                DisplayableText.of(TEXT),
                 this.buttonsBox,
                 archiveBrowserView.createRootItem());
     }

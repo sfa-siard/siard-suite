@@ -4,8 +4,8 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.util.I18nKey;
 import ch.admin.bar.siardsuite.util.MetaSearchTerm;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import javafx.scene.control.TreeItem;
 import lombok.Builder;
 import lombok.NonNull;
@@ -54,7 +54,7 @@ public class TreeItemsExplorer {
     ) {
         val updatedPathToTreeItem = copyAndAddElement(
                 pathToTreeItem,
-                treeItem.getValue().getName());
+                treeItem.getValue().getName().getText());
 
         val formFields = treeItem.getValue()
                 .getRenderableForm()
@@ -122,12 +122,12 @@ public class TreeItemsExplorer {
     public static class Result {
         @NonNull TreeItem<TreeAttributeWrapper> treeItem;
         @NonNull List<String> pathToTreeItem;
-        @NonNull I18nKey propertyName;
+        @NonNull DisplayableText propertyName;
     }
 
     @Value
     private static class FormField {
-        I18nKey title;
+        DisplayableText title;
         Supplier<String> valueSupplier;
     }
 
@@ -136,7 +136,7 @@ public class TreeItemsExplorer {
     private static class FormField2TreeItemRelation {
         Supplier<String> valueSupplier;
         TreeItem<TreeAttributeWrapper> treeItem;
-        I18nKey propertyTitle;
+        DisplayableText propertyTitle;
         List<String> pathToTreeItem;
     }
 }

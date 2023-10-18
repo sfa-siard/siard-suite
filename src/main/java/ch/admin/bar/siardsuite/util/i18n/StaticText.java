@@ -10,6 +10,6 @@ public class StaticText implements DisplayableText {
 
     @Override
     public String getText() {
-        return null;
+        return staticText;
     }
 }

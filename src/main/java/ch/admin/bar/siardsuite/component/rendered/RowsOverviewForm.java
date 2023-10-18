@@ -12,7 +12,8 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
-import ch.admin.bar.siardsuite.util.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.enterag.utils.BU;
 import lombok.Getter;
 import lombok.NonNull;
@@ -35,7 +36,7 @@ public class RowsOverviewForm {
     public static RenderableForm<DatabaseTable> create(@NonNull final DatabaseTable table) {
         val tableProperties = table.getColumns().stream()
                 .map(column -> new ReadOnlyStringProperty<RecordWrapper>(
-                        I18nKey.of(column.getName()), // TODO FIXME: Is not a key, will not be translated
+                        DisplayableText.of(column.getName()),
                         row -> row.findCellValue(column.name())))
                 .collect(Collectors.toList());
 

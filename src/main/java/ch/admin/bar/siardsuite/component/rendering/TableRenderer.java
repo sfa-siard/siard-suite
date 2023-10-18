@@ -66,7 +66,7 @@ public class TableRenderer<T, I> implements SearchableFormEntry{
     }
 
     private TableColumn<I, String> column(final ReadOnlyStringProperty<I> columnProperty) {
-        val column = new TableColumn<I, String>(I18n.get(columnProperty.getTitle()));
+        val column = new TableColumn<I, String>(columnProperty.getTitle().getText());
         column.setCellValueFactory(cellData -> {
             val value = columnProperty.getValueExtractor().apply(cellData.getValue());
             return new SimpleStringProperty(value);

@@ -8,7 +8,8 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTa
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.presenter.archive.browser.ChangeableDataPresenter.SaveChangesReport;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
@@ -179,12 +180,12 @@ public class FormRenderer<T> {
         private final TextField valueTextField;
 
         public ReadOnlyFormField(
-                @NonNull final I18nKey title,
+                @NonNull final DisplayableText title,
                 @NonNull final Function<T, String> valueExtractor,
                 @NonNull final T data) {
 
             titleLabel = new Label();
-            titleLabel.setText(I18n.get(title));
+            titleLabel.setText(title.getText());
             titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
 
             val value = valueExtractor.apply(data);
@@ -224,7 +225,7 @@ public class FormRenderer<T> {
             val titleSuffix = property.getValueValidators().stream()
                     .map(validator -> validator.getTitleSuffix().orElse(""))
                     .collect(Collectors.joining());
-            title.setText(I18n.get(property.getTitle()) + titleSuffix);
+            title.setText(property.getTitle().getText() + titleSuffix);
             title.getStyleClass().add(TITLE_STYLE_CLASS);
 
             value = new TextField();
@@ -283,13 +284,13 @@ public class FormRenderer<T> {
                         title.getText(),
                         currentValue,
                         e.getMessage());
-                showValidationLabel(SINGLE_FIELD_UNKNOWN_ERROR);
+                showValidationLabel(DisplayableText.of(SINGLE_FIELD_UNKNOWN_ERROR));
                 return false;
             }
         }
 
-        private void showValidationLabel(final I18nKey message) {
-            validationMsg.setText(I18n.get(message));
+        private void showValidationLabel(final DisplayableText message) {
+            validationMsg.setText(message.getText());
             validationMsg.setVisible(true);
             validationMsg.setManaged(true);
         }

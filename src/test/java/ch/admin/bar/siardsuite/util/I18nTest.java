@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.util;
 
 import ch.admin.bar.siardsuite.SiardApplication;
+import ch.admin.bar.siardsuite.util.i18n.keys.Key;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
@@ -31,7 +32,7 @@ class I18nTest {
     @Test
     public void areAllStaticDefinedI18nKeysSupportedByMessageBundles() {
         // given
-        val keys = extractStaticI18nKeyDefinitions();
+        val keys = extractStaticKeyDefinitions();
 
         // when
         val unsupportedKeys = keys.stream()
@@ -51,6 +52,7 @@ class I18nTest {
                 .collect(Collectors.toSet());
 
         // then
+        Assertions.assertThat(keys).isNotEmpty();
         if (!unsupportedKeys.isEmpty()) {
             System.out.println("========= Properties-template for unsupported keys =========");
             System.out.println(createPropertiesTemplate(unsupportedKeys));
@@ -75,28 +77,28 @@ class I18nTest {
                 .collect(Collectors.joining("\n"));
     }
 
-    private List<ResourceBundle> findBundlesWhichNotContainingKey(I18nKey key) {
+    private List<ResourceBundle> findBundlesWhichNotContainingKey(Key key) {
         return BUNDLES.stream()
                 .filter(resourceBundle -> !resourceBundle.containsKey(key.getValue()))
                 .collect(Collectors.toList());
     }
 
-    private Set<I18nKey> extractStaticI18nKeyDefinitions() {
+    private Set<Key> extractStaticKeyDefinitions() {
         val siardClasses = findAllClasses("ch.admin.bar.siardsuite");
 
         return siardClasses.stream()
-                .flatMap(clazz -> extractStaticI18nKeyDefinitions(clazz).stream())
+                .flatMap(clazz -> extractStaticKeyDefinitions(clazz).stream())
                 .collect(Collectors.toSet());
     }
 
-    private Set<I18nKey> extractStaticI18nKeyDefinitions(Class<?> clazz) {
+    private Set<Key> extractStaticKeyDefinitions(Class<?> clazz) {
         return Arrays.stream(clazz.getDeclaredFields())
                 .filter(field -> Modifier.isStatic(field.getModifiers()))
-                .filter(field -> field.getType().equals(I18nKey.class))
+                .filter(field -> Key.class.isAssignableFrom(field.getType()))
                 .map(field -> {
                     try {
                         field.setAccessible(true);
-                        return (I18nKey) field.get(null);
+                        return (Key) field.get(null);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
@@ -143,7 +145,7 @@ class I18nTest {
 
     @Value
     private static class UnsupportedKey {
-        @NonNull I18nKey key;
+        @NonNull Key key;
         @NonNull Set<Locale> unsupportedLanguages;
 
         public String toFailureMessage() {

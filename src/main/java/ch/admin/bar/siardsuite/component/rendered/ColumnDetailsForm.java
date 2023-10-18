@@ -5,7 +5,8 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
-import ch.admin.bar.siardsuite.util.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
 import java.net.URI;
@@ -29,7 +30,7 @@ public class ColumnDetailsForm {
     private static final I18nKey NOT_A_VALID_LOCATION = I18nKey.of("valueValidation.notAValidLocation");
 
     public static final ReadWriteStringProperty.Validator IS_VALID_PATH_TO_LOB_FOLDER_VALIDATOR = ReadWriteStringProperty.Validator.builder()
-            .message(NOT_A_VALID_LOCATION)
+            .message(DisplayableText.of(NOT_A_VALID_LOCATION))
             .isValidCheck(nullableValue -> {
                 if (nullableValue == null || nullableValue.isEmpty()) {
                     return true;
