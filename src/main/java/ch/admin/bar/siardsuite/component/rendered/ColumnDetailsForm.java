@@ -1,23 +1,16 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
-import ch.admin.bar.siard2.api.MetaColumn;
-import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
+import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.booleanToString;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.cardinalityToString;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.catchExceptions;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.uriToString;
 
 public class ColumnDetailsForm {
 
@@ -52,52 +45,53 @@ public class ColumnDetailsForm {
             })
             .build();
 
-    public static RenderableForm create(@NonNull final MetaColumn column) {
-        return RenderableForm.<MetaColumn>builder()
+    public static RenderableForm<DatabaseColumn> create(@NonNull final DatabaseColumn column) {
+        return RenderableForm.<DatabaseColumn>builder()
                 .dataSupplier(() -> column)
-                .group(RenderableFormGroup.<MetaColumn>builder()
+                .afterSaveAction(DatabaseColumn::write)
+                .group(RenderableFormGroup.<DatabaseColumn>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 NAME,
-                                MetaColumn::getName))
+                                DatabaseColumn::getName))
                         .property(new ReadOnlyStringProperty<>(
                                 POSITION,
-                                intToString(MetaColumn::getPosition)))
+                                DatabaseColumn::getIndex))
                         .property(new ReadWriteStringProperty<>(
                                 LOB,
-                                uriToString(MetaColumn::getLobFolder),
-                                (valueHolder, value) -> valueHolder.setLobFolder(new URI(value)),
+                                DatabaseColumn::getLobFolder,
+                                DatabaseColumn::setLobFolder,
                                 IS_VALID_PATH_TO_LOB_FOLDER_VALIDATOR
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 MIME,
-                                MetaColumn::getMimeType,
-                                MetaColumn::setMimeType
+                                DatabaseColumn::getMimeType,
+                                DatabaseColumn::setMimeType
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 SQL,
-                                catchExceptions(MetaColumn::getType)))
+                                DatabaseColumn::getType))
                         .property(new ReadOnlyStringProperty<>(
                                 UDT_SCHEMA,
-                                MetaColumn::getTypeSchema))
+                                DatabaseColumn::getUserDefinedTypeSchema))
                         .property(new ReadOnlyStringProperty<>(
                                 UDT_NAME,
-                                MetaColumn::getTypeName))
+                                DatabaseColumn::getUserDefinedTypeName))
                         .property(new ReadOnlyStringProperty<>(
                                 DATA_TYPE,
-                                MetaColumn::getTypeOriginal))
+                                DatabaseColumn::getOriginalType))
                         .property(new ReadOnlyStringProperty<>(
                                 NULLABLE,
-                                booleanToString(MetaColumn::isNullable)))
+                                DatabaseColumn::getIsNullable))
                         .property(new ReadOnlyStringProperty<>(
                                 DEFAULT_VALUE,
-                                MetaColumn::getDefaultValue))
+                                DatabaseColumn::getDefaultValue))
                         .property(new ReadOnlyStringProperty<>(
                                 CARDINALITY,
-                                cardinalityToString(MetaColumn::getCardinality)))
+                                DatabaseColumn::getCardinality))
                         .property(new ReadWriteStringProperty<>(
                                 DESCRIPTION,
-                                MetaColumn::getDescription,
-                                MetaColumn::setDescription))
+                                DatabaseColumn::getDescription,
+                                DatabaseColumn::setDescription))
                         .build())
                 .build();
     }

@@ -37,7 +37,7 @@ public class RowsOverviewForm {
         val tableProperties = table.getColumns().stream()
                 .map(column -> new ReadOnlyStringProperty<RecordWrapper>(
                         DisplayableText.of(column.getName()),
-                        row -> row.findCellValue(column.getName())))
+                        row -> row.findCellValue(column.name())))
                 .collect(Collectors.toList());
 
 
@@ -49,7 +49,7 @@ public class RowsOverviewForm {
                                 DatabaseTable::name))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_NUMBER_OF_ROWS,
-                                Converter.longToString(DatabaseTable::getNumberOfRows)))
+                                DatabaseTable::getNumberOfRows))
                         .property(RenderableLazyLoadingTable.<DatabaseTable, RecordWrapper>builder()
                                 .dataExtractor(databaseTable -> new RecordDataSource(table.getTable()))
                                 .properties(tableProperties)
@@ -67,7 +67,7 @@ public class RowsOverviewForm {
             this.record = record;
 
             val cells = new ListAssembler<>(
-                    Converter.catchExceptions(record::getCells).get(),
+                    Converter.catchExceptions(record::getCells),
                     Converter.catchExceptions(record::getCell)
             ).assemble();
 

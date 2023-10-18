@@ -17,11 +17,6 @@ import java.util.function.Supplier;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Converter {
-
-    public static <T> Function<T, String> booleanToString(Function<T, Boolean> getter) {
-        return t -> String.valueOf(getter.apply(t));
-    }
-
     public static <T> Function<T, String> intToString(Function<T, Integer> intGetter) {
         return t -> String.valueOf(intGetter.apply(t));
     }
@@ -38,17 +33,6 @@ public class Converter {
         return t -> Optional.ofNullable(getter.apply(t))
                 .map(URI::getPath)
                 .orElse("");
-    }
-
-    public static <T> Function<T, String> cardinalityToString(ThrowingFunction<T, Integer> getter) {
-        return t -> {
-            val cardinality = catchExceptions(getter).apply(t);
-
-            if (cardinality == -1) {
-                return "";
-            }
-            return String.valueOf(cardinality);
-        };
     }
 
     public static <T> Function<T, LocalDate> calendarToLocalDate(Function<T, Calendar> getter) {

@@ -1,11 +1,6 @@
 package ch.admin.bar.siardsuite.component;
 
-import ch.admin.bar.siard2.api.MetaAttribute;
-import ch.admin.bar.siard2.api.MetaColumn;
 import ch.admin.bar.siard2.api.MetaParameter;
-import ch.admin.bar.siard2.api.MetaSchema;
-import ch.admin.bar.siard2.api.MetaType;
-import ch.admin.bar.siard2.api.MetaView;
 import ch.admin.bar.siardsuite.component.rendered.AttributeDetailsForm;
 import ch.admin.bar.siardsuite.component.rendered.ColumnDetailsForm;
 import ch.admin.bar.siardsuite.component.rendered.MetadataDetailsForm;
@@ -21,18 +16,21 @@ import ch.admin.bar.siardsuite.component.rendered.TypesOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.UsersOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.ViewOverviewForm;
 import ch.admin.bar.siardsuite.component.rendered.ViewsOverviewForm;
-import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.TreeContentView;
+import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
+import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siardsuite.model.database.DatabaseType;
+import ch.admin.bar.siardsuite.model.database.DatabaseView;
 import ch.admin.bar.siardsuite.model.database.Privilige;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKeyArg;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import lombok.RequiredArgsConstructor;
@@ -175,9 +173,8 @@ public class TreeBuilder {
 
         schemaItem.setExpanded(true);
 
-        val metaSchema = schema.getSchema().getMetaSchema();
-        if (metaSchema.getMetaTypes() > 0) {
-            schemaItem.getChildren().add(createItemForTypes(metaSchema));
+        if (!schema.getTypes().isEmpty()) {
+            schemaItem.getChildren().add(createItemForTypes(schema));
         }
 
         if (!schema.getTables().isEmpty()) {
@@ -188,23 +185,21 @@ public class TreeBuilder {
             schemaItem.getChildren().add(createItemForRoutines(schema));
         }
 
-        if (metaSchema.getMetaViews() > 0) {
-            schemaItem.getChildren().add(createItemForViews(metaSchema));
+        if (!schema.getViews().isEmpty()) {
+            schemaItem.getChildren().add(createItemForViews(schema));
         }
 
         return schemaItem;
     }
 
-    private TreeItem<TreeAttributeWrapper> createItemForTypes(final MetaSchema schema) {
-
-        val types = new ListAssembler<>(schema.getMetaTypes(), schema::getMetaType)
-                .assemble();
+    private TreeItem<TreeAttributeWrapper> createItemForTypes(final DatabaseSchema schema) {
+        val types = schema.types();
 
         val typesItem = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(TYPES_ELEMENT_NAME, types.size()))
                 .viewTitle(DisplayableText.of(TYPES_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
-                .renderableForm(TypesOverviewForm.create(schema, types).toBuilder()
+                .renderableForm(TypesOverviewForm.create(schema).toBuilder()
                         .readOnlyForm(readonly)
                         .build())
                 .build());
@@ -218,19 +213,17 @@ public class TreeBuilder {
         return typesItem;
     }
 
-    private TreeItem<TreeAttributeWrapper> createItemsForType(final MetaType type) {
-        val attributes = new ListAssembler<>(type.getMetaAttributes(), type::getMetaAttribute).assemble();
-
+    private TreeItem<TreeAttributeWrapper> createItemsForType(final DatabaseType type) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(type.getName()))
+                .name(DisplayableText.of(type.name()))
                 .viewTitle(DisplayableText.of(TYPE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
-                .renderableForm(TypeDetailsForm.create(type, attributes).toBuilder()
+                .renderableForm(TypeDetailsForm.create(type).toBuilder()
                         .readOnlyForm(readonly)
                         .build())
                 .build());
 
-        val attributeItems = attributes.stream()
+        val attributeItems = type.attributes().stream()
                 .map(this::createItemsForAttribute)
                 .collect(Collectors.toList());
 
@@ -239,7 +232,7 @@ public class TreeBuilder {
         return item;
     }
 
-    private TreeItem<TreeAttributeWrapper> createItemsForAttribute(final MetaAttribute attribute) {
+    private TreeItem<TreeAttributeWrapper> createItemsForAttribute(final DatabaseAttribute attribute) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(attribute.getName()))
                 .viewTitle(DisplayableText.of(ATTRIBUTE_VIEW_TITLE))
@@ -317,14 +310,13 @@ public class TreeBuilder {
                 .build());
     }
 
-    private TreeItem<TreeAttributeWrapper> createItemForViews(MetaSchema schema) {
-        val views = new ListAssembler<>(schema.getMetaViews(), schema::getMetaView).assemble();
-
+    private TreeItem<TreeAttributeWrapper> createItemForViews(DatabaseSchema schema) {
+        List<DatabaseView> views = schema.views();
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(VIEWS_ELEMENT_NAME, views.size()))
                 .viewTitle(DisplayableText.of(VIEWS_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
-                .renderableForm(ViewsOverviewForm.create(schema, views).toBuilder()
+                .renderableForm(ViewsOverviewForm.create(schema).toBuilder()
                         .readOnlyForm(readonly)
                         .build())
                 .build());
@@ -338,12 +330,12 @@ public class TreeBuilder {
         return item;
     }
 
-    private TreeItem<TreeAttributeWrapper> createItemForView(MetaView view) {
+    private TreeItem<TreeAttributeWrapper> createItemForView(DatabaseView view) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(view.getName()))
+                .name(DisplayableText.of(view.name()))
                 .viewTitle(DisplayableText.of(VIEW_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
-                .renderableForm(ViewOverviewForm.create(view).toBuilder()
+                .renderableForm(ViewOverviewForm.create(view.getMetaView()).toBuilder()
                         .readOnlyForm(readonly)
                         .build())
                 .build());
@@ -353,19 +345,17 @@ public class TreeBuilder {
         return item;
     }
 
-    private TreeItem<TreeAttributeWrapper> createItemForColumns(MetaView view) {
-        val columns = new ListAssembler<>(view.getMetaColumns(), view::getMetaColumn).assemble();
-
+    private TreeItem<TreeAttributeWrapper> createItemForColumns(DatabaseView view) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, columns.size()))
+                .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, view.columns().size()))
                 .viewTitle(DisplayableText.of(COLUMNS_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
-                .renderableForm(ViewOverviewForm.create(view).toBuilder()
+                .renderableForm(ViewOverviewForm.create(view.getMetaView()).toBuilder()
                         .readOnlyForm(readonly)
                         .build())
                 .build());
 
-        val columnItems = columns.stream()
+        val columnItems = view.columns().stream()
                 .map(this::createColumnItem)
                 .collect(Collectors.toList());
 
@@ -374,9 +364,9 @@ public class TreeBuilder {
         return item;
     }
 
-    private TreeItem<TreeAttributeWrapper> createColumnItem(MetaColumn column) {
+    private TreeItem<TreeAttributeWrapper> createColumnItem(DatabaseColumn column) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(column.getName()))
+                .name(DisplayableText.of(column.name()))
                 .viewTitle(DisplayableText.of(COLUMN_VIEW_TITLE))
                 /*
                 Caution: Mockups are showing different style for column details forms.
@@ -444,8 +434,7 @@ public class TreeBuilder {
     }
 
     private TreeItem<TreeAttributeWrapper> createColumnItem(DatabaseTable table) {
-        val metaTable = table.getTable().getMetaTable();
-        val columns = new ListAssembler<>(metaTable.getMetaColumns(), metaTable::getMetaColumn).assemble();
+        List<DatabaseColumn> columns = table.columns();
 
         val columnsItem = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, columns.size()))
