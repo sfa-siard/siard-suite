@@ -50,6 +50,18 @@ public class Converter {
         };
     }
 
+    public static <T> Function<T, String> cardinalityToString(ThrowingFunction<T, Integer> getter) {
+        return t -> {
+            val cardinality = catchExceptions(getter).apply(t);
+
+            if (cardinality == -1) {
+                return "";
+            }
+            return String.valueOf(cardinality);
+        };
+    }
+
+
     public static <T, P> Function<T, P> catchExceptions(ThrowingFunction<T, P> throwingFunction) {
         return t -> {
             try {

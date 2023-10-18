@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Routine extends DatabaseObject {
+public class Routine {
 
     private final MetaRoutine metaRoutine;
 
@@ -33,7 +33,6 @@ public class Routine extends DatabaseObject {
         this.description = metaRoutine.getBody();
     }
 
-    @Override
     public String name() {
         return metaRoutine.getName();
     }

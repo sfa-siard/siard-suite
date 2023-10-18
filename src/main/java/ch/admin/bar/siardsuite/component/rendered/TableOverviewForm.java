@@ -44,7 +44,7 @@ public class TableOverviewForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         COLUMN_NAME,
-                                        DatabaseColumn::name
+                                        DatabaseColumn::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         COLUMN_TYPE,

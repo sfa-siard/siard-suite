@@ -7,19 +7,19 @@ import lombok.Getter;
 
 import java.io.IOException;
 
-public class DatabaseCell extends DatabaseObject {
+public class DatabaseCell {
 
-    protected final SiardArchive archive;
-    protected final DatabaseSchema schema;
-    protected final DatabaseTable table;
-    protected final DatabaseColumn column;
-    protected final DatabaseRow row;
-    protected final Cell cell;
-    protected final String index;
-    protected final String name;
-    protected final String type;
+    private final SiardArchive archive;
+    private final DatabaseSchema schema;
+    private final DatabaseTable table;
+    private final DatabaseColumn column;
+    private final DatabaseRow row;
+    private final Cell cell;
+    private final String index;
+    private final String name;
+    private final String type;
     @Getter
-    protected final String value;
+    private final String value;
 
     protected DatabaseCell(SiardArchive archive, DatabaseSchema schema, DatabaseTable table, DatabaseRow row,
                            Cell cell) {
@@ -51,10 +51,4 @@ public class DatabaseCell extends DatabaseObject {
         }
         return this.cell.getString();
     }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
 }

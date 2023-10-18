@@ -12,30 +12,26 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseTable extends DatabaseObject {
+public class DatabaseTable {
 
-    protected final SiardArchive siardArchive;
-    protected final DatabaseSchema schema;
+    private final SiardArchive siardArchive;
+    private final DatabaseSchema schema;
 
     @Getter
-    protected final Table table;
-    protected final boolean onlyMetaData;
+    private final Table table;
+    private final boolean onlyMetaData;
     @Getter
-    public final String name;
+    private final String name;
     @Getter
     @Setter
-    public String description;
+    private String description;
     @Getter
-    protected final List<DatabaseColumn> columns = new ArrayList<>();
-    public final String numberOfColumns;
+    private final List<DatabaseColumn> columns = new ArrayList<>();
+    private final String numberOfColumns;
     @Getter
-    protected final List<DatabaseRow> rows = new ArrayList<>();
+    private final List<DatabaseRow> rows = new ArrayList<>();
     @Getter
-    public final String numberOfRows;
-
-    public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
-        this(archive, schema, table, false);
-    }
+    private final String numberOfRows;
 
     public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
         this.siardArchive = archive;
@@ -57,13 +53,12 @@ public class DatabaseTable extends DatabaseObject {
         OutputStream outPutStream = new FileOutputStream(destination);
         this.table.getParentSchema()
                 .getParentArchive()
-                .getSchema(this.schema.name)
+                .getSchema(this.schema.name())
                 .getTable(this.name)
                 .exportAsHtml(outPutStream, lobFolder);
         outPutStream.close();
     }
 
-    @Override
     public String name() {
         return name;
     }

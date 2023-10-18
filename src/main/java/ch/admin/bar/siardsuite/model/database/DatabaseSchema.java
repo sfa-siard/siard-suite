@@ -5,40 +5,36 @@ import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
 import javafx.scene.control.CheckBoxTreeItem;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DatabaseSchema extends DatabaseObject {
+public class DatabaseSchema {
 
-    protected final SiardArchive siardArchive;
-    protected final Schema schema;
-    protected final boolean onlyMetaData;
-    protected final String name;
+    private final Schema schema;
+
+    private final String name;
 
     @Setter
     @Getter
-    protected String description;
+    private String description;
 
     @Getter
-    protected List<DatabaseTable> tables;
+    private final List<DatabaseTable> tables;
 
     @Getter
-    protected List<DatabaseView> views;
+    private final List<DatabaseView> views;
 
     @Getter
-    protected List<DatabaseType> types;
+    private final List<DatabaseType> types;
 
     @Getter
-    protected List<Routine> routines;
+    private final List<Routine> routines;
 
     protected DatabaseSchema(SiardArchive siardArchive, Schema schema, boolean onlyMetaData) {
-        this.siardArchive = siardArchive;
         this.schema = schema;
-        this.onlyMetaData = onlyMetaData;
 
         MetaSchemaFacade metaSchemaFacade = new MetaSchemaFacade(schema);
         name = metaSchemaFacade.name();
@@ -52,14 +48,12 @@ public class DatabaseSchema extends DatabaseObject {
     }
 
     public void write() {
-        val schema = siardArchive.getArchive()
-                .getSchema(name);
         schema.getMetaSchema().setDescription(description);
     }
 
     public void export(List<String> tablesToExport, File directory) {
         this.tables.stream()
-                .filter(databaseTable -> tablesToExport.contains(databaseTable.name))
+                .filter(databaseTable -> tablesToExport.contains(databaseTable.getName()))
                 .forEach(databaseTable -> {
                     try {
                         databaseTable.export(directory);
@@ -72,7 +66,7 @@ public class DatabaseSchema extends DatabaseObject {
 
     public void populate(CheckBoxTreeItem<String> schemaItem) {
         List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.tables.stream()
-                .map(table -> new CheckBoxTreeItem<>(table.name))
+                .map(table -> new CheckBoxTreeItem<>(table.getName()))
                 .collect(Collectors.toList());
         schemaItem.getChildren().setAll(checkBoxTreeItems);
     }

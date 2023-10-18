@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaColumn;
+import ch.admin.bar.siard2.api.MetaValue;
+import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,29 +10,25 @@ import java.io.IOException;
 import java.net.URI;
 
 @Getter
-public class DatabaseColumn extends DatabaseObject {
+@Setter
+public class DatabaseColumn {
 
-    protected final SiardArchive archive;
-    protected final DatabaseSchema schema;
-    protected final MetaColumn column;
-    protected final String index;
-    protected final String name;
-    protected final String type;
+    private final SiardArchive archive;
+    private final DatabaseSchema schema;
+    private final MetaColumn column;
+    private final String index;
+    private final String name;
+    private final String type;
+    private final String userDefinedTypeSchema;
+    private final String userDefinedTypeName;
+    private final String originalType;
+    private final String isNullable;
+    private final String defaultValue;
+    private final String cardinality;
 
-    @Setter
-    protected String lobFolder;
-
-    @Setter
-    protected String mimeType;
-    protected final String userDefinedTypeSchema;
-    protected final String userDefinedTypeName;
-    protected final String originalType;
-    protected final String isNullable;
-    protected final String defaultValue;
-    protected String cardinality;
-
-    @Setter
-    protected String description;
+    private String lobFolder;
+    private String mimeType;
+    private String description;
 
     protected DatabaseColumn(
             SiardArchive archive,
@@ -55,19 +53,8 @@ public class DatabaseColumn extends DatabaseObject {
         originalType = column.getTypeOriginal();
         isNullable = String.valueOf(column.isNullable());
         defaultValue = column.getDefaultValue();
-
-        try {
-            cardinality = formatCardinality(column.getCardinality());
-        } catch (IOException e) {
-            cardinality = "";
-        }
-
+        cardinality = Converter.<MetaColumn>cardinalityToString(MetaValue::getCardinality).apply(column);
         description = column.getDescription();
-    }
-
-    @Override
-    public String name() {
-        return this.name;
     }
 
     public String index() {
@@ -86,10 +73,5 @@ public class DatabaseColumn extends DatabaseObject {
         column.setLobFolder(URI.create(lobFolder));
         column.setMimeType(mimeType);
         column.setDescription(description);
-    }
-
-    private String formatCardinality(final int cardinality) {
-        if (cardinality == -1) return "";
-        return String.valueOf(cardinality);
     }
 }

@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
+import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -52,15 +53,15 @@ public class TypeDetailsForm {
                                 .dataExtractor(DatabaseType::getDatabaseAttributes)
                                 .property(new ReadOnlyStringProperty<>(
                                         ATTRIBUTE_NAME,
-                                        DatabaseAttribute::name
+                                        DatabaseAttribute::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         ATTRIBUTE_TYPE,
-                                        DatabaseAttribute::type
+                                        DatabaseAttribute::getType
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         ATTRIBUTE_CARDINALITY,
-                                        DatabaseAttribute::cardinality
+                                        Converter.cardinalityToString(DatabaseAttribute::getCardinality)
                                 ))
                                 .build())
                         .build())

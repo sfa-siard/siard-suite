@@ -366,7 +366,7 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createColumnItem(DatabaseColumn column) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(column.name()))
+                .name(DisplayableText.of(column.getName()))
                 .viewTitle(DisplayableText.of(COLUMN_VIEW_TITLE))
                 /*
                 Caution: Mockups are showing different style for column details forms.

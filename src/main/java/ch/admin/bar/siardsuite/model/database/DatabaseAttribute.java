@@ -4,7 +4,7 @@ import ch.admin.bar.siard2.api.MetaAttribute;
 import lombok.Getter;
 import lombok.Setter;
 
-public class DatabaseAttribute extends DatabaseObject {
+public class DatabaseAttribute {
 
     private final MetaAttribute metaAttribute;
 
@@ -16,11 +16,6 @@ public class DatabaseAttribute extends DatabaseObject {
         this.metaAttribute = metaAttribute;
 
         this.description = metaAttribute.getDescription();
-    }
-
-    @Deprecated
-    public String name() {
-        return this.metaAttribute.getName();
     }
 
     public String getName() {
@@ -62,10 +57,6 @@ public class DatabaseAttribute extends DatabaseObject {
 
     public String type() {
         return this.metaAttribute.getType();
-    }
-
-    public String cardinality() {
-        return String.valueOf(this.metaAttribute.getCardinality());
     }
 
     public void write() {

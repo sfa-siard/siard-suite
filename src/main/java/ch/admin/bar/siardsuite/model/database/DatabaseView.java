@@ -6,23 +6,20 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseView extends DatabaseObject {
+public class DatabaseView {
 
     @Getter
-    protected final MetaView metaView;
-    protected final List<DatabaseColumn> columns = new ArrayList<>();
-    private DatabaseSchema schema;
+    private final MetaView metaView;
+    private final List<DatabaseColumn> columns = new ArrayList<>();
 
     public DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView metaView) {
         this.metaView = metaView;
-        this.schema = schema;
 
         for (int i = 0; i < metaView.getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, metaView.getMetaColumn(i)));
         }
     }
 
-    @Override
     public String name() {
         return metaView.getName();
     }

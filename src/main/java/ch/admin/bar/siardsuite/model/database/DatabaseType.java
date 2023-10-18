@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-public class DatabaseType extends DatabaseObject {
+public class DatabaseType {
 
     private final String name;
     private final String category;
@@ -30,7 +30,6 @@ public class DatabaseType extends DatabaseObject {
         this.databaseAttributes = metaAttributes;
     }
 
-    @Override
     public String name() {
         return name;
     }

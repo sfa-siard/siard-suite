@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 // understands the content of a SIARD Archive
-public class SiardArchive extends DatabaseObject {
+public class SiardArchive {
 
     @Getter
     private Archive archive;
@@ -113,8 +113,8 @@ public class SiardArchive extends DatabaseObject {
 
     public void export(File directory) {
         List<String> allTables = this.schemas.stream()
-                .flatMap(schema -> schema.tables.stream())
-                .map(databaseTable -> databaseTable.name)
+                .flatMap(schema -> schema.getTables().stream())
+                .map(databaseTable -> databaseTable.name())
                 .collect(
                         Collectors.toList());
         this.export(allTables, directory);
@@ -126,7 +126,7 @@ public class SiardArchive extends DatabaseObject {
 
     public void populate(TreeItem root) {
         List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.schemas.stream().map(schema -> {
-            CheckBoxTreeItem<String> schemaItem = new CheckBoxTreeItem<>(schema.name);
+            CheckBoxTreeItem<String> schemaItem = new CheckBoxTreeItem<>(schema.name());
             schemaItem.setExpanded(true);
             schema.populate(schemaItem);
 

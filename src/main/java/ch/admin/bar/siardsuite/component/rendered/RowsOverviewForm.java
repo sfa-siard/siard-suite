@@ -37,7 +37,7 @@ public class RowsOverviewForm {
         val tableProperties = table.getColumns().stream()
                 .map(column -> new ReadOnlyStringProperty<RecordWrapper>(
                         DisplayableText.of(column.getName()),
-                        row -> row.findCellValue(column.name())))
+                        row -> row.findCellValue(column.getName())))
                 .collect(Collectors.toList());
 
 
