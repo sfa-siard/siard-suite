@@ -24,10 +24,10 @@ public class MetaSchemaFacade {
         return schema.getMetaSchema().getDescription();
     }
 
-    public List<DatabaseTable> tables(SiardArchive archive, DatabaseSchema databaseSchema, boolean onlyMetaData) {
+    public List<DatabaseTable> tables(SiardArchive archive, DatabaseSchema databaseSchema) {
         return IntStream.range(0, schema.getTables())
                         .mapToObj(schema::getTable)
-                        .map(table -> new DatabaseTable(archive, databaseSchema, table, onlyMetaData))
+                        .map(table -> new DatabaseTable(archive, databaseSchema, table))
                         .collect(Collectors.toList());
 
     }

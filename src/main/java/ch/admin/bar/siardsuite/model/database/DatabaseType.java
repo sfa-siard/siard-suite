@@ -30,14 +30,6 @@ public class DatabaseType {
         this.databaseAttributes = metaAttributes;
     }
 
-    public String name() {
-        return name;
-    }
-
-    public List<DatabaseAttribute> attributes() {
-        return databaseAttributes;
-    }
-
     public void write() {
         throw new UnsupportedOperationException("Not implemented yet"); // TODO
     }

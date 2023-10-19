@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
+import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -49,7 +50,7 @@ public class SchemaOverviewForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         NUMBER_OF_ROWS,
-                                        databaseTable -> databaseTable.getRows().size() + ""
+                                        Converter.longToString(DatabaseTable::getNumberOfRows)
                                 ))
                                 .build())
                         .build())

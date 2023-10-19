@@ -33,11 +33,11 @@ public class RoutineOverviewForm {
                 .group(RenderableFormGroup.<Routine>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 NAME,
-                                Routine::name
+                                Routine::getName
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 SPECIFIC_NAME,
-                                Routine::specificName
+                                Routine::getSpecificName
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 SOURCE,
@@ -51,11 +51,11 @@ public class RoutineOverviewForm {
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 CHARACTERISTICS,
-                                Routine::characteristics
+                                Routine::getCharacteristics
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 RETURN_TYPE,
-                                Routine::returnType
+                                Routine::getReturnType
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 DESCRIPTION,
@@ -63,7 +63,7 @@ public class RoutineOverviewForm {
                                 Routine::setDescription
                         ))
                         .property(RenderableTable.<Routine, MetaParameter>builder()
-                                .dataExtractor(Routine::parameters)
+                                .dataExtractor(Routine::getParameters)
                                 .property(new ReadOnlyStringProperty<>(
                                         POSITION,
                                         metaParameter -> String.valueOf(metaParameter.getPosition())

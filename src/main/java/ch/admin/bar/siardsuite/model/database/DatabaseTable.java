@@ -19,7 +19,6 @@ public class DatabaseTable {
 
     @Getter
     private final Table table;
-    private final boolean onlyMetaData;
     @Getter
     private final String name;
     @Getter
@@ -27,24 +26,19 @@ public class DatabaseTable {
     private String description;
     @Getter
     private final List<DatabaseColumn> columns = new ArrayList<>();
-    private final String numberOfColumns;
     @Getter
-    private final List<DatabaseRow> rows = new ArrayList<>();
-    @Getter
-    private final String numberOfRows;
+    private final long numberOfRows;
 
-    public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
+    public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
         this.siardArchive = archive;
         this.schema = schema;
         this.table = table;
-        this.onlyMetaData = onlyMetaData;
         name = table.getMetaTable().getName();
         description = table.getMetaTable().getDescription();
         for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
             columns.add(new DatabaseColumn(archive, schema, table.getMetaTable().getMetaColumn(i)));
         }
-        numberOfColumns = String.valueOf(columns.size());
-        numberOfRows = String.valueOf(table.getMetaTable().getRows());
+        numberOfRows = table.getMetaTable().getRows();
     }
 
     protected void export(File directory) throws IOException {
@@ -65,10 +59,6 @@ public class DatabaseTable {
 
     public List<DatabaseColumn> columns() {
         return this.columns;
-    }
-
-    public String numberOfRows() {
-        return this.numberOfRows;
     }
 
     public void write() {

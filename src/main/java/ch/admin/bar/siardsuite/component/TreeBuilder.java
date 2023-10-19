@@ -93,7 +93,7 @@ public class TreeBuilder {
     public TreeItem<TreeAttributeWrapper> createRootItem() {
         val rootItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
-                        .name(DisplayableText.of(this.siardArchive.name()))
+                        .name(DisplayableText.of(this.siardArchive.getName().orElse("")))
                         .viewTitle(DisplayableText.of(ROOT_ELEMENT_NAME))
                         .type(TreeContentView.FORM_RENDERER)
                         .renderableForm(MetadataDetailsForm.create(siardArchive)
@@ -215,7 +215,7 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemsForType(final DatabaseType type) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(type.name()))
+                .name(DisplayableText.of(type.getName()))
                 .viewTitle(DisplayableText.of(TYPE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(TypeDetailsForm.create(type).toBuilder()
@@ -223,7 +223,7 @@ public class TreeBuilder {
                         .build())
                 .build());
 
-        val attributeItems = type.attributes().stream()
+        val attributeItems = type.getDatabaseAttributes().stream()
                 .map(this::createItemsForAttribute)
                 .collect(Collectors.toList());
 
@@ -266,7 +266,7 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemsForRoutine(final Routine routine) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(routine.name()))
+                .name(DisplayableText.of(routine.getName()))
                 .viewTitle(DisplayableText.of(ROUTINE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(RoutineOverviewForm.create(routine).toBuilder()
@@ -280,7 +280,7 @@ public class TreeBuilder {
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForParameters(final Routine routine) {
-        val parameters = routine.parameters();
+        val parameters = routine.getParameters();
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(PARAMETERS_ELEMENT_NAME, parameters.size()))
                 .viewTitle(DisplayableText.of(ROUTINE_VIEW_TITLE))

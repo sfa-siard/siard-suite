@@ -14,8 +14,15 @@ public class ListAssembler<T> {
     Function<Integer, T> itemSupplier;
 
     public List<T> assemble() {
-        val nrOfItems = nrOfItemsSupplier.get();
+        return assemble(nrOfItemsSupplier, itemSupplier);
+    }
 
+    public static <T> List<T> assemble(final Supplier<Integer> nrOfItemsSupplier, final Function<Integer, T> itemSupplier) {
+        val nrOfItems = nrOfItemsSupplier.get();
+        return assemble(nrOfItems, itemSupplier);
+    }
+
+    public static <T> List<T> assemble(final int nrOfItems, final Function<Integer, T> itemSupplier) {
         val assembledItems = new ArrayList<T>();
         for (int i = 0; i < nrOfItems; i++) {
             assembledItems.add(itemSupplier.apply(i));

@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
+import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -43,23 +44,23 @@ public class RoutinesOverviewForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         NAME,
-                                        Routine::name
+                                        Routine::getName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         SPECIFIC_NAME,
-                                        Routine::specificName
+                                        Routine::getSpecificName
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         CHARACTERISTICS,
-                                        Routine::characteristics
+                                        Routine::getCharacteristics
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         RETURN_TYPE,
-                                        Routine::returnType
+                                        Routine::getReturnType
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         NUMBER_OF_PARAMETERS,
-                                        Routine::numberOfParameters
+                                        Converter.intToString(routine -> routine.getParameters().size())
                                 ))
                                 .build())
                         .build())

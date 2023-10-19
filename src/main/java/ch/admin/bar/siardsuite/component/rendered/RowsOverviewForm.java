@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.longToString;
+
 public class RowsOverviewForm {
 
     private static final I18nKey LABEL_TABLE = I18nKey.of("tableContainer.labelTable");
@@ -49,7 +51,7 @@ public class RowsOverviewForm {
                                 DatabaseTable::name))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_NUMBER_OF_ROWS,
-                                DatabaseTable::getNumberOfRows))
+                                longToString(DatabaseTable::getNumberOfRows)))
                         .property(RenderableLazyLoadingTable.<DatabaseTable, RecordWrapper>builder()
                                 .dataExtractor(databaseTable -> new RecordDataSource(table.getTable()))
                                 .properties(tableProperties)

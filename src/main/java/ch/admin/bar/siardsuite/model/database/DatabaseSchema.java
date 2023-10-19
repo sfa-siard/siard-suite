@@ -33,14 +33,14 @@ public class DatabaseSchema {
     @Getter
     private final List<Routine> routines;
 
-    protected DatabaseSchema(SiardArchive siardArchive, Schema schema, boolean onlyMetaData) {
+    protected DatabaseSchema(SiardArchive siardArchive, Schema schema) {
         this.schema = schema;
 
         MetaSchemaFacade metaSchemaFacade = new MetaSchemaFacade(schema);
         name = metaSchemaFacade.name();
         description = metaSchemaFacade.description();
 
-        this.tables = metaSchemaFacade.tables(siardArchive, this, onlyMetaData);
+        this.tables = metaSchemaFacade.tables(siardArchive, this);
         this.views = metaSchemaFacade.views(siardArchive, this);
         this.routines = metaSchemaFacade.routines(siardArchive, this);
 

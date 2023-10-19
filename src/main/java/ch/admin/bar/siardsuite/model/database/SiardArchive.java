@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 // understands the content of a SIARD Archive
@@ -25,7 +26,7 @@ public class SiardArchive {
 
     @Getter
     private Archive archive;
-    private String name;
+    private Optional<String> name;
     // another hack to reuse tmp file for metadata export
     private DiskFile tmpPath;
     private boolean onlyMetaData = false;
@@ -38,19 +39,19 @@ public class SiardArchive {
     public SiardArchive() {
     }
 
-    public SiardArchive(String name, Archive archive) {
-        this(name, archive, false);
-    }
-
-    public SiardArchive(String name, Archive archive, boolean onlyMetaData) {
+    public SiardArchive(
+            String name,
+            Archive archive,
+            boolean onlyMetaData
+    ) {
         this.archive = archive;
         this.tmpPath = ((ArchiveImpl) archive).getZipFile().getDiskFile();
         this.onlyMetaData = onlyMetaData;
-        this.name = name;
+        this.name = Optional.ofNullable(name);
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         this.schemas = new ArchiveFacade(archive).schemas()
                 .stream()
-                .map(schema -> new DatabaseSchema(this, schema, onlyMetaData)).collect(
+                .map(schema -> new DatabaseSchema(this, schema)).collect(
                         Collectors.toList());
         MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         this.users = metaDataFacade.users();
@@ -135,7 +136,7 @@ public class SiardArchive {
         root.getChildren().setAll(checkBoxTreeItems);
     }
 
-    public String name() {
+    public Optional<String> getName() {
         return name;
     }
 

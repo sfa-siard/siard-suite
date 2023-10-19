@@ -2,62 +2,54 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siard2.api.MetaRoutine;
+import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import ch.admin.bar.siardsuite.model.facades.MetaRoutineFacade;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class Routine {
 
     private final MetaRoutine metaRoutine;
+    private final List<MetaParameter> parameters;
 
-    @Getter
-    @Setter
     private String source;
-
-    @Getter
-    @Setter
     private String body;
-
-    @Getter
-    @Setter
     private String description;
 
     public Routine(MetaRoutine metaRoutine) {
         this.metaRoutine = metaRoutine;
+        this.parameters = ListAssembler.assemble(metaRoutine.getMetaParameters(), metaRoutine::getMetaParameter);
 
         this.source = metaRoutine.getSource();
         this.body = metaRoutine.getBody();
         this.description = metaRoutine.getBody();
     }
 
-    public String name() {
+    public String getName() {
         return metaRoutine.getName();
     }
 
-    public String characteristics() {
+    public String getCharacteristics() {
         return metaRoutine.getCharacteristic();
     }
 
-    public String specificName() {
+    public String getSpecificName() {
         return metaRoutine.getSpecificName();
     }
 
-    public String returnType() {
+    public String getReturnType() {
         return metaRoutine.getReturnType();
     }
 
-    public String numberOfParameters() {
-        return String.valueOf(metaRoutine.getMetaParameters());
-    }
-
-    public List<MetaParameter> parameters() {
-        return new MetaRoutineFacade(metaRoutine).parameters().collect(Collectors.toList());
-    }
-
-    public void write() {
-        throw new UnsupportedOperationException("Not implemented yet"); // TODO
+    public void write() throws IOException {
+        metaRoutine.setSource(source);
+        metaRoutine.setBody(body);
+        metaRoutine.setDescription(description);
     }
 }

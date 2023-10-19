@@ -1,23 +1,25 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaView;
+import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DatabaseView {
 
     @Getter
     private final MetaView metaView;
-    private final List<DatabaseColumn> columns = new ArrayList<>();
+    private final List<DatabaseColumn> columns;
 
     public DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView metaView) {
         this.metaView = metaView;
 
-        for (int i = 0; i < metaView.getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(archive, schema, metaView.getMetaColumn(i)));
-        }
+        this.columns = new ListAssembler<>(metaView::getMetaColumns, metaView::getMetaColumn).assemble()
+                .stream()
+                .map(t -> new DatabaseColumn(archive, schema, t))
+                .collect(Collectors.toList());
     }
 
     public String name() {
