@@ -9,7 +9,6 @@ import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.TreeItem;
 
 import java.io.File;
 import java.io.IOException;
@@ -140,10 +139,6 @@ public class Model {
                 lobFolder,
                 targetArchive,
                 viewsAsTables);
-    }
-
-    public void populate(TreeItem root) {
-        getSiardArchive().populate(root);
     }
 
     public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataDetailsVisitor visitor) {

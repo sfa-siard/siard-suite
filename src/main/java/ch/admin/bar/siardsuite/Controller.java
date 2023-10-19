@@ -221,10 +221,6 @@ public class Controller {
         model.setDatabaseType(databaseType);
     }
 
-    public void populate(TreeItem root) {
-        this.model.populate(root);
-    }
-
     public void provideArchiveObject(ArchiveVisitor visitor) {
         this.model.provideArchiveObject(visitor);
     }

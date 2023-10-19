@@ -9,8 +9,6 @@ import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.enterag.utils.io.DiskFile;
-import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.TreeItem;
 import lombok.Getter;
 
 import java.io.File;
@@ -30,6 +28,8 @@ public class SiardArchive {
     // another hack to reuse tmp file for metadata export
     private DiskFile tmpPath;
     private boolean onlyMetaData = false;
+
+    @Getter
     private List<DatabaseSchema> schemas = new ArrayList<>();
     private List<User> users = new ArrayList<>();
     private List<Privilige> priviliges = new ArrayList<>();
@@ -110,19 +110,6 @@ public class SiardArchive {
         if (metaData != null) {
             metaData.shareObject(visitor);
         }
-    }
-
-    public void populate(TreeItem root) {
-        List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.schemas.stream()
-                .map(schema -> {
-                    CheckBoxTreeItem<String> schemaItem = new CheckBoxTreeItem<>(schema.name());
-                    schemaItem.setExpanded(true);
-                    schema.populate(schemaItem);
-
-                    return schemaItem;
-                })
-                .collect(Collectors.toList());
-        root.getChildren().setAll(checkBoxTreeItems);
     }
 
     public Optional<String> getName() {

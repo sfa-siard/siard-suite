@@ -1,28 +1,15 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.MetaTable;
 import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DatabaseTable {
-
-
-
-
-    @Getter
-    private final MetaTable metaTable = null; // TODO;
-
 
     @Getter
     private final Table table;
@@ -53,8 +40,6 @@ public class DatabaseTable {
 
         numberOfRows = table.getMetaTable().getRows();
     }
-
-
 
     public String name() {
         return name;

@@ -68,15 +68,9 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
 
         this.saveButton.setOnAction(this::handleSaveClicked);
         this.saveButton.textProperty().bind(I18n.createStringBinding("export.choose-location.text"));
-
-        TreeItem root = new CheckBoxTreeItem("root");
-        this.controller.populate(root);
-        root.setExpanded(true);
-
-        this.tableSelector.setRoot(root);
+        this.tableSelector.setRoot(createTree());
         this.tableSelector.setShowRoot(false);
         tableSelector.setCellFactory((Callback<TreeView<String>, TreeCell<String>>) param -> new CheckBoxTreeCell<>());
-
     }
 
     private void handleSaveClicked(ActionEvent actionEvent) {
@@ -103,6 +97,29 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
                 e.printStackTrace();
             }
         }
+    }
+
+    private CheckBoxTreeItem<String> createTree() {
+        val root = new CheckBoxTreeItem<>("root");
+        root.setExpanded(true);
+
+        val items = controller.getSiardArchive().getSchemas().stream()
+                .map(schema -> {
+                    val schemaItem = new CheckBoxTreeItem<>(schema.name());
+                    schemaItem.setExpanded(true);
+
+                    val tableItems = schema.getTables().stream()
+                            .map(table -> new CheckBoxTreeItem<>(table.getName()))
+                            .collect(Collectors.toList());
+
+                    schemaItem.getChildren().setAll(tableItems);
+
+                    return schemaItem;
+                })
+                .collect(Collectors.toList());
+        root.getChildren().setAll(items);
+
+        return root;
     }
 
     private List<CheckBoxTreeItem<String>> findCheckedItems() {

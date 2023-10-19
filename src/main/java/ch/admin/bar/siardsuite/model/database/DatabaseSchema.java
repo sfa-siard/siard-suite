@@ -1,16 +1,12 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.MetaType;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
-import javafx.scene.control.CheckBoxTreeItem;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,15 +59,6 @@ public class DatabaseSchema {
 
     public void write() {
         schema.getMetaSchema().setDescription(description);
-    }
-
-
-
-    public void populate(CheckBoxTreeItem<String> schemaItem) {
-        List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.tables.stream()
-                .map(table -> new CheckBoxTreeItem<>(table.getName()))
-                .collect(Collectors.toList());
-        schemaItem.getChildren().setAll(checkBoxTreeItems);
     }
 
     public String name() {
