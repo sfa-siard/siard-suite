@@ -24,8 +24,6 @@ public class IconButton extends Label {
         this.setPrefWidth(42);
         this.setAlignment(Pos.CENTER);
         this.setCursor(Cursor.HAND);
-
-        //this.setIcon(Icon.DOWNLOAD);
     }
 
     public void setIcon(Icon icon) {

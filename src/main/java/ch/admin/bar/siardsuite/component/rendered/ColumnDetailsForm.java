@@ -57,10 +57,12 @@ public class ColumnDetailsForm {
                 .group(RenderableFormGroup.<DatabaseColumn>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 NAME,
-                                DatabaseColumn::getName))
+                                DatabaseColumn::getName
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 POSITION,
-                                intToString(DatabaseColumn::getIndex)))
+                                intToString(DatabaseColumn::getIndex)
+                        ))
                         .property(new ReadWriteStringProperty<>(
                                 LOB,
                                 DatabaseColumn::getLobFolder,
@@ -74,29 +76,37 @@ public class ColumnDetailsForm {
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 SQL,
-                                catchExceptions(DatabaseColumn::getType)))
+                                catchExceptions(DatabaseColumn::getType)
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 UDT_SCHEMA,
-                                DatabaseColumn::getUserDefinedTypeSchema))
+                                DatabaseColumn::getUserDefinedTypeSchema
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 UDT_NAME,
-                                DatabaseColumn::getUserDefinedTypeName))
+                                DatabaseColumn::getUserDefinedTypeName
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 DATA_TYPE,
-                                DatabaseColumn::getOriginalType))
+                                DatabaseColumn::getOriginalType
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 NULLABLE,
-                                booleanToString(DatabaseColumn::isNullable)))
+                                booleanToString(DatabaseColumn::isNullable)
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 DEFAULT_VALUE,
-                                DatabaseColumn::getDefaultValue))
+                                DatabaseColumn::getDefaultValue
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 CARDINALITY,
-                                cardinalityToString(DatabaseColumn::getCardinality)))
+                                cardinalityToString(DatabaseColumn::getCardinality)
+                        ))
                         .property(new ReadWriteStringProperty<>(
                                 DESCRIPTION,
                                 DatabaseColumn::getDescription,
-                                DatabaseColumn::setDescription))
+                                DatabaseColumn::setDescription
+                        ))
                         .build())
                 .build();
     }

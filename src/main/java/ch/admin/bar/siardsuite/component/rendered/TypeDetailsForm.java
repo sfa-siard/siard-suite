@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
-import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -10,6 +9,9 @@ import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
 import ch.admin.bar.siardsuite.model.database.DatabaseType;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
+
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.booleanToString;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.cardinalityToString;
 
 public class TypeDetailsForm {
 
@@ -31,19 +33,24 @@ public class TypeDetailsForm {
                 .group(RenderableFormGroup.<DatabaseType>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 NAME,
-                                DatabaseType::getName))
+                                DatabaseType::getName
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 CATEGORY,
-                                DatabaseType::getCategory))
+                                DatabaseType::getCategory
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 IS_INSTANTIABLE,
-                                it -> Boolean.valueOf(it.isInstantiable()).toString()))
+                                booleanToString(DatabaseType::isInstantiable)
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 IS_FINAL,
-                                it -> Boolean.valueOf(it.isFinal()).toString()))
+                                booleanToString(DatabaseType::isFinal)
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 BASE_CATEGORY,
-                                DatabaseType::getCategory))
+                                DatabaseType::getCategory
+                        ))
                         .property(new ReadWriteStringProperty<>(
                                 DESCRIPTION,
                                 DatabaseType::getDescription,
@@ -61,7 +68,7 @@ public class TypeDetailsForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         ATTRIBUTE_CARDINALITY,
-                                        Converter.cardinalityToString(DatabaseAttribute::getCardinality)
+                                        cardinalityToString(DatabaseAttribute::getCardinality)
                                 ))
                                 .build())
                         .build())

@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
-import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -10,6 +9,8 @@ import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
+
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
 
 public class RoutinesOverviewForm {
 
@@ -30,7 +31,8 @@ public class RoutinesOverviewForm {
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_SCHEMA,
-                                DatabaseSchema::getName))
+                                DatabaseSchema::getName
+                        ))
                         .property(new ReadWriteStringProperty<>(
                                 LABEL_DESC_SCHEMA,
                                 DatabaseSchema::getDescription,
@@ -60,7 +62,7 @@ public class RoutinesOverviewForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         NUMBER_OF_PARAMETERS,
-                                        Converter.intToString(routine -> routine.getParameters().size())
+                                        intToString(routine -> routine.getParameters().size())
                                 ))
                                 .build())
                         .build())

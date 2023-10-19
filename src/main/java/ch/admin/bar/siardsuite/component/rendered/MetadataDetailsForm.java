@@ -6,13 +6,14 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 import lombok.val;
 
 import java.net.URI;
 import java.util.Optional;
+
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.localDateToString;
 
 public class MetadataDetailsForm {
 
@@ -39,7 +40,8 @@ public class MetadataDetailsForm {
                 .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_FORMAT,
-                                SiardArchiveMetaData::getSiardFormatVersion))
+                                SiardArchiveMetaData::getSiardFormatVersion
+                        ))
                         .property(new ReadWriteStringProperty<>(
                                 LABEL_DB,
                                 SiardArchiveMetaData::getDatabaseName,
@@ -48,13 +50,16 @@ public class MetadataDetailsForm {
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_PRODUCT,
-                                SiardArchiveMetaData::getDatabaseProduct))
+                                SiardArchiveMetaData::getDatabaseProduct
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_CONNECTION,
-                                SiardArchiveMetaData::getDatabaseConnectionURL))
+                                SiardArchiveMetaData::getDatabaseConnectionURL
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_USERNAME,
-                                SiardArchiveMetaData::getDatabaseUsername))
+                                SiardArchiveMetaData::getDatabaseUsername
+                        ))
                         .build())
                 .group(RenderableFormGroup.<SiardArchiveMetaData>builder()
                         .property(new ReadWriteStringProperty<>(
@@ -76,7 +81,7 @@ public class MetadataDetailsForm {
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_ARCHIVE_DATE,
-                                siardArchiveMetaData -> I18n.getLocaleDate(siardArchiveMetaData.getArchivingDate())
+                                localDateToString(SiardArchiveMetaData::getArchivingDate)
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 LABEL_ARCHIVE_USER,

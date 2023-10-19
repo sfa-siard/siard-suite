@@ -15,6 +15,7 @@ import lombok.NonNull;
 
 import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.catchExceptions;
 import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.longToString;
 
 public class ViewOverviewForm {
 
@@ -50,7 +51,7 @@ public class ViewOverviewForm {
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 NR_RECORDS,
-                                Converter.longToString(MetaView::getRows)
+                                longToString(MetaView::getRows)
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 DESCRIPTION,

@@ -10,11 +10,13 @@ import ch.admin.bar.siardsuite.model.database.DatabaseType;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.booleanToString;
+
 public class TypesOverviewForm {
 
     private static final I18nKey LABEL_SCHEMA = I18nKey.of("tableContainer.labelSchema");
     private static final I18nKey LABEL_DESC_SCHEMA = I18nKey.of("tableContainer.labelDescSchema");
-    
+
     private static final I18nKey NAME = I18nKey.of("tableContainer.types.header.name");
     private static final I18nKey CATEGORY = I18nKey.of("tableContainer.types.header.category");
     private static final I18nKey IS_INSTANTIABLE = I18nKey.of("tableContainer.types.header.instantiable");
@@ -48,11 +50,11 @@ public class TypesOverviewForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         IS_INSTANTIABLE,
-                                        databaseType -> Boolean.valueOf(databaseType.isInstantiable()).toString()
+                                        booleanToString(DatabaseType::isInstantiable)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         IS_FINAL,
-                                        databaseType -> Boolean.valueOf(databaseType.isFinal()).toString()
+                                        booleanToString(DatabaseType::isFinal)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         BASE,

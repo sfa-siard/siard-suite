@@ -31,10 +31,12 @@ public class TableOverviewForm {
                 .group(RenderableFormGroup.<DatabaseTable>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_TABLE,
-                                DatabaseTable::getName))
+                                DatabaseTable::getName
+                        ))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_NUMBER_OF_ROWS,
-                                longToString(DatabaseTable::getNumberOfRows)))
+                                longToString(DatabaseTable::getNumberOfRows)
+                        ))
                         .property(new ReadWriteStringProperty<>(
                                 LABEL_DESC_TABLE,
                                 DatabaseTable::getDescription,

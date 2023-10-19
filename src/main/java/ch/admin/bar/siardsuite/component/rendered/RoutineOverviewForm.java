@@ -10,6 +10,9 @@ import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.cardinalityToString;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
+
 public class RoutineOverviewForm {
 
     private static final I18nKey NAME = I18nKey.of("details.routine.name");
@@ -66,7 +69,7 @@ public class RoutineOverviewForm {
                                 .dataExtractor(Routine::getParameters)
                                 .property(new ReadOnlyStringProperty<>(
                                         POSITION,
-                                        metaParameter -> String.valueOf(metaParameter.getPosition())
+                                        intToString(MetaParameter::getPosition)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         PARAMETER_NAME,
@@ -82,7 +85,7 @@ public class RoutineOverviewForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         CARDINALITY,
-                                        metaParameter -> String.valueOf(metaParameter.getCardinality())
+                                        cardinalityToString(MetaParameter::getCardinality)
                                 ))
                                 .build())
                         .build())

@@ -55,7 +55,6 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
         updateProgress(0, 100);
         metadata.download(viewsAsTables, false, this);
 
-
         model.provideDatabaseArchiveMetaDataObject(this);
         if (metaData != null) {
             metaData.write(archive);
