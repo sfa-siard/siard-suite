@@ -51,8 +51,8 @@ public class SiardArchive {
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         this.schemas = new ArchiveFacade(archive).schemas()
                 .stream()
-                .map(schema -> new DatabaseSchema(this, schema)).collect(
-                        Collectors.toList());
+                .map(DatabaseSchema::new)
+                .collect(Collectors.toList());
         MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         this.users = metaDataFacade.users();
         this.priviliges = metaDataFacade.priviliges();

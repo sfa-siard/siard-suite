@@ -105,7 +105,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
 
         val items = controller.getSiardArchive().getSchemas().stream()
                 .map(schema -> {
-                    val schemaItem = new CheckBoxTreeItem<>(schema.name());
+                    val schemaItem = new CheckBoxTreeItem<>(schema.getName());
                     schemaItem.setExpanded(true);
 
                     val tableItems = schema.getTables().stream()

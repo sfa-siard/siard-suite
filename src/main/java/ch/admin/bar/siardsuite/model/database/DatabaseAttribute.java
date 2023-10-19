@@ -54,7 +54,6 @@ public class DatabaseAttribute {
         return metaAttribute.getCardinality();
     }
 
-
     public String type() {
         return this.metaAttribute.getType();
     }

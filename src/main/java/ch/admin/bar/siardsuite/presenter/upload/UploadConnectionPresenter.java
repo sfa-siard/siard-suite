@@ -282,8 +282,8 @@ public class UploadConnectionPresenter extends StepperPresenter {
             Label currentName = new Label();
             Label iconLabel = new Label();
             TextField newName = new TextField();
-            currentName.setText(schema.name());
-            newName.setText(schema.name());
+            currentName.setText(schema.getName());
+            newName.setText(schema.getName());
             HBox container = new HBox();
             container.setPrefSize(200.0, 48.0);
             currentName.setPrefSize(253.0, 48.0);

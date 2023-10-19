@@ -28,7 +28,7 @@ public class SchemaOverviewForm {
                 .group(RenderableFormGroup.<DatabaseSchema>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_SCHEMA,
-                                DatabaseSchema::name))
+                                DatabaseSchema::getName))
                         .property(new ReadWriteStringProperty<>(
                                 LABEL_DESC_SCHEMA,
                                 DatabaseSchema::getDescription,

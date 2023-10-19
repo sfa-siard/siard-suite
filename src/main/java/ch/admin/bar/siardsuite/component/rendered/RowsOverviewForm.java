@@ -48,7 +48,7 @@ public class RowsOverviewForm {
                 .group(RenderableFormGroup.<DatabaseTable>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_TABLE,
-                                DatabaseTable::name))
+                                DatabaseTable::getName))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_NUMBER_OF_ROWS,
                                 longToString(DatabaseTable::getNumberOfRows)))

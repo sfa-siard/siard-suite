@@ -12,6 +12,11 @@ import lombok.NonNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.booleanToString;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.cardinalityToString;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.catchExceptions;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
+
 public class ColumnDetailsForm {
 
     private static final I18nKey NAME = I18nKey.of("columnDetails.name");
@@ -55,7 +60,7 @@ public class ColumnDetailsForm {
                                 DatabaseColumn::getName))
                         .property(new ReadOnlyStringProperty<>(
                                 POSITION,
-                                DatabaseColumn::getIndex))
+                                intToString(DatabaseColumn::getIndex)))
                         .property(new ReadWriteStringProperty<>(
                                 LOB,
                                 DatabaseColumn::getLobFolder,
@@ -69,7 +74,7 @@ public class ColumnDetailsForm {
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 SQL,
-                                DatabaseColumn::getType))
+                                catchExceptions(DatabaseColumn::getType)))
                         .property(new ReadOnlyStringProperty<>(
                                 UDT_SCHEMA,
                                 DatabaseColumn::getUserDefinedTypeSchema))
@@ -81,13 +86,13 @@ public class ColumnDetailsForm {
                                 DatabaseColumn::getOriginalType))
                         .property(new ReadOnlyStringProperty<>(
                                 NULLABLE,
-                                DatabaseColumn::getIsNullable))
+                                booleanToString(DatabaseColumn::isNullable)))
                         .property(new ReadOnlyStringProperty<>(
                                 DEFAULT_VALUE,
                                 DatabaseColumn::getDefaultValue))
                         .property(new ReadOnlyStringProperty<>(
                                 CARDINALITY,
-                                DatabaseColumn::getCardinality))
+                                cardinalityToString(DatabaseColumn::getCardinality)))
                         .property(new ReadWriteStringProperty<>(
                                 DESCRIPTION,
                                 DatabaseColumn::getDescription,

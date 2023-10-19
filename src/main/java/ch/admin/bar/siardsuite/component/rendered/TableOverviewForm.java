@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
-import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -11,6 +10,8 @@ import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.catchExceptions;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
 import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.longToString;
 
 public class TableOverviewForm {
@@ -30,7 +31,7 @@ public class TableOverviewForm {
                 .group(RenderableFormGroup.<DatabaseTable>builder()
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_TABLE,
-                                DatabaseTable::name))
+                                DatabaseTable::getName))
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_NUMBER_OF_ROWS,
                                 longToString(DatabaseTable::getNumberOfRows)))
@@ -43,7 +44,7 @@ public class TableOverviewForm {
                                 .dataExtractor(DatabaseTable::getColumns)
                                 .property(new ReadOnlyStringProperty<>(
                                         POSITION,
-                                        DatabaseColumn::index
+                                        intToString(DatabaseColumn::getIndex)
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         COLUMN_NAME,
@@ -51,7 +52,7 @@ public class TableOverviewForm {
                                 ))
                                 .property(new ReadOnlyStringProperty<>(
                                         COLUMN_TYPE,
-                                        DatabaseColumn::type
+                                        catchExceptions(DatabaseColumn::getType)
                                 ))
                                 .build())
                         .build())

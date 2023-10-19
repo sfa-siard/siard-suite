@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
-import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -10,46 +9,41 @@ import lombok.val;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class DatabaseSchema {
 
-    @Getter
     private final Schema schema;
 
-    private final String name;
+    private final List<DatabaseTable> tables;
+    private final List<DatabaseView> views;
+    private final List<DatabaseType> types;
+    private final List<Routine> routines;
 
     @Setter
     @Getter
     private String description;
 
-    @Getter
-    private final List<DatabaseTable> tables;
-
-    @Getter
-    private final List<DatabaseView> views;
-
-    @Getter
-    private final List<DatabaseType> types;
-
-    @Getter
-    private final List<Routine> routines;
-
-    protected DatabaseSchema(SiardArchive siardArchive, Schema schema) {
+    protected DatabaseSchema(Schema schema) {
         this.schema = schema;
-
-        MetaSchemaFacade metaSchemaFacade = new MetaSchemaFacade(schema);
-        name = metaSchemaFacade.name();
-        description = metaSchemaFacade.description();
-
         val metaSchema = schema.getMetaSchema();
+
+        this.description = metaSchema.getDescription();
 
         this.tables = ListAssembler.assemble(schema.getTables(), schema::getTable)
                 .stream()
                 .map(DatabaseTable::new)
                 .collect(Collectors.toList());
 
-        this.views = metaSchemaFacade.views(siardArchive, this);
-        this.routines = metaSchemaFacade.routines(siardArchive, this);
+        this.views = ListAssembler.assemble(metaSchema.getMetaViews(), metaSchema::getMetaView)
+                .stream()
+                .map(DatabaseView::new)
+                .collect(Collectors.toList());
 
+        this.routines = ListAssembler.assemble(metaSchema.getMetaRoutines(), metaSchema::getMetaRoutine)
+                .stream()
+                .map(Routine::new)
+                .collect(Collectors.toList());
 
         this.types = ListAssembler.assemble(metaSchema.getMetaTypes(), metaSchema::getMetaType)
                 .stream()
@@ -61,23 +55,7 @@ public class DatabaseSchema {
         schema.getMetaSchema().setDescription(description);
     }
 
-    public String name() {
-        return name;
-    }
-
-    public List<DatabaseType> types() {
-        return this.types;
-    }
-
-    public List<Routine> routines() {
-        return this.routines;
-    }
-
-    public List<DatabaseView> views() {
-        return this.views;
-    }
-
-    public List<DatabaseTable> tables() {
-        return this.tables;
+    public String getName() {
+        return schema.getMetaSchema().getName();
     }
 }

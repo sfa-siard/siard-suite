@@ -140,7 +140,7 @@ public class TreeBuilder {
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForSchemas() {
-        List<DatabaseSchema> schemas = this.siardArchive.schemas();
+        val schemas = this.siardArchive.schemas();
 
         val schemasItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
@@ -163,7 +163,7 @@ public class TreeBuilder {
     private TreeItem<TreeAttributeWrapper> createItemsForSchema(DatabaseSchema schema) {
         val schemaItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
-                        .name(DisplayableText.of(schema.name()))
+                        .name(DisplayableText.of(schema.getName()))
                         .viewTitle(DisplayableText.of(SCHEMA_VIEW_TITLE))
                         .type(TreeContentView.FORM_RENDERER)
                         .renderableForm(SchemaOverviewForm.create(schema).toBuilder()
@@ -193,7 +193,7 @@ public class TreeBuilder {
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForTypes(final DatabaseSchema schema) {
-        val types = schema.types();
+        val types = schema.getTypes();
 
         val typesItem = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(TYPES_ELEMENT_NAME, types.size()))
@@ -244,7 +244,7 @@ public class TreeBuilder {
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForRoutines(DatabaseSchema schema) {
-        List<Routine> routines = schema.routines();
+        val routines = schema.getRoutines();
 
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(ROUTINES_ELEMENT_NAME, routines.size()))
@@ -311,7 +311,7 @@ public class TreeBuilder {
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForViews(DatabaseSchema schema) {
-        List<DatabaseView> views = schema.views();
+        val views = schema.getViews();
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(VIEWS_ELEMENT_NAME, views.size()))
                 .viewTitle(DisplayableText.of(VIEWS_VIEW_TITLE))
@@ -382,8 +382,7 @@ public class TreeBuilder {
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForTables(DatabaseSchema schema) {
-
-        List<DatabaseTable> tables = schema.tables();
+        val tables = schema.getTables();
 
         val tablesItem = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(TABLES_ELEMENT_NAME, tables.size()))
@@ -406,7 +405,7 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemForTable(DatabaseTable table) {
         val tableItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(table.name()))
+                .name(DisplayableText.of(table.getName()))
                 .viewTitle(DisplayableText.of(TABLE_VIEW_TITLE))
                 .type(TreeContentView.FORM_RENDERER)
                 .renderableForm(TableOverviewForm.create(table).toBuilder()
@@ -434,7 +433,7 @@ public class TreeBuilder {
     }
 
     private TreeItem<TreeAttributeWrapper> createColumnItem(DatabaseTable table) {
-        List<DatabaseColumn> columns = table.columns();
+        List<DatabaseColumn> columns = table.getColumns();
 
         val columnsItem = new TreeItem<>(TreeAttributeWrapper.builder()
                 .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, columns.size()))

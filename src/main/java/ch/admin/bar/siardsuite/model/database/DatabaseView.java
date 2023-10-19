@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siard2.api.MetaColumn;
 import ch.admin.bar.siard2.api.MetaView;
 import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import lombok.Getter;
@@ -13,7 +14,7 @@ public class DatabaseView {
     private final MetaView metaView;
     private final List<DatabaseColumn> columns;
 
-    public DatabaseView(SiardArchive archive, DatabaseSchema schema, MetaView metaView) {
+    public DatabaseView(MetaView metaView) {
         this.metaView = metaView;
 
         this.columns = new ListAssembler<>(metaView::getMetaColumns, metaView::getMetaColumn).assemble()

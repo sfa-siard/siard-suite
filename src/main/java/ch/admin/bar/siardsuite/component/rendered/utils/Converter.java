@@ -17,6 +17,11 @@ import java.util.function.Supplier;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Converter {
+
+    public static <T> Function<T, String> booleanToString(Function<T, Boolean> getter) {
+        return t -> String.valueOf(getter.apply(t));
+    }
+
     public static <T> Function<T, String> intToString(Function<T, Integer> intGetter) {
         return t -> String.valueOf(intGetter.apply(t));
     }
