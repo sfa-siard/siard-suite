@@ -112,27 +112,16 @@ public class SiardArchive {
         }
     }
 
-    public void export(File directory) {
-        List<String> allTables = this.schemas.stream()
-                .flatMap(schema -> schema.getTables().stream())
-                .map(databaseTable -> databaseTable.name())
-                .collect(
-                        Collectors.toList());
-        this.export(allTables, directory);
-    }
-
-    public void export(List<String> tablesToExport, File directory) {
-        this.schemas.forEach(schema -> schema.export(tablesToExport, directory));
-    }
-
     public void populate(TreeItem root) {
-        List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.schemas.stream().map(schema -> {
-            CheckBoxTreeItem<String> schemaItem = new CheckBoxTreeItem<>(schema.name());
-            schemaItem.setExpanded(true);
-            schema.populate(schemaItem);
+        List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.schemas.stream()
+                .map(schema -> {
+                    CheckBoxTreeItem<String> schemaItem = new CheckBoxTreeItem<>(schema.name());
+                    schemaItem.setExpanded(true);
+                    schema.populate(schemaItem);
 
-            return schemaItem;
-        }).collect(Collectors.toList());
+                    return schemaItem;
+                })
+                .collect(Collectors.toList());
         root.getChildren().setAll(checkBoxTreeItems);
     }
 

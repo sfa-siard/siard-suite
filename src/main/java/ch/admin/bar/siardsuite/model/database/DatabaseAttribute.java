@@ -60,6 +60,6 @@ public class DatabaseAttribute {
     }
 
     public void write() {
-        throw new UnsupportedOperationException("Not implemented yet"); // TODO
+        metaAttribute.setDescription(description);
     }
 }

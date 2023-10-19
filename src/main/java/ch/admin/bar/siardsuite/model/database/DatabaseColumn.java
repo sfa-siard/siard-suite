@@ -13,8 +13,6 @@ import java.net.URI;
 @Setter
 public class DatabaseColumn {
 
-    private final SiardArchive archive;
-    private final DatabaseSchema schema;
     private final MetaColumn column;
     private final String index;
     private final String name;
@@ -30,13 +28,7 @@ public class DatabaseColumn {
     private String mimeType;
     private String description;
 
-    protected DatabaseColumn(
-            SiardArchive archive,
-            DatabaseSchema schema,
-            MetaColumn column
-    ) {
-        this.archive = archive;
-        this.schema = schema;
+    protected DatabaseColumn(MetaColumn column) {
         this.column = column;
         this.index = String.valueOf(column.getPosition());
         name = column.getName();

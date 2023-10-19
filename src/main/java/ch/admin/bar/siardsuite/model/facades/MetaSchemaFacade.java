@@ -24,14 +24,6 @@ public class MetaSchemaFacade {
         return schema.getMetaSchema().getDescription();
     }
 
-    public List<DatabaseTable> tables(SiardArchive archive, DatabaseSchema databaseSchema) {
-        return IntStream.range(0, schema.getTables())
-                        .mapToObj(schema::getTable)
-                        .map(table -> new DatabaseTable(archive, databaseSchema, table))
-                        .collect(Collectors.toList());
-
-    }
-
     public List<DatabaseView> views(SiardArchive archive, DatabaseSchema databaseSchema) {
         return IntStream.range(0, schema.getMetaSchema().getMetaViews())
                         .mapToObj(schema.getMetaSchema()::getMetaView)
@@ -45,26 +37,4 @@ public class MetaSchemaFacade {
                         .map(metaRoutine -> new Routine(metaRoutine))
                         .collect(Collectors.toList());
     }
-
-    public List<DatabaseType> types() {
-        return IntStream.range(0, schema.getMetaSchema().getMetaTypes())
-                        .mapToObj(schema.getMetaSchema()::getMetaType)
-                        .map(type -> new DatabaseType(type.getName(),
-                                                      type.getCategory(),
-                                                      type.isInstantiable(),
-                                                      type.isFinal(),
-                                                      type.getBase(),
-                                                      type.getDescription(),
-                                                      getMetaAttributes(type)))
-                        .collect(Collectors.toList());
-    }
-
-    private List<DatabaseAttribute> getMetaAttributes(MetaType type) {
-        return IntStream.range(0, type.getMetaAttributes())
-                        .mapToObj(type::getMetaAttribute)
-                        .map(metaAttribute -> new DatabaseAttribute(metaAttribute))
-                        .collect(Collectors.toList());
-    }
-
-
 }

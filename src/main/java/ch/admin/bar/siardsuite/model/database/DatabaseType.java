@@ -1,36 +1,54 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import ch.admin.bar.siard2.api.MetaType;
+import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
+@Setter
 public class DatabaseType {
 
-    private final String name;
-    private final String category;
-    private final boolean instantiable;
-    private final boolean isFinal;
-    private final String base;
-
-    @Setter
-    private String description;
-
+    private final MetaType metaType;
     private final List<DatabaseAttribute> databaseAttributes;
 
-    public DatabaseType(String name, String category, boolean instantiable, boolean isFinal, String base,
-                        String description, List<DatabaseAttribute> metaAttributes) {
-        this.name = name;
-        this.category = category;
-        this.instantiable = instantiable;
-        this.isFinal = isFinal;
-        this.base = base;
-        this.description = description;
-        this.databaseAttributes = metaAttributes;
+    private String description;
+
+    public DatabaseType(MetaType metaType) {
+        this.metaType = metaType;
+
+        databaseAttributes = ListAssembler.assemble(metaType.getMetaAttributes(), metaType::getMetaAttribute)
+                .stream()
+                .map(DatabaseAttribute::new)
+                .collect(Collectors.toList());
+
+        description = metaType.getDescription();
+    }
+
+    public String getName() {
+        return metaType.getName();
+    }
+
+    public String getCategory() {
+        return metaType.getCategory();
+    }
+
+    public boolean isInstantiable() {
+        return metaType.isInstantiable();
+    }
+
+    public boolean isFinal() {
+        return metaType.isFinal();
+    }
+
+    public String getBase() {
+        return metaType.getBase();
     }
 
     public void write() {
-        throw new UnsupportedOperationException("Not implemented yet"); // TODO
+        metaType.setDescription(description);
     }
 }
