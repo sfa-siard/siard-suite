@@ -142,8 +142,19 @@ public class GenericArchiveBrowserPresenter {
                     refreshContentPane(change.getNewValue().getValue());
                     break;
                 case SAVE_CHANGES:
-                    changeableDataPresenter.saveChanges();
-                    refreshContentPane(change.getNewValue().getValue());
+                    val report = changeableDataPresenter.saveChanges();
+                    ifPresentOrElse(
+                            report.getFailedMessage(),
+                            errorMessage -> {
+                                showErrorMessage(errorMessage);
+                                change.getDeactivatableListener().deactivate();
+                                change.getOldValue().ifPresent(previousSelectedItem ->
+                                        treeView.getSelectionModel()
+                                                .select(previousSelectedItem));
+                                change.getDeactivatableListener().activate();
+                            },
+                            () -> refreshContentPane(change.getNewValue().getValue())
+                    );
                     break;
             }
         });
@@ -203,7 +214,7 @@ public class GenericArchiveBrowserPresenter {
                 .addListener((observable, oldValue, hasChanges) -> {
                     if (hasChanges) {
                         showSaveAndDropButtons();
-                        this.titleTableContainer.setText(wrapper.getViewTitle().getText() + " (edited)");
+                        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
                     } else {
                         hideSaveAndDropButtons();
                         this.titleTableContainer.setText(wrapper.getViewTitle().getText());
@@ -230,10 +241,10 @@ public class GenericArchiveBrowserPresenter {
                 .bind(searchableTableContainer.hasSearchableData());
         tableSearchButton.setState(TwoStatesButton.State.NORMAL);
         tableSearchButton.setNormalStateAction(event ->
-            rootStage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
-                    searchableTableContainer::applySearchTerm,
-                    () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
-            )));
+                rootStage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
+                        searchableTableContainer::applySearchTerm,
+                        () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
+                )));
         tableSearchButton.setBoldStateAction(event -> searchableTableContainer.clearSearchTerm());
     }
 
