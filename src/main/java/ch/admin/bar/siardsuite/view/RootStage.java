@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.view;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
+import ch.admin.bar.siardsuite.component.rendering.presenter.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.Presenter;
@@ -83,6 +84,16 @@ public class RootStage extends Stage {
                             presenterClass,
                             view.name()
                     )));
+  }
+
+  public void openUnsavedChangesDialogue(final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
+    val loaded = UnsavedChangesDialogPresenter.load(result -> {
+      closeDialog();
+      resultCallback.accept(result);
+    });
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
   }
 
   public void openSearchTableDialog(final Consumer<Optional<String>> searchTermConsumer) {

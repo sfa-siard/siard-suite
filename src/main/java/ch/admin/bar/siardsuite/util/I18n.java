@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.util;
 
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.i18n.keys.Key;
 import javafx.beans.binding.Bindings;
@@ -84,8 +85,17 @@ public class I18n {
         stringProperty.bind(I18n.createStringBinding(key, args));
     }
 
+    public static void bind(final StringProperty stringProperty, final DisplayableText displayableText) {
+        stringProperty.bind(Bindings.createStringBinding(displayableText::getText, locale));
+    }
+
+    @Deprecated
     public static void bind(Labeled labeled, final String key, final Object... args) {
         bind(labeled.textProperty(), key, args);
+    }
+
+    public static void bind(Labeled labeled, final DisplayableText displayableText) {
+        bind(labeled.textProperty(), displayableText);
     }
 
     public static void bind(Text text, String key, final Object... args) {

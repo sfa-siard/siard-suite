@@ -6,9 +6,11 @@ import ch.admin.bar.siardsuite.component.TwoStatesButton;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
+import ch.admin.bar.siardsuite.util.DeactivatableListener;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -23,6 +25,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.val;
 
+import java.util.Optional;
+
 import static ch.admin.bar.siardsuite.util.CastHelper.tryCast;
 import static ch.admin.bar.siardsuite.util.I18n.bind;
 import static ch.admin.bar.siardsuite.util.OptionalHelper.ifPresentOrElse;
@@ -32,6 +36,9 @@ import static ch.admin.bar.siardsuite.util.OptionalHelper.ifPresentOrElse;
  * file was opened to browse the archive content
  */
 public class GenericArchiveBrowserPresenter {
+
+    private static final I18nKey META_SEARCH = I18nKey.of("tableContainer.metaSearchButton");
+    private static final I18nKey TABLE_SEARCH = I18nKey.of("tableContainer.tableSearchButton");
 
     @FXML
     public VBox container;
@@ -65,6 +72,8 @@ public class GenericArchiveBrowserPresenter {
     @FXML
     private AnchorPane contentPane;
 
+    private Optional<ChangeableDataPresenter> currentChangeableDataPresenter = Optional.empty();
+
 
     private RootStage rootStage;
     private Controller controller;
@@ -96,12 +105,48 @@ public class GenericArchiveBrowserPresenter {
         ));
         treeView.getSelectionModel()
                 .selectedItemProperty()
-                .addListener(((observable, oldValue, newValue) -> refreshContentPane(newValue.getValue())));
+                .addListener(new DeactivatableListener<>(this::onSelectedTreeItemChanged));
 
-        bind(metaSearchButton, "tableContainer.metaSearchButton");
-        bind(tableSearchButton, "tableContainer.tableSearchButton");
+        bind(metaSearchButton, DisplayableText.of(META_SEARCH));
+        bind(tableSearchButton, DisplayableText.of(TABLE_SEARCH));
 
         treeView.getSelectionModel().select(rootTreeItem);
+    }
+
+    private void onSelectedTreeItemChanged(final DeactivatableListener.Change<TreeItem<TreeAttributeWrapper>> change) {
+        ifPresentOrElse(currentChangeableDataPresenter,
+                changeableDataPresenter -> onSelectedTreeItemChanged(change, changeableDataPresenter),
+                () -> refreshContentPane(change.getNewValue().getValue()));
+    }
+
+    private void onSelectedTreeItemChanged(
+            final DeactivatableListener.Change<TreeItem<TreeAttributeWrapper>> change,
+            final ChangeableDataPresenter changeableDataPresenter
+    ) {
+        if (!changeableDataPresenter.hasChanged().get()) {
+            refreshContentPane(change.getNewValue().getValue());
+            return;
+        }
+
+        this.rootStage.openUnsavedChangesDialogue(result -> {
+            switch (result) {
+                case CANCEL:
+                    change.getDeactivatableListener().deactivate();
+                    change.getOldValue().ifPresent(previousSelectedItem ->
+                                    treeView.getSelectionModel()
+                                            .select(previousSelectedItem));
+                    change.getDeactivatableListener().activate();
+                    break;
+                case DROP_CHANGES:
+                    changeableDataPresenter.dropChanges();
+                    refreshContentPane(change.getNewValue().getValue());
+                    break;
+                case SAVE_CHANGES:
+                    changeableDataPresenter.saveChanges();
+                    refreshContentPane(change.getNewValue().getValue());
+                    break;
+            }
+        });
     }
 
     private void refreshContentPane(TreeAttributeWrapper wrapper) {
@@ -124,9 +169,6 @@ public class GenericArchiveBrowserPresenter {
                 () -> refreshForNonChangeableContent(wrapper)
         );
 
-        tryCast(newContent.getController(), ChangeableDataPresenter.class)
-                .ifPresent(detailsPresenter -> refreshContentPane(wrapper, detailsPresenter));
-
         ifPresentOrElse(
                 tryCast(newContent.getController(), SearchableTableContainer.class),
                 this::refreshContentPane,
@@ -144,6 +186,7 @@ public class GenericArchiveBrowserPresenter {
     }
 
     private void refreshForNonChangeableContent(final TreeAttributeWrapper wrapper) {
+        this.currentChangeableDataPresenter = Optional.empty();
         hideSaveAndDropButtons();
         hideErrorMessage();
         this.titleTableContainer.setText(wrapper.getViewTitle().getText());
@@ -153,6 +196,8 @@ public class GenericArchiveBrowserPresenter {
             final TreeAttributeWrapper wrapper,
             final ChangeableDataPresenter changeableDataPresenter
     ) {
+        this.currentChangeableDataPresenter = Optional.of(changeableDataPresenter);
+
         changeableDataPresenter
                 .hasChanged()
                 .addListener((observable, oldValue, hasChanges) -> {
@@ -184,12 +229,11 @@ public class GenericArchiveBrowserPresenter {
         tableSearchButton.visibleProperty()
                 .bind(searchableTableContainer.hasSearchableData());
         tableSearchButton.setState(TwoStatesButton.State.NORMAL);
-        tableSearchButton.setNormalStateAction(event -> {
+        tableSearchButton.setNormalStateAction(event ->
             rootStage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
                     searchableTableContainer::applySearchTerm,
                     () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
-            ));
-        });
+            )));
         tableSearchButton.setBoldStateAction(event -> searchableTableContainer.clearSearchTerm());
     }
 
