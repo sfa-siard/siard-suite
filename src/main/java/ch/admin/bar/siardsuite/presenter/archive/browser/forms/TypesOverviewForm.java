@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendered;
+package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
@@ -10,7 +10,7 @@ import ch.admin.bar.siardsuite.model.database.DatabaseType;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.booleanToString;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.booleanToString;
 
 public class TypesOverviewForm {
 

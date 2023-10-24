@@ -1,13 +1,14 @@
-package ch.admin.bar.siardsuite.presenter.search;
+package ch.admin.bar.siardsuite.presenter.archive.browser.dialogues;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.component.SearchButton;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.MetaSearchTerm;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.DialogCloser;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -24,12 +25,16 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SearchMetadataDialogPresenter {
+
+    private static final I18nKey TITLE = I18nKey.of("search.metadata.dialog.title");
+    private static final I18nKey TEXT = I18nKey.of("search.metadata.dialog.text");
+    private static final I18nKey NO_DATA = I18nKey.of("search.metadata.dialog.nodata");
 
     @FXML
     protected Label title;
@@ -57,8 +62,8 @@ public class SearchMetadataDialogPresenter {
         this.onSelected = onSelected;
         this.treeItemsExplorer = treeItemsExplorer;
 
-        I18n.bind(title.textProperty(), "search.metadata.dialog.title");
-        I18n.bind(text.textProperty(), "search.metadata.dialog.text");
+        title.setText(DisplayableText.of(TITLE).getText());
+        text.setText((DisplayableText.of(TEXT).getText()));
 
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
         buttonBox.getChildren().add(new CloseDialogButton(dialogCloser));
@@ -98,7 +103,7 @@ public class SearchMetadataDialogPresenter {
     }
 
     private Label createNoSearchHitsLabel() {
-        final Label label = new Label(I18n.get("search.metadata.dialog.nodata"));
+        final Label label = new Label(DisplayableText.of(NO_DATA).getText());
         label.setStyle("-fx-text-fill: #2a2a2a82");
 
         return label;
@@ -136,7 +141,7 @@ public class SearchMetadataDialogPresenter {
 
     private List<String> replaceOrAddFirstElement(final List<String> path, String firstElement) {
         if (path.isEmpty()) {
-            return Arrays.asList(firstElement);
+            return Collections.singletonList(firstElement);
         }
 
         val copiedPath = path.subList(0, path.size());

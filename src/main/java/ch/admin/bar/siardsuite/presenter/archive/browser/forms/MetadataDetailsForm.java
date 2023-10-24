@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendered;
+package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
@@ -13,7 +13,7 @@ import lombok.val;
 import java.net.URI;
 import java.util.Optional;
 
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.localDateToString;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.localDateToString;
 
 public class MetadataDetailsForm {
 

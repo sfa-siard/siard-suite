@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Schema;
-import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
+import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;

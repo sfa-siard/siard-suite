@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendering.presenter;
+package ch.admin.bar.siardsuite.presenter.archive.browser.dialogues;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;

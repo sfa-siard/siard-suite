@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendered;
+package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;

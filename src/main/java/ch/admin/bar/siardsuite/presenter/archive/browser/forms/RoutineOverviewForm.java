@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendered;
+package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
 import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
@@ -10,8 +10,8 @@ import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.cardinalityToString;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.cardinalityToString;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.intToString;
 
 public class RoutineOverviewForm {
 

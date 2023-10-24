@@ -3,13 +3,11 @@ package ch.admin.bar.siardsuite.view;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
-import ch.admin.bar.siardsuite.component.rendering.presenter.UnsavedChangesDialogPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.Presenter;
-import ch.admin.bar.siardsuite.presenter.search.SearchMetadataDialogPresenter;
-import ch.admin.bar.siardsuite.presenter.search.SearchTableDialogPresenter;
-import ch.admin.bar.siardsuite.util.CastHelper;
+import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
@@ -56,11 +54,9 @@ public class RootStage extends Stage {
     this.show();
   }
 
-  private Presenter setCenter(BorderPane borderPane, View view) {
+  private void setCenter(BorderPane borderPane, View view) {
     val loaded = view.getViewCreator().apply(controller, this);
     borderPane.setCenter(loaded.getNode());
-
-    return loaded.getController();
   }
 
   public void navigate(View view) {
@@ -71,19 +67,6 @@ public class RootStage extends Stage {
   public void openDialog(View view) {
     setCenter(dialogPane, view);
     dialogPane.setVisible(true);
-  }
-
-  public <T> T openDialogAndReturnPresenter(View view, Class<T> presenterClass) {
-    val presenter = setCenter(dialogPane, view);
-    dialogPane.setVisible(true);
-
-    return CastHelper.tryCast(presenter, presenterClass)
-            .orElseThrow(() -> new IllegalArgumentException(
-                    String.format(
-                            "Presenter type %s is not supported by view %s",
-                            presenterClass,
-                            view.name()
-                    )));
   }
 
   public void openUnsavedChangesDialogue(final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
@@ -97,11 +80,10 @@ public class RootStage extends Stage {
   }
 
   public void openSearchTableDialog(final Consumer<Optional<String>> searchTermConsumer) {
-    val presenter = openDialogAndReturnPresenter(
-            View.SEARCH_TABLE_DIALOG,
-            SearchTableDialogPresenter.class);
+    val loaded = SearchTableDialogPresenter.load(this::closeDialog, searchTermConsumer);
 
-    presenter.registerResultListener(searchTermConsumer);
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
   }
 
   public void openSearchMetaDataDialog(

@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendered.utils;
+package ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils;
 
 import lombok.Value;
 import lombok.val;

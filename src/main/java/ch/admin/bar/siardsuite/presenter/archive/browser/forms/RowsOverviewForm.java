@@ -1,10 +1,8 @@
-package ch.admin.bar.siardsuite.component.rendered;
+package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
 import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siard2.api.Record;
 import ch.admin.bar.siard2.api.Table;
-import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
-import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import ch.admin.bar.siardsuite.component.rendering.model.LazyLoadingDataSource;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -12,6 +10,8 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
+import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.enterag.utils.BU;
@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.longToString;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.longToString;
 
 public class RowsOverviewForm {
 

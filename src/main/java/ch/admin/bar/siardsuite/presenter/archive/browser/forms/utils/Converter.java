@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendered.utils;
+package ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils;
 
 import ch.admin.bar.siardsuite.util.I18n;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendered;
+package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
@@ -12,10 +12,10 @@ import lombok.NonNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.booleanToString;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.cardinalityToString;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.catchExceptions;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.booleanToString;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.cardinalityToString;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.catchExceptions;
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.intToString;
 
 public class ColumnDetailsForm {
 
