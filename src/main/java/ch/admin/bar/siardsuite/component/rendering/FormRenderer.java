@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -119,7 +120,7 @@ public class FormRenderer<T> {
                     data);
         }
 
-        val formField = new EditableFormField<T>(property, data, hasChanged);
+        val formField = new EditableFormField<>(property, data, hasChanged);
         editableFormFields.add(formField);
 
         return formField;
@@ -140,7 +141,7 @@ public class FormRenderer<T> {
                                                    .collect(Collectors.toList());
 
         if (!invalidFields.isEmpty()) {
-            return new SaveChangesReport(I18n.get(VALIDATION_ERRORS));
+            return new SaveChangesReport(DisplayableText.of(VALIDATION_ERRORS).getText());
         }
 
         val failedFields = this.editableFormFields.stream()
@@ -159,7 +160,7 @@ public class FormRenderer<T> {
             log.error("Storage failed because of after-storage-action because {}",
                       e.getMessage());
         }
-        return new SaveChangesReport(I18n.get(UNKNOWN_ERROR));
+        return new SaveChangesReport(DisplayableText.of(UNKNOWN_ERROR).getText());
     }
 
     public void applySearchTerm(final String searchTerm) {
@@ -181,7 +182,8 @@ public class FormRenderer<T> {
                 @NonNull final T data) {
 
             titleLabel = new Label();
-            titleLabel.setText(title.getText());
+            titleLabel.textProperty()
+                    .bind(I18n.bind(title));
             titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
 
             val value = valueExtractor.apply(data);
@@ -221,7 +223,11 @@ public class FormRenderer<T> {
             val titleSuffix = property.getValueValidators().stream()
                                       .map(validator -> validator.getTitleSuffix().orElse(""))
                                       .collect(Collectors.joining());
-            title.setText(property.getTitle().getText() + titleSuffix);
+
+            title.textProperty()
+                    .bind(Bindings
+                            .concat(I18n.bind(property.getTitle()))
+                            .concat(titleSuffix));
             title.getStyleClass().add(TITLE_STYLE_CLASS);
 
             value = new TextField();

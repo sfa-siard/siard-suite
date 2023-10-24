@@ -89,6 +89,10 @@ public class I18n {
         stringProperty.bind(Bindings.createStringBinding(displayableText::getText, locale));
     }
 
+    public static StringBinding bind(final DisplayableText displayableText) {
+        return Bindings.createStringBinding(displayableText::getText, locale);
+    }
+
     @Deprecated
     public static void bind(Labeled labeled, final String key, final Object... args) {
         bind(labeled.textProperty(), key, args);

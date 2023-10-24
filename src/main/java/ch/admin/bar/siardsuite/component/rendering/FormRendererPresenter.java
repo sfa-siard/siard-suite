@@ -33,11 +33,6 @@ public class FormRendererPresenter extends DetailsPresenter implements Changeabl
     }
 
     @Override
-    protected void bindLabels() {
-        // TODO re-render table (switch of language)
-    }
-
-    @Override
     public BooleanProperty hasChanged() {
         return hasChanged;
     }

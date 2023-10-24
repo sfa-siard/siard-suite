@@ -7,6 +7,7 @@ import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.DeactivatableListener;
+import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
@@ -96,6 +97,8 @@ public class GenericArchiveBrowserPresenter {
         this.leftTreeBox.prefHeightProperty().bind(container.heightProperty());
 
         this.treeView.setRoot(rootTreeItem);
+        I18n.localeProperty()
+                .addListener((observable, oldValue, newValue) -> this.treeView.refresh());
 
         val explorer = TreeItemsExplorer.from(rootTreeItem);
 
