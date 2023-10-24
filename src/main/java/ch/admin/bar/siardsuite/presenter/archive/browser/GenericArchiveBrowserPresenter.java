@@ -1,35 +1,34 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.component.TwoStatesButton;
+import ch.admin.bar.siardsuite.component.rendering.FormRenderer;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
+import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.presenter.tree.DetailsPresenter;
 import ch.admin.bar.siardsuite.util.DeactivatableListener;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.val;
 
-import java.util.Optional;
-
-import static ch.admin.bar.siardsuite.util.CastHelper.tryCast;
-import static ch.admin.bar.siardsuite.util.I18n.bind;
+import static ch.admin.bar.siardsuite.util.I18n.localeProperty;
 import static ch.admin.bar.siardsuite.util.OptionalHelper.ifPresentOrElse;
 
 /**
@@ -55,8 +54,6 @@ public class GenericArchiveBrowserPresenter {
     private TreeView<TreeAttributeWrapper> treeView;
     @FXML
     public VBox leftTreeBox;
-    @FXML
-    private StackPane rightTableBox;
 
     @FXML
     private IconButton saveChangesButton;
@@ -73,60 +70,77 @@ public class GenericArchiveBrowserPresenter {
     @FXML
     private AnchorPane contentPane;
 
-    private Optional<ChangeableDataPresenter> currentChangeableDataPresenter = Optional.empty();
-
+    private FormRenderer currentFormRenderer;
 
     private RootStage rootStage;
-    private Controller controller;
+
+    private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
 
     public void init(
             final RootStage rootStage,
-            final Controller controller,
-            final DisplayableText title,
-            final DisplayableText text,
+            final DisplayableText titleValue,
+            final DisplayableText textValue,
             final Node footerNode,
             final TreeItem<TreeAttributeWrapper> rootTreeItem
     ) {
         this.rootStage = rootStage;
-        this.controller = controller;
-
-        this.title.setText(title.getText());
-        this.text.setText(text.getText());
 
         this.borderPane.setBottom(footerNode);
+        this.treeView.setRoot(rootTreeItem);
+
+        this.metaSearchButton.textProperty().bind(DisplayableText.of(META_SEARCH).bindable());
+        this.tableSearchButton.textProperty().bind(DisplayableText.of(TABLE_SEARCH).bindable());
+        this.title.textProperty().bind(titleValue.bindable());
+        this.text.textProperty().bind(textValue.bindable());
         this.leftTreeBox.prefHeightProperty().bind(container.heightProperty());
 
-        this.treeView.setRoot(rootTreeItem);
-        I18n.localeProperty()
-                .addListener((observable, oldValue, newValue) -> this.treeView.refresh());
+        // add listeners
+        localeProperty().addListener((observable, oldValue, newValue) -> this.treeView.refresh());
+        this.leftTreeBox.prefHeightProperty().bind(container.heightProperty());
+        this.hasChanged.addListener((observable, oldValue, hasChanges) -> {
+            if (hasChanges) {
+                showSaveAndDropButtons();
+            } else {
+                hideSaveAndDropButtons();
+            }
+        });
+
+        this.saveChangesButton.setOnAction(() -> {
+            val report = currentFormRenderer.saveChanges();
+            ifPresentOrElse(
+                    report.getFailedMessage(),
+                    this::showErrorMessage,
+                    this::hideErrorMessage
+            );
+        });
+
+        this.dropChangesButton.setOnAction(() -> {
+            hideErrorMessage();
+            currentFormRenderer.dropChanges();
+        });
+
+        tableSearchButton.setNormalStateAction(event ->
+                rootStage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
+                        s -> currentFormRenderer.applySearchTerm(s),
+                        () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
+                )));
+        tableSearchButton.setBoldStateAction(event -> currentFormRenderer.clearSearchTerm());
 
         val explorer = TreeItemsExplorer.from(rootTreeItem);
-
         metaSearchButton.setOnAction(event -> rootStage.openSearchMetaDataDialog(
                 explorer,
                 treeItem -> treeView.getSelectionModel().select(treeItem)
         ));
+
         treeView.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(new DeactivatableListener<>(this::onSelectedTreeItemChanged));
-
-        bind(metaSearchButton, DisplayableText.of(META_SEARCH));
-        bind(tableSearchButton, DisplayableText.of(TABLE_SEARCH));
 
         treeView.getSelectionModel().select(rootTreeItem);
     }
 
     private void onSelectedTreeItemChanged(final DeactivatableListener.Change<TreeItem<TreeAttributeWrapper>> change) {
-        ifPresentOrElse(currentChangeableDataPresenter,
-                changeableDataPresenter -> onSelectedTreeItemChanged(change, changeableDataPresenter),
-                () -> refreshContentPane(change.getNewValue().getValue()));
-    }
-
-    private void onSelectedTreeItemChanged(
-            final DeactivatableListener.Change<TreeItem<TreeAttributeWrapper>> change,
-            final ChangeableDataPresenter changeableDataPresenter
-    ) {
-        if (!changeableDataPresenter.hasChanged().get()) {
+        if (!hasChanged.get()) {
             refreshContentPane(change.getNewValue().getValue());
             return;
         }
@@ -136,16 +150,16 @@ public class GenericArchiveBrowserPresenter {
                 case CANCEL:
                     change.getDeactivatableListener().deactivate();
                     change.getOldValue().ifPresent(previousSelectedItem ->
-                                    treeView.getSelectionModel()
-                                            .select(previousSelectedItem));
+                            treeView.getSelectionModel()
+                                    .select(previousSelectedItem));
                     change.getDeactivatableListener().activate();
                     break;
                 case DROP_CHANGES:
-                    changeableDataPresenter.dropChanges();
+                    currentFormRenderer.dropChanges();
                     refreshContentPane(change.getNewValue().getValue());
                     break;
                 case SAVE_CHANGES:
-                    val report = changeableDataPresenter.saveChanges();
+                    val report = currentFormRenderer.saveChanges();
                     ifPresentOrElse(
                             report.getFailedMessage(),
                             errorMessage -> {
@@ -167,88 +181,23 @@ public class GenericArchiveBrowserPresenter {
         hideSaveAndDropButtons();
         hideErrorMessage();
 
-        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
+        final RenderableForm form = wrapper.getRenderableForm();
+        currentFormRenderer = FormRenderer.builder()
+                .renderableForm(form)
+                .hasChanged(hasChanged)
+                .build();
 
-        val newContent = FXMLLoadHelper.load(wrapper.getType().getViewName());
-        contentPane.getChildren().clear();
-        contentPane.getChildren().add(newContent.getNode());
-        contentPane.prefWidthProperty().bind(rightTableBox.widthProperty());
+        this.titleTableContainer.textProperty()
+                .bind(wrapper.getViewTitle().bindable());
+        this.tableSearchButton.setVisible(currentFormRenderer.hasSearchableData());
 
-        tryCast(newContent.getController(), DetailsPresenter.class)
-                .ifPresent(detailsPresenter -> refreshContentPane(wrapper, detailsPresenter));
+        val vbox = currentFormRenderer.getRendered();
+        AnchorPane.setLeftAnchor(vbox, 0D);
+        AnchorPane.setRightAnchor(vbox, 0D);
+        VBox.setVgrow(vbox, Priority.ALWAYS);
+        vbox.setPadding(new Insets(25));
 
-        ifPresentOrElse(
-                tryCast(newContent.getController(), ChangeableDataPresenter.class),
-                detailsPresenter -> refreshContentPane(wrapper, detailsPresenter),
-                () -> refreshForNonChangeableContent(wrapper)
-        );
-
-        ifPresentOrElse(
-                tryCast(newContent.getController(), SearchableTableContainer.class),
-                this::refreshContentPane,
-                () -> tableSearchButton.setVisible(false));
-    }
-
-    private void refreshContentPane(
-            final TreeAttributeWrapper wrapper,
-            final DetailsPresenter detailsPresenter
-    ) {
-        detailsPresenter.init(
-                this.controller,
-                this.rootStage,
-                wrapper);
-    }
-
-    private void refreshForNonChangeableContent(final TreeAttributeWrapper wrapper) {
-        this.currentChangeableDataPresenter = Optional.empty();
-        hideSaveAndDropButtons();
-        hideErrorMessage();
-        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
-    }
-
-    private void refreshContentPane(
-            final TreeAttributeWrapper wrapper,
-            final ChangeableDataPresenter changeableDataPresenter
-    ) {
-        this.currentChangeableDataPresenter = Optional.of(changeableDataPresenter);
-
-        changeableDataPresenter
-                .hasChanged()
-                .addListener((observable, oldValue, hasChanges) -> {
-                    if (hasChanges) {
-                        showSaveAndDropButtons();
-                        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
-                    } else {
-                        hideSaveAndDropButtons();
-                        this.titleTableContainer.setText(wrapper.getViewTitle().getText());
-                    }
-                });
-
-        this.saveChangesButton.setOnAction(() -> {
-            val report = changeableDataPresenter.saveChanges();
-            ifPresentOrElse(
-                    report.getFailedMessage(),
-                    this::showErrorMessage,
-                    this::hideErrorMessage
-            );
-        });
-
-        this.dropChangesButton.setOnAction(() -> {
-            hideErrorMessage();
-            changeableDataPresenter.dropChanges();
-        });
-    }
-
-    private void refreshContentPane(final SearchableTableContainer searchableTableContainer) {
-        tableSearchButton.visibleProperty()
-                .bind(searchableTableContainer.hasSearchableData());
-        tableSearchButton.setState(TwoStatesButton.State.NORMAL);
-        tableSearchButton.setNormalStateAction(event ->
-                rootStage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
-                        searchableTableContainer::applySearchTerm,
-                        () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
-                )));
-        tableSearchButton.setBoldStateAction(event -> searchableTableContainer.clearSearchTerm());
+        this.contentPane.getChildren().setAll(vbox);
     }
 
     private void showSaveAndDropButtons() {
@@ -278,7 +227,6 @@ public class GenericArchiveBrowserPresenter {
 
     public static LoadedFxml<GenericArchiveBrowserPresenter> load(
             final RootStage rootStage,
-            final Controller controller,
             final DisplayableText title,
             final DisplayableText text,
             final Node footer,
@@ -287,7 +235,6 @@ public class GenericArchiveBrowserPresenter {
         val loaded = FXMLLoadHelper.<GenericArchiveBrowserPresenter>load("fxml/archive-browser.fxml");
         loaded.getController()
                 .init(rootStage,
-                        controller,
                         title,
                         text,
                         footer,

@@ -49,7 +49,6 @@ public class OpenArchiveBrowser extends Presenter {
 
         this.loadedFxml = GenericArchiveBrowserPresenter.load(
                 stage,
-                controller,
                 DisplayableText.of(TITLE),
                 DisplayableText.of(TEXT),
                 this.buttonsBox,

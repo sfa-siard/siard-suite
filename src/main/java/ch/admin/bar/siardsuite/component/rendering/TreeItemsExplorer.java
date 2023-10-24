@@ -15,7 +15,6 @@ import lombok.val;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -56,10 +55,7 @@ public class TreeItemsExplorer {
                 pathToTreeItem,
                 treeItem.getValue().getName().getText());
 
-        val formFields = treeItem.getValue()
-                .getRenderableForm()
-                .map(TreeItemsExplorer::findFormFields)
-                .orElse(Collections.emptyList());
+        val formFields = findFormFields(treeItem.getValue().getRenderableForm());
 
         val itemForm = formFields.stream()
                 .map(field -> FormField2TreeItemRelation.builder()

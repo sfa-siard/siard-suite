@@ -44,7 +44,6 @@ public class PreviewArchiveBrowser extends Presenter implements StepperDependant
         this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.loadedFxml = GenericArchiveBrowserPresenter.load(
                 stage,
-                controller,
                 DisplayableText.of(TITLE),
                 DisplayableText.of(TEXT),
                 this.buttonsBox,

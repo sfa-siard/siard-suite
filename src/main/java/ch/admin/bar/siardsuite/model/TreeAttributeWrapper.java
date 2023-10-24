@@ -6,29 +6,13 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import java.util.Optional;
-
-
 @Value
+@Builder
 public class TreeAttributeWrapper {
 
-    DisplayableText name;
-    DisplayableText viewTitle;
-    TreeContentView type;
-    Optional<RenderableForm<?>> renderableForm;
-
-    @Builder
-    public TreeAttributeWrapper(
-            @NonNull DisplayableText name,
-            @NonNull DisplayableText viewTitle,
-            @NonNull TreeContentView type,
-            RenderableForm<?> renderableForm
-    ) {
-        this.name = name;
-        this.viewTitle = viewTitle;
-        this.type = type;
-        this.renderableForm = Optional.ofNullable(renderableForm);
-    }
+    @NonNull DisplayableText name;
+    @NonNull DisplayableText viewTitle;
+    @NonNull RenderableForm<?> renderableForm;
 
     @Override
     public String toString() {
