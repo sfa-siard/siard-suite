@@ -84,11 +84,6 @@ public class TreeBuilder {
     private final SiardArchive siardArchive;
     private final boolean readonly;
 
-    public TreeBuilder(SiardArchive siardArchive) {
-        this.siardArchive = siardArchive;
-        this.readonly = false;
-    }
-
     public TreeItem<TreeAttributeWrapper> createRootItem() {
         val rootItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()

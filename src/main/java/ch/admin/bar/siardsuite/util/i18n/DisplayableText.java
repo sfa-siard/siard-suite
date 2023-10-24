@@ -26,6 +26,6 @@ public interface DisplayableText {
     }
 
     static <TArg1, TArg2> DisplayableText of(I18nKeyArgArg<TArg1, TArg2> key, TArg1 arg1, TArg2 arg2) {
-        return TranslatableText.of(key);
+        return TranslatableText.of(key, arg1, arg2);
     }
 }

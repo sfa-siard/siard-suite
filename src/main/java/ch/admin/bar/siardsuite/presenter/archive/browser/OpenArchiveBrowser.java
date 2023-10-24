@@ -26,7 +26,6 @@ public class OpenArchiveBrowser extends Presenter {
     private static final I18nKey TITLE = I18nKey.of("open.siard.archive.preview.title");
     private static final I18nKey TEXT = I18nKey.of("open.siard.archive.preview.text");
 
-    private ButtonBox buttonsBox;
     private LoadedFxml<GenericArchiveBrowserPresenter> loadedFxml;
 
     @Override
@@ -35,7 +34,7 @@ public class OpenArchiveBrowser extends Presenter {
         this.stage = stage;
         val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), false);
 
-        this.buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
+        val buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
         buttonsBox.cancel().setOnAction(event -> this.controller.initializeUpload(stage)); // FIXME Duplication?
         buttonsBox.previous().setOnAction(event -> this.controller.initializeExport(stage));
         buttonsBox.next().setOnAction(event -> {
@@ -51,7 +50,7 @@ public class OpenArchiveBrowser extends Presenter {
                 stage,
                 DisplayableText.of(TITLE),
                 DisplayableText.of(TEXT),
-                this.buttonsBox,
+                buttonsBox,
                 archiveBrowserView.createRootItem());
     }
 
