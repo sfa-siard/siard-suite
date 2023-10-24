@@ -4,9 +4,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.TreeContentView;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.MetaSearchTerm;
 import javafx.scene.control.TreeItem;
 import lombok.Value;
@@ -60,21 +58,18 @@ class TreeItemsExplorerTest {
     private static final TreeItem<TreeAttributeWrapper> TREE_ITEM_A = new TreeItem<>(TreeAttributeWrapper.builder()
             .name(DisplayableText.of("treeitem.a.name"))
             .viewTitle(DisplayableText.of("treeitem.a.viewTitle"))
-            .type(TreeContentView.FORM_RENDERER)
             .renderableForm(FORM_A)
             .build());
 
     private static final TreeItem<TreeAttributeWrapper> TREE_ITEM_B = new TreeItem<>(TreeAttributeWrapper.builder()
             .name(DisplayableText.of("treeitem.b.name"))
             .viewTitle(DisplayableText.of("treeitem.b.viewTitle"))
-            .type(TreeContentView.FORM_RENDERER)
             .renderableForm(FORM_B)
             .build());
 
     private static final TreeItem<TreeAttributeWrapper> TREE_ITEM_C = new TreeItem<>(TreeAttributeWrapper.builder()
             .name(DisplayableText.of("treeitem.c.name"))
             .viewTitle(DisplayableText.of("treeitem.c.viewTitle"))
-            .type(TreeContentView.FORM_RENDERER)
             .renderableForm(FORM_C)
             .build());
 
