@@ -26,7 +26,7 @@ public class DeactivatableListener<T> implements ChangeListener<T> {
 
     @Override
     public void changed(ObservableValue<? extends T> observable, T oldValue, T newValue) {
-        if (activated.get()) {
+        if (activated.get() && newValue != null) {
             listener.accept(new Change<>(
                     newValue,
                     Optional.ofNullable(oldValue),
