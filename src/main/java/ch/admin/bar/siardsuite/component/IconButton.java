@@ -1,7 +1,5 @@
 package ch.admin.bar.siardsuite.component;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -11,7 +9,7 @@ import lombok.Setter;
 
 import java.net.URL;
 
-import static ch.admin.bar.siardsuite.util.ResourcesResolver.*;
+import static ch.admin.bar.siardsuite.util.ResourcesResolver.resolve;
 
 @Getter
 @Setter

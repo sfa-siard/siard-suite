@@ -5,7 +5,6 @@ import ch.admin.bar.siardsuite.component.rendering.model.LazyLoadingDataSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
@@ -35,10 +34,10 @@ public class LoadingBatchManager<T> {
         }
 
         log.info("Data for index {} is not yet available, loading batch {} with start index {} (and length {})",
-                index,
-                matchingBatch.getBatchNr(),
-                matchingBatch.getStartIndex(),
-                matchingBatch.getNrOfElements());
+                 index,
+                 matchingBatch.getBatchNr(),
+                 matchingBatch.getStartIndex(),
+                 matchingBatch.getNrOfElements());
 
         loadedBatches.add(matchingBatch);
 

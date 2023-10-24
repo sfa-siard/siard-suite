@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.MetaColumn;
 import ch.admin.bar.siard2.api.MetaView;
 import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
 import lombok.Getter;

@@ -3,13 +3,11 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siard2.api.MetaRoutine;
 import ch.admin.bar.siardsuite.component.rendered.utils.ListAssembler;
-import ch.admin.bar.siardsuite.model.facades.MetaRoutineFacade;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

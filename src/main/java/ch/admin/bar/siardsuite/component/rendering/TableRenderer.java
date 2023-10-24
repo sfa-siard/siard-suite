@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.component.rendering;
 
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.TableSize;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

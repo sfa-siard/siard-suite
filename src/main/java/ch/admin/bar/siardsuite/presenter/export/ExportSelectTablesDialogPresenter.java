@@ -10,11 +10,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -23,10 +19,8 @@ import javafx.util.Callback;
 import lombok.val;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -80,15 +74,16 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         if (Objects.nonNull(file)) {
             try {
                 val namesOfSelectedTables = findCheckedItems().stream()
-                        .map(TreeItem::getValue)
-                        .collect(Collectors.toSet());
+                                                              .map(TreeItem::getValue)
+                                                              .collect(Collectors.toSet());
 
                 TableExporterService.builder()
-                        .exportDir(file)
-                        .schemas(this.controller.getSiardArchive().schemas())
-                        .shouldBeExportedFilter(databaseTable -> namesOfSelectedTables.contains(databaseTable.getName()))
-                        .build()
-                        .export();
+                                    .exportDir(file)
+                                    .schemas(this.controller.getSiardArchive().schemas())
+                                    .shouldBeExportedFilter(databaseTable -> namesOfSelectedTables.contains(
+                                            databaseTable.getName()))
+                                    .build()
+                                    .export();
 
                 this.stage.closeDialog();
                 this.stage.openDialog(View.EXPORT_SUCCESS);
@@ -104,19 +99,19 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         root.setExpanded(true);
 
         val items = controller.getSiardArchive().getSchemas().stream()
-                .map(schema -> {
-                    val schemaItem = new CheckBoxTreeItem<>(schema.getName());
-                    schemaItem.setExpanded(true);
+                              .map(schema -> {
+                                  val schemaItem = new CheckBoxTreeItem<>(schema.getName());
+                                  schemaItem.setExpanded(true);
 
-                    val tableItems = schema.getTables().stream()
-                            .map(table -> new CheckBoxTreeItem<>(table.getName()))
-                            .collect(Collectors.toList());
+                                  val tableItems = schema.getTables().stream()
+                                                         .map(table -> new CheckBoxTreeItem<>(table.getName()))
+                                                         .collect(Collectors.toList());
 
-                    schemaItem.getChildren().setAll(tableItems);
+                                  schemaItem.getChildren().setAll(tableItems);
 
-                    return schemaItem;
-                })
-                .collect(Collectors.toList());
+                                  return schemaItem;
+                              })
+                              .collect(Collectors.toList());
         root.getChildren().setAll(items);
 
         return root;
@@ -129,11 +124,11 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
 
     private Stream<CheckBoxTreeItem<String>> findCheckedItems(CheckBoxTreeItem<String> item) {
         val checkedItem = Stream.of(item)
-                .filter(CheckBoxTreeItem::isSelected);
+                                .filter(CheckBoxTreeItem::isSelected);
 
         val checkedChildItems = item.getChildren().stream()
-                .map(child -> (CheckBoxTreeItem<String>) child)
-                .flatMap(this::findCheckedItems);
+                                    .map(child -> (CheckBoxTreeItem<String>) child)
+                                    .flatMap(this::findCheckedItems);
 
         return Stream.concat(
                 checkedItem,

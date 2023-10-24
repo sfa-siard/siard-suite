@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.component.rendered;
 
-import ch.admin.bar.siardsuite.component.rendered.utils.Converter;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
@@ -9,9 +8,7 @@ import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.booleanToString;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.cardinalityToString;
-import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.intToString;
+import static ch.admin.bar.siardsuite.component.rendered.utils.Converter.*;
 
 public class AttributeDetailsForm {
 
@@ -29,51 +26,51 @@ public class AttributeDetailsForm {
     public static RenderableForm create(@NonNull final DatabaseAttribute attribute) {
 
         return RenderableForm.<DatabaseAttribute>builder()
-                .dataSupplier(() -> attribute)
-                .afterSaveAction(DatabaseAttribute::write)
-                .group(RenderableFormGroup.<DatabaseAttribute>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                NAME,
-                                DatabaseAttribute::getName
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                POSITION,
-                                intToString(DatabaseAttribute::getPosition)
-                                ))
-                        .property(new ReadOnlyStringProperty<>(
-                                SQL_TYPE,
-                                DatabaseAttribute::getType
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                UDT_SCHEMA,
-                                DatabaseAttribute::getTypeSchema
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                UDT_NAME,
-                                DatabaseAttribute::getTypeName
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                ORIGINAL_DATA_TYPE,
-                                DatabaseAttribute::getTypeOriginal
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                ALLOWS_NULL,
-                                booleanToString(DatabaseAttribute::isNullable)
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                DEFAULT_VALUE,
-                                DatabaseAttribute::getDefaultValue
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                ARRAY_CARDINALITY,
-                                cardinalityToString(DatabaseAttribute::getCardinality)
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                DESCRIPTION,
-                                DatabaseAttribute::getDescription,
-                                DatabaseAttribute::setDescription
-                        ))
-                        .build())
-                .build();
+                             .dataSupplier(() -> attribute)
+                             .afterSaveAction(DatabaseAttribute::write)
+                             .group(RenderableFormGroup.<DatabaseAttribute>builder()
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               NAME,
+                                                               DatabaseAttribute::getName
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               POSITION,
+                                                               intToString(DatabaseAttribute::getPosition)
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               SQL_TYPE,
+                                                               DatabaseAttribute::getType
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               UDT_SCHEMA,
+                                                               DatabaseAttribute::getTypeSchema
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               UDT_NAME,
+                                                               DatabaseAttribute::getTypeName
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               ORIGINAL_DATA_TYPE,
+                                                               DatabaseAttribute::getTypeOriginal
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               ALLOWS_NULL,
+                                                               booleanToString(DatabaseAttribute::isNullable)
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               DEFAULT_VALUE,
+                                                               DatabaseAttribute::getDefaultValue
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               ARRAY_CARDINALITY,
+                                                               cardinalityToString(DatabaseAttribute::getCardinality)
+                                                       ))
+                                                       .property(new ReadWriteStringProperty<>(
+                                                               DESCRIPTION,
+                                                               DatabaseAttribute::getDescription,
+                                                               DatabaseAttribute::setDescription
+                                                       ))
+                                                       .build())
+                             .build();
     }
 }

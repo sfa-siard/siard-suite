@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 import lombok.val;
 
 import java.io.IOException;

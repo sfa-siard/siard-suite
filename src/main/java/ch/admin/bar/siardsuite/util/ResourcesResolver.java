@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 
@@ -24,8 +23,9 @@ public class ResourcesResolver {
      */
     public static URL resolve(final String resource) {
         return Optional.ofNullable(ResourcesResolver.class
-                .getClassLoader()
-                .getResource(resource))
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Resource \"%s\" not found", resource)));
+                                           .getClassLoader()
+                                           .getResource(resource))
+                       .orElseThrow(() -> new IllegalArgumentException(String.format("Resource \"%s\" not found",
+                                                                                     resource)));
     }
 }
