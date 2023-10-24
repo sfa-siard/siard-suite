@@ -15,7 +15,7 @@ public class FXMLLoadHelper {
         val loader = new FXMLLoader(SiardApplication.class.getResource(view));
         try {
             Node node = loader.load();
-            C controller =loader.getController();
+            C controller = loader.getController();
 
             return new LoadedFxml<>(node, controller);
         } catch (IOException e) {

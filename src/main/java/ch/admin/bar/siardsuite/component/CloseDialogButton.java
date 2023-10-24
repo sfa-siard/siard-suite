@@ -13,11 +13,9 @@ public class CloseDialogButton extends MFXButton {
     }
 
     public CloseDialogButton(DialogCloser dialogCloser) {
-        I18n.bind(this.textProperty(),"button.cancel");
+        I18n.bind(this.textProperty(), "button.cancel");
         this.getStyleClass().setAll("button", "secondary");
         this.setManaged(true);
         this.setOnAction(event -> dialogCloser.closeDialog());
     }
-
-
 }

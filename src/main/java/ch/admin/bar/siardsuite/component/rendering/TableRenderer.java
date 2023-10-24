@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Builder
-public class TableRenderer<T, I> implements SearchableFormEntry{
+public class TableRenderer<T, I> implements SearchableFormEntry {
 
     private static final String TABLE_STYLE_CLASS = "tree-table-view";
 
