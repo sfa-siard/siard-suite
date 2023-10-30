@@ -58,7 +58,17 @@ public class LazyLoadingTableRenderer<T, I> {
             });
 
             row.setOnMouseClicked(event -> {
-                val tablePosition = tableView.getSelectionModel().getSelectedCells().get(0);
+                val selectionModel = tableView.getSelectionModel();
+                if (selectionModel.getSelectedCells().isEmpty()) {
+                    return;
+                }
+
+                val tablePosition = selectionModel.getSelectedCells().get(0);
+                if (tablePosition.getColumn() < 0 ||
+                        tablePosition.getColumn() >= renderableTable.getProperties().size()) {
+                    return;
+                }
+
                 val column = renderableTable.getProperties().get(tablePosition.getColumn());
 
                 column.getOnCellClickedListener()
@@ -86,7 +96,6 @@ public class LazyLoadingTableRenderer<T, I> {
         val column = new TableColumn<I, String>(columnProperty.getTitle().getText());
 
         column.setSortable(false); // Not sortable because of lazy loading
-        column.setMinWidth(100);
         column.setCellValueFactory(cellData -> {
             val value = columnProperty.getValueExtractor().apply(cellData.getValue());
             return new SimpleStringProperty(value);
