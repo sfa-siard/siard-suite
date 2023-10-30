@@ -145,7 +145,7 @@ public class GenericArchiveBrowserPresenter {
             return;
         }
 
-        this.rootStage.openUnsavedChangesDialogue(result -> {
+        this.rootStage.openUnsavedChangesDialog(result -> {
             switch (result) {
                 case CANCEL:
                     change.getDeactivatableListener().deactivate();
@@ -185,6 +185,7 @@ public class GenericArchiveBrowserPresenter {
         currentFormRenderer = FormRenderer.builder()
                 .renderableForm(form)
                 .hasChanged(hasChanged)
+                .errorDialogOpener(rootStage)
                 .build();
 
         this.titleTableContainer.textProperty()

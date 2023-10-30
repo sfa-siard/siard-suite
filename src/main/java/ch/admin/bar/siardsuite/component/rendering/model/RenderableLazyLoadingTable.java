@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.function.Function;
 
 @Value
-@Builder
 public class RenderableLazyLoadingTable<T, I> implements RenderableProperty<T> {
 
     @NonNull
@@ -17,5 +16,13 @@ public class RenderableLazyLoadingTable<T, I> implements RenderableProperty<T> {
 
     @Singular
     @NonNull
-    List<ReadOnlyStringProperty<I>> properties;
+    List<TableColumnProperty<I>> properties;
+
+    @Builder
+    public RenderableLazyLoadingTable(
+            @NonNull Function<T, LazyLoadingDataSource<I>> dataExtractor,
+            @NonNull @Singular List<TableColumnProperty<I>> properties) {
+        this.dataExtractor = dataExtractor;
+        this.properties = properties;
+    }
 }

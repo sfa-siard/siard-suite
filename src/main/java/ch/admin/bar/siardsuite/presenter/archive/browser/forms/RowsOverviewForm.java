@@ -3,15 +3,19 @@ package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siard2.api.Record;
 import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siard2.api.primary.CellImpl;
 import ch.admin.bar.siardsuite.component.rendering.model.LazyLoadingDataSource;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
+import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
+import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
-import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
+import ch.admin.bar.siardsuite.util.FileHelper;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.enterag.utils.BU;
@@ -19,17 +23,21 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.catchExceptions;
 import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.longToString;
 
+@Slf4j
 public class RowsOverviewForm {
 
     private static final I18nKey LABEL_TABLE = I18nKey.of("tableContainer.labelTable");
@@ -37,9 +45,10 @@ public class RowsOverviewForm {
 
     public static RenderableForm<DatabaseTable> create(@NonNull final DatabaseTable table) {
         val tableProperties = table.getColumns().stream()
-                .map(column -> new ReadOnlyStringProperty<RecordWrapper>(
+                .map(column -> new TableColumnProperty<>(
                         DisplayableText.of(column.getName()),
-                        row -> row.findCellValue(column.getName())))
+                        row -> row.findCellValue(column.getName()),
+                        createCellClickListener(column)))
                 .collect(Collectors.toList());
 
 
@@ -69,8 +78,8 @@ public class RowsOverviewForm {
             this.record = record;
 
             val cells = new ListAssembler<>(
-                    Converter.catchExceptions(record::getCells),
-                    Converter.catchExceptions(record::getCell)
+                    catchExceptions(record::getCells),
+                    catchExceptions(record::getCell)
             ).assemble();
 
             this.cellsByName = cells.stream()
@@ -135,5 +144,30 @@ public class RowsOverviewForm {
         public long findIndexOf(RecordWrapper item) {
             return item.getRecord().getRecord();
         }
+    }
+
+
+    private static Optional<TableColumnProperty.CellClickedListener<RecordWrapper>> createCellClickListener(final DatabaseColumn column) {
+        try {
+            if (!new PreTypeFacade(column.getColumn().getPreType()).isBlob()) {
+                return Optional.empty();
+            }
+        } catch (IOException e) {
+            log.error("Can not read pre-type of column {}. Message: {}", column.getName(), e.getMessage());
+            return Optional.empty();
+        }
+
+        return Optional.of((property, value) -> {
+            val absoluteLobFolder = column.getColumn().getAbsoluteLobFolder();
+            val cell = value.findCell(column.getName());
+
+            if (absoluteLobFolder == null) {
+                val cellImpl = (CellImpl) cell;
+                Path tempFilePath = FileHelper.createTempFile(cellImpl.getLobFilename(), cell.getBytes());
+                OS.openFile(String.valueOf(tempFilePath));
+            } else {
+                OS.openFile(absoluteLobFolder + cell.getFilename());
+            }
+        });
     }
 }

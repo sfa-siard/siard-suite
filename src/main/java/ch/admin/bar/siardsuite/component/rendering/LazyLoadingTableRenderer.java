@@ -1,9 +1,10 @@
 package ch.admin.bar.siardsuite.component.rendering;
 
 import ch.admin.bar.siardsuite.component.rendering.model.LazyLoadingDataSource;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
+import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.component.rendering.utils.LoadingBatchManager;
+import ch.admin.bar.siardsuite.view.ErrorDialogOpener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -11,6 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.val;
 
 import java.util.stream.Collectors;
@@ -22,10 +24,16 @@ public class LazyLoadingTableRenderer<T, I> {
     private final RenderableLazyLoadingTable<T, I> renderableTable;
     private final LazyLoadingDataSource<I> lazyLoadingDataSource;
 
+    private final ErrorDialogOpener errorDialogOpener;
+
 
     @Builder
-    public LazyLoadingTableRenderer(RenderableLazyLoadingTable<T, I> renderableTable, T dataHolder) {
+    public LazyLoadingTableRenderer(
+            @NonNull final RenderableLazyLoadingTable<T, I> renderableTable,
+            @NonNull final T dataHolder,
+            @NonNull final ErrorDialogOpener errorDialogOpener) {
         this.renderableTable = renderableTable;
+        this.errorDialogOpener = errorDialogOpener;
         this.lazyLoadingDataSource = renderableTable.getDataExtractor().apply(dataHolder);
     }
 
@@ -49,6 +57,20 @@ public class LazyLoadingTableRenderer<T, I> {
                 }
             });
 
+            row.setOnMouseClicked(event -> {
+                val tablePosition = tableView.getSelectionModel().getSelectedCells().get(0);
+                val column = renderableTable.getProperties().get(tablePosition.getColumn());
+
+                column.getOnCellClickedListener()
+                        .ifPresent(listener -> {
+                            try {
+                                listener.onClick(column, row.getItem());
+                            } catch (Exception e) {
+                                errorDialogOpener.openErrorDialog(e);
+                            }
+                        });
+            });
+
             return row;
         });
 
@@ -60,7 +82,7 @@ public class LazyLoadingTableRenderer<T, I> {
         return tableView;
     }
 
-    private TableColumn<I, String> column(final ReadOnlyStringProperty<I> columnProperty) {
+    private TableColumn<I, String> column(final TableColumnProperty<I> columnProperty) {
         val column = new TableColumn<I, String>(columnProperty.getTitle().getText());
 
         column.setSortable(false); // Not sortable because of lazy loading

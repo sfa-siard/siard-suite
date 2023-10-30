@@ -3,6 +3,8 @@ package ch.admin.bar.siardsuite.view;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
+import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
@@ -20,7 +22,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class RootStage extends Stage {
+public class RootStage extends Stage implements ErrorDialogOpener {
   private final Controller controller;
 
   private final BorderPane rootPane;
@@ -69,7 +71,15 @@ public class RootStage extends Stage {
     dialogPane.setVisible(true);
   }
 
-  public void openUnsavedChangesDialogue(final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
+  @Override
+  public void openErrorDialog(final Throwable e) {
+    val loaded = ErrorDialogPresenter.load(new Failure(e), this::closeDialog);
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
+  }
+
+  public void openUnsavedChangesDialog(final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
     val loaded = UnsavedChangesDialogPresenter.load(result -> {
       closeDialog();
       resultCallback.accept(result);
