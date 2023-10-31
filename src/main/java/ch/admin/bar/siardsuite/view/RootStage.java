@@ -1,45 +1,46 @@
 package ch.admin.bar.siardsuite.view;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.component.Icon;
+import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
+import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.presenter.Presenter;
-import ch.admin.bar.siardsuite.presenter.RootPresenter;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import javafx.scene.Scene;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.val;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.function.Consumer;
 
-public class RootStage extends Stage {
+public class RootStage extends Stage implements ErrorDialogOpener {
   private final Controller controller;
 
-  @FXML
   private final BorderPane rootPane;
-  @FXML
   private final BorderPane dialogPane;
 
   public RootStage(Controller controller) throws IOException {
     this.controller = controller;
 
-    FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(View.ROOT.getName()));
-    rootPane = loader.load();
-    loader.<RootPresenter>getController().init(controller,this);
+    rootPane = View.ROOT.getViewCreator()
+                    .apply(controller, this)
+                    .getNode();
+    dialogPane = View.DIALOG.getViewCreator()
+            .apply(controller, this)
+            .getNode();
+    dialogPane.setVisible(false);
 
     // load start view
     navigate(controller.getCurrentView());
-
-    // prepare for dialogs
-    loader = new FXMLLoader(SiardApplication.class.getResource(View.DIALOG.getName()));
-    dialogPane = loader.load();
-    loader.<DialogPresenter>getController().init(controller, this);
-    dialogPane.setVisible(false);
 
     // set overall stack pane
     StackPane stackPane = new StackPane(rootPane, dialogPane);
@@ -55,30 +56,60 @@ public class RootStage extends Stage {
     this.show();
   }
 
-  private void setCenter(BorderPane borderPane, String viewName) {
-    FXMLLoader loader = new FXMLLoader(SiardApplication.class.getResource(viewName));
-    try {
-      borderPane.setCenter(loader.load());
-      loader.<Presenter>getController().init(this.controller, this);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+  private void setCenter(BorderPane borderPane, View view) {
+    val loaded = view.getViewCreator().apply(controller, this);
+    borderPane.setCenter(loaded.getNode());
   }
 
   public void navigate(View view) {
     controller.setCurrentView(view);
-    setCenter(rootPane, view.getName());
+    setCenter(rootPane, view);
   }
 
   public void openDialog(View view) {
-    setCenter(dialogPane, view.getName());
+    setCenter(dialogPane, view);
     dialogPane.setVisible(true);
   }
 
+  @Override
+  public void openErrorDialog(final Throwable e) {
+    val loaded = ErrorDialogPresenter.load(new Failure(e), this::closeDialog);
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
+  }
+
+  public void openUnsavedChangesDialog(final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
+    val loaded = UnsavedChangesDialogPresenter.load(result -> {
+      closeDialog();
+      resultCallback.accept(result);
+    });
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
+  }
+
+  public void openSearchTableDialog(final Consumer<Optional<String>> searchTermConsumer) {
+    val loaded = SearchTableDialogPresenter.load(this::closeDialog, searchTermConsumer);
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
+  }
+
+  public void openSearchMetaDataDialog(
+          final TreeItemsExplorer treeItemsExplorer,
+          final Consumer<TreeItem<TreeAttributeWrapper>> onSelected) {
+    val loaded = SearchMetadataDialogPresenter.load(
+            this::closeDialog,
+            treeItemsExplorer,
+            onSelected
+    );
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
+  }
 
   public void closeDialog() {
     dialogPane.setVisible(false);
   }
-
-
 }

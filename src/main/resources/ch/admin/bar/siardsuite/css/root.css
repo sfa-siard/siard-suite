@@ -19,6 +19,9 @@
     siard-font-family: 'Roboto Regular';
     siard-text-color: #52606D;
     siard-text-color-black: #1e2731;
+    siard-bright-background-color: #F5F7FA;
+
+    siard-details-fields-border-color: #b0afaf;
 }
 
 .root {
@@ -83,11 +86,16 @@
 
 .icon-button {
     -fx-background-color: transparent;
-    -fx-max-height: 24;
     -fx-content-display: graphic-only;
-    -fx-padding: 0 0.5em 0 0.5em;
+    -fx-padding: 0;
     -fx-cursor: HAND;
 
+    -fx-pref-height: 24;
+    -fx-pref-width: 24;
+    -fx-min-height: 24;
+    -fx-min-width: 24;
+    -fx-max-height: 24;
+    -fx-max-width: 24;
 }
 
 .menu-bar {
@@ -438,6 +446,12 @@
     -fx-graphic: url(../icons/search.png);
 }
 
+.download-icon {
+    -fx-graphic: url(../icons/download.png);
+    -fx-max-width: 24;
+    -fx-max-height: 24;
+}
+
 .upload-icon {
     -fx-graphic: url(../icons/upload.png);
 }
@@ -452,6 +466,12 @@
 
 .arrow-right-icon {
     -fx-graphic: url(../icons/right_arrow.png);
+    -fx-max-width: 48;
+    -fx-max-height: 48;
+}
+
+.arrow-left-icon {
+    -fx-graphic: url(../icons/left_arrow.png);
     -fx-max-width: 48;
     -fx-max-height: 48;
 }
@@ -491,6 +511,23 @@
     -fx-border-width: 1;
     -fx-border-radius: 0;
     -fx-text-fill: siard-text-color-black;
+}
+
+.rendered-field {
+    -fx-padding: 2 2 2 10;
+    -fx-max-height: 30;
+    -fx-min-height: 30;
+    -fx-border-width: 1;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: siard-details-fields-border-color;
+    -fx-text-fill: siard-text-color-black;
+    -fx-background-color: white;
+}
+
+.rendered-field:readonly {
+    -fx-opacity: 1.0;
+    -fx-background-color: siard-bright-background-color;
 }
 
 .form-label {
@@ -685,11 +722,25 @@
     -fx-max-width: infinity;
 }
 
+.validation-text {
+    -fx-font-size: 12;
+    -fx-text-fill: red;
+    -fx-max-width: infinity;
+}
+
 .table-container-text {
     -fx-font-family: siard-font-family;
     -fx-font-size: 14;
     -fx-text-fill: siard-text-color-black;
     -fx-label-padding: 6 0 14 0;
+    -fx-max-width: infinity;
+}
+
+.table-container-rendered-field {
+    -fx-font-family: siard-font-family;
+    -fx-font-size: 14;
+    -fx-text-fill: siard-text-color-black;
+    -fx-label-padding: 6 0 6 0;
     -fx-max-width: infinity;
 }
 
@@ -860,7 +911,7 @@
 /* Search Hits */
 
 .search-hits-vbox-list {
-    -fx-pref-width: 700.0;
+    -fx-min-width: 700.0;
 }
 
 .search-hits-vbox-list .search-hit-hbox {
@@ -874,7 +925,6 @@
 }
 
 .search-hits-vbox-list .search-hit-hbox .name-label {
-    -fx-pref-width: 600.0;
     -fx-pref-height: 40.0;
     -fx-font-size: 15;
     -fx-alignment: center-left;
@@ -882,6 +932,7 @@
 
 .search-hits-vbox-list .search-hit-hbox .number-label {
     -fx-pref-width: 50.0;
+    -fx-min-width: 50.0;
     -fx-pref-height: 40.0;
     -fx-alignment: center-left;
     -fx-text-fill: #1a1a1aa8;

@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.export;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
+import ch.admin.bar.siardsuite.service.TableExporterService;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -15,11 +16,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Callback;
+import lombok.val;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     @FXML
@@ -59,15 +62,9 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
 
         this.saveButton.setOnAction(this::handleSaveClicked);
         this.saveButton.textProperty().bind(I18n.createStringBinding("export.choose-location.text"));
-
-        TreeItem root = new CheckBoxTreeItem("root");
-        this.controller.populate(root);
-        root.setExpanded(true);
-
-        this.tableSelector.setRoot(root);
+        this.tableSelector.setRoot(createTree());
         this.tableSelector.setShowRoot(false);
         tableSelector.setCellFactory((Callback<TreeView<String>, TreeCell<String>>) param -> new CheckBoxTreeCell<>());
-
     }
 
     private void handleSaveClicked(ActionEvent actionEvent) {
@@ -76,10 +73,18 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         File file = directoryChooser.showDialog(stage);
         if (Objects.nonNull(file)) {
             try {
-                List<String> tables = new ArrayList<>();
-                this.findCheckedItems((CheckBoxTreeItem<String>) this.tableSelector.getRoot(), tables);
+                val namesOfSelectedTables = findCheckedItems().stream()
+                                                              .map(TreeItem::getValue)
+                                                              .collect(Collectors.toSet());
 
-                this.controller.getSiardArchive().export(tables, file);
+                TableExporterService.builder()
+                                    .exportDir(file)
+                                    .schemas(this.controller.getSiardArchive().schemas())
+                                    .shouldBeExportedFilter(databaseTable -> namesOfSelectedTables.contains(
+                                            databaseTable.getName()))
+                                    .build()
+                                    .export();
+
                 this.stage.closeDialog();
                 this.stage.openDialog(View.EXPORT_SUCCESS);
             } catch (Exception e) {
@@ -89,14 +94,46 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
         }
     }
 
-    // copied from https://stackoverflow.com/questions/42828781/how-to-get-checked-items-in-checkboxtreeview-in-javafx
-    private void findCheckedItems(CheckBoxTreeItem<String> item, List<String> checkedItems) {
-        if (item.isSelected()) {
-            checkedItems.add(item.getValue());
-        }
-        for (TreeItem<?> child : item.getChildren()) {
-            findCheckedItems((CheckBoxTreeItem<String>) child, checkedItems);
-        }
+    private CheckBoxTreeItem<String> createTree() {
+        val root = new CheckBoxTreeItem<>("root");
+        root.setExpanded(true);
+
+        val items = controller.getSiardArchive().getSchemas().stream()
+                              .map(schema -> {
+                                  val schemaItem = new CheckBoxTreeItem<>(schema.getName());
+                                  schemaItem.setExpanded(true);
+
+                                  val tableItems = schema.getTables().stream()
+                                                         .map(table -> new CheckBoxTreeItem<>(table.getName()))
+                                                         .collect(Collectors.toList());
+
+                                  schemaItem.getChildren().setAll(tableItems);
+
+                                  return schemaItem;
+                              })
+                              .collect(Collectors.toList());
+        root.getChildren().setAll(items);
+
+        return root;
+    }
+
+    private List<CheckBoxTreeItem<String>> findCheckedItems() {
+        return findCheckedItems((CheckBoxTreeItem<String>) this.tableSelector.getRoot())
+                .collect(Collectors.toList());
+    }
+
+    private Stream<CheckBoxTreeItem<String>> findCheckedItems(CheckBoxTreeItem<String> item) {
+        val checkedItem = Stream.of(item)
+                                .filter(CheckBoxTreeItem::isSelected);
+
+        val checkedChildItems = item.getChildren().stream()
+                                    .map(child -> (CheckBoxTreeItem<String>) child)
+                                    .flatMap(this::findCheckedItems);
+
+        return Stream.concat(
+                checkedItem,
+                checkedChildItems
+        );
     }
 }
 

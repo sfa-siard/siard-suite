@@ -4,31 +4,22 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionProperties;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
-import ch.admin.bar.siardsuite.model.database.DatabaseObject;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.presenter.ArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TreeItem;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Model {
 
     private View currentView = View.START;
-    private TableSearchBase currentTableSearchBase = null;
-    private TableSearchButton currentTableSearchButton = null;
-    private ArchiveBrowserPresenter currentPreviewPresenter = null;
-    private String currentTableSearch = null;
-    private String currentMetaSearch = null;
     private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
     private Map<String, String> schemaMap = new HashMap<>();
     private SiardArchive siardArchive = new SiardArchive();
@@ -44,46 +35,6 @@ public class Model {
 
     public void setCurrentView(View view) {
         this.currentView = view;
-    }
-
-    public TableSearchBase getCurrentTableSearchBase() {
-        return currentTableSearchBase;
-    }
-
-    public void setCurrentTableSearchBase(TableView<Map> tableView, LinkedHashSet<Map> rows) {
-        currentTableSearchBase = new TableSearchBase(tableView, rows);
-    }
-
-    public TableSearchButton getCurrentTableSearchButton() {
-        return currentTableSearchButton;
-    }
-
-    public void setCurrentTableSearchButton(MFXButton button, Boolean active) {
-        currentTableSearchButton = new TableSearchButton(button, active);
-    }
-
-    public ArchiveBrowserPresenter getCurrentPreviewPresenter() {
-        return currentPreviewPresenter;
-    }
-
-    public void setCurrentPreviewPresenter(ArchiveBrowserPresenter presenter) {
-        currentPreviewPresenter = presenter;
-    }
-
-    public String getCurrentTableSearch() {
-        return currentTableSearch;
-    }
-
-    public void setCurrentTableSearch(String s) {
-        currentTableSearch = s;
-    }
-
-    public String getCurrentMetaSearch() {
-        return currentMetaSearch;
-    }
-
-    public void setCurrentMetaSearch(String s) {
-        currentMetaSearch = s;
     }
 
     public Archive initArchive() {
@@ -180,26 +131,14 @@ public class Model {
                                       String archiverName, String archiverContact, URI lobFolder, File targetArchive,
                                       boolean viewsAsTables) {
         getSiardArchive().addArchiveMetaData(dbName,
-                                             description,
-                                             owner,
-                                             dataOriginTimespan,
-                                             archiverName,
-                                             archiverContact,
-                                             lobFolder,
-                                             targetArchive,
-                                             viewsAsTables);
-    }
-
-    public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor) {
-        getSiardArchive().shareProperties(visitor);
-    }
-
-    public void provideDatabaseArchiveProperties(SiardArchiveVisitor visitor, DatabaseObject databaseObject) {
-        getSiardArchive().shareProperties(visitor, databaseObject);
-    }
-
-    public void populate(TreeItem root) {
-        getSiardArchive().populate(root);
+                description,
+                owner,
+                dataOriginTimespan,
+                archiverName,
+                archiverContact,
+                lobFolder,
+                targetArchive,
+                viewsAsTables);
     }
 
     public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
@@ -216,10 +155,6 @@ public class Model {
 
     public void provideArchiveObject(ArchiveVisitor visitor) {
         getSiardArchive().shareObject(visitor);
-    }
-
-    public TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
-        return getSiardArchive().aggregatedMetaSearch(s);
     }
 
     public void setSchemaMap(Map schemaMap) {

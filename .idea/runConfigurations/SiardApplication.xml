@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SiardApplication" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="ALTERNATIVE_JRE_PATH" value="jdk+fx-17" />
+    <option name="ALTERNATIVE_JRE_PATH" value="zulu-17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="ch.admin.bar.siardsuite.SiardApplication" />
     <module name="siard-suite.main" />

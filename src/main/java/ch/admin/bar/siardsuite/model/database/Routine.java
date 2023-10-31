@@ -2,107 +2,52 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siard2.api.MetaRoutine;
-import ch.admin.bar.siardsuite.component.SiardTableView;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.model.facades.MetaParameterFacade;
-import ch.admin.bar.siardsuite.model.facades.MetaRoutineFacade;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
+import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-public class Routine extends DatabaseObject implements WithColumns {
+@Getter
+@Setter
+public class Routine {
 
     private final MetaRoutine metaRoutine;
+    private final List<MetaParameter> parameters;
+
+    private String source;
+    private String body;
+    private String description;
 
     public Routine(MetaRoutine metaRoutine) {
         this.metaRoutine = metaRoutine;
+        this.parameters = ListAssembler.assemble(metaRoutine.getMetaParameters(), metaRoutine::getMetaParameter);
+
+        this.source = metaRoutine.getSource();
+        this.body = metaRoutine.getBody();
+        this.description = metaRoutine.getBody();
     }
 
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(metaRoutine.getName(),
-                      String.valueOf(metaRoutine.getMetaParameters()),
-                      new ArrayList<>(),
-                      new ArrayList<>());
-    }
-
-    @Override
-    public void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView == null) return;
-        if (!TreeContentView.COLUMNS.equals(type) && !TreeContentView.ROUTINE.equals(type)) return;
-        new SiardTableView(tableView)
-                .withColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, POSITION)
-                .withColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_NAME, PARAMETER_NAME)
-                .withColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_MODE, PARAMETER_MODE)
-                .withColumn(TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_TYPE, PARAMETER_TYPE)
-                .withColumn(TABLE_CONTAINER_PARAMETER_HEADER_CARDINALITY, CARDINALITY).withItems(colItems());
-    }
-
-    private ObservableList<Map> colItems() {
-        return FXCollections.observableArrayList(new MetaRoutineFacade(metaRoutine).parameters()
-                                                                                   .map(metaParameter -> createItem(
-                                                                                           metaParameter)
-
-                                                                                   ).collect(Collectors.toList()));
-    }
-
-    private static Map<String, String> createItem(MetaParameter metaParameter) {
-        Map<String, String> item = new HashMap<>();
-        item.put(POSITION, String.valueOf(metaParameter.getPosition()));
-        item.put(PARAMETER_NAME, metaParameter.getName());
-        item.put(PARAMETER_MODE, metaParameter.getMode());
-        item.put(PARAMETER_TYPE, metaParameter.getType());
-        item.put(CARDINALITY,
-                 new MetaParameterFacade(metaParameter).formattedCardinality());
-        return item;
-    }
-
-
-    @Override
-    public void populate(VBox vBox, TreeContentView type) {
-    }
-
-    @Override
-    public String name() {
+    public String getName() {
         return metaRoutine.getName();
     }
 
-    public String characteristics() {
+    public String getCharacteristics() {
         return metaRoutine.getCharacteristic();
     }
 
-    public String specificName() {
+    public String getSpecificName() {
         return metaRoutine.getSpecificName();
     }
 
-    public String returnType() {
-        return metaRoutine.getSpecificName();
+    public String getReturnType() {
+        return metaRoutine.getReturnType();
     }
 
-    public String numberOfParameters() {
-        return String.valueOf(metaRoutine.getMetaParameters());
+    public void write() throws IOException {
+        metaRoutine.setSource(source);
+        metaRoutine.setBody(body);
+        metaRoutine.setDescription(description);
     }
-
-    public List<MetaParameter> parameters() {
-        return new MetaRoutineFacade(metaRoutine).parameters().collect(Collectors.toList());
-    }
-
-    private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
-    private static final String TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_NAME = "tableContainer.parameter.header.parameterName";
-    private static final String TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_MODE = "tableContainer.parameter.header.parameterMode";
-    private static final String TABLE_CONTAINER_PARAMETER_HEADER_PARAMETER_TYPE = "tableContainer.parameter.header.parameterType";
-    private static final String TABLE_CONTAINER_PARAMETER_HEADER_CARDINALITY = "tableContainer.parameter.header.cardinality";
-    private static final String POSITION = "position";
-    private static final String PARAMETER_NAME = "parameterName";
-    private static final String PARAMETER_MODE = "parameterMode";
-    private static final String PARAMETER_TYPE = "parameterType";
-    private static final String CARDINALITY = "cardinality";
 }

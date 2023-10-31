@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<BorderPane
+        maxHeight="-Infinity"
+        maxWidth="-Infinity"
+        minHeight="-Infinity"
+        minWidth="500"
+        prefHeight="300.0"
+        styleClass="dialog"
+        stylesheets="@../../css/root.css"
+        BorderPane.alignment="CENTER"
+        xmlns="http://javafx.com/javafx/1.8"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter">
+    <center>
+        <BorderPane
+                minHeight="-Infinity"
+                minWidth="418"
+                BorderPane.alignment="CENTER">
+            <top>
+                <HBox BorderPane.alignment="CENTER_LEFT">
+                    <BorderPane.margin>
+                        <Insets bottom="15.0"/>
+                    </BorderPane.margin>
+                    <Label fx:id="title"
+                           prefHeight="42.0"
+                           styleClass="dialog-title"
+                           text="Label"
+                           HBox.hgrow="ALWAYS"/>
+                    <MFXButton fx:id="closeButton"
+                               alignment="CENTER_RIGHT"
+                               contentDisplay="CENTER"
+                               styleClass="dialog-close-button"
+                               text="X"
+                               HBox.hgrow="NEVER"/>
+                </HBox>
+            </top>
+            <center>
+                <VBox prefHeight="100.0"
+                      BorderPane.alignment="CENTER">
+                    <Text fx:id="text"
+                          styleClass="dialog-text"
+                          textOrigin="BOTTOM"
+                          wrappingWidth="329.943359375">
+                        <VBox.margin>
+                            <Insets bottom="25.0"/>
+                        </VBox.margin>
+                    </Text>
+                </VBox>
+            </center>
+        </BorderPane>
+    </center>
+    <bottom>
+        <HBox fx:id="buttonBox"
+              maxHeight="1.7976931348623157E308"
+              maxWidth="1.7976931348623157E308"
+              minWidth="-Infinity"
+              spacing="20.0"
+              styleClass="btn-box">
+        </HBox>
+    </bottom>
+</BorderPane>

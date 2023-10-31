@@ -1,5 +1,8 @@
 package ch.admin.bar.siardsuite.model.database;
 
+import lombok.Getter;
+
+@Getter
 public class Privilige {
 
     private final String type;
@@ -16,9 +19,5 @@ public class Privilige {
         this.grantee = grantee;
         this.option = option;
         this.description = description;
-    }
-
-    public <T> T accept(PriviligeVisitor<T> visitor) {
-        return visitor.visit(type, object, grantor, grantee, option, description);
     }
 }

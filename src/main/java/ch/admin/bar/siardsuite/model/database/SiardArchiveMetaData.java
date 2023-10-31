@@ -5,8 +5,8 @@ import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,73 +15,94 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+@Getter
+@Setter
 // understands additional metadata of the archive
 public class SiardArchiveMetaData {
 
-    protected final StringProperty siardFormatVersion;
-    protected final StringProperty databaseName;
-    protected final StringProperty databaseProduct;
-    protected final StringProperty databaseConnectionURL;
-    protected final StringProperty databaseUsername;
-    protected final StringProperty databaseDescription;
-    protected final StringProperty dataOwner;
-    protected final StringProperty dataOriginTimespan;
-    protected final LocalDate archivingDate;
-    protected final StringProperty archiverName;
-    protected final StringProperty archiverContact;
-    protected File targetArchive; // not sure if this is the correct place here... maybe just use the model?
-    protected URI lobFolder;
-    protected boolean viewsAsTables;
+    private final String siardFormatVersion;
+    private String databaseName;
+    private final String databaseProduct;
+    private final String databaseConnectionURL;
+    private final String databaseUsername;
+    private String databaseDescription;
+    private String dataOwner;
+    private String dataOriginTimespan;
+    private final LocalDate archivingDate;
+    private String archiverName;
+    private String archiverContact;
+    private File targetArchive; // not sure if this is the correct place here... maybe just use the model?
+    private URI lobFolder;
+    private boolean viewsAsTables;
 
-    public SiardArchiveMetaData(String dbName, String databaseDescription, String dataOwner, String dataOriginTimespan,
-                                String archiverName, String archiverContact, URI lobFolder, File targetArchive,
-                                boolean viewsAsTables) {
+    public SiardArchiveMetaData(
+            String databaseName,
+            String databaseDescription,
+            String dataOwner,
+            String dataOriginTimespan,
+            String archiverName,
+            String archiverContact,
+            URI lobFolder,
+            File targetArchive,
+            boolean viewsAsTables) {
 
-        siardFormatVersion = new SimpleStringProperty();
-        databaseName = new SimpleStringProperty(dbName);
-        databaseProduct = new SimpleStringProperty();
-        databaseConnectionURL = new SimpleStringProperty();
-        databaseUsername = new SimpleStringProperty();
-        this.databaseDescription = new SimpleStringProperty(databaseDescription);
-        this.dataOwner = new SimpleStringProperty(dataOwner);
-        this.dataOriginTimespan = new SimpleStringProperty(dataOriginTimespan);
-        archivingDate = LocalDate.now();
-        this.archiverName = new SimpleStringProperty(archiverName);
-        this.archiverContact = new SimpleStringProperty(archiverContact);
+        this.siardFormatVersion = "";
+        this.databaseName = databaseName;
+        this.databaseProduct = "";
+        this.databaseConnectionURL = "";
+        this.databaseUsername = "";
+        this.databaseDescription = databaseDescription;
+        this.dataOwner = dataOwner;
+        this.dataOriginTimespan = dataOriginTimespan;
+        this.archivingDate = LocalDate.now();
+        this.archiverName = archiverName;
+        this.archiverContact = archiverContact;
         this.targetArchive = targetArchive;
         this.lobFolder = lobFolder;
         this.viewsAsTables = viewsAsTables;
     }
 
     public SiardArchiveMetaData(MetaData metaData) {
-        siardFormatVersion = new SimpleStringProperty(metaData.getVersion());
-        databaseName = new SimpleStringProperty(metaData.getDbName());
-        databaseProduct = new SimpleStringProperty(metaData.getDatabaseProduct());
-        databaseConnectionURL = new SimpleStringProperty(metaData.getConnection());
-        databaseUsername = new SimpleStringProperty(metaData.getDatabaseUser());
-        databaseDescription = new SimpleStringProperty(metaData.getDescription());
-        dataOwner = new SimpleStringProperty(metaData.getDataOwner());
-        dataOriginTimespan = new SimpleStringProperty(metaData.getDataOriginTimespan());
+        siardFormatVersion = metaData.getVersion();
+        databaseName = metaData.getDbName();
+        databaseProduct = metaData.getDatabaseProduct();
+        databaseConnectionURL = metaData.getConnection();
+        databaseUsername = metaData.getDatabaseUser();
+        databaseDescription = metaData.getDescription();
+        dataOwner = metaData.getDataOwner();
+        dataOriginTimespan = metaData.getDataOriginTimespan();
         final Calendar calendar = metaData.getArchivalDate();
         LocalDate date;
         try {
             date = LocalDate.of(calendar.get(Calendar.YEAR),
-                                calendar.get(Calendar.MONTH) + 1,
-                                calendar.get(Calendar.DATE));
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DATE));
         } catch (DateTimeException e) {
             date = LocalDate.now();
         }
         archivingDate = date;
-        archiverName = new SimpleStringProperty(metaData.getArchiver());
-        archiverContact = new SimpleStringProperty(metaData.getArchiverContact());
+        archiverName = metaData.getArchiver();
+        archiverContact = metaData.getArchiverContact();
         lobFolder = metaData.getLobFolder();
     }
 
     public void accept(SiardArchiveMetaDataDetailsVisitor visitor) {
-        visitor.visit(siardFormatVersion.getValue(), databaseName.getValue(), databaseProduct.getValue(),
-                      databaseConnectionURL.getValue(), databaseUsername.getValue(), databaseDescription.getValue(),
-                      dataOwner.getValue(), dataOriginTimespan.getValue(), archivingDate,
-                      archiverName.getValue(), archiverContact.getValue(), targetArchive, lobFolder, viewsAsTables);
+        visitor.visit(
+                siardFormatVersion,
+                databaseName,
+                databaseProduct,
+                databaseConnectionURL,
+                databaseUsername,
+                databaseDescription,
+                dataOwner,
+                dataOriginTimespan,
+                archivingDate,
+                archiverName,
+                archiverContact,
+                targetArchive,
+                lobFolder,
+                viewsAsTables
+        );
     }
 
 
@@ -90,17 +111,18 @@ public class SiardArchiveMetaData {
     }
 
     public void write(Archive archive) {
-        archive.getMetaData().setDbName(databaseName.getValue());
-        archive.getMetaData().setArchiver(archiverName.getValue());
-        archive.getMetaData().setArchiverContact(archiverContact.getValue());
-        archive.getMetaData().setDescription(databaseDescription.getValue());
-        archive.getMetaData().setDataOwner(dataOwner.getValue());
-        archive.getMetaData().setDataOriginTimespan(dataOriginTimespan.getValue());
+        archive.getMetaData().setDbName(databaseName);
+        archive.getMetaData().setArchiver(archiverName);
+        archive.getMetaData().setArchiverContact(archiverContact);
+        archive.getMetaData().setDescription(databaseDescription);
+        archive.getMetaData().setDataOwner(dataOwner);
+        archive.getMetaData().setDataOriginTimespan(dataOriginTimespan);
         try {
-            new MetaDataFacade(archive.getMetaData()).setLobFolder(this.lobFolder);
+            if (lobFolder != null) {
+                new MetaDataFacade(archive.getMetaData()).setLobFolder(this.lobFolder);
+            }
         } catch (IOException e) {
             //throw new RuntimeException(e);
         }
     }
-
 }

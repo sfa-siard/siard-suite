@@ -1,102 +1,54 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siardsuite.component.SiardLabelContainer;
-import ch.admin.bar.siardsuite.component.SiardTableView;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
+import ch.admin.bar.siard2.api.MetaType;
+import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DatabaseType extends DatabaseObject {
+@Getter
+@Setter
+public class DatabaseType {
 
-    private final String name;
-    private final String category;
-    private final boolean instantiable;
-    private final boolean isFinal;
-    private final String base;
-    private final String description;
-
+    private final MetaType metaType;
     private final List<DatabaseAttribute> databaseAttributes;
 
-    public DatabaseType(String name, String category, boolean instantiable, boolean isFinal, String base,
-                        String description, List<DatabaseAttribute> metaAttributes) {
-        this.name = name;
-        this.category = category;
-        this.instantiable = instantiable;
-        this.isFinal = isFinal;
-        this.base = base;
-        this.description = description;
-        this.databaseAttributes = metaAttributes;
+    private String description;
+
+    public DatabaseType(MetaType metaType) {
+        this.metaType = metaType;
+
+        databaseAttributes = ListAssembler.assemble(metaType.getMetaAttributes(), metaType::getMetaAttribute)
+                .stream()
+                .map(DatabaseAttribute::new)
+                .collect(Collectors.toList());
+
+        description = metaType.getDescription();
     }
 
-    public <T> T accept(TypeVisitor<T> visitor) {
-        return visitor.visit(name, category, instantiable, isFinal, base, description);
+    public String getName() {
+        return metaType.getName();
     }
 
-    @Override
-    public String name() {
-        return name;
+    public String getCategory() {
+        return metaType.getCategory();
     }
 
-    @Override
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-
+    public boolean isInstantiable() {
+        return metaType.isInstantiable();
     }
 
-    @Override
-    public void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView == null || type == null) return;
-        new SiardTableView(tableView).withColumn(ATTRIBUTE_NAME, NAME)
-                                     .withColumn(ATTRIBUTE_TYPE, TYPE)
-                                     .withColumn(ATTRIBUTE_CARDINALITY, CARDINALITY)
-                                     .withItems(items());
+    public boolean isFinal() {
+        return metaType.isFinal();
     }
 
-    private ObservableList<Map> items() {
-        return FXCollections.observableArrayList(this.databaseAttributes.stream().map(databaseAttribute -> {
-            Map<String, String> item = new HashMap<>();
-            item.put(NAME, databaseAttribute.name());
-            item.put(TYPE, databaseAttribute.type());
-            item.put(CARDINALITY, databaseAttribute.cardinality());
-            return item;
-        }).collect(Collectors.toList()));
+    public String getBase() {
+        return metaType.getBase();
     }
 
-    @Override
-    public void populate(VBox container, TreeContentView type) {
-        new SiardLabelContainer(container)
-                .withLabel(name, "name")
-                .withLabel(category, "typeCategory")
-                .withLabel(String.valueOf(instantiable), "isInstantiable")
-                .withLabel(String.valueOf(isFinal), "isFinal")
-                .withLabel(base, "baseType")
-                .withLabel(description, "description");
-
-        for (Node node : container.getChildren()) {
-            node.getStyleClass().add("table-container-label-small");
-        }
+    public void write() {
+        metaType.setDescription(description);
     }
-
-    public int numberOfAttributes() {
-        return this.databaseAttributes.size();
-    }
-
-    public List<DatabaseAttribute> attributes() {
-        return databaseAttributes;
-    }
-
-    private static final String NAME = "name";
-    private static final String TYPE = "type";
-    private static final String CARDINALITY = "cardinality";
-    private static final String ATTRIBUTE_NAME = "attribute.name";
-    private static final String ATTRIBUTE_TYPE = "attribute.type";
-    private static final String ATTRIBUTE_CARDINALITY = "attribute.cardinality";
 }

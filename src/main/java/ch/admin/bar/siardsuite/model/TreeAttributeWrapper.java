@@ -1,31 +1,21 @@
 package ch.admin.bar.siardsuite.model;
 
-import ch.admin.bar.siardsuite.model.database.DatabaseObject;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
 
+@Value
+@Builder
 public class TreeAttributeWrapper {
 
-  private final StringProperty name;
-  private final TreeContentView type;
-  private final DatabaseObject databaseObject;
+    @NonNull DisplayableText name;
+    @NonNull DisplayableText viewTitle;
+    @NonNull RenderableForm<?> renderableForm;
 
-  public TreeAttributeWrapper(String name, TreeContentView type, DatabaseObject databaseObject) {
-    this.name = new SimpleStringProperty(name);
-    this.type = type;
-    this.databaseObject = databaseObject;
-  }
-
-  public TreeContentView getType() {
-    return type;
-  }
-
-  public DatabaseObject getDatabaseObject() {
-    return databaseObject;
-  }
-
-  @Override
-  public String toString() {
-    return name.get();
-  }
+    @Override
+    public String toString() {
+        return name.getText();
+    }
 }

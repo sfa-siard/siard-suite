@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox stylesheets="@../../css/root.css"
+      xmlns="http://javafx.com/javafx/1.8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      AnchorPane.leftAnchor="0.0"
+      AnchorPane.rightAnchor="0.0"
+      fx:controller="ch.admin.bar.siardsuite.component.rendering.FormRendererPresenter"
+      fx:id="container"
+      VBox.vgrow="ALWAYS">
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+    </padding>
+</VBox>

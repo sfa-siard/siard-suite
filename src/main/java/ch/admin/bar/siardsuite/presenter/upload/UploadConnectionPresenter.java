@@ -6,7 +6,7 @@ import ch.admin.bar.siardsuite.component.SiardToolip;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.ValidationProperties;
 import ch.admin.bar.siardsuite.presenter.ValidationProperty;
@@ -14,7 +14,6 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
@@ -31,18 +30,26 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.CONNECTION_URL;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.DATABASE_NAME;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.DATABASE_SERVER;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.DATABASE_SYSTEM;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.PORT_NUMBER;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.USER_NAME;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
-public class UploadConnectionPresenter extends StepperPresenter implements SiardArchiveVisitor {
+public class UploadConnectionPresenter extends StepperPresenter {
 
     private List<DatabaseSchema> schemas = new ArrayList<>();
-    private String schemaName = "";
     private final Map<String, String> schemaMap = new HashMap<>();
     @FXML
     public Text title;
@@ -126,7 +133,7 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
     @Override
     public void init(Controller controller, RootStage stage, MFXStepper stepper) {
         this.init(controller, stage);
-        this.controller.provideDatabaseArchiveProperties(this);
+        this.schemas = controller.getSiardArchive().schemas();
         addTextWithStyles();
         addFormText();
 
@@ -205,9 +212,9 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
             boolean validSchemaFields = validSchemaFields();
             if (allPropsValid && validSchemaFields) {
                 controller.updateConnectionData(urlField.getText(),
-                                                this.usernameField.getText(),
-                                                this.dbNameField.getText(),
-                                                this.passwordField.getText());
+                        this.usernameField.getText(),
+                        this.dbNameField.getText(),
+                        this.passwordField.getText());
                 controller.updateSchemaMap(schemaMap);
                 stepper.next();
                 stepper.fireEvent(new SiardEvent(SiardEvent.UPLOAD_CONNECTION_UPDATED));
@@ -228,26 +235,26 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     private boolean validateProperties() {
         ValidationProperties validationProperties = new ValidationProperties(Arrays.asList(new ValidationProperty(
-                                                                                                   dbServerField,
-                                                                                                   dbServerValidationMsg,
-                                                                                                   "connection.view.error.database.server"),
-                                                                                           new ValidationProperty(
-                                                                                                   dbNameField,
-                                                                                                   dbNameValidationMsg,
-                                                                                                   "connection.view.error.database.name"),
-                                                                                           new ValidationProperty(
-                                                                                                   usernameField,
-                                                                                                   userNameValidationMsg,
-                                                                                                   "connection.view.error.user.name"),
+                        dbServerField,
+                        dbServerValidationMsg,
+                        "connection.view.error.database.server"),
+                new ValidationProperty(
+                        dbNameField,
+                        dbNameValidationMsg,
+                        "connection.view.error.database.name"),
+                new ValidationProperty(
+                        usernameField,
+                        userNameValidationMsg,
+                        "connection.view.error.user.name"),
 
-                                                                                           new ValidationProperty(
-                                                                                                   passwordField,
-                                                                                                   passwordValidationMsg,
-                                                                                                   "connection.view.error.user.password"),
-                                                                                           new ValidationProperty(
-                                                                                                   urlField,
-                                                                                                   urlValidationMsg,
-                                                                                                   "connection.view.error.connection.url")));
+                new ValidationProperty(
+                        passwordField,
+                        passwordValidationMsg,
+                        "connection.view.error.user.password"),
+                new ValidationProperty(
+                        urlField,
+                        urlValidationMsg,
+                        "connection.view.error.connection.url")));
 
         return validationProperties.validate();
     }
@@ -272,12 +279,11 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
 
     private void initSchemaFields() {
         for (DatabaseSchema schema : schemas) {
-            controller.provideDatabaseArchiveProperties(this, schema);
             Label currentName = new Label();
             Label iconLabel = new Label();
             TextField newName = new TextField();
-            currentName.setText(schemaName);
-            newName.setText(schemaName);
+            currentName.setText(schema.getName());
+            newName.setText(schema.getName());
             HBox container = new HBox();
             container.setPrefSize(200.0, 48.0);
             currentName.setPrefSize(253.0, 48.0);
@@ -297,28 +303,8 @@ public class UploadConnectionPresenter extends StepperPresenter implements Siard
         String inputText = event.getText();
         if (inputText != null) {
             urlField.setText(controller.getDatabaseProps()
-                                       .jdbcUrl(dbServerField.getText(), portField.getText(), dbNameField.getText()));
+                    .jdbcUrl(dbServerField.getText(), portField.getText(), dbNameField.getText()));
         }
         event.consume();
-    }
-
-    @Override
-    public void visit(String archiveName, boolean onlyMetaData, List<DatabaseSchema> schemas, List<User> users,
-                      List<Privilige> priviliges) {
-        this.schemas = schemas;
-    }
-
-    @Override
-    public void visitSchema(String schemaName, String schemaDescription, List<DatabaseTable> tables,
-                            List<DatabaseView> views, List<DatabaseType> types, List<Routine> routines) {
-        this.schemaName = schemaName;
-    }
-
-    @Override
-    public void visit(String tableName, String numberOfRows, List<DatabaseColumn> columns, List<DatabaseRow> rows) {
-    }
-
-    @Override
-    public void visit(String columnName) {
     }
 }

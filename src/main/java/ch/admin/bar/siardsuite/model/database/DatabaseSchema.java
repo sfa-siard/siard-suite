@@ -1,142 +1,61 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Schema;
-import ch.admin.bar.siardsuite.model.MetaSearchHit;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.model.facades.MetaSchemaFacade;
-import ch.admin.bar.siardsuite.presenter.tree.*;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
+import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-public class DatabaseSchema extends DatabaseObject {
+@Getter
+@Setter
+public class DatabaseSchema {
 
-    protected final SiardArchive archive;
-    protected final Schema schema;
-    protected final boolean onlyMetaData;
-    protected final String name;
-    protected final String description;
-    protected List<DatabaseTable> tables;
-    protected List<DatabaseView> views;
-    protected List<DatabaseType> types;
-    protected List<Routine> routines;
+    private final Schema schema;
 
-    protected final TreeContentView treeContentView = TreeContentView.SCHEMA;
+    private final List<DatabaseTable> tables;
+    private final List<DatabaseView> views;
+    private final List<DatabaseType> types;
+    private final List<Routine> routines;
 
-    protected DatabaseSchema(SiardArchive archive, Schema schema, boolean onlyMetaData) {
-        this.archive = archive;
+    @Setter
+    @Getter
+    private String description;
+
+    protected DatabaseSchema(Schema schema) {
         this.schema = schema;
-        this.onlyMetaData = onlyMetaData;
+        val metaSchema = schema.getMetaSchema();
 
-        MetaSchemaFacade metaSchemaFacade = new MetaSchemaFacade(schema);
-        name = metaSchemaFacade.name();
-        description = metaSchemaFacade.description();
+        this.description = metaSchema.getDescription();
 
-        this.tables = metaSchemaFacade.tables(archive, this, onlyMetaData);
-        this.views = metaSchemaFacade.views(archive, this);
-        this.routines = metaSchemaFacade.routines(archive, this);
+        this.tables = ListAssembler.assemble(schema.getTables(), schema::getTable)
+                .stream()
+                .map(DatabaseTable::new)
+                .collect(Collectors.toList());
 
-        this.types = metaSchemaFacade.types();
+        this.views = ListAssembler.assemble(metaSchema.getMetaViews(), metaSchema::getMetaView)
+                .stream()
+                .map(DatabaseView::new)
+                .collect(Collectors.toList());
+
+        this.routines = ListAssembler.assemble(metaSchema.getMetaRoutines(), metaSchema::getMetaRoutine)
+                .stream()
+                .map(Routine::new)
+                .collect(Collectors.toList());
+
+        this.types = ListAssembler.assemble(metaSchema.getMetaTypes(), metaSchema::getMetaType)
+                .stream()
+                .map(DatabaseType::new)
+                .collect(Collectors.toList());
     }
 
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visitSchema(name, description, tables, views, types, routines);
+    public void write() {
+        schema.getMetaSchema().setDescription(description);
     }
 
-    @Override
-    public void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView == null || type == null) return;
-        TableViewPopulatorStrategy strategy = getStrategy(type);
-        if (strategy == null) return;
-        strategy.populate(tableView, onlyMetaData);
-    }
-
-    private TableViewPopulatorStrategy getStrategy(TreeContentView type) {
-        if (type.equals(TreeContentView.TABLES) || type.equals(TreeContentView.SCHEMA))
-            return new TablesTableViewPopulatorStrategy(tables);
-        if (type.equals(TreeContentView.VIEWS)) return new ViewsTableViewPopulatorStrategy(views);
-        if (type.equals(TreeContentView.ROUTINES)) return new RoutinesTableViewPopulatorStrategy(routines);
-        if (type.equals(TreeContentView.TYPES)) return new TypesTableViewPopulatorStrategy(types);
-        return null;
-    }
-
-
-    public void export(List<String> tablesToExport, File directory) {
-        this.tables.stream()
-                   .filter(databaseTable -> tablesToExport.contains(databaseTable.name))
-                   .forEach(databaseTable -> {
-                       try {
-                           databaseTable.export(directory);
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                           throw new RuntimeException(e);
-                       }
-                   });
-    }
-
-    public void populate(CheckBoxTreeItem<String> schemaItem) {
-        List<CheckBoxTreeItem<String>> checkBoxTreeItems = this.tables.stream()
-                                                                      .map(table -> new CheckBoxTreeItem<>(table.name))
-                                                                      .collect(Collectors.toList());
-        schemaItem.getChildren().setAll(checkBoxTreeItems);
-    }
-
-    @Override
-    public void populate(VBox vbox, TreeContentView type) {
-    }
-
-    private TreeSet<MetaSearchHit> metaSearch(String s) {
-        TreeSet<MetaSearchHit> hits = new TreeSet<>();
-        final List<String> nodeIds = new ArrayList<>();
-        if (contains(name, s)) {
-            nodeIds.add("name");
-        }
-        if (contains(description, s)) {
-            nodeIds.add("description");
-        }
-        if (nodeIds.size() > 0) {
-            List<MetaSearchHit> metaSearchHits = new ArrayList<>();
-            metaSearchHits.add(new MetaSearchHit("Schema " + name, this, treeContentView, nodeIds));
-            hits = new TreeSet<>(metaSearchHits);
-        }
-        return hits;
-    }
-
-    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
-        final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(tables.stream()
-                          .flatMap(table -> table.aggregatedMetaSearch(s).stream())
-                          .collect(Collectors.toList()));
-        // TODO: search other aspects of the archive, not only tables...
-        return hits;
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public List<DatabaseType> types() {
-        return this.types;
-    }
-
-    public List<Routine> routines() {
-        return this.routines;
-    }
-
-    public List<DatabaseView> views() {
-        return this.views;
-    }
-
-    public List<DatabaseTable> tables() {
-        return this.tables;
+    public String getName() {
+        return schema.getMetaSchema().getName();
     }
 }

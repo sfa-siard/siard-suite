@@ -5,6 +5,7 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'org.asciidoctor.jvm.pdf' version '3.3.2'
     id 'pl.allegro.tech.build.axion-release' version '1.14.3'
+    id 'io.freefair.lombok' version '6.5.0'
 }
 
 repositories {

@@ -1,275 +1,44 @@
 package ch.admin.bar.siardsuite.model.database;
 
-import ch.admin.bar.siard2.api.RecordDispenser;
 import ch.admin.bar.siard2.api.Table;
-import ch.admin.bar.siard2.api.primary.CellImpl;
-import ch.admin.bar.siardsuite.component.SiardTableView;
-import ch.admin.bar.siardsuite.model.MetaSearchHit;
-import ch.admin.bar.siardsuite.model.TreeContentView;
-import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
-import ch.admin.bar.siardsuite.util.OS;
-import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveVisitor;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
-import javafx.util.Callback;
-import org.jetbrains.annotations.NotNull;
+import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class DatabaseTable extends DatabaseObject implements WithColumns {
+@Getter
+@Setter
+public class DatabaseTable {
 
-    public static final String TABLE_CONTAINER_TABLE_HEADER_ROW = "tableContainer.table.header.row";
-    protected final SiardArchive archive;
-    protected final DatabaseSchema schema;
-    protected final Table table;
-    protected final boolean onlyMetaData;
-    public final String name;
-    protected final List<DatabaseColumn> columns = new ArrayList<>();
-    public final String numberOfColumns;
-    protected final List<DatabaseRow> rows = new ArrayList<>();
-    public final String numberOfRows;
-    protected int loadBatchSize = 50;
-    protected int lastRowLoadedIndex = -1;
-    protected final TreeContentView treeContentView = TreeContentView.TABLE;
+    private final Table table;
+    private final List<DatabaseColumn> columns;
 
-    public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table) {
-        this(archive, schema, table, false);
-    }
+    private String description;
 
-    public DatabaseTable(SiardArchive archive, DatabaseSchema schema, Table table, boolean onlyMetaData) {
-        this.archive = archive;
-        this.schema = schema;
+    public DatabaseTable(Table table) {
         this.table = table;
-        this.onlyMetaData = onlyMetaData;
-        name = table.getMetaTable().getName();
-        for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
-            columns.add(new DatabaseColumn(archive, schema, this, table.getMetaTable().getMetaColumn(i)));
-        }
-        numberOfColumns = String.valueOf(columns.size());
-        numberOfRows = String.valueOf(table.getMetaTable().getRows());
+
+        val metatable = table.getMetaTable();
+
+        description = metatable.getDescription();
+        this.columns = new ListAssembler<>(metatable::getMetaColumns, metatable::getMetaColumn).assemble()
+                .stream()
+                .map(DatabaseColumn::new)
+                .collect(Collectors.toList());
     }
 
-    protected void shareProperties(SiardArchiveVisitor visitor) {
-        visitor.visit(name, numberOfRows, columns, rows);
+    public String getName() {
+        return table.getMetaTable().getName();
     }
 
-    @Override
-    public void populate(TableView<Map> tableView, TreeContentView type) {
-        if (tableView == null) return;
-
-        if (TreeContentView.TABLE.equals(type) || TreeContentView.COLUMNS.equals(type)) {
-            new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_POSITION, INDEX)
-                                         .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME, NAME)
-                                         .withColumn(TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE, TYPE)
-                                         .withItems(colItems());
-        }
-        if (TreeContentView.ROWS.equals(type)) {
-            lastRowLoadedIndex = -1;
-            final List<TableRow<Map>> rows = new ArrayList<>();
-            final Callback<TableView<Map>, TableRow<Map>> rowFactory = o -> {
-                TableRow<Map> row = new TableRow<>();
-                rows.add(row);
-                return row;
-            };
-            tableView.setRowFactory(rowFactory);
-
-            SiardTableView siardTableView = new SiardTableView(tableView).withColumn(TABLE_CONTAINER_TABLE_HEADER_ROW,
-                                                                                     INDEX);
-            for (DatabaseColumn column : columns) {
-                siardTableView.withColumn(column.name, column.index);
-            }
-            try {
-                final RecordDispenser recordDispenser = table.openRecords();
-                loadRecords(recordDispenser);
-                tableView.setItems(rowItems());
-                EventHandler<MouseEvent> cellClickedHandler = event -> {
-                    TablePosition tablePosition = tableView.getSelectionModel().getSelectedCells().get(0);
-                    if (tablePosition.getColumn() == 0) return;
-                    int column = tablePosition.getColumn() - 1; // since we added an index column...
-                    int row = tablePosition.getRow();
-
-                    DatabaseRow databaseRow = this.rows.get(row);
-                    DatabaseCell databaseCell = databaseRow.cells.get(column);
-                    try {
-                        boolean isBlob = new PreTypeFacade(databaseCell.cell.getMetaColumn().getPreType()).isBlob();
-                        if (isBlob) {
-                            URI absoluteLobFolder = databaseCell.cell.getMetaColumn().getAbsoluteLobFolder();
-                            if (absoluteLobFolder == null) {
-                                Path tempFilePath = createTempFile(databaseCell);
-                                OS.openFile(String.valueOf(tempFilePath));
-                            } else {
-                                OS.openFile(absoluteLobFolder + databaseCell.cell.getFilename());
-                            }
-                        }
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                };
-                tableView.setOnMouseClicked(cellClickedHandler);
-                tableView.setOnScroll(event -> loadItems(recordDispenser, tableView, rows));
-                tableView.addEventHandler(SiardEvent.EXPAND_DATABASE_TABLE,
-                                          event -> expand(recordDispenser, tableView));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    public long getNumberOfRows() {
+        return table.getMetaTable().getRows();
     }
 
-
-    @Override
-    public void populate(VBox vbox, TreeContentView type) {
+    public void write() {
+        table.getMetaTable().setDescription(description);
     }
-
-    private ObservableList<Map> colItems() {
-        final ObservableList<Map> items = FXCollections.observableArrayList();
-        for (DatabaseColumn column : columns) {
-            Map<String, String> item = new HashMap<>();
-            item.put("index", column.index);
-            item.put("name", column.name);
-            item.put("type", column.type);
-            items.add(item);
-        }
-        return items;
-    }
-
-    private ObservableList<Map> rowItems() {
-        return FXCollections.observableArrayList(rows.stream().map(row -> {
-            Map<String, String> item = new HashMap<>();
-            item.put(INDEX, String.valueOf(Integer.parseInt(row.index) + 1));
-            row.cells.forEach(cell -> item.put(cell.index, cell.value));
-            return item;
-        }).collect(Collectors.toList()));
-    }
-
-    private void loadItems(RecordDispenser recordDispenser, TableView<Map> tableView, List<TableRow<Map>> rows) {
-        boolean reload = false;
-        for (TableRow<Map> row : rows) {
-            if (lastRowLoadedIndex <= row.getIndex()) {
-                reload = true;
-            }
-        }
-        if (reload) {
-            loadRecords(recordDispenser);
-            tableView.getItems().addAll(rowItems());
-        }
-    }
-
-    private void loadRecords(RecordDispenser recordDispenser) {
-        rows.clear();
-        if (onlyMetaData) return;
-        try {
-            final long numberOfRows = table.getMetaTable().getRows();
-            int j = 0;
-            while (j < numberOfRows && j < loadBatchSize) {
-                if (recordDispenser.getPosition() < numberOfRows) {
-                    rows.add(new DatabaseRow(archive, schema, this, recordDispenser.get()));
-                }
-                j++;
-                lastRowLoadedIndex++;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void expand(RecordDispenser recordDispenser, TableView<Map> tableView) {
-        final int loadBatchSize = this.loadBatchSize;
-        final long numberOfRows = table.getMetaTable().getRows();
-        this.loadBatchSize = (int) numberOfRows / 50;
-        while (recordDispenser.getPosition() < numberOfRows) {
-            loadRecords(recordDispenser);
-            tableView.getItems().addAll(rowItems());
-            System.out.println(numberOfRows - recordDispenser.getPosition() + " rows remaining");
-        }
-        this.loadBatchSize = loadBatchSize;
-    }
-
-    protected void export(File directory) throws IOException {
-        File destination = new File(directory.getAbsolutePath(), this.name + ".html");
-        File lobFolder = new File(directory, "lobs/"); //TODO: was taken from the user properties in the original GUI
-        OutputStream outPutStream = new FileOutputStream(destination);
-        this.table.getParentSchema()
-                  .getParentArchive()
-                  .getSchema(this.schema.name)
-                  .getTable(this.name)
-                  .exportAsHtml(outPutStream, lobFolder);
-        outPutStream.close();
-    }
-
-    private TreeSet<MetaSearchHit> metaSearch(String s) {
-        TreeSet<MetaSearchHit> hits = new TreeSet<>();
-        final List<String> nodeIds = new ArrayList<>();
-        if (contains(name, s)) {
-            nodeIds.add("name");
-        }
-        if (nodeIds.size() > 0) {
-            List<MetaSearchHit> metaSearchHits = new ArrayList<>();
-            metaSearchHits.add(new MetaSearchHit("Schema " + schema.name + ", Table " + name,
-                                                 this,
-                                                 treeContentView,
-                                                 nodeIds));
-            hits = new TreeSet<>(
-                    metaSearchHits);
-        }
-        return hits;
-    }
-
-    protected TreeSet<MetaSearchHit> aggregatedMetaSearch(String s) {
-        final TreeSet<MetaSearchHit> hits = metaSearch(s);
-        hits.addAll(columns.stream().flatMap(col -> col.aggregatedMetaSearch(s).stream()).collect(Collectors.toList()));
-        return hits;
-    }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
-    public List<DatabaseColumn> columns() {
-        return this.columns;
-    }
-
-    public String numberOfRows() {
-        return this.numberOfRows;
-    }
-
-    @NotNull
-    private Path createTempFile(DatabaseCell databaseCell) throws IOException {
-        String filename = ((CellImpl) databaseCell.cell).getLobFilename();
-        String suffix = getExtensionByStringHandling(filename);
-        Path tempFilePath = Files.createTempFile(filename, "." + suffix);
-        Files.write(tempFilePath, databaseCell.cell.getBytes());
-        return tempFilePath;
-    }
-
-    // Taken from https://www.baeldung.com/java-file-extension
-    private String getExtensionByStringHandling(String filename) {
-        return Optional.ofNullable(filename)
-                       .filter(f -> f.contains("."))
-                       .map(f -> f.substring(filename.lastIndexOf(".") + 1)).orElse("bin");
-    }
-
-
-    private static final String TABLE_CONTAINER_TABLE_HEADER_POSITION = "tableContainer.table.header.position";
-    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_NAME = "tableContainer.table.header.columnName";
-    private static final String TABLE_CONTAINER_TABLE_HEADER_COLUMN_TYPE = "tableContainer.table.header.columnType";
-    private static final String INDEX = "index";
-    private static final String NAME = "name";
-    private static final String TYPE = "type";
 }

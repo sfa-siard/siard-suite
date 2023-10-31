@@ -1,5 +1,8 @@
 package ch.admin.bar.siardsuite.util;
 
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.util.i18n.keys.Key;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
@@ -54,6 +57,19 @@ public class I18n {
 
     private static final String BASE_NAME = "ch/admin/bar/siardsuite/i18n/messages";
 
+    public static String get(final Key key, final Object... args) {
+        return get(key.getValue(), args);
+    }
+
+    @Deprecated
+    public static String get(final I18nKey key, final Object... args) {
+        return get(key.getValue(), args);
+    }
+
+    /**
+     * Deprecation: Please use {@link #get(I18nKey, Object...)} instead.
+     */
+    @Deprecated
     public static String get(final String key, final Object... args) {
         ResourceBundle bundle = ResourceBundle.getBundle(BASE_NAME, getLocale());
         String translation = bundle.containsKey(key) ? bundle.getString(key) : key;
@@ -69,8 +85,21 @@ public class I18n {
         stringProperty.bind(I18n.createStringBinding(key, args));
     }
 
+    public static void bind(final StringProperty stringProperty, final DisplayableText displayableText) {
+        stringProperty.bind(Bindings.createStringBinding(displayableText::getText, locale));
+    }
+
+    public static StringBinding bind(final DisplayableText displayableText) {
+        return Bindings.createStringBinding(displayableText::getText, locale);
+    }
+
+    @Deprecated
     public static void bind(Labeled labeled, final String key, final Object... args) {
         bind(labeled.textProperty(), key, args);
+    }
+
+    public static void bind(Labeled labeled, final DisplayableText displayableText) {
+        bind(labeled.textProperty(), displayableText);
     }
 
     public static void bind(Text text, String key, final Object... args) {

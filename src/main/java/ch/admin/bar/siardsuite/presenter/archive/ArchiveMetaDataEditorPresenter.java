@@ -107,6 +107,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         saveArchiveButton.setOnAction(event -> this.saveOnlyMetaData(stepper));
 
         this.buttonsBox.append(saveArchiveButton);
+        initFields();
         this.setListeners(stepper);
     }
 
@@ -157,8 +158,6 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         });
 
         new SiardToolip(infoButton, tooltip).setup();
-
-        stepper.addEventHandler(SiardEvent.ARCHIVE_LOADED, event -> initFields());
     }
 
     /*
