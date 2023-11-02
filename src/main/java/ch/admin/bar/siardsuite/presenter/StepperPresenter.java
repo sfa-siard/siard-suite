@@ -42,6 +42,11 @@ public abstract class StepperPresenter extends Presenter implements StepperDepen
 
         stepper.getStepperToggles().addAll(stepperToggles);
         stepper.setSkin(new CustomStepperSkin(stepper, stage));
+
+        if (stepper.getCurrentIndex() == -1) {
+            stepper.next();
+        }
+
         if (recentConnection) {
             stepper.getStepperToggles().get(0).setState(StepperToggleState.COMPLETED);
             stepper.updateProgress();
