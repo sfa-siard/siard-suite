@@ -14,6 +14,8 @@ import java.util.Set;
 @Slf4j
 public class LoadingBatchManager<T> {
 
+    private static final int LOADING_DISTANCE = 50;
+
     @Getter
     private final ObservableList<T> observableList = FXCollections.observableArrayList();
     private final Set<LoadingBatch> loadedBatches = new HashSet<>();
@@ -26,15 +28,16 @@ public class LoadingBatchManager<T> {
     }
 
     public void loadDataIfNecessary(final long index) {
-        val matchingBatch = LoadingBatch.createMatchingLoadingBatch(index + 2);
+        val thresholdIndex = index + LOADING_DISTANCE;
+        val matchingBatch = LoadingBatch.createMatchingLoadingBatch(thresholdIndex);
 
         if (loadedBatches.contains(matchingBatch)) {
             // batch already loaded
             return;
         }
 
-        log.info("Data for index {} is not yet available, loading batch {} with start index {} (and length {})",
-                 index,
+        log.info("Data for threshold-index {} is not yet available, loading batch {} with start index {} (and length {})",
+                 thresholdIndex,
                  matchingBatch.getBatchNr(),
                  matchingBatch.getStartIndex(),
                  matchingBatch.getNrOfElements());
