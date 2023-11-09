@@ -50,4 +50,26 @@ public class LoadingBatchManager<T> {
 
         observableList.addAll(data);
     }
+
+    public boolean loadedAll() {
+        val currentlyLoaded = loadedBatches.stream()
+                .mapToLong(LoadingBatch::getNrOfElements)
+                .sum();
+
+        return currentlyLoaded >= dataSource.getNumberOfItems();
+    }
+
+    public long getLastLoadingIndex() {
+        val latestBatch = loadedBatches.stream()
+                .reduce((loadingBatch, loadingBatch2) -> {
+                    if (loadingBatch.getBatchNr() > loadingBatch2.getBatchNr()) {
+                        return loadingBatch;
+                    }
+                    return loadingBatch2;
+                });
+
+        return latestBatch
+                .map(batch -> batch.getStartIndex() + batch.getNrOfElements() - LOADING_DISTANCE)
+                .orElse(0L);
+    }
 }

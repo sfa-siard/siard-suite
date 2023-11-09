@@ -144,6 +144,11 @@ public class RowsOverviewForm {
         public long findIndexOf(RecordWrapper item) {
             return item.getRecord().getRecord();
         }
+
+        @Override
+        public long getNumberOfItems() {
+            return table.getMetaTable().getRows();
+        }
     }
 
 
