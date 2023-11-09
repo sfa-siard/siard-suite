@@ -42,8 +42,6 @@ public class LazyLoadingTableRenderer<T, I> {
         val loadingBatchManager = new LoadingBatchManager<>(lazyLoadingDataSource);
         val tableView = new TableView<>(loadingBatchManager.getObservableList());
 
-        val issueConcealer = new JumpingScrollingPositionIssueConcealer(loadingBatchManager, tableView);
-
         tableView.getColumns().addAll(
                 renderableTable.getProperties().stream()
                         .map(this::column)
@@ -56,8 +54,6 @@ public class LazyLoadingTableRenderer<T, I> {
                 if (newValue != null) {
                     val index = lazyLoadingDataSource.findIndexOf(newValue);
                     loadingBatchManager.loadDataIfNecessary(index);
-
-                    issueConcealer.concealIssue();
                 }
             });
 
