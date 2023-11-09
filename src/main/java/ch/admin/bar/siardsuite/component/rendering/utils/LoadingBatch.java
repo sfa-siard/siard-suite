@@ -11,10 +11,6 @@ public class LoadingBatch {
     long nrOfElements;
     long batchNr;
 
-    public long calculateDistance(final LoadingBatch other) {
-        return other.batchNr - this.batchNr;
-    }
-
     public static LoadingBatch createMatchingLoadingBatch(long index) {
         val batchIndex = index % BATCH_SIZE;
         val startIndex = (index - batchIndex);
