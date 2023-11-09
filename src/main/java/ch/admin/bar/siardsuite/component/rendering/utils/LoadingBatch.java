@@ -5,7 +5,7 @@ import lombok.val;
 
 @Value
 public class LoadingBatch {
-    public static final int BATCH_SIZE = 100;
+    public static final int BATCH_SIZE = 50;
 
     long startIndex;
     long nrOfElements;
