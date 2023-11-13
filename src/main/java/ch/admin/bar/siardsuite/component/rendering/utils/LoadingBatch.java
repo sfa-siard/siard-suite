@@ -5,15 +5,11 @@ import lombok.val;
 
 @Value
 public class LoadingBatch {
-    public static final int BATCH_SIZE = 50;
+    public static final int BATCH_SIZE = 100;
 
     long startIndex;
     long nrOfElements;
     long batchNr;
-
-    public long calculateDistance(final LoadingBatch other) {
-        return other.batchNr - this.batchNr;
-    }
 
     public static LoadingBatch createMatchingLoadingBatch(long index) {
         val batchIndex = index % BATCH_SIZE;
