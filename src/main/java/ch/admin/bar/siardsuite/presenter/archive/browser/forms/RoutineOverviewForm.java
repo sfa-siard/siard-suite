@@ -1,11 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
 import ch.admin.bar.siard2.api.MetaParameter;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.*;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
@@ -67,23 +63,23 @@ public class RoutineOverviewForm {
                         ))
                         .property(RenderableTable.<Routine, MetaParameter>builder()
                                 .dataExtractor(Routine::getParameters)
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         POSITION,
                                         intToString(MetaParameter::getPosition)
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         PARAMETER_NAME,
                                         MetaParameter::getName
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         PARAMETER_MODE,
                                         MetaParameter::getMode
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         PARAMETER_TYPE,
                                         MetaParameter::getType
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         CARDINALITY,
                                         cardinalityToString(MetaParameter::getCardinality)
                                 ))

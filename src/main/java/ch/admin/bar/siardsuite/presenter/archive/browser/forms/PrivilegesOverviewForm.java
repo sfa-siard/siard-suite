@@ -1,9 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.*;
 import ch.admin.bar.siardsuite.model.database.Privilige;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -24,27 +21,27 @@ public class PrivilegesOverviewForm {
                 .group(RenderableFormGroup.<SiardArchive>builder()
                         .property(RenderableTable.<SiardArchive, Privilige>builder()
                                 .dataExtractor(SiardArchive::priviliges)
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         TYPE,
                                         Privilige::getType
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         OBJECT,
                                         Privilige::getObject
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         GRANTOR,
                                         Privilige::getGrantor
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         RECEIVER,
                                         Privilige::getGrantee
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         OPTION,
                                         Privilige::getOption
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         DESCRIPTION,
                                         Privilige::getDescription
                                 ))

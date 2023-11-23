@@ -5,12 +5,12 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 
-import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.catchExceptions;
 import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.intToString;
 import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.longToString;
 
@@ -44,17 +44,17 @@ public class TableOverviewForm {
                         ))
                         .property(RenderableTable.<DatabaseTable, DatabaseColumn>builder()
                                 .dataExtractor(DatabaseTable::getColumns)
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         POSITION,
                                         intToString(DatabaseColumn::getIndex)
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         COLUMN_NAME,
                                         DatabaseColumn::getName
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         COLUMN_TYPE,
-                                        catchExceptions(DatabaseColumn::getType)
+                                        DatabaseColumn::getType
                                 ))
                                 .build())
                         .build())

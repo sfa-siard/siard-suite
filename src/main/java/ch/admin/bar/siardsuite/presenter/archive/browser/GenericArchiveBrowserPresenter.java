@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.component.TwoStatesButton;
-import ch.admin.bar.siardsuite.component.rendering.FormRenderer;
+import ch.admin.bar.siardsuite.component.rendering.form.FormRenderer;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;

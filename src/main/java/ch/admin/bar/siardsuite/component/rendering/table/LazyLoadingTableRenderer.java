@@ -1,12 +1,9 @@
-package ch.admin.bar.siardsuite.component.rendering;
+package ch.admin.bar.siardsuite.component.rendering.table;
 
 import ch.admin.bar.siardsuite.component.rendering.model.LazyLoadingDataSource;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
-import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.component.rendering.utils.LoadingBatchManager;
 import ch.admin.bar.siardsuite.view.ErrorDialogOpener;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Priority;
@@ -46,7 +43,7 @@ public class LazyLoadingTableRenderer<T, I> {
 
         tableView.getColumns().addAll(
                 renderableTable.getProperties().stream()
-                        .map(this::column)
+                        .map(TableColumnFactory::column)
                         .collect(Collectors.toList()));
 
         tableView.setRowFactory(param -> {
@@ -94,17 +91,5 @@ public class LazyLoadingTableRenderer<T, I> {
         tableView.autosize();
 
         return tableView;
-    }
-
-    private TableColumn<I, String> column(final TableColumnProperty<I> columnProperty) {
-        val column = new TableColumn<I, String>(columnProperty.getTitle().getText());
-
-        column.setSortable(false); // Not sortable because of lazy loading
-        column.setCellValueFactory(cellData -> {
-            val value = columnProperty.getValueExtractor().apply(cellData.getValue());
-            return new SimpleStringProperty(value);
-        });
-
-        return column;
     }
 }

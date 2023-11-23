@@ -3,13 +3,9 @@ package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siard2.api.Record;
 import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siard2.api.Value;
 import ch.admin.bar.siard2.api.primary.CellImpl;
-import ch.admin.bar.siardsuite.component.rendering.model.LazyLoadingDataSource;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
-import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
+import ch.admin.bar.siardsuite.component.rendering.model.*;
 import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
@@ -18,20 +14,18 @@ import ch.admin.bar.siardsuite.util.FileHelper;
 import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.enterag.sqlparser.Interval;
+import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.BU;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import ch.enterag.utils.DU;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.sql.Types;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.catchExceptions;
@@ -94,22 +88,33 @@ public class RowsOverviewForm {
 
         private String findCellValue(final String name) {
             val cell = findCell(name);
+            return extractText(cell);
+        }
 
+        private String extractText(final Cell cell) {
+            if (cell == null || cell.isNull()) {
+                return "";
+            }
             try {
-                if (new PreTypeFacade(cell.getMetaColumn().getPreType()).isBlob()) {
-                    val bytes = cell.getBytes();
+                switch (cell.getMetaValue().getPreType()) {
+                    case Types.BINARY:
+                    case Types.VARBINARY:
+                    case Types.BLOB:
+                        val bytes = cell.getBytes();
 
-                    if (bytes.length == 0) {
-                        return "";
-                    }
+                        if (bytes.length == 0) {
+                            return "";
+                        }
 
-                    if (bytes.length < 16) {
-                        return "0x" + BU.toHex(cell.getBytes());
-                    }
+                        if (bytes.length < 16) {
+                            return "0x" + BU.toHex(cell.getBytes());
+                        }
 
-                    return "0x" + BU.toHex(cell.getBytes()).substring(0, 16) + "...";
+                        return "0x" + BU.toHex(cell.getBytes()).substring(0, 16) + "...";
+
+                    default:
+                        return cell.getString();
                 }
-                return cell.getString();
             } catch (IOException e) {
                 return "";
             }

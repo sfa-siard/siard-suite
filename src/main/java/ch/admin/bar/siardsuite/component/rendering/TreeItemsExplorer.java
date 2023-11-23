@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.component.rendering;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
+import ch.admin.bar.siardsuite.component.rendering.model.ThrowingExtractor;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.util.MetaSearchTerm;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
@@ -16,6 +17,7 @@ import lombok.val;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -31,7 +33,9 @@ public class TreeItemsExplorer {
 
     public Collection<Result> find(final MetaSearchTerm searchTerm) {
         return formFields.stream()
-                .filter(formField -> searchTerm.matches(formField.getValueSupplier().get()))
+                .filter(formField -> formField.getValueSupplier().get()
+                        .map(searchTerm::matches)
+                        .orElse(false))
                 .map(formField2TreeItemRelation -> Result.builder()
                         .pathToTreeItem(formField2TreeItemRelation.getPathToTreeItem())
                         .propertyName(formField2TreeItemRelation.getPropertyTitle())
@@ -89,12 +93,22 @@ public class TreeItemsExplorer {
                         findReadOnlyStringProperties(form).stream()
                                 .map(property -> new FormField(
                                         property.getTitle(),
-                                        () -> property.getValueExtractor().apply(data))),
+                                        doCatch(property.getValueExtractor(), data))),
                         findReadWriteStringProperties(form).stream()
                                 .map(property -> new FormField(
                                         property.getTitle(),
-                                        () -> property.getValueExtractor().apply(data))))
+                                        doCatch(property.getValueExtractor(), data))))
                 .collect(Collectors.toList());
+    }
+
+    private static <T, R> Supplier<Optional<R>> doCatch(final ThrowingExtractor<T, R> throwingExtractor, T data) {
+        return () -> {
+            try {
+                return Optional.of(throwingExtractor.extract(data));
+            } catch (Exception ex) {
+                return Optional.empty();
+            }
+        };
     }
 
     private static <T> List<ReadOnlyStringProperty<T>> findReadOnlyStringProperties(RenderableForm<T> form) {
@@ -124,13 +138,13 @@ public class TreeItemsExplorer {
     @Value
     private static class FormField {
         DisplayableText title;
-        Supplier<String> valueSupplier;
+        Supplier<Optional<String>> valueSupplier;
     }
 
     @Value
     @Builder
     private static class FormField2TreeItemRelation {
-        Supplier<String> valueSupplier;
+        Supplier<Optional<String>> valueSupplier;
         TreeItem<TreeAttributeWrapper> treeItem;
         DisplayableText propertyTitle;
         List<String> pathToTreeItem;

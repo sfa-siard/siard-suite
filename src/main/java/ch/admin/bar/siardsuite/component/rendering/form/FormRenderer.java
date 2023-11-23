@@ -1,15 +1,14 @@
-package ch.admin.bar.siardsuite.component.rendering;
+package ch.admin.bar.siardsuite.component.rendering.form;
 
+import ch.admin.bar.siardsuite.component.rendering.SaveChangesReport;
+import ch.admin.bar.siardsuite.component.rendering.SearchableFormEntry;
 import ch.admin.bar.siardsuite.component.rendering.model.*;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.OptionalHelper;
+import ch.admin.bar.siardsuite.component.rendering.table.LazyLoadingTableRenderer;
+import ch.admin.bar.siardsuite.component.rendering.table.TableRenderer;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.ErrorDialogOpener;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Builder;
@@ -20,8 +19,6 @@ import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -185,135 +182,5 @@ public class FormRenderer<T> {
         return !searchableFormEntries.isEmpty();
     }
 
-    private static class ReadOnlyFormField<T> extends VBox {
 
-        private final Label titleLabel;
-        private final TextField valueTextField;
-
-        public ReadOnlyFormField(
-                @NonNull final DisplayableText title,
-                @NonNull final Function<T, String> valueExtractor,
-                @NonNull final T data) {
-
-            titleLabel = new Label();
-            titleLabel.textProperty()
-                    .bind(I18n.bind(title));
-            titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
-
-            val value = valueExtractor.apply(data);
-
-            valueTextField = new TextField();
-            valueTextField.setText(value);
-            valueTextField.setEditable(false);
-            valueTextField.getStyleClass().add(FIELD_STYLE_CLASS);
-
-            this.getChildren().setAll(titleLabel, valueTextField);
-        }
-
-        public ReadOnlyFormField(
-                @NonNull final ReadOnlyStringProperty<T> property,
-                @NonNull final T data) {
-            this(property.getTitle(), property.getValueExtractor(), data);
-        }
-    }
-
-    private static class EditableFormField<T> extends VBox {
-
-        private final Label title;
-        private final TextField value;
-        private final Label validationMsg;
-
-        private final ReadWriteStringProperty<T> property;
-        private final T data;
-
-        public EditableFormField(
-                final ReadWriteStringProperty<T> property,
-                final T data,
-                final BooleanProperty hasChanged) {
-            this.property = property;
-            this.data = data;
-
-            title = new Label();
-            val titleSuffix = property.getValueValidators().stream()
-                    .map(validator -> validator.getTitleSuffix().orElse(""))
-                    .collect(Collectors.joining());
-
-            title.textProperty()
-                    .bind(Bindings
-                            .concat(I18n.bind(property.getTitle()))
-                            .concat(titleSuffix));
-            title.getStyleClass().add(TITLE_STYLE_CLASS);
-
-            value = new TextField();
-            value.getStyleClass().add(FIELD_STYLE_CLASS);
-
-            validationMsg = new Label();
-            validationMsg.getStyleClass().add(VALIDATION_STYLE_CLASS);
-            hideValidationLabel();
-
-            reset();
-            value.textProperty()
-                    .addListener((observable, oldValue, newValue) -> hasChanged.set(true));
-
-            this.getChildren().setAll(title, value, validationMsg);
-        }
-
-        public boolean hasValidValue() {
-            val currentValue = value.getText();
-            val failedValidator = this.property.getValueValidators().stream()
-                    .filter(validator -> !validator.getIsValidCheck().test(currentValue))
-                    .findAny();
-
-            OptionalHelper.ifPresentOrElse(
-                    failedValidator,
-                    validator -> showValidationLabel(validator.getMessage()),
-                    this::hideValidationLabel
-            );
-
-            return !failedValidator.isPresent();
-        }
-
-        public void reset() {
-            val originalValue = property.getValueExtractor().apply(data);
-            value.setText(originalValue);
-            hideValidationLabel();
-        }
-
-        public boolean hasChanges() {
-            val originalValue = property.getValueExtractor().apply(data);
-            return !Objects.equals(originalValue, value.getText());
-        }
-
-        public boolean save() {
-            if (!hasChanges()) {
-                return true;
-            }
-
-            val currentValue = value.getText();
-
-            try {
-                property.getValuePersistor()
-                        .persist(data, currentValue);
-                return true;
-            } catch (Exception e) {
-                log.error("Storage failed for field {} with value {} because {}",
-                        title.getText(),
-                        currentValue,
-                        e.getMessage());
-                showValidationLabel(DisplayableText.of(SINGLE_FIELD_UNKNOWN_ERROR));
-                return false;
-            }
-        }
-
-        private void showValidationLabel(final DisplayableText message) {
-            validationMsg.setText(message.getText());
-            validationMsg.setVisible(true);
-            validationMsg.setManaged(true);
-        }
-
-        private void hideValidationLabel() {
-            validationMsg.setVisible(false);
-            validationMsg.setManaged(false); // otherwise, the VBox still does reserve space for the label
-        }
-    }
 }

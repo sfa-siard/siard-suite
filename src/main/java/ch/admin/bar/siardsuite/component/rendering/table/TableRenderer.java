@@ -1,14 +1,11 @@
-package ch.admin.bar.siardsuite.component.rendering;
+package ch.admin.bar.siardsuite.component.rendering.table;
 
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
+import ch.admin.bar.siardsuite.component.rendering.SearchableFormEntry;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.view.TableSize;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -18,6 +15,7 @@ import lombok.val;
 
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Builder
@@ -41,7 +39,7 @@ public class TableRenderer<T, I> implements SearchableFormEntry {
 
         tableView.getColumns().addAll(
                 renderableTable.getProperties().stream()
-                        .map(this::column)
+                        .map(TableColumnFactory::column)
                         .collect(Collectors.toList()));
 
         tableView.getStyleClass().add(TABLE_STYLE_CLASS);
@@ -56,25 +54,18 @@ public class TableRenderer<T, I> implements SearchableFormEntry {
     @Override
     public void applySearchTerm(final String searchTerm) {
         filteredTableItems.setPredicate(i -> renderableTable.getProperties().stream()
-                    .map(iReadOnlyStringProperty -> iReadOnlyStringProperty.getValueExtractor().apply(i))
-                    .anyMatch(s -> s.contains(searchTerm)));
+                .flatMap(iReadOnlyStringProperty -> {
+                    try {
+                        return Stream.of(iReadOnlyStringProperty.getValueExtractor().extract(i));
+                    } catch (Exception e) {
+                        return Stream.empty();
+                    }
+                })
+                .anyMatch(s -> s.contains(searchTerm)));
     }
 
     @Override
     public void clearSearchTerm() {
         filteredTableItems.setPredicate(doNotFilter);
-    }
-
-    private TableColumn<I, String> column(final ReadOnlyStringProperty<I> columnProperty) {
-        val column = new TableColumn<I, String>();
-        column.textProperty()
-                .bind(I18n.bind(columnProperty.getTitle()));
-
-        column.setCellValueFactory(cellData -> {
-            val value = columnProperty.getValueExtractor().apply(cellData.getValue());
-            return new SimpleStringProperty(value);
-        });
-
-        return column;
     }
 }

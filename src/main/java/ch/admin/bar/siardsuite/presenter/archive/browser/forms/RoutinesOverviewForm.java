@@ -1,10 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.*;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -40,27 +36,27 @@ public class RoutinesOverviewForm {
                         ))
                         .property(RenderableTable.<DatabaseSchema, Routine>builder()
                                 .dataExtractor(DatabaseSchema::getRoutines)
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         ROW,
                                         routine -> String.valueOf(schema.getRoutines().indexOf(routine) + 1)
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         NAME,
                                         Routine::getName
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         SPECIFIC_NAME,
                                         Routine::getSpecificName
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         CHARACTERISTICS,
                                         Routine::getCharacteristics
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         RETURN_TYPE,
                                         Routine::getReturnType
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         NUMBER_OF_PARAMETERS,
                                         intToString(routine -> routine.getParameters().size())
                                 ))

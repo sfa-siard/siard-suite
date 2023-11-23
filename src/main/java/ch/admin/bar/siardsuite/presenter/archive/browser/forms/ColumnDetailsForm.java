@@ -14,7 +14,6 @@ import java.net.URISyntaxException;
 
 import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.booleanToString;
 import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.cardinalityToString;
-import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.catchExceptions;
 import static ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.Converter.intToString;
 
 public class ColumnDetailsForm {
@@ -76,7 +75,7 @@ public class ColumnDetailsForm {
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 SQL,
-                                catchExceptions(DatabaseColumn::getType)
+                                DatabaseColumn::getType
                         ))
                         .property(new ReadOnlyStringProperty<>(
                                 UDT_SCHEMA,

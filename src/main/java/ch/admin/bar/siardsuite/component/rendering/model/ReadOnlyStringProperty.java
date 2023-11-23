@@ -5,16 +5,14 @@ import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
 import lombok.Value;
 
-import java.util.function.Function;
-
 @Value
 public class ReadOnlyStringProperty<T> implements RenderableProperty<T> {
     @NonNull DisplayableText title;
-    @NonNull Function<T, String> valueExtractor;
+    @NonNull ThrowingExtractor<T, String> valueExtractor;
 
     public ReadOnlyStringProperty(
             @NonNull DisplayableText title,
-            @NonNull Function<T, String> valueExtractor
+            @NonNull ThrowingExtractor<T, String> valueExtractor
     ) {
         this.title = title;
         this.valueExtractor = valueExtractor;
@@ -22,7 +20,7 @@ public class ReadOnlyStringProperty<T> implements RenderableProperty<T> {
 
     public ReadOnlyStringProperty(
             @NonNull I18nKey titleKey,
-            @NonNull Function<T, String> valueExtractor
+            @NonNull ThrowingExtractor<T, String> valueExtractor
     ) {
         this.title = DisplayableText.of(titleKey);
         this.valueExtractor = valueExtractor;

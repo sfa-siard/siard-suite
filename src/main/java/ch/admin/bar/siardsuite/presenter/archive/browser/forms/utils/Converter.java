@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils;
 
+import ch.admin.bar.siardsuite.component.rendering.model.ThrowingExtractor;
 import ch.admin.bar.siardsuite.util.I18n;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -18,29 +19,29 @@ import java.util.function.Supplier;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Converter {
 
-    public static <T> Function<T, String> booleanToString(Function<T, Boolean> getter) {
+    public static <T> ThrowingExtractor<T, String> booleanToString(Function<T, Boolean> getter) {
         return t -> String.valueOf(getter.apply(t));
     }
 
-    public static <T> Function<T, String> intToString(Function<T, Integer> intGetter) {
+    public static <T> ThrowingExtractor<T, String> intToString(Function<T, Integer> intGetter) {
         return t -> String.valueOf(intGetter.apply(t));
     }
 
-    public static <T> Function<T, String> longToString(Function<T, Long> longGetter) {
+    public static <T> ThrowingExtractor<T, String> longToString(Function<T, Long> longGetter) {
         return t -> String.valueOf(longGetter.apply(t));
     }
 
-    public static <T> Function<T, String> localDateToString(Function<T, LocalDate> getter) {
+    public static <T> ThrowingExtractor<T, String> localDateToString(Function<T, LocalDate> getter) {
         return t -> I18n.getLocaleDate(getter.apply(t));
     }
 
-    public static <T> Function<T, String> uriToString(Function<T, URI> getter) {
+    public static <T> ThrowingExtractor<T, String> uriToString(Function<T, URI> getter) {
         return t -> Optional.ofNullable(getter.apply(t))
                 .map(URI::getPath)
                 .orElse("");
     }
 
-    public static <T> Function<T, LocalDate> calendarToLocalDate(Function<T, Calendar> getter) {
+    public static <T> ThrowingExtractor<T, LocalDate> calendarToLocalDate(Function<T, Calendar> getter) {
         return t -> {
             val calendar = getter.apply(t);
             try {
@@ -55,7 +56,7 @@ public class Converter {
         };
     }
 
-    public static <T> Function<T, String> cardinalityToString(ThrowingFunction<T, Integer> getter) {
+    public static <T> ThrowingExtractor<T, String> cardinalityToString(ThrowingFunction<T, Integer> getter) {
         return t -> {
             val cardinality = catchExceptions(getter).apply(t);
 

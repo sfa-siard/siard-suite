@@ -8,6 +8,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.NonNull;
@@ -62,19 +63,19 @@ public class ViewOverviewForm {
                                         metaView::getMetaColumns,
                                         metaView::getMetaColumn
                                 ).assemble())
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         POSITION,
                                         intToString(MetaValue::getPosition)
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         COLUMN_NAME,
                                         MetaColumn::getName
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         COLUMN_TYPE,
-                                        catchExceptions(MetaValue::getType, "")
+                                        MetaValue::getType
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         CARDINALITY,
                                         intToString(catchExceptions(MetaValue::getCardinality, 0))
                                 ))

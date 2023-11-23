@@ -1,9 +1,9 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -20,11 +20,11 @@ public class UsersOverviewForm {
                 .group(RenderableFormGroup.<SiardArchive>builder()
                         .property(RenderableTable.<SiardArchive, User>builder()
                                 .dataExtractor(SiardArchive::users)
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         USERNAME,
                                         User::getName
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         DESCRIPTION,
                                         User::getDescription
                                 ))

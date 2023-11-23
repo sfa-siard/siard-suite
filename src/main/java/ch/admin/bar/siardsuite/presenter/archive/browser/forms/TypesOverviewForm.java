@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseType;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -40,27 +41,27 @@ public class TypesOverviewForm {
                         ))
                         .property(RenderableTable.<DatabaseSchema, DatabaseType>builder()
                                 .dataExtractor(DatabaseSchema::getTypes)
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         NAME,
                                         DatabaseType::getName
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         CATEGORY,
                                         DatabaseType::getCategory
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         IS_INSTANTIABLE,
                                         booleanToString(DatabaseType::isInstantiable)
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         IS_FINAL,
                                         booleanToString(DatabaseType::isFinal)
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         BASE,
                                         DatabaseType::getBase
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         DESCRIPTION,
                                         DatabaseType::getDescription
                                 ))

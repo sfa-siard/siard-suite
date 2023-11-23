@@ -9,7 +9,6 @@ import lombok.Value;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -27,14 +26,14 @@ public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
             .build();
 
     @NonNull DisplayableText title;
-    @NonNull Function<T, String> valueExtractor;
+    @NonNull ThrowingExtractor<T, String> valueExtractor;
     @NonNull Persistor<T> valuePersistor;
 
     @NonNull Set<Validator> valueValidators;
 
     public ReadWriteStringProperty(
             @NonNull DisplayableText title,
-            @NonNull Function<T, String> valueExtractor,
+            @NonNull ThrowingExtractor<T, String> valueExtractor,
             @NonNull Persistor<T> valuePersistor,
             @NonNull Validator... valueValidators) {
         this.title = title;
@@ -46,7 +45,7 @@ public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
 
     public ReadWriteStringProperty(
             @NonNull I18nKey titleKey,
-            @NonNull Function<T, String> valueExtractor,
+            @NonNull ThrowingExtractor<T, String> valueExtractor,
             @NonNull Persistor<T> valuePersistor,
             @NonNull Validator... valueValidators) {
         this.title = DisplayableText.of(titleKey);

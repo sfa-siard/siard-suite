@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendering;
+package ch.admin.bar.siardsuite.component.rendering.table;
 
 import ch.admin.bar.siardsuite.component.rendering.utils.LoadingBatchManager;
 import javafx.application.Platform;

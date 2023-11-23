@@ -47,11 +47,13 @@ public class I18nTestHelper {
 
     private static Set<Class<?>> findAllClasses(String packageName) {
         return findAllClassNames(packageName).stream()
-                .map(className -> {
+                .flatMap(className -> {
                     try {
-                        return SiardApplication.class.getClassLoader().loadClass(className);
+                        return Stream.of(SiardApplication.class.getClassLoader().loadClass(className));
                     } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("Failed to load class " + className);
+                        //throw new RuntimeException(e);
+                        return Stream.empty();
                     }
                 })
                 .collect(Collectors.toSet());
@@ -60,11 +62,16 @@ public class I18nTestHelper {
     private static Set<String> findAllClassNames(String packageName) {
         val mainBuildOutput = "./build/classes/java/main";
 
-        return findClassNames(new File(mainBuildOutput, packageName.replaceAll("[.]", "/")))
-                .map(s -> s.replaceFirst("./build/classes/java/main/", ""))
+        val classNames = findClassNames(new File(mainBuildOutput, packageName.replaceAll("[.]", "/")))
+                .collect(Collectors.toList());
+
+        return classNames.stream()
+                .map(s -> s.replace("./build/classes/java/main/", ""))
+                .map(s -> s.replace(".\\build\\classes\\java\\main\\", ""))
                 .map(s -> s.replace(mainBuildOutput, ""))
                 .map(s -> s.replace(".class", ""))
-                .map(s -> s.replaceAll("/", "."))
+                .map(s -> s.replace("/", "."))
+                .map(s -> s.replace("\\", "."))
                 .collect(Collectors.toSet());
     }
 

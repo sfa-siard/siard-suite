@@ -1,10 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.forms;
 
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.*;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -39,19 +35,19 @@ public class SchemaOverviewForm {
                         ))
                         .property(RenderableTable.<DatabaseSchema, DatabaseTable>builder()
                                 .dataExtractor(DatabaseSchema::getTables)
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         ROW,
                                         databaseTable -> (schema.getTables().indexOf(databaseTable) + 1) + ""
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         TABLE_NAME,
                                         DatabaseTable::getName
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         NUMBER_OF_COLUMNS,
                                         intToString(databaseTable -> databaseTable.getColumns().size())
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         NUMBER_OF_ROWS,
                                         longToString(DatabaseTable::getNumberOfRows)
                                 ))

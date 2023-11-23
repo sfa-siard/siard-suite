@@ -17,5 +17,5 @@ public class RenderableTable<T, I> implements RenderableProperty<T> {
 
     @Singular
     @NonNull
-    List<ReadOnlyStringProperty<I>> properties;
+    List<TableColumnProperty<I>> properties;
 }

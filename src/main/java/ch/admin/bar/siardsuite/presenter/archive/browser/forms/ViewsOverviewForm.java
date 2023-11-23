@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseView;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -36,19 +37,19 @@ public class ViewsOverviewForm {
                         ))
                         .property(RenderableTable.<DatabaseSchema, DatabaseView>builder()
                                 .dataExtractor(DatabaseSchema::getViews)
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         ROW,
                                         databaseView -> String.valueOf(schema.getViews().indexOf(databaseView) + 1)
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         VIEW_NAME,
                                         DatabaseView::name
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         NUMBER_OF_COLUMNS,
                                         DatabaseView::getNumberOfColumns
                                 ))
-                                .property(new ReadOnlyStringProperty<>(
+                                .property(new TableColumnProperty<>(
                                         NUMBER_OF_ROWS,
                                         DatabaseView::getNumberOfRows
                                 ))
