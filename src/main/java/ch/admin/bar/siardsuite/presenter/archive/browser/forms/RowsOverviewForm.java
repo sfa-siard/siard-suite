@@ -12,7 +12,6 @@ import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTa
 import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
 import ch.admin.bar.siardsuite.model.database.DatabaseTable;
-import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
 import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
 import ch.admin.bar.siardsuite.util.FileHelper;
 import ch.admin.bar.siardsuite.util.OS;
@@ -28,6 +27,7 @@ import lombok.val;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -94,22 +94,33 @@ public class RowsOverviewForm {
 
         private String findCellValue(final String name) {
             val cell = findCell(name);
+            return extractText(cell);
+        }
 
+        private String extractText(final Cell cell) {
+            if (cell == null || cell.isNull()) {
+                return "";
+            }
             try {
-                if (new PreTypeFacade(cell.getMetaColumn().getPreType()).isBlob()) {
-                    val bytes = cell.getBytes();
+                switch (cell.getMetaValue().getPreType()) {
+                    case Types.BINARY:
+                    case Types.VARBINARY:
+                    case Types.BLOB:
+                        val bytes = cell.getBytes();
 
-                    if (bytes.length == 0) {
-                        return "";
-                    }
+                        if (bytes.length == 0) {
+                            return "";
+                        }
 
-                    if (bytes.length < 16) {
-                        return "0x" + BU.toHex(cell.getBytes());
-                    }
+                        if (bytes.length < 16) {
+                            return "0x" + BU.toHex(cell.getBytes());
+                        }
 
-                    return "0x" + BU.toHex(cell.getBytes()).substring(0, 16) + "...";
+                        return "0x" + BU.toHex(cell.getBytes()).substring(0, 16) + "...";
+
+                    default:
+                        return cell.getString();
                 }
-                return cell.getString();
             } catch (IOException e) {
                 return "";
             }
@@ -151,10 +162,12 @@ public class RowsOverviewForm {
         }
     }
 
-
     private static Optional<TableColumnProperty.CellClickedListener<RecordWrapper>> createCellClickListener(final DatabaseColumn column) {
         try {
-            if (!new PreTypeFacade(column.getColumn().getPreType()).isBlob()) {
+            val type = column.getColumn().getPreType();
+            val clickListenerSupported = type == Types.BINARY || type == Types.VARBINARY || type == Types.BLOB;
+
+            if (!clickListenerSupported) {
                 return Optional.empty();
             }
         } catch (IOException e) {
