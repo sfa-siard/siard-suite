@@ -58,13 +58,15 @@ public class I18nTestHelper {
     }
 
     private static Set<String> findAllClassNames(String packageName) {
-        val mainBuildOutput = "./build/classes/java/main";
+        val mainBuildOutput = "./build/classes/java/main/".replace("/", File.separator);
 
-        return findClassNames(new File(mainBuildOutput, packageName.replaceAll("[.]", "/")))
-                .map(s -> s.replaceFirst("./build/classes/java/main/", ""))
+        val classNames = findClassNames(new File(mainBuildOutput, packageName.replace(".", File.separator)))
+                .collect(Collectors.toList());
+
+        return classNames.stream()
                 .map(s -> s.replace(mainBuildOutput, ""))
                 .map(s -> s.replace(".class", ""))
-                .map(s -> s.replaceAll("/", "."))
+                .map(s -> s.replace(File.separator, "."))
                 .collect(Collectors.toSet());
     }
 
