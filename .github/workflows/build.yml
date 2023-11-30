@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -32,7 +32,7 @@ jobs:
       - name: Show current application version
         run: ./gradlew cV
       - name: Execute Gradle build
-        run: ./gradlew build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
+        run: ./gradlew build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon --debug
       - name: upload zip archive
         uses: actions/upload-artifact@v3
         with:
