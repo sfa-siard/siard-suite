@@ -3,7 +3,6 @@ name: Create standalone deliverables for SIARD (installers and distributions wit
 
 on:
   push:
-    branches: [ "bugfix/*" ]
     tags:
       - v*.**
 
@@ -32,12 +31,12 @@ jobs:
       - name: upload zip archive
         uses: actions/upload-artifact@v3
         with:
-          name: temp
+          name: ${{ env.NAME_TAG }}
           path: build/distributions/SIARD-Suite-*.zip
       - name: upload siard-manual.pdf
         uses: actions/upload-artifact@v3
         with:
-          name: temp-user-manual.pdf
+          name: ${{ env.NAME_TAG }}-user-manual.pdf
           path: build/docs/pdf/en/user-manual.pdf
 
   native-packages:
@@ -73,35 +72,35 @@ jobs:
       - name: Upload DMG as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: temp-${{ runner.os }}-dmg
+          name: ${{ env.NAME_TAG }}-${{ runner.os }}-dmg
           path: build/jpackage/*.dmg
           if-no-files-found: ignore
       - name: Upload EXE as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: temp-win-exe
+          name: ${{ env.NAME_TAG }}-win-exe
           path: build/jpackage/*.exe
           if-no-files-found: ignore
       - name: Upload MSI as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: temp-win-msi
+          name: ${{ env.NAME_TAG }}-win-msi
           path: build/jpackage/*.msi
           if-no-files-found: ignore
       - name: Upload DEB as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: temp-${{ runner.os }}-deb
+          name: ${{ env.NAME_TAG }}-${{ runner.os }}-deb
           path: build/jpackage/*.deb
           if-no-files-found: ignore
       - name: Upload RPM as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: temp-${{ runner.os }}-rpm
+          name: ${{ env.NAME_TAG }}-${{ runner.os }}-rpm
           path: build/jpackage/*.rpm
           if-no-files-found: ignore
       - name: Upload application image zip
         uses: actions/upload-artifact@v3
         with:
-          name: temp-${{ runner.os }}
+          name: ${{ env.NAME_TAG }}-${{ runner.os }}
           path: build/image-zip/*.zip
