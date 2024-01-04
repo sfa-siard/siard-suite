@@ -114,7 +114,7 @@ runtime {
     jpackage {
         imageName = "SIARD-Suite"
         installerName = "SIARD-Suite"
-        appVersion = version
+        appVersion = "1.2.3"
 
         skipInstaller = false
 
