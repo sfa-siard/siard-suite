@@ -32,12 +32,12 @@ jobs:
       - name: upload zip archive
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}
+          name: temp
           path: build/distributions/SIARD-Suite-*.zip
       - name: upload siard-manual.pdf
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-user-manual.pdf
+          name: temp
           path: build/docs/pdf/en/user-manual.pdf
 
   native-packages:
@@ -73,35 +73,35 @@ jobs:
       - name: Upload DMG as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-${{ runner.os }}-dmg
+          name: temp-${{ runner.os }}-dmg
           path: build/jpackage/*.dmg
           if-no-files-found: ignore
       - name: Upload EXE as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-win-exe
+          name: temp-win-exe
           path: build/jpackage/*.exe
           if-no-files-found: ignore
       - name: Upload MSI as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-win-msi
+          name: temp-win-msi
           path: build/jpackage/*.msi
           if-no-files-found: ignore
       - name: Upload DEB as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-${{ runner.os }}-deb
+          name: temp-${{ runner.os }}-deb
           path: build/jpackage/*.deb
           if-no-files-found: ignore
       - name: Upload RPM as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-${{ runner.os }}-rpm
+          name: temp-${{ runner.os }}-rpm
           path: build/jpackage/*.rpm
           if-no-files-found: ignore
       - name: Upload application image zip
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.NAME_TAG }}-${{ runner.os }}
+          name: temp-${{ runner.os }}
           path: build/image-zip/*.zip
