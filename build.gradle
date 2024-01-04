@@ -128,7 +128,7 @@ runtime {
                     '--win-per-user-install',
                     '--win-dir-chooser',
                     '--win-menu',
-//                    '--win-menu-group SIARD', // otherwise, the folder will be named "unknown"
+                    '--win-menu-group', 'SIARD', // otherwise, the folder will be named "unknown"
                     '--win-shortcut'
             ]
         } else if (currentOs.linux) {
