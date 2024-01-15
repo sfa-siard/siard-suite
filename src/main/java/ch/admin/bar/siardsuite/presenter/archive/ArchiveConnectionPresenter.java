@@ -9,6 +9,7 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.ValidationProperties;
 import ch.admin.bar.siardsuite.presenter.ValidationProperty;
+import ch.admin.bar.siardsuite.presenter.connection.DefaultConnectionPropertiesForm;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
@@ -23,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -58,54 +60,28 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     @FXML
     public Text textRight;
     @FXML
-    public TextField dbServerField;
-    @FXML
-    public TextField dbNameField;
-    @FXML
-    public TextField usernameField;
-    @FXML
     public TextField urlField;
-    @FXML
-    public PasswordField passwordField;
-    @FXML
-    public TextField portField;
     @FXML
     public TextField connectionName;
     @FXML
     public MFXToggleButton toggleSave;
     @FXML
     public BorderPane borderPane;
+
+    @FXML
+    public HBox formContainer;
+
     @FXML
     private ButtonBox buttonsBox;
     @FXML
     public MFXButton infoButton;
     @FXML
     private Tooltip tooltip;
-    @FXML
-    public Label dbServerLabel;
-    @FXML
-    public Label portLabel;
-    @FXML
-    public Label dbNameLabel;
-    @FXML
-    public Label usernameLabel;
-    @FXML
-    public Label passwordLabel;
-    @FXML
+
     public Label urlLabel;
     @FXML
     public Label connectionLabel;
 
-    @FXML
-    public Label dbServerValidationMsg;
-    @FXML
-    public Label portValidationMsg;
-    @FXML
-    public Label dbNameValidationMsg;
-    @FXML
-    public Label usernameValidationMsg;
-    @FXML
-    public Label passwordValidationMsg;
     @FXML
     public Label urlValidationMsg;
     @FXML
@@ -120,6 +96,8 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     @Override
     public void init(Controller controller, RootStage stage, MFXStepper stepper) {
         this.init(controller, stage);
+
+        formContainer.getChildren().addAll(new DefaultConnectionPropertiesForm());
 
         addTextWithStyles();
         addFormText();
@@ -149,12 +127,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     }
 
     private void addFormText() {
-        I18n.bind(dbServerLabel.textProperty(), "connection.view.dbServer.label");
-        I18n.bind(dbServerField.promptTextProperty(), "connection.view.dbServer.prompt");
-        I18n.bind(portLabel.textProperty(), "connection.view.port.label");
-        I18n.bind(dbNameLabel.textProperty(), "connection.view.databaseName.label");
-        I18n.bind(usernameLabel.textProperty(), "connection.view.username.label");
-        I18n.bind(passwordLabel.textProperty(), "connection.view.password.label");
         I18n.bind(urlLabel.textProperty(), "connection.view.url.label");
         I18n.bind(toggleSave.textProperty(), "archiveConnection.view.toggleSave");
         I18n.bind(connectionLabel.textProperty(), "archiveConnection.view.connectionName.label");
@@ -163,10 +135,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     private void addRecentDatabaseConnection() {
         Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection);
         controller.setDatabaseType(preferences.get(DATABASE_SYSTEM.name(), ""));
-        dbServerField.setText(preferences.get(DATABASE_SERVER.name(), ""));
-        portField.setText(preferences.get(PORT_NUMBER.name(), ""));
-        dbNameField.setText(preferences.get(DATABASE_NAME.name(), ""));
-        usernameField.setText(preferences.get(USER_NAME.name(), ""));
         urlField.setText(preferences.get(CONNECTION_URL.name(), ""));
         connectionName.setText(controller.recentDatabaseConnection);
         controller.recentDatabaseConnection = null;
@@ -177,15 +145,15 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
             // TODO MSAccess-DB needs different Fields for selecting File- #CR457
             DatabaseProperties databaseProps = controller.getDatabaseProps();
             String url = databaseProps.jdbcUrl();
-            portField.setText(databaseProps.port());
-            portField.setPromptText(databaseProps.port());
+//            portField.setText(databaseProps.port());
+//            portField.setPromptText(databaseProps.port());
             urlField.setPromptText(url);
         });
 
-        dbServerField.setOnKeyReleased(this::handleKeyEvent);
-        dbNameField.setOnKeyReleased(this::handleKeyEvent);
-        portField.setOnKeyReleased(this::handleKeyEvent);
-        usernameField.setOnKeyReleased(this::handleKeyEvent);
+//        dbServerField.setOnKeyReleased(this::handleKeyEvent);
+//        dbNameField.setOnKeyReleased(this::handleKeyEvent);
+//        portField.setOnKeyReleased(this::handleKeyEvent);
+//        usernameField.setOnKeyReleased(this::handleKeyEvent);
 
         toggleSave.setOnAction(event -> {
             this.connectionLabel.setVisible(!this.connectionLabel.isVisible());
@@ -203,11 +171,11 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
                                                                              Comparator.reverseOrder(),
                                                                              connectionName.getText());
                         preferences.put(DATABASE_SYSTEM.name(), controller.getDatabaseProduct().get());
-                        preferences.put(DATABASE_SERVER.name(), dbServerField.getText());
-                        preferences.put(PORT_NUMBER.name(), portField.getText());
-                        preferences.put(DATABASE_NAME.name(), dbNameField.getText());
-                        preferences.put(USER_NAME.name(), usernameField.getText());
-                        preferences.put(USER_PASSWORD.name(), passwordField.getText());
+//                        preferences.put(DATABASE_SERVER.name(), dbServerField.getText());
+//                        preferences.put(PORT_NUMBER.name(), portField.getText());
+//                        preferences.put(DATABASE_NAME.name(), dbNameField.getText());
+//                        preferences.put(USER_NAME.name(), usernameField.getText());
+//                        preferences.put(USER_PASSWORD.name(), passwordField.getText());
                         preferences.put(CONNECTION_URL.name(), urlField.getText());
                         preferences.put(STORAGE_DATE.name(), I18n.getLocaleDate(LocalDate.now().toString()));
                         preferences.put(TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
@@ -215,13 +183,13 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
                         throw new RuntimeException(e);
                     }
                 }
-                controller.updateConnectionData(urlField.getText(),
-                                                this.usernameField.getText(),
-                                                this.dbNameField.getText(),
-                                                this.passwordField.getText());
+//                controller.updateConnectionData(urlField.getText(),
+//                                                this.usernameField.getText(),
+//                                                this.dbNameField.getText(),
+//                                                this.passwordField.getText());
                 stepper.next();
                 stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBLOAD_EVENT));
-                passwordField.setText("");
+//                passwordField.setText("");
             }
 
         });
@@ -233,37 +201,14 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     private void handleKeyEvent(KeyEvent event) {
         String inputText = event.getText();
         if (inputText != null) {
-            urlField.setText(controller.getDatabaseProps().jdbcUrl(dbServerField.getText(), portField.getText(),
-                                                                   dbNameField.getText()));
+//            urlField.setText(controller.getDatabaseProps().jdbcUrl(dbServerField.getText(), portField.getText(),
+//                                                                   dbNameField.getText()));
         }
         event.consume();
     }
 
     private boolean validateProperties() {
-        ArrayList properties = new ArrayList<>(Arrays.asList(new ValidationProperty(dbServerField,
-                                                                                    dbServerValidationMsg,
-                                                                                    "connection.view.error.database.server"),
-                                                             new ValidationProperty(dbNameField,
-                                                                                    dbNameValidationMsg,
-                                                                                    "connection.view.error.database.name"),
-                                                             new ValidationProperty(portField, portValidationMsg,
-                                                                                    "connection.view.error.port.number"),
-                                                             new ValidationProperty(usernameField,
-                                                                                    usernameValidationMsg,
-                                                                                    "connection.view.error.user.name"),
-                                                             new ValidationProperty(passwordField,
-                                                                                    passwordValidationMsg,
-                                                                                    "connection.view.error.user.password"),
-                                                             new ValidationProperty(urlField,
-                                                                                    urlValidationMsg,
-                                                                                    "connection.view.error.connection.url")));
-        if (toggleSave.isSelected()) {
-            properties.add(new ValidationProperty(connectionName,
-                                                  connectionValidationMsg,
-                                                  "connection.view.error.connection.name.symbol"));
-        }
-
-        return new ValidationProperties(properties).validate();
+        return false;
     }
 
 }

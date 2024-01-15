@@ -62,7 +62,7 @@ public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
     }
 
     @Value
-    public static class Validator {
+    public static class Validator { // TODO: Move to utils package
         @NonNull DisplayableText message;
         @NonNull Predicate<String> isValidCheck;
         @NonNull Optional<String> titleSuffix;
