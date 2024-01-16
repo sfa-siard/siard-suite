@@ -10,6 +10,7 @@ import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.ValidationProperties;
 import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.presenter.connection.DefaultConnectionPropertiesForm;
+import ch.admin.bar.siardsuite.presenter.connection.SelectFileConnectionPropertiesForm;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.UserPreferences;
@@ -25,8 +26,10 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import lombok.val;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -97,7 +100,11 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     public void init(Controller controller, RootStage stage, MFXStepper stepper) {
         this.init(controller, stage);
 
-        formContainer.getChildren().addAll(new DefaultConnectionPropertiesForm());
+//        formContainer.getChildren().addAll(new DefaultConnectionPropertiesForm());
+
+        val form = new SelectFileConnectionPropertiesForm();
+        HBox.setHgrow(form, Priority.ALWAYS);
+        formContainer.getChildren().addAll(form);
 
         addTextWithStyles();
         addFormText();

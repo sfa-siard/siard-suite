@@ -1,5 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.connection;
 
+import ch.admin.bar.siardsuite.presenter.connection.fields.FileChooserFormField;
+import ch.admin.bar.siardsuite.presenter.connection.fields.StringFormField;
 import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.geometry.Insets;
@@ -27,18 +29,18 @@ public class DefaultConnectionPropertiesForm extends VBox {
     private static final I18nKey USERNAME_LABEL = I18nKey.of("connection.view.username.label");
     private static final I18nKey PASSWORD_LABEL = I18nKey.of("connection.view.password.label");
 
-    private final Collection<ConnectionFormField> formFields;
+    private final Collection<StringFormField> formFields;
 
     private final Supplier<Values> valuesSupplier;
 
     public DefaultConnectionPropertiesForm() {
-        val url = ConnectionFormField.builder()
+        val url = StringFormField.builder()
                 .title(TranslatableText.of(DB_SERVER_LABEL))
                 .prompt(TranslatableText.of(DB_SERVER_PROMPT))
                 .prefWidth(FORM_FIELD_WITH - PORT_FIELD_WITH - 10)
                 .build();
 
-        val port = ConnectionFormField.builder()
+        val port = StringFormField.builder()
                 .title(TranslatableText.of(DB_PORT_LABEL))
                 .prefWidth(PORT_FIELD_WITH)
                 .build();
@@ -46,17 +48,17 @@ public class DefaultConnectionPropertiesForm extends VBox {
         val urlAndPortHBox = new HBox(url, port);
         HBox.setMargin(url, new Insets(0, 10, 0, 0));
 
-        val dbName = ConnectionFormField.builder()
+        val dbName = StringFormField.builder()
                 .title(TranslatableText.of(DB_NAME_LABEL))
                 .prefWidth(FORM_FIELD_WITH)
                 .build();
 
-        val username = ConnectionFormField.builder()
+        val username = StringFormField.builder()
                 .title(TranslatableText.of(USERNAME_LABEL))
                 .prefWidth(FORM_FIELD_WITH)
                 .build();
 
-        val password = ConnectionFormField.builder()
+        val password = StringFormField.builder()
                 .title(TranslatableText.of(PASSWORD_LABEL))
                 .prefWidth(FORM_FIELD_WITH)
                 .build();
@@ -69,7 +71,9 @@ public class DefaultConnectionPropertiesForm extends VBox {
         HBox.setMargin(password, new Insets(25));
         val secondLineHBox = new HBox(dbName, password);
 
-        this.getChildren().addAll(firstLineHBox, secondLineHBox);
+        this.getChildren().addAll(
+                firstLineHBox,
+                secondLineHBox);
 
         formFields = Arrays.asList(
                 url,
@@ -90,7 +94,7 @@ public class DefaultConnectionPropertiesForm extends VBox {
 
     public Optional<Values> tryGetValidValues() {
         if (formFields.stream()
-                .allMatch(ConnectionFormField::hasValidValue)) {
+                .allMatch(StringFormField::hasValidValue)) {
             return Optional.of(valuesSupplier.get());
         }
         return Optional.empty();

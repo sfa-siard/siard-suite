@@ -1,10 +1,9 @@
-package ch.admin.bar.siardsuite.presenter.connection;
+package ch.admin.bar.siardsuite.presenter.connection.fields;
 
 import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
@@ -23,7 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
-public class ConnectionFormField extends VBox {
+public class StringFormField extends VBox {
 
     private static final String TITLE_STYLE_CLASS = "form-label";
     private static final String FIELD_STYLE_CLASS = "form-field";
@@ -37,7 +36,7 @@ public class ConnectionFormField extends VBox {
     private final Set<ReadWriteStringProperty.Validator> validators;
 
     @Builder
-    public ConnectionFormField(
+    public StringFormField(
             @NonNull final TranslatableText title,
             @Nullable final TranslatableText prompt,
             @Nullable final String initialValue,
