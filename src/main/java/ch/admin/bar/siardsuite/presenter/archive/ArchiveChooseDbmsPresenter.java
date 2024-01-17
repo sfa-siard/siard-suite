@@ -57,8 +57,6 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
         this.errorMessage.setVisible(false);
         I18n.bind(errorMessage.textProperty(), "archiveDb.view.error");
 
-
-//        this.controller.getDatabaseTypes().forEach(this::createRadioToVBox);
         DbmsRegistry.getSupportedDbms().forEach(this::createRadioToVBox);
 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
@@ -80,12 +78,10 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
             MFXRadioButton selected = (MFXRadioButton) toggleGroup.getSelectedToggle();
             if (selected != null) {
                 val selectedDbms = DbmsRegistry.findDbmsByName(selected.getText());
-
-//                controller.setDatabaseType(selected.getText());
                 this.errorMessage.setVisible(false);
+
                 stepper.next();
-                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(selectedDbms)); // TODO
-                //fire event
+                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(selectedDbms));
             } else {
                 this.errorMessage.setVisible(true);
             }

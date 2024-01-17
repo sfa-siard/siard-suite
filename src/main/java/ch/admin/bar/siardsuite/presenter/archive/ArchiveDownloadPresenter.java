@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.*;
+import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
@@ -131,21 +132,18 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                 this.archivePath.setText(targetArchive.getAbsolutePath());
                 this.subtitle1.setText(this.databaseName);
                 try {
-                    controller.loadDatabase(targetArchive,
-                                            false,
-                                            this.viewsAsTables,
-                                            handleDownloadSuccess(stepper),
-                                            handleDownloadFailure(stepper));
-                    controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
-                        AtomicInteger pos = new AtomicInteger();
-                        newValue.forEach(p ->
-                                                 addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
-                        );
-                    });
-                    controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
-                        double pos = newValue.doubleValue();
-                        progressBar.progressProperty().set(pos);
-                    });
+                    controller.loadDatabase(LoadDatabaseInstruction.builder()
+                            .connectionData(null) // TODO FIXME
+                            .loadOnlyMetadata(true)
+                            .onSuccess(successEvent -> handleDownloadSuccess(stepper).handle(successEvent))
+                            .onFailure(failureEvent -> handleDownloadFailure(stepper).handle(failureEvent))
+                            .onProgress((observable, oldValue, newValue) -> progressBar.progressProperty().set(newValue.doubleValue()))
+                            .onSingleValueCompleted((observable, oldValue, newValue) -> {
+                                AtomicInteger pos = new AtomicInteger();
+                                newValue.forEach(p -> addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement()));
+                            })
+                            .build());
+
                     event.consume();
                 } catch (SQLException e) {
                     fail(stepper, e, ERROR_OCCURED);

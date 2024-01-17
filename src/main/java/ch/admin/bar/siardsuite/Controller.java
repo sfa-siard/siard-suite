@@ -5,6 +5,8 @@ import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
+import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -17,8 +19,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.TreeItem;
 import javafx.util.Pair;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.val;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +31,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Controller {
 
@@ -37,30 +42,39 @@ public class Controller {
     private Workflow workflow;
     public String recentDatabaseConnection;
 
+    @Setter
+    @Getter
+    private Optional<DbmsConnectionData> tempConnectionData = Optional.empty();
+
+    public Optional<DbmsConnectionData> popTempConnectionData() {
+        val tempReturnValue = tempConnectionData;
+        tempConnectionData = Optional.empty();
+        return tempReturnValue;
+    }
+
     public Controller(Model model) {
         this.model = model;
     }
 
-    public void loadDatabase(boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
-                             EventHandler<WorkerStateEvent> onFailure
-    ) throws SQLException {
+    public void loadDatabase(final LoadDatabaseInstruction instruction) throws SQLException {
         tmpArchive = model.initArchive();
-        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(tmpArchive, onlyMetaData, false);
-        this.onDatabaseLoadSuccess(onSuccess);
-        this.onDatabaseLoadFailed(onFailure);
-        this.databaseLoadService.start();
-    }
 
-    public void loadDatabase(File target, boolean onlyMetaData, boolean viewsAsTables,
-                             EventHandler<WorkerStateEvent> onSuccess,
-                             EventHandler<WorkerStateEvent> onFailure) throws SQLException {
-        final Archive archive = model.initArchive(target, onlyMetaData);
-        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
-                .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
-        this.onDatabaseLoadSuccess(onSuccess);
-        this.onDatabaseLoadFailed(onFailure);
-        this.databaseLoadService.start();
+        val connection = instruction.getConnectionData().createConnection();
+
+        val dbLoadService = new DatabaseLoadService(
+                connection,
+                model,
+                tmpArchive,
+                instruction.isLoadOnlyMetadata(),
+                instruction.isViewsAsTables());
+
+        dbLoadService.setOnSucceeded(instruction.getOnSuccess());
+        dbLoadService.setOnFailed(instruction.getOnFailure());
+
+        dbLoadService.start();
+
+        dbLoadService.valueProperty().addListener(instruction.getOnSingleValueCompleted());
+        dbLoadService.progressProperty().addListener(instruction.getOnProgress());
     }
 
     public void closeDbConnection() {
@@ -76,22 +90,6 @@ public class Controller {
 
     public void updateSchemaMap(Map schemaMap) {
         this.model.setSchemaMap(schemaMap);
-    }
-
-    public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
-        this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
-    }
-
-    public void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
-        this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
-    }
-
-    public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<Pair<String, Long>>> listener) {
-        this.databaseLoadService.valueProperty().addListener(listener);
-    }
-
-    public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener) {
-        this.databaseLoadService.progressProperty().addListener(listener);
     }
 
     public void onDatabaseUploadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {

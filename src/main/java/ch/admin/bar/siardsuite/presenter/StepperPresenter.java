@@ -37,7 +37,7 @@ public abstract class StepperPresenter extends Presenter implements StepperDepen
     }
 
     protected void createStepper(List<Step> steps, MFXStepper stepper) {
-        boolean recentConnection = !Objects.isNull(this.controller.recentDatabaseConnection);
+        boolean recentConnection = controller.getTempConnectionData().isPresent();
         List<MFXStepperToggle> stepperToggles = createSteps(steps, stepper);
 
         stepper.getStepperToggles().addAll(stepperToggles);

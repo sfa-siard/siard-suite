@@ -14,18 +14,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import lombok.val;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
 
 import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.STORAGE_DATE;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
-import static ch.admin.bar.siardsuite.util.UserPreferences.sortedChildrenNames;
 
-public class ArchiveDbDialogPresenter extends DialogPresenter {
+public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
 
     @FXML
     protected Label title;
@@ -64,19 +61,14 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
         I18n.bind(recentConnectionsHeaderName.textProperty(), "dialog.recent.connections.header.name");
         I18n.bind(recentConnectionsHeaderDate.textProperty(), "dialog.recent.connections.header.date");
 
-        try {
-            List<String> connectionNames = sortedChildrenNames(DATABASE_CONNECTION, TIMESTAMP, Comparator.reverseOrder());
-            for (String connectionName : connectionNames) {
-                recentConnectionsBox.getChildren().add(getRecentConnectionsBox(connectionName));
-            }
-        } catch (BackingStoreException e) {
-            throw new RuntimeException(e);
-        }
+        recentConnectionsBox.getChildren().addAll(UserPreferences.getStoredConnections().stream()
+                .map(this::getRecentConnectionsBox)
+                .collect(Collectors.toList()));
 
-        if (recentConnectionsBox.getChildren().size() == 0) {
+        if (recentConnectionsBox.getChildren().isEmpty()) {
             showNoRecentConnections();
         } else {
-            recentConnectionsBox.getChildren().removeIf(child -> recentConnectionsBox.getChildren().indexOf(child) > 2);
+            recentConnectionsBox.getChildren().removeIf(child -> recentConnectionsBox.getChildren().indexOf(child) > 2); // FIXME Wieso werden 30 gespeichert?
         }
 
         closeButton.setOnAction(event -> stage.closeDialog());
@@ -89,6 +81,25 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
         final Label label = new Label(I18n.get("dialog.recent.connections.nodata"));
         recentConnectionsBox.getChildren().add(label);
         label.setStyle("-fx-text-fill: #2a2a2a82");
+    }
+
+    private HBox getRecentConnectionsBox(final UserPreferences.StorageData<UserPreferences.DbConnection> storedConnection) {
+        val imageLabel = new Label();
+        imageLabel.getStyleClass().add("link-icon");
+
+        val nameLabel = new Label(storedConnection.getStoredData().getName());
+        nameLabel.getStyleClass().add("name-label");
+
+        val dateLabel = new Label(storedConnection.getStoredAtDate());
+        dateLabel.getStyleClass().add("date-label");
+
+        val recentConnectionsBox = new HBox(imageLabel, nameLabel, dateLabel);
+        recentConnectionsBox.getStyleClass().add("connections-hbox");
+        recentConnectionsBox.setOnMouseClicked(event -> showRecentConnection(storedConnection));
+
+        VBox.setMargin(recentConnectionsBox, new Insets(5, 0, 5, 0));
+
+        return recentConnectionsBox;
     }
 
     private HBox getRecentConnectionsBox(String connectionName) {
@@ -114,6 +125,12 @@ public class ArchiveDbDialogPresenter extends DialogPresenter {
         }
 
         return recentConnectionsBox;
+    }
+
+    private void showRecentConnection(final UserPreferences.StorageData<UserPreferences.DbConnection> storedConnection) {
+        controller.setTempConnectionData(storedConnection.getStoredData().tryMapToDbmsConnectionData());
+        stage.closeDialog();
+        stage.navigate(View.ARCHIVE_STEPPER);
     }
 
     private void showRecentConnection(String connectionName) {

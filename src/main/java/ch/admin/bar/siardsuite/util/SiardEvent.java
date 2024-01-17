@@ -1,13 +1,14 @@
 package ch.admin.bar.siardsuite.util;
 
-import ch.admin.bar.siardsuite.database.DbmsRegistry;
+import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.database.model.Dbms;
 import javafx.event.Event;
 import javafx.event.EventType;
 import lombok.Getter;
 
 public class SiardEvent extends Event {
     public static final EventType<DbmsSelectedEvent> UPDATE_STEPPER_DBTYPE_EVENT;
-    public static final EventType<SiardEvent> UPDATE_STEPPER_DBLOAD_EVENT;
+    public static final EventType<DbmsConnectionDataReadyEvent> UPDATE_STEPPER_DBLOAD_EVENT;
     public static final EventType<SiardEvent> UPDATE_LANGUAGE_EVENT;
     public static final EventType<SiardEvent> ARCHIVE_LOADED;
     public static final EventType<SiardEvent> ARCHIVE_METADATA_UPDATED;
@@ -31,9 +32,9 @@ public class SiardEvent extends Event {
         ARCHIVE_METADATA_UPDATED = new EventType<>("ARCHIVE_METADATA_UPDATED");
         DATABASE_DOWNLOADED = new EventType<>("DATABASE_DOWNLOADED");
         UPLOAD_DBMS_SELECTED = new EventType<>("UPLOAD_DBMS_SELECTED");
-        UPLOAD_CONNECTION_UPDATED = new EventType<>( "UPLOAD_CONNECTION_UPDATED");
-        UPLOAD_SUCCEDED = new EventType<>( "UPLOAD_SUCCEDED");
-        UPLOAD_FAILED = new EventType<>( "UPLOAD_FAILED");
+        UPLOAD_CONNECTION_UPDATED = new EventType<>("UPLOAD_CONNECTION_UPDATED");
+        UPLOAD_SUCCEDED = new EventType<>("UPLOAD_SUCCEDED");
+        UPLOAD_FAILED = new EventType<>("UPLOAD_FAILED");
         EXPAND_DATABASE_TABLE = new EventType<>("EXPAND_DATABASE_TABLE");
         ERROR_OCCURED = new EventType<>("DATABASE_DOWNLOAD_FAILED");
     }
@@ -41,11 +42,24 @@ public class SiardEvent extends Event {
     public static class DbmsSelectedEvent extends Event {
 
         @Getter
-        private final DbmsRegistry.Dbms<?> selectedDbms;
+        private final Dbms<?> selectedDbms;
 
-        public DbmsSelectedEvent(final DbmsRegistry.Dbms<?> selectedDbms) {
+        public DbmsSelectedEvent(final Dbms<?> selectedDbms) {
             super(UPDATE_STEPPER_DBTYPE_EVENT);
             this.selectedDbms = selectedDbms;
+        }
+    }
+
+    public static class DbmsConnectionDataReadyEvent extends Event {
+
+        @Getter
+        private final DbmsConnectionData connectionData;
+
+        public DbmsConnectionDataReadyEvent(
+                final DbmsConnectionData connectionData
+        ) {
+            super(UPDATE_STEPPER_DBLOAD_EVENT);
+            this.connectionData = connectionData;
         }
     }
 }

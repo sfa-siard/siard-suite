@@ -1,32 +1,39 @@
 package ch.admin.bar.siardsuite.presenter.connection.fields;
 
+import ch.admin.bar.siardsuite.util.OptionalHelper;
+import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lombok.Builder;
 import lombok.NonNull;
+import lombok.val;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class FormField<T extends Node> extends VBox {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
+
+public abstract class FormField<T> extends VBox {
     protected static final String TITLE_STYLE_CLASS = "form-label";
     protected static final String FIELD_STYLE_CLASS = "form-field";
     protected static final String VALIDATION_STYLE_CLASS = "error-text";
 
-    private final Label title;
-    protected final T value;
-    private final Label validationMsg;
+    protected final Label title;
+    protected final Label validationMsg;
+
+    private final Collection<Validator<T>> validators;
 
     private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
 
     public FormField(
             @NonNull final DisplayableText title,
-            @NonNull final T value
-    ) {
+            @Nullable final Collection<Validator<T>> validators
+            ) {
+        this.validators = Optional.ofNullable(validators).orElse(new ArrayList<>());
 
         this.title = new Label();
         this.title.textProperty()
@@ -34,14 +41,27 @@ public abstract class FormField<T extends Node> extends VBox {
         this.title.getStyleClass().add(TITLE_STYLE_CLASS);
         VBox.setMargin(this.title, new Insets(0, 0, 10, 0));
 
-        this.value = value;
-
         validationMsg = new Label();
         validationMsg.getStyleClass().add(VALIDATION_STYLE_CLASS);
         hideValidationLabel();
-
-        this.getChildren().setAll(this.title, this.value, validationMsg);
     }
+
+    public boolean hasValidValue() {
+        val currentValue = getValue();
+        val failedValidator = validators.stream()
+                .filter(validator -> !validator.getIsValidCheck().test(currentValue))
+                .findAny();
+
+        OptionalHelper.ifPresentOrElse(
+                failedValidator,
+                validator -> showValidationLabel(validator.getMessage()),
+                this::hideValidationLabel
+        );
+
+        return !failedValidator.isPresent();
+    }
+
+    protected abstract T getValue();
 
     private void showValidationLabel(final DisplayableText message) {
         validationMsg.setText(message.getText());
