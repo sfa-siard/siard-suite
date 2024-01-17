@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter.connection.fields;
 
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.scene.control.TextField;
@@ -24,13 +25,14 @@ public class FileChooserFormField extends FormField<HBox> {
     private static final I18nKey FILE_CHOOSER_TITLE = I18nKey.of("export.choose-location.text");
 
     private final TextField pathField;
-    private final TranslatableText fileChooserTitle;
+    private final DisplayableText fileChooserTitle;
     private final Collection<FileChooser.ExtensionFilter> fileChooserExtensionFilters;
 
     @Builder
     public FileChooserFormField(
-            @NonNull final TranslatableText title,
-            @NonNull final TranslatableText fileChooserTitle,
+            @NonNull final DisplayableText title,
+            @NonNull final DisplayableText fileChooserTitle,
+            @Nullable final DisplayableText prompt,
             @Singular final Collection<FileChooser.ExtensionFilter> fileChooserExtensionFilters,
             @Nullable final File initialValue,
             @Nullable final Double prefWidth
@@ -41,6 +43,7 @@ public class FileChooserFormField extends FormField<HBox> {
         this.fileChooserExtensionFilters = Optional.ofNullable(fileChooserExtensionFilters).orElse(new ArrayList<>());
 
         pathField = new TextField();
+        Optional.ofNullable(prompt).ifPresent(displayableText -> pathField.setPromptText(displayableText.getText()));
         pathField.getStyleClass().add(FIELD_STYLE_CLASS);
         pathField.setStyle("" +
                 "-fx-border-color: transparent; " +

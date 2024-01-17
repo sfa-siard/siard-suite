@@ -1,7 +1,8 @@
 package ch.admin.bar.siardsuite.presenter.connection;
 
-import ch.admin.bar.siardsuite.presenter.connection.fields.FileChooserFormField;
+import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.presenter.connection.fields.StringFormField;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.geometry.Insets;
@@ -17,7 +18,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class DefaultConnectionPropertiesForm extends VBox {
+public class ServerBasedDbmsConnectionPropertiesForm extends VBox {
 
     private static final double FORM_FIELD_WITH = 578D;
     private static final double PORT_FIELD_WITH = 120D;
@@ -33,15 +34,17 @@ public class DefaultConnectionPropertiesForm extends VBox {
 
     private final Supplier<Values> valuesSupplier;
 
-    public DefaultConnectionPropertiesForm() {
+    public ServerBasedDbmsConnectionPropertiesForm(final DbmsRegistry.ServerBasedDbms serverBasedDbms) {
         val url = StringFormField.builder()
                 .title(TranslatableText.of(DB_SERVER_LABEL))
-                .prompt(TranslatableText.of(DB_SERVER_PROMPT))
+                .prompt(DisplayableText.of(serverBasedDbms.getHost()))
                 .prefWidth(FORM_FIELD_WITH - PORT_FIELD_WITH - 10)
                 .build();
 
         val port = StringFormField.builder()
                 .title(TranslatableText.of(DB_PORT_LABEL))
+                .initialValue(serverBasedDbms.getPort() + "")
+                .prompt(DisplayableText.of(serverBasedDbms.getPort() + ""))
                 .prefWidth(PORT_FIELD_WITH)
                 .build();
 
@@ -50,6 +53,7 @@ public class DefaultConnectionPropertiesForm extends VBox {
 
         val dbName = StringFormField.builder()
                 .title(TranslatableText.of(DB_NAME_LABEL))
+                .prompt(DisplayableText.of(serverBasedDbms.getDbName()))
                 .prefWidth(FORM_FIELD_WITH)
                 .build();
 

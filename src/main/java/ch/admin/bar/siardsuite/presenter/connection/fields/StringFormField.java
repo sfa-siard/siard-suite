@@ -37,8 +37,8 @@ public class StringFormField extends VBox {
 
     @Builder
     public StringFormField(
-            @NonNull final TranslatableText title,
-            @Nullable final TranslatableText prompt,
+            @NonNull final DisplayableText title,
+            @Nullable final DisplayableText prompt,
             @Nullable final String initialValue,
             @Singular final Set<ReadWriteStringProperty.Validator> validators,
             @Nullable final Double prefWidth

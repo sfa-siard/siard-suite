@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -16,9 +17,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import lombok.val;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
-import static ch.admin.bar.siardsuite.util.SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT;
 
 public class ArchiveChooseDbmsPresenter extends StepperPresenter {
 
@@ -57,7 +58,8 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
         I18n.bind(errorMessage.textProperty(), "archiveDb.view.error");
 
 
-        this.controller.getDatabaseTypes().forEach(this::createRadioToVBox);
+//        this.controller.getDatabaseTypes().forEach(this::createRadioToVBox);
+        DbmsRegistry.getSupportedDbms().forEach(this::createRadioToVBox);
 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.borderPane.setBottom(buttonsBox);
@@ -77,10 +79,12 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
         this.buttonsBox.next().setOnAction((event) -> {
             MFXRadioButton selected = (MFXRadioButton) toggleGroup.getSelectedToggle();
             if (selected != null) {
-                controller.setDatabaseType(selected.getText());
+                val selectedDbms = DbmsRegistry.findDbmsByName(selected.getText());
+
+//                controller.setDatabaseType(selected.getText());
                 this.errorMessage.setVisible(false);
                 stepper.next();
-                stepper.fireEvent(new SiardEvent(UPDATE_STEPPER_DBTYPE_EVENT));
+                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(selectedDbms)); // TODO
                 //fire event
             } else {
                 this.errorMessage.setVisible(true);

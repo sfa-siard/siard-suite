@@ -4,12 +4,10 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardToolip;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.database.DatabaseProperties;
+import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
-import ch.admin.bar.siardsuite.presenter.ValidationProperties;
-import ch.admin.bar.siardsuite.presenter.ValidationProperty;
-import ch.admin.bar.siardsuite.presenter.connection.DefaultConnectionPropertiesForm;
+import ch.admin.bar.siardsuite.presenter.connection.ServerBasedDbmsConnectionPropertiesForm;
 import ch.admin.bar.siardsuite.presenter.connection.SelectFileConnectionPropertiesForm;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
@@ -20,12 +18,12 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -33,15 +31,16 @@ import lombok.val;
 
 import java.time.Clock;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.*;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.CONNECTION_URL;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.DATABASE_SYSTEM;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.STORAGE_DATE;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
 import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
@@ -100,12 +99,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     public void init(Controller controller, RootStage stage, MFXStepper stepper) {
         this.init(controller, stage);
 
-//        formContainer.getChildren().addAll(new DefaultConnectionPropertiesForm());
-
-        val form = new SelectFileConnectionPropertiesForm();
-        HBox.setHgrow(form, Priority.ALWAYS);
-        formContainer.getChildren().addAll(form);
-
         addTextWithStyles();
         addFormText();
 
@@ -147,14 +140,32 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         controller.recentDatabaseConnection = null;
     }
 
+    private Pane getConnectionPropertiesForm(final DbmsRegistry.Dbms<?> dbms) {
+        if (dbms.getExampleConfiguration() instanceof DbmsRegistry.ServerBasedDbms) {
+            return new ServerBasedDbmsConnectionPropertiesForm((DbmsRegistry.ServerBasedDbms) dbms.getExampleConfiguration());
+        }
+
+        if (dbms.getExampleConfiguration() instanceof DbmsRegistry.FileBasedDbms) {
+            return new SelectFileConnectionPropertiesForm((DbmsRegistry.FileBasedDbms) dbms.getExampleConfiguration());
+        }
+
+        throw new IllegalArgumentException("Unsupported DBMS: " + dbms);
+    }
+
     private void setListeners(MFXStepper stepper) {
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
+            val form = getConnectionPropertiesForm(event.getSelectedDbms());
+            HBox.setHgrow(form, Priority.ALWAYS);
+            formContainer.getChildren().clear();
+            formContainer.getChildren().add(form);
+
+
             // TODO MSAccess-DB needs different Fields for selecting File- #CR457
-            DatabaseProperties databaseProps = controller.getDatabaseProps();
-            String url = databaseProps.jdbcUrl();
+//            DatabaseProperties databaseProps = controller.getDatabaseProps();
+//            String url = databaseProps.jdbcUrl();
 //            portField.setText(databaseProps.port());
 //            portField.setPromptText(databaseProps.port());
-            urlField.setPromptText(url);
+//            urlField.setPromptText(url);
         });
 
 //        dbServerField.setOnKeyReleased(this::handleKeyEvent);
@@ -168,15 +179,15 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         });
 
         new SiardToolip(infoButton, tooltip).setup();
-        
+
         buttonsBox.next().setOnAction((event) -> {
             if (this.validateProperties()) {
                 if (toggleSave.isSelected()) {
                     try {
                         final Preferences preferences = UserPreferences.push(DATABASE_CONNECTION,
-                                                                             TIMESTAMP,
-                                                                             Comparator.reverseOrder(),
-                                                                             connectionName.getText());
+                                TIMESTAMP,
+                                Comparator.reverseOrder(),
+                                connectionName.getText());
                         preferences.put(DATABASE_SYSTEM.name(), controller.getDatabaseProduct().get());
 //                        preferences.put(DATABASE_SERVER.name(), dbServerField.getText());
 //                        preferences.put(PORT_NUMBER.name(), portField.getText());

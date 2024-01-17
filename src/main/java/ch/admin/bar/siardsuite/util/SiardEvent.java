@@ -1,10 +1,12 @@
 package ch.admin.bar.siardsuite.util;
 
+import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import javafx.event.Event;
 import javafx.event.EventType;
+import lombok.Getter;
 
 public class SiardEvent extends Event {
-    public static final EventType<SiardEvent> UPDATE_STEPPER_DBTYPE_EVENT;
+    public static final EventType<DbmsSelectedEvent> UPDATE_STEPPER_DBTYPE_EVENT;
     public static final EventType<SiardEvent> UPDATE_STEPPER_DBLOAD_EVENT;
     public static final EventType<SiardEvent> UPDATE_LANGUAGE_EVENT;
     public static final EventType<SiardEvent> ARCHIVE_LOADED;
@@ -34,5 +36,16 @@ public class SiardEvent extends Event {
         UPLOAD_FAILED = new EventType<>( "UPLOAD_FAILED");
         EXPAND_DATABASE_TABLE = new EventType<>("EXPAND_DATABASE_TABLE");
         ERROR_OCCURED = new EventType<>("DATABASE_DOWNLOAD_FAILED");
+    }
+
+    public static class DbmsSelectedEvent extends Event {
+
+        @Getter
+        private final DbmsRegistry.Dbms<?> selectedDbms;
+
+        public DbmsSelectedEvent(final DbmsRegistry.Dbms<?> selectedDbms) {
+            super(UPDATE_STEPPER_DBTYPE_EVENT);
+            this.selectedDbms = selectedDbms;
+        }
     }
 }

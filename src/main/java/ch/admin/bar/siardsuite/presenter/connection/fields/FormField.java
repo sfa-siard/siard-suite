@@ -24,7 +24,7 @@ public abstract class FormField<T extends Node> extends VBox {
     private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
 
     public FormField(
-            @NonNull final TranslatableText title,
+            @NonNull final DisplayableText title,
             @NonNull final T value
     ) {
 
