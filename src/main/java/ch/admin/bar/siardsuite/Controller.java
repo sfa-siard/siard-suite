@@ -2,13 +2,11 @@ package ch.admin.bar.siardsuite;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
-import ch.admin.bar.siardsuite.database.DatabaseInteractionService;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
-import ch.admin.bar.siardsuite.database.model.UploadDatabaseInstruction;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -17,6 +15,11 @@ import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
+import javafx.util.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -25,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,23 +42,43 @@ public class Controller {
     private Workflow workflow;
     public String recentDatabaseConnection;
 
-    private final DatabaseInteractionService databaseInteractionService;
-
     @Setter
     @Getter
     private Optional<DbmsConnectionData> tempConnectionData = Optional.empty();
 
+    public Optional<DbmsConnectionData> popTempConnectionData() {
+        val tempReturnValue = tempConnectionData;
+        tempConnectionData = Optional.empty();
+        return tempReturnValue;
+    }
+
     public Controller(Model model) {
         this.model = model;
-        this.databaseInteractionService = new DatabaseInteractionService(new DatabaseConnectionFactory(), model);
     }
 
-    public void loadDatabase(final LoadDatabaseInstruction instruction) {
-        databaseInteractionService.execute(instruction);
+    public void loadDatabase(final LoadDatabaseInstruction instruction) throws SQLException {
+        tmpArchive = model.initArchive();
+
+        val connection = instruction.getConnectionData().createConnection();
+
+        val dbLoadService = new DatabaseLoadService(
+                connection,
+                model,
+                tmpArchive,
+                instruction.isLoadOnlyMetadata(),
+                instruction.isViewsAsTables());
+
+        dbLoadService.setOnSucceeded(instruction.getOnSuccess());
+        dbLoadService.setOnFailed(instruction.getOnFailure());
+
+        dbLoadService.start();
+
+        dbLoadService.valueProperty().addListener(instruction.getOnSingleValueCompleted());
+        dbLoadService.progressProperty().addListener(instruction.getOnProgress());
     }
 
-    public void uploadDatabase(final UploadDatabaseInstruction instruction) {
-        databaseInteractionService.execute(instruction);
+    public void closeDbConnection() {
+        DatabaseConnectionFactory.disconnect();
     }
 
     public void updateConnectionData(String connectionUrl, String username, String databaseName, String password) {
@@ -68,8 +92,33 @@ public class Controller {
         this.model.setSchemaMap(schemaMap);
     }
 
+    public void onDatabaseUploadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+        this.databaseUploadService.setOnSucceeded(workerStateEventEventHandler);
+    }
+
+    public void onDatabaseUploadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+        this.databaseUploadService.setOnFailed(workerStateEventEventHandler);
+    }
+
+    public void addDatabaseUploadingValuePropertyListener(ChangeListener<String> listener) {
+        this.databaseUploadService.valueProperty().addListener(listener);
+    }
+
+    public void addDatabaseUploadingProgressPropertyListener(ChangeListener<Number> listener) {
+        this.databaseUploadService.progressProperty().addListener(listener);
+    }
+
     public Workflow getWorkflow() {
         return workflow;
+    }
+
+
+    public void uploadArchive(EventHandler<WorkerStateEvent> onSuccess,
+                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
+        this.databaseUploadService = DatabaseConnectionFactory.getInstance(model).createDatabaseUploader();
+        this.onDatabaseUploadSuccess(onSuccess);
+        this.onDatabaseUploadFailed(onFailure);
+        this.databaseUploadService.start();
     }
 
     public void cancelDownload() {
@@ -87,6 +136,7 @@ public class Controller {
     }
 
     public void releaseResources() {
+        closeDbConnection();
         removeTmpArchive();
     }
 
@@ -179,6 +229,10 @@ public class Controller {
 
     public DatabaseProperties getDatabaseProps() {
         return this.model.getDatabaseProps();
+    }
+
+    public StringProperty getDatabaseProduct() {
+        return this.model.getDatabaseProduct();
     }
 
     public List<String> getDatabaseTypes() {

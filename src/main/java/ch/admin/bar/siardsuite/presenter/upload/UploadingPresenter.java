@@ -5,7 +5,6 @@ import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
-import ch.admin.bar.siardsuite.database.model.UploadDatabaseInstruction;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -14,7 +13,6 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.controls.MFXStepper;
-import javafx.beans.value.ChangeListener;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -83,26 +81,20 @@ public class UploadingPresenter extends StepperPresenter {
           stepper.fireEvent(new SiardEvent(UPLOAD_FAILED));
         };
 
-        ChangeListener<String> onStepCompleted = (o, oldValue, newValue) -> {
+        try {
+          controller.uploadArchive(onSuccess, onFailure);
+        } catch (Exception e) {
+          fail(e, stepper);
+        }
+
+        controller.addDatabaseUploadingValuePropertyListener((o, oldValue, newValue) -> {
           AtomicInteger pos1 = new AtomicInteger();
           addLoadingData(newValue, pos1.getAndIncrement());
-        };
-
-        ChangeListener<Number> onProgress = (o, oldValue, newValue) -> {
+        });
+        controller.addDatabaseUploadingProgressPropertyListener((o, oldValue, newValue) -> {
           double pos = newValue.doubleValue();
           progressBar.progressProperty().set(pos);
-        };
-
-        controller.uploadDatabase(UploadDatabaseInstruction.builder()
-                // TODO FIXME connection data should be delivered by SiardEvent.class
-                .connectionData(controller.getTempConnectionData()
-                        .orElseThrow(() -> new IllegalStateException("No required connection data found")))
-                .onSuccess(onSuccess)
-                .onFailure(onFailure)
-                .onProgress(onProgress)
-                .onStepCompleted(onStepCompleted)
-                .build());
-
+        });
         event.consume();
       }
     };

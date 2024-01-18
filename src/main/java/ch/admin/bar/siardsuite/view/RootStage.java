@@ -5,7 +5,6 @@ import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
-import ch.admin.bar.siardsuite.presenter.archive.ArchiveAbortDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
@@ -69,13 +68,6 @@ public class RootStage extends Stage implements ErrorDialogOpener {
 
   public void openDialog(View view) {
     setCenter(dialogPane, view);
-    dialogPane.setVisible(true);
-  }
-
-  public void openAbortArchivingDialog() {
-    val loaded = ArchiveAbortDialogPresenter.load(controller, this);
-
-    dialogPane.setCenter(loaded.getNode());
     dialogPane.setVisible(true);
   }
 

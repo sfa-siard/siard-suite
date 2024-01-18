@@ -19,8 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.val;
 
-import java.util.Optional;
-
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 
 public class ArchiveChooseDbmsPresenter extends StepperPresenter {
@@ -83,13 +81,13 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
                 this.errorMessage.setVisible(false);
 
                 stepper.next();
-                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(selectedDbms, Optional.empty()));
+                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(selectedDbms));
             } else {
                 this.errorMessage.setVisible(true);
             }
         });
         this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG));
-        this.buttonsBox.cancel().setOnAction((event) -> stage.openAbortArchivingDialog());
+        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
 
 }

@@ -4,19 +4,13 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import lombok.val;
-
-import java.util.function.Consumer;
 
 import static ch.admin.bar.siardsuite.util.I18n.bind;
 
@@ -63,10 +57,4 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
         buttonBox.getChildren().addAll(proceedArchiveButton, cancelArchiveButton);
     }
 
-    public static LoadedFxml<ArchiveAbortDialogPresenter> load(final Controller controller, final RootStage stage) {
-        val loaded = FXMLLoadHelper.<ArchiveAbortDialogPresenter>load("ch/admin/bar/siardsuite/fxml/archive/archive-abort-dialog.fxml");
-        loaded.getController().init(controller, stage);
-
-        return loaded;
-    }
 }

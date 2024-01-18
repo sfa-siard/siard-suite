@@ -1,26 +1,30 @@
-package ch.admin.bar.siardsuite.util.preferences;
+package ch.admin.bar.siardsuite.util;
 
+import ch.admin.bar.siardsuite.database.DbmsRegistry;
+import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.DbmsId;
-import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
+import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
+import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
+import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
+import java.io.File;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
-
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.LOGIN_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.QUERY_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.OPTIONS;
 
 @Slf4j
 public class UserPreferences {
@@ -87,21 +91,80 @@ public class UserPreferences {
         }
     }
 
-    public static Options getStoredOptions() {
-        val optionsNode = node(OPTIONS);
-
-        return Options.builder()
-                .queryTimeout(Integer.parseInt(optionsNode.get(QUERY_TIMEOUT.name(), "0")))
-                .loginTimeout(Integer.parseInt(optionsNode.get(LOGIN_TIMEOUT.name(), "0")))
-                .build();
-    }
-
     @Value
     @Builder
     public static class StorageData<T> {
         String storedAtDate;
         String storedAtTime;
         T storedData;
+    }
+
+    @Value
+    @Builder
+    public static class DbConnection {
+        @NonNull String name;
+
+        @NonNull DbmsId dbmsProduct;
+        @NonNull String jdbcUrl;
+
+        @NonNull String host;
+        @NonNull String port;
+        @NonNull String dbName;
+        @NonNull String user;
+
+        @NonNull String file;
+
+        public Optional<DbmsConnectionData> tryMapToDbmsConnectionData() {
+            val dbms = DbmsRegistry.findDbmsById(dbmsProduct);
+
+            return OptionalHelper.firstPresent(
+                    () -> CastHelper.tryCast(dbms, ServerBasedDbms.class)
+                            .map(serverBasedDbms -> new DbmsConnectionData(
+                                    serverBasedDbms,
+                                    ServerBasedDbmsConnectionProperties.builder()
+                                            .host(host)
+                                            .port(port)
+                                            .dbName(dbName)
+                                            .user(user)
+                                            .password("")
+                                            .build()
+                            )),
+                    () -> CastHelper.tryCast(dbms, FileBasedDbms.class)
+                            .map(fileBasedDbms -> new DbmsConnectionData(
+                                    fileBasedDbms,
+                                    new FileBasedDbmsConnectionProperties(new File(file))
+                            ))
+            );
+        }
+
+        public static DbConnection from(
+                final DbmsConnectionData connectionData,
+                final String name,
+                final String jdbcUrl
+        ) {
+
+            val serverBasedProp = CastHelper.tryCast(
+                    connectionData.getProperties(),
+                    ServerBasedDbmsConnectionProperties.class);
+
+            val fileBasedProp = CastHelper.tryCast(
+                    connectionData.getProperties(),
+                    FileBasedDbmsConnectionProperties.class);
+
+            return DbConnection.builder()
+                    .name(name)
+                    .dbmsProduct(connectionData.getDbms().getId())
+                    .jdbcUrl(jdbcUrl)
+
+                    .host(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getHost).orElse(""))
+                    .port(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getPort).orElse(""))
+                    .dbName(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getDbName).orElse(""))
+                    .user(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getUser).orElse(""))
+
+                    .file(fileBasedProp.map(prop -> prop.getFile().getAbsolutePath()).orElse(""))
+
+                    .build();
+        }
     }
 
     public static Preferences push(NodePath nodePath, KeyIndex comparisonKeyIndex, Comparator<String> comparator, String path) throws BackingStoreException {
@@ -156,7 +219,7 @@ public class UserPreferences {
         val parentNode = node(nodePath);
         return Arrays.stream(parentNode.childrenNames())
                 .sorted(Comparator.comparing(
-                        name -> Long.parseLong(parentNode.node(name).get(KeyIndex.TIMESTAMP.name(), "0")),
+                        name ->  Long.parseLong(parentNode.node(name).get(KeyIndex.TIMESTAMP.name(), "0")),
                         Comparator.naturalOrder()
                 ))
                 .collect(Collectors.toList());
@@ -166,7 +229,7 @@ public class UserPreferences {
         val parentNode = node(nodePath);
         return Arrays.stream(parentNode.childrenNames())
                 .sorted(Comparator.comparing(
-                        name -> Long.parseLong(parentNode.node(name).get(KeyIndex.TIMESTAMP.name(), "0")),
+                        name ->  Long.parseLong(parentNode.node(name).get(KeyIndex.TIMESTAMP.name(), "0")),
                         Comparator.reverseOrder()
                 ))
                 .collect(Collectors.toList());

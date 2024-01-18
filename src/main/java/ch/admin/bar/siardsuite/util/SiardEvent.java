@@ -1,16 +1,13 @@
 package ch.admin.bar.siardsuite.util;
 
-import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionProperties;
+import ch.admin.bar.siardsuite.database.model.Dbms;
 import javafx.event.Event;
 import javafx.event.EventType;
 import lombok.Getter;
 
-import java.util.Optional;
-
 public class SiardEvent extends Event {
-    public static final EventType<DbmsSelectedEvent<DbmsConnectionProperties>> UPDATE_STEPPER_DBTYPE_EVENT;
+    public static final EventType<DbmsSelectedEvent> UPDATE_STEPPER_DBTYPE_EVENT;
     public static final EventType<DbmsConnectionDataReadyEvent> UPDATE_STEPPER_DBLOAD_EVENT;
     public static final EventType<SiardEvent> UPDATE_LANGUAGE_EVENT;
     public static final EventType<SiardEvent> ARCHIVE_LOADED;
@@ -42,18 +39,14 @@ public class SiardEvent extends Event {
         ERROR_OCCURED = new EventType<>("DATABASE_DOWNLOAD_FAILED");
     }
 
-    public static class DbmsSelectedEvent<T extends DbmsConnectionProperties> extends Event {
+    public static class DbmsSelectedEvent extends Event {
 
         @Getter
-        private final Dbms<T> selectedDbms;
+        private final Dbms<?> selectedDbms;
 
-        @Getter
-        private final Optional<DbmsConnectionProperties<T>> properties;
-
-        public DbmsSelectedEvent(final Dbms<T> selectedDbms, Optional<DbmsConnectionProperties<T>> properties) {
+        public DbmsSelectedEvent(final Dbms<?> selectedDbms) {
             super(UPDATE_STEPPER_DBTYPE_EVENT);
             this.selectedDbms = selectedDbms;
-            this.properties = properties;
         }
     }
 

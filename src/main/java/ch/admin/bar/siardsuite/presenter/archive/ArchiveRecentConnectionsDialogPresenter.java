@@ -5,8 +5,7 @@ import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.preferences.DbConnection;
-import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -20,8 +19,8 @@ import lombok.val;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.STORAGE_DATE;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.DATABASE_CONNECTION;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.STORAGE_DATE;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
 
 public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
 
@@ -84,7 +83,7 @@ public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
         label.setStyle("-fx-text-fill: #2a2a2a82");
     }
 
-    private HBox getRecentConnectionsBox(final UserPreferences.StorageData<DbConnection> storedConnection) {
+    private HBox getRecentConnectionsBox(final UserPreferences.StorageData<UserPreferences.DbConnection> storedConnection) {
         val imageLabel = new Label();
         imageLabel.getStyleClass().add("link-icon");
 
@@ -128,7 +127,7 @@ public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
         return recentConnectionsBox;
     }
 
-    private void showRecentConnection(final UserPreferences.StorageData<DbConnection> storedConnection) {
+    private void showRecentConnection(final UserPreferences.StorageData<UserPreferences.DbConnection> storedConnection) {
         controller.setTempConnectionData(storedConnection.getStoredData().tryMapToDbmsConnectionData());
         stage.closeDialog();
         stage.navigate(View.ARCHIVE_STEPPER);

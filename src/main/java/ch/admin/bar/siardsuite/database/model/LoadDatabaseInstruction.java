@@ -20,7 +20,7 @@ public class LoadDatabaseInstruction {
     EventHandler<WorkerStateEvent> onSuccess;
     EventHandler<WorkerStateEvent> onFailure;
     ChangeListener<Number> onProgress;
-    ChangeListener<ObservableList<Pair<String, Long>>> onStepCompleted;
+    ChangeListener<ObservableList<Pair<String, Long>>> onSingleValueCompleted; // TODO: Naming
 
     @Builder
     public LoadDatabaseInstruction(
@@ -34,12 +34,10 @@ public class LoadDatabaseInstruction {
     ) {
         this.connectionData = connectionData;
         this.loadOnlyMetadata = Optional.ofNullable(loadOnlyMetadata).orElse(false);
-        this.viewsAsTables = Optional.ofNullable(viewsAsTables).orElse(false);
+        this.viewsAsTables = Optional.ofNullable(viewsAsTables).orElse(false);;
         this.onSuccess = Optional.ofNullable(onSuccess).orElse(event -> {});
         this.onFailure = Optional.ofNullable(onFailure).orElse(event -> {});
-        this.onProgress = Optional.ofNullable(onProgress)
-                .orElse((observable, oldValue, newValue) -> {});
-        this.onStepCompleted = Optional.ofNullable(onSingleValueCompleted)
-                .orElse((observable, oldValue, newValue) -> {});
+        this.onProgress = Optional.ofNullable(onProgress).orElse((observable, oldValue, newValue) -> {});
+        this.onSingleValueCompleted = Optional.ofNullable(onSingleValueCompleted).orElse((observable, oldValue, newValue) -> {});
     }
 }

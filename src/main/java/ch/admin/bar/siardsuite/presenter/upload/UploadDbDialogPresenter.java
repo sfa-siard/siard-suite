@@ -5,7 +5,7 @@ import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.STORAGE_DATE;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.TIMESTAMP;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.DATABASE_CONNECTION;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.sortedChildrenNames;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.STORAGE_DATE;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
+import static ch.admin.bar.siardsuite.util.UserPreferences.sortedChildrenNames;
 
 public class UploadDbDialogPresenter extends DialogPresenter {
 

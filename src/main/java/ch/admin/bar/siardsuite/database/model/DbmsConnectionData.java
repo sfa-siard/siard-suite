@@ -1,24 +1,16 @@
 package ch.admin.bar.siardsuite.database.model;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.function.Supplier;
 
+@Value
 public class DbmsConnectionData {
-    @Getter
-    private final Dbms<?> dbms;
-    @Getter
-    private final DbmsConnectionProperties<?> properties;
-
-    private final Supplier<String> jdbsConnectionStringSupplier;
-    private final Supplier<String> userSupplier;
-    private final Supplier<String> passwordSupplier;
+    Dbms<?> dbms;
+    DbmsConnectionProperties<?> properties;
 
     public DbmsConnectionData(
             @NonNull ServerBasedDbms dbms,
@@ -26,10 +18,6 @@ public class DbmsConnectionData {
     ) {
         this.dbms = dbms;
         this.properties = properties;
-
-        jdbsConnectionStringSupplier = () -> dbms.getJdbcConnectionStringEncoder().apply(properties);
-        userSupplier = properties::getUser;
-        passwordSupplier = properties::getPassword;
     }
 
     public DbmsConnectionData(
@@ -38,21 +26,15 @@ public class DbmsConnectionData {
     ) {
         this.dbms = dbms;
         this.properties = properties;
-
-        jdbsConnectionStringSupplier = () -> dbms.getJdbcConnectionStringEncoder().apply(properties);
-        userSupplier = () -> null;
-        passwordSupplier = () -> null;
     }
 
-    public String getUser() {
-        return userSupplier.get();
-    }
 
-    public String getPassword() {
-        return passwordSupplier.get();
-    }
+    public Connection createConnection() throws SQLException { // TODO: Move to connection factory
 
-    public String getJdbcConnectionString() {
-        return jdbsConnectionStringSupplier.get();
+        throw new UnsupportedOperationException();
+//        DriverManager.setLoginTimeout(Integer.parseInt(UserPreferences.node(OPTIONS).get(LOGIN_TIMEOUT.name(), "0")));
+//        val connection = config.createConnection(dbms.getJdbcConnectionStringEncoder());
+//
+//        return connection;
     }
 }

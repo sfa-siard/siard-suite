@@ -6,7 +6,8 @@ import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
-import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
+import ch.admin.bar.siardsuite.util.UserPreferences;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
@@ -14,12 +15,15 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.util.Pair;
 
+import java.io.File;
+import java.net.URI;
 import java.sql.Connection;
+import java.time.LocalDate;
 
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.QUERY_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.OPTIONS;
+import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.QUERY_TIMEOUT;
+import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
 
-public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress, SiardArchiveMetaDataVisitor {
+public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress, SiardArchiveMetaDataVisitor, SiardArchiveMetaDataDetailsVisitor {
 
     private final Connection connection;
     private final Model model;
@@ -44,16 +48,14 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
         ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
         connection.setAutoCommit(false);
         int timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
-
         archive.getMetaData().setDbName(model.getDatabaseName().getValue());
-
         MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
         metadata.setQueryTimeout(timeout);
         updateValue(FXCollections.observableArrayList(new Pair<>("Metadata", -1L)));
         updateProgress(0, 100);
         metadata.download(viewsAsTables, false, this);
 
-        model.provideDatabaseArchiveMetaDataObject(this); // very complicated getter for the SiardArchiveMetaData
+        model.provideDatabaseArchiveMetaDataObject(this);
         if (metaData != null) {
             metaData.write(archive);
         }
@@ -92,6 +94,16 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
     @Override
     public void notifyProgress(int i) {
         updateProgress(i, 100);
+    }
+
+    @Override
+    public void visit(String siardFormatVersion, String databaseName, String databaseProduct,
+                      String databaseConnectionURL,
+                      String databaseUsername, String databaseDescription, String databaseOwner,
+                      String databaseCreationDate,
+                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive,
+                      URI lobFolder, boolean viewsAsTables) {
+        this.name = targetArchive.getName();
     }
 
     @Override
