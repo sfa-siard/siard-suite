@@ -5,15 +5,15 @@ import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siard2.cmd.MetaDataToDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataToDb;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.concurrent.Task;
 
 import java.sql.Connection;
 
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.QUERY_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.QUERY_TIMEOUT;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.OPTIONS;
 
 public class DatabaseUploadTask extends Task<String> implements Progress, ArchiveVisitor {
 

@@ -10,7 +10,7 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
@@ -35,10 +35,10 @@ import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.ABSOLUTE_PATH;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.TIMESTAMP;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.RECENT_FILES;
-import static ch.admin.bar.siardsuite.util.UserPreferences.sortedChildrenNames;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.ABSOLUTE_PATH;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.TIMESTAMP;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.RECENT_FILES;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.sortedChildrenNames;
 
 public class OpenSiardArchiveDialogPresenter extends DialogPresenter {
 

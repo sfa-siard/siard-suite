@@ -12,7 +12,7 @@ import ch.admin.bar.siardsuite.presenter.ValidationProperties;
 import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -39,13 +39,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.CONNECTION_URL;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.DATABASE_NAME;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.DATABASE_SERVER;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.DATABASE_SYSTEM;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.PORT_NUMBER;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.USER_NAME;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.DATABASE_CONNECTION;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.CONNECTION_URL;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.DATABASE_NAME;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.DATABASE_SERVER;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.DATABASE_SYSTEM;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.PORT_NUMBER;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.USER_NAME;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.DATABASE_CONNECTION;
 
 public class UploadConnectionPresenter extends StepperPresenter {
 

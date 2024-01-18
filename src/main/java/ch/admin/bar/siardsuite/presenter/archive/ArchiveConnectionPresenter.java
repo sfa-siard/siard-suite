@@ -18,7 +18,10 @@ import ch.admin.bar.siardsuite.presenter.connection.ServerBasedDbmsConnectionPro
 import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.util.preferences.DbConnection;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -38,6 +41,12 @@ import java.util.Optional;
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
+
+    private static final I18nKey TITLE = I18nKey.of("connection.view.title");
+    private static final I18nKey SUBTITLE_LEFT = I18nKey.of("connection.view.subtitleLeft");
+    private static final I18nKey SUBTITLE_RIGHT = I18nKey.of("connection.view.subtitleRight");
+    private static final I18nKey TEXT_LEFT = I18nKey.of("connection.view.textLeft");
+    private static final I18nKey TEXT_RIGHT = I18nKey.of("connection.view.textRight");
 
     @FXML
     public Text title;
@@ -105,11 +114,11 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     }
 
     private void addTextWithStyles() {
-        I18n.bind(title.textProperty(), "connection.view.title");
-        I18n.bind(subtitleLeft.textProperty(), "connection.view.subtitleLeft");
-        I18n.bind(subtitleRight.textProperty(), "connection.view.subtitleRight");
-        I18n.bind(textLeft.textProperty(), "connection.view.textLeft");
-        I18n.bind(textRight.textProperty(), "connection.view.textRight");
+        title.textProperty().bind(DisplayableText.of(TITLE).bindable());
+        subtitleLeft.textProperty().bind(DisplayableText.of(SUBTITLE_LEFT).bindable());
+        subtitleRight.textProperty().bind(DisplayableText.of(SUBTITLE_RIGHT).bindable());
+        textLeft.textProperty().bind(DisplayableText.of(TEXT_LEFT).bindable());
+        textRight.textProperty().bind(DisplayableText.of(TEXT_RIGHT).bindable());
 
         for (int i = 0; i < textFlow.getChildren().size(); i++) {
             Text text = (Text) textFlow.getChildren().get(i);
@@ -125,9 +134,9 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         I18n.bind(connectionLabel.textProperty(), "archiveConnection.view.connectionName.label");
     }
 
-    private ConnectionPropertiesForm getConnectionPropertiesForm(
-            final Dbms<?> dbms,
-            final Optional<DbmsConnectionProperties<?>> initialValue
+    private <T extends DbmsConnectionProperties> ConnectionPropertiesForm getConnectionPropertiesForm(
+            final Dbms<T> dbms,
+            final Optional<DbmsConnectionProperties<T>> initialValue
     ) {
         if (dbms instanceof ServerBasedDbms) {
             return new ServerBasedDbmsConnectionPropertiesForm(
@@ -144,19 +153,13 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         throw new IllegalArgumentException("Unsupported DBMS: " + dbms);
     }
 
-    private void handleConnectionPropertiesForm() {
-        connectionPropertiesForm = controller.popTempConnectionData()
-                .map(dbmsConnectionData -> getConnectionPropertiesForm(dbmsConnectionData.getDbms(), Optional.of(dbmsConnectionData.getProperties())))
-                .orElseGet(() -> getConnectionPropertiesForm(event.getSelectedDbms(), Optional.empty()));
-
-        HBox.setHgrow(connectionPropertiesForm, Priority.ALWAYS);
-        formContainer.getChildren().clear();
-        formContainer.getChildren().add(connectionPropertiesForm);
-    }
-
     private void setListeners(MFXStepper stepper) {
         stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
+            connectionPropertiesForm = this.getConnectionPropertiesForm(event.getSelectedDbms(), event.getProperties());
+            HBox.setHgrow(connectionPropertiesForm, Priority.ALWAYS);
 
+            formContainer.getChildren().clear();
+            formContainer.getChildren().add(connectionPropertiesForm);
         });
 
         toggleSave.setOnAction(event -> {
@@ -170,7 +173,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
                 connectionPropertiesForm.tryGetValidConnectionData()
                         .ifPresent(connectionData -> {
                             if (toggleSave.isSelected()) {
-                                UserPreferences.push(UserPreferences.DbConnection.from(
+                                UserPreferences.push(DbConnection.from(
                                         connectionData,
                                         connectionName.getText(),
                                         urlField.getText()
