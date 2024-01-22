@@ -42,12 +42,20 @@ public class IconButton extends Label {
     public enum Icon {
         DOWNLOAD(resolve("ch/admin/bar/siardsuite/icons/download.png")),
         LEFT_ARROW(resolve("ch/admin/bar/siardsuite/icons/left_arrow.png")),
-        SELECT_FILE(resolve("ch/admin/bar/siardsuite/icons/select_file_icon_gray.png"));
+        SELECT_FILE(resolve("ch/admin/bar/siardsuite/icons/select_file_icon_gray.png")),
+        INFO(resolve("ch/admin/bar/siardsuite/icons/info.png")),
+        SERVER(resolve("ch/admin/bar/siardsuite/icons/server.png")),
+        USER(resolve("ch/admin/bar/siardsuite/icons/user.png"));
+
 
         private URL url;
 
         Icon(URL file) {
             this.url = file;
+        }
+
+        public ImageView toImageView() {
+            return new ImageView(this.url.toString());
         }
     }
 }

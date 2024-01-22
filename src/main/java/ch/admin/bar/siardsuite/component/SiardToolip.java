@@ -2,14 +2,15 @@ package ch.admin.bar.siardsuite.component;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 
 public class SiardToolip {
 
-    private final MFXButton button;
+    private final Node button;
     private final Tooltip tooltip;
 
-    public SiardToolip(MFXButton button, Tooltip tooltip) {
+    public SiardToolip(Node button, Tooltip tooltip) {
         this.button = button;
         this.tooltip = tooltip;
     }

@@ -56,16 +56,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     public Text text3;
     @FXML
     public TextFlow textFlow;
-    @FXML
-    public Label subtitleLeft;
-    @FXML
-    public Label subtitleRight;
-    @FXML
-    public Text textLeft;
-    @FXML
-    public Text textRight;
-    @FXML
-    public TextField urlField;
+
     @FXML
     public TextField connectionName;
     @FXML
@@ -83,12 +74,9 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     @FXML
     private Tooltip tooltip;
 
-    public Label urlLabel;
     @FXML
     public Label connectionLabel;
 
-    @FXML
-    public Label urlValidationMsg;
     @FXML
     public Label connectionValidationMsg;
 
@@ -115,10 +103,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
 
     private void addTextWithStyles() {
         title.textProperty().bind(DisplayableText.of(TITLE).bindable());
-        subtitleLeft.textProperty().bind(DisplayableText.of(SUBTITLE_LEFT).bindable());
-        subtitleRight.textProperty().bind(DisplayableText.of(SUBTITLE_RIGHT).bindable());
-        textLeft.textProperty().bind(DisplayableText.of(TEXT_LEFT).bindable());
-        textRight.textProperty().bind(DisplayableText.of(TEXT_RIGHT).bindable());
 
         for (int i = 0; i < textFlow.getChildren().size(); i++) {
             Text text = (Text) textFlow.getChildren().get(i);
@@ -129,7 +113,6 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     }
 
     private void addFormText() {
-        I18n.bind(urlLabel.textProperty(), "connection.view.url.label");
         I18n.bind(toggleSave.textProperty(), "archiveConnection.view.toggleSave");
         I18n.bind(connectionLabel.textProperty(), "archiveConnection.view.connectionName.label");
     }
@@ -176,7 +159,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
                                 UserPreferences.push(DbConnection.from(
                                         connectionData,
                                         connectionName.getText(),
-                                        urlField.getText()
+                                        "" // TODO FIXME
                                 ));
                             }
 

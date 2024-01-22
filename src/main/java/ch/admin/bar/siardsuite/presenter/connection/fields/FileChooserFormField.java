@@ -35,6 +35,7 @@ public class FileChooserFormField extends FormField<File> {
     @Builder
     public FileChooserFormField(
             @NonNull final DisplayableText title,
+            @Nullable final DisplayableText hint,
             @NonNull final DisplayableText fileChooserTitle,
             @Nullable final DisplayableText prompt,
             @Singular final Collection<FileChooser.ExtensionFilter> fileChooserExtensionFilters,
@@ -42,7 +43,7 @@ public class FileChooserFormField extends FormField<File> {
             @Nullable final File initialValue,
             @Nullable final Double prefWidth
     ) {
-        super(title, validators);
+        super(title, hint, validators);
 
         this.fileChooserTitle = fileChooserTitle;
         this.fileChooserExtensionFilters = Optional.ofNullable(fileChooserExtensionFilters).orElse(new ArrayList<>());

@@ -1,5 +1,8 @@
 package ch.admin.bar.siardsuite.presenter.connection.fields;
 
+import ch.admin.bar.siardsuite.component.IconButton;
+import ch.admin.bar.siardsuite.component.SiardToolip;
+import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
@@ -7,6 +10,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import lombok.NonNull;
@@ -31,6 +35,7 @@ public abstract class FormField<T> extends VBox {
 
     public FormField(
             @NonNull final DisplayableText title,
+            @Nullable final DisplayableText hint,
             @Nullable final Collection<Validator<T>> validators
             ) {
         this.validators = Optional.ofNullable(validators).orElse(new ArrayList<>());
@@ -39,6 +44,17 @@ public abstract class FormField<T> extends VBox {
         this.title.textProperty()
                 .bind(title.bindable());
         this.title.getStyleClass().add(TITLE_STYLE_CLASS);
+
+        Optional.ofNullable(hint).ifPresent(displayableText -> {
+            val temp = new SiardTooltip(displayableText.getText());
+            val iconButton = new IconButton(IconButton.Icon.INFO);
+
+            this.title.setContentDisplay(ContentDisplay.RIGHT);
+            this.title.setGraphic(iconButton);
+
+            new SiardToolip(iconButton, temp).setup();
+        });
+
         VBox.setMargin(this.title, new Insets(0, 0, 10, 0));
 
         validationMsg = new Label();
@@ -59,6 +75,10 @@ public abstract class FormField<T> extends VBox {
         );
 
         return !failedValidator.isPresent();
+    }
+
+    public boolean hasInvalidValue() {
+        return !hasValidValue();
     }
 
     protected abstract T getValue();
