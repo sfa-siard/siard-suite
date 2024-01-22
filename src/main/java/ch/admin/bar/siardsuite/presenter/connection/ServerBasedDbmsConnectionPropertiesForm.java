@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.presenter.connection;
 
-import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
@@ -10,25 +9,17 @@ import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import lombok.NonNull;
 import lombok.val;
 
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertiesForm {
 
-    private static final double FORM_FIELD_WITH = 578D;
     private static final double PORT_FIELD_WITH = 120D;
 
-    private static final I18nKey LEFT_INFO_TITLE = I18nKey.of("connection.view.subtitleLeft");
-    private static final I18nKey LEFT_INFO_TEXT = I18nKey.of("connection.view.textLeft");
-    private static final I18nKey RIGHT_INFO_TITLE = I18nKey.of("connection.view.subtitleRight");
     private static final I18nKey RIGHT_INFO_TEXT = I18nKey.of("connection.view.textRight");
 
     private static final I18nKey DB_SERVER_LABEL = I18nKey.of("connection.view.dbServer.label");
@@ -37,10 +28,13 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private static final I18nKey USERNAME_LABEL = I18nKey.of("connection.view.username.label");
     private static final I18nKey PASSWORD_LABEL = I18nKey.of("connection.view.password.label");
 
-    private static final I18nKey JDBC_URL_LABEL = I18nKey.of("connection.view.url.label");
-
     private final Supplier<ServerBasedDbmsConnectionProperties> connectionPropertiesSupplier;
     private final ServerBasedDbms serverBasedDbms;
+
+    private final StringFormField host;
+    private final StringFormField port;
+    private final StringFormField dbName;
+    private final StringFormField jdbcUrl;
 
     public ServerBasedDbmsConnectionPropertiesForm(
             @NonNull final ServerBasedDbms dbms,
@@ -48,14 +42,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     ) {
         this.serverBasedDbms = dbms;
 
-        val leftInfo = createInfo(DisplayableText.of(LEFT_INFO_TITLE), DisplayableText.of(LEFT_INFO_TEXT), IconButton.Icon.SERVER);
-        val rightInfo = createInfo(DisplayableText.of(RIGHT_INFO_TITLE), DisplayableText.of(RIGHT_INFO_TEXT), IconButton.Icon.USER);
-        HBox.setMargin(leftInfo, new Insets(25));
-        HBox.setMargin(rightInfo, new Insets(25));
-
-        val infos = new HBox(leftInfo, rightInfo);
-
-        val host = StringFormField.builder()
+        host = StringFormField.builder()
                 .title(TranslatableText.of(DB_SERVER_LABEL))
                 .initialValue(initialValue
                         .map(ServerBasedDbmsConnectionProperties::getHost)
@@ -63,9 +50,11 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .prompt(DisplayableText.of(dbms.getExampleHost()))
                 .prefWidth(FORM_FIELD_WITH - PORT_FIELD_WITH - 10)
                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
+                .validator(Validator.DOES_NOT_INCLUDE_COLONS_VALIDATOR)
+                .onNewUserInput(newHost -> handleJdbcUrl())
                 .build();
 
-        val port = StringFormField.builder()
+        port = StringFormField.builder()
                 .title(TranslatableText.of(DB_PORT_LABEL))
                 .initialValue(initialValue
                         .map(ServerBasedDbmsConnectionProperties::getPort)
@@ -73,12 +62,14 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .prompt(DisplayableText.of(dbms.getExamplePort()))
                 .prefWidth(PORT_FIELD_WITH)
                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
+                .validator(Validator.DOES_NOT_INCLUDE_COLONS_VALIDATOR)
+                .onNewUserInput(newHost -> handleJdbcUrl())
                 .build();
 
         val urlAndPortHBox = new HBox(host, port);
         HBox.setMargin(host, new Insets(0, 10, 0, 0));
 
-        val dbName = StringFormField.builder()
+        dbName = StringFormField.builder()
                 .title(TranslatableText.of(DB_NAME_LABEL))
                 .initialValue(initialValue
                         .map(ServerBasedDbmsConnectionProperties::getDbName)
@@ -86,6 +77,8 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .prompt(DisplayableText.of(dbms.getExampleDbName()))
                 .prefWidth(FORM_FIELD_WITH)
                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
+                .validator(Validator.DOES_NOT_INCLUDE_COLONS_VALIDATOR)
+                .onNewUserInput(newHost -> handleJdbcUrl())
                 .build();
 
         val username = StringFormField.builder()
@@ -115,19 +108,30 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         HBox.setMargin(password, new Insets(25));
         val secondLineHBox = new HBox(dbName, password);
 
-        val jdbcUrl = StringFormField.builder()
+        jdbcUrl = StringFormField.builder()
                 .title(TranslatableText.of(JDBC_URL_LABEL))
                 .initialValue(initialValue
                         .map(dbms.getJdbcConnectionStringEncoder())
                         .orElse(""))
                 .prefWidth(FORM_FIELD_WITH * 2)
                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
+                .validator(validJdbcUrlValidator())
+                .onNewUserInput(newValue -> {
+                    try {
+                        val decoded = dbms.getJdbcConnectionStringDecoder().apply(newValue);
+                        host.setValue(decoded.getHost());
+                        port.setValue(decoded.getPort());
+                        dbName.setValue(decoded.getDbName());
+                    } catch (Exception e) {
+                        // should not be thrown, because of validator
+                    }
+                })
                 .build();
+
         HBox.setMargin(jdbcUrl, new Insets(25));
         val thirdLineHBox = new HBox(jdbcUrl);
 
         this.getChildren().addAll(
-                infos,
                 firstLineHBox,
                 secondLineHBox,
                 thirdLineHBox
@@ -159,23 +163,34 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
 
     }
 
-    private static VBox createInfo(
-            final DisplayableText title,
-            final DisplayableText text,
-            final IconButton.Icon icon
-    ) {
-        val titleNode = new Label();
-        titleNode.getStyleClass().addAll("h3", "label-icon");
-        titleNode.textProperty().bind(title.bindable());
-        titleNode.setGraphic(icon.toImageView());
+    private void handleJdbcUrl() {
+        if (host.hasValidValue() &&
+                port.hasValidValue() &&
+                dbName.hasValidValue()) {
+            val currentProperties = connectionPropertiesSupplier.get();
 
-        val textNode = new Text();
-        textNode.getStyleClass().addAll("view-text");
-        textNode.textProperty().bind(text.bindable());
+            val currentJdbcUrl = serverBasedDbms.getJdbcConnectionStringEncoder().apply(currentProperties);
+            jdbcUrl.setValue(currentJdbcUrl);
+        }
+    }
 
-        val box = new VBox(titleNode, textNode);
-        box.setPrefWidth(FORM_FIELD_WITH);
+    private Validator<String> validJdbcUrlValidator() {
+        return Validator.<String>builder()
+                .message(DisplayableText.of(INVALID_JDBC_URL_MESSAGE))
+                .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
+                        .filter(value -> {
+                            if (!value.startsWith("jdbc:" + serverBasedDbms.getId().getValue())) {
+                                return false;
+                            }
 
-        return box;
+                            try {
+                                serverBasedDbms.getJdbcConnectionStringDecoder().apply(value);
+                                return true;
+                            } catch (Exception e) {
+                                return false;
+                            }
+                        })
+                        .isPresent())
+                .build();
     }
 }

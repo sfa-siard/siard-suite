@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.util.Optional;
+
 @Value
 @Builder
 public class ServerBasedDbmsConnectionProperties implements DbmsConnectionProperties<ServerBasedDbmsConnectionProperties> {
@@ -12,4 +14,8 @@ public class ServerBasedDbmsConnectionProperties implements DbmsConnectionProper
     @NonNull String dbName;
     @NonNull String user;
     @NonNull String password;
+
+    @Builder.Default
+    @NonNull
+    Optional<String> options = Optional.empty();
 }

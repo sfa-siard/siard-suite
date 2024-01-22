@@ -1,14 +1,9 @@
 package ch.admin.bar.siardsuite.presenter.connection.fields;
 
 import ch.admin.bar.siardsuite.component.IconButton;
-import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -23,10 +18,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class FileChooserFormField extends FormField<File> {
-
-    private static final I18nKey FILE_CHOOSER_TITLE = I18nKey.of("export.choose-location.text");
 
     private final TextField pathField;
     private final DisplayableText fileChooserTitle;
@@ -41,7 +35,8 @@ public class FileChooserFormField extends FormField<File> {
             @Singular final Collection<FileChooser.ExtensionFilter> fileChooserExtensionFilters,
             @Singular final Collection<Validator<File>> validators,
             @Nullable final File initialValue,
-            @Nullable final Double prefWidth
+            @Nullable final Double prefWidth,
+            @Nullable final Consumer<File> onNewUserInput
     ) {
         super(title, hint, validators);
 
@@ -58,10 +53,27 @@ public class FileChooserFormField extends FormField<File> {
                 "-fx-min-height: 48; " +
                 "-fx-background-color: -transparent, -fx-text-box-border, -fx-control-inner-background; "
         );
+        Optional.ofNullable(onNewUserInput)
+                .ifPresent(stringConsumer -> this.pathField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                            if (!newValue && oldValue && !hasInvalidValueAndIfSoShowValidationMessage()) {
+                                stringConsumer.accept(getValue());
+                            }
+                        }
+                ));
 
         val searchFileButton = new IconButton(IconButton.Icon.SELECT_FILE);
         searchFileButton.setOnAction(() -> showFileChooser()
-                .ifPresent(file -> pathField.setText(file.getPath())));
+                .ifPresent(file -> {
+                    pathField.setText(file.getPath());
+
+                    Optional.ofNullable(onNewUserInput)
+                            .ifPresent(stringConsumer -> {
+                                        if (!hasInvalidValueAndIfSoShowValidationMessage()) {
+                                            stringConsumer.accept(getValue());
+                                        }
+                                    }
+                            );
+                }));
 
         val value = new HBox();
         HBox.setHgrow(pathField, Priority.ALWAYS);
@@ -78,24 +90,15 @@ public class FileChooserFormField extends FormField<File> {
                 "-fx-background-radius: 3, 2, 2;");
 
         this.getChildren().setAll(this.title, value, validationMsg);
-
-//        value.setStyle("-fx-border-color: #b0afaf; -fx-border-width: 1; -fx-max-height: 48; -fx-min-height: 48");
-
-        /*
-        .form-field {
-    -fx-padding: 2 2 2 10;
-    -fx-max-height: 48;
-    -fx-min-height: 48;
-    -fx-border-color: #b0afaf;
-    -fx-border-width: 1;
-    -fx-border-radius: 0;
-    -fx-text-fill: siard-text-color-black;
-}
-         */
     }
 
     public File getValue() {
         return new File(pathField.getText());
+    }
+
+    @Override
+    public void setValue(File newValue) {
+        pathField.setText(newValue.getAbsolutePath());
     }
 
     private Optional<File> showFileChooser() {

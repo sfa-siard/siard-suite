@@ -31,8 +31,6 @@ public abstract class FormField<T> extends VBox {
 
     private final Collection<Validator<T>> validators;
 
-    private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
-
     public FormField(
             @NonNull final DisplayableText title,
             @Nullable final DisplayableText hint,
@@ -63,25 +61,35 @@ public abstract class FormField<T> extends VBox {
     }
 
     public boolean hasValidValue() {
-        val currentValue = getValue();
-        val failedValidator = validators.stream()
-                .filter(validator -> !validator.getIsValidCheck().test(currentValue))
-                .findAny();
-
-        OptionalHelper.ifPresentOrElse(
-                failedValidator,
-                validator -> showValidationLabel(validator.getMessage()),
-                this::hideValidationLabel
-        );
-
-        return !failedValidator.isPresent();
+        return !findFailingValidator().isPresent();
     }
 
     public boolean hasInvalidValue() {
         return !hasValidValue();
     }
 
-    protected abstract T getValue();
+    public boolean hasInvalidValueAndIfSoShowValidationMessage() {
+        val failingValidator = findFailingValidator();
+
+        OptionalHelper.ifPresentOrElse(
+                failingValidator,
+                validator -> showValidationLabel(validator.getMessage()),
+                this::hideValidationLabel
+        );
+
+        return failingValidator.isPresent();
+    }
+
+    public abstract T getValue();
+
+    public abstract void setValue(T newValue);
+
+    private Optional<Validator<T>> findFailingValidator() {
+        val currentValue = getValue();
+        return validators.stream()
+                .filter(validator -> !validator.getIsValidCheck().test(currentValue))
+                .findAny();
+    }
 
     private void showValidationLabel(final DisplayableText message) {
         validationMsg.setText(message.getText());

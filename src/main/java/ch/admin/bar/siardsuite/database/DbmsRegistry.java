@@ -3,11 +3,15 @@ package ch.admin.bar.siardsuite.database;
 import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsId;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
+import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
+import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
+import lombok.val;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +25,10 @@ public class DbmsRegistry {
                     .jdbcConnectionStringEncoder(config -> String.format(
                             "jdbc:access:%s",
                             config.getFile().getAbsolutePath()))
+                    .jdbcConnectionStringDecoder(encoded -> {
+                        val file = new File(encoded.replace("jdbc:access:", ""));
+                        return new FileBasedDbmsConnectionProperties(file);
+                    })
                     .exampleFile(new File("D:\\Projekte\\SIARD2\\JdbcAccess\\testfiles\\dbfile.mdb"))
                     .build(),
 
@@ -29,10 +37,21 @@ public class DbmsRegistry {
                     .id(DbmsId.of("db2"))
                     .driverClassName("ch.admin.bar.siard2.jdbc.Db2Driver")
                     .jdbcConnectionStringEncoder(config -> String.format(
-                            "jdbc:db2://%s:%s/%s",
+                            "jdbc:db2://%s:%s/%s", // example: "jdbc:db2://myhost:5021/mydb:user=dbadm;password=dbadm;"
                             config.getHost(),
                             config.getPort(),
                             config.getDbName()))
+                    .jdbcConnectionStringDecoder(encoded -> {
+                        val splitEncoded = encoded.split(":");
+                        val splitPortAndDbName = splitEncoded[3].split("/", 2);
+                        val port = splitPortAndDbName[0].replace("//", "");
+
+                        return ServerBasedDbmsConnectionProperties.builder()
+                                .host(splitEncoded[2])
+                                .port(port)
+                                .dbName(splitPortAndDbName[1])
+                                .build();
+                    })
                     .examplePort("50000")
                     .exampleHost("db2.exampleHost.org")
                     .exampleDbName("DB2-Database")
@@ -43,10 +62,21 @@ public class DbmsRegistry {
                     .id(DbmsId.of("mysql"))
                     .driverClassName("ch.admin.bar.siard2.jdbc.MySqlDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
-                            "jdbc:mysql://%s:%s/%s",
+                            "jdbc:mysql://%s:%s/%s", // example: "jdbc:mysql://localhost:8080/test?user=minty&password=greatsqldb"
                             config.getHost(),
                             config.getPort(),
                             config.getDbName()))
+                    .jdbcConnectionStringDecoder(encoded -> {
+                        val splitEncoded = encoded.split(":");
+                        val splitPortAndDbNameWithOptions = splitEncoded[3].split("/", 2);
+                        val splitDbNameAndOptions = splitPortAndDbNameWithOptions[1].split("\\?", 2);
+
+                        return ServerBasedDbmsConnectionProperties.builder()
+                                .host(splitEncoded[2])
+                                .port(splitPortAndDbNameWithOptions[0])
+                                .dbName(splitDbNameAndOptions[0])
+                                .build();
+                    })
                     .examplePort("3306")
                     .exampleHost("mysql.exampleHost.org")
                     .exampleDbName("MySQL-Database")
@@ -61,6 +91,17 @@ public class DbmsRegistry {
                             config.getHost(),
                             config.getPort(),
                             config.getDbName()))
+                    .jdbcConnectionStringDecoder(encoded -> { // TODO
+                        val splitEncoded = encoded.split(":");
+                        val splitPortAndDbNameWithOptions = splitEncoded[3].split("/", 2);
+                        val splitDbNameAndOptions = splitPortAndDbNameWithOptions[1].split("\\?", 2);
+
+                        return ServerBasedDbmsConnectionProperties.builder()
+                                .host(splitEncoded[2])
+                                .port(splitPortAndDbNameWithOptions[0])
+                                .dbName(splitDbNameAndOptions[0])
+                                .build();
+                    })
                     .examplePort("1521")
                     .exampleHost("oracle.exampleHost.org")
                     .exampleDbName("Oracle-Database")
@@ -71,10 +112,27 @@ public class DbmsRegistry {
                     .id(DbmsId.of("postgresql"))
                     .driverClassName("ch.admin.bar.siard2.jdbc.PostgresDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
-                            "jdbc:postgresql://%s:%s/%s",
+                            "jdbc:postgresql://%s:%s/%s", // example: "jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true"
                             config.getHost(),
                             config.getPort(),
                             config.getDbName()))
+                    .jdbcConnectionStringDecoder(encoded -> { // TODO
+                        val splitEncoded = encoded.split(":");
+                        val splitPortAndDbNameWithOptions = splitEncoded[3].split("/", 2);
+                        val host = splitEncoded[2].replace("//", "");
+                        val splitDbNameAndOptions = splitPortAndDbNameWithOptions[1].split("\\?", 2);
+
+                        return ServerBasedDbmsConnectionProperties.builder()
+                                .host(host)
+                                .port(splitPortAndDbNameWithOptions[0])
+                                .dbName(splitDbNameAndOptions[0])
+                                .options(Optional.of(splitDbNameAndOptions)
+                                        .filter(strings -> strings.length > 1)
+                                        .map(strings -> strings[1]))
+                                .user("")
+                                .password("")
+                                .build();
+                    })
                     .examplePort("5432")
                     .exampleHost("postgresql.exampleHost.org")
                     .exampleDbName("PostgreSQL-Database")
@@ -89,6 +147,17 @@ public class DbmsRegistry {
                             config.getHost(),
                             config.getPort(),
                             config.getDbName()))
+                    .jdbcConnectionStringDecoder(encoded -> { // TODO
+                        val splitEncoded = encoded.split(":");
+                        val splitPortAndDbNameWithOptions = splitEncoded[3].split("/", 2);
+                        val splitDbNameAndOptions = splitPortAndDbNameWithOptions[1].split("\\?", 2);
+
+                        return ServerBasedDbmsConnectionProperties.builder()
+                                .host(splitEncoded[2])
+                                .port(splitPortAndDbNameWithOptions[0])
+                                .dbName(splitDbNameAndOptions[0])
+                                .build();
+                    })
                     .examplePort("1433")
                     .exampleHost("mssql.exampleHost.org")
                     .exampleDbName("MS-SQL-Database")

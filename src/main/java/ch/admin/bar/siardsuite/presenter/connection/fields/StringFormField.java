@@ -1,27 +1,20 @@
 package ch.admin.bar.siardsuite.presenter.connection.fields;
 
-import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 @Slf4j
-public class StringFormField extends FormField {
+public class StringFormField extends FormField<String> {
 
     private static final String FIELD_STYLE_CLASS = "form-field";
 
@@ -34,7 +27,8 @@ public class StringFormField extends FormField {
             @Nullable final DisplayableText prompt,
             @Nullable final String initialValue,
             @Singular final Set<Validator<String>> validators,
-            @Nullable final Double prefWidth
+            @Nullable final Double prefWidth,
+            @Nullable final Consumer<String> onNewUserInput
     ) {
         super(title, hint, validators);
 
@@ -47,11 +41,24 @@ public class StringFormField extends FormField {
                 .ifPresent(this.value::setText);
         Optional.ofNullable(prefWidth)
                 .ifPresent(this.value::setPrefWidth);
+        Optional.ofNullable(onNewUserInput)
+                .ifPresent(stringConsumer -> this.value.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                            if (!newValue && oldValue && !hasInvalidValueAndIfSoShowValidationMessage()) {
+                                stringConsumer.accept(this.value.getText());
+                            }
+                        }
+                ));
 
         this.getChildren().setAll(this.title, this.value, validationMsg);
     }
 
+    @Override
     public String getValue() {
         return value.getText();
+    }
+
+    @Override
+    public void setValue(final String text) {
+         value.setText(text);
     }
 }

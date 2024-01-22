@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 @Value
 public class Validator<T> {
     private static final I18nKey CAN_NOT_BE_EMPTY = I18nKey.of("valueValidation.canNotBeEmpty");
+    private static final I18nKey DOES_NOT_INCLUDE_COLONS = I18nKey.of("valueValidation.doesNotIncludeColons");
     private static final I18nKey NEED_TO_EXIST = I18nKey.of("valueValidation.needsToBeExistingFile");
 
     public static final Validator<String> IS_NOT_EMPTY_STRING_VALIDATOR = Validator.<String>builder()
@@ -24,12 +25,18 @@ public class Validator<T> {
             .titleSuffix("*")
             .build();
 
+    public static final Validator<String> DOES_NOT_INCLUDE_COLONS_VALIDATOR = Validator.<String>builder()
+            .message(DisplayableText.of(DOES_NOT_INCLUDE_COLONS))
+            .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
+                    .filter(value -> !value.contains(":"))
+                    .isPresent())
+            .build();
+
     public static final Validator<File> IS_EXISTING_FILE_VALIDATOR = Validator.<File>builder()
             .message(DisplayableText.of(NEED_TO_EXIST))
             .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
                     .filter(value -> value.isFile() && value.exists())
                     .isPresent())
-            .titleSuffix("*")
             .build();
 
 
