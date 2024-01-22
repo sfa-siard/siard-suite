@@ -1,35 +1,37 @@
 package ch.admin.bar.siardsuite.database;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
+import lombok.val;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
-
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.LOGIN_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
 
 public class DatabaseConnectionFactory {
   private static DatabaseConnectionFactory instance;
   private static Connection connection;
   private static Model model;
 
-  private DatabaseConnectionFactory(Model model) throws SQLException {
+  private DatabaseConnectionFactory(Model model, DbmsConnectionData connectionData) throws SQLException {
     DatabaseConnectionFactory.model = model;
-    loadDriver(DatabaseConnectionFactory.model.getDatabaseProps().product());
-    DriverManager.setLoginTimeout(Integer.parseInt(UserPreferences.node(OPTIONS).get(LOGIN_TIMEOUT.name(), "0")));
-    connection = DriverManager.getConnection(model.getConnectionUrl().get(),
-            model.getDatabaseUsername().get(), model.getDatabasePassword());
+    val options = UserPreferences.getStoredOptions();
+
+    loadDriver(connectionData.getDbms().getDriverClassName());
+
+    DriverManager.setLoginTimeout(options.getLoginTimeout());
+    connection = DriverManager.getConnection(
+            connectionData.getJdbcConnectionString(),
+            connectionData.getUser(),
+            connectionData.getPassword());
   }
 
-  public static DatabaseConnectionFactory getInstance(Model model) throws SQLException {
+  public static DatabaseConnectionFactory getInstance(Model model, DbmsConnectionData connectionData) throws SQLException {
     if (instance == null || connection.isClosed()) {
-      instance = new DatabaseConnectionFactory(model);
+      instance = new DatabaseConnectionFactory(model, connectionData);
     }
     return instance;
   }
@@ -52,24 +54,11 @@ public class DatabaseConnectionFactory {
     }
   }
 
-  private void loadDriver(String product) {
-    Properties properties = new Properties();
-    try (InputStream is = getClass().getResourceAsStream("driver.properties")) {
-      properties.load(is);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+  private void loadDriver(String jdbcDriverClass) {
+    try {
+      Class.forName(jdbcDriverClass);
+    } catch (ClassNotFoundException var7) {
+      throw new RuntimeException("Driver " + jdbcDriverClass + " could not be loaded!");
     }
-    String jdbcDriverClass = properties.getProperty(product);
-    if (jdbcDriverClass != null) {
-      try {
-        Class.forName(jdbcDriverClass);
-      } catch (ClassNotFoundException var7) {
-        throw new RuntimeException("Driver " + jdbcDriverClass + " could not be loaded!");
-      }
-    } else {
-      throw new RuntimeException("No driver found for sub scheme \"" + product + "\"!");
-    }
-
   }
-
 }

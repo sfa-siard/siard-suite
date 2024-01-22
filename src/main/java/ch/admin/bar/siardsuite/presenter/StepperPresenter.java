@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.model.Step;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.CastHelper;
+import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperSkin;
 import ch.admin.bar.siardsuite.view.skins.CustomStepperToggleSkin;
@@ -18,6 +19,7 @@ import lombok.val;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,6 @@ public abstract class StepperPresenter extends Presenter implements StepperDepen
     }
 
     protected void createStepper(List<Step> steps, MFXStepper stepper) {
-        boolean recentConnection = controller.getTempConnectionData().isPresent();
         List<MFXStepperToggle> stepperToggles = createSteps(steps, stepper);
 
         stepper.getStepperToggles().addAll(stepperToggles);
@@ -47,11 +48,15 @@ public abstract class StepperPresenter extends Presenter implements StepperDepen
             stepper.next();
         }
 
-        if (recentConnection) {
-            stepper.getStepperToggles().get(0).setState(StepperToggleState.COMPLETED);
-            stepper.updateProgress();
-            stepper.next();
-        }
+        controller.getTempConnectionData()
+                .ifPresent(dbmsConnectionData -> {
+                    stepper.getStepperToggles().get(0).setState(StepperToggleState.COMPLETED);
+                    stepper.updateProgress();
+                    stepper.next();
+                    stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(
+                            dbmsConnectionData.getDbms(),
+                            Optional.of(dbmsConnectionData.getProperties())));
+                });
     }
 
     private List<MFXStepperToggle> createSteps(List<Step> steps, MFXStepper stepper) {

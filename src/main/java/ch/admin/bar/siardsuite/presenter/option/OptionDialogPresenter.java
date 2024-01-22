@@ -5,7 +5,7 @@ import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.component.DialogButton;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -15,9 +15,9 @@ import javafx.scene.layout.HBox;
 
 import java.util.prefs.Preferences;
 
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.LOGIN_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.QUERY_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.LOGIN_TIMEOUT;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.QUERY_TIMEOUT;
+import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.OPTIONS;
 
 public class OptionDialogPresenter extends DialogPresenter {
 

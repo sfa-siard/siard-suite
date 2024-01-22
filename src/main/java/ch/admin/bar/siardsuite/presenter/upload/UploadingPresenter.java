@@ -82,7 +82,11 @@ public class UploadingPresenter extends StepperPresenter {
         };
 
         try {
-          controller.uploadArchive(onSuccess, onFailure);
+          controller.uploadArchive(
+                  null, // TODO FIXME
+                  onSuccess,
+                  onFailure
+          );
         } catch (Exception e) {
           fail(e, stepper);
         }

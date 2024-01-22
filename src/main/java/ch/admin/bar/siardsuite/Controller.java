@@ -6,7 +6,6 @@ import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -56,25 +55,34 @@ public class Controller {
         this.model = model;
     }
 
-    public void loadDatabase(final LoadDatabaseInstruction instruction) throws SQLException {
+    public void loadDatabase(
+            DbmsConnectionData connectionData,
+            boolean onlyMetaData,
+            EventHandler<WorkerStateEvent> onSuccess,
+            EventHandler<WorkerStateEvent> onFailure
+    ) throws SQLException {
         tmpArchive = model.initArchive();
+        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model, connectionData)
+                .createDatabaseLoader(tmpArchive, onlyMetaData, false);
+        this.onDatabaseLoadSuccess(onSuccess);
+        this.onDatabaseLoadFailed(onFailure);
+        this.databaseLoadService.start();
+    }
 
-        val connection = instruction.getConnectionData().createConnection();
-
-        val dbLoadService = new DatabaseLoadService(
-                connection,
-                model,
-                tmpArchive,
-                instruction.isLoadOnlyMetadata(),
-                instruction.isViewsAsTables());
-
-        dbLoadService.setOnSucceeded(instruction.getOnSuccess());
-        dbLoadService.setOnFailed(instruction.getOnFailure());
-
-        dbLoadService.start();
-
-        dbLoadService.valueProperty().addListener(instruction.getOnSingleValueCompleted());
-        dbLoadService.progressProperty().addListener(instruction.getOnProgress());
+    public void loadDatabase(
+            DbmsConnectionData connectionData,
+            File target,
+            boolean onlyMetaData,
+            boolean viewsAsTables,
+            EventHandler<WorkerStateEvent> onSuccess,
+            EventHandler<WorkerStateEvent> onFailure
+    ) throws SQLException {
+        final Archive archive = model.initArchive(target, onlyMetaData);
+        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model, connectionData)
+                .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
+        this.onDatabaseLoadSuccess(onSuccess);
+        this.onDatabaseLoadFailed(onFailure);
+        this.databaseLoadService.start();
     }
 
     public void closeDbConnection() {
@@ -86,6 +94,22 @@ public class Controller {
         this.model.setDatabaseName(databaseName);
         this.model.setUsername(username);
         this.model.setPassword(password);
+    }
+
+    public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+        this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
+    }
+
+    public void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+        this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
+    }
+
+    public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<Pair<String, Long>>> listener) {
+        this.databaseLoadService.valueProperty().addListener(listener);
+    }
+
+    public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener) {
+        this.databaseLoadService.progressProperty().addListener(listener);
     }
 
     public void updateSchemaMap(Map schemaMap) {
@@ -113,9 +137,12 @@ public class Controller {
     }
 
 
-    public void uploadArchive(EventHandler<WorkerStateEvent> onSuccess,
-                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
-        this.databaseUploadService = DatabaseConnectionFactory.getInstance(model).createDatabaseUploader();
+    public void uploadArchive(
+            DbmsConnectionData connectionData,
+            EventHandler<WorkerStateEvent> onSuccess,
+                              EventHandler<WorkerStateEvent> onFailure
+    ) throws SQLException {
+        this.databaseUploadService = DatabaseConnectionFactory.getInstance(model, connectionData).createDatabaseUploader();
         this.onDatabaseUploadSuccess(onSuccess);
         this.onDatabaseUploadFailed(onFailure);
         this.databaseUploadService.start();

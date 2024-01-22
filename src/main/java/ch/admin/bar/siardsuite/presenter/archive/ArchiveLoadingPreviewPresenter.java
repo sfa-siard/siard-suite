@@ -93,14 +93,13 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
                 scrollBox.getChildren().clear();
 
                 try {
-                    controller.loadDatabase(LoadDatabaseInstruction.builder()
-                            .connectionData(event.getConnectionData())
-                            .loadOnlyMetadata(true)
-                            .onSuccess(successEvent -> handleOnSuccess(stepper).handle(successEvent))
-                            .onFailure(failureEvent -> handleOnFailure(stepper).handle(failureEvent))
-                            .onProgress(numberChangeListener)
-                            .onSingleValueCompleted(databaseLoadingValuePropertyListener)
-                            .build());
+                    controller.loadDatabase(
+                            event.getConnectionData(),
+                            true,
+                            handleOnSuccess(stepper),
+                            handleOnFailure(stepper));
+                    controller.addDatabaseLoadingValuePropertyListener(databaseLoadingValuePropertyListener);
+                    controller.addDatabaseLoadingProgressPropertyListener(numberChangeListener);
                 } catch (Exception e) {
                     fail(stepper, e, ERROR_OCCURED);
                 } finally {
