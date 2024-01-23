@@ -42,7 +42,7 @@ public class UserPreferences {
         val preferences = node(NodePath.DATABASE_CONNECTION).node(dbConnection.getName());
 
         preferences.put(KeyIndex.DATABASE_SYSTEM.name(), dbConnection.getDbmsProduct().getValue());
-        preferences.put(KeyIndex.CONNECTION_URL.name(), dbConnection.getJdbcUrl());
+        preferences.put(KeyIndex.CONNECTION_OPTIONS.name(), dbConnection.getConnectionOptions());
 
         preferences.put(KeyIndex.DATABASE_SERVER.name(), dbConnection.getHost());
         preferences.put(KeyIndex.PORT_NUMBER.name(), dbConnection.getPort());
@@ -71,7 +71,7 @@ public class UserPreferences {
                                 .storedData(DbConnection.builder()
                                         .name(name)
                                         .dbmsProduct(DbmsId.of(node.get(KeyIndex.DATABASE_SYSTEM.name(), "")))
-                                        .jdbcUrl(node.get(KeyIndex.CONNECTION_URL.name(), ""))
+                                        .connectionOptions(node.get(KeyIndex.CONNECTION_OPTIONS.name(), ""))
                                         .host(node.get(KeyIndex.DATABASE_SERVER.name(), ""))
                                         .port(node.get(KeyIndex.PORT_NUMBER.name(), ""))
                                         .dbName(node.get(KeyIndex.DATABASE_NAME.name(), ""))
@@ -186,6 +186,7 @@ public class UserPreferences {
         USER_NAME,
         FILE,
         CONNECTION_URL,
+        CONNECTION_OPTIONS,
         STORAGE_DATE,
         ABSOLUTE_PATH,
         TIMESTAMP,

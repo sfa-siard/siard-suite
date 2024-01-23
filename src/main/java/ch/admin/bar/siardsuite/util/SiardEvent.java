@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.util;
 import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionProperties;
+import ch.admin.bar.siardsuite.util.preferences.DbConnection;
 import javafx.event.Event;
 import javafx.event.EventType;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 public class SiardEvent extends Event {
     public static final EventType<DbmsSelectedEvent<DbmsConnectionProperties>> UPDATE_STEPPER_DBTYPE_EVENT;
+    public static final EventType<RecentConnectionSelectedEvent> RECENT_CONNECTION_SELECTED_EVENT = new EventType<>();
     public static final EventType<DbmsConnectionDataReadyEvent> UPDATE_STEPPER_DBLOAD_EVENT;
     public static final EventType<SiardEvent> UPDATE_LANGUAGE_EVENT;
     public static final EventType<SiardEvent> ARCHIVE_LOADED;
@@ -47,13 +49,21 @@ public class SiardEvent extends Event {
         @Getter
         private final Dbms<T> selectedDbms;
 
-        @Getter
-        private final Optional<DbmsConnectionProperties<T>> properties;
-
-        public DbmsSelectedEvent(final Dbms<T> selectedDbms, Optional<DbmsConnectionProperties<T>> properties) {
+        public DbmsSelectedEvent(final Dbms<T> selectedDbms) {
             super(UPDATE_STEPPER_DBTYPE_EVENT);
             this.selectedDbms = selectedDbms;
-            this.properties = properties;
+        }
+    }
+
+    public static class RecentConnectionSelectedEvent extends Event {
+
+        @Getter
+        private final DbConnection recentConnectionData;
+
+        public RecentConnectionSelectedEvent(final DbConnection recentConnectionData) {
+            super(RECENT_CONNECTION_SELECTED_EVENT);
+
+            this.recentConnectionData = recentConnectionData;
         }
     }
 

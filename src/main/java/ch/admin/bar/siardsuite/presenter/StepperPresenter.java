@@ -48,14 +48,12 @@ public abstract class StepperPresenter extends Presenter implements StepperDepen
             stepper.next();
         }
 
-        controller.getTempConnectionData()
-                .ifPresent(dbmsConnectionData -> {
+        controller.popRecentDatabaseConnection()
+                .ifPresent(recentConnection -> {
                     stepper.getStepperToggles().get(0).setState(StepperToggleState.COMPLETED);
                     stepper.updateProgress();
                     stepper.next();
-                    stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(
-                            dbmsConnectionData.getDbms(),
-                            Optional.of(dbmsConnectionData.getProperties())));
+                    stepper.fireEvent(new SiardEvent.RecentConnectionSelectedEvent(recentConnection));
                 });
     }
 

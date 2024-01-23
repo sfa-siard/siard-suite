@@ -18,10 +18,10 @@ import ch.admin.bar.siardsuite.presenter.connection.ServerBasedDbmsConnectionPro
 import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.util.preferences.DbConnection;
-import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.util.preferences.DbConnection;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -35,6 +35,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import lombok.val;
 
 import java.util.Optional;
 
@@ -117,6 +118,17 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         I18n.bind(connectionLabel.textProperty(), "archiveConnection.view.connectionName.label");
     }
 
+    private <T extends DbmsConnectionProperties> void handlePropertiesForm(
+            final Dbms<T> dbms,
+            final Optional<DbmsConnectionProperties<T>> initialValue
+    ) {
+        connectionPropertiesForm = this.getConnectionPropertiesForm(dbms, initialValue);
+        HBox.setHgrow(connectionPropertiesForm, Priority.ALWAYS);
+
+        formContainer.getChildren().clear();
+        formContainer.getChildren().add(connectionPropertiesForm);
+    }
+
     private <T extends DbmsConnectionProperties> ConnectionPropertiesForm getConnectionPropertiesForm(
             final Dbms<T> dbms,
             final Optional<DbmsConnectionProperties<T>> initialValue
@@ -137,12 +149,20 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
     }
 
     private void setListeners(MFXStepper stepper) {
-        stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
-            connectionPropertiesForm = this.getConnectionPropertiesForm(event.getSelectedDbms(), event.getProperties());
-            HBox.setHgrow(connectionPropertiesForm, Priority.ALWAYS);
+        stepper.addEventHandler(SiardEvent.RECENT_CONNECTION_SELECTED_EVENT, event -> {
+            val recentConnection = event.getRecentConnectionData();
 
-            formContainer.getChildren().clear();
-            formContainer.getChildren().add(connectionPropertiesForm);
+            final Dbms dbms = recentConnection.mapToDbmsConnectionData().getDbms();
+            final DbmsConnectionProperties properties = recentConnection.mapToDbmsConnectionData().getProperties();
+
+            handlePropertiesForm(dbms, Optional.of(properties));
+
+            connectionName.setText(recentConnection.getName());
+        });
+
+        stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBTYPE_EVENT, event -> {
+            handlePropertiesForm(event.getSelectedDbms(), Optional.empty());
+            connectionName.setText("");
         });
 
         toggleSave.setOnAction(event -> {
@@ -158,8 +178,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
                             if (toggleSave.isSelected()) {
                                 UserPreferences.push(DbConnection.from(
                                         connectionData,
-                                        connectionName.getText(),
-                                        "" // TODO FIXME
+                                        connectionName.getText()
                                 ));
                             }
 

@@ -137,10 +137,10 @@ public class UploadConnectionPresenter extends StepperPresenter {
         addTextWithStyles();
         addFormText();
 
-        if (controller.recentDatabaseConnection != null) {
-            addRecentDatabaseConnection();
-            initSchemaFields();
-        }
+//        if (controller.recentDatabaseConnection != null) { TODO FIXME
+//            addRecentDatabaseConnection();
+//            initSchemaFields();
+//        }
 
         tooltip = new SiardTooltip("uploadConnection.view.tooltip");
         buttonsBox = new ButtonBox().make(DEFAULT);
@@ -178,15 +178,15 @@ public class UploadConnectionPresenter extends StepperPresenter {
     }
 
     private void addRecentDatabaseConnection() {
-        Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection);
-        String dbTypeString = preferences.get(DATABASE_SYSTEM.name(), "");
-        controller.setDatabaseType(dbTypeString);
-        dbServerField.setText(preferences.get(DATABASE_SERVER.name(), ""));
-        portField.setText(preferences.get(PORT_NUMBER.name(), ""));
-        dbNameField.setText(preferences.get(DATABASE_NAME.name(), ""));
-        usernameField.setText(preferences.get(USER_NAME.name(), ""));
-        urlField.setText(preferences.get(CONNECTION_URL.name(), ""));
-        controller.recentDatabaseConnection = null;
+//        Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(controller.recentDatabaseConnection); TODO FIXME
+//        String dbTypeString = preferences.get(DATABASE_SYSTEM.name(), "");
+//        controller.setDatabaseType(dbTypeString);
+//        dbServerField.setText(preferences.get(DATABASE_SERVER.name(), ""));
+//        portField.setText(preferences.get(PORT_NUMBER.name(), ""));
+//        dbNameField.setText(preferences.get(DATABASE_NAME.name(), ""));
+//        usernameField.setText(preferences.get(USER_NAME.name(), ""));
+//        urlField.setText(preferences.get(CONNECTION_URL.name(), ""));
+//        controller.recentDatabaseConnection = null;
     }
 
     private void setListeners(MFXStepper stepper) {

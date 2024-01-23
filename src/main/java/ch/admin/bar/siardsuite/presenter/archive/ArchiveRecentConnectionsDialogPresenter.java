@@ -17,11 +17,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.val;
 
-import java.util.prefs.Preferences;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.STORAGE_DATE;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.DATABASE_CONNECTION;
 
 public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
 
@@ -103,41 +100,9 @@ public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
         return recentConnectionsBox;
     }
 
-    private HBox getRecentConnectionsBox(String connectionName) {
-        final HBox recentConnectionsBox = new HBox();
-
-        if (!connectionName.isEmpty()) {
-            final Preferences preferences = UserPreferences.node(DATABASE_CONNECTION).node(connectionName);
-
-            final Label imageLabel = new Label();
-            imageLabel.getStyleClass().add("link-icon");
-            final Label nameLabel = new Label(connectionName);
-            nameLabel.getStyleClass().add("name-label");
-
-            final String localeDate = preferences.get(STORAGE_DATE.name(), "");
-            final Label dateLabel = new Label(localeDate);
-            dateLabel.getStyleClass().add("date-label");
-
-            recentConnectionsBox.getChildren().addAll(imageLabel, nameLabel, dateLabel);
-            recentConnectionsBox.getStyleClass().add("connections-hbox");
-            VBox.setMargin(recentConnectionsBox, new Insets(5, 0, 5, 0));
-
-            recentConnectionsBox.setOnMouseClicked(event -> showRecentConnection(connectionName));
-        }
-
-        return recentConnectionsBox;
-    }
-
     private void showRecentConnection(final UserPreferences.StorageData<DbConnection> storedConnection) {
-        controller.setTempConnectionData(storedConnection.getStoredData().tryMapToDbmsConnectionData());
         stage.closeDialog();
+        controller.setRecentDatabaseConnection(Optional.of(storedConnection.getStoredData()));
         stage.navigate(View.ARCHIVE_STEPPER);
     }
-
-    private void showRecentConnection(String connectionName) {
-        controller.recentDatabaseConnection = connectionName;
-        stage.closeDialog();
-        stage.navigate(View.ARCHIVE_STEPPER);
-    }
-
 }

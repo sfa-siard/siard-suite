@@ -116,7 +116,7 @@ public class UploadDbDialogPresenter extends DialogPresenter {
     }
 
     private void showRecentConnection(String connectionName) {
-        controller.recentDatabaseConnection = connectionName;
+//        controller.recentDatabaseConnection = connectionName; TODO FIXME
         stage.closeDialog();
         stage.navigate(View.UPLOAD_STEPPER);
     }

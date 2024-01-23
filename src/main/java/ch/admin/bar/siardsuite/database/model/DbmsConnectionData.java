@@ -1,13 +1,8 @@
 package ch.admin.bar.siardsuite.database.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.function.Supplier;
 
 public class DbmsConnectionData {

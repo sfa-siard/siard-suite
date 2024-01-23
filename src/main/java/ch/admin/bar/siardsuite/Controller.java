@@ -11,6 +11,7 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
+import ch.admin.bar.siardsuite.util.preferences.DbConnection;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import javafx.beans.property.StringProperty;
@@ -20,6 +21,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.util.Pair;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
@@ -39,15 +41,14 @@ public class Controller {
     private DatabaseLoadService databaseLoadService;
     private DatabaseUploadService databaseUploadService;
     private Workflow workflow;
-    public String recentDatabaseConnection;
 
     @Setter
-    @Getter
-    private Optional<DbmsConnectionData> tempConnectionData = Optional.empty();
+    @NonNull
+    private Optional<DbConnection> recentDatabaseConnection = Optional.empty();
 
-    public Optional<DbmsConnectionData> popTempConnectionData() {
-        val tempReturnValue = tempConnectionData;
-        tempConnectionData = Optional.empty();
+    public Optional<DbConnection> popRecentDatabaseConnection() {
+        val tempReturnValue = recentDatabaseConnection;
+        recentDatabaseConnection = Optional.empty();
         return tempReturnValue;
     }
 

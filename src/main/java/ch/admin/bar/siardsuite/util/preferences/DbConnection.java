@@ -23,7 +23,7 @@ public class DbConnection {
     @NonNull String name;
 
     @NonNull DbmsId dbmsProduct;
-    @NonNull String jdbcUrl;
+    @NonNull String connectionOptions;
 
     @NonNull String host;
     @NonNull String port;
@@ -32,33 +32,36 @@ public class DbConnection {
 
     @NonNull String file;
 
-    public Optional<DbmsConnectionData> tryMapToDbmsConnectionData() {
+    public DbmsConnectionData mapToDbmsConnectionData() {
         val dbms = DbmsRegistry.findDbmsById(dbmsProduct);
 
         return OptionalHelper.firstPresent(
-                () -> CastHelper.tryCast(dbms, ServerBasedDbms.class)
-                        .map(serverBasedDbms -> new DbmsConnectionData(
-                                serverBasedDbms,
-                                ServerBasedDbmsConnectionProperties.builder()
-                                        .host(host)
-                                        .port(port)
-                                        .dbName(dbName)
-                                        .user(user)
-                                        .password("")
-                                        .build()
-                        )),
-                () -> CastHelper.tryCast(dbms, FileBasedDbms.class)
-                        .map(fileBasedDbms -> new DbmsConnectionData(
-                                fileBasedDbms,
-                                new FileBasedDbmsConnectionProperties(new File(file))
-                        ))
-        );
+                        () -> CastHelper.tryCast(dbms, ServerBasedDbms.class)
+                                .map(serverBasedDbms -> new DbmsConnectionData(
+                                        serverBasedDbms,
+                                        ServerBasedDbmsConnectionProperties.builder()
+                                                .host(host)
+                                                .port(port)
+                                                .dbName(dbName)
+                                                .options(Optional.of(connectionOptions)
+                                                        .filter(s -> !s.isEmpty()))
+                                                .user(user)
+                                                .password("")
+                                                .build()
+                                )),
+                        () -> CastHelper.tryCast(dbms, FileBasedDbms.class)
+                                .map(fileBasedDbms -> new DbmsConnectionData(
+                                        fileBasedDbms,
+                                        new FileBasedDbmsConnectionProperties(new File(file))
+                                )))
+                .orElseThrow(() -> new IllegalStateException(String.format(
+                        "Failed to map stored connection %s to valid connection data",
+                        this)));
     }
 
     public static DbConnection from(
             final DbmsConnectionData connectionData,
-            final String name,
-            final String jdbcUrl
+            final String name
     ) {
 
         val serverBasedProp = CastHelper.tryCast(
@@ -72,8 +75,7 @@ public class DbConnection {
         return DbConnection.builder()
                 .name(name)
                 .dbmsProduct(connectionData.getDbms().getId())
-                .jdbcUrl(jdbcUrl)
-
+                .connectionOptions(serverBasedProp.flatMap(ServerBasedDbmsConnectionProperties::getOptions).orElse(""))
                 .host(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getHost).orElse(""))
                 .port(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getPort).orElse(""))
                 .dbName(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getDbName).orElse(""))
