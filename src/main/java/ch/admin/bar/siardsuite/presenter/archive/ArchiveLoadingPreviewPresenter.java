@@ -4,8 +4,6 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.Spinner;
-import ch.admin.bar.siardsuite.database.DbmsRegistry;
-import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.ProgressItem;
@@ -30,13 +28,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.val;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;
@@ -88,7 +80,7 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     }
 
     private void setListeners(MFXStepper stepper) {
-        stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
+        stepper.addEventHandler(SiardEvent.ARCHIVE_CONNECTION_DATA_READY, event -> {
             if (!event.isConsumed()) {
                 scrollBox.getChildren().clear();
 

@@ -68,6 +68,19 @@ public class ConnectionForm extends VBox {
         return connectionPropertiesForm.isValid() & !connectionNameField.hasInvalidValueAndIfSoShowValidationMessage();
     }
 
+    public DbmsConnectionData getConnectionData() {
+        val connectionData = connectionPropertiesForm.getConnectionData();
+
+        if (connectionNameField.isActivated()) {
+            UserPreferences.push(DbConnection.from(
+                    connectionData,
+                    connectionNameField.getValue()
+            ));
+        }
+
+        return connectionData;
+    }
+
     public Optional<DbmsConnectionData> tryGetValidConnectionData() {
         if (!isValid()) {
             return Optional.empty();

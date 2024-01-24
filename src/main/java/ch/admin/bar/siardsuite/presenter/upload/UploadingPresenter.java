@@ -61,7 +61,7 @@ public class UploadingPresenter extends StepperPresenter {
     stepper.addEventHandler(SiardEvent.UPLOAD_CONNECTION_UPDATED, uploadDatabase(stepper));
   }
 
-  private EventHandler<SiardEvent> uploadDatabase(MFXStepper stepper) {
+  private EventHandler<SiardEvent.DbmsConnectionDataReadyEvent> uploadDatabase(MFXStepper stepper) {
     return event -> {
       if (!event.isConsumed()) {
         scrollBox.getChildren().clear();
@@ -83,7 +83,7 @@ public class UploadingPresenter extends StepperPresenter {
 
         try {
           controller.uploadArchive(
-                  null, // TODO FIXME
+                  event.getConnectionData(),
                   onSuccess,
                   onFailure
           );

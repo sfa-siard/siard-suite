@@ -99,7 +99,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
             connectionForm.tryGetValidConnectionData()
                     .ifPresent(dbmsConnectionData -> {
                         stepper.next();
-                        stepper.fireEvent(new SiardEvent.DbmsConnectionDataReadyEvent(dbmsConnectionData));
+                        stepper.fireEvent(new SiardEvent.DbmsConnectionDataReadyEvent(SiardEvent.ARCHIVE_CONNECTION_DATA_READY, dbmsConnectionData));
                     });
         });
 

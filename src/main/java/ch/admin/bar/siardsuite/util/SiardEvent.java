@@ -11,14 +11,14 @@ import lombok.Getter;
 public class SiardEvent extends Event {
     public static final EventType<DbmsSelectedEvent<DbmsConnectionProperties>> ARCHIVE_DBMS_SELECTED;
     public static final EventType<RecentConnectionSelectedEvent> RECENT_CONNECTION_SELECTED_EVENT = new EventType<>();
-    public static final EventType<DbmsConnectionDataReadyEvent> UPDATE_STEPPER_DBLOAD_EVENT;
+    public static final EventType<DbmsConnectionDataReadyEvent> ARCHIVE_CONNECTION_DATA_READY;
     public static final EventType<SiardEvent> UPDATE_LANGUAGE_EVENT;
     public static final EventType<SiardEvent> ARCHIVE_LOADED;
     public static final EventType<SiardEvent> ARCHIVE_METADATA_UPDATED;
     public static final EventType<SiardEvent> DATABASE_DOWNLOADED;
     public static final EventType<DbmsSelectedEvent<DbmsConnectionProperties>> UPLOAD_DBMS_SELECTED;
     public static final EventType<SiardEvent> EXPAND_DATABASE_TABLE;
-    public static final EventType<SiardEvent> UPLOAD_CONNECTION_UPDATED;
+    public static final EventType<DbmsConnectionDataReadyEvent> UPLOAD_CONNECTION_UPDATED;
     public static final EventType<SiardEvent> UPLOAD_SUCCEDED;
     public static final EventType<SiardEvent> UPLOAD_FAILED;
     public static final EventType<SiardEvent> ERROR_OCCURED;
@@ -29,7 +29,7 @@ public class SiardEvent extends Event {
 
     static {
         ARCHIVE_DBMS_SELECTED = new EventType<>(ANY, "UPDATE_STEPPER_DBTYPE_EVENT");
-        UPDATE_STEPPER_DBLOAD_EVENT = new EventType<>(ANY, "UPDATE_STEPPER_DBLOAD_EVENT");
+        ARCHIVE_CONNECTION_DATA_READY = new EventType<>(ANY, "UPDATE_STEPPER_DBLOAD_EVENT");
         UPDATE_LANGUAGE_EVENT = new EventType<>(ANY, "UPDATE_LANGUAGE_EVENT");
         ARCHIVE_LOADED = new EventType<>(ANY, "UPDATE_ARCHIVE_TREE_EVENT");
         ARCHIVE_METADATA_UPDATED = new EventType<>("ARCHIVE_METADATA_UPDATED");
@@ -71,9 +71,10 @@ public class SiardEvent extends Event {
         private final DbmsConnectionData connectionData;
 
         public DbmsConnectionDataReadyEvent(
+                final EventType<DbmsConnectionDataReadyEvent> eventType,
                 final DbmsConnectionData connectionData
         ) {
-            super(UPDATE_STEPPER_DBLOAD_EVENT);
+            super(eventType);
             this.connectionData = connectionData;
         }
     }
