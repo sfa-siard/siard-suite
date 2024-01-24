@@ -81,7 +81,7 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
                 this.errorMessage.setVisible(false);
 
                 stepper.next();
-                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(selectedDbms));
+                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(SiardEvent.ARCHIVE_DBMS_SELECTED, selectedDbms));
             } else {
                 this.errorMessage.setVisible(true);
             }

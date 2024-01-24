@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
+<?import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm?>
 <ScrollPane maxHeight="1.7976931348623157E308"
             maxWidth="1.7976931348623157E308"
             styleClass="scrollable-pane"
@@ -41,10 +42,9 @@
                         </VBox.margin>
                     </TextFlow>
                 </VBox>
-                <VBox fx:id="formContainer"
-                      maxWidth="1140.0"
-                      styleClass="form-container">
-                </VBox>
+                <ConnectionForm fx:id="connectionForm"
+                                maxWidth="1140.0"
+                                styleClass="form-container"/>
             </VBox>
         </center>
         <bottom>
