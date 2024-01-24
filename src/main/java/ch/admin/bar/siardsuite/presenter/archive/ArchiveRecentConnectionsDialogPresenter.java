@@ -1,13 +1,13 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.preferences.DbConnection;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.view.DialogCloser;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -17,10 +17,21 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.val;
 
-import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
+public class ArchiveRecentConnectionsDialogPresenter {
+
+    private static final I18nKey ARCHIVE_TITLE = I18nKey.of("archiveDbDialog.title");
+    private static final I18nKey ARCHIVE_TEXT = I18nKey.of("archiveDbDialog.text");
+
+    private static final I18nKey UPLOAD_TITLE = I18nKey.of("archiveDbDialog.title");
+    private static final I18nKey UPLOAD_TEXT = I18nKey.of("archiveDbDialog.text");
+
+    private static final I18nKey NEW_CONNECTION = I18nKey.of("archiveDbDialog.btnNewConnection");
+    private static final I18nKey RECENT_CONNECTIONS_HEADER_NAME = I18nKey.of("dialog.recent.connections.header.name");
+    private static final I18nKey RECENT_CONNECTIONS_HEADER_DATE = I18nKey.of("dialog.recent.connections.header.date");
+    private static final I18nKey NO_DATA = I18nKey.of("dialog.recent.connections.nodata");
 
     @FXML
     protected Label title;
@@ -41,47 +52,58 @@ public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
     @FXML
     protected HBox buttonBox;
 
-    @Override
-    public void init(Controller controller, RootStage stage) {
-        this.controller = controller;
-        this.stage = stage;
+    public void init(
+            final DialogCloser dialogCloser,
+            final Runnable onNewConnection,
+            final Consumer<DbConnection> onRecentConnectionSelected,
+            final DisplayableText titleText,
+            final DisplayableText descriptionText
+    ) {
+        title.textProperty().bind(titleText.bindable());
+        text.textProperty().bind(descriptionText.bindable());
 
-        I18n.bind(title.textProperty(), "archiveDbDialog.title");
-        I18n.bind(text.textProperty(), "archiveDbDialog.text");
-
-        I18n.bind(newConnectionButton.textProperty(), "archiveDbDialog.btnNewConnection");
+        newConnectionButton.textProperty().bind(DisplayableText.of(NEW_CONNECTION).bindable());
+        recentConnectionsHeaderName.textProperty().bind(DisplayableText.of(RECENT_CONNECTIONS_HEADER_NAME).bindable());
+        recentConnectionsHeaderDate.textProperty().bind(DisplayableText.of(RECENT_CONNECTIONS_HEADER_DATE).bindable());
 
         newConnectionButton.setOnAction(event -> {
-            stage.closeDialog();
-            stage.navigate(View.ARCHIVE_STEPPER);
+            dialogCloser.closeDialog();
+            onNewConnection.run();
         });
+        closeButton.setOnAction(event -> dialogCloser.closeDialog());
+        buttonBox.getChildren().add(new CloseDialogButton(dialogCloser));
 
-        I18n.bind(recentConnectionsHeaderName.textProperty(), "dialog.recent.connections.header.name");
-        I18n.bind(recentConnectionsHeaderDate.textProperty(), "dialog.recent.connections.header.date");
+        val boxes = UserPreferences.getStoredConnections().stream()
+                .map(dbConnectionStorageData -> createConnectionsBox(
+                        dbConnectionStorageData,
+                        () -> {
+                            dialogCloser.closeDialog();
+                            onRecentConnectionSelected.accept(dbConnectionStorageData.getStoredData());
+                        }
+                ))
+                .limit(3)
+                .collect(Collectors.toList());
 
-        recentConnectionsBox.getChildren().addAll(UserPreferences.getStoredConnections().stream()
-                .map(this::getRecentConnectionsBox)
-                .collect(Collectors.toList()));
-
-        if (recentConnectionsBox.getChildren().isEmpty()) {
+        if (boxes.isEmpty()) {
             showNoRecentConnections();
         } else {
-            recentConnectionsBox.getChildren().removeIf(child -> recentConnectionsBox.getChildren().indexOf(child) > 2); // FIXME Wieso werden 30 gespeichert?
+            recentConnectionsBox.getChildren().addAll(boxes);
         }
-
-        closeButton.setOnAction(event -> stage.closeDialog());
-
-        buttonBox.getChildren().add(new CloseDialogButton(this.stage));
     }
 
     private void showNoRecentConnections() {
+        recentConnectionsBox.getChildren().clear();
         recentConnectionsBox.setStyle("-fx-background-color: #f8f6f69e; -fx-alignment: center");
-        final Label label = new Label(I18n.get("dialog.recent.connections.nodata"));
+        final Label label = new Label();
+        label.textProperty().bind(DisplayableText.of(NO_DATA).bindable());
         recentConnectionsBox.getChildren().add(label);
         label.setStyle("-fx-text-fill: #2a2a2a82");
     }
 
-    private HBox getRecentConnectionsBox(final UserPreferences.StorageData<DbConnection> storedConnection) {
+    private HBox createConnectionsBox(
+            final UserPreferences.StorageData<DbConnection> storedConnection,
+            final Runnable onAction
+    ) {
         val imageLabel = new Label();
         imageLabel.getStyleClass().add("link-icon");
 
@@ -93,16 +115,44 @@ public class ArchiveRecentConnectionsDialogPresenter extends DialogPresenter {
 
         val recentConnectionsBox = new HBox(imageLabel, nameLabel, dateLabel);
         recentConnectionsBox.getStyleClass().add("connections-hbox");
-        recentConnectionsBox.setOnMouseClicked(event -> showRecentConnection(storedConnection));
+        recentConnectionsBox.setOnMouseClicked(event -> onAction.run());
 
         VBox.setMargin(recentConnectionsBox, new Insets(5, 0, 5, 0));
 
         return recentConnectionsBox;
     }
 
-    private void showRecentConnection(final UserPreferences.StorageData<DbConnection> storedConnection) {
-        stage.closeDialog();
-        controller.setRecentDatabaseConnection(Optional.of(storedConnection.getStoredData()));
-        stage.navigate(View.ARCHIVE_STEPPER);
+    public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForUpload(
+            final DialogCloser dialogCloser,
+            final Runnable onNewConnection,
+            final Consumer<DbConnection> onRecentConnectionSelected
+    ) {
+        val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
+
+        loaded.getController().init(
+                dialogCloser,
+                onNewConnection,
+                onRecentConnectionSelected,
+                DisplayableText.of(UPLOAD_TITLE),
+                DisplayableText.of(UPLOAD_TEXT));
+
+        return loaded;
+    }
+
+    public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForArchiving(
+            final DialogCloser dialogCloser,
+            final Runnable onNewConnection,
+            final Consumer<DbConnection> onRecentConnectionSelected
+    ) {
+        val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
+
+        loaded.getController().init(
+                dialogCloser,
+                onNewConnection,
+                onRecentConnectionSelected,
+                DisplayableText.of(ARCHIVE_TITLE),
+                DisplayableText.of(ARCHIVE_TEXT));
+
+        return loaded;
     }
 }

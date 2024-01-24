@@ -5,11 +5,13 @@ import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.ArchiveRecentConnectionsDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
+import ch.admin.bar.siardsuite.util.preferences.DbConnection;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
@@ -103,6 +105,34 @@ public class RootStage extends Stage implements ErrorDialogOpener {
             this::closeDialog,
             treeItemsExplorer,
             onSelected
+    );
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
+  }
+
+  public void openRecentConnectionsDialogForArchiving(
+          final Runnable onNewConnection,
+          final Consumer<DbConnection> onRecentConnectionSelected
+  ) {
+    val loaded = ArchiveRecentConnectionsDialogPresenter.loadForArchiving(
+            this::closeDialog,
+            onNewConnection,
+            onRecentConnectionSelected
+    );
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
+  }
+
+  public void openRecentConnectionsDialogForUploading(
+          final Runnable onNewConnection,
+          final Consumer<DbConnection> onRecentConnectionSelected
+  ) {
+    val loaded = ArchiveRecentConnectionsDialogPresenter.loadForArchiving(
+            this::closeDialog,
+            onNewConnection,
+            onRecentConnectionSelected
     );
 
     dialogPane.setCenter(loaded.getNode());

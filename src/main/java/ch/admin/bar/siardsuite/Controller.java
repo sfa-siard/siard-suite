@@ -20,7 +20,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.util.Pair;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
@@ -213,7 +212,18 @@ public class Controller {
     public void initializeWorkflow(Workflow workflow, RootStage stage) {
         this.model.clearSiardArchive();
         this.workflow = workflow;
-        stage.openDialog(View.forWorkflow(workflow));
+
+        if (Workflow.ARCHIVE.equals(workflow)) {
+            stage.openRecentConnectionsDialogForArchiving(
+                    () -> stage.navigate(View.ARCHIVE_STEPPER),
+                    dbConnection -> {
+                        setRecentDatabaseConnection(Optional.of(dbConnection));
+                        stage.navigate(View.ARCHIVE_STEPPER);
+                    }
+            );
+        } else {
+            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
+        }
     }
 
     public void initializeExport(RootStage stage) {
