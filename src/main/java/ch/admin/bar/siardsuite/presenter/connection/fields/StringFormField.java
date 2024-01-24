@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter.connection.fields;
 
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import lombok.Builder;
 import lombok.NonNull;
@@ -28,9 +29,10 @@ public class StringFormField extends FormField<String> {
             @Nullable final String initialValue,
             @Singular final Set<Validator<String>> validators,
             @Nullable final Double prefWidth,
-            @Nullable final Consumer<String> onNewUserInput
+            @Nullable final Consumer<String> onNewUserInput,
+            @Nullable final Boolean deactivable
     ) {
-        super(title, hint, validators);
+        super(title, hint, validators, deactivable);
 
         this.value = new TextField();
         this.value.getStyleClass().add(FIELD_STYLE_CLASS);
@@ -60,5 +62,10 @@ public class StringFormField extends FormField<String> {
     @Override
     public void setValue(final String text) {
          value.setText(text);
+    }
+
+    @Override
+    protected Node getContentNode() {
+        return this.value;
     }
 }

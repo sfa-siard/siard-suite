@@ -75,12 +75,8 @@ public class FileBasedDbmsConnectionPropertiesForm extends ConnectionPropertiesF
     }
 
     @Override
-    public Optional<DbmsConnectionData> tryGetValidConnectionData() {
-        if (isValid()) {
-            return Optional.of(new DbmsConnectionData(dbms, connectionPropertiesSupplier.get()));
-        }
-
-        return Optional.empty();
+    public DbmsConnectionData getConnectionData() {
+        return new DbmsConnectionData(dbms, connectionPropertiesSupplier.get());
     }
 
     private void handleJdbcUrl() {

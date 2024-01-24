@@ -6,12 +6,15 @@ import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.NonNull;
 import lombok.val;
@@ -26,31 +29,54 @@ public abstract class FormField<T> extends VBox {
     protected static final String FIELD_STYLE_CLASS = "form-field";
     protected static final String VALIDATION_STYLE_CLASS = "error-text";
 
-    protected final Label title;
+    protected final HBox title;
     protected final Label validationMsg;
+
+    private final MFXToggleButton activationToggle;
 
     private final Collection<Validator<T>> validators;
 
     public FormField(
             @NonNull final DisplayableText title,
             @Nullable final DisplayableText hint,
-            @Nullable final Collection<Validator<T>> validators
+            @Nullable final Collection<Validator<T>> validators,
+            @Nullable final Boolean deactivable
             ) {
         this.validators = Optional.ofNullable(validators).orElse(new ArrayList<>());
 
-        this.title = new Label();
-        this.title.textProperty()
+        val titleLabel = new Label();
+        titleLabel.textProperty()
                 .bind(title.bindable());
-        this.title.getStyleClass().add(TITLE_STYLE_CLASS);
+        titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
+        titleLabel.setAlignment(Pos.CENTER_LEFT);
+        titleLabel.setMaxHeight(Double.MAX_VALUE);
+
+        activationToggle = new MFXToggleButton();
+        activationToggle.setSelected(true);
+        activationToggle.setOnAction(event -> {
+            val contentNode = getContentNode();
+            contentNode.setVisible(!contentNode.isVisible());
+            contentNode.setManaged(!contentNode.isManaged());
+
+            if (!activationToggle.isSelected()) {
+                hideValidationLabel();
+            }
+        });
+
+        if (deactivable != null && deactivable) {
+            this.title = new HBox(activationToggle, titleLabel);
+        } else {
+            this.title = new HBox(titleLabel);
+        }
+        this.title.setFillHeight(true);
 
         Optional.ofNullable(hint).ifPresent(displayableText -> {
-            val temp = new SiardTooltip(displayableText.getText());
             val iconButton = new IconButton(IconButton.Icon.INFO);
 
-            this.title.setContentDisplay(ContentDisplay.RIGHT);
-            this.title.setGraphic(iconButton);
+            titleLabel.setContentDisplay(ContentDisplay.RIGHT);
+            titleLabel.setGraphic(iconButton);
 
-            new SiardToolip(iconButton, temp).setup();
+            new SiardTooltip(displayableText).showOnMouseOn(iconButton);
         });
 
         VBox.setMargin(this.title, new Insets(0, 0, 10, 0));
@@ -69,7 +95,7 @@ public abstract class FormField<T> extends VBox {
     }
 
     public boolean hasInvalidValueAndIfSoShowValidationMessage() {
-        val failingValidator = findFailingValidator();
+                val failingValidator = findFailingValidator();
 
         OptionalHelper.ifPresentOrElse(
                 failingValidator,
@@ -80,11 +106,21 @@ public abstract class FormField<T> extends VBox {
         return failingValidator.isPresent();
     }
 
+    public boolean isActivated() {
+        return activationToggle.isSelected();
+    }
+
     public abstract T getValue();
 
     public abstract void setValue(T newValue);
 
+    protected abstract Node getContentNode();
+
     private Optional<Validator<T>> findFailingValidator() {
+        if (!isActivated()) {
+            return Optional.empty();
+        }
+
         val currentValue = getValue();
         return validators.stream()
                 .filter(validator -> !validator.getIsValidCheck().test(currentValue))

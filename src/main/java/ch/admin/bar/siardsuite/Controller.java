@@ -222,30 +222,34 @@ public class Controller {
                             stage.navigate(View.ARCHIVE_STEPPER);
                         }
                 );
+                break;
             case OPEN:
                 stage.openSelectSiardFileDialog((file, archive) -> {
                             setSiardArchive(file.getName(), archive);
                             stage.navigate(View.EXPORT_SELECT_TABLES);
                         }
                 );
+                break;
             case EXPORT:
                 stage.openSelectSiardFileDialog((file, archive) -> {
                             setSiardArchive(file.getName(), archive);
                             stage.openDialog(View.OPEN_SIARD_ARCHIVE_PREVIEW);
                         }
                 );
+                break;
             case UPLOAD:
                 stage.openSelectSiardFileDialog((file, archive) -> {
                             setSiardArchive(file.getName(), archive);
                             stage.openRecentConnectionsDialogForUploading(
-                                    () -> stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG),
+                                    () -> stage.openDialog(View.UPLOAD_STEPPER),
                                     dbConnection -> {
                                         setRecentDatabaseConnection(Optional.of(dbConnection));
-                                        stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG);
+                                        stage.openDialog(View.UPLOAD_STEPPER);
                                     }
                             );
                         }
                 );
+                break;
         }
     }
 

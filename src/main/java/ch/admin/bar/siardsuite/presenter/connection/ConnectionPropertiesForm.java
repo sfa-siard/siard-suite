@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public abstract class ConnectionPropertiesForm extends VBox {
 
-    protected static final double FORM_FIELD_WITH = 578D;
+    public static final double FORM_FIELD_WITH = 578D;
 
     protected static final I18nKey JDBC_URL_LABEL = I18nKey.of("connection.view.url.label");
     protected static final I18nKey INVALID_JDBC_URL_MESSAGE = I18nKey.of("connection.view.url.invalid");
@@ -28,6 +28,6 @@ public abstract class ConnectionPropertiesForm extends VBox {
         return invalidFields.isEmpty();
     }
 
-    public abstract Optional<DbmsConnectionData> tryGetValidConnectionData();
+    public abstract DbmsConnectionData getConnectionData();
 
 }

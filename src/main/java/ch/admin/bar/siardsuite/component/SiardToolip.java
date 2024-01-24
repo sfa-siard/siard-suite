@@ -1,10 +1,10 @@
 package ch.admin.bar.siardsuite.component;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 
+@Deprecated
 public class SiardToolip {
 
     private final Node button;

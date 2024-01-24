@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -23,6 +24,7 @@ import java.util.function.Consumer;
 public class FileChooserFormField extends FormField<File> {
 
     private final TextField pathField;
+    private final HBox content;
     private final DisplayableText fileChooserTitle;
     private final Collection<FileChooser.ExtensionFilter> fileChooserExtensionFilters;
 
@@ -36,9 +38,10 @@ public class FileChooserFormField extends FormField<File> {
             @Singular final Collection<Validator<File>> validators,
             @Nullable final File initialValue,
             @Nullable final Double prefWidth,
-            @Nullable final Consumer<File> onNewUserInput
+            @Nullable final Consumer<File> onNewUserInput,
+            @Nullable final Boolean deactivable
     ) {
-        super(title, hint, validators);
+        super(title, hint, validators, deactivable);
 
         this.fileChooserTitle = fileChooserTitle;
         this.fileChooserExtensionFilters = Optional.ofNullable(fileChooserExtensionFilters).orElse(new ArrayList<>());
@@ -75,12 +78,12 @@ public class FileChooserFormField extends FormField<File> {
                             );
                 }));
 
-        val value = new HBox();
+        content = new HBox();
         HBox.setHgrow(pathField, Priority.ALWAYS);
-        value.getChildren().addAll(searchFileButton, pathField);
-        Optional.ofNullable(prefWidth).ifPresent(value::setPrefWidth);
+        content.getChildren().addAll(searchFileButton, pathField);
+        Optional.ofNullable(prefWidth).ifPresent(content::setPrefWidth);
 
-        value.setStyle("" +
+        content.setStyle("" +
                 "-fx-border-color: #b0afaf; " +
                 "-fx-border-width: 1; " +
                 "-fx-max-height: 48; " +
@@ -89,7 +92,7 @@ public class FileChooserFormField extends FormField<File> {
                 "-fx-background-insets: 0, 1, 2; " +
                 "-fx-background-radius: 3, 2, 2;");
 
-        this.getChildren().setAll(this.title, value, validationMsg);
+        this.getChildren().setAll(this.title, content, validationMsg);
     }
 
     public File getValue() {
@@ -99,6 +102,11 @@ public class FileChooserFormField extends FormField<File> {
     @Override
     public void setValue(File newValue) {
         pathField.setText(newValue.getAbsolutePath());
+    }
+
+    @Override
+    protected Node getContentNode() {
+        return content;
     }
 
     private Optional<File> showFileChooser() {

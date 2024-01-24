@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXToggleButton?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveConnectionPresenter">
-    <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+<ScrollPane maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308"
+            styleClass="scrollable-pane"
+            stylesheets="@../../css/root.css"
+            xmlns="http://javafx.com/javafx/1.8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveConnectionPresenter">
+    <BorderPane fx:id="borderPane"
+                maxHeight="1.7976931348623157E308"
+                maxWidth="1.7976931348623157E308"
+                style="-fx-background-color: white">
         <center>
             <VBox BorderPane.alignment="TOP_LEFT">
                 <BorderPane.margin>
@@ -18,7 +26,10 @@
                     <VBox.margin>
                         <Insets left="25.0" right="25.0"/>
                     </VBox.margin>
-                    <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2"/>
+                    <Text fx:id="title"
+                          strokeType="OUTSIDE"
+                          strokeWidth="0.0"
+                          styleClass="h2"/>
                     <TextFlow fx:id="textFlow" lineSpacing="8.0">
                         <Text fx:id="text0" styleClass="view-text"/>
                         <Text fx:id="text1" styleClass="view-text"/>
@@ -30,50 +41,10 @@
                         </VBox.margin>
                     </TextFlow>
                 </VBox>
-                <HBox fx:id="formContainer" maxWidth="1140.0" styleClass="form-container">
-                </HBox>
-                <VBox>
-                    <VBox.margin>
-                        <Insets bottom="24.0" left="25.0" right="25.0" top="24.0"/>
-                    </VBox.margin>
-                    <styleClass>
-                        <String fx:value="form-container"/>
-                        <String fx:value="form-container-white"/>
-                    </styleClass>
-
-                    <HBox styleClass="info-container">
-                        <VBox.margin>
-                            <Insets bottom="24.0" top="10.0"/>
-                        </VBox.margin>
-                        <MFXToggleButton fx:id="toggleSave" prefHeight="48.0" selected="true"
-                                         styleClass="toggle-button"/>
-                        <MFXButton fx:id="infoButton" alignment="CENTER" rippleAnimateBackground="false">
-                            <styleClass>
-                                <String fx:value="info-icon"/>
-                                <String fx:value="icon-button"/>
-                            </styleClass>
-                            <HBox.margin>
-                                <Insets top="4.0"/>
-                            </HBox.margin>
-                        </MFXButton>
-                    </HBox>
-                    <Label fx:id="connectionLabel" styleClass="form-label">
-                        <VBox.margin>
-                            <Insets bottom="10.0" top="25.0"/>
-                        </VBox.margin>
-                    </Label>
-                    <TextField fx:id="connectionName" maxWidth="460.0" styleClass="form-field">
-                        <VBox.margin>
-                            <Insets bottom="10.0"/>
-                        </VBox.margin>
-                    </TextField>
-                    <Label fx:id="connectionValidationMsg" styleClass="error-text">
-                        <VBox.margin>
-                            <Insets/>
-                        </VBox.margin>
-                    </Label>
+                <VBox fx:id="formContainer"
+                      maxWidth="1140.0"
+                      styleClass="form-container">
                 </VBox>
-
             </VBox>
         </center>
         <bottom>
