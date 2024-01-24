@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.view;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
@@ -11,6 +12,7 @@ import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
+import ch.admin.bar.siardsuite.presenter.open.OpenSiardArchiveDialogPresenter;
 import ch.admin.bar.siardsuite.util.preferences.DbConnection;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
@@ -20,11 +22,13 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.val;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class RootStage extends Stage implements ErrorDialogOpener {
+public class RootStage extends Stage implements ErrorHandler {
   private final Controller controller;
 
   private final BorderPane rootPane;
@@ -74,7 +78,7 @@ public class RootStage extends Stage implements ErrorDialogOpener {
   }
 
   @Override
-  public void openErrorDialog(final Throwable e) {
+  public void handle(final Throwable e) {
     val loaded = ErrorDialogPresenter.load(new Failure(e), this::closeDialog);
 
     dialogPane.setCenter(loaded.getNode());
@@ -129,10 +133,21 @@ public class RootStage extends Stage implements ErrorDialogOpener {
           final Runnable onNewConnection,
           final Consumer<DbConnection> onRecentConnectionSelected
   ) {
-    val loaded = ArchiveRecentConnectionsDialogPresenter.loadForArchiving(
+    val loaded = ArchiveRecentConnectionsDialogPresenter.loadForUpload(
             this::closeDialog,
             onNewConnection,
             onRecentConnectionSelected
+    );
+
+    dialogPane.setCenter(loaded.getNode());
+    dialogPane.setVisible(true);
+  }
+
+  public void openSelectSiardFileDialog(final BiConsumer<File, Archive> onArchiveSelected) {
+    val loaded = OpenSiardArchiveDialogPresenter.load(
+            this::closeDialog,
+            this,
+            onArchiveSelected
     );
 
     dialogPane.setCenter(loaded.getNode());

@@ -5,7 +5,7 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.ErrorDialogOpener;
+import ch.admin.bar.siardsuite.view.ErrorHandler;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
@@ -39,7 +39,7 @@ public class FormRenderer<T> {
     private final RenderableForm<T> renderableForm;
     private final T data;
 
-    private final ErrorDialogOpener errorDialogOpener;
+    private final ErrorHandler errorHandler;
 
     private final List<EditableFormField> editableFormFields = new ArrayList<>();
     private final List<SearchableFormEntry> searchableFormEntries = new ArrayList<>();
@@ -52,11 +52,11 @@ public class FormRenderer<T> {
     @Builder
     public FormRenderer(
             @NonNull final RenderableForm<T> renderableForm,
-            @NonNull final ErrorDialogOpener errorDialogOpener,
+            @NonNull final ErrorHandler errorHandler,
             @NonNull final BooleanProperty hasChanged
     ) {
         this.renderableForm = renderableForm;
-        this.errorDialogOpener = errorDialogOpener;
+        this.errorHandler = errorHandler;
         this.hasChanged = hasChanged;
 
         this.data = renderableForm.getDataSupplier().get();
@@ -102,7 +102,7 @@ public class FormRenderer<T> {
                     if (renderableProperty instanceof RenderableLazyLoadingTable) {
                         return LazyLoadingTableRenderer.<T, Object>builder()
                                 .dataHolder(data)
-                                .errorDialogOpener(errorDialogOpener)
+                                .errorHandler(errorHandler)
                                 .renderableTable((RenderableLazyLoadingTable<T, Object>) renderableProperty)
                                 .build()
                                 .render();

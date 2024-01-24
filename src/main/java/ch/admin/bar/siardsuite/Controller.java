@@ -140,7 +140,7 @@ public class Controller {
     public void uploadArchive(
             DbmsConnectionData connectionData,
             EventHandler<WorkerStateEvent> onSuccess,
-                              EventHandler<WorkerStateEvent> onFailure
+            EventHandler<WorkerStateEvent> onFailure
     ) throws SQLException {
         this.databaseUploadService = DatabaseConnectionFactory.getInstance(model, connectionData).createDatabaseUploader();
         this.onDatabaseUploadSuccess(onSuccess);
@@ -213,16 +213,39 @@ public class Controller {
         this.model.clearSiardArchive();
         this.workflow = workflow;
 
-        if (Workflow.ARCHIVE.equals(workflow)) {
-            stage.openRecentConnectionsDialogForArchiving(
-                    () -> stage.navigate(View.ARCHIVE_STEPPER),
-                    dbConnection -> {
-                        setRecentDatabaseConnection(Optional.of(dbConnection));
-                        stage.navigate(View.ARCHIVE_STEPPER);
-                    }
-            );
-        } else {
-            stage.openDialog(View.OPEN_SIARD_ARCHIVE_DIALOG);
+        switch (workflow) {
+            case ARCHIVE:
+                stage.openRecentConnectionsDialogForArchiving(
+                        () -> stage.navigate(View.ARCHIVE_STEPPER),
+                        dbConnection -> {
+                            setRecentDatabaseConnection(Optional.of(dbConnection));
+                            stage.navigate(View.ARCHIVE_STEPPER);
+                        }
+                );
+            case OPEN:
+                stage.openSelectSiardFileDialog((file, archive) -> {
+                            setSiardArchive(file.getName(), archive);
+                            stage.navigate(View.EXPORT_SELECT_TABLES);
+                        }
+                );
+            case EXPORT:
+                stage.openSelectSiardFileDialog((file, archive) -> {
+                            setSiardArchive(file.getName(), archive);
+                            stage.openDialog(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+                        }
+                );
+            case UPLOAD:
+                stage.openSelectSiardFileDialog((file, archive) -> {
+                            setSiardArchive(file.getName(), archive);
+                            stage.openRecentConnectionsDialogForUploading(
+                                    () -> stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG),
+                                    dbConnection -> {
+                                        setRecentDatabaseConnection(Optional.of(dbConnection));
+                                        stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG);
+                                    }
+                            );
+                        }
+                );
         }
     }
 

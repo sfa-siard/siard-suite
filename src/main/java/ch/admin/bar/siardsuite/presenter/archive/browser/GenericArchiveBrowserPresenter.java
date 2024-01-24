@@ -185,7 +185,7 @@ public class GenericArchiveBrowserPresenter {
         currentFormRenderer = FormRenderer.builder()
                 .renderableForm(form)
                 .hasChanged(hasChanged)
-                .errorDialogOpener(rootStage)
+                .errorHandler(rootStage)
                 .build();
 
         this.titleTableContainer.textProperty()
