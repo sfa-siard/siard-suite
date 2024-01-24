@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm?>
-<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
+<ScrollPane styleClass="scrollable-pane"
+            stylesheets="@../../css/root.css"
+            xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadConnectionPresenter"
-            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-    <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
+            maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308">
+    <BorderPane style="-fx-background-color: white"
+                fx:id="borderPane"
+                maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308">
         <center>
             <VBox BorderPane.alignment="TOP_LEFT">
-                <VBox prefWidth="100.0">
-                    <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2"/>
-                    <TextFlow fx:id="textFlow" lineSpacing="8.0">
-                        <Text fx:id="text0" styleClass="view-text"/>
-                        <Text fx:id="text1" styleClass="view-text"/>
-                        <Text fx:id="text2" styleClass="view-text"/>
-                        <Text fx:id="text3" styleClass="view-text"/>
-                        <Text fx:id="text4" styleClass="view-text"/>
-                        <VBox.margin>
-                            <Insets bottom="24.0" top="15.0"/>
-                        </VBox.margin>
-                    </TextFlow>
-                    <VBox.margin>
-                        <Insets left="25.0" right="25.0"/>
-                    </VBox.margin>
-                </VBox>
+                <BorderPane.margin>
+                    <Insets left="25.0" right="25.0" top="48.0"/>
+                </BorderPane.margin>
 
                 <ConnectionForm fx:id="connectionForm"
-                                maxWidth="1140.0"
-                                styleClass="form-container"/>
+                                maxWidth="1140.0"/>
 
                 <VBox>
                     <VBox.margin>

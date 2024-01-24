@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
-<?import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm?>
 <ScrollPane maxHeight="1.7976931348623157E308"
             maxWidth="1.7976931348623157E308"
             styleClass="scrollable-pane"
@@ -23,28 +21,8 @@
                 <BorderPane.margin>
                     <Insets left="25.0" right="25.0" top="48.0"/>
                 </BorderPane.margin>
-                <VBox prefWidth="100.0">
-                    <VBox.margin>
-                        <Insets left="25.0" right="25.0"/>
-                    </VBox.margin>
-                    <Text fx:id="title"
-                          strokeType="OUTSIDE"
-                          strokeWidth="0.0"
-                          styleClass="h2"/>
-                    <TextFlow fx:id="textFlow" lineSpacing="8.0">
-                        <Text fx:id="text0" styleClass="view-text"/>
-                        <Text fx:id="text1" styleClass="view-text"/>
-                        <Text fx:id="text2" styleClass="view-text"/>
-                        <Text fx:id="text3" styleClass="view-text"/>
-                        <Text fx:id="text4" styleClass="view-text"/>
-                        <VBox.margin>
-                            <Insets bottom="24.0" top="15.0"/>
-                        </VBox.margin>
-                    </TextFlow>
-                </VBox>
                 <ConnectionForm fx:id="connectionForm"
-                                maxWidth="1140.0"
-                                styleClass="form-container"/>
+                                maxWidth="1140.0"/>
             </VBox>
         </center>
         <bottom>

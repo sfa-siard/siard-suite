@@ -2,22 +2,17 @@ package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
-import ch.admin.bar.siardsuite.component.SiardToolip;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionProperties;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
-import ch.admin.bar.siardsuite.presenter.ValidationProperties;
-import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -25,64 +20,27 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import lombok.val;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.prefs.Preferences;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.CONNECTION_URL;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.DATABASE_NAME;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.DATABASE_SERVER;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.DATABASE_SYSTEM;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.PORT_NUMBER;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.USER_NAME;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.DATABASE_CONNECTION;
 
 public class UploadConnectionPresenter extends StepperPresenter {
-
-    private static final I18nKey TITLE = I18nKey.of("connection.view.title");
-
-    private static final I18nKey TEXT_0 = I18nKey.of("connection.view.text0");
-    private static final I18nKey TEXT_1 = I18nKey.of("connection.view.text1");
-    private static final I18nKey TEXT_2 = I18nKey.of("connection.view.text2");
-    private static final I18nKey TEXT_3 = I18nKey.of("connection.view.text3");
-    private static final I18nKey TEXT_4 = I18nKey.of("connection.view.text4");
 
     private static final I18nKey TOOLTIP = I18nKey.of("uploadConnection.view.tooltip");
     private static final I18nKey SCHEMA_NAME_TITLE = I18nKey.of("uploadConnection.view.new.schema.name");
     private static final I18nKey CURRENT_NAME = I18nKey.of("uploadConnection.view.current.name");
     private static final I18nKey NEW_NAME = I18nKey.of("uploadConnection.view.new.name");
 
-
-    @FXML
-    public Text title;
-    @FXML
-    public Text text0;
-    @FXML
-    public Text text1;
-    @FXML
-    public Text text2;
-    @FXML
-    public Text text3;
-    @FXML
-    public Text text4;
-    @FXML
-    public TextFlow textFlow;
     @FXML
     public BorderPane borderPane;
     @FXML
@@ -102,18 +60,6 @@ public class UploadConnectionPresenter extends StepperPresenter {
     public ConnectionForm connectionForm;
 
     @FXML
-    public Label dbServerValidationMsg;
-    @FXML
-    public Label dbNameValidationMsg;
-    @FXML
-    public Label portValidationMsg;
-    @FXML
-    public Label userNameValidationMsg;
-    @FXML
-    public Label passwordValidationMsg;
-    @FXML
-    public Label urlValidationMsg;
-    @FXML
     public Label schemaValidationMsg;
 
 
@@ -131,22 +77,11 @@ public class UploadConnectionPresenter extends StepperPresenter {
     public void init(Controller controller, RootStage stage, MFXStepper stepper) {
         this.init(controller, stage);
 
-        this.schemas = controller.getSiardArchive().schemas();
-
-        title.textProperty().bind(DisplayableText.of(TITLE).bindable());
-
-        text0.textProperty().bind(DisplayableText.of(TEXT_0).bindable());
-        text1.textProperty().bind(DisplayableText.of(TEXT_1).bindable());
-        text1.getStyleClass().add("bold");
-        text2.textProperty().bind(DisplayableText.of(TEXT_2).bindable());
-        text3.textProperty().bind(DisplayableText.of(TEXT_3).bindable());
-        text3.getStyleClass().add("bold");
-        text4.textProperty().bind(DisplayableText.of(TEXT_4).bindable());
+        schemas = controller.getSiardArchive().schemas();
 
         titleNewSchemaName.textProperty().bind(DisplayableText.of(SCHEMA_NAME_TITLE).bindable());
         currentNameLabel.textProperty().bind(DisplayableText.of(CURRENT_NAME).bindable());
         newNameLabel.textProperty().bind(DisplayableText.of(NEW_NAME).bindable());
-
 
 
         new SiardTooltip(DisplayableText.of(TOOLTIP)).showOnMouseOn(infoButton);
