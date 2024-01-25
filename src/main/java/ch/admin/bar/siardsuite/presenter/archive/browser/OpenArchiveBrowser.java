@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import lombok.val;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.OPEN_PREVIEW;
@@ -35,7 +36,15 @@ public class OpenArchiveBrowser extends Presenter {
         val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), false);
 
         val buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
-        buttonsBox.cancel().setOnAction(event -> stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG));
+        buttonsBox.cancel().setOnAction(event -> {
+            stage.openRecentConnectionsDialogForUploading(
+                    () -> stage.openDialog(View.UPLOAD_STEPPER),
+                    dbConnection -> {
+                        controller.setRecentDatabaseConnection(Optional.of(dbConnection));
+                        stage.openDialog(View.UPLOAD_STEPPER);
+                    }
+            );
+        });
         buttonsBox.previous().setOnAction(event -> stage.openDialog(View.EXPORT_SELECT_TABLES));
         buttonsBox.next().setOnAction(event -> {
             try {

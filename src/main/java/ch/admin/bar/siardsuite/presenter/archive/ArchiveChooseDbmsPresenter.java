@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.model.View;
@@ -86,8 +87,7 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
                 this.errorMessage.setVisible(true);
             }
         });
-        this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.ARCHIVE_DB_DIALOG));
+        this.buttonsBox.previous().setOnAction((event) -> controller.initializeWorkflow(Workflow.UPLOAD, stage));
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
-
 }

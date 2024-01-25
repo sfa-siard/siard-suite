@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
-import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.model.Failure;
@@ -14,7 +13,6 @@ import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor
 import ch.admin.bar.siardsuite.util.preferences.DbConnection;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
@@ -29,7 +27,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 

@@ -96,6 +96,12 @@ public class UserPreferences {
                 .build();
     }
 
+    public static void push(final Options options) {
+        val node = UserPreferences.node(OPTIONS);
+        node.put(QUERY_TIMEOUT.name(), options.getQueryTimeout() + "");
+        node.put(LOGIN_TIMEOUT.name(), options.getLoginTimeout() + "");
+    }
+
     @Value
     @Builder
     public static class StorageData<T> {

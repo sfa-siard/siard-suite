@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.model.View;
@@ -20,7 +21,6 @@ import javafx.scene.text.Text;
 import lombok.val;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
-import static ch.admin.bar.siardsuite.util.SiardEvent.UPLOAD_DBMS_SELECTED;
 
 public class UploadChooseDbmsPresenter extends StepperPresenter {
 
@@ -83,12 +83,12 @@ public class UploadChooseDbmsPresenter extends StepperPresenter {
                 this.errorMessage.setVisible(false);
 
                 stepper.next();
-                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(UPLOAD_DBMS_SELECTED, selectedDbms));
+                stepper.fireEvent(new SiardEvent.DbmsSelectedEvent(SiardEvent.UPLOAD_DBMS_SELECTED, selectedDbms));
             } else {
                 this.errorMessage.setVisible(true);
             }
         });
-        this.buttonsBox.previous().setOnAction((event) -> stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG));
+        this.buttonsBox.previous().setOnAction((event) -> controller.initializeWorkflow(Workflow.UPLOAD, stage));
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.UPLOAD_ABORT_DIALOG));
     }
 }

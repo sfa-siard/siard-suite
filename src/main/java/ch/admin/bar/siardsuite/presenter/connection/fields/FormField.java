@@ -1,14 +1,11 @@
 package ch.admin.bar.siardsuite.presenter.connection.fields;
 
 import ch.admin.bar.siardsuite.component.IconButton;
-import ch.admin.bar.siardsuite.component.SiardToolip;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;

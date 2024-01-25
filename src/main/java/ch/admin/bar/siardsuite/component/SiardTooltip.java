@@ -8,17 +8,16 @@ import javafx.scene.control.Tooltip;
 
 public class SiardTooltip extends Tooltip {
 
-    @Deprecated
-    public SiardTooltip(String messageKey) {
-        this(DisplayableText.of(I18nKey.of(messageKey)));
-    }
-
     public SiardTooltip(DisplayableText displayableText) {
         super();
         this.setPrefSize(328.0, 162);
         this.setAutoHide(true);
         this.getStyleClass().add("info-tooltip");
         this.textProperty().bind(displayableText.bindable());
+    }
+
+    public SiardTooltip(I18nKey i18nKey) {
+        this(DisplayableText.of(i18nKey));
     }
 
     public void showOnMouseOn(final Node node) {

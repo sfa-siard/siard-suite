@@ -49,6 +49,7 @@ public abstract class StepperPresenter extends Presenter implements StepperDepen
 
         controller.getRecentDatabaseConnection()
                 .ifPresent(recentConnection -> {
+                    // skip first step
                     stepper.getStepperToggles().get(0).setState(StepperToggleState.COMPLETED);
                     stepper.updateProgress();
                     stepper.next();

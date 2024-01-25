@@ -12,9 +12,6 @@ import javafx.concurrent.Task;
 
 import java.sql.Connection;
 
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.QUERY_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.OPTIONS;
-
 public class DatabaseUploadTask extends Task<String> implements Progress, ArchiveVisitor {
 
   private final Connection connection;
@@ -43,7 +40,7 @@ public class DatabaseUploadTask extends Task<String> implements Progress, Archiv
     this.model.provideArchiveObject(this);
 
     connection.setAutoCommit(false);
-    int timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
+    int timeout = UserPreferences.getStoredOptions().getQueryTimeout();
 
     // TODO overwrite and metadataonly?
     boolean isOverwrite = true;

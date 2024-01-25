@@ -85,7 +85,7 @@ public class UploadConnectionPresenter extends StepperPresenter {
         newNameLabel.textProperty().bind(DisplayableText.of(NEW_NAME).bindable());
 
 
-        new SiardTooltip(DisplayableText.of(TOOLTIP)).showOnMouseOn(infoButton);
+        new SiardTooltip(TOOLTIP).showOnMouseOn(infoButton);
         buttonsBox = new ButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
 
