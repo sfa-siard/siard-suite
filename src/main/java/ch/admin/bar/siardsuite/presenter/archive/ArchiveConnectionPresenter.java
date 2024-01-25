@@ -14,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import lombok.val;
 
+import java.util.Optional;
+
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 
 public class ArchiveConnectionPresenter extends StepperPresenter {
@@ -60,6 +62,7 @@ public class ArchiveConnectionPresenter extends StepperPresenter {
         buttonsBox.next().setOnAction((event) -> {
             connectionForm.tryGetValidConnectionData()
                     .ifPresent(dbmsConnectionData -> {
+                        controller.setDatabaseConnectionData(Optional.of(dbmsConnectionData));
                         stepper.next();
                         stepper.fireEvent(new SiardEvent.DbmsConnectionDataReadyEvent(SiardEvent.ARCHIVE_CONNECTION_DATA_READY, dbmsConnectionData));
                     });

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
@@ -114,6 +115,7 @@ public class UploadConnectionPresenter extends StepperPresenter {
                 val connectionData = connectionForm.getConnectionData();
 
                 controller.updateSchemaMap(schemaMap);
+                controller.setDatabaseConnectionData(Optional.of(connectionData));
 
                 stepper.next();
                 stepper.fireEvent(new SiardEvent.DbmsConnectionDataReadyEvent(SiardEvent.UPLOAD_CONNECTION_UPDATED, connectionData));

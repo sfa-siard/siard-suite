@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.database.model;
 
+import ch.admin.bar.siardsuite.util.FileHelper;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -14,6 +15,7 @@ public class DbmsConnectionData {
     private final Supplier<String> jdbsConnectionStringSupplier;
     private final Supplier<String> userSupplier;
     private final Supplier<String> passwordSupplier;
+    private final Supplier<String> dbNameSupplier;
 
     public DbmsConnectionData(
             @NonNull ServerBasedDbms dbms,
@@ -25,6 +27,7 @@ public class DbmsConnectionData {
         jdbsConnectionStringSupplier = () -> dbms.getJdbcConnectionStringEncoder().apply(properties);
         userSupplier = properties::getUser;
         passwordSupplier = properties::getPassword;
+        dbNameSupplier = properties::getDbName;
     }
 
     public DbmsConnectionData(
@@ -37,6 +40,7 @@ public class DbmsConnectionData {
         jdbsConnectionStringSupplier = () -> dbms.getJdbcConnectionStringEncoder().apply(properties);
         userSupplier = () -> null;
         passwordSupplier = () -> null;
+        dbNameSupplier = () -> FileHelper.extractFilenameWithoutExtension(properties.getFile());
     }
 
     public String getUser() {
@@ -49,5 +53,9 @@ public class DbmsConnectionData {
 
     public String getJdbcConnectionString() {
         return jdbsConnectionStringSupplier.get();
+    }
+
+    public String getDbName() {
+        return dbNameSupplier.get();
     }
 }

@@ -20,9 +20,9 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.util.Pair;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,17 +39,16 @@ public class Controller {
     private Archive tmpArchive;
     private DatabaseLoadService databaseLoadService;
     private DatabaseUploadService databaseUploadService;
-    private Workflow workflow;
 
     @Setter
+    @Getter
     @NonNull
     private Optional<DbConnection> recentDatabaseConnection = Optional.empty();
 
-    public Optional<DbConnection> popRecentDatabaseConnection() {
-        val tempReturnValue = recentDatabaseConnection;
-        recentDatabaseConnection = Optional.empty();
-        return tempReturnValue;
-    }
+    @Setter
+    @Getter
+    @NonNull
+    private Optional<DbmsConnectionData> databaseConnectionData = Optional.empty();
 
     public Controller(Model model) {
         this.model = model;
@@ -89,13 +88,6 @@ public class Controller {
         DatabaseConnectionFactory.disconnect();
     }
 
-    public void updateConnectionData(String connectionUrl, String username, String databaseName, String password) {
-        this.model.setConnectionUrl(connectionUrl);
-        this.model.setDatabaseName(databaseName);
-        this.model.setUsername(username);
-        this.model.setPassword(password);
-    }
-
     public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
         this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
     }
@@ -131,11 +123,6 @@ public class Controller {
     public void addDatabaseUploadingProgressPropertyListener(ChangeListener<Number> listener) {
         this.databaseUploadService.progressProperty().addListener(listener);
     }
-
-    public Workflow getWorkflow() {
-        return workflow;
-    }
-
 
     public void uploadArchive(
             DbmsConnectionData connectionData,
@@ -211,7 +198,7 @@ public class Controller {
 
     public void initializeWorkflow(Workflow workflow, RootStage stage) {
         this.model.clearSiardArchive();
-        this.workflow = workflow;
+        this.setRecentDatabaseConnection(Optional.empty());
 
         switch (workflow) {
             case ARCHIVE:
@@ -226,14 +213,14 @@ public class Controller {
             case OPEN:
                 stage.openSelectSiardFileDialog((file, archive) -> {
                             setSiardArchive(file.getName(), archive);
-                            stage.navigate(View.EXPORT_SELECT_TABLES);
+                            stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
                         }
                 );
                 break;
             case EXPORT:
                 stage.openSelectSiardFileDialog((file, archive) -> {
                             setSiardArchive(file.getName(), archive);
-                            stage.openDialog(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+                            stage.openDialog(View.EXPORT_SELECT_TABLES);
                         }
                 );
                 break;
@@ -253,16 +240,6 @@ public class Controller {
         }
     }
 
-    public void initializeExport(RootStage stage) {
-        this.workflow = Workflow.EXPORT;
-        stage.openDialog(View.EXPORT_SELECT_TABLES);
-    }
-
-    public void initializeUpload(RootStage stage) {
-        this.workflow = Workflow.UPLOAD;
-        stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG);
-    }
-
     public void start(RootStage stage) {
         this.model.clearSiardArchive();
         stage.navigate(View.START);
@@ -270,18 +247,6 @@ public class Controller {
 
     public SiardArchive getSiardArchive() {
         return model.getSiardArchive();
-    }
-
-    public void setCurrentView(View view) {
-        this.model.setCurrentView(view);
-    }
-
-    public View getCurrentView() {
-        return this.model.getCurrentView();
-    }
-
-    public void setDatabaseType(String databaseType) {
-        model.setDatabaseType(databaseType);
     }
 
     public void provideArchiveObject(ArchiveVisitor visitor) {
@@ -292,24 +257,11 @@ public class Controller {
         this.model.provideDatabaseArchiveMetaDataProperties(visitor);
     }
 
-    public DatabaseProperties getDatabaseProps() {
-        return this.model.getDatabaseProps();
-    }
-
-    public StringProperty getDatabaseProduct() {
-        return this.model.getDatabaseProduct();
-    }
-
-    public List<String> getDatabaseTypes() {
-        return this.model.getDatabaseTypes();
-    }
-
     public void setSiardArchive(String name, Archive archive) {
         this.model.setSiardArchive(name, archive);
     }
 
     public void saveArchiveOnlyMetaData() throws IOException {
         this.getSiardArchive().save();
-
     }
 }

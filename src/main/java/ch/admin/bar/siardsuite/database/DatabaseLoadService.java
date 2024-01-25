@@ -6,27 +6,22 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.util.Pair;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
 
+@RequiredArgsConstructor
 public class DatabaseLoadService extends Service<ObservableList<Pair<String, Long>>> {
 
   private final Connection connection;
   private final Model model;
+  private final String dbName;
   private final Archive archive;
   private final boolean onlyMetaData;
   private final boolean viewsAsTables;
 
-  public DatabaseLoadService(Connection connection, Model model, Archive archive, boolean onlyMetaData, boolean viewsAsTables) {
-    this.connection = connection;
-    this.model = model;
-    this.archive = archive;
-    this.onlyMetaData = onlyMetaData;
-    this.viewsAsTables = viewsAsTables;
-  }
-
   @Override
   protected Task<ObservableList<Pair<String, Long>>> createTask() {
-    return new DatabaseLoadTask(connection, model, archive, onlyMetaData, viewsAsTables);
+    return new DatabaseLoadTask(connection, model, dbName, archive, onlyMetaData, viewsAsTables);
   }
 }

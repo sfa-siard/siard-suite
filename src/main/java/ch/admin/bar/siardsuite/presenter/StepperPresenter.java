@@ -19,7 +19,6 @@ import lombok.val;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -48,7 +47,7 @@ public abstract class StepperPresenter extends Presenter implements StepperDepen
             stepper.next();
         }
 
-        controller.popRecentDatabaseConnection()
+        controller.getRecentDatabaseConnection()
                 .ifPresent(recentConnection -> {
                     stepper.getStepperToggles().get(0).setState(StepperToggleState.COMPLETED);
                     stepper.updateProgress();

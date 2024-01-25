@@ -16,7 +16,11 @@ public class DatabaseConnectionFactory {
   private static Connection connection;
   private static Model model;
 
+  private final DbmsConnectionData connectionData;
+
   private DatabaseConnectionFactory(Model model, DbmsConnectionData connectionData) throws SQLException {
+    this.connectionData = connectionData;
+
     DatabaseConnectionFactory.model = model;
     val options = UserPreferences.getStoredOptions();
 
@@ -37,7 +41,7 @@ public class DatabaseConnectionFactory {
   }
 
   public DatabaseLoadService createDatabaseLoader(final Archive archive, boolean onlyMetaData, boolean viewsAsTables) {
-    return new DatabaseLoadService(connection, model, archive, onlyMetaData, viewsAsTables);
+    return new DatabaseLoadService(connection, model, connectionData.getDbName(), archive, onlyMetaData, viewsAsTables);
   }
 
   public DatabaseUploadService createDatabaseUploader() {

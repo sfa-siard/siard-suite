@@ -46,7 +46,7 @@ public class RootStage extends Stage implements ErrorHandler {
     dialogPane.setVisible(false);
 
     // load start view
-    navigate(controller.getCurrentView());
+    navigate(View.START);
 
     // set overall stack pane
     StackPane stackPane = new StackPane(rootPane, dialogPane);
@@ -68,7 +68,6 @@ public class RootStage extends Stage implements ErrorHandler {
   }
 
   public void navigate(View view) {
-    controller.setCurrentView(view);
     setCenter(rootPane, view);
   }
 

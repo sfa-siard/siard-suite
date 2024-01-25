@@ -19,7 +19,6 @@ import java.util.Map;
 
 public class Model {
 
-    private View currentView = View.START;
     private DatabaseConnectionProperties dbConnectionProps = new DatabaseConnectionProperties();
     private Map<String, String> schemaMap = new HashMap<>();
     private SiardArchive siardArchive = new SiardArchive();
@@ -27,14 +26,6 @@ public class Model {
     private Failure failure = null;
 
     public Model() {
-    }
-
-    public View getCurrentView() {
-        return currentView;
-    }
-
-    public void setCurrentView(View view) {
-        this.currentView = view;
     }
 
     public Archive initArchive() {
@@ -75,55 +66,16 @@ public class Model {
         return siardArchive;
     }
 
-    public void setDatabaseType(String databaseType) {
-        if (this.dbConnectionProps == null) {
-            this.dbConnectionProps = new DatabaseConnectionProperties();
-        }
-        this.dbConnectionProps.setDatabaseProduct(databaseType);
-    }
-
-    public void setConnectionUrl(String connectionUrl) {
-        this.dbConnectionProps.setConnectionUrl(connectionUrl);
-    }
-
-    public DatabaseProperties getDatabaseProps() {
-        return this.dbConnectionProps.getDatabaseProps();
-    }
-
-    public List<String> getDatabaseTypes() {
-        return this.dbConnectionProps.getDatabaseTypes();
-    }
-
     public StringProperty getDatabaseName() {
         return this.dbConnectionProps.getDatabaseName();
-    }
-
-    public StringProperty getDatabaseProduct() {
-        return this.dbConnectionProps.getDatabaseProduct();
-    }
-
-    public StringProperty getConnectionUrl() {
-        return this.dbConnectionProps.getConnectionUrl();
-    }
-
-    public StringProperty getDatabaseUsername() {
-        return this.dbConnectionProps.getDatabaseUsername();
     }
 
     public void setDatabaseName(String databaseName) {
         this.dbConnectionProps.setDatabaseName(databaseName);
     }
 
-    public void setUsername(String username) {
-        this.dbConnectionProps.setDatabaseUsername(username);
-    }
-
     public void setPassword(String password) {
         this.dbConnectionProps.setPassword(password);
-    }
-
-    public String getDatabasePassword() {
-        return this.dbConnectionProps.getPassword();
     }
 
     // TODO: maybe use some sort of visitor or provider or...

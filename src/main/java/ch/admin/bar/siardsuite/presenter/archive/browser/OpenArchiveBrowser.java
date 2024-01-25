@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -34,8 +35,8 @@ public class OpenArchiveBrowser extends Presenter {
         val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), false);
 
         val buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
-        buttonsBox.cancel().setOnAction(event -> this.controller.initializeUpload(stage)); // FIXME Duplication?
-        buttonsBox.previous().setOnAction(event -> this.controller.initializeExport(stage));
+        buttonsBox.cancel().setOnAction(event -> stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG));
+        buttonsBox.previous().setOnAction(event -> stage.openDialog(View.EXPORT_SELECT_TABLES));
         buttonsBox.next().setOnAction(event -> {
             try {
                 this.controller.saveArchiveOnlyMetaData();

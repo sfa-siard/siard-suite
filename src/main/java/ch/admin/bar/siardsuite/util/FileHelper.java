@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.val;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,5 +26,16 @@ public class FileHelper {
                 .filter(f -> f.contains("."))
                 .map(f -> f.substring(filename.lastIndexOf(".") + 1))
                 .orElse("bin");
+    }
+
+    public static String extractFilenameWithoutExtension(final File file) {
+        val filename = file.getName();
+
+        val lastDotIndex = filename.lastIndexOf('.');
+
+        if (lastDotIndex > 0) {
+            return filename.substring(0, lastDotIndex);
+        }
+        return filename;
     }
 }

@@ -140,7 +140,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                 this.subtitle1.setText(this.databaseName);
                 try {
                     controller.loadDatabase(
-                            null, // TODO FIXME
+                            controller.getDatabaseConnectionData().orElseThrow(() -> new IllegalStateException("No database connection data available")), // TODO FIXME
                             targetArchive,
                             false,
                             this.viewsAsTables,
