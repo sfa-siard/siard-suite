@@ -28,10 +28,6 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private static final I18nKey USERNAME_LABEL = I18nKey.of("connection.view.username.label");
     private static final I18nKey PASSWORD_LABEL = I18nKey.of("connection.view.password.label");
 
-    private static final I18nKey TOGGLE_SAVE = I18nKey.of("archiveConnection.view.toggleSave");
-    private static final I18nKey TOGGLE_SAVE_INFO = I18nKey.of("archiveConnection.view.tooltip");
-    private static final I18nKey CONNECTION_NAME = I18nKey.of("archiveConnection.view.connectionName.label");
-
     private final Supplier<ServerBasedDbmsConnectionProperties> connectionPropertiesSupplier;
     private final ServerBasedDbms serverBasedDbms;
 
@@ -96,6 +92,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .build();
 
         val password = StringFormField.builder()
+                .inputType(StringFormField.InputType.PASSWORD)
                 .title(TranslatableText.of(PASSWORD_LABEL))
                 .initialValue(initialValue
                         .map(ServerBasedDbmsConnectionProperties::getPassword)

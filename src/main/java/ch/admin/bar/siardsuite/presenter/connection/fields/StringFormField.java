@@ -3,7 +3,9 @@ package ch.admin.bar.siardsuite.presenter.connection.fields;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import javafx.scene.Node;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
@@ -19,7 +21,7 @@ public class StringFormField extends FormField<String> {
 
     private static final String FIELD_STYLE_CLASS = "form-field";
 
-    private final TextField value;
+    private final TextInputControl value;
 
     @Builder
     public StringFormField(
@@ -30,11 +32,17 @@ public class StringFormField extends FormField<String> {
             @Singular final Set<Validator<String>> validators,
             @Nullable final Double prefWidth,
             @Nullable final Consumer<String> onNewUserInput,
-            @Nullable final Boolean deactivable
+            @Nullable final Boolean deactivable,
+            @Nullable final InputType inputType
     ) {
         super(title, hint, validators, deactivable);
 
-        this.value = new TextField();
+        if (InputType.PASSWORD.equals(inputType)) {
+            this.value = new PasswordField();
+        } else {
+            this.value = new TextField();
+        }
+
         this.value.getStyleClass().add(FIELD_STYLE_CLASS);
         Optional.ofNullable(prompt)
                 .ifPresent(translatableText -> this.value.promptTextProperty().bind(translatableText.bindable()));
@@ -67,5 +75,10 @@ public class StringFormField extends FormField<String> {
     @Override
     protected Node getContentNode() {
         return this.value;
+    }
+
+    public enum InputType {
+        PLAIN_TEXT,
+        PASSWORD
     }
 }
