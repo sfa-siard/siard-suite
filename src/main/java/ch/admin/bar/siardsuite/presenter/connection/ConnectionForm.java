@@ -92,6 +92,7 @@ public class ConnectionForm extends VBox {
         connectionNameField = StringFormField.builder()
                 .title(DisplayableText.of(CONNECTION_NAME))
                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
+                .validator(Validator.SLASH_NOT_ALLOWED_VALIDATOR)
                 .hint(DisplayableText.of(TOGGLE_SAVE_INFO))
                 .initialValue(connectionName)
                 .deactivable(true)

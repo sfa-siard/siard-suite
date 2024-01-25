@@ -49,7 +49,7 @@ public class FileChooserFormField extends FormField<File> {
         this.fileChooserExtensionFilters = Optional.ofNullable(fileChooserExtensionFilters).orElse(new ArrayList<>());
 
         pathField = new TextField();
-        pathField.getStyleClass().add(TRANSPARENT_FIELD_STYLE_CLASS);
+        pathField.getStyleClass().addAll(FIELD_STYLE_CLASS, TRANSPARENT_STYLE_CLASS);
         Optional.ofNullable(prompt).ifPresent(displayableText -> pathField.setPromptText(displayableText.getText()));
         Optional.ofNullable(initialValue).ifPresent(file -> pathField.setText(file.getAbsolutePath()));
 

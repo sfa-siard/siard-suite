@@ -14,7 +14,8 @@ import java.util.function.Predicate;
 @Value
 public class Validator<T> {
     private static final I18nKey CAN_NOT_BE_EMPTY = I18nKey.of("valueValidation.canNotBeEmpty");
-    private static final I18nKey DOES_NOT_INCLUDE_COLONS = I18nKey.of("valueValidation.doesNotIncludeColons");
+    private static final I18nKey COLONS_NOT_ALLOWED = I18nKey.of("valueValidation.doesNotIncludeColons");
+    private static final I18nKey SLASH_NOT_ALLOWED = I18nKey.of("connection.view.error.connection.name.symbol");
     private static final I18nKey NEED_TO_EXIST = I18nKey.of("valueValidation.needsToBeExistingFile");
 
     public static final Validator<String> IS_NOT_EMPTY_STRING_VALIDATOR = Validator.<String>builder()
@@ -26,9 +27,16 @@ public class Validator<T> {
             .build();
 
     public static final Validator<String> DOES_NOT_INCLUDE_COLONS_VALIDATOR = Validator.<String>builder()
-            .message(DisplayableText.of(DOES_NOT_INCLUDE_COLONS))
+            .message(DisplayableText.of(COLONS_NOT_ALLOWED))
             .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
                     .filter(value -> !value.contains(":"))
+                    .isPresent())
+            .build();
+
+public static final Validator<String> SLASH_NOT_ALLOWED_VALIDATOR = Validator.<String>builder()
+            .message(DisplayableText.of(SLASH_NOT_ALLOWED))
+            .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
+                    .filter(value -> !value.contains("/"))
                     .isPresent())
             .build();
 
