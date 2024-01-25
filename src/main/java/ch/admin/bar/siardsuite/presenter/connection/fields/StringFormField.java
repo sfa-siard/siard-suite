@@ -19,8 +19,6 @@ import java.util.function.Consumer;
 @Slf4j
 public class StringFormField extends FormField<String> {
 
-    private static final String FIELD_STYLE_CLASS = "form-field";
-
     private final TextInputControl value;
 
     @Builder
@@ -69,7 +67,7 @@ public class StringFormField extends FormField<String> {
 
     @Override
     public void setValue(final String text) {
-         value.setText(text);
+        value.setText(text);
     }
 
     @Override

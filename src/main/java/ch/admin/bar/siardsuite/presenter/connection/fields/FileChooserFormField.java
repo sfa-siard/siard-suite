@@ -4,6 +4,8 @@ import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -47,15 +49,10 @@ public class FileChooserFormField extends FormField<File> {
         this.fileChooserExtensionFilters = Optional.ofNullable(fileChooserExtensionFilters).orElse(new ArrayList<>());
 
         pathField = new TextField();
+        pathField.getStyleClass().add(TRANSPARENT_FIELD_STYLE_CLASS);
         Optional.ofNullable(prompt).ifPresent(displayableText -> pathField.setPromptText(displayableText.getText()));
-        pathField.getStyleClass().add(FIELD_STYLE_CLASS);
-        pathField.setStyle("" +
-                "-fx-border-color: transparent; " +
-                "-fx-border-width: 0; " +
-                "-fx-max-height: 48; " +
-                "-fx-min-height: 48; " +
-                "-fx-background-color: -transparent, -fx-text-box-border, -fx-control-inner-background; "
-        );
+        Optional.ofNullable(initialValue).ifPresent(file -> pathField.setText(file.getAbsolutePath()));
+
         Optional.ofNullable(onNewUserInput)
                 .ifPresent(stringConsumer -> this.pathField.focusedProperty().addListener((observable, oldValue, newValue) -> {
                             if (!newValue && oldValue && !hasInvalidValueAndIfSoShowValidationMessage()) {
@@ -79,18 +76,12 @@ public class FileChooserFormField extends FormField<File> {
                 }));
 
         content = new HBox();
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.getStyleClass().add(FIELD_STYLE_CLASS);
+
         HBox.setHgrow(pathField, Priority.ALWAYS);
         content.getChildren().addAll(searchFileButton, pathField);
         Optional.ofNullable(prefWidth).ifPresent(content::setPrefWidth);
-
-        content.setStyle("" +
-                "-fx-border-color: #b0afaf; " +
-                "-fx-border-width: 1; " +
-                "-fx-max-height: 48; " +
-                "-fx-min-height: 48; " +
-                "-fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background; " +
-                "-fx-background-insets: 0, 1, 2; " +
-                "-fx-background-radius: 3, 2, 2;");
 
         this.getChildren().setAll(this.title, content, validationMsg);
     }
