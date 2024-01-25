@@ -30,10 +30,10 @@ public class DbmsRegistryTest {
     private static final String EXPECTED_JDBC_URL_FOR_DB2 = "jdbc:db2://db.host.org:1234/test?option=value";
 
     private static final FileBasedDbmsConnectionProperties EXAMPLE_FILE_BASEDPROPERTIES = new FileBasedDbmsConnectionProperties(
-            new File("C:\\i\\am\\a\\file.accdb")
+            new File("C:/i/am/a/file.accdb".replace("/", File.separator))
     );
 
-    private static final String EXPECTED_JDBC_URL_FOR_MSACCESS = "jdbc:access:C:\\i\\am\\a\\file.accdb";
+    private static final String EXPECTED_JDBC_URL_FOR_MSACCESS = "jdbc:access:C:/i/am/a/file.accdb".replace("/", File.separator);
 
     @Test
     public void decode_forPostgresql_expectDecodedProperties() throws Exception {
