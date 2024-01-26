@@ -25,8 +25,8 @@ public class ArchiveRecentConnectionsDialogPresenter {
     private static final I18nKey ARCHIVE_TITLE = I18nKey.of("archiveDbDialog.title");
     private static final I18nKey ARCHIVE_TEXT = I18nKey.of("archiveDbDialog.text");
 
-    private static final I18nKey UPLOAD_TITLE = I18nKey.of("archiveDbDialog.title");
-    private static final I18nKey UPLOAD_TEXT = I18nKey.of("archiveDbDialog.text");
+    private static final I18nKey UPLOAD_TITLE = I18nKey.of("uploadDbDialog.title");
+    private static final I18nKey UPLOAD_TEXT = I18nKey.of("uploadDbDialog.text");
 
     private static final I18nKey NEW_CONNECTION = I18nKey.of("archiveDbDialog.btnNewConnection");
     private static final I18nKey RECENT_CONNECTIONS_HEADER_NAME = I18nKey.of("dialog.recent.connections.header.name");
