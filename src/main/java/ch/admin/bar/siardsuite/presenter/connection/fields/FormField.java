@@ -24,7 +24,6 @@ import java.util.Optional;
 public abstract class FormField<T> extends VBox {
     protected static final String TITLE_STYLE_CLASS = "form-label";
     protected static final String FIELD_STYLE_CLASS = "form-field";
-    protected static final String TRANSPARENT_FIELD_STYLE_CLASS = "form-field-transparent";
     protected static final String TRANSPARENT_STYLE_CLASS = "transparent";
     protected static final String VALIDATION_STYLE_CLASS = "error-text";
 

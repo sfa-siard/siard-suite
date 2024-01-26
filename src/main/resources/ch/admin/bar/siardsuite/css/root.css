@@ -514,10 +514,11 @@
     -fx-background-color: white
 }
 
-.form-field.transparent {
+.form-container .form-field .transparent {
+    -fx-padding: 0 0 0 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-background-color: -transparent, -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-color: transparent;
 }
 
 HBox.form-field {
