@@ -183,6 +183,7 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.success");
             resultTitle.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
             setResultData();
+            controller.closeDbConnection();
             stepper.fireEvent(new SiardEvent(DATABASE_DOWNLOADED));
             this.buttonsBox = new ButtonBox().make(DOWNLOAD_FINISHED);
             addButtons(stepper);
