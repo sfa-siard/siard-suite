@@ -114,6 +114,13 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .initialValue(initialValue
                         .map(dbms.getJdbcConnectionStringEncoder())
                         .orElse(""))
+                .prompt(DisplayableText.of(dbms.getJdbcConnectionStringEncoder().apply(ServerBasedDbmsConnectionProperties.builder()
+                                .host(dbms.getExampleHost())
+                                .port(dbms.getExamplePort())
+                                .dbName(dbms.getExampleDbName())
+                                .user("")
+                                .password("")
+                        .build())))
                 .prefWidth(FORM_FIELD_WITH * 2)
                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
                 .validator(validJdbcUrlValidator())

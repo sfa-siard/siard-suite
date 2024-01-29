@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.connection;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
+import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.presenter.connection.fields.FileChooserFormField;
 import ch.admin.bar.siardsuite.presenter.connection.fields.StringFormField;
 import ch.admin.bar.siardsuite.util.Validator;
@@ -52,6 +53,9 @@ public class FileBasedDbmsConnectionPropertiesForm extends ConnectionPropertiesF
                 .initialValue(initialValue
                         .map(dbms.getJdbcConnectionStringEncoder())
                         .orElse(""))
+                .prompt(DisplayableText.of(dbms.getJdbcConnectionStringEncoder().apply(FileBasedDbmsConnectionProperties.builder()
+                        .file(dbms.getExampleFile())
+                        .build())))
                 .prefWidth(FORM_FIELD_WITH * 2)
                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
                 .validator(validJdbcUrlValidator())
