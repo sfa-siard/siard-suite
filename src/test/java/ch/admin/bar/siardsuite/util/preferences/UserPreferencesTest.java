@@ -20,10 +20,10 @@ class UserPreferencesTest {
             .queryTimeout(4321)
             .build();
 
-    private static final RecentFile RECENT_FILE_1 = new RecentFile(new File("C:/i/am/file1")); // TODO muss auch auf Linux funktionieren...
-    private static final RecentFile RECENT_FILE_2 = new RecentFile(new File("C:/i/am/file2"));
-    private static final RecentFile RECENT_FILE_3 = new RecentFile(new File("C:/i/am/file3"));
-    private static final RecentFile RECENT_FILE_4 = new RecentFile(new File("C:/i/am/file4"));
+    private static final RecentFile RECENT_FILE_1 = new RecentFile(new File("/i/am/file1"));
+    private static final RecentFile RECENT_FILE_2 = new RecentFile(new File("/i/am/file2"));
+    private static final RecentFile RECENT_FILE_3 = new RecentFile(new File("/i/am/file3"));
+    private static final RecentFile RECENT_FILE_4 = new RecentFile(new File("/i/am/file4"));
 
     private static final RecentDbConnection RECENT_CONNECTION_1 = RecentDbConnection.builder()
             .name("RECENT_CONNECTION_1")
@@ -122,7 +122,11 @@ class UserPreferencesTest {
 
         // then
         Assertions.assertThat(files.stream()
-                        .map(StorageData::getStoredData)
+                        .map(recentFileStorageData -> {
+                            // Test needs to run on windows and on unix-os
+                            val osIndependentFile = new File(recentFileStorageData.getStoredData().getValue().getAbsolutePath().replace("C:", ""));
+                            return new RecentFile(osIndependentFile);
+                        })
                         .collect(Collectors.toList()))
                 .containsExactly(
                         RECENT_FILE_4,
