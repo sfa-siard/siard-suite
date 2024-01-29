@@ -5,6 +5,7 @@ import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.testfx.assertions.api.Assertions;
+import test.helper.FileTestHelper;
 
 import java.io.File;
 import java.util.HashMap;
@@ -115,6 +116,7 @@ class UserPreferencesTest {
         userPreferences.push(RECENT_FILE_1);
         userPreferences.push(RECENT_FILE_2);
         userPreferences.push(RECENT_FILE_3);
+        userPreferences.push(RECENT_FILE_2);
         userPreferences.push(RECENT_FILE_4);
 
         // when
@@ -124,14 +126,14 @@ class UserPreferencesTest {
         Assertions.assertThat(files.stream()
                         .map(recentFileStorageData -> {
                             // Test needs to run on windows and on unix-os
-                            val osIndependentFile = new File(recentFileStorageData.getStoredData().getValue().getAbsolutePath().replace("C:", ""));
+                            val osIndependentFile = FileTestHelper.removeDriveLetterIfNecessary(recentFileStorageData.getStoredData().getValue());
                             return new RecentFile(osIndependentFile);
                         })
                         .collect(Collectors.toList()))
                 .containsExactly(
                         RECENT_FILE_4,
-                        RECENT_FILE_3,
-                        RECENT_FILE_2
+                        RECENT_FILE_2,
+                        RECENT_FILE_3
                 );
     }
 
@@ -152,6 +154,7 @@ class UserPreferencesTest {
         userPreferences.push(RECENT_CONNECTION_1);
         userPreferences.push(RECENT_CONNECTION_2);
         userPreferences.push(RECENT_CONNECTION_3);
+        userPreferences.push(RECENT_CONNECTION_2);
         userPreferences.push(RECENT_CONNECTION_4);
 
         // when
@@ -163,8 +166,8 @@ class UserPreferencesTest {
                         .collect(Collectors.toList()))
                 .containsExactly(
                         RECENT_CONNECTION_4,
-                        RECENT_CONNECTION_3,
-                        RECENT_CONNECTION_2
+                        RECENT_CONNECTION_2,
+                        RECENT_CONNECTION_3
                 );
     }
 
