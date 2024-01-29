@@ -27,13 +27,7 @@ public class UserPreferences {
 
     public static final UserPreferences INSTANCE = new UserPreferences(Preferences::userRoot);
 
-    private static final int max_stack_size = 30;
-
     private final PreferencesWrapper preferencesWrapper;
-
-    private Preferences node(NodePath nodePath) {
-        return preferencesWrapper.root().node(nodePath.name());
-    }
 
     public void push(final RecentDbConnection recentDbConnection) {
         val preferences = node(NodePath.DATABASE_CONNECTION).node(recentDbConnection.getName());
@@ -129,31 +123,8 @@ public class UserPreferences {
         node.put(KeyIndex.LOGIN_TIMEOUT.name(), options.getLoginTimeout() + "");
     }
 
-    private Preferences push(NodePath nodePath, KeyIndex comparisonKeyIndex, Comparator<String> comparator, String path) throws BackingStoreException {
-        final List<String> childrenNames = sortedChildrenNames(nodePath, comparisonKeyIndex, comparator);
-        List<String> list = new ArrayList<>();
-        list.add(path);
-        childrenNames.removeAll(list);
-        childrenNames.add(0, path);
-        for (String childName : childrenNames) {
-            if (childrenNames.indexOf(childName) > max_stack_size - 1) {
-                remove(nodePath, childName);
-            }
-        }
-        return node(nodePath).node(path);
-    }
-
-    private void remove(NodePath nodePath, String path) throws BackingStoreException {
-        node(nodePath).node(path).removeNode();
-    }
-
-    private List<String> sortedChildrenNames(NodePath nodePath, KeyIndex comparisonKeyIndex, Comparator<String> comparator) throws BackingStoreException {
-        return Arrays.stream(node(nodePath).childrenNames())
-                .sorted(Comparator.comparing(
-                        name -> node(nodePath).node(name).get(comparisonKeyIndex.name(), ""),
-                        Comparator.reverseOrder()
-                ))
-                .collect(Collectors.toList());
+    private Preferences node(NodePath nodePath) {
+        return preferencesWrapper.root().node(nodePath.name());
     }
 
     private void cropToMaxElements(final NodePath nodePath, final int maxNr) {

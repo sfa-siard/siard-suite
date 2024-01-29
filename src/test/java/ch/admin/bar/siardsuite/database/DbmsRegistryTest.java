@@ -7,9 +7,13 @@ import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionPropertie
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.testfx.assertions.api.Assertions;
+import test.helper.FileTestHelper;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DbmsRegistryTest {
 
@@ -189,7 +193,9 @@ public class DbmsRegistryTest {
         val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_FILE_BASEDPROPERTIES);
 
         // then
-        Assertions.assertThat(url.replace("C:", "")) // absolut path -> contains "C:"-prefix on windows-systems
+        Assertions.assertThat(FileTestHelper.removeDriveLetterIfNecessary(url)) // absolut path -> contains "C:"-prefix on windows-systems
                 .isEqualTo(EXPECTED_JDBC_URL_FOR_MSACCESS);
     }
+
+
 }
