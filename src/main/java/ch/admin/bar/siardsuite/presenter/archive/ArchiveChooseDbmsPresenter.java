@@ -87,7 +87,7 @@ public class ArchiveChooseDbmsPresenter extends StepperPresenter {
                 this.errorMessage.setVisible(true);
             }
         });
-        this.buttonsBox.previous().setOnAction((event) -> controller.initializeWorkflow(Workflow.UPLOAD, stage));
+        this.buttonsBox.previous().setOnAction((event) -> controller.initializeWorkflow(Workflow.ARCHIVE, stage));
         this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
     }
 }

@@ -225,10 +225,10 @@ public class Controller {
                 stage.openSelectSiardFileDialog((file, archive) -> {
                             setSiardArchive(file.getName(), archive);
                             stage.openRecentConnectionsDialogForUploading(
-                                    () -> stage.openDialog(View.UPLOAD_STEPPER),
+                                    () -> stage.navigate(View.UPLOAD_STEPPER),
                                     dbConnection -> {
                                         setRecentDatabaseConnection(Optional.of(dbConnection));
-                                        stage.openDialog(View.UPLOAD_STEPPER);
+                                        stage.navigate(View.UPLOAD_STEPPER);
                                     }
                             );
                         }
