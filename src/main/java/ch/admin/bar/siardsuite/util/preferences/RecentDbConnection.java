@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.util.preferences;
 
 import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.DbmsId;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
@@ -18,11 +17,11 @@ import java.io.File;
 import java.util.Optional;
 
 @Value
-@Builder
-public class DbConnection {
+@Builder(toBuilder = true)
+public class RecentDbConnection {
     @NonNull String name;
 
-    @NonNull DbmsId dbmsProduct;
+    @NonNull String dbmsProduct;
     @NonNull String connectionOptions;
 
     @NonNull String host;
@@ -33,7 +32,7 @@ public class DbConnection {
     @NonNull String file;
 
     public DbmsConnectionData mapToDbmsConnectionData() {
-        val dbms = DbmsRegistry.findDbmsById(dbmsProduct);
+        val dbms = DbmsRegistry.findDbmsByName(dbmsProduct);
 
         return OptionalHelper.firstPresent(
                         () -> CastHelper.tryCast(dbms, ServerBasedDbms.class)
@@ -59,7 +58,7 @@ public class DbConnection {
                         this)));
     }
 
-    public static DbConnection from(
+    public static RecentDbConnection from(
             final DbmsConnectionData connectionData,
             final String name
     ) {
@@ -72,9 +71,9 @@ public class DbConnection {
                 connectionData.getProperties(),
                 FileBasedDbmsConnectionProperties.class);
 
-        return DbConnection.builder()
+        return RecentDbConnection.builder()
                 .name(name)
-                .dbmsProduct(connectionData.getDbms().getId())
+                .dbmsProduct(connectionData.getDbms().getName())
                 .connectionOptions(serverBasedProp.flatMap(ServerBasedDbmsConnectionProperties::getOptions).orElse(""))
                 .host(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getHost).orElse(""))
                 .port(serverBasedProp.map(ServerBasedDbmsConnectionProperties::getPort).orElse(""))

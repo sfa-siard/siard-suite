@@ -93,7 +93,7 @@ public class FileBasedDbmsConnectionPropertiesForm extends ConnectionPropertiesF
                 .message(DisplayableText.of(INVALID_JDBC_URL_MESSAGE))
                 .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
                         .filter(value -> {
-                            if (!value.startsWith("jdbc:" + dbms.getId().getValue())) {
+                            if (!value.startsWith("jdbc:" + dbms.getId())) {
                                 return false;
                             }
 

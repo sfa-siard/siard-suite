@@ -12,7 +12,7 @@ import java.util.function.Function;
 @Builder
 public class FileBasedDbms implements Dbms<FileBasedDbmsConnectionProperties> {
     @NonNull String name;
-    @NonNull DbmsId id;
+    @NonNull String id;
     @NonNull String driverClassName;
     @NonNull Function<FileBasedDbmsConnectionProperties, String> jdbcConnectionStringEncoder;
     @NonNull ThrowingFunction<String, FileBasedDbmsConnectionProperties> jdbcConnectionStringDecoder;

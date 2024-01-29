@@ -13,7 +13,7 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.open.OpenSiardArchiveDialogPresenter;
-import ch.admin.bar.siardsuite.util.preferences.DbConnection;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
@@ -116,7 +116,7 @@ public class RootStage extends Stage implements ErrorHandler {
 
   public void openRecentConnectionsDialogForArchiving(
           final Runnable onNewConnection,
-          final Consumer<DbConnection> onRecentConnectionSelected
+          final Consumer<RecentDbConnection> onRecentConnectionSelected
   ) {
     val loaded = ArchiveRecentConnectionsDialogPresenter.loadForArchiving(
             this::closeDialog,
@@ -130,7 +130,7 @@ public class RootStage extends Stage implements ErrorHandler {
 
   public void openRecentConnectionsDialogForUploading(
           final Runnable onNewConnection,
-          final Consumer<DbConnection> onRecentConnectionSelected
+          final Consumer<RecentDbConnection> onRecentConnectionSelected
   ) {
     val loaded = ArchiveRecentConnectionsDialogPresenter.loadForUpload(
             this::closeDialog,

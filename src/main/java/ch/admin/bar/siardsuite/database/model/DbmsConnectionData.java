@@ -1,20 +1,31 @@
 package ch.admin.bar.siardsuite.database.model;
 
 import ch.admin.bar.siardsuite.util.FileHelper;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
+@EqualsAndHashCode
 public class DbmsConnectionData {
+
     @Getter
     private final Dbms<?> dbms;
     @Getter
     private final DbmsConnectionProperties<?> properties;
 
+    @EqualsAndHashCode.Exclude
     private final Supplier<String> jdbsConnectionStringSupplier;
+
+    @EqualsAndHashCode.Exclude
     private final Supplier<String> userSupplier;
+
+    @EqualsAndHashCode.Exclude
     private final Supplier<String> passwordSupplier;
+
+    @EqualsAndHashCode.Exclude
     private final Supplier<String> dbNameSupplier;
 
     public DbmsConnectionData(

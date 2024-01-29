@@ -5,7 +5,8 @@ import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.preferences.DbConnection;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.util.preferences.StorageData;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.DialogCloser;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -55,7 +56,7 @@ public class ArchiveRecentConnectionsDialogPresenter {
     public void init(
             final DialogCloser dialogCloser,
             final Runnable onNewConnection,
-            final Consumer<DbConnection> onRecentConnectionSelected,
+            final Consumer<RecentDbConnection> onRecentConnectionSelected,
             final DisplayableText titleText,
             final DisplayableText descriptionText
     ) {
@@ -73,7 +74,7 @@ public class ArchiveRecentConnectionsDialogPresenter {
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
         buttonBox.getChildren().add(new CloseDialogButton(dialogCloser));
 
-        val boxes = UserPreferences.getStoredConnections().stream()
+        val boxes = UserPreferences.INSTANCE.getStoredConnections().stream()
                 .map(dbConnectionStorageData -> createConnectionsBox(
                         dbConnectionStorageData,
                         () -> {
@@ -101,7 +102,7 @@ public class ArchiveRecentConnectionsDialogPresenter {
     }
 
     private HBox createConnectionsBox(
-            final UserPreferences.StorageData<DbConnection> storedConnection,
+            final StorageData<RecentDbConnection> storedConnection,
             final Runnable onAction
     ) {
         val imageLabel = new Label();
@@ -125,7 +126,7 @@ public class ArchiveRecentConnectionsDialogPresenter {
     public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForUpload(
             final DialogCloser dialogCloser,
             final Runnable onNewConnection,
-            final Consumer<DbConnection> onRecentConnectionSelected
+            final Consumer<RecentDbConnection> onRecentConnectionSelected
     ) {
         val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
 
@@ -142,7 +143,7 @@ public class ArchiveRecentConnectionsDialogPresenter {
     public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForArchiving(
             final DialogCloser dialogCloser,
             final Runnable onNewConnection,
-            final Consumer<DbConnection> onRecentConnectionSelected
+            final Consumer<RecentDbConnection> onRecentConnectionSelected
     ) {
         val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
 

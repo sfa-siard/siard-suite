@@ -40,7 +40,7 @@ public class DatabaseUploadTask extends Task<String> implements Progress, Archiv
     this.model.provideArchiveObject(this);
 
     connection.setAutoCommit(false);
-    int timeout = UserPreferences.getStoredOptions().getQueryTimeout();
+    int timeout = UserPreferences.INSTANCE.getStoredOptions().getQueryTimeout();
 
     // TODO overwrite and metadataonly?
     boolean isOverwrite = true;

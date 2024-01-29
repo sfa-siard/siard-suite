@@ -7,7 +7,7 @@ import lombok.Value;
 import java.util.Optional;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class ServerBasedDbmsConnectionProperties implements DbmsConnectionProperties<ServerBasedDbmsConnectionProperties> {
     @NonNull String host;
     @NonNull String port;

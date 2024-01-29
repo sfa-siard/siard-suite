@@ -22,7 +22,7 @@ public class DatabaseConnectionFactory {
     this.connectionData = connectionData;
 
     DatabaseConnectionFactory.model = model;
-    val options = UserPreferences.getStoredOptions();
+    val options = UserPreferences.INSTANCE.getStoredOptions();
 
     loadDriver(connectionData.getDbms().getDriverClassName());
 

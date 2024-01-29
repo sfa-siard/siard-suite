@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public interface Dbms<T extends DbmsConnectionProperties> {
     String getName();
-    DbmsId getId();
+    String getId();
     String getDriverClassName();
     Function<T, String> getJdbcConnectionStringEncoder();
     ThrowingFunction<String, T> getJdbcConnectionStringDecoder();

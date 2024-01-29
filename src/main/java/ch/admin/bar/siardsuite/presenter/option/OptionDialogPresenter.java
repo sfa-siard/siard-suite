@@ -54,7 +54,7 @@ public class OptionDialogPresenter extends DialogPresenter {
     }
 
     private void saveOptions() {
-        UserPreferences.push(Options.builder()
+        UserPreferences.INSTANCE.push(Options.builder()
                 .queryTimeout(Integer.parseInt(queryTimeoutText.getText())) // FIXME input validation needed
                 .loginTimeout(Integer.parseInt(loginTimeoutText.getText())) // FIXME input validation needed
                 .build());
@@ -62,7 +62,7 @@ public class OptionDialogPresenter extends DialogPresenter {
     }
 
     private void initFormFields() {
-        val options = UserPreferences.getStoredOptions();
+        val options = UserPreferences.INSTANCE.getStoredOptions();
         queryTimeoutText.setText(options.getQueryTimeout() + "");
         loginTimeoutText.setText(options.getLoginTimeout() + "");
     }

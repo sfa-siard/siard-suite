@@ -11,7 +11,7 @@ import java.util.function.Function;
 @Builder
 public class ServerBasedDbms implements Dbms<ServerBasedDbmsConnectionProperties> {
     @NonNull String name;
-    @NonNull DbmsId id;
+    @NonNull String id;
     @NonNull String driverClassName;
     @NonNull Function<ServerBasedDbmsConnectionProperties, String> jdbcConnectionStringEncoder;
     @NonNull ThrowingFunction<String, ServerBasedDbmsConnectionProperties> jdbcConnectionStringDecoder;

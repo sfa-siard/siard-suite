@@ -12,7 +12,7 @@ import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.preferences.DbConnection;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
@@ -112,7 +112,7 @@ public class ConnectionForm extends VBox {
         val connectionData = connectionPropertiesForm.getConnectionData();
 
         if (connectionNameField.isActivated()) {
-            UserPreferences.push(DbConnection.from(
+            UserPreferences.INSTANCE.push(RecentDbConnection.from(
                     connectionData,
                     connectionNameField.getValue()
             ));
@@ -129,7 +129,7 @@ public class ConnectionForm extends VBox {
         val connectionData = connectionPropertiesForm.getConnectionData();
 
         if (connectionNameField.isActivated()) {
-            UserPreferences.push(DbConnection.from(
+            UserPreferences.INSTANCE.push(RecentDbConnection.from(
                     connectionData,
                     connectionNameField.getValue()
             ));

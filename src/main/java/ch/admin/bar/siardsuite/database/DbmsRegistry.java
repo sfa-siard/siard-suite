@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.database;
 
 import ch.admin.bar.siardsuite.database.model.Dbms;
-import ch.admin.bar.siardsuite.database.model.DbmsId;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
@@ -20,7 +19,7 @@ public class DbmsRegistry {
     public static final Collection<Dbms<?>> DBMS = Arrays.asList(
             FileBasedDbms.builder()
                     .name("MS Access")
-                    .id(DbmsId.of("access"))
+                    .id("access")
                     .driverClassName("ch.admin.bar.siard2.jdbc.AccessDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
                             "jdbc:access:%s",
@@ -34,7 +33,7 @@ public class DbmsRegistry {
 
             ServerBasedDbms.builder()
                     .name("DB/2")
-                    .id(DbmsId.of("db2"))
+                    .id("db2")
                     .driverClassName("ch.admin.bar.siard2.jdbc.Db2Driver")
                     .jdbcConnectionStringEncoder(config -> String.format(
                             "jdbc:db2://%s:%s/%s%s",
@@ -65,7 +64,7 @@ public class DbmsRegistry {
 
             ServerBasedDbms.builder()
                     .name("MySQL")
-                    .id(DbmsId.of("mysql"))
+                    .id("mysql")
                     .driverClassName("ch.admin.bar.siard2.jdbc.MySqlDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
                             "jdbc:mysql://%s:%s/%s%s",
@@ -96,7 +95,7 @@ public class DbmsRegistry {
 
             ServerBasedDbms.builder()
                     .name("Oracle")
-                    .id(DbmsId.of("oracle"))
+                    .id("oracle")
                     .driverClassName("ch.admin.bar.siard2.jdbc.OracleDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
                             "jdbc:oracle:thin:@//%s:%s/%s%s",
@@ -127,7 +126,7 @@ public class DbmsRegistry {
 
             ServerBasedDbms.builder()
                     .name("PostgreSQL")
-                    .id(DbmsId.of("postgresql"))
+                    .id("postgresql")
                     .driverClassName("ch.admin.bar.siard2.jdbc.PostgresDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
                             "jdbc:postgresql://%s:%s/%s%s", // example: "jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true"
@@ -161,7 +160,7 @@ public class DbmsRegistry {
 
             ServerBasedDbms.builder()
                     .name("Microsoft SQL Server")
-                    .id(DbmsId.of("mssql"))
+                    .id("mssql")
                     .driverClassName("ch.admin.bar.siard2.jdbc.MsSqlDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
                             "jdbc:sqlserver://%s:%s;databaseName=%s%s",
@@ -213,12 +212,5 @@ public class DbmsRegistry {
                 .filter(dbms -> dbms.getName().equals(name))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("No DBMS with name " + name + " available"));
-    }
-
-    public static Dbms<?> findDbmsById(final DbmsId id) {
-        return DBMS.stream()
-                .filter(dbms -> dbms.getId().equals(id))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("No DBMS with id " + id + " available"));
     }
 }

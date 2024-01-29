@@ -10,7 +10,7 @@ import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
-import ch.admin.bar.siardsuite.util.preferences.DbConnection;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import javafx.beans.value.ChangeListener;
@@ -40,7 +40,7 @@ public class Controller {
     @Setter
     @Getter
     @NonNull
-    private Optional<DbConnection> recentDatabaseConnection = Optional.empty();
+    private Optional<RecentDbConnection> recentDatabaseConnection = Optional.empty();
 
     @Setter
     @Getter

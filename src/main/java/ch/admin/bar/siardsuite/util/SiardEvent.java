@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.util;
 import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionProperties;
-import ch.admin.bar.siardsuite.util.preferences.DbConnection;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import javafx.event.Event;
 import javafx.event.EventType;
 import lombok.Getter;
@@ -56,9 +56,9 @@ public class SiardEvent extends Event {
     public static class RecentConnectionSelectedEvent extends Event {
 
         @Getter
-        private final DbConnection recentConnectionData;
+        private final RecentDbConnection recentConnectionData;
 
-        public RecentConnectionSelectedEvent(final DbConnection recentConnectionData) {
+        public RecentConnectionSelectedEvent(final RecentDbConnection recentConnectionData) {
             super(RECENT_CONNECTION_SELECTED_EVENT);
 
             this.recentConnectionData = recentConnectionData;

@@ -175,7 +175,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .message(DisplayableText.of(INVALID_JDBC_URL_MESSAGE))
                 .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
                         .filter(value -> {
-                            if (!value.startsWith("jdbc:" + serverBasedDbms.getId().getValue())) {
+                            if (!value.startsWith("jdbc:" + serverBasedDbms.getId())) {
                                 return false;
                             }
 

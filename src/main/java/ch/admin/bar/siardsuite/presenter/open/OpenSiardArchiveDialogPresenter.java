@@ -6,6 +6,8 @@ import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.util.preferences.RecentFile;
+import ch.admin.bar.siardsuite.util.preferences.StorageData;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.DialogCloser;
 import ch.admin.bar.siardsuite.view.ErrorHandler;
@@ -24,20 +26,7 @@ import lombok.val;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.time.Clock;
-import java.util.Comparator;
-import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
-
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.ABSOLUTE_PATH;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.KeyIndex.TIMESTAMP;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.NodePath.RECENT_FILES;
-import static ch.admin.bar.siardsuite.util.preferences.UserPreferences.sortedChildrenNames;
 
 public class OpenSiardArchiveDialogPresenter {
 
@@ -85,18 +74,9 @@ public class OpenSiardArchiveDialogPresenter {
         I18n.bind(recentFilesHeaderName.textProperty(), "dialog.recent.files.header.name");
         I18n.bind(recentFilesHeaderDate.textProperty(), "dialog.recent.files.header.date");
 
-        try {
-            List<String> fileHashCodes = sortedChildrenNames(RECENT_FILES, TIMESTAMP, Comparator.reverseOrder());
-            for (String fileHashCode : fileHashCodes) {
-                try {
-                    recentFilesBox.getChildren().add(getRecentFileBox(fileHashCode));
-                } catch (IOException e) {
-                    UserPreferences.remove(RECENT_FILES, fileHashCode);
-                }
-            }
-        } catch (BackingStoreException e) {
-            throw new RuntimeException(e);
-        }
+        UserPreferences.INSTANCE.getRecentFiles()
+                .forEach(recentFileStorageData -> recentFilesBox.getChildren()
+                        .add(getRecentFileBox(recentFileStorageData)));
 
         if (recentFilesBox.getChildren().size() == 0) {
             showNoRecentFiles();
@@ -157,34 +137,22 @@ public class OpenSiardArchiveDialogPresenter {
         label.setStyle("-fx-text-fill: #2a2a2a82");
     }
 
-    private HBox getRecentFileBox(String fileHashCode) throws IOException {
+    private HBox getRecentFileBox(final StorageData<RecentFile> recentFileStorageData) {
         final HBox recentFileBox = new HBox();
 
-        if (!fileHashCode.isEmpty()) {
-            final Preferences preferences = UserPreferences.node(RECENT_FILES).node(fileHashCode);
+        final Label imageLabel = new Label();
+        imageLabel.getStyleClass().add("icon-label");
+        final Label nameLabel = new Label(recentFileStorageData.getStoredData().getValue().getName());
+        nameLabel.getStyleClass().add("name-label");
 
-            final String filePath = preferences.get(ABSOLUTE_PATH.name(), "");
-            final File recentFile = new File(filePath);
-            final BasicFileAttributes recentFileAttributes = Files.readAttributes(Paths.get(filePath),
-                    BasicFileAttributes.class);
+        final Label dateLabel = new Label(recentFileStorageData.getStoredAtDate());
+        dateLabel.getStyleClass().add("date-label");
 
-            final Label imageLabel = new Label();
-            imageLabel.getStyleClass().add("icon-label");
-            final Label nameLabel = new Label(recentFile.getName());
-            nameLabel.getStyleClass().add("name-label");
+        recentFileBox.getChildren().addAll(imageLabel, nameLabel, dateLabel);
+        recentFileBox.getStyleClass().add("file-hbox");
+        VBox.setMargin(recentFileBox, new Insets(5, 0, 5, 0));
 
-            final String localeDate = I18n.getLocaleDate(recentFileAttributes.lastModifiedTime()
-                    .toString()
-                    .split("T")[0]);
-            final Label dateLabel = new Label(localeDate);
-            dateLabel.getStyleClass().add("date-label");
-
-            recentFileBox.getChildren().addAll(imageLabel, nameLabel, dateLabel);
-            recentFileBox.getStyleClass().add("file-hbox");
-            VBox.setMargin(recentFileBox, new Insets(5, 0, 5, 0));
-
-            recentFileBox.setOnMouseClicked(event -> readArchive(recentFile));
-        }
+        recentFileBox.setOnMouseClicked(event -> readArchive(recentFileStorageData.getStoredData().getValue()));
 
         return recentFileBox;
     }
@@ -205,16 +173,7 @@ public class OpenSiardArchiveDialogPresenter {
             } catch (IOException e) {
                 errorHandler.handle(e);
             }
-            try {
-                final Preferences preferences = UserPreferences.push(RECENT_FILES,
-                        TIMESTAMP,
-                        Comparator.reverseOrder(),
-                        String.valueOf(file.hashCode()));
-                preferences.put(ABSOLUTE_PATH.name(), file.getAbsolutePath());
-                preferences.put(TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
-            } catch (BackingStoreException e) {
-                errorHandler.handle(e);
-            }
+            UserPreferences.INSTANCE.push(new RecentFile(file));
         }
     }
 

@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.database;
 
-import ch.admin.bar.siardsuite.database.model.DbmsId;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
@@ -13,6 +12,14 @@ import java.io.File;
 import java.util.Optional;
 
 public class DbmsRegistryTest {
+
+    // The following names can not be changed due to backwards compatibility
+    private static final String DB_2 = "DB/2";
+    private static final String MY_SQL = "MySQL";
+    private static final String ORACLE = "Oracle";
+    private static final String POSTGRES = "PostgreSQL";
+    private static final String MS_SQL = "Microsoft SQL Server";
+    private static final String MS_ACCESS = "MS Access";
 
     private static final ServerBasedDbmsConnectionProperties EXAMPLE_PROPERTIES = ServerBasedDbmsConnectionProperties.builder()
             .host("db.host.org")
@@ -38,7 +45,7 @@ public class DbmsRegistryTest {
     @Test
     public void decode_forPostgresql_expectDecodedProperties() throws Exception {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("postgresql"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(POSTGRES);
 
         // when
         val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_POSTGRESQL);
@@ -51,7 +58,7 @@ public class DbmsRegistryTest {
     @Test
     public void encode_forPostgresql_expectEncodedUrl() {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("postgresql"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(POSTGRES);
 
         // when
         val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
@@ -63,7 +70,7 @@ public class DbmsRegistryTest {
     @Test
     public void decode_forOracle_expectDecodedProperties() throws Exception {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("oracle"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(ORACLE);
 
         // when
         val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_ORACLE);
@@ -76,7 +83,7 @@ public class DbmsRegistryTest {
     @Test
     public void encode_forOracle_expectEncodedUrl() {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("oracle"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(ORACLE);
 
         // when
         val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
@@ -88,7 +95,7 @@ public class DbmsRegistryTest {
     @Test
     public void decode_forMySql_expectDecodedProperties() throws Exception {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("mysql"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(MY_SQL);
 
         // when
         val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_MYSQL);
@@ -101,7 +108,7 @@ public class DbmsRegistryTest {
     @Test
     public void encode_forMySql_expectEncodedUrl() {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("mysql"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(MY_SQL);
 
         // when
         val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
@@ -113,7 +120,7 @@ public class DbmsRegistryTest {
     @Test
     public void decode_forMsSql_expectDecodedProperties() throws Exception {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("mssql"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(MS_SQL);
 
         // when
         val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_MSSQL);
@@ -126,7 +133,7 @@ public class DbmsRegistryTest {
     @Test
     public void encode_forMsSql_expectEncodedUrl() {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("mssql"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(MS_SQL);
 
         // when
         val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
@@ -138,7 +145,7 @@ public class DbmsRegistryTest {
     @Test
     public void decode_forDb2_expectDecodedProperties() throws Exception {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("db2"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(DB_2);
 
         // when
         val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_DB2);
@@ -151,7 +158,7 @@ public class DbmsRegistryTest {
     @Test
     public void encode_forDb2_expectEncodedUrl() {
         // given
-        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("db2"));
+        final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(DB_2);
 
         // when
         val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
@@ -163,7 +170,7 @@ public class DbmsRegistryTest {
     @Test
     public void decode_forAccess_expectDecodedProperties() throws Exception {
         // given
-        val dbms = (FileBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("access"));
+        val dbms = (FileBasedDbms) DbmsRegistry.findDbmsByName(MS_ACCESS);
 
         // when
         val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_MSACCESS);
@@ -176,7 +183,7 @@ public class DbmsRegistryTest {
     @Test
     public void encode_forAccess_expectEncodedUrl() {
         // given
-        val dbms = (FileBasedDbms) DbmsRegistry.findDbmsById(DbmsId.of("access"));
+        val dbms = (FileBasedDbms) DbmsRegistry.findDbmsByName(MS_ACCESS);
 
         // when
         val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_FILE_BASEDPROPERTIES);
