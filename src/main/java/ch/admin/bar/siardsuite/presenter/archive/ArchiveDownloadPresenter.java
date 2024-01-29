@@ -3,7 +3,13 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.*;
+import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.component.Icon;
+import ch.admin.bar.siardsuite.component.IconView;
+import ch.admin.bar.siardsuite.component.LabelIcon;
+import ch.admin.bar.siardsuite.component.Spinner;
+import ch.admin.bar.siardsuite.component.SystemFileBrowser;
+import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
@@ -33,7 +39,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ch.admin.bar.siardsuite.component.ButtonBox.Type.*;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DOWNLOAD_FINISHED;
+import static ch.admin.bar.siardsuite.component.ButtonBox.Type.TO_START;
 import static ch.admin.bar.siardsuite.model.View.START;
 import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOADED;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
@@ -131,15 +139,17 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
                 this.archivePath.setText(targetArchive.getAbsolutePath());
                 this.subtitle1.setText(this.databaseName);
                 try {
-                    controller.loadDatabase(targetArchive,
-                                            false,
-                                            this.viewsAsTables,
-                                            handleDownloadSuccess(stepper),
-                                            handleDownloadFailure(stepper));
+                    controller.loadDatabase(
+                            controller.getDatabaseConnectionData().orElseThrow(() -> new IllegalStateException("No database connection data available")), // TODO FIXME
+                            targetArchive,
+                            false,
+                            this.viewsAsTables,
+                            handleDownloadSuccess(stepper),
+                            handleDownloadFailure(stepper));
                     controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
                         AtomicInteger pos = new AtomicInteger();
                         newValue.forEach(p ->
-                                                 addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
+                                addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
                         );
                     });
                     controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
@@ -195,7 +205,6 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
             I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.failed");
             I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.failed");
             resultTitle.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
-            controller.closeDbConnection();
             this.buttonsBox = new ButtonBox().make(TO_START);
             fail(stepper, e.getSource().getException(), ERROR_OCCURED);
             addButtons(stepper);

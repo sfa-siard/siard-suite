@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.LazyLoadingDataSource;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableLazyLoadingTable;
 import ch.admin.bar.siardsuite.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.component.rendering.utils.LoadingBatchManager;
-import ch.admin.bar.siardsuite.view.ErrorDialogOpener;
+import ch.admin.bar.siardsuite.view.ErrorHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -24,16 +24,16 @@ public class LazyLoadingTableRenderer<T, I> {
     private final RenderableLazyLoadingTable<T, I> renderableTable;
     private final LazyLoadingDataSource<I> lazyLoadingDataSource;
 
-    private final ErrorDialogOpener errorDialogOpener;
+    private final ErrorHandler errorHandler;
 
 
     @Builder
     public LazyLoadingTableRenderer(
             @NonNull final RenderableLazyLoadingTable<T, I> renderableTable,
             @NonNull final T dataHolder,
-            @NonNull final ErrorDialogOpener errorDialogOpener) {
+            @NonNull final ErrorHandler errorHandler) {
         this.renderableTable = renderableTable;
-        this.errorDialogOpener = errorDialogOpener;
+        this.errorHandler = errorHandler;
         this.lazyLoadingDataSource = renderableTable.getDataExtractor().apply(dataHolder);
     }
 
@@ -80,7 +80,7 @@ public class LazyLoadingTableRenderer<T, I> {
                             try {
                                 listener.onClick(column, row.getItem());
                             } catch (Exception e) {
-                                errorDialogOpener.openErrorDialog(e);
+                                errorHandler.handle(e);
                             }
                         });
             });

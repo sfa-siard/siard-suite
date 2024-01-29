@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.util;
 
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -16,6 +17,10 @@ public final class CastHelper {
             return Optional.of((T) o);
         }
         return Optional.empty();
+    }
+
+    public static <I, O> Function<I, Optional<O>> tryCast(final Class<O> type) {
+        return t -> tryCast(t, type);
     }
 
     /**

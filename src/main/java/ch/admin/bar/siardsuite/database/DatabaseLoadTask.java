@@ -7,58 +7,54 @@ import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
-import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.util.Pair;
+import lombok.RequiredArgsConstructor;
 
 import java.io.File;
 import java.net.URI;
 import java.sql.Connection;
 import java.time.LocalDate;
 
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.QUERY_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
-
-public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress, SiardArchiveMetaDataVisitor, SiardArchiveMetaDataDetailsVisitor {
+@RequiredArgsConstructor
+public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress {
 
     private final Connection connection;
     private final Model model;
+    private final String dbName;
     private final Archive archive;
-    private SiardArchiveMetaData metaData;
     private final boolean onlyMetaData;
-    private boolean viewsAsTables;
-    private String name;
-
-    public DatabaseLoadTask(Connection connection, Model model, Archive archive, boolean onlyMetaData,
-                            boolean viewsAsTables) {
-        this.connection = connection;
-        this.model = model;
-        this.archive = archive;
-        this.onlyMetaData = onlyMetaData;
-        this.viewsAsTables = viewsAsTables;
-    }
+    private final boolean viewsAsTables;
 
     @Override
     protected ObservableList<Pair<String, Long>> call() throws Exception {
 
         ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
         connection.setAutoCommit(false);
-        int timeout = Integer.parseInt(UserPreferences.node(OPTIONS).get(QUERY_TIMEOUT.name(), "0"));
-        archive.getMetaData().setDbName(model.getDatabaseName().getValue());
-        MetaDataFromDb metadata = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
-        metadata.setQueryTimeout(timeout);
+        int timeout = UserPreferences.INSTANCE.getStoredOptions().getQueryTimeout();
+
+        archive.getMetaData().setDbName(dbName);
+
+        MetaDataFromDb metaDataFromDb = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
+        metaDataFromDb.setQueryTimeout(timeout);
+
         updateValue(FXCollections.observableArrayList(new Pair<>("Metadata", -1L)));
         updateProgress(0, 100);
-        metadata.download(viewsAsTables, false, this);
 
-        model.provideDatabaseArchiveMetaDataObject(this);
-        if (metaData != null) {
-            metaData.write(archive);
-        }
+        metaDataFromDb.download(viewsAsTables, false, this);
+
+        // store user defined metadata to archive (if present)
+        model.provideDatabaseArchiveMetaDataObject(metaData -> {
+            if (metaData != null) {
+                metaData.write(archive);
+            }
+        });
+
 
         // TODO: replace the boolean flag with a strategy pattern
         if (!onlyMetaData) {
@@ -80,7 +76,7 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
             updateValue(progressData);
         }
 
-        model.setSiardArchive(name, archive, onlyMetaData);
+        model.setSiardArchive(null, archive, onlyMetaData);
         // Closing is mandatory to write the archive to the filesystem
         archive.close();
         return progressData;
@@ -95,20 +91,4 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
     public void notifyProgress(int i) {
         updateProgress(i, 100);
     }
-
-    @Override
-    public void visit(String siardFormatVersion, String databaseName, String databaseProduct,
-                      String databaseConnectionURL,
-                      String databaseUsername, String databaseDescription, String databaseOwner,
-                      String databaseCreationDate,
-                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive,
-                      URI lobFolder, boolean viewsAsTables) {
-        this.name = targetArchive.getName();
-    }
-
-    @Override
-    public void visit(SiardArchiveMetaData metaData) {
-        this.metaData = metaData;
-    }
-
 }

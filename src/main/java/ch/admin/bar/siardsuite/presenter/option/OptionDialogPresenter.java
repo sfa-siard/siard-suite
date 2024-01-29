@@ -5,19 +5,15 @@ import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.component.DialogButton;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.UserPreferences;
+import ch.admin.bar.siardsuite.util.preferences.Options;
+import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-
-import java.util.prefs.Preferences;
-
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.LOGIN_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.KeyIndex.QUERY_TIMEOUT;
-import static ch.admin.bar.siardsuite.util.UserPreferences.NodePath.OPTIONS;
+import lombok.val;
 
 public class OptionDialogPresenter extends DialogPresenter {
 
@@ -58,16 +54,16 @@ public class OptionDialogPresenter extends DialogPresenter {
     }
 
     private void saveOptions() {
-        final Preferences preferences = UserPreferences.node(OPTIONS);
-        preferences.put(QUERY_TIMEOUT.name(), queryTimeoutText.getText());
-        preferences.put(LOGIN_TIMEOUT.name(), loginTimeoutText.getText());
+        UserPreferences.INSTANCE.push(Options.builder()
+                .queryTimeout(Integer.parseInt(queryTimeoutText.getText())) // FIXME input validation needed
+                .loginTimeout(Integer.parseInt(loginTimeoutText.getText())) // FIXME input validation needed
+                .build());
         stage.closeDialog();
     }
 
     private void initFormFields() {
-        final Preferences preferences = UserPreferences.node(OPTIONS);
-        queryTimeoutText.setText(preferences.get(QUERY_TIMEOUT.name(), "0"));
-        loginTimeoutText.setText(preferences.get(LOGIN_TIMEOUT.name(), "0"));
+        val options = UserPreferences.INSTANCE.getStoredOptions();
+        queryTimeoutText.setText(options.getQueryTimeout() + "");
+        loginTimeoutText.setText(options.getLoginTimeout() + "");
     }
-
 }

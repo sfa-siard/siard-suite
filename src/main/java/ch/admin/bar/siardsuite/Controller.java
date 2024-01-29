@@ -3,30 +3,32 @@ package ch.admin.bar.siardsuite;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
-import ch.admin.bar.siardsuite.database.DatabaseProperties;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
+import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.TreeItem;
 import javafx.util.Pair;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class Controller {
 
@@ -34,29 +36,45 @@ public class Controller {
     private Archive tmpArchive;
     private DatabaseLoadService databaseLoadService;
     private DatabaseUploadService databaseUploadService;
-    private Workflow workflow;
-    public String recentDatabaseConnection;
+
+    @Setter
+    @Getter
+    @NonNull
+    private Optional<RecentDbConnection> recentDatabaseConnection = Optional.empty();
+
+    @Setter
+    @Getter
+    @NonNull
+    private Optional<DbmsConnectionData> databaseConnectionData = Optional.empty();
 
     public Controller(Model model) {
         this.model = model;
     }
 
-    public void loadDatabase(boolean onlyMetaData, EventHandler<WorkerStateEvent> onSuccess,
-                             EventHandler<WorkerStateEvent> onFailure
+    public void loadDatabase(
+            DbmsConnectionData connectionData,
+            boolean onlyMetaData,
+            EventHandler<WorkerStateEvent> onSuccess,
+            EventHandler<WorkerStateEvent> onFailure
     ) throws SQLException {
         tmpArchive = model.initArchive();
-        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
+        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model, connectionData)
                 .createDatabaseLoader(tmpArchive, onlyMetaData, false);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
     }
 
-    public void loadDatabase(File target, boolean onlyMetaData, boolean viewsAsTables,
-                             EventHandler<WorkerStateEvent> onSuccess,
-                             EventHandler<WorkerStateEvent> onFailure) throws SQLException {
+    public void loadDatabase(
+            DbmsConnectionData connectionData,
+            File target,
+            boolean onlyMetaData,
+            boolean viewsAsTables,
+            EventHandler<WorkerStateEvent> onSuccess,
+            EventHandler<WorkerStateEvent> onFailure
+    ) throws SQLException {
         final Archive archive = model.initArchive(target, onlyMetaData);
-        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model)
+        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model, connectionData)
                 .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
@@ -65,17 +83,6 @@ public class Controller {
 
     public void closeDbConnection() {
         DatabaseConnectionFactory.disconnect();
-    }
-
-    public void updateConnectionData(String connectionUrl, String username, String databaseName, String password) {
-        this.model.setConnectionUrl(connectionUrl);
-        this.model.setDatabaseName(databaseName);
-        this.model.setUsername(username);
-        this.model.setPassword(password);
-    }
-
-    public void updateSchemaMap(Map schemaMap) {
-        this.model.setSchemaMap(schemaMap);
     }
 
     public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
@@ -94,6 +101,10 @@ public class Controller {
         this.databaseLoadService.progressProperty().addListener(listener);
     }
 
+    public void updateSchemaMap(Map schemaMap) {
+        this.model.setSchemaMap(schemaMap);
+    }
+
     public void onDatabaseUploadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
         this.databaseUploadService.setOnSucceeded(workerStateEventEventHandler);
     }
@@ -110,14 +121,12 @@ public class Controller {
         this.databaseUploadService.progressProperty().addListener(listener);
     }
 
-    public Workflow getWorkflow() {
-        return workflow;
-    }
-
-
-    public void uploadArchive(EventHandler<WorkerStateEvent> onSuccess,
-                              EventHandler<WorkerStateEvent> onFailure) throws SQLException {
-        this.databaseUploadService = DatabaseConnectionFactory.getInstance(model).createDatabaseUploader();
+    public void uploadArchive(
+            DbmsConnectionData connectionData,
+            EventHandler<WorkerStateEvent> onSuccess,
+            EventHandler<WorkerStateEvent> onFailure
+    ) throws SQLException {
+        this.databaseUploadService = DatabaseConnectionFactory.getInstance(model, connectionData).createDatabaseUploader();
         this.onDatabaseUploadSuccess(onSuccess);
         this.onDatabaseUploadFailed(onFailure);
         this.databaseUploadService.start();
@@ -186,18 +195,46 @@ public class Controller {
 
     public void initializeWorkflow(Workflow workflow, RootStage stage) {
         this.model.clearSiardArchive();
-        this.workflow = workflow;
-        stage.openDialog(View.forWorkflow(workflow));
-    }
+        this.setRecentDatabaseConnection(Optional.empty());
 
-    public void initializeExport(RootStage stage) {
-        this.workflow = Workflow.EXPORT;
-        stage.openDialog(View.EXPORT_SELECT_TABLES);
-    }
-
-    public void initializeUpload(RootStage stage) {
-        this.workflow = Workflow.UPLOAD;
-        stage.openDialog(View.UPLOAD_DB_CONNECTION_DIALOG);
+        switch (workflow) {
+            case ARCHIVE:
+                stage.openRecentConnectionsDialogForArchiving(
+                        () -> stage.navigate(View.ARCHIVE_STEPPER),
+                        dbConnection -> {
+                            setRecentDatabaseConnection(Optional.of(dbConnection));
+                            stage.navigate(View.ARCHIVE_STEPPER);
+                        }
+                );
+                break;
+            case OPEN:
+                stage.openSelectSiardFileDialog((file, archive) -> {
+                            setSiardArchive(file.getName(), archive);
+                            stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+                        }
+                );
+                break;
+            case EXPORT:
+                stage.openSelectSiardFileDialog((file, archive) -> {
+                            setSiardArchive(file.getName(), archive);
+                            stage.openDialog(View.EXPORT_SELECT_TABLES);
+                        }
+                );
+                break;
+            case UPLOAD:
+                stage.openSelectSiardFileDialog((file, archive) -> {
+                            setSiardArchive(file.getName(), archive);
+                            stage.openRecentConnectionsDialogForUploading(
+                                    () -> stage.navigate(View.UPLOAD_STEPPER),
+                                    dbConnection -> {
+                                        setRecentDatabaseConnection(Optional.of(dbConnection));
+                                        stage.navigate(View.UPLOAD_STEPPER);
+                                    }
+                            );
+                        }
+                );
+                break;
+        }
     }
 
     public void start(RootStage stage) {
@@ -209,18 +246,6 @@ public class Controller {
         return model.getSiardArchive();
     }
 
-    public void setCurrentView(View view) {
-        this.model.setCurrentView(view);
-    }
-
-    public View getCurrentView() {
-        return this.model.getCurrentView();
-    }
-
-    public void setDatabaseType(String databaseType) {
-        model.setDatabaseType(databaseType);
-    }
-
     public void provideArchiveObject(ArchiveVisitor visitor) {
         this.model.provideArchiveObject(visitor);
     }
@@ -229,24 +254,11 @@ public class Controller {
         this.model.provideDatabaseArchiveMetaDataProperties(visitor);
     }
 
-    public DatabaseProperties getDatabaseProps() {
-        return this.model.getDatabaseProps();
-    }
-
-    public StringProperty getDatabaseProduct() {
-        return this.model.getDatabaseProduct();
-    }
-
-    public List<String> getDatabaseTypes() {
-        return this.model.getDatabaseTypes();
-    }
-
     public void setSiardArchive(String name, Archive archive) {
         this.model.setSiardArchive(name, archive);
     }
 
     public void saveArchiveOnlyMetaData() throws IOException {
         this.getSiardArchive().save();
-
     }
 }

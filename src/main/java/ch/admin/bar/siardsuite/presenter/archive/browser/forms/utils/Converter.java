@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils;
 
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.ThrowingFunction;
+import ch.admin.bar.siardsuite.util.ThrowingSupplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -109,13 +111,5 @@ public class Converter {
                 return defaultValue;
             }
         };
-    }
-
-    public interface ThrowingSupplier<T> {
-        T get() throws Exception;
-    }
-
-    public interface ThrowingFunction<P, R> {
-        R apply(P parameter) throws Exception;
     }
 }

@@ -80,12 +80,16 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     }
 
     private void setListeners(MFXStepper stepper) {
-        stepper.addEventHandler(SiardEvent.UPDATE_STEPPER_DBLOAD_EVENT, event -> {
+        stepper.addEventHandler(SiardEvent.ARCHIVE_CONNECTION_DATA_READY, event -> {
             if (!event.isConsumed()) {
                 scrollBox.getChildren().clear();
 
                 try {
-                    controller.loadDatabase(true, handleOnSuccess(stepper), handleOnFailure(stepper));
+                    controller.loadDatabase(
+                            event.getConnectionData(),
+                            true,
+                            handleOnSuccess(stepper),
+                            handleOnFailure(stepper));
                     controller.addDatabaseLoadingValuePropertyListener(databaseLoadingValuePropertyListener);
                     controller.addDatabaseLoadingProgressPropertyListener(numberChangeListener);
                 } catch (Exception e) {

@@ -4,7 +4,6 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
-import ch.admin.bar.siardsuite.component.SiardToolip;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
@@ -14,6 +13,7 @@ import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.SiardEvent;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStepper;
@@ -37,6 +37,8 @@ import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_METADATA_UPDATED;
 
 public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements SiardArchiveMetaDataDetailsVisitor {
+
+    private static final I18nKey TOOLTIP = I18nKey.of("archiveMetadata.view.tooltip");
 
     @FXML
     Text titleText = new Text();
@@ -93,7 +95,7 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.stage = stage;
         this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.borderPane.setBottom(buttonsBox);
-        this.tooltip = new SiardTooltip("archiveMetadata.view.tooltip");
+
         this.bindTexts();
     }
 
@@ -109,6 +111,8 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
         this.buttonsBox.append(saveArchiveButton);
         initFields();
         this.setListeners(stepper);
+
+        new SiardTooltip(TOOLTIP).showOnMouseOn(infoButton);
     }
 
     private void bindTexts() {
@@ -156,8 +160,6 @@ public class ArchiveMetaDataEditorPresenter extends StepperPresenter implements 
                 }
             }
         });
-
-        new SiardToolip(infoButton, tooltip).setup();
     }
 
     /*

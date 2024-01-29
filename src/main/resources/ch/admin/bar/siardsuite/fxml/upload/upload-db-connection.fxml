@@ -1,171 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<ScrollPane styleClass="scrollable-pane" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8"
+<?import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
+<ScrollPane styleClass="scrollable-pane"
+            stylesheets="@../../css/root.css"
+            xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadConnectionPresenter"
-            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-    <BorderPane style="-fx-background-color: white" fx:id="borderPane" maxHeight="1.7976931348623157E308"
+            maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308">
+    <BorderPane style="-fx-background-color: white"
+                fx:id="borderPane"
+                maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308">
         <center>
             <VBox BorderPane.alignment="TOP_LEFT">
-                <VBox prefWidth="100.0">
-                    <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2"/>
-                    <TextFlow fx:id="textFlow" lineSpacing="8.0">
-                        <Text fx:id="text0" styleClass="view-text"/>
-                        <Text fx:id="text1" styleClass="view-text"/>
-                        <Text fx:id="text2" styleClass="view-text"/>
-                        <Text fx:id="text3" styleClass="view-text"/>
-                        <Text fx:id="text4" styleClass="view-text"/>
-                        <VBox.margin>
-                            <Insets bottom="24.0" top="15.0"/>
-                        </VBox.margin>
-                    </TextFlow>
-                    <VBox.margin>
-                        <Insets left="25.0" right="25.0"/>
-                    </VBox.margin>
-                </VBox>
-                <HBox prefHeight="100.0" prefWidth="600.0">
-                    <VBox fx:id="leftVBox" prefWidth="690.0">
-                        <Label fx:id="subtitleLeft">
-                            <styleClass>
-                                <String fx:value="h3"/>
-                                <String fx:value="label-icon"/>
-                                <String fx:value="server-icon"/>
-                            </styleClass>
-                        </Label>
-                        <Text fx:id="textLeft" lineSpacing="8.0" styleClass="view-text">
-                            <VBox.margin>
-                                <Insets bottom="15.0" top="24.0"/>
-                            </VBox.margin>
-                        </Text>
-                    </VBox>
-                    <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="470.0">
-                        <Label fx:id="subtitleRight">
-                            <styleClass>
-                                <String fx:value="h3"/>
-                                <String fx:value="label-icon"/>
-                                <String fx:value="user-icon"/>
-                            </styleClass>
-                        </Label>
-                        <Text fx:id="textRight" lineSpacing="8.0" styleClass="view-text">
-                            <VBox.margin>
-                                <Insets bottom="15.0" top="24.0"/>
-                            </VBox.margin>
-                        </Text>
-                    </VBox>
-                    <VBox.margin>
-                        <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
-                    </VBox.margin>
-                </HBox>
-                <HBox styleClass="form-container">
-                    <VBox prefWidth="670.0">
-                        <HBox>
-                            <VBox>
-                                <Label fx:id="dbServerLabel" styleClass="form-label">
-                                    <VBox.margin>
-                                        <Insets bottom="10.0" />
-                                    </VBox.margin>
-                                </Label>
-                                <TextField fx:id="dbServerField" maxWidth="458.0" minWidth="458.0" styleClass="form-field" />
-                                <Label fx:id="dbServerValidationMsg" styleClass="error-text">
-                                    <VBox.margin>
-                                        <Insets/>
-                                    </VBox.margin>
-                                </Label>
-                                <HBox.margin>
-                                    <Insets right="25.0" />
-                                </HBox.margin>
-                            </VBox>
-                            <VBox>
-                                <Label fx:id="portLabel" styleClass="form-label">
-                                    <VBox.margin>
-                                        <Insets bottom="10.0" />
-                                    </VBox.margin>
-                                </Label>
-                                <TextField fx:id="portField" minWidth="-Infinity" prefWidth="96.0" styleClass="form-field" />
-                                <Label fx:id="portValidationMsg" styleClass="error-text">
-                                    <VBox.margin>
-                                        <Insets/>
-                                    </VBox.margin>
-                                </Label>
-                            </VBox>
-                        </HBox>
-                        <Label fx:id="dbNameLabel" styleClass="form-label">
-                            <VBox.margin>
-                                <Insets bottom="10.0" top="25.0" />
-                            </VBox.margin>
-                        </Label>
-                        <TextField fx:id="dbNameField" maxWidth="578.0" styleClass="form-field" />
-                        <Label fx:id="dbNameValidationMsg" styleClass="error-text">
-                            <VBox.margin>
-                                <Insets/>
-                            </VBox.margin>
-                        </Label>
-                        <HBox.margin>
-                            <Insets bottom="24.0" left="25.0" right="25.0" top="25.0" />
-                        </HBox.margin>
-                        <padding>
-                            <Insets right="50.0" />
-                        </padding>
-                    </VBox>
-                    <VBox prefWidth="470.0">
-                        <Label fx:id="usernameLabel" styleClass="form-label">
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <TextField fx:id="usernameField" maxWidth="1.7976931348623157E308" styleClass="form-field" />
-                        <Label fx:id="userNameValidationMsg" styleClass="error-text">
-                            <VBox.margin>
-                                <Insets/>
-                            </VBox.margin>
-                        </Label>
-                        <Label fx:id="passwordLabel" styleClass="form-label">
-                            <VBox.margin>
-                                <Insets bottom="10.0" top="25.0" />
-                            </VBox.margin>
-                        </Label>
-                        <PasswordField fx:id="passwordField" maxWidth="1.7976931348623157E308" styleClass="form-field">
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                        </PasswordField>
-                        <Label fx:id="passwordValidationMsg" styleClass="error-text">
-                            <VBox.margin>
-                                <Insets/>
-                            </VBox.margin>
-                        </Label>
-                        <HBox.margin>
-                            <Insets bottom="25.0" right="25.0" top="25.0" />
-                        </HBox.margin>
-                    </VBox>
-                </HBox>
-                <VBox maxWidth="1140.0" styleClass="form-container">
-                    <Label fx:id="urlLabel" styleClass="form-label">
-                        <VBox.margin>
-                            <Insets bottom="10.0" left="25.0" top="25.0" />
-                        </VBox.margin>
-                    </Label>
-                    <TextField fx:id="urlField" maxWidth="1.7976931348623157E308" styleClass="form-field" HBox.hgrow="ALWAYS">
-                        <VBox.margin>
-                            <Insets left="25.0" right="25.0" />
-                        </VBox.margin>
-                    </TextField>
-                    <Label fx:id="urlValidationMsg" styleClass="error-text">
-                        <VBox.margin>
-                            <Insets bottom="24.0" left="25.0"/>
-                        </VBox.margin>
-                    </Label>
-                    <VBox.margin>
-                        <Insets top="24.0" />
-                    </VBox.margin>
-                </VBox>
+                <BorderPane.margin>
+                    <Insets left="25.0" right="25.0" top="48.0"/>
+                </BorderPane.margin>
+
+                <ConnectionForm fx:id="connectionForm"
+                                maxWidth="1140.0"/>
+
                 <VBox>
                     <VBox.margin>
                         <Insets bottom="24.0" left="25.0" right="25.0" top="24.0"/>
