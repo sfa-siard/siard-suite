@@ -5,14 +5,14 @@ name: Build project
 
 on:
   push:
-    branches: [ "main", "feature/*", "fix/*" ]
+    branches: [ "main", "feature/*", "issue/*" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
