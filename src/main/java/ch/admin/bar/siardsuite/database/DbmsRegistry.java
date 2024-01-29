@@ -98,7 +98,7 @@ public class DbmsRegistry {
                     .id("oracle")
                     .driverClassName("ch.admin.bar.siard2.jdbc.OracleDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
-                            "jdbc:oracle:thin:@//%s:%s/%s%s",
+                            "jdbc:oracle:thin:@%s:%s/%s%s",
                             config.getHost(),
                             config.getPort(),
                             config.getDbName(),
@@ -111,7 +111,7 @@ public class DbmsRegistry {
                         val splitDbNameAndOptions = splitPortAndDbNameWithOptions[1].split("\\?", 2);
 
                         return ServerBasedDbmsConnectionProperties.builder()
-                                .host(splitEncoded[3].replace("@//", ""))
+                                .host(splitEncoded[3].replace("@", ""))
                                 .port(splitPortAndDbNameWithOptions[0])
                                 .dbName(splitDbNameAndOptions[0])
                                 .options(splitDbNameAndOptions.length > 1 ? Optional.of(splitDbNameAndOptions[1]) : Optional.empty())

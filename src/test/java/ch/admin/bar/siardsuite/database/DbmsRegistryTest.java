@@ -31,7 +31,7 @@ public class DbmsRegistryTest {
             .build();
 
     private static final String EXPECTED_JDBC_URL_FOR_POSTGRESQL = "jdbc:postgresql://db.host.org:1234/test?option=value";
-    private static final String EXPECTED_JDBC_URL_FOR_ORACLE = "jdbc:oracle:thin:@//db.host.org:1234/test?option=value";
+    private static final String EXPECTED_JDBC_URL_FOR_ORACLE = "jdbc:oracle:thin:@db.host.org:1234/test?option=value";
     private static final String EXPECTED_JDBC_URL_FOR_MYSQL = "jdbc:mysql://db.host.org:1234/test?option=value";
     private static final String EXPECTED_JDBC_URL_FOR_MSSQL = "jdbc:sqlserver://db.host.org:1234;databaseName=test;option=value";
     private static final String EXPECTED_JDBC_URL_FOR_DB2 = "jdbc:db2://db.host.org:1234/test?option=value";
