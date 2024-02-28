@@ -5,6 +5,8 @@ import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
+import ch.admin.bar.siardsuite.util.Validator;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import lombok.val;
 
 import java.io.File;
@@ -12,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DbmsRegistry {
@@ -136,7 +139,7 @@ public class DbmsRegistry {
                             config.getOptions()
                                     .map(optionsString -> "?" + optionsString)
                                     .orElse("")))
-                    .jdbcConnectionStringDecoder(encoded -> { // TODO
+                    .jdbcConnectionStringDecoder(encoded -> {
                         val splitEncoded = encoded.split(":");
                         val splitPortAndDbNameWithOptions = splitEncoded[3].split("/", 2);
                         val host = splitEncoded[2].replace("//", "");
@@ -160,7 +163,7 @@ public class DbmsRegistry {
 
             ServerBasedDbms.builder()
                     .name("Microsoft SQL Server")
-                    .id("mssql")
+                    .id("sqlserver")
                     .driverClassName("ch.admin.bar.siard2.jdbc.MsSqlDriver")
                     .jdbcConnectionStringEncoder(config -> String.format(
                             "jdbc:sqlserver://%s:%s;databaseName=%s%s",
@@ -170,7 +173,7 @@ public class DbmsRegistry {
                             config.getOptions()
                                     .map(optionsString -> ";" + optionsString)
                                     .orElse("")))
-                    .jdbcConnectionStringDecoder(encoded -> { // TODO
+                    .jdbcConnectionStringDecoder(encoded -> {
                         val splitEncoded = encoded.split(":");
                         val splitPortAndDbNameWithOptions = splitEncoded[3].split(";");
 
@@ -212,5 +215,22 @@ public class DbmsRegistry {
                 .filter(dbms -> dbms.getName().equals(name))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("No DBMS with name " + name + " available"));
+    }
+
+    public static Predicate<String> checkJdbcUrlValidity(final Dbms<?> serverBasedDbms) {
+        return nullableValue -> Optional.ofNullable(nullableValue)
+                .filter(value -> {
+                    if (!value.startsWith("jdbc:" + serverBasedDbms.getId())) {
+                        return false;
+                    }
+
+                    try {
+                        serverBasedDbms.getJdbcConnectionStringDecoder().apply(value);
+                        return true;
+                    } catch (Exception e) {
+                        return false;
+                    }
+                })
+                .isPresent();
     }
 }

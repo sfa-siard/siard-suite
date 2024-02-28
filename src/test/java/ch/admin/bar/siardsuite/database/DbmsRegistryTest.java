@@ -10,10 +10,7 @@ import org.testfx.assertions.api.Assertions;
 import test.helper.FileTestHelper;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DbmsRegistryTest {
 
@@ -197,5 +194,75 @@ public class DbmsRegistryTest {
                 .isEqualTo(EXPECTED_JDBC_URL_FOR_MSACCESS);
     }
 
+    @Test
+    public void jdbcUrlValidation_forPostgres_expectIsValid() {
+        // given
+        val validator = DbmsRegistry.checkJdbcUrlValidity(DbmsRegistry.findDbmsByName(POSTGRES));
 
+        // when
+        val result = validator.test(EXPECTED_JDBC_URL_FOR_POSTGRESQL);
+
+        // then
+        Assertions.assertThat(result).isTrue();
+    }
+
+    @Test
+    public void jdbcUrlValidation_forOracle_expectIsValid() {
+        // given
+        val validator = DbmsRegistry.checkJdbcUrlValidity(DbmsRegistry.findDbmsByName(ORACLE));
+
+        // when
+        val result = validator.test(EXPECTED_JDBC_URL_FOR_ORACLE);
+
+        // then
+        Assertions.assertThat(result).isTrue();
+    }
+
+    @Test
+    public void jdbcUrlValidation_forMySql_expectIsValid() {
+        // given
+        val validator = DbmsRegistry.checkJdbcUrlValidity(DbmsRegistry.findDbmsByName(MY_SQL));
+
+        // when
+        val result = validator.test(EXPECTED_JDBC_URL_FOR_MYSQL);
+
+        // then
+        Assertions.assertThat(result).isTrue();
+    }
+
+    @Test
+    public void jdbcUrlValidation_forMsSql_expectIsValid() {
+        // given
+        val validator = DbmsRegistry.checkJdbcUrlValidity(DbmsRegistry.findDbmsByName(MS_SQL));
+
+        // when
+        val result = validator.test(EXPECTED_JDBC_URL_FOR_MSSQL);
+
+        // then
+        Assertions.assertThat(result).isTrue();
+    }
+
+    @Test
+    public void jdbcUrlValidation_forDB2_expectIsValid() {
+        // given
+        val validator = DbmsRegistry.checkJdbcUrlValidity(DbmsRegistry.findDbmsByName(DB_2));
+
+        // when
+        val result = validator.test(EXPECTED_JDBC_URL_FOR_DB2);
+
+        // then
+        Assertions.assertThat(result).isTrue();
+    }
+
+    @Test
+    public void jdbcUrlValidation_forAccess_expectIsValid() {
+        // given
+        val validator = DbmsRegistry.checkJdbcUrlValidity(DbmsRegistry.findDbmsByName(MS_ACCESS));
+
+        // when
+        val result = validator.test(EXPECTED_JDBC_URL_FOR_MSACCESS);
+
+        // then
+        Assertions.assertThat(result).isTrue();
+    }
 }

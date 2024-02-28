@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.connection;
 
+import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
@@ -123,7 +124,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                         .build())))
                 .prefWidth(FORM_FIELD_WITH * 2)
                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
-                .validator(validJdbcUrlValidator())
+                .validator(validJdbcUrlValidator(serverBasedDbms))
                 .onNewUserInput(newValue -> {
                     try {
                         val decoded = dbms.getJdbcConnectionStringDecoder().apply(newValue);
@@ -177,23 +178,10 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         }
     }
 
-    private Validator<String> validJdbcUrlValidator() {
+    private Validator<String> validJdbcUrlValidator(final ServerBasedDbms serverBasedDbms) {
         return Validator.<String>builder()
                 .message(DisplayableText.of(INVALID_JDBC_URL_MESSAGE))
-                .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
-                        .filter(value -> {
-                            if (!value.startsWith("jdbc:" + serverBasedDbms.getId())) {
-                                return false;
-                            }
-
-                            try {
-                                serverBasedDbms.getJdbcConnectionStringDecoder().apply(value);
-                                return true;
-                            } catch (Exception e) {
-                                return false;
-                            }
-                        })
-                        .isPresent())
+                .isValidCheck(DbmsRegistry.checkJdbcUrlValidity(serverBasedDbms))
                 .build();
     }
 }
