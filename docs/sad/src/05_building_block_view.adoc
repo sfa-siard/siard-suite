@@ -1,0 +1,76 @@
+ifndef::imagesdir[:imagesdir: ../images]
+
+[[section-building-block-view]]
+
+
+== Building Block View
+
+=== Whitebox Overall System
+
+[mermaid]
+----
+graph TD
+    siardsuite[SiardSuite]
+    siardapi[SiardApi]
+    siardcmd[SiardCmd]
+    sqlparser[SqlParser]
+    jdbcbase[JdbcBase]
+    jdbcaccess[JdbcAccess]
+    jdbcdb2[JdbcDb2]
+    jdbcoracle[JdbcOracle]
+    jdbcmssql[JdbcMssql]
+    jdbcmysql[JdbcMysql]
+    enterutils[EnterUtils]
+    zip64file[Zip64File]
+
+    siardsuite --- siardapi
+    siardsuite --- siardcmd
+    siardsuite --- sqlparser
+    siardsuite --- zip64file
+    siardsuite --- enterutils
+
+    siardapi --- sqlparser
+    siardapi --- enterutils
+    siardapi --- zip64file
+    zip64file --- enterutils
+    sqlparser --- enterutils
+
+    siardcmd --- siardapi
+    siardcmd --- sqlparser
+    siardcmd --- jdbc
+    siardcmd --- enterutils
+
+    jdbc --- enterutils
+    jdbc --- sqlparser
+
+    subgraph jdbc
+    jdbcaccess --> jdbcbase
+    jdbcdb2 --> jdbcbase
+    jdbcoracle --> jdbcbase
+    jdbcpostgres --> jdbcbase
+    jdbcmssql --> jdbcbase
+    jdbcmysql --> jdbcbase
+    end
+
+----
+
+
+Contained Building Blocks::
+
+[options="header",cols="1,2"]
+|===
+|Module | Repository
+|SiardSuite |
+|SiardApi |
+|SiardCmd |
+|SqlParser |
+|JdbcBase |
+|JdbcAccess |
+|JdbcDb2 |
+|JdbcOracle |
+|JdbcMssql |
+|JdbcMysql |
+|EnterUtils |
+|Zip64File |
+|===
+
