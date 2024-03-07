@@ -1,0 +1,17 @@
+ifndef::imagesdir[:imagesdir: ../images]
+
+[[section-glossary]]
+== Glossary
+
+
+
+[cols="e,2e" options="header"]
+|===
+|Term |Definition
+
+|BIT
+|Bundesamt für Informatik
+
+|SFA
+|Swiss Federal Archive, Bundesarchiv
+|===

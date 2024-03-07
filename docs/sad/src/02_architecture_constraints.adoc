@@ -1,0 +1,18 @@
+ifndef::imagesdir[:imagesdir: ../images]
+
+[[section-architecture-constraints]]
+== Architecture Constraints
+
+=== Technical Constraints
+
+[options="header",cols="1,2"]
+|===
+|Constraint |Explanation, Background
+
+|Must run with Java 8
+|Computers (aka Bundeslaptop) used by the Swiss Federal Archived are managed by the BIT. Users are not allowed to install any software on these machines. The Java Runtime environment is fixed to JRE8 (Corretto) and there is no way for these users to circumvent this restriction.
+|===
+
+
+
+

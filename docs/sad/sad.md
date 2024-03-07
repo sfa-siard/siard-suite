@@ -1,4 +1,4 @@
-# 
+#    
 
 **About arc42**
 
@@ -10,31 +10,38 @@ Template Version 8.2 EN. (based upon AsciiDoc version), January 2023
 Created, maintained and © by Dr. Peter Hruschka, Dr. Gernot Starke and
 contributors. See <https://arc42.org>.
 
-# Introduction and Goals {#section-introduction-and-goals}
+# Introduction and Goals
 
-## Requirements Overview {#_requirements_overview}
+## Requirements Overview
 
-## Quality Goals {#_quality_goals}
+## Quality Goals
 
-## Stakeholders {#_stakeholders}
+## Stakeholders
 
-| Role/Name   | Contact        | Expectations       |
-|-------------|----------------|--------------------|
-| *\<Role-1>* | *\<Contact-1>* | *\<Expectation-1>* |
-| *\<Role-2>* | *\<Contact-2>* | *\<Expectation-2>* |
+| Role/Name              | Contact                                | Expectations                                                                                                                                                                                |
+|------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Swiss Federal Archives | https://github.com/sfa-siard           | Long-term archiving of data sets.<br/>Support for common relational database systems.<br/>Reliable, correct archiving of big data sets<br/> Cost efficient maintanance and flexible software |
+| Archives Worldwide     | -                                      | Long-term archiving of data sets.<br/>Support for common relational database systems.<br/>Reliable, correct archiving of big data sets<br/>Quick Issue handling                             |
+| Puzzle ITC             | https://github.com/puzzle              | Main contributor<br/>Establishing a community of contributors to the project                                                                                                                |
+| DILCIS Board           | https://dilcis.eu/content-types/siard  | Archiving of relation databases according to the specification                                                                                                                              |
 
-# Architecture Constraints {#section-architecture-constraints}
+# Architecture Constraints
 
-# System Scope and Context {#section-system-scope-and-context}
+# System Scope and Context
 
-## Business Context {#_business_context}
+## Business Context
 
 **\<Diagram or Table>**
 
 **\<optionally: Explanation of external domain interfaces>**
 
 
-## Technical Context {#_technical_context}
+## Technical Context
+
+```mermaid
+graph LR
+    id1[(Database)]
+```
 
 ```mermaid
 classDiagram
@@ -45,7 +52,7 @@ classDiagram
     Animal : +String gender
     Animal: +isMammal()
     Animal: +mate()
-    class Duck{
+    class Duck{ 
     +String beakColor
     +swim()
     +quack()
@@ -58,6 +65,7 @@ classDiagram
     +bool is_wild
     +run()
 }
+
 ```
 
 **\<Diagram or Table>**
@@ -66,11 +74,11 @@ classDiagram
 
 **\<Mapping Input/Output to Channels>**
 
-# Solution Strategy {#section-solution-strategy}
+# Solution Strategy
 
-# Building Block View {#section-building-block-view}
+# Building Block View
 
-## Whitebox Overall System {#_whitebox_overall_system}
+## Whitebox Overall System
 
 ***\<Overview Diagram>***
 
@@ -86,7 +94,7 @@ Important Interfaces
 
 :   *\<Description of important interfaces>*
 
-### \<Name black box 1> {#__name_black_box_1}
+### \<Name black box 1>
 
 *\<Purpose/Responsibility>*
 
@@ -100,68 +108,69 @@ Important Interfaces
 
 *\<(optional) Open Issues/Problems/Risks>*
 
-### \<Name black box 2> {#__name_black_box_2}
+### \<Name black box 2>
 
 *\<black box template>*
 
-### \<Name black box n> {#__name_black_box_n}
+### \<Name black box n>
 
 *\<black box template>*
 
-### \<Name interface 1> {#__name_interface_1}
+### \<Name interface 1>
+
+...
+[top](#introduction-and-goals)
+
+### \<Name interface m>
+
+## Level 2
+
+### White Box *\<building block 1>*
+
+*\<white box template>*
+
+### White Box *\<building block 2>*
+
+*\<white box template>*
 
 ...
 
-### \<Name interface m> {#__name_interface_m}
-
-## Level 2 {#_level_2}
-
-### White Box *\<building block 1>* {#_white_box_emphasis_building_block_1_emphasis}
+### White Box *\<building block m>*
 
 *\<white box template>*
 
-### White Box *\<building block 2>* {#_white_box_emphasis_building_block_2_emphasis}
+## Level 3
+
+### White Box \<\_building block x.1\_\>
 
 *\<white box template>*
 
-...
-
-### White Box *\<building block m>* {#_white_box_emphasis_building_block_m_emphasis}
+### White Box \<\_building block x.2\_\>
 
 *\<white box template>*
 
-## Level 3 {#_level_3}
-
-### White Box \<\_building block x.1\_\> {#_white_box_building_block_x_1}
+### White Box \<\_building block y.1\_\>
 
 *\<white box template>*
 
-### White Box \<\_building block x.2\_\> {#_white_box_building_block_x_2}
+# Runtime View
 
-*\<white box template>*
-
-### White Box \<\_building block y.1\_\> {#_white_box_building_block_y_1}
-
-*\<white box template>*
-
-# Runtime View {#section-runtime-view}
-
-## \<Runtime Scenario 1> {#__runtime_scenario_1}
+## \<Runtime Scenario 1>
 
 -   *\<insert runtime diagram or textual description of the scenario>*
 
 -   *\<insert description of the notable aspects of the interactions
     between the building block instances depicted in this diagram.\>*
 
-## \<Runtime Scenario 2> {#__runtime_scenario_2}
+## \<Runtime Scenario 2>
 
-## ... {#_}
+## ...
 
-## \<Runtime Scenario n> {#__runtime_scenario_n}
+## \<Runtime Scenario n>
 
-# Deployment View {#section-deployment-view}
+# Deployment View
 
-## Infrastructure Level 1 {#_infrastructure_level_1}
+## Infrastructure Level 1
 
 ***\<Overview Diagram>***
 
@@ -177,49 +186,49 @@ Mapping of Building Blocks to Infrastructure
 
 :   *\<description of the mapping>*
 
-## Infrastructure Level 2 {#_infrastructure_level_2}
+## Infrastructure Level 2
 
-### *\<Infrastructure Element 1>* {#__emphasis_infrastructure_element_1_emphasis}
+### *\<Infrastructure Element 1>*
 
 *\<diagram + explanation>*
 
-### *\<Infrastructure Element 2>* {#__emphasis_infrastructure_element_2_emphasis}
+### *\<Infrastructure Element 2>*
 
 *\<diagram + explanation>*
 
 ...
 
-### *\<Infrastructure Element n>* {#__emphasis_infrastructure_element_n_emphasis}
+### *\<Infrastructure Element n>*
 
 *\<diagram + explanation>*
 
-# Cross-cutting Concepts {#section-concepts}
+# Cross-cutting Concepts
 
-## *\<Concept 1>* {#__emphasis_concept_1_emphasis}
+## *\<Concept 1>*
 
 *\<explanation>*
 
-## *\<Concept 2>* {#__emphasis_concept_2_emphasis}
+## *\<Concept 2>*
 
 *\<explanation>*
 
 ...
 
-## *\<Concept n>* {#__emphasis_concept_n_emphasis}
+## *\<Concept n>*
 
 *\<explanation>*
 
-# Architecture Decisions {#section-design-decisions}
+# Architecture Decisions
 
-# Quality Requirements {#section-quality-scenarios}
+# Quality Requirements
 
-## Quality Tree {#_quality_tree}
+## Quality Tree
 
-## Quality Scenarios {#_quality_scenarios}
+## Quality Scenarios
 
-# Risks and Technical Debts {#section-technical-risks}
+# Risks and Technical Debts
 
-# Glossary {#section-glossary}
+# Glossary
 
 +-----------------------+-----------------------------------------------+
 | Term                  | Definition                                    |

@@ -1,0 +1,35 @@
+ifndef::imagesdir[:imagesdir: ../images]
+
+[[section-system-scope-and-context]]
+== System Scope and Context
+
+=== Business Context
+
+[plantuml]
+----
+@startuml
+
+[First component]
+[Another component] as Comp2
+component Comp3
+component [Last\ncomponent] as Comp4
+
+@enduml
+
+
+----
+
+
+
+**<Diagram or Table>**
+
+**<optionally: Explanation of external domain interfaces>**
+
+=== Technical Context
+
+
+**<Diagram or Table>**
+
+**<optionally: Explanation of technical interfaces>**
+
+**<Mapping Input/Output to Channels>**

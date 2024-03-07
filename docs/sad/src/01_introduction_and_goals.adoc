@@ -1,0 +1,41 @@
+ifndef::imagesdir[:imagesdir: ../images]
+
+[[section-introduction-and-goals]]
+== Introduction and Goals
+
+
+
+=== Requirements Overview
+
+What is SIARD-Suite?
+
+* SIARD Suite is a set of tools for the long-term archiving of data stored in relational databases as SIARD archives.
+* SIARD Suite is the reference implementation of the [SIARD Specification](https://siard.dilcis.eu/SIARD%202.2/SIARD%202.2.pdf)
+
+Main Features:
+
+* Support for multiple relational database management systems.
+* Graphical user interface (GUI) and command line interface (CLI) for archiving and restoring data
+* Clients for Windows, Mac and Linux
+
+=== Quality Goals
+
+[options="header",cols="1,2"]
+|===
+|Quality Goal|Motivation and Description
+| Swiss Federal Archive | https://github.com/sfa-siard
+| Archives world wide | -
+
+|===
+
+=== Stakeholders
+
+[options="header",cols="1,2,2"]
+|===
+|Role/Name|Contact|Expectations
+| Swiss Federal Archive | https://github.com/sfa-siard | _<Expectation-1>_
+| Archives world wide | - | _<Expectation-2>_
+| SIARD Suite users | - |
+| Puzzle ITC GmbH (main contributor| https://github.com/puzzle |
+| Developers, Contributors | - | |
+|===
