@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Builder
 @RequiredArgsConstructor
@@ -32,7 +31,7 @@ public class StepsChainBuilder {
         return this;
     }
 
-    public List<Step> build() {
+    public StepChain build() {
         if (!chainIsValid()) {
             throw new IllegalStateException("Steps chain is not valid");
         }
@@ -87,7 +86,7 @@ public class StepsChainBuilder {
                     .build());
         }
 
-        return Collections.unmodifiableList(preparedSteps);
+        return new StepChain(Collections.unmodifiableList(preparedSteps));
     }
 
     private boolean chainIsValid() {
@@ -100,36 +99,5 @@ public class StepsChainBuilder {
 
                     return matchingInputType;
                 });
-    }
-
-    private List<StepDefinition<?, ?>> buildChain() {
-        val chain = new ArrayList<StepDefinition<?, ?>>();
-
-        StepDefinition<?, ?> currentStep = findStepByInputType(Void.class);
-        chain.add(currentStep);
-
-        while (!currentStep.getOutputType().equals(Void.class)) {
-            currentStep = findStepByInputType(currentStep.getOutputType());
-            chain.add(currentStep);
-        }
-
-        return chain;
-    }
-
-    private <TIn> StepDefinition<TIn, ?> findStepByInputType(final Class<TIn> inputType) {
-        val matchingSteps = registeredSteps.stream()
-                .filter(step -> step.getInputType().equals(inputType))
-                .collect(Collectors.toList());
-
-        if (matchingSteps.size() != 1) {
-            throw new IllegalStateException(String.format(
-                    "No unique step found with input type %s. Found steps are: %s",
-                    inputType.getCanonicalName(),
-                    matchingSteps.stream()
-                            .map(StepDefinition::toString)
-                            .collect(Collectors.joining(","))));
-        }
-
-        return (StepDefinition<TIn, ?>) matchingSteps.get(0);
     }
 }

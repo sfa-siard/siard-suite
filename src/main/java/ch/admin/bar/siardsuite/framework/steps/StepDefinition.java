@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.framework.steps;
 
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import lombok.Builder;
 import lombok.NonNull;
@@ -24,9 +23,6 @@ public class StepDefinition<TIn, TOut> {
     @NonNull Class<TIn> inputType;
     @NonNull Class<TOut> outputType;
     @NonNull StepViewLoader<TIn, TOut> viewLoader;
-
-    @Builder.Default
-    boolean skipOnPrevious = false;
 
     public boolean isVisible() {
         return title.isPresent();

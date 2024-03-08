@@ -72,7 +72,7 @@ public class ArchiveStepperPresenter extends Presenter {
 
     @Override
     public void init(Controller controller, RootStage stage) {
-        val steps = new StepsChainBuilder(
+        val chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,
                 nextDisplayedStep -> stepper.next(),
                 nextDisplayedStep -> {
@@ -91,7 +91,14 @@ public class ArchiveStepperPresenter extends Presenter {
                 .build();
 
         new StepperInitializer(stage, stepper)
-                .init(steps);
+                .init(chain.getSteps());
+
+        controller.getRecentDatabaseConnection()
+                .ifPresent(recentConnection -> {
+                    // skip select dbms step
+                    chain.getNavigatorOfStep(SELECT_DBMS)
+                            .next(recentConnection.mapToDbmsConnectionData().getDbms());
+                });
     }
 
     public static LoadedFxml<ArchiveStepperPresenter> load(Controller controller, RootStage stage) {

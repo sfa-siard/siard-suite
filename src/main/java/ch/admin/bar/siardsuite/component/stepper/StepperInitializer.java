@@ -36,6 +36,10 @@ public class StepperInitializer {
         stepper.getStepperToggles()
                 .addAll(toggles);
         stepper.setSkin(new CustomStepperSkin(stepper, stage));
+
+        if (stepper.getCurrentIndex() == -1) {
+            stepper.next();
+        }
     }
 
     private MFXStepperToggle createToggle(final Step step, final String stepNumber) {
