@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
+import ch.admin.bar.siardsuite.framework.steps.StepMetaData;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
 import ch.admin.bar.siardsuite.presenter.StepperPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.model.SiardArchiveWithConnectionData;
@@ -26,7 +27,7 @@ public class ArchiveStepperPresenter extends StepperPresenter {
     private static final I18nKey EDIT_META_DATA_TITLE = I18nKey.of("archive.step.name.metadata");
     private static final I18nKey DB_DOWNLOAD_TITLE = I18nKey.of("archive.step.name.download");
 
-    private final List<StepsChainBuilder.StepMetaData> steps = new StepsChainBuilder(this::display, ServicesFacade.INSTANCE)
+    private final List<StepMetaData> steps = new StepsChainBuilder(this::display, ServicesFacade.INSTANCE)
             .register(StepDefinition.<Void, Dbms>builder()
                     .title(DisplayableText.of(SELECT_DBMS_TITLE))
                     .inputType(Void.class)

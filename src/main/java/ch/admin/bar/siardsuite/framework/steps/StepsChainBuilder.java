@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.framework.steps;
 
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -39,13 +38,6 @@ public class StepsChainBuilder {
         int stepIndex;
     }
 
-    @Value
-    @Builder
-    public static class StepMetaData {
-        int index;
-        DisplayableText title;
-    }
-
     public List<StepMetaData> build() {
         val preparedSteps = new ArrayList<PreparedStep>();
         val indexCurrentStep = new AtomicInteger(0);
@@ -67,7 +59,7 @@ public class StepsChainBuilder {
 
                     val targetStep = preparedSteps.get(targetStepIndex);
                     targetStep.getDataCache().set(data);
-                    displayService.accept((LoadedFxml) targetStep.getDefinition()
+                    displayService.accept(targetStep.getDefinition()
                             .getViewLoader()
                             .load(data,
                                     targetStep.getNavigator(),
@@ -84,7 +76,7 @@ public class StepsChainBuilder {
                     }
 
                     val targetStep = preparedSteps.get(targetStepIndex);
-                    displayService.accept((LoadedFxml) targetStep.getDefinition()
+                    displayService.accept(targetStep.getDefinition()
                             .getViewLoader()
                             .load(targetStep.getDataCache().get(),
                                     targetStep.getNavigator(),
@@ -102,7 +94,7 @@ public class StepsChainBuilder {
 
         // display first step
         val firstStep = preparedSteps.get(0);
-        displayService.accept((LoadedFxml) firstStep.getDefinition()
+        displayService.accept(firstStep.getDefinition()
                 .getViewLoader()
                 .load(null,
                         firstStep.getNavigator(),
