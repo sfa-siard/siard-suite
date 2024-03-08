@@ -5,13 +5,14 @@ import ch.admin.bar.siardsuite.component.TwoStatesButton;
 import ch.admin.bar.siardsuite.component.rendering.FormRenderer;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
+import ch.admin.bar.siardsuite.framework.general.Dialogs;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.util.DeactivatableListener;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.view.ErrorHandler;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -72,18 +73,21 @@ public class GenericArchiveBrowserPresenter {
 
     private FormRenderer currentFormRenderer;
 
-    private RootStage rootStage;
+    private Dialogs dialogs;
+    private ErrorHandler errorHandler;
 
     private final BooleanProperty hasChanged = new SimpleBooleanProperty(false);
 
     public void init(
-            final RootStage rootStage,
+            final Dialogs dialogs,
+            final ErrorHandler errorHandler,
             final DisplayableText titleValue,
             final DisplayableText textValue,
             final Node footerNode,
             final TreeItem<TreeAttributeWrapper> rootTreeItem
     ) {
-        this.rootStage = rootStage;
+        this.dialogs = dialogs;
+        this.errorHandler = errorHandler;
 
         this.borderPane.setBottom(footerNode);
         this.treeView.setRoot(rootTreeItem);
@@ -120,14 +124,14 @@ public class GenericArchiveBrowserPresenter {
         });
 
         tableSearchButton.setNormalStateAction(event ->
-                rootStage.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
+                dialogs.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
                         s -> currentFormRenderer.applySearchTerm(s),
                         () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
                 )));
         tableSearchButton.setBoldStateAction(event -> currentFormRenderer.clearSearchTerm());
 
         val explorer = TreeItemsExplorer.from(rootTreeItem);
-        metaSearchButton.setOnAction(event -> rootStage.openSearchMetaDataDialog(
+        metaSearchButton.setOnAction(event -> dialogs.openSearchMetaDataDialog(
                 explorer,
                 treeItem -> treeView.getSelectionModel().select(treeItem)
         ));
@@ -145,7 +149,7 @@ public class GenericArchiveBrowserPresenter {
             return;
         }
 
-        this.rootStage.openUnsavedChangesDialog(result -> {
+        this.dialogs.openUnsavedChangesDialog(result -> {
             switch (result) {
                 case CANCEL:
                     change.getDeactivatableListener().deactivate();
@@ -185,7 +189,7 @@ public class GenericArchiveBrowserPresenter {
         currentFormRenderer = FormRenderer.builder()
                 .renderableForm(form)
                 .hasChanged(hasChanged)
-                .errorHandler(rootStage)
+                .errorHandler(errorHandler)
                 .build();
 
         this.titleTableContainer.textProperty()
@@ -227,7 +231,8 @@ public class GenericArchiveBrowserPresenter {
     }
 
     public static LoadedFxml<GenericArchiveBrowserPresenter> load(
-            final RootStage rootStage,
+            final Dialogs dialogs,
+            final ErrorHandler errorHandler,
             final DisplayableText title,
             final DisplayableText text,
             final Node footer,
@@ -235,7 +240,8 @@ public class GenericArchiveBrowserPresenter {
     ) {
         val loaded = FXMLLoadHelper.<GenericArchiveBrowserPresenter>load("fxml/archive-browser.fxml");
         loaded.getController()
-                .init(rootStage,
+                .init(dialogs,
+                        errorHandler,
                         title,
                         text,
                         footer,

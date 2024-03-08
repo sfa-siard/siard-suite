@@ -4,9 +4,10 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
+import ch.admin.bar.siardsuite.framework.general.Dialogs;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
-import ch.admin.bar.siardsuite.presenter.archive.ArchiveRecentConnectionsDialogPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.dialogs.ArchiveRecentConnectionsDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.View;
@@ -28,7 +29,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class RootStage extends Stage implements ErrorHandler {
+public class RootStage extends Stage implements ErrorHandler, Dialogs {
   private final Controller controller;
 
   private final BorderPane rootPane;
@@ -71,6 +72,7 @@ public class RootStage extends Stage implements ErrorHandler {
     setCenter(rootPane, view);
   }
 
+  @Override
   public void openDialog(View view) {
     setCenter(dialogPane, view);
     dialogPane.setVisible(true);
@@ -84,6 +86,7 @@ public class RootStage extends Stage implements ErrorHandler {
     dialogPane.setVisible(true);
   }
 
+  @Override
   public void openUnsavedChangesDialog(final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
     val loaded = UnsavedChangesDialogPresenter.load(result -> {
       closeDialog();
@@ -94,6 +97,7 @@ public class RootStage extends Stage implements ErrorHandler {
     dialogPane.setVisible(true);
   }
 
+  @Override
   public void openSearchTableDialog(final Consumer<Optional<String>> searchTermConsumer) {
     val loaded = SearchTableDialogPresenter.load(this::closeDialog, searchTermConsumer);
 
@@ -101,6 +105,7 @@ public class RootStage extends Stage implements ErrorHandler {
     dialogPane.setVisible(true);
   }
 
+  @Override
   public void openSearchMetaDataDialog(
           final TreeItemsExplorer treeItemsExplorer,
           final Consumer<TreeItem<TreeAttributeWrapper>> onSelected) {
@@ -114,6 +119,7 @@ public class RootStage extends Stage implements ErrorHandler {
     dialogPane.setVisible(true);
   }
 
+  @Override
   public void openRecentConnectionsDialogForArchiving(
           final Runnable onNewConnection,
           final Consumer<RecentDbConnection> onRecentConnectionSelected
@@ -128,6 +134,7 @@ public class RootStage extends Stage implements ErrorHandler {
     dialogPane.setVisible(true);
   }
 
+  @Override
   public void openRecentConnectionsDialogForUploading(
           final Runnable onNewConnection,
           final Consumer<RecentDbConnection> onRecentConnectionSelected
@@ -142,6 +149,7 @@ public class RootStage extends Stage implements ErrorHandler {
     dialogPane.setVisible(true);
   }
 
+  @Override
   public void openSelectSiardFileDialog(final BiConsumer<File, Archive> onArchiveSelected) {
     val loaded = OpenSiardArchiveDialogPresenter.load(
             this::closeDialog,

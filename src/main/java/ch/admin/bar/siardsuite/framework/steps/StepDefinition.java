@@ -24,6 +24,14 @@ public class StepDefinition<TIn, TOut> {
         LoadedFxml load(TIn data, StepperNavigator<TOut> navigator);
     }
 
+    public interface StepViewLoaderWithoutData<TIn, TOut> {
+        LoadedFxml load(StepperNavigator<TOut> navigator, ServicesFacade servicesFacade);
+    }
+
+    public interface StepViewLoaderWithoutDataAndServices<TIn, TOut> {
+        LoadedFxml load(StepperNavigator<TOut> navigator);
+    }
+
     public static class StepDefinitionBuilder<TIn, TOut> {
         public StepDefinitionBuilder<TIn, TOut> viewLoader(StepViewLoader<TIn, TOut> viewLoader) {
             this.viewLoader = viewLoader;
@@ -32,6 +40,16 @@ public class StepDefinition<TIn, TOut> {
 
         public StepDefinitionBuilder<TIn, TOut> viewLoader(StepViewLoaderWithoutServices<TIn, TOut> viewLoader) {
             this.viewLoader = (data, navigator, servicesRegistry) -> viewLoader.load(data, navigator);
+            return this;
+        }
+
+        public StepDefinitionBuilder<TIn, TOut> viewLoader(StepViewLoaderWithoutData<TIn,TOut> viewLoader) {
+            this.viewLoader = (data, navigator, servicesRegistry) -> viewLoader.load(navigator, servicesRegistry);
+            return this;
+        }
+
+        public StepDefinitionBuilder<TIn, TOut> viewLoader(StepViewLoaderWithoutDataAndServices<TIn,TOut> viewLoader) {
+            this.viewLoader = (data, navigator, servicesRegistry) -> viewLoader.load(navigator);
             return this;
         }
     }

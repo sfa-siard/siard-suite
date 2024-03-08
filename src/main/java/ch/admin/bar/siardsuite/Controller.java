@@ -5,6 +5,8 @@ import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
@@ -30,7 +32,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;
 
-public class Controller {
+public class Controller implements DbInteractionService {
 
     private final Model model;
     private Archive tmpArchive;
@@ -79,6 +81,24 @@ public class Controller {
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
+    }
+
+    @Override
+    public void execute(LoadDatabaseInstruction instruction) throws SQLException {
+        loadDatabase(
+                instruction.getConnectionData(),
+                instruction.getSaveAt(),
+                instruction.isLoadOnlyMetadata(),
+                instruction.isViewsAsTables(),
+                event -> {
+                    instruction.getOnSuccess().handle(event);
+                    DatabaseConnectionFactory.disconnect();
+                },
+                instruction.getOnFailure()
+        );
+
+        this.databaseLoadService.valueProperty().addListener(instruction.getOnStepCompleted());
+        this.databaseLoadService.progressProperty().addListener(instruction.getOnProgress());
     }
 
     public void closeDbConnection() {
@@ -176,21 +196,6 @@ public class Controller {
 
     public String errorStackTrace() {
         return this.model.getFailure().stacktrace();
-    }
-
-    public void updateArchiveMetaData(String dbName, String description, String owner, String dataOriginTimespan,
-                                      String archiverName, String archiverContact, URI lobFolder, File targetArchive,
-                                      boolean viewsAsTables) {
-        this.model.updateArchiveMetaData(
-                dbName,
-                description,
-                owner,
-                dataOriginTimespan,
-                archiverName,
-                archiverContact,
-                lobFolder,
-                targetArchive,
-                viewsAsTables);
     }
 
     public void initializeWorkflow(Workflow workflow, RootStage stage) {

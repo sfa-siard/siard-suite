@@ -10,11 +10,13 @@ import lombok.NonNull;
 import lombok.Value;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Optional;
 
 @Value
 public class LoadDatabaseInstruction {
     DbmsConnectionData connectionData;
+    File saveAt;
     boolean loadOnlyMetadata;
     boolean viewsAsTables;
     EventHandler<WorkerStateEvent> onSuccess;
@@ -25,6 +27,7 @@ public class LoadDatabaseInstruction {
     @Builder
     public LoadDatabaseInstruction(
             @NonNull DbmsConnectionData connectionData,
+            @NonNull File saveAt,
             @Nullable Boolean loadOnlyMetadata,
             @Nullable Boolean viewsAsTables,
             @Nullable EventHandler<WorkerStateEvent> onSuccess,
@@ -33,6 +36,7 @@ public class LoadDatabaseInstruction {
             @Nullable ChangeListener<ObservableList<Pair<String, Long>>> onSingleValueCompleted
     ) {
         this.connectionData = connectionData;
+        this.saveAt = saveAt;
         this.loadOnlyMetadata = Optional.ofNullable(loadOnlyMetadata).orElse(false);
         this.viewsAsTables = Optional.ofNullable(viewsAsTables).orElse(false);
         this.onSuccess = Optional.ofNullable(onSuccess).orElse(event -> {});

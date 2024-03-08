@@ -4,7 +4,6 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.OpenArchiveBrowser;
-import ch.admin.bar.siardsuite.presenter.archive.browser.PreviewArchiveBrowser;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -17,13 +16,10 @@ public enum View {
 
     ROOT("fxml/root.fxml"),
     START("fxml/start.fxml"),
-    ARCHIVE_DB("fxml/archive/archive-choose-dbms.fxml"),
-    ARCHIVE_CONNECTION("fxml/archive/archive-connection.fxml"),
     ARCHIVE_STEPPER("fxml/archive/archive-stepper.fxml"),
     DIALOG("fxml/dialog.fxml"),
     ARCHIVE_DB_DIALOG("fxml/archive/archive-db-dialog.fxml"),
     ARCHIVE_ABORT_DIALOG("fxml/archive/archive-abort-dialog.fxml"),
-    ARCHIVE_PREVIEW(PreviewArchiveBrowser.VIEW_CREATOR),
     ARCHIVE_LOADING_PREVIEW("fxml/archive/archive-loading-preview.fxml"),
     ARCHIVE_METADATA_EDITOR("fxml/archive/archive-metadata-editor.fxml"),
     ARCHIVE_DOWNLOAD("fxml/archive/archive-download.fxml"),

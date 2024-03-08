@@ -1,24 +1,22 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.Spinner;
-import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.ProgressItem;
 import ch.admin.bar.siardsuite.presenter.ProgressItems;
-import ch.admin.bar.siardsuite.presenter.StepperPresenter;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.presenter.archive.model.SiardArchiveWithConnectionData;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
-import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -28,14 +26,17 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
+import lombok.val;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;
-import static ch.admin.bar.siardsuite.util.SiardEvent.ARCHIVE_LOADED;
-import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
-public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
+public class ArchiveLoadingPreviewPresenter {
+
+    private static final I18nKey TITLE = I18nKey.of("archiveLoadingPreview.view.title");
+    private static final I18nKey TEXT = I18nKey.of("archiveLoadingPreview.view.text");
+
     @FXML
     public Label title;
     @FXML
@@ -55,50 +56,53 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
 
     private final ProgressItems progressItems = new ProgressItems();
 
-    @Override
-    public void init(Controller controller, RootStage stage) {
-        this.controller = controller;
-        this.stage = stage;
-    }
+    public void init(
+            final DbmsConnectionData dbmsConnectionData,
+            final StepperNavigator<SiardArchiveWithConnectionData> navigator,
+            final ServicesFacade servicesFacade
+    ) {
+        this.title.textProperty().bind(DisplayableText.of(TITLE).bindable());
+        this.text.textProperty().bind(DisplayableText.of(TEXT).bindable());
 
-    @Override
-    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
-        this.init(controller, stage);
-
-        I18n.bind(this.title.textProperty(), "archiveLoadingPreview.view.title");
-        I18n.bind(this.text.textProperty(), "archiveLoadingPreview.view.text");
         this.loader.setImage(loading);
         new Spinner(this.loader).play();
 
         ButtonBox buttonsBox = new ButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
 
-        buttonsBox.previous().setOnAction((event) -> cancel(stepper));
-        buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+        val controller = servicesFacade.controller();
 
-        this.setListeners(stepper);
-    }
-
-    private void setListeners(MFXStepper stepper) {
-        stepper.addEventHandler(SiardEvent.ARCHIVE_CONNECTION_DATA_READY, event -> {
-            if (!event.isConsumed()) {
-                scrollBox.getChildren().clear();
-
-                try {
-                    controller.loadDatabase(
-                            event.getConnectionData(),
-                            true,
-                            handleOnSuccess(stepper),
-                            handleOnFailure(stepper));
-                    controller.addDatabaseLoadingValuePropertyListener(databaseLoadingValuePropertyListener);
-                    controller.addDatabaseLoadingProgressPropertyListener(numberChangeListener);
-                } catch (Exception e) {
-                    fail(stepper, e, ERROR_OCCURED);
-                } finally {
-                    event.consume();
-                }
-            }
+        buttonsBox.previous().setOnAction(event -> {
+            navigator.previous();
+            controller.cancelDownload();
         });
+        buttonsBox.cancel().setOnAction(event -> servicesFacade
+                .dialogs()
+                .openDialog(View.ARCHIVE_ABORT_DIALOG));
+
+        try {
+            controller.loadDatabase(
+                    dbmsConnectionData,
+                    true,
+                    event -> {
+                        navigator.next(SiardArchiveWithConnectionData.builder()
+                                .dbmsConnectionData(dbmsConnectionData)
+                                .siardArchive(controller.getSiardArchive())
+                                .build());
+                        controller.releaseResources();
+                    },
+                    event -> {
+                        navigator.previous();
+                        controller.cancelDownload();
+                        servicesFacade.errorHandler().handle(event.getSource().getException());
+                    });
+            controller.addDatabaseLoadingValuePropertyListener(databaseLoadingValuePropertyListener);
+            controller.addDatabaseLoadingProgressPropertyListener(numberChangeListener);
+        } catch (Exception e) {
+            navigator.previous();
+            controller.cancelDownload();
+            servicesFacade.errorHandler().handle(e);
+        }
     }
 
     private void addLoadingItem(String text, Integer pos) {
@@ -116,36 +120,6 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
         }
     }
 
-    private void cancel(MFXStepper stepper) {
-        stepper.previous();
-        controller.cancelDownload();
-    }
-
-    private void fail(MFXStepper stepper, Throwable e, EventType<SiardEvent> event) {
-        stepper.previous();
-        e.printStackTrace();
-        this.stage.openDialog(View.ERROR_DIALOG);
-        controller.cancelDownload();
-        controller.failure(new Failure(e));
-        stepper.fireEvent(new SiardEvent(event));
-    }
-
-    private EventHandler<WorkerStateEvent> handleOnFailure(MFXStepper stepper) {
-        return e -> {
-            e.getSource().getException().printStackTrace();
-            fail(stepper, e.getSource().getException(), ERROR_OCCURED);
-        };
-    }
-
-    private EventHandler<WorkerStateEvent> handleOnSuccess(MFXStepper stepper) {
-        return e -> {
-            stepper.next();
-            stepper.fireEvent(new SiardEvent(ARCHIVE_LOADED));
-            controller.releaseResources();
-        };
-    }
-
-
     private final ChangeListener<ObservableList<Pair<String, Long>>> databaseLoadingValuePropertyListener = (o1, oldValue, newValue) -> {
         newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
     };
@@ -153,4 +127,15 @@ public class ArchiveLoadingPreviewPresenter extends StepperPresenter {
     private final ChangeListener<Number> numberChangeListener = (o, oldValue, newValue) -> {
         progressBar.progressProperty().set(newValue.doubleValue());
     };
+
+    public static LoadedFxml<ArchiveLoadingPreviewPresenter> load(
+            final DbmsConnectionData dbmsConnectionData,
+            final StepperNavigator<SiardArchiveWithConnectionData> navigator,
+            final ServicesFacade servicesFacade
+    ) {
+        val loaded = FXMLLoadHelper.<ArchiveLoadingPreviewPresenter>load("fxml/archive/archive-loading-preview.fxml");
+        loaded.getController().init(dbmsConnectionData, navigator, servicesFacade);
+
+        return loaded;
+    }
 }

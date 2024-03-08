@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.IconView;
@@ -10,44 +9,40 @@ import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.component.SystemFileBrowser;
 import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
-import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
+import ch.admin.bar.siardsuite.framework.general.Dialogs;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
-import ch.admin.bar.siardsuite.presenter.StepperPresenter;
-import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
+import ch.admin.bar.siardsuite.presenter.archive.model.UserDefinedMetadata;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.view.ErrorHandler;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
-import io.github.palexdev.materialfx.controls.MFXStepper;
-import io.github.palexdev.materialfx.enums.StepperToggleState;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import lombok.val;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DOWNLOAD_FINISHED;
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.TO_START;
 import static ch.admin.bar.siardsuite.model.View.START;
-import static ch.admin.bar.siardsuite.util.SiardEvent.DATABASE_DOWNLOADED;
-import static ch.admin.bar.siardsuite.util.SiardEvent.ERROR_OCCURED;
 
-public class ArchiveDownloadPresenter extends StepperPresenter implements SiardArchiveMetaDataVisitor, SiardArchiveMetaDataDetailsVisitor {
+public class ArchiveDownloadPresenter {
 
+    @FXML
+    public BorderPane borderPane;
     @FXML
     public Label title;
     @FXML
@@ -77,49 +72,57 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
     private ButtonBox buttonsBox;
 
     private Spinner loadingSpinner;
-    private File targetArchive;
-    private String databaseName;
     private long total;
-    boolean viewsAsTables;
 
-    @Override
-    public void init(Controller controller, RootStage stage) {
-        this.controller = controller;
-        this.stage = stage;
-    }
+    private ErrorHandler errorHandler;
+    private UserDefinedMetadata userDefinedMetadata;
+    private DbInteractionService dbInteractionService;
+    private Dialogs dialogs;
+    private Navigator navigator;
 
-    @Override
-    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
-        this.init(controller, stage);
+    public void init(
+            final UserDefinedMetadata userDefinedMetadata,
+            final StepperNavigator<Void> navigator,
+            final ServicesFacade servicesFacade
+    ) {
+        this.errorHandler = servicesFacade.errorHandler();
+        this.userDefinedMetadata = userDefinedMetadata;
+        this.dbInteractionService = servicesFacade.dbInteractionService();
+        this.dialogs = servicesFacade.dialogs();
+        this.navigator = servicesFacade.navigator();
+
         this.loader.setImage(Icon.loading);
         loadingSpinner = new Spinner(this.loader);
         this.bindTexts();
         this.buttonsBox = new ButtonBox().make(CANCEL);
-        addButtons(stepper);
-        setListeners(stepper);
+        addButtons();
+        setListeners();
+
+        this.openLink.setOnMouseClicked(event -> openArchiveDirectory(userDefinedMetadata.getSaveAt()));
+        this.archivePath.setText(userDefinedMetadata.getSaveAt().getAbsolutePath());
+        this.subtitle1.setText(userDefinedMetadata.getDbName());
+
+        downloadAndArchiveDatabase();
     }
 
-    private void setListeners(MFXStepper stepper) {
-        stepper.addEventHandler(SiardEvent.ARCHIVE_METADATA_UPDATED, downloadAndArchiveDatabase(stepper));
-
+    private void setListeners() {
         if (this.buttonsBox.cancel() != null) {
             if (this.resultTitle.isVisible()) {
                 this.buttonsBox.cancel().setOnAction((event) -> {
                     try {
                         final Archive archive = ArchiveImpl.newInstance();
-                        archive.open(targetArchive);
-                        controller.setSiardArchive(targetArchive.getName(), archive);
-                        stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+                        archive.open(userDefinedMetadata.getSaveAt());
+                        navigator.openArchive(archive);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 });
             } else {
-                this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.ARCHIVE_ABORT_DIALOG));
+                this.buttonsBox.cancel().setOnAction((event) -> dialogs.openDialog(View.ARCHIVE_ABORT_DIALOG));
             }
         }
         if (this.buttonsBox.next() != null) {
-            this.buttonsBox.next().setOnAction((event) -> stage.navigate(START));
+            this.buttonsBox.next().setOnAction((event) -> navigator.navigate(START));
         }
     }
 
@@ -130,100 +133,73 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
         I18n.bind(openLink.textProperty(), "archiveDownload.view.openLink");
     }
 
-    private EventHandler<SiardEvent> downloadAndArchiveDatabase(MFXStepper stepper) {
-        return event -> {
-            if (!event.isConsumed()) {
-                loadingSpinner.play();
-                controller.provideDatabaseArchiveMetaDataProperties(this);
-                this.openLink.setOnMouseClicked(openArchiveDirectory(targetArchive));
-                this.archivePath.setText(targetArchive.getAbsolutePath());
-                this.subtitle1.setText(this.databaseName);
-                try {
-                    controller.loadDatabase(
-                            controller.getDatabaseConnectionData().orElseThrow(() -> new IllegalStateException("No database connection data available")), // TODO FIXME
-                            targetArchive,
-                            false,
-                            this.viewsAsTables,
-                            handleDownloadSuccess(stepper),
-                            handleDownloadFailure(stepper));
-                    controller.addDatabaseLoadingValuePropertyListener((o, oldValue, newValue) -> {
+    private void downloadAndArchiveDatabase() {
+        loadingSpinner.play();
+
+        try {
+            dbInteractionService.execute(LoadDatabaseInstruction.builder()
+                    .connectionData(userDefinedMetadata.getDbmsConnectionData())
+                    .saveAt(userDefinedMetadata.getSaveAt())
+                    .loadOnlyMetadata(false)
+                    .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
+                    .onSuccess(event -> handleDownloadSuccess())
+                    .onFailure(event -> handleDownloadFailure(event.getSource().getException()))
+                    .onSingleValueCompleted((observable, oldValue, newValue) -> {
                         AtomicInteger pos = new AtomicInteger();
                         newValue.forEach(p ->
                                 addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
                         );
-                    });
-                    controller.addDatabaseLoadingProgressPropertyListener((o, oldValue, newValue) -> {
+                    })
+                    .onProgress((observable, oldValue, newValue) -> {
                         double pos = newValue.doubleValue();
                         progressBar.progressProperty().set(pos);
-                    });
-                    event.consume();
-                } catch (SQLException e) {
-                    fail(stepper, e, ERROR_OCCURED);
-                }
-            }
-        };
+                    })
+                    .build());
+        } catch (SQLException e) {
+            errorHandler.handle(e);
+            ;
+        }
     }
 
-    private void fail(MFXStepper stepper, Throwable e, EventType<SiardEvent> event) {
-        e.printStackTrace();
-        this.stage.openDialog(View.ERROR_DIALOG);
-        controller.cancelDownload();
-        controller.failure(new Failure(e));
-        stepper.fireEvent(new SiardEvent(event));
+    private void handleDownloadSuccess() {
+        loadingSpinner.hide();
+        this.title.setVisible(false);
+        this.resultTitle.setVisible(true);
+        this.fileSystemBox.setVisible(true);
+        I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.success");
+        resultTitle.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
+        setResultData();
+
+        this.buttonsBox = new ButtonBox().make(DOWNLOAD_FINISHED);
+        addButtons();
     }
 
-    private EventHandler<WorkerStateEvent> handleDownloadSuccess(MFXStepper stepper) {
-        return e -> {
-            stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.COMPLETED);
-            stepper.updateProgress();
-            loadingSpinner.hide();
-            this.title.setVisible(false);
-            this.resultTitle.setVisible(true);
-            this.fileSystemBox.setVisible(true);
-            I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.success");
-            resultTitle.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
-            setResultData();
-            controller.closeDbConnection();
-            stepper.fireEvent(new SiardEvent(DATABASE_DOWNLOADED));
-            this.buttonsBox = new ButtonBox().make(DOWNLOAD_FINISHED);
-            addButtons(stepper);
-        };
+    private void handleDownloadFailure(final Throwable throwable) {
+        this.title.setVisible(false);
+        loadingSpinner.hide();
+        progressBar.setVisible(false);
+        this.resultTitle.setVisible(true);
+        this.subtitle1.setVisible(false);
+        this.resultBox.setVisible(false);
+        I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.failed");
+        I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.failed");
+        resultTitle.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
+        this.buttonsBox = new ButtonBox().make(TO_START);
+        errorHandler.handle(throwable);
+        addButtons();
     }
 
-    private EventHandler<WorkerStateEvent> handleDownloadFailure(MFXStepper stepper) {
-        return e -> {
-            System.err.println(I18n.get("archiveDownload.view.title.failed") + " " + e.getSource().getException());
-            e.getSource().getException().printStackTrace();
-            stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.ERROR);
-            stepper.updateProgress();
-            this.title.setVisible(false);
-            loadingSpinner.hide();
-            progressBar.setVisible(false);
-            this.resultTitle.setVisible(true);
-            this.subtitle1.setVisible(false);
-            this.resultBox.setVisible(false);
-            I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.failed");
-            I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.failed");
-            resultTitle.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
-            this.buttonsBox = new ButtonBox().make(TO_START);
-            fail(stepper, e.getSource().getException(), ERROR_OCCURED);
-            addButtons(stepper);
-        };
-    }
-
-    private void addButtons(MFXStepper stepper) {
+    private void addButtons() {
         this.borderPane.setBottom(buttonsBox);
-        setListeners(stepper);
+        setListeners();
     }
 
-    private EventHandler<MouseEvent> openArchiveDirectory(File file) {
-        return event -> {
-            try {
-                new SystemFileBrowser(file).show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
+    private void openArchiveDirectory(File file) { // TODO move to services
+        try {
+            new SystemFileBrowser(file).show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void setResultData() {
@@ -253,19 +229,14 @@ public class ArchiveDownloadPresenter extends StepperPresenter implements SiardA
         }
     }
 
-    @Override
-    public void visit(String siardFormatVersion, String databaseName, String databaseProduct,
-                      String databaseConnectionURL,
-                      String databaseUsername, String databaseDescription, String databaseOwner,
-                      String databaseCreationDate,
-                      LocalDate archivingDate, String archiverName, String archiverContact, File targetArchive,
-                      URI lobFolder, boolean viewsAsTables) {
-        this.targetArchive = targetArchive;
-        this.databaseName = databaseName;
-        this.viewsAsTables = viewsAsTables;
-    }
+    public static LoadedFxml<ArchiveDownloadPresenter> load(
+            final UserDefinedMetadata userDefinedMetadata,
+            final StepperNavigator<Void> navigator,
+            final ServicesFacade servicesFacade
+    ) {
+        val loaded = FXMLLoadHelper.<ArchiveDownloadPresenter>load("fxml/archive/archive-download.fxml");
+        loaded.getController().init(userDefinedMetadata, navigator, servicesFacade);
 
-    @Override
-    public void visit(SiardArchiveMetaData metaData) {
+        return loaded;
     }
 }

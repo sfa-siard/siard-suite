@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.presenter.archive;
+package ch.admin.bar.siardsuite.presenter.archive.dialogs;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
