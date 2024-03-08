@@ -45,7 +45,3 @@ build/
 
 # ignore generated user manuals
 /src/main/resources/ch/admin/bar/siardsuite/doc/
-
-# ignore generated plantuml diagrams
-**/diagrams/generated
-
