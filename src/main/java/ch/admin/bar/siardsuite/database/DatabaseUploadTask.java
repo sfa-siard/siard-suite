@@ -1,28 +1,22 @@
 package ch.admin.bar.siardsuite.database;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siard2.cmd.MetaDataToDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataToDb;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.concurrent.Task;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
+import java.util.Map;
 
-public class DatabaseUploadTask extends Task<String> implements Progress, ArchiveVisitor {
+@RequiredArgsConstructor
+public class DatabaseUploadTask extends Task<String> implements Progress {
 
   private final Connection connection;
-  private final Model model;
-  private MetaData metaData;
-  private Archive archive;
-
-  public DatabaseUploadTask(Connection connection, Model model) {
-    this.connection = connection;
-    this.model = model;
-  }
+  private final Archive archive;
+  private final Map<String, String> schemaNameMapping;
 
   @Override
   public boolean cancelRequested() {
@@ -36,9 +30,6 @@ public class DatabaseUploadTask extends Task<String> implements Progress, Archiv
 
   @Override
   protected String call() throws Exception {
-    this.model.provideArchiveProperties(this);
-    this.model.provideArchiveObject(this);
-
     connection.setAutoCommit(false);
     int timeout = UserPreferences.INSTANCE.getStoredOptions().getQueryTimeout();
 
@@ -46,7 +37,7 @@ public class DatabaseUploadTask extends Task<String> implements Progress, Archiv
     boolean isOverwrite = true;
     boolean metaDataOnly = false;
 
-    MetaDataToDb metadata = MetaDataToDb.newInstance(connection.getMetaData(), this.metaData, model.getSchemaMap());
+    MetaDataToDb metadata = MetaDataToDb.newInstance(connection.getMetaData(), this.archive.getMetaData(), this.schemaNameMapping);
     metadata.setQueryTimeout(timeout);
     if (!isOverwrite) {
       if ((metadata.tablesDroppedByUpload() == 0)) {
@@ -66,16 +57,5 @@ public class DatabaseUploadTask extends Task<String> implements Progress, Archiv
       data.upload(this);
     }
     return null;
-  }
-
-
-  @Override
-  public void visit(Archive archive) {
-    this.archive = archive;
-  }
-
-  @Override
-  public void visit(MetaData metaData) {
-    this.metaData = metaData;
   }
 }

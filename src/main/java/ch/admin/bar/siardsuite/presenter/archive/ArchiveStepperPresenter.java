@@ -74,13 +74,13 @@ public class ArchiveStepperPresenter extends Presenter {
 
     @Override
     public void init(Controller controller, RootStage stage) {
-        val chain = new StepsChainBuilder(
+        val chain = new StepsChainBuilder<>(
                 ServicesFacade.INSTANCE,
                 nextDisplayedStep -> stepper.next(),
                 nextDisplayedStep -> {
                     stepper.previous();
 
-                    if (nextDisplayedStep.getDefinition().equals(DOWNLOAD_METADATA)) {
+                    if (nextDisplayedStep.getId().equals(DOWNLOAD_METADATA.getId())) {
                         stepper.previous();
                     }
                 })
@@ -98,7 +98,7 @@ public class ArchiveStepperPresenter extends Presenter {
         controller.getRecentDatabaseConnection()
                 .ifPresent(recentConnection -> {
                     // skip select dbms step
-                    chain.getNavigatorOfStep(SELECT_DBMS)
+                    chain.getNavigatorOfStep(SELECT_DBMS.getId())
                             .next(DbmsWithInitialValue.builder()
                                     .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
                                     .initialValue(Optional.of(recentConnection))

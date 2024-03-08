@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.database.model.UploadDatabaseInstruction;
 import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
@@ -101,6 +102,23 @@ public class Controller implements DbInteractionService {
         this.databaseLoadService.progressProperty().addListener(instruction.getOnProgress());
     }
 
+    @Override
+    public void execute(UploadDatabaseInstruction instruction) throws SQLException {
+        uploadArchive(
+                instruction.getConnectionData(),
+                instruction.getArchive(),
+                instruction.getSchemaNameMappings(),
+                event -> {
+                    instruction.getOnSuccess().handle(event);
+                    DatabaseConnectionFactory.disconnect();
+                },
+                instruction.getOnFailure()
+        );
+
+        addDatabaseUploadingValuePropertyListener(instruction.getOnStepCompleted());
+        addDatabaseUploadingProgressPropertyListener(instruction.getOnProgress());
+    }
+
     public void closeDbConnection() {
         DatabaseConnectionFactory.disconnect();
     }
@@ -143,10 +161,14 @@ public class Controller implements DbInteractionService {
 
     public void uploadArchive(
             DbmsConnectionData connectionData,
+            Archive archive,
+            Map<String, String> schemaNameMappings,
             EventHandler<WorkerStateEvent> onSuccess,
             EventHandler<WorkerStateEvent> onFailure
     ) throws SQLException {
-        this.databaseUploadService = DatabaseConnectionFactory.getInstance(model, connectionData).createDatabaseUploader();
+        this.databaseUploadService = DatabaseConnectionFactory
+                .getInstance(model, connectionData)
+                .createDatabaseUploader(archive, schemaNameMappings);
         this.onDatabaseUploadSuccess(onSuccess);
         this.onDatabaseUploadFailed(onFailure);
         this.databaseUploadService.start();

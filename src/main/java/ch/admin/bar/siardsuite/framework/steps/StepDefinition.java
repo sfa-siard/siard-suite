@@ -24,8 +24,21 @@ public class StepDefinition<TIn, TOut> {
     @NonNull Class<TOut> outputType;
     @NonNull StepViewLoader<TIn, TOut> viewLoader;
 
-    public boolean isVisible() {
-        return title.isPresent();
+    public StepId getId() {
+        return StepId.builder()
+                .title(title)
+                .inputType(inputType)
+                .outputType(outputType)
+                .build();
+    }
+
+    public <TContext> StepDefinitionWithContext<TIn, TOut, TContext> addContextCompatibility() {
+        return StepDefinitionWithContext.<TIn, TOut, TContext>builder()
+                .title(title)
+                .inputType(inputType)
+                .outputType(outputType)
+                .viewLoader((data, navigator, context, servicesFacade) -> viewLoader.load(data, navigator, servicesFacade))
+                .build();
     }
 
     public interface StepViewLoader<TIn, TOut> {

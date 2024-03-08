@@ -1,139 +1,142 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siard2.api.Schema;
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
-import ch.admin.bar.siardsuite.presenter.StepperPresenter;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.SiardEvent;
-import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
-import io.github.palexdev.materialfx.controls.MFXStepper;
-import io.github.palexdev.materialfx.enums.StepperToggleState;
-import javafx.event.EventHandler;
+import ch.admin.bar.siardsuite.util.OptionalHelper;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import lombok.val;
+
+import java.util.Optional;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.FAILED;
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.TO_START;
 import static ch.admin.bar.siardsuite.model.View.START;
 
-public class UploadResultPresenter extends StepperPresenter implements ArchiveVisitor {
-  @FXML
-  public Label title;
-  @FXML
-  public Label summary;
-  @FXML
-  public BorderPane borderPane;
-  @FXML
-  public Label subtitle1;
-  @FXML
-  public ScrollPane resultBox;
-  @FXML
-  public VBox scrollBox;
-  @FXML
-  public Label errorMessage;
-  @FXML
-  public TextArea stackTrace;
-  @FXML
-  private ButtonBox buttonsBox;
+public class UploadResultPresenter {
 
-  private Archive archive;
+    private static final I18nKey FAILED_TITLE = I18nKey.of("upload.result.failed.title");
+    private static final I18nKey FAILED_MESSAGE = I18nKey.of("upload.result.failed.message");
+    private static final I18nKey SUCCESS_TITLE = I18nKey.of("upload.result.success.title");
 
-  @Override
-  public void init(Controller controller, RootStage stage) {
-    this.controller = controller;
-    this.stage = stage;
-  }
+    @FXML
+    public Label title;
+    @FXML
+    public Label summary;
+    @FXML
+    public BorderPane borderPane;
+    @FXML
+    public Label subtitle1;
+    @FXML
+    public ScrollPane resultBox;
+    @FXML
+    public VBox scrollBox;
+    @FXML
+    public Label errorMessage;
+    @FXML
+    public TextArea stackTrace;
 
-  @Override
-  public void init(Controller controller, RootStage stage, MFXStepper stepper) {
-    this.init(controller, stage);
+    public void init(
+            final Archive archive,
+            final Optional<Failure> uploadFailure,
+            final StepperNavigator<Void> stepperNavigator,
+            final Navigator navigator
+    ) {
+        OptionalHelper.ifPresentOrElse(
+                uploadFailure,
+                failure -> {
+//                    stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.ERROR); // TODO
+//                    stepper.updateProgress();
 
-    stepper.addEventHandler(SiardEvent.UPLOAD_SUCCEDED, showResult(stepper));
-    stepper.addEventHandler(SiardEvent.UPLOAD_FAILED, showFailed(stepper));
-  }
 
-  private EventHandler<SiardEvent> showResult(MFXStepper stepper) {
-    return event -> {
-      stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.COMPLETED);
-      stepper.updateProgress();
-      this.subtitle1.setVisible(true);
-      this.resultBox.setVisible(true);
-      setResultData();
-      I18n.bind(title.textProperty(), "upload.result.success.title");
-      title.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
-      this.buttonsBox = new ButtonBox().make(TO_START);
-      addButtons(stepper);
-    };
-  }
+                    title.textProperty().bind(DisplayableText.of(FAILED_TITLE).bindable());
+                    summary.textProperty().bind(DisplayableText.of(FAILED_MESSAGE).bindable());
 
-  private EventHandler<SiardEvent> showFailed(MFXStepper stepper) {
-    return event -> {
-      stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.ERROR);
-      stepper.updateProgress();
-      I18n.bind(title.textProperty(), "upload.result.failed.title");
-      I18n.bind(summary.textProperty(), "upload.result.failed.message");
-      errorMessage.textProperty().setValue(controller.errorMessage());
-      stackTrace.textProperty().setValue(controller.errorStackTrace());
-      title.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
-      this.buttonsBox = new ButtonBox().make(FAILED);
-      addButtons(stepper);
-    };
-  }
+                    errorMessage.textProperty().setValue(failure.message());
+                    stackTrace.textProperty().setValue(failure.stacktrace());
+                    title.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
 
-  private void addButtons(MFXStepper stepper) {
-    this.borderPane.setBottom(buttonsBox);
-    setListeners(stepper);
-  }
+                    val buttonsBox = new ButtonBox().make(FAILED);
+                    buttonsBox.next().setOnAction((event) -> navigator.navigate(START));
+                    this.borderPane.setBottom(buttonsBox);
+                    buttonsBox.cancel().setOnAction((event) -> {
+                        stepperNavigator.previous();
+                    });
+                },
+                () -> {
+//                    stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.COMPLETED);  // TODO
+//                    stepper.updateProgress();
 
-  private void setListeners(MFXStepper stepper) {
-    this.buttonsBox.next().setOnAction((event) -> stage.navigate(START));
-    if (this.buttonsBox.cancel() != null) {
-      this.buttonsBox.cancel().setOnAction((event) -> {
-        stepper.previous();
-        stepper.previous();
-      });
+                    title.textProperty().bind(DisplayableText.of(SUCCESS_TITLE).bindable());
+
+                    this.subtitle1.setVisible(true);
+                    this.resultBox.setVisible(true);
+                    setResultData(archive);
+                    title.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
+
+                    val buttonsBox = new ButtonBox().make(TO_START);
+                    this.borderPane.setBottom(buttonsBox);
+                    buttonsBox.next().setOnAction((event) -> navigator.navigate(START));
+                    buttonsBox.cancel().setOnAction((event) -> {
+                        stepperNavigator.previous();
+                    });
+                }
+        );
     }
-  }
 
-  private void setResultData() {
-    this.controller.provideArchiveObject(this);
-    this.subtitle1.setText(this.archive.getMetaData().getDbName());
-    long total = 0;
-    for (int i = 0; i < this.archive.getSchemas(); i++) {
-      Schema schema = this.archive.getSchema(i);
-      scrollBox.getChildren().add(new Label(schema.getMetaSchema().getName()));
-      for (int y = 0; y < schema.getTables(); y++) {
-        String tableName = schema.getTable(y).getMetaTable().getName();
-        long rows = schema.getTable(y).getMetaTable().getRows();
-        addTableData(tableName, rows, y);
-        total += rows;
-      }
+    private void setResultData(final Archive archive) {
+        this.subtitle1.setText(archive.getMetaData().getDbName());
+        long total = 0;
+        for (int i = 0; i < archive.getSchemas(); i++) {
+            Schema schema = archive.getSchema(i);
+            scrollBox.getChildren().add(new Label(schema.getMetaSchema().getName()));
+            for (int y = 0; y < schema.getTables(); y++) {
+                String tableName = schema.getTable(y).getMetaTable().getName();
+                long rows = schema.getTable(y).getMetaTable().getRows();
+                addTableData(tableName, rows, y);
+                total += rows;
+            }
+        }
+        I18n.bind(summary.textProperty(), "upload.result.success.message", total);
     }
-    I18n.bind(summary.textProperty(), "upload.result.success.message", total);
-  }
 
-  private void addTableData(String tableName, Long rows, Integer pos) {
-    LabelIcon label = new LabelIcon(tableName, pos, IconView.IconType.OK);
-    I18n.bind(label.textProperty(), "upload.result.success.table.rows", tableName, rows);
-    scrollBox.getChildren().add(label);
-  }
+    private void addTableData(String tableName, Long rows, Integer pos) {
+        LabelIcon label = new LabelIcon(tableName, pos, IconView.IconType.OK);
+        I18n.bind(label.textProperty(), "upload.result.success.table.rows", tableName, rows);
+        scrollBox.getChildren().add(label);
+    }
 
-  @Override
-  public void visit(Archive archive) {
-    this.archive = archive;
-  }
+    public static LoadedFxml<UploadResultPresenter> load(
+            final ShowUploadResultsData data,
+            final StepperNavigator<Void> navigator,
+            final Archive context,
+            final ServicesFacade servicesFacade
+    ) {
+        val loaded = FXMLLoadHelper.<UploadResultPresenter>load("fxml/upload/upload-result.fxml");
+        loaded.getController().init(
+                context,
+                data.getFailure(),
+                navigator,
+                servicesFacade.navigator()
+        );
 
-  @Override
-  public void visit(MetaData metaData) {
-  }
+        return loaded;
+    }
 }

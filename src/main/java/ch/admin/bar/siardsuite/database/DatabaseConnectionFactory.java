@@ -10,6 +10,7 @@ import lombok.val;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class DatabaseConnectionFactory {
   private static DatabaseConnectionFactory instance;
@@ -44,8 +45,8 @@ public class DatabaseConnectionFactory {
     return new DatabaseLoadService(connection, model, connectionData.getDbName(), archive, onlyMetaData, viewsAsTables);
   }
 
-  public DatabaseUploadService createDatabaseUploader() {
-    return new DatabaseUploadService(connection, model);
+  public DatabaseUploadService createDatabaseUploader(final Archive archive, final Map<String, String> schemaNameMappings) {
+    return new DatabaseUploadService(connection, archive, schemaNameMappings);
   }
 
   public static void disconnect() {

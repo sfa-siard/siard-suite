@@ -1,5 +1,7 @@
 package ch.admin.bar.siardsuite.database.model;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -8,10 +10,13 @@ import lombok.NonNull;
 import lombok.Value;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Value
 public class UploadDatabaseInstruction {
+    Archive archive;
+    Map<String, String> schemaNameMappings;
     DbmsConnectionData connectionData;
     EventHandler<WorkerStateEvent> onSuccess;
     EventHandler<WorkerStateEvent> onFailure;
@@ -20,12 +25,16 @@ public class UploadDatabaseInstruction {
 
     @Builder
     public UploadDatabaseInstruction(
+            @NonNull Archive archive,
+            @NonNull Map<String, String> schemaNameMappings,
             @NonNull DbmsConnectionData connectionData,
             @Nullable EventHandler<WorkerStateEvent> onSuccess,
             @Nullable EventHandler<WorkerStateEvent> onFailure,
             @Nullable ChangeListener<Number> onProgress,
             @Nullable ChangeListener<String> onStepCompleted
     ) {
+        this.archive = archive;
+        this.schemaNameMappings = schemaNameMappings;
         this.connectionData = connectionData;
 
         this.onSuccess = Optional.ofNullable(onSuccess).orElse(event -> {});

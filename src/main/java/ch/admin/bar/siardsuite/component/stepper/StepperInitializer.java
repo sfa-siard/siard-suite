@@ -26,7 +26,7 @@ public class StepperInitializer {
         val stepNumber = new AtomicInteger(1);
         val toggles = steps.stream()
                 .map(step -> {
-                    if (step.getDefinition().isVisible()) {
+                    if (step.isVisible()) {
                         return createToggle(step, stepNumber.getAndIncrement() + "");
                     }
                     return createToggle(step, "");
@@ -49,7 +49,7 @@ public class StepperInitializer {
 
         MFXStepperToggle toggle = new MFXStepperToggle(
                 // passing the key is kind of a hack to bind it in the CustomStepperToggleSkin
-                step.getDefinition().getTitle()
+                step.getTitle()
                         .map(I18nKey::getValue)
                         .orElse(""),
                 btn);
@@ -62,12 +62,7 @@ public class StepperInitializer {
                     }
                 });
 
-        val toggleIsVisible = step.getDefinition()
-                .getTitle()
-                .isPresent();
-
-        toggle.setSkin(new CustomStepperToggleSkin(toggle, toggleIsVisible, stage));
-        //toggle.setVisible(toggleIsVisible); // FIXME Doppelt?
+        toggle.setSkin(new CustomStepperToggleSkin(toggle, step.isVisible(), stage));
 
         return toggle;
     }
