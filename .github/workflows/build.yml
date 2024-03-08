@@ -5,7 +5,7 @@ name: Build project
 
 on:
   push:
-    branches: [ "main", "feature/*", "issue/*" ]
+    branches: [ "main", "feature/*", "issue/*", "doc/*" ]
   pull_request:
     branches: [ "main" ]
 
