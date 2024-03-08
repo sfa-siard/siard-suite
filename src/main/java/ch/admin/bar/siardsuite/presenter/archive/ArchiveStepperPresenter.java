@@ -2,12 +2,12 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.stepper.StepperInitializer;
-import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
 import ch.admin.bar.siardsuite.presenter.Presenter;
+import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.presenter.archive.model.SiardArchiveWithConnectionData;
 import ch.admin.bar.siardsuite.presenter.archive.model.UserDefinedMetadata;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
@@ -18,6 +18,8 @@ import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import lombok.val;
 
+import java.util.Optional;
+
 public class ArchiveStepperPresenter extends Presenter {
 
     private static final I18nKey SELECT_DBMS_TITLE = I18nKey.of("archive.step.name.dbms");
@@ -26,16 +28,16 @@ public class ArchiveStepperPresenter extends Presenter {
     private static final I18nKey EDIT_META_DATA_TITLE = I18nKey.of("archive.step.name.metadata");
     private static final I18nKey DB_DOWNLOAD_TITLE = I18nKey.of("archive.step.name.download");
 
-    private static final StepDefinition<Void, Dbms> SELECT_DBMS = StepDefinition.<Void, Dbms>builder()
+    private static final StepDefinition<Void, DbmsWithInitialValue> SELECT_DBMS = StepDefinition.<Void, DbmsWithInitialValue>builder()
             .title(SELECT_DBMS_TITLE)
             .inputType(Void.class)
-            .outputType(Dbms.class)
+            .outputType(DbmsWithInitialValue.class)
             .viewLoader(ArchiveChooseDbmsPresenter::load)
             .build();
 
-    private static final StepDefinition<Dbms, DbmsConnectionData> EDIT_DB_CONNECTION_PROPERTIES = StepDefinition.<Dbms, DbmsConnectionData>builder()
+    private static final StepDefinition<DbmsWithInitialValue, DbmsConnectionData> EDIT_DB_CONNECTION_PROPERTIES = StepDefinition.<DbmsWithInitialValue, DbmsConnectionData>builder()
             .title(DB_CONNECTION_TITLE)
-            .inputType(Dbms.class)
+            .inputType(DbmsWithInitialValue.class)
             .outputType(DbmsConnectionData.class)
             .viewLoader(ArchiveConnectionPresenter::load)
             .build();
@@ -97,7 +99,10 @@ public class ArchiveStepperPresenter extends Presenter {
                 .ifPresent(recentConnection -> {
                     // skip select dbms step
                     chain.getNavigatorOfStep(SELECT_DBMS)
-                            .next(recentConnection.mapToDbmsConnectionData().getDbms());
+                            .next(DbmsWithInitialValue.builder()
+                                    .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
+                                    .initialValue(Optional.of(recentConnection))
+                                    .build());
                 });
     }
 

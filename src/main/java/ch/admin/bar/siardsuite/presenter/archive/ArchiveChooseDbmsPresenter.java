@@ -2,10 +2,10 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.ButtonBox;
-import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
@@ -48,7 +48,7 @@ public class ArchiveChooseDbmsPresenter {
     private boolean next = true;
 
     public void init(
-            final StepperNavigator<Dbms> navigator,
+            final StepperNavigator<DbmsWithInitialValue> navigator,
             final ServicesFacade servicesFacade
     ) {
         title.textProperty().bind(DisplayableText.of(TITLE).bindable());
@@ -71,7 +71,9 @@ public class ArchiveChooseDbmsPresenter {
                 val selectedDbms = dbmsRegistry.findDbmsByName(selected.getText());
                 this.errorMessage.setVisible(false);
 
-                navigator.next(selectedDbms);
+                navigator.next(DbmsWithInitialValue.builder()
+                        .dbms(selectedDbms)
+                        .build());
             } else {
                 this.errorMessage.setVisible(true);
             }
@@ -94,7 +96,7 @@ public class ArchiveChooseDbmsPresenter {
     }
 
     public static LoadedFxml<ArchiveChooseDbmsPresenter> load(
-            final StepperNavigator<Dbms> navigator,
+            final StepperNavigator<DbmsWithInitialValue> navigator,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveChooseDbmsPresenter>load("fxml/archive/archive-choose-dbms.fxml");

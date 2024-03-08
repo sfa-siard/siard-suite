@@ -3,15 +3,20 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.database.model.DbmsConnectionProperties;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import lombok.val;
+
+import java.util.Optional;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 
@@ -25,6 +30,7 @@ public class ArchiveConnectionPresenter {
 
     public void init(
             final Dbms dbms,
+            final Optional<RecentDbConnection> initialValue,
             final StepperNavigator<DbmsConnectionData> navigator,
             final ServicesFacade servicesFacade
     ) {
@@ -33,15 +39,12 @@ public class ArchiveConnectionPresenter {
 
         connectionForm.show(dbms);
 
-        // TODO FIXME recent connection --> probably customized input data
-//        stepper.addEventHandler(SiardEvent.RECENT_CONNECTION_SELECTED_EVENT, event -> {
-//            val recentConnection = event.getRecentConnectionData();
-//
-//            final Dbms dbms = recentConnection.mapToDbmsConnectionData().getDbms();
-//            final DbmsConnectionProperties properties = recentConnection.mapToDbmsConnectionData().getProperties();
-//
-//            connectionForm.show(dbms, properties, recentConnection.getName());
-//        });
+        initialValue.ifPresent(recentDbConnection -> {
+            val dbmsConnectionData = recentDbConnection.mapToDbmsConnectionData();
+            final DbmsConnectionProperties properties = dbmsConnectionData.getProperties();
+
+            connectionForm.show(dbms, properties, recentDbConnection.getName());
+        });
 
         buttonsBox.next()
                 .setOnAction((event) -> connectionForm
@@ -55,12 +58,16 @@ public class ArchiveConnectionPresenter {
     }
 
     public static LoadedFxml<ArchiveConnectionPresenter> load(
-            final Dbms dbmsSelected,
+            final DbmsWithInitialValue dbmsSelected,
             final StepperNavigator<DbmsConnectionData> navigator,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveConnectionPresenter>load("fxml/archive/archive-connection.fxml");
-        loaded.getController().init(dbmsSelected, navigator, servicesFacade);
+        loaded.getController().init(
+                dbmsSelected.getDbms(),
+                dbmsSelected.getInitialValue(),
+                navigator,
+                servicesFacade);
 
         return loaded;
     }
