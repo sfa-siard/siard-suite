@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.database.model;
 
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Value
 public class LoadDatabaseInstruction {
@@ -19,7 +21,7 @@ public class LoadDatabaseInstruction {
     File saveAt;
     boolean loadOnlyMetadata;
     boolean viewsAsTables;
-    EventHandler<WorkerStateEvent> onSuccess;
+    Consumer<SiardArchive> onSuccess;
     EventHandler<WorkerStateEvent> onFailure;
     ChangeListener<Number> onProgress;
     ChangeListener<ObservableList<Pair<String, Long>>> onStepCompleted;
@@ -30,7 +32,7 @@ public class LoadDatabaseInstruction {
             @NonNull File saveAt,
             @Nullable Boolean loadOnlyMetadata,
             @Nullable Boolean viewsAsTables,
-            @Nullable EventHandler<WorkerStateEvent> onSuccess,
+            @Nullable Consumer<SiardArchive> onSuccess,
             @Nullable EventHandler<WorkerStateEvent> onFailure,
             @Nullable ChangeListener<Number> onProgress,
             @Nullable ChangeListener<ObservableList<Pair<String, Long>>> onSingleValueCompleted
@@ -39,7 +41,7 @@ public class LoadDatabaseInstruction {
         this.saveAt = saveAt;
         this.loadOnlyMetadata = Optional.ofNullable(loadOnlyMetadata).orElse(false);
         this.viewsAsTables = Optional.ofNullable(viewsAsTables).orElse(false);
-        this.onSuccess = Optional.ofNullable(onSuccess).orElse(event -> {});
+        this.onSuccess = Optional.ofNullable(onSuccess).orElse(archive -> {});
         this.onFailure = Optional.ofNullable(onFailure).orElse(event -> {});
         this.onProgress = Optional.ofNullable(onProgress)
                 .orElse((observable, oldValue, newValue) -> {});

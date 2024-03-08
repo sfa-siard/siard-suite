@@ -4,6 +4,9 @@ import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
+import ch.admin.bar.siardsuite.framework.general.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;
@@ -14,8 +17,8 @@ import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.view.ErrorHandler;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -25,7 +28,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 import lombok.val;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -59,7 +61,9 @@ public class ArchiveLoadingPreviewPresenter {
     public void init(
             final DbmsConnectionData dbmsConnectionData,
             final StepperNavigator<SiardArchiveWithConnectionData> navigator,
-            final ServicesFacade servicesFacade
+            final DbInteractionService dbInteractionService,
+            final Dialogs dialogs,
+            final ErrorHandler errorHandler
     ) {
         this.title.textProperty().bind(DisplayableText.of(TITLE).bindable());
         this.text.textProperty().bind(DisplayableText.of(TEXT).bindable());
@@ -70,38 +74,37 @@ public class ArchiveLoadingPreviewPresenter {
         ButtonBox buttonsBox = new ButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
 
-        val controller = servicesFacade.controller();
-
         buttonsBox.previous().setOnAction(event -> {
             navigator.previous();
-            controller.cancelDownload();
+            dbInteractionService.cancelRunning();
         });
-        buttonsBox.cancel().setOnAction(event -> servicesFacade
-                .dialogs()
+        buttonsBox.cancel().setOnAction(event -> dialogs
                 .openDialog(View.ARCHIVE_ABORT_DIALOG));
 
         try {
-            controller.loadDatabase(
-                    dbmsConnectionData,
-                    true,
-                    event -> {
+            dbInteractionService.execute(LoadDatabaseInstruction.builder()
+                    .connectionData(dbmsConnectionData)
+                    .loadOnlyMetadata(true)
+                    .onSuccess(siardArchive -> {
                         navigator.next(SiardArchiveWithConnectionData.builder()
                                 .dbmsConnectionData(dbmsConnectionData)
-                                .siardArchive(controller.getSiardArchive())
+                                .siardArchive(siardArchive)
                                 .build());
-                        controller.releaseResources();
-                    },
-                    event -> {
+                    })
+                    .onFailure(event -> {
                         navigator.previous();
-                        controller.cancelDownload();
-                        servicesFacade.errorHandler().handle(event.getSource().getException());
-                    });
-            controller.addDatabaseLoadingValuePropertyListener(databaseLoadingValuePropertyListener);
-            controller.addDatabaseLoadingProgressPropertyListener(numberChangeListener);
+                        errorHandler.handle(event.getSource().getException());
+                    })
+                    .onProgress((o, oldValue, newValue) -> {
+                        progressBar.progressProperty().set(newValue.doubleValue());
+                    })
+                    .onSingleValueCompleted((o1, oldValue, newValue) -> {
+                        newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
+                    })
+                    .build());
         } catch (Exception e) {
             navigator.previous();
-            controller.cancelDownload();
-            servicesFacade.errorHandler().handle(e);
+            errorHandler.handle(e);
         }
     }
 
@@ -120,21 +123,19 @@ public class ArchiveLoadingPreviewPresenter {
         }
     }
 
-    private final ChangeListener<ObservableList<Pair<String, Long>>> databaseLoadingValuePropertyListener = (o1, oldValue, newValue) -> {
-        newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
-    };
-
-    private final ChangeListener<Number> numberChangeListener = (o, oldValue, newValue) -> {
-        progressBar.progressProperty().set(newValue.doubleValue());
-    };
-
     public static LoadedFxml<ArchiveLoadingPreviewPresenter> load(
             final DbmsConnectionData dbmsConnectionData,
             final StepperNavigator<SiardArchiveWithConnectionData> navigator,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveLoadingPreviewPresenter>load("fxml/archive/archive-loading-preview.fxml");
-        loaded.getController().init(dbmsConnectionData, navigator, servicesFacade);
+        loaded.getController().init(
+                dbmsConnectionData,
+                navigator,
+                servicesFacade.dbInteractionService(),
+                servicesFacade.dialogs(),
+                servicesFacade.errorHandler()
+        );
 
         return loaded;
     }

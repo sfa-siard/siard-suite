@@ -142,7 +142,7 @@ public class ArchiveDownloadPresenter {
                     .saveAt(userDefinedMetadata.getSaveAt())
                     .loadOnlyMetadata(false)
                     .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
-                    .onSuccess(event -> handleDownloadSuccess())
+                    .onSuccess(siardArchive -> handleDownloadSuccess())
                     .onFailure(event -> handleDownloadFailure(event.getSource().getException()))
                     .onSingleValueCompleted((observable, oldValue, newValue) -> {
                         AtomicInteger pos = new AtomicInteger();

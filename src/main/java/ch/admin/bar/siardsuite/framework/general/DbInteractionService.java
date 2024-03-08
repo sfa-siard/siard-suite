@@ -30,4 +30,6 @@ public interface DbInteractionService {
     void execute(LoadDatabaseInstruction instruction) throws SQLException;
 
     void execute(UploadDatabaseInstruction instruction) throws SQLException;
+
+    void cancelRunning();
 }

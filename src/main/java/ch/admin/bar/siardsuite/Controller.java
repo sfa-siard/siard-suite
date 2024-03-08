@@ -8,26 +8,20 @@ import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.database.model.UploadDatabaseInstruction;
 import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
-import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.view.RootStage;
-import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.util.Pair;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Map;
@@ -92,7 +86,7 @@ public class Controller implements DbInteractionService {
                 instruction.isLoadOnlyMetadata(),
                 instruction.isViewsAsTables(),
                 event -> {
-                    instruction.getOnSuccess().handle(event);
+                    instruction.getOnSuccess().accept(getSiardArchive());
                     DatabaseConnectionFactory.disconnect();
                 },
                 instruction.getOnFailure()
@@ -119,43 +113,44 @@ public class Controller implements DbInteractionService {
         addDatabaseUploadingProgressPropertyListener(instruction.getOnProgress());
     }
 
-    public void closeDbConnection() {
+    @Override
+    public void cancelRunning() {
+        if (databaseLoadService != null && databaseLoadService.isRunning()) {
+            this.databaseLoadService.cancel();
+        }
+
+        if (databaseUploadService != null && databaseUploadService.isRunning()) {
+            this.databaseUploadService.cancel();
+        }
+
+        releaseResources();
+    }
+
+    private void closeDbConnection() {
         DatabaseConnectionFactory.disconnect();
     }
 
-    public void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    private void onDatabaseLoadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
         this.databaseLoadService.setOnSucceeded(workerStateEventEventHandler);
     }
 
-    public void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    private void onDatabaseLoadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
         this.databaseLoadService.setOnFailed(workerStateEventEventHandler);
     }
 
-    public void addDatabaseLoadingValuePropertyListener(ChangeListener<ObservableList<Pair<String, Long>>> listener) {
-        this.databaseLoadService.valueProperty().addListener(listener);
-    }
-
-    public void addDatabaseLoadingProgressPropertyListener(ChangeListener<Number> listener) {
-        this.databaseLoadService.progressProperty().addListener(listener);
-    }
-
-    public void updateSchemaMap(Map schemaMap) {
-        this.model.setSchemaMap(schemaMap);
-    }
-
-    public void onDatabaseUploadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    private void onDatabaseUploadSuccess(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
         this.databaseUploadService.setOnSucceeded(workerStateEventEventHandler);
     }
 
-    public void onDatabaseUploadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
+    private void onDatabaseUploadFailed(EventHandler<WorkerStateEvent> workerStateEventEventHandler) {
         this.databaseUploadService.setOnFailed(workerStateEventEventHandler);
     }
 
-    public void addDatabaseUploadingValuePropertyListener(ChangeListener<String> listener) {
+    private void addDatabaseUploadingValuePropertyListener(ChangeListener<String> listener) {
         this.databaseUploadService.valueProperty().addListener(listener);
     }
 
-    public void addDatabaseUploadingProgressPropertyListener(ChangeListener<Number> listener) {
+    private void addDatabaseUploadingProgressPropertyListener(ChangeListener<Number> listener) {
         this.databaseUploadService.progressProperty().addListener(listener);
     }
 
@@ -206,18 +201,6 @@ public class Controller implements DbInteractionService {
             }
         } catch (Exception ignored) {
         }
-    }
-
-    public void failure(Failure failure) {
-        this.model.setFailure(failure);
-    }
-
-    public String errorMessage() {
-        return this.model.getFailure().message();
-    }
-
-    public String errorStackTrace() {
-        return this.model.getFailure().stacktrace();
     }
 
     public void initializeWorkflow(Workflow workflow, RootStage stage) {
@@ -271,14 +254,6 @@ public class Controller implements DbInteractionService {
 
     public SiardArchive getSiardArchive() {
         return model.getSiardArchive();
-    }
-
-    public void provideArchiveObject(ArchiveVisitor visitor) {
-        this.model.provideArchiveObject(visitor);
-    }
-
-    public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
-        this.model.provideDatabaseArchiveMetaDataProperties(visitor);
     }
 
     public void setSiardArchive(String name, Archive archive) {

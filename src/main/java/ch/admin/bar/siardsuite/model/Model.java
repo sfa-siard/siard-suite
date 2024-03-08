@@ -3,22 +3,15 @@ package ch.admin.bar.siardsuite.model;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
-import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Model {
 
-    private Map<String, String> schemaMap = new HashMap<>();
     private SiardArchive siardArchive = new SiardArchive();
     public static final String TMP_SIARD = "tmp.siard";
-    private Failure failure = null;
 
     public Model() {
     }
@@ -61,36 +54,8 @@ public class Model {
         return siardArchive;
     }
 
-    public void provideDatabaseArchiveMetaDataProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
-        getSiardArchive().shareProperties(visitor);
-    }
-
     public void provideDatabaseArchiveMetaDataObject(SiardArchiveMetaDataVisitor visitor) {
         getSiardArchive().shareObject(visitor);
-    }
-
-    public void provideArchiveProperties(ArchiveVisitor visitor) {
-        getSiardArchive().shareProperties(visitor);
-    }
-
-    public void provideArchiveObject(ArchiveVisitor visitor) {
-        getSiardArchive().shareObject(visitor);
-    }
-
-    public void setSchemaMap(Map schemaMap) {
-        this.schemaMap = schemaMap;
-    }
-
-    public Map<String, String> getSchemaMap() {
-        return schemaMap;
-    }
-
-    public void setFailure(Failure failure) {
-        this.failure = failure;
-    }
-
-    public Failure getFailure() {
-        return this.failure;
     }
 
     public void clearSiardArchive() {
