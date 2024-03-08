@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.framework.general.Dialogs;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.dialogs.ArchiveRecentConnectionsDialogPresenter;
@@ -37,6 +38,9 @@ public class RootStage extends Stage implements ErrorHandler, Dialogs {
 
   public RootStage(Controller controller) throws IOException {
     this.controller = controller;
+
+    ServicesFacade.INSTANCE.setRootStage(this);
+    ServicesFacade.INSTANCE.setController(controller);
 
     rootPane = View.ROOT.getViewCreator()
                     .apply(controller, this)

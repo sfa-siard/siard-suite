@@ -4,48 +4,47 @@ import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.val;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@Builder
 @RequiredArgsConstructor
 public class StepsChainBuilder {
 
-    private final Consumer<LoadedFxml> displayService;
     private final ServicesFacade servicesFacade;
 
-    private final Set<StepDefinition<?, ?>> registeredSteps = new HashSet<>();
+    private final List<StepDefinition<?, ?>> registeredSteps = new ArrayList<>();
+
+    private final Consumer<Step> onNextListener;
+    private final Consumer<Step> onPreviousListener;
 
     public StepsChainBuilder register(StepDefinition<?, ?> step) {
         registeredSteps.add(step);
         return this;
     }
 
-    @Value
-    @Builder
-    private static class PreparedStep {
-        StepDefinition definition;
-        StepperNavigator navigator;
-        AtomicReference dataCache;
-        int stepIndex;
-    }
+    public List<Step> build() {
+        if (!chainIsValid()) {
+            throw new IllegalStateException("Steps chain is not valid");
+        }
 
-    public List<StepMetaData> build() {
-        val preparedSteps = new ArrayList<PreparedStep>();
+        val preparedSteps = new ArrayList<Step>();
         val indexCurrentStep = new AtomicInteger(0);
-        val chain = buildChain();
+        val cachedInputDataByStepIndex = new HashMap<Integer, Object>();
 
-        for (val step : chain) {
+        val totalNrOfSteps = registeredSteps.size();
+
+        for (StepDefinition step : registeredSteps) {
             val stepIndex = indexCurrentStep.getAndIncrement();
-            val totalNrOfSteps = chain.size();
 
             val navigator = new StepperNavigator() {
                 @Override
@@ -57,13 +56,8 @@ public class StepsChainBuilder {
                         throw new IllegalStateException("No further step is available");
                     }
 
-                    val targetStep = preparedSteps.get(targetStepIndex);
-                    targetStep.getDataCache().set(data);
-                    displayService.accept(targetStep.getDefinition()
-                            .getViewLoader()
-                            .load(data,
-                                    targetStep.getNavigator(),
-                                    servicesFacade));
+                    cachedInputDataByStepIndex.put(targetStepIndex, data);
+                    onNextListener.accept(preparedSteps.get(targetStepIndex));
                 }
 
                 @Override
@@ -75,37 +69,37 @@ public class StepsChainBuilder {
                         throw new IllegalStateException("No previous step is available");
                     }
 
-                    val targetStep = preparedSteps.get(targetStepIndex);
-                    displayService.accept(targetStep.getDefinition()
-                            .getViewLoader()
-                            .load(targetStep.getDataCache().get(),
-                                    targetStep.getNavigator(),
-                                    servicesFacade));
+                    onPreviousListener.accept(preparedSteps.get(targetStepIndex));
                 }
             };
 
-            preparedSteps.add(PreparedStep.builder()
+            final Supplier<LoadedFxml> viewLoader = () -> {
+                val data = cachedInputDataByStepIndex.get(stepIndex);
+                return step.getViewLoader()
+                        .load(data, navigator, servicesFacade);
+            };
+
+            preparedSteps.add(Step.builder()
                     .definition(step)
-                    .dataCache(new AtomicReference<>())
                     .navigator(navigator)
                     .stepIndex(stepIndex)
+                    .viewLoader(viewLoader)
                     .build());
         }
 
-        // display first step
-        val firstStep = preparedSteps.get(0);
-        displayService.accept(firstStep.getDefinition()
-                .getViewLoader()
-                .load(null,
-                        firstStep.getNavigator(),
-                        servicesFacade));
+        return Collections.unmodifiableList(preparedSteps);
+    }
 
-        return preparedSteps.stream()
-                .map(preparedStep -> StepMetaData.builder()
-                        .title(preparedStep.getDefinition().getTitle())
-                        .index(preparedStep.getStepIndex())
-                        .build())
-                .collect(Collectors.toList());
+    private boolean chainIsValid() {
+        AtomicReference<Class> lastOutputType = new AtomicReference<>(Void.class);
+
+        return registeredSteps.stream()
+                .allMatch(stepDefinition -> {
+                    val matchingInputType = stepDefinition.getInputType().equals(lastOutputType.get());
+                    lastOutputType.set(stepDefinition.getOutputType());
+
+                    return matchingInputType;
+                });
     }
 
     private List<StepDefinition<?, ?>> buildChain() {

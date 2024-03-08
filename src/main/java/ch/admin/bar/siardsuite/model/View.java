@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.model;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.presenter.Presenter;
+import ch.admin.bar.siardsuite.presenter.archive.ArchiveStepperPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.OpenArchiveBrowser;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;

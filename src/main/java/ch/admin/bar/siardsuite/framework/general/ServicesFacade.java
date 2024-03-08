@@ -21,7 +21,7 @@ public class ServicesFacade {
     }
 
     public Navigator navigator() {
-        return new Navigator(null, null); // TODO
+        return new Navigator(controller, rootStage); // TODO
     }
 
     public Dialogs dialogs() {

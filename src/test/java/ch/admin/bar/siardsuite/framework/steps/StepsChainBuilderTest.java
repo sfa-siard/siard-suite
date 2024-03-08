@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.framework.steps;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.scene.Node;
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
@@ -18,36 +19,35 @@ class StepsChainBuilderTest {
     private static final DummyView<ThirdStepData, FourthStepData> THIRD_VIEW = new DummyView<>();
     private static final DummyView<FourthStepData, Void> FOURTH_VIEW = new DummyView<>();
 
-    private final Consumer<LoadedFxml> displayServiceMock = Mockito.mock(Consumer.class);
     private final ServicesFacade servicesFacadeMock = Mockito.mock(ServicesFacade.class);
 
     @Test
     public void test() {
         // given
-        new StepsChainBuilder(displayServiceMock, servicesFacadeMock)
+        new StepsChainBuilder(servicesFacadeMock, blub -> {}, blub -> {})
                 .register(StepDefinition.<Void, SecondStepData>builder()
                         .inputType(Void.class)
                         .outputType(SecondStepData.class)
                         .viewLoader(FIRST_VIEW::load)
-                        .title(DisplayableText.of("First"))
+                        .title(I18nKey.of("First"))
                         .build())
                 .register(StepDefinition.<SecondStepData, ThirdStepData>builder()
                         .inputType(SecondStepData.class)
                         .outputType(ThirdStepData.class)
                         .viewLoader(SECOND_VIEW::load)
-                        .title(DisplayableText.of("Second"))
+                        .title(I18nKey.of("Second"))
                         .build())
                 .register(StepDefinition.<ThirdStepData, FourthStepData>builder()
                         .inputType(ThirdStepData.class)
                         .outputType(FourthStepData.class)
                         .viewLoader(THIRD_VIEW::load)
-                        .title(DisplayableText.of("Third"))
+                        .title(I18nKey.of("Third"))
                         .build())
                 .register(StepDefinition.<FourthStepData, Void>builder()
                         .inputType(FourthStepData.class)
                         .outputType(Void.class)
                         .viewLoader(FOURTH_VIEW::load)
-                        .title(DisplayableText.of("Fourth"))
+                        .title(I18nKey.of("Fourth"))
                         .build())
                 .build();
 
@@ -63,7 +63,7 @@ class StepsChainBuilderTest {
     @Test
     public void test2() {
         // given
-        new StepsChainBuilder(displayServiceMock, servicesFacadeMock)
+        new StepsChainBuilder(servicesFacadeMock, blub -> {}, blub -> {})
                 .register(StepDefinition.<Void, SecondStepData>builder()
                         .inputType(Void.class)
                         .outputType(SecondStepData.class)
