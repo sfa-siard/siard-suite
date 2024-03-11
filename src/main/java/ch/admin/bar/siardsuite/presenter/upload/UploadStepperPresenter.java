@@ -48,7 +48,7 @@ public class UploadStepperPresenter extends Presenter {
                 nextDisplayedStep -> {
                     stepper.previous();
 
-                    if (nextDisplayedStep.equals(UPLOAD_ARCHIVE)) {
+                    if (nextDisplayedStep.getDefinition().equals(UPLOAD_ARCHIVE)) {
                         stepper.previous();
                     }
                 })
