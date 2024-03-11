@@ -7,6 +7,9 @@ import ch.admin.bar.siardsuite.view.ErrorHandler;
 import ch.admin.bar.siardsuite.view.RootStage;
 import lombok.Setter;
 
+/**
+ * Facade class for accessing various services in the application.
+ */
 public class ServicesFacade {
     public static final ServicesFacade INSTANCE = new ServicesFacade();
 
@@ -16,28 +19,49 @@ public class ServicesFacade {
     @Setter
     private Controller controller;
 
+    /**
+     * Returns the database management system registry.
+     */
     public DbmsRegistry dbmsRegistry() {
-        return new DbmsRegistry(); // TODO
+        return new DbmsRegistry();
     }
 
+    /**
+     * Returns the navigator for navigation within the application.
+     */
     public Navigator navigator() {
-        return new Navigator(controller, rootStage); // TODO
+        return new Navigator(controller, rootStage);
     }
 
+    /**
+     * Returns the dialogs service for displaying various dialogs.
+     */
     public Dialogs dialogs() {
-        return rootStage; // TODO
+        return rootStage;
     }
 
+    /**
+     * Returns the database interaction service.
+     */
     public DbInteractionService dbInteractionService() {
         return controller;
     }
 
+    /**
+     * Returns the legacy controller instance.
+     *
+     * @deprecated This method is deprecated and should not be used. It exists only for compatibility
+     * reasons  and will be removed in further releases.
+     */
     @Deprecated
     public Controller controller() {
-        return controller; // TODO
+        return controller;
     }
 
+    /**
+     * Returns the error handler for handling application errors.
+     */
     public ErrorHandler errorHandler() {
-        return rootStage; // TODO
+        return rootStage;
     }
 }

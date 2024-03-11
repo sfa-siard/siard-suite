@@ -10,9 +10,16 @@ import lombok.Value;
 import java.util.Optional;
 
 
+/**
+ * Represents the definition of a step in a workflow.
+ *
+ * @param <TIn> The input data type for the step.
+ * @param <TOut> The output data type for the step.
+ */
 @Value
 @Builder
 public class StepDefinition<TIn, TOut> {
+
     /**
      * If empty, step will be invisible in the header
      */
@@ -24,6 +31,9 @@ public class StepDefinition<TIn, TOut> {
     @NonNull Class<TOut> outputType;
     @NonNull StepViewLoader<TIn, TOut> viewLoader;
 
+    /**
+     * Gets the unique identifier for the step.
+     */
     public StepId getId() {
         return StepId.builder()
                 .title(title)
@@ -53,10 +63,6 @@ public class StepDefinition<TIn, TOut> {
         LoadedFxml load(StepperNavigator<TOut> navigator, ServicesFacade servicesFacade);
     }
 
-    public interface StepViewLoaderWithoutDataAndServices<TIn, TOut> {
-        LoadedFxml load(StepperNavigator<TOut> navigator);
-    }
-
     public static class StepDefinitionBuilder<TIn, TOut> {
         public StepDefinitionBuilder<TIn, TOut> viewLoader(StepViewLoader<TIn, TOut> viewLoader) {
             this.viewLoader = viewLoader;
@@ -70,11 +76,6 @@ public class StepDefinition<TIn, TOut> {
 
         public StepDefinitionBuilder<TIn, TOut> viewLoader(StepViewLoaderWithoutData<TIn, TOut> viewLoader) {
             this.viewLoader = (data, navigator, servicesRegistry) -> viewLoader.load(navigator, servicesRegistry);
-            return this;
-        }
-
-        public StepDefinitionBuilder<TIn, TOut> viewLoader(StepViewLoaderWithoutDataAndServices<TIn, TOut> viewLoader) {
-            this.viewLoader = (data, navigator, servicesRegistry) -> viewLoader.load(navigator);
             return this;
         }
 

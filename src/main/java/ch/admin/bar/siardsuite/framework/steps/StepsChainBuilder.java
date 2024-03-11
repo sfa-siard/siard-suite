@@ -17,6 +17,15 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * Builder for constructing a chain of steps in a stepper, each step defined with or without context.
+ * <p>
+ * This builder allows the registration of {@link StepDefinition} or {@link StepDefinitionWithContext}
+ * instances to create a sequence of steps in a stepper. It provides methods to register steps,
+ * build the step chain, and perform checks on the validity of the steps chain.
+ *
+ * @param <TContext> The type of context used in {@link StepDefinitionWithContext}.
+ */
 @RequiredArgsConstructor
 public class StepsChainBuilder<TContext> {
 
@@ -29,6 +38,13 @@ public class StepsChainBuilder<TContext> {
 
     private final Optional<TContext> context;
 
+    /**
+     * Constructs a StepsChainBuilder with the required parameters.
+     *
+     * @param servicesFacade    The services facade providing access to various services.
+     * @param onNextListener    Listener for the next step event.
+     * @param onPreviousListener Listener for the previous step event.
+     */
     public StepsChainBuilder(
             @NonNull ServicesFacade servicesFacade,
             @NonNull Consumer<Step> onNextListener,
@@ -40,6 +56,14 @@ public class StepsChainBuilder<TContext> {
         this.context = Optional.empty();
     }
 
+    /**
+     * Constructs a StepsChainBuilder with the required parameters including a context.
+     *
+     * @param servicesFacade    The services facade providing access to various services.
+     * @param onNextListener    Listener for the next step event.
+     * @param onPreviousListener Listener for the previous step event.
+     * @param context           The context to be used in {@link StepDefinitionWithContext}.
+     */
     public StepsChainBuilder(
             @NonNull ServicesFacade servicesFacade,
             @NonNull Consumer<Step> onNextListener,
@@ -52,11 +76,23 @@ public class StepsChainBuilder<TContext> {
         this.context = Optional.ofNullable(context);
     }
 
+    /**
+     * Registers a step without context in the steps chain.
+     *
+     * @param step The step to be registered.
+     * @return The current builder instance for method chaining.
+     */
     public StepsChainBuilder register(StepDefinition<?, ?> step) {
         registeredSteps.add(step.addContextCompatibility());
         return this;
     }
 
+    /**
+     * Registers a step with context in the steps chain.
+     *
+     * @param step The step to be registered.
+     * @return The current builder instance for method chaining.
+     */
     public StepsChainBuilder register(StepDefinitionWithContext<?, ?, TContext> step) {
         if (!context.isPresent()) {
             throw new IllegalArgumentException("No context provided");
@@ -66,6 +102,12 @@ public class StepsChainBuilder<TContext> {
         return this;
     }
 
+    /**
+     * Builds the step chain based on the registered steps.
+     *
+     * @return The constructed {@link StepChain}.
+     * @throws IllegalStateException If the steps chain is not valid.
+     */
     public StepChain build() {
         if (!chainIsValid()) {
             throw new IllegalStateException("Steps chain is not valid");

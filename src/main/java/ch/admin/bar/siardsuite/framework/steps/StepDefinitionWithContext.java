@@ -9,6 +9,13 @@ import lombok.Value;
 
 import java.util.Optional;
 
+/**
+ * Represents a step definition without context in a workflow. This class defines the characteristics of a workflow step,
+ * such as the title, input type, output type, and a view loader.
+ *
+ * @param <TIn> The type of input data for the step.
+ * @param <TOut> The type of output data for the step.
+ */
 @Value
 @Builder
 public class StepDefinitionWithContext<TIn, TOut, TContext> {
@@ -23,6 +30,11 @@ public class StepDefinitionWithContext<TIn, TOut, TContext> {
     @NonNull Class<TOut> outputType;
     @NonNull StepViewLoader<TIn, TOut, TContext> viewLoader;
 
+    /**
+     * Gets the unique identifier for the step.
+     *
+     * @return The step identifier.
+     */
     public StepId getId() {
         return StepId.builder()
                 .title(title)
