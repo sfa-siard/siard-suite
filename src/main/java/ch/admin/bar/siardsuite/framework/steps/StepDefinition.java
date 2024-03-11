@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 /**
- * Represents the definition of a step in a workflow.
+ * Represents the definition of a step in a stepper-view.
  *
  * @param <TIn>  The input data type for the step.
  * @param <TOut> The output data type for the step.

@@ -6,12 +6,12 @@ import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.scene.Node;
 import lombok.Getter;
 import lombok.val;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.testfx.assertions.api.Assertions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -29,6 +29,14 @@ class StepsChainBuilderTest {
 
 
     private final ServicesFacade servicesFacadeMock = Mockito.mock(ServicesFacade.class);
+
+    @BeforeEach
+    public void setup() {
+        FIRST_VIEW.reset();
+        SECOND_VIEW.reset();
+        THIRD_VIEW.reset();
+        FOURTH_VIEW.reset();
+    }
 
     @Test
     public void navigateTroughChain_forwardOnlyWithStepsOnly_expectValidInjectedData() {
@@ -175,13 +183,17 @@ class StepsChainBuilderTest {
     private static class DummyView<TIn, TOut> {
         private StepperNavigator<TOut> navigator = null;
         private final List<TIn> injectedData = new ArrayList<>();
-        private TIn data = null;
 
         public LoadedFxml load(final TIn data, final StepperNavigator<TOut> navigator) {
             this.navigator = navigator;
             this.injectedData.add(data);
 
             return new LoadedFxml(() -> Mockito.mock(Node.class), new Object());
+        }
+
+        public void reset() {
+            navigator = null;
+            injectedData.clear();
         }
     }
 

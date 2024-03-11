@@ -15,6 +15,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * A builder class for constructing a chain of steps in a stepper.
+ */
 @RequiredArgsConstructor
 public class StepsChainBuilder {
 
@@ -24,10 +27,7 @@ public class StepsChainBuilder {
     private final Consumer<Step> onPreviousListener;
 
     /**
-     * Registers a step without context in the steps chain.
-     *
-     * @param step The step to be registered.
-     * @return The current builder instance for method chaining.
+     * Registers first step in the steps chain.
      */
     public <TPrevious> StepRegisterer<TPrevious> register(StepDefinition<Void, TPrevious> step) {
         val registerer = new StepRegisterer<Void>(servicesFacade, onNextListener, onPreviousListener);
@@ -35,6 +35,11 @@ public class StepsChainBuilder {
         return registerer.register(step);
     }
 
+    /**
+     * A step registerer class responsible for registering steps and building the step chain type-safe.
+     *
+     * @param <TOutPrevious> The type of the previous output for the registered steps.
+     */
     @RequiredArgsConstructor
     public static class StepRegisterer<TOutPrevious> {
 
@@ -46,6 +51,12 @@ public class StepsChainBuilder {
         private final Map<Integer, Object> cachedInputDataByStepIndex = new HashMap<>();
         private final List<Step> preparedSteps = new ArrayList<>();
 
+        /**
+         * Registers a step in the steps chain.
+         *
+         * @param step The step to be registered.
+         * @param <TOut> The type of the output for the registered step.
+         */
         public <TOut> StepRegisterer<TOut> register(StepDefinition<TOutPrevious, TOut> step) {
             val stepIndex = indexNextStep.getAndIncrement();
             val navigator = createNavigator(stepIndex);
@@ -68,6 +79,13 @@ public class StepsChainBuilder {
             return (StepRegisterer<TOut>) this;
         }
 
+        /**
+         * Transforms the output of the last registered step. Can be used, if the last output does not match the
+         * next input (e.g. provide further data).
+         *
+         * @param transformer The transformer function.
+         * @param <TOut> The type of the transformed output.
+         */
         public <TOut> StepRegisterer<TOut> transform(Transformer<TOutPrevious, TOut> transformer) {
             val indexLastRegisteredStep = indexNextStep.get() - 1;
             val lastRegisteredStep = preparedSteps.get(indexLastRegisteredStep);
@@ -81,9 +99,6 @@ public class StepsChainBuilder {
 
         /**
          * Builds the step chain based on the registered steps.
-         *
-         * @return The constructed {@link StepChain}.
-         * @throws IllegalStateException If the steps chain is not valid.
          */
         public StepChain build() {
             return new StepChain(Collections.unmodifiableList(preparedSteps));
