@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.framework.steps;
 
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import javafx.scene.Node;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.testfx.assertions.api.Assertions;
 
-import java.util.function.Consumer;
 
 class StepsChainBuilderTest {
 

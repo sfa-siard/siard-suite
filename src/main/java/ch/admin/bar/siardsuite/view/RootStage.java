@@ -36,7 +36,7 @@ public class RootStage extends Stage implements ErrorHandler, Dialogs {
   private final BorderPane rootPane;
   private final BorderPane dialogPane;
 
-  public RootStage(Controller controller) throws IOException {
+  public RootStage(Controller controller) {
     this.controller = controller;
 
     ServicesFacade.INSTANCE.setRootStage(this);

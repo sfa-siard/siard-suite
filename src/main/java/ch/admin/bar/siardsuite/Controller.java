@@ -162,20 +162,6 @@ public class Controller implements DbInteractionService {
         this.databaseUploadService.start();
     }
 
-    private void cancelDownload() {
-        if (databaseLoadService != null && databaseLoadService.isRunning()) {
-            this.databaseLoadService.cancel();
-        }
-        releaseResources();
-    }
-
-    private void cancelUpload() {
-        if (databaseUploadService != null && databaseUploadService.isRunning()) {
-            this.databaseUploadService.cancel();
-        }
-        releaseResources();
-    }
-
     private void releaseResources() {
         closeDbConnection();
         removeTmpArchive();

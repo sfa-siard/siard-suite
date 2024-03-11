@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
-import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import lombok.Getter;
 import lombok.Setter;

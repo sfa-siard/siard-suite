@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.database.model;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;

@@ -3,8 +3,6 @@ package ch.admin.bar.siardsuite.presenter.connection.fields;
 import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.util.Validator;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;

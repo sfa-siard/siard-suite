@@ -93,8 +93,6 @@ public class ArchiveMetaDataEditorPresenter {
     @FXML
     public MFXButton infoButton;
     @FXML
-    private Tooltip tooltip;
-    @FXML
     public Label nameLabel;
     @FXML
     public Label ownerLabel;
