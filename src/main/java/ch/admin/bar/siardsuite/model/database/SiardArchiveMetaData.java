@@ -86,26 +86,6 @@ public class SiardArchiveMetaData {
         lobFolder = metaData.getLobFolder();
     }
 
-    public void accept(SiardArchiveMetaDataDetailsVisitor visitor) {
-        visitor.visit(
-                siardFormatVersion,
-                databaseName,
-                databaseProduct,
-                databaseConnectionURL,
-                databaseUsername,
-                databaseDescription,
-                dataOwner,
-                dataOriginTimespan,
-                archivingDate,
-                archiverName,
-                archiverContact,
-                targetArchive,
-                lobFolder,
-                viewsAsTables
-        );
-    }
-
-
     public void shareObject(SiardArchiveMetaDataVisitor visitor) {
         visitor.visit(this);
     }

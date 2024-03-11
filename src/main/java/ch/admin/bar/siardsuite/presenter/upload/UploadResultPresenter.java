@@ -62,10 +62,6 @@ public class UploadResultPresenter {
         OptionalHelper.ifPresentOrElse(
                 uploadFailure,
                 failure -> {
-//                    stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.ERROR); // TODO
-//                    stepper.updateProgress();
-
-
                     title.textProperty().bind(DisplayableText.of(FAILED_TITLE).bindable());
                     summary.textProperty().bind(DisplayableText.of(FAILED_MESSAGE).bindable());
 
@@ -81,9 +77,6 @@ public class UploadResultPresenter {
                     });
                 },
                 () -> {
-//                    stepper.getStepperToggles().get(stepper.getCurrentIndex()).setState(StepperToggleState.COMPLETED);  // TODO
-//                    stepper.updateProgress();
-
                     title.textProperty().bind(DisplayableText.of(SUCCESS_TITLE).bindable());
 
                     this.subtitle1.setVisible(true);

@@ -11,13 +11,13 @@ import java.net.URI;
 @Value
 @Builder
 public class UserDefinedMetadata {
-        String dbName;
-        String description;
-        String owner;
-        String dataOriginTimespan;
-        String archiverName;
-        String archiverContact;
-        URI lobFolder;
+        @NonNull String dbName;
+        @NonNull String description;
+        @NonNull String owner;
+        @NonNull String dataOriginTimespan;
+        @NonNull String archiverName;
+        @NonNull String archiverContact;
+        @NonNull URI lobFolder;
 
         @NonNull File saveAt;
         @NonNull Boolean exportViewsAsTables;

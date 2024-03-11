@@ -82,14 +82,16 @@ public class ArchiveDownloadPresenter {
 
     public void init(
             final UserDefinedMetadata userDefinedMetadata,
-            final StepperNavigator<Void> navigator,
-            final ServicesFacade servicesFacade
+            final ErrorHandler errorHandler,
+            final DbInteractionService dbInteractionService,
+            final Dialogs dialogs,
+            final Navigator navigator
     ) {
-        this.errorHandler = servicesFacade.errorHandler();
         this.userDefinedMetadata = userDefinedMetadata;
-        this.dbInteractionService = servicesFacade.dbInteractionService();
-        this.dialogs = servicesFacade.dialogs();
-        this.navigator = servicesFacade.navigator();
+        this.errorHandler = errorHandler;
+        this.dbInteractionService = dbInteractionService;
+        this.dialogs = dialogs;
+        this.navigator = navigator;
 
         this.loader.setImage(Icon.loading);
         loadingSpinner = new Spinner(this.loader);
@@ -194,7 +196,7 @@ public class ArchiveDownloadPresenter {
         setListeners();
     }
 
-    private void openArchiveDirectory(File file) { // TODO move to services
+    private void openArchiveDirectory(File file) {
         try {
             new SystemFileBrowser(file).show();
         } catch (IOException e) {
@@ -235,7 +237,13 @@ public class ArchiveDownloadPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveDownloadPresenter>load("fxml/archive/archive-download.fxml");
-        loaded.getController().init(userDefinedMetadata, navigator, servicesFacade);
+        loaded.getController().init(
+                userDefinedMetadata,
+                servicesFacade.errorHandler(),
+                servicesFacade.dbInteractionService(),
+                servicesFacade.dialogs(),
+                servicesFacade.navigator()
+        );
 
         return loaded;
     }

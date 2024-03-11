@@ -82,6 +82,7 @@ public class ArchiveLoadingPreviewPresenter {
                 .openDialog(View.ARCHIVE_ABORT_DIALOG));
 
         try {
+            // FIXME saveAt needs to be defined --> Temp Archive!
             dbInteractionService.execute(LoadDatabaseInstruction.builder()
                     .connectionData(dbmsConnectionData)
                     .loadOnlyMetadata(true)

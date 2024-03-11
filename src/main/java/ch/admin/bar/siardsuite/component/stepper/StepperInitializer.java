@@ -57,7 +57,7 @@ public class StepperInitializer {
         // do lazy load view
         toggle.stateProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    if (StepperToggleState.SELECTED.equals(newValue) && toggle.getContent() == null) {
+                    if (StepperToggleState.SELECTED.equals(newValue)) {
                         toggle.setContent(step.getViewLoader().get().getNode());
                     }
                 });

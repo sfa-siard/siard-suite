@@ -16,14 +16,6 @@ public class Model {
     public Model() {
     }
 
-    public Archive initArchive() {
-        try {
-            return this.initArchive(File.createTempFile("tmp", ".siard"), true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public Archive initArchive(File fileArchive, Boolean metaLoad) {
         if (fileArchive.exists()) {
             fileArchive.delete();

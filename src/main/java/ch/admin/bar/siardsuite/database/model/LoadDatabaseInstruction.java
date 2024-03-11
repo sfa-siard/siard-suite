@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 @Value
 public class LoadDatabaseInstruction {
     DbmsConnectionData connectionData;
-    File saveAt;
+    Optional<File> saveAt;
     boolean loadOnlyMetadata;
     boolean viewsAsTables;
     Consumer<SiardArchive> onSuccess;
@@ -29,7 +29,7 @@ public class LoadDatabaseInstruction {
     @Builder
     public LoadDatabaseInstruction(
             @NonNull DbmsConnectionData connectionData,
-            @NonNull File saveAt,
+            @Nullable File saveAt,
             @Nullable Boolean loadOnlyMetadata,
             @Nullable Boolean viewsAsTables,
             @Nullable Consumer<SiardArchive> onSuccess,
@@ -38,7 +38,7 @@ public class LoadDatabaseInstruction {
             @Nullable ChangeListener<ObservableList<Pair<String, Long>>> onSingleValueCompleted
     ) {
         this.connectionData = connectionData;
-        this.saveAt = saveAt;
+        this.saveAt = Optional.ofNullable(saveAt);
         this.loadOnlyMetadata = Optional.ofNullable(loadOnlyMetadata).orElse(false);
         this.viewsAsTables = Optional.ofNullable(viewsAsTables).orElse(false);
         this.onSuccess = Optional.ofNullable(onSuccess).orElse(archive -> {});

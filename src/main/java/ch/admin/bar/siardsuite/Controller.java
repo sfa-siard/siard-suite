@@ -48,21 +48,7 @@ public class Controller implements DbInteractionService {
         this.model = model;
     }
 
-    public void loadDatabase(
-            DbmsConnectionData connectionData,
-            boolean onlyMetaData,
-            EventHandler<WorkerStateEvent> onSuccess,
-            EventHandler<WorkerStateEvent> onFailure
-    ) throws SQLException {
-        tmpArchive = model.initArchive();
-        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model, connectionData)
-                .createDatabaseLoader(tmpArchive, onlyMetaData, false);
-        this.onDatabaseLoadSuccess(onSuccess);
-        this.onDatabaseLoadFailed(onFailure);
-        this.databaseLoadService.start();
-    }
-
-    public void loadDatabase(
+    private void loadDatabase(
             DbmsConnectionData connectionData,
             File target,
             boolean onlyMetaData,
@@ -82,7 +68,14 @@ public class Controller implements DbInteractionService {
     public void execute(LoadDatabaseInstruction instruction) throws SQLException {
         loadDatabase(
                 instruction.getConnectionData(),
-                instruction.getSaveAt(),
+                instruction.getSaveAt()
+                        .orElseGet(() -> {
+                            try {
+                                return File.createTempFile("tmp", ".siard");
+                            } catch (IOException e) {
+                                throw new RuntimeException("Failed to create temp file for temp archive", e);
+                            }
+                        }),
                 instruction.isLoadOnlyMetadata(),
                 instruction.isViewsAsTables(),
                 event -> {
@@ -154,7 +147,7 @@ public class Controller implements DbInteractionService {
         this.databaseUploadService.progressProperty().addListener(listener);
     }
 
-    public void uploadArchive(
+    private void uploadArchive(
             DbmsConnectionData connectionData,
             Archive archive,
             Map<String, String> schemaNameMappings,
@@ -169,21 +162,21 @@ public class Controller implements DbInteractionService {
         this.databaseUploadService.start();
     }
 
-    public void cancelDownload() {
+    private void cancelDownload() {
         if (databaseLoadService != null && databaseLoadService.isRunning()) {
             this.databaseLoadService.cancel();
         }
         releaseResources();
     }
 
-    public void cancelUpload() {
+    private void cancelUpload() {
         if (databaseUploadService != null && databaseUploadService.isRunning()) {
             this.databaseUploadService.cancel();
         }
         releaseResources();
     }
 
-    public void releaseResources() {
+    private void releaseResources() {
         closeDbConnection();
         removeTmpArchive();
     }

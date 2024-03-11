@@ -18,7 +18,6 @@ public class Navigator {
     }
 
     public void openArchive(Archive archive) {
-        // TODO: Checkm is archive.getFile().getName() same like UserDefinedMetadata.getSaveAt().getName() ?
         controller.setSiardArchive(archive.getFile().getName(), archive);
         stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
     }
