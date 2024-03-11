@@ -9,6 +9,7 @@ import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
@@ -117,15 +118,14 @@ public class UploadResultPresenter {
     }
 
     public static LoadedFxml<UploadResultPresenter> load(
-            final ShowUploadResultsData data,
+            final ArchiveAdder<ShowUploadResultsData> data,
             final StepperNavigator<Void> navigator,
-            final Archive context,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<UploadResultPresenter>load("fxml/upload/upload-result.fxml");
         loaded.getController().init(
-                context,
-                data.getFailure(),
+                data.getArchive(),
+                data.getData().getFailure(),
                 navigator,
                 servicesFacade.navigator()
         );

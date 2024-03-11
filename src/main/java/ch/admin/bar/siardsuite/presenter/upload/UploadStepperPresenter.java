@@ -1,15 +1,14 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
-import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.stepper.StepperInitializer;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
-import ch.admin.bar.siardsuite.framework.steps.StepDefinitionWithContext;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.presenter.archive.ArchiveChooseDbmsPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
+import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -27,54 +26,38 @@ public class UploadStepperPresenter extends Presenter {
     private static final I18nKey RESULT_TITLE = I18nKey.of("upload.step.name.result");
 
     private static final StepDefinition<Void, DbmsWithInitialValue> SELECT_DBMS =
-            StepDefinition.<Void, DbmsWithInitialValue>builder()
-                    .title(SELECT_DBMS_TITLE)
-                    .inputType(Void.class)
-                    .outputType(DbmsWithInitialValue.class)
-                    .viewLoader(ArchiveChooseDbmsPresenter::load) // TODO: Rename and move
-                    .build();
+            new StepDefinition<>(SELECT_DBMS_TITLE, ArchiveChooseDbmsPresenter::load);
 
-    private static final StepDefinitionWithContext<DbmsWithInitialValue, UploadArchiveData, Archive> EDIT_DB_CONNECTION_PROPERTIES =
-    StepDefinitionWithContext.<DbmsWithInitialValue, UploadArchiveData, Archive>builder()
-                    .title(DB_CONNECTION_TITLE)
-                    .inputType(DbmsWithInitialValue.class)
-                    .outputType(UploadArchiveData.class)
-                    .viewLoader(UploadConnectionPresenter::load)
-                    .build();
+    private static final StepDefinition<ArchiveAdder<DbmsWithInitialValue>, UploadArchiveData> EDIT_DB_CONNECTION_PROPERTIES =
+            new StepDefinition<>(DB_CONNECTION_TITLE, UploadConnectionPresenter::load);
 
-    private static final StepDefinitionWithContext<UploadArchiveData, ShowUploadResultsData, Archive> UPLOAD_ARCHIVE =
-            StepDefinitionWithContext.<UploadArchiveData, ShowUploadResultsData, Archive>builder()
-                    .inputType(UploadArchiveData.class)
-                    .outputType(ShowUploadResultsData.class)
-                    .viewLoader(UploadingPresenter::load)
-                    .build();
+    private static final StepDefinition<ArchiveAdder<UploadArchiveData>, ShowUploadResultsData> UPLOAD_ARCHIVE =
+            new StepDefinition<>(UploadingPresenter::load);
 
-    private static final StepDefinitionWithContext<ShowUploadResultsData, Void, Archive> UPLOAD_RESULTS = StepDefinitionWithContext.<ShowUploadResultsData, Void, Archive>builder()
-            .title(RESULT_TITLE)
-            .inputType(ShowUploadResultsData.class)
-            .outputType(Void.class)
-            .viewLoader(UploadResultPresenter::load)
-            .build();
+    private static final StepDefinition<ArchiveAdder<ShowUploadResultsData>, Void> UPLOAD_RESULTS =
+            new StepDefinition<>(RESULT_TITLE, UploadResultPresenter::load);
 
     @FXML
     private MFXStepper stepper;
 
     @Override
     public void init(Controller controller, RootStage stage) {
-        val chain = new StepsChainBuilder<>(
+        val chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,
                 nextDisplayedStep -> stepper.next(),
                 nextDisplayedStep -> {
                     stepper.previous();
 
-                    if (nextDisplayedStep.getId().equals(UPLOAD_ARCHIVE.getId())) {
+                    if (nextDisplayedStep.equals(UPLOAD_ARCHIVE)) {
                         stepper.previous();
                     }
-                },
-                controller.getSiardArchive().getArchive())
+                })
                 .register(SELECT_DBMS)
+                .transform(data -> new ArchiveAdder<>(controller.getSiardArchive().getArchive(), data))
                 .register(EDIT_DB_CONNECTION_PROPERTIES)
+                .transform(data -> new ArchiveAdder<>(controller.getSiardArchive().getArchive(), data))
                 .register(UPLOAD_ARCHIVE)
+                .transform(data -> new ArchiveAdder<>(controller.getSiardArchive().getArchive(), data))
                 .register(UPLOAD_RESULTS)
                 .build();
 
@@ -84,7 +67,7 @@ public class UploadStepperPresenter extends Presenter {
         controller.getRecentDatabaseConnection()
                 .ifPresent(recentConnection -> {
                     // skip select dbms step
-                    chain.getNavigatorOfStep(SELECT_DBMS.getId())
+                    chain.getNavigatorOfStep(SELECT_DBMS)
                             .next(DbmsWithInitialValue.builder()
                                     .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
                                     .initialValue(Optional.of(recentConnection))

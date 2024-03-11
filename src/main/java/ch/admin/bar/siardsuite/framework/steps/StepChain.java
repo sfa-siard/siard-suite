@@ -9,9 +9,9 @@ import java.util.List;
 public class StepChain {
     @NonNull List<Step> steps;
 
-    public <TOut> StepperNavigator<TOut> getNavigatorOfStep(final StepId stepId) {
+    public <TOut> StepperNavigator<TOut> getNavigatorOfStep(final StepDefinition stepDefinition) {
         return steps.stream()
-                .filter(step -> step.getId().equals(stepId))
+                .filter(step -> step.getDefinition() == stepDefinition)
                 .findAny()
                 .map(step -> (StepperNavigator<TOut>)step.getNavigator())
                 .orElseThrow(() -> new IllegalArgumentException("Searched step not found"));

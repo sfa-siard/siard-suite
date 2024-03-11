@@ -12,6 +12,8 @@ import ch.admin.bar.siardsuite.framework.general.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
+import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -104,16 +106,15 @@ public class UploadingPresenter {
     }
 
     public static LoadedFxml<UploadingPresenter> load(
-            final UploadArchiveData data,
+            final ArchiveAdder<UploadArchiveData> data,
             final StepperNavigator<ShowUploadResultsData> navigator,
-            final Archive context,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<UploadingPresenter>load("fxml/upload/upload-uploading.fxml");
         loaded.getController().init(
-                data.getConnectionData(),
-                context,
-                data.getSchemaNameMappings(),
+                data.getData().getConnectionData(),
+                data.getArchive(),
+                data.getData().getSchemaNameMappings(),
                 navigator,
                 servicesFacade.errorHandler(),
                 servicesFacade.dbInteractionService(),

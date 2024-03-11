@@ -28,59 +28,36 @@ public class ArchiveStepperPresenter extends Presenter {
     private static final I18nKey EDIT_META_DATA_TITLE = I18nKey.of("archive.step.name.metadata");
     private static final I18nKey DB_DOWNLOAD_TITLE = I18nKey.of("archive.step.name.download");
 
-    private static final StepDefinition<Void, DbmsWithInitialValue> SELECT_DBMS = StepDefinition.<Void, DbmsWithInitialValue>builder()
-            .title(SELECT_DBMS_TITLE)
-            .inputType(Void.class)
-            .outputType(DbmsWithInitialValue.class)
-            .viewLoader(ArchiveChooseDbmsPresenter::load)
-            .build();
+    private static final StepDefinition<Void, DbmsWithInitialValue> SELECT_DBMS =
+            new StepDefinition<>(SELECT_DBMS_TITLE, ArchiveChooseDbmsPresenter::load);
 
-    private static final StepDefinition<DbmsWithInitialValue, DbmsConnectionData> EDIT_DB_CONNECTION_PROPERTIES = StepDefinition.<DbmsWithInitialValue, DbmsConnectionData>builder()
-            .title(DB_CONNECTION_TITLE)
-            .inputType(DbmsWithInitialValue.class)
-            .outputType(DbmsConnectionData.class)
-            .viewLoader(ArchiveConnectionPresenter::load)
-            .build();
+    private static final StepDefinition<DbmsWithInitialValue, DbmsConnectionData> EDIT_DB_CONNECTION_PROPERTIES =
+            new StepDefinition<>(DB_CONNECTION_TITLE, ArchiveConnectionPresenter::load);
 
-    private static final StepDefinition<DbmsConnectionData, SiardArchiveWithConnectionData> DOWNLOAD_METADATA = StepDefinition.<DbmsConnectionData, SiardArchiveWithConnectionData>builder() // TODO not visible in header
-            .inputType(DbmsConnectionData.class)
-            .outputType(SiardArchiveWithConnectionData.class)
-            .viewLoader(ArchiveLoadingPreviewPresenter::load)
-            .build();
+    private static final StepDefinition<DbmsConnectionData, SiardArchiveWithConnectionData> DOWNLOAD_METADATA =
+            new StepDefinition<>(ArchiveLoadingPreviewPresenter::load);
 
-    private static final StepDefinition<SiardArchiveWithConnectionData, SiardArchiveWithConnectionData> PREVIEW_METADATA = StepDefinition.<SiardArchiveWithConnectionData, SiardArchiveWithConnectionData>builder()
-            .title(DB_PREVIEW_TITLE)
-            .inputType(SiardArchiveWithConnectionData.class)
-            .outputType(SiardArchiveWithConnectionData.class)
-            .viewLoader(PreviewArchiveBrowser::load)
-            .build();
+    private static final StepDefinition<SiardArchiveWithConnectionData, SiardArchiveWithConnectionData> PREVIEW_METADATA =
+            new StepDefinition<>(DB_PREVIEW_TITLE, PreviewArchiveBrowser::load);
 
-    private static final StepDefinition<SiardArchiveWithConnectionData, UserDefinedMetadata> EDIT_USER_DEFINED_METADATA = StepDefinition.<SiardArchiveWithConnectionData, UserDefinedMetadata>builder()
-            .title(EDIT_META_DATA_TITLE)
-            .inputType(SiardArchiveWithConnectionData.class)
-            .outputType(UserDefinedMetadata.class)
-            .viewLoader(ArchiveMetaDataEditorPresenter::load)
-            .build();
+    private static final StepDefinition<SiardArchiveWithConnectionData, UserDefinedMetadata> EDIT_USER_DEFINED_METADATA =
+            new StepDefinition<>(EDIT_META_DATA_TITLE, ArchiveMetaDataEditorPresenter::load);
 
-    private static final StepDefinition<UserDefinedMetadata, Void> DOWNLOAD_DB = StepDefinition.<UserDefinedMetadata, Void>builder()
-            .title(DB_DOWNLOAD_TITLE)
-            .inputType(UserDefinedMetadata.class)
-            .outputType(Void.class)
-            .viewLoader(ArchiveDownloadPresenter::load)
-            .build();
+    private static final StepDefinition<UserDefinedMetadata, Void> DOWNLOAD_DB =
+            new StepDefinition<>(DB_DOWNLOAD_TITLE, ArchiveDownloadPresenter::load);
 
     @FXML
     private MFXStepper stepper;
 
     @Override
     public void init(Controller controller, RootStage stage) {
-        val chain = new StepsChainBuilder<>(
+        val chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,
                 nextDisplayedStep -> stepper.next(),
                 nextDisplayedStep -> {
                     stepper.previous();
 
-                    if (nextDisplayedStep.getId().equals(DOWNLOAD_METADATA.getId())) {
+                    if (nextDisplayedStep.getDefinition().equals(DOWNLOAD_METADATA)) {
                         stepper.previous();
                     }
                 })
@@ -98,7 +75,7 @@ public class ArchiveStepperPresenter extends Presenter {
         controller.getRecentDatabaseConnection()
                 .ifPresent(recentConnection -> {
                     // skip select dbms step
-                    chain.getNavigatorOfStep(SELECT_DBMS.getId())
+                    chain.getNavigatorOfStep(SELECT_DBMS)
                             .next(DbmsWithInitialValue.builder()
                                     .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
                                     .initialValue(Optional.of(recentConnection))

@@ -11,6 +11,7 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
 import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm;
+import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
@@ -169,16 +170,15 @@ public class UploadConnectionPresenter {
     }
 
     public static LoadedFxml<UploadConnectionPresenter> load(
-            final DbmsWithInitialValue data,
+            final ArchiveAdder<DbmsWithInitialValue> data,
             final StepperNavigator<UploadArchiveData> navigator,
-            final Archive context,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<UploadConnectionPresenter>load("fxml/upload/upload-db-connection.fxml");
         loaded.getController().init(
-                data.getDbms(),
-                context,
-                data.getInitialValue(),
+                data.getData().getDbms(),
+                data.getArchive(),
+                data.getData().getInitialValue(),
                 navigator,
                 servicesFacade);
 

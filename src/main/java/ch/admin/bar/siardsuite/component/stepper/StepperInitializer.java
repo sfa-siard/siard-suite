@@ -58,7 +58,7 @@ public class StepperInitializer {
         toggle.stateProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if (StepperToggleState.SELECTED.equals(newValue)) {
-                        toggle.setContent(step.getViewLoader().get().getNode());
+                        toggle.setContent(step.getViewSupplier().get().getNode());
                     }
                 });
 
