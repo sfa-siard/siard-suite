@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
+import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.general.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.Failure;
@@ -15,6 +16,8 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.open.OpenSiardArchiveDialogPresenter;
+import ch.admin.bar.siardsuite.util.CastHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
@@ -27,6 +30,7 @@ import lombok.val;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -35,6 +39,8 @@ public class RootStage extends Stage implements ErrorHandler, Dialogs {
 
   private final BorderPane rootPane;
   private final BorderPane dialogPane;
+
+  private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
 
   public RootStage(Controller controller) {
     this.controller = controller;
@@ -68,7 +74,15 @@ public class RootStage extends Stage implements ErrorHandler, Dialogs {
   }
 
   private void setCenter(BorderPane borderPane, View view) {
-    val loaded = view.getViewCreator().apply(controller, this);
+    val loaded = previouslyLoadedView.updateAndGet(previouslyLoadedFxml -> {
+      if (previouslyLoadedFxml != null) {
+        CastHelper.tryCast(previouslyLoadedFxml.getController(), Destructible.class)
+                .ifPresent(Destructible::destruct);
+      }
+
+      return view.getViewCreator().apply(controller, this);
+    });
+
     borderPane.setCenter(loaded.getNode());
   }
 

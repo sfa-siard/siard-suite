@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
+import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,10 +55,12 @@ public class StepsChainBuilder {
         private final Map<Integer, Object> cachedInputDataByStepIndex = new HashMap<>();
         private final List<Step> preparedSteps = new ArrayList<>();
 
+        private final AtomicReference<LoadedFxml> previouslyLoaded = new AtomicReference<>();
+
         /**
          * Registers a step in the steps chain.
          *
-         * @param step The step to be registered.
+         * @param step   The step to be registered.
          * @param <TOut> The type of the output for the registered step.
          */
         public <TOut> StepRegisterer<TOut> register(StepDefinition<TOutPrevious, TOut> step) {
@@ -69,8 +73,15 @@ public class StepsChainBuilder {
 
                     val casted = (TOutPrevious) data;
 
-                    return step.getViewLoader()
-                            .load(casted, navigator, servicesFacade);
+                    return previouslyLoaded.updateAndGet(previouslyLoadedFxml -> {
+                        if (previouslyLoadedFxml != null) {
+                            CastHelper.tryCast(previouslyLoadedFxml.getController(), Destructible.class)
+                                    .ifPresent(Destructible::destruct);
+                        }
+
+                        return step.getViewLoader()
+                                .load(casted, navigator, servicesFacade);
+                    });
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     throw ex;
@@ -93,7 +104,7 @@ public class StepsChainBuilder {
          * next input (e.g. provide further data).
          *
          * @param transformer The transformer function.
-         * @param <TOut> The type of the transformed output.
+         * @param <TOut>      The type of the transformed output.
          */
         public <TOut> StepRegisterer<TOut> transform(Transformer<TOutPrevious, TOut> transformer) {
             val indexLastRegisteredStep = indexNextStep.get() - 1;
@@ -110,7 +121,7 @@ public class StepsChainBuilder {
          * Builds the step chain based on the registered steps.
          */
         public StepChain build() {
-            return new StepChain(Collections.unmodifiableList(preparedSteps));
+            return new StepChain(Collections.unmodifiableList(preparedSteps), previouslyLoaded);
         }
 
         private StepperNavigator createNavigator(final int stepIndex) {

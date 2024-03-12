@@ -2,7 +2,10 @@ package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
+import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
+import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.steps.StepChain;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
 import ch.admin.bar.siardsuite.presenter.Presenter;
@@ -14,11 +17,10 @@ import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
-import lombok.val;
 
 import java.util.Optional;
 
-public class UploadStepperPresenter extends Presenter {
+public class UploadStepperPresenter extends Presenter implements Destructible {
 
     private static final I18nKey SELECT_DBMS_TITLE = I18nKey.of("upload.step.name.dbms");
     private static final I18nKey DB_CONNECTION_TITLE = I18nKey.of("upload.step.name.databaseConnection");
@@ -39,9 +41,14 @@ public class UploadStepperPresenter extends Presenter {
     @FXML
     private DrilledMFXStepper stepper;
 
+    private DbInteractionService dbInteractionService;
+    private StepChain chain;
+
     @Override
     public void init(Controller controller, RootStage stage) {
-        val chain = new StepsChainBuilder(
+        dbInteractionService = controller;
+
+        chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,
                 nextDisplayedStep -> stepper.display(nextDisplayedStep),
                 nextDisplayedStep -> {
@@ -73,5 +80,12 @@ public class UploadStepperPresenter extends Presenter {
                                     .build());
                 });
 
+    }
+
+    @Override
+    public void destruct() {
+        stepper.destruct();
+        chain.destruct();
+        dbInteractionService.cancelRunning();
     }
 }

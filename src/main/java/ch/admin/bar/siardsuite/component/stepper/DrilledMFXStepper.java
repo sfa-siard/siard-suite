@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.component.stepper;
 
+import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.steps.Step;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -8,19 +9,28 @@ import ch.admin.bar.siardsuite.component.stepper.skins.CustomStepperToggleSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.WeakChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class DrilledMFXStepper extends MFXStepper {
+public class DrilledMFXStepper extends MFXStepper implements Destructible {
+
+    private final List<Runnable> refreshables = new ArrayList<>();
+
+    private final ChangeListener<Locale> onLanguageChanged = (observable, oldValue, newValue) -> refreshables.forEach(Runnable::run);
 
     public DrilledMFXStepper() {
+        I18n.locale.addListener(onLanguageChanged);
     }
 
     public void init(List<Step> steps) {
@@ -34,14 +44,13 @@ public class DrilledMFXStepper extends MFXStepper {
                 })
                 .collect(Collectors.toList());
 
-        getStepperToggles()
-                .addAll(toggles);
+        getStepperToggles().addAll(toggles);
 
         val skin = new CustomStepperSkin(this);
-        I18n.locale.addListener((observable, oldValue, newValue) -> {
-            skin.refresh();
-        });
+        refreshables.add(skin::refresh);
         setSkin(skin);
+
+
 
         // bootstrap first step
         display(steps.get(0));
@@ -90,9 +99,13 @@ public class DrilledMFXStepper extends MFXStepper {
 
         val skin = new CustomStepperToggleSkin(toggle, step.isVisible());
         toggle.setSkin(skin);
-
-        I18n.locale.addListener((observable, oldValue, newValue) -> skin.refresh());
+        refreshables.add(skin::refresh);
 
         return toggle;
+    }
+
+    @Override
+    public void destruct() {
+        I18n.locale.removeListener(onLanguageChanged);
     }
 }

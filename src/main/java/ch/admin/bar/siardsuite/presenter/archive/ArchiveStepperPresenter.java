@@ -3,7 +3,10 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
+import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.steps.StepChain;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
 import ch.admin.bar.siardsuite.presenter.Presenter;
@@ -19,7 +22,7 @@ import lombok.val;
 
 import java.util.Optional;
 
-public class ArchiveStepperPresenter extends Presenter {
+public class ArchiveStepperPresenter extends Presenter implements Destructible {
 
     private static final I18nKey SELECT_DBMS_TITLE = I18nKey.of("archive.step.name.dbms");
     private static final I18nKey DB_CONNECTION_TITLE = I18nKey.of("archive.step.name.databaseConnectionURL");
@@ -48,9 +51,14 @@ public class ArchiveStepperPresenter extends Presenter {
     @FXML
     private DrilledMFXStepper stepper;
 
+    private DbInteractionService dbInteractionService;
+    private StepChain chain;
+
     @Override
     public void init(Controller controller, RootStage stage) {
-        val chain = new StepsChainBuilder(
+        dbInteractionService = controller;
+
+        chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,
                 nextDisplayedStep -> stepper.display(nextDisplayedStep),
                 nextDisplayedStep -> {
@@ -87,5 +95,12 @@ public class ArchiveStepperPresenter extends Presenter {
         loaded.getController().init(controller, stage);
 
         return loaded;
+    }
+
+    @Override
+    public void destruct() {
+        stepper.destruct();
+        chain.destruct();
+        dbInteractionService.cancelRunning();
     }
 }
