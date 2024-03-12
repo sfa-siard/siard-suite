@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.stepper.StepperInitializer;
+import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
@@ -14,8 +14,6 @@ import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
-import io.github.palexdev.materialfx.controls.MFXStepper;
-import io.github.palexdev.materialfx.enums.StepperToggleState;
 import javafx.fxml.FXML;
 import lombok.val;
 
@@ -48,18 +46,19 @@ public class ArchiveStepperPresenter extends Presenter {
             new StepDefinition<>(DB_DOWNLOAD_TITLE, ArchiveDownloadPresenter::load);
 
     @FXML
-    private MFXStepper stepper;
+    private DrilledMFXStepper stepper;
 
     @Override
     public void init(Controller controller, RootStage stage) {
         val chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,
-                nextDisplayedStep -> stepper.next(),
+                nextDisplayedStep -> stepper.display(nextDisplayedStep),
                 nextDisplayedStep -> {
-                    stepper.previous();
-
                     if (nextDisplayedStep.getDefinition().equals(DOWNLOAD_METADATA)) {
-                        stepper.previous();
+                        // skip without displaying it
+                        nextDisplayedStep.getNavigator().previous();
+                    } else {
+                        stepper.display(nextDisplayedStep);
                     }
                 })
                 .register(SELECT_DBMS)
@@ -70,8 +69,7 @@ public class ArchiveStepperPresenter extends Presenter {
                 .register(DOWNLOAD_DB)
                 .build();
 
-        new StepperInitializer(stage, stepper)
-                .init(chain.getSteps());
+        stepper.init(chain.getSteps());
 
         controller.getRecentDatabaseConnection()
                 .ifPresent(recentConnection -> {

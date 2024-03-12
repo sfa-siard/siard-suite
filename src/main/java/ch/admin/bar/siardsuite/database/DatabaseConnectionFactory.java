@@ -5,7 +5,6 @@ import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -38,7 +37,6 @@ public class DatabaseConnectionFactory {
                 viewsAsTables);
     }
 
-    @SneakyThrows
     public DatabaseUploadService createDatabaseUploader(
             final DbmsConnectionData connectionData,
             final Archive archive,
@@ -49,39 +47,6 @@ public class DatabaseConnectionFactory {
                 schemaNameMappings);
     }
 
-    private static Connection getOrCreateConnection(final DbmsConnectionData connectionData) {
-        return CONNECTION_CACHE.updateAndGet(nullableEstablishedConnection -> {
-            if (nullableEstablishedConnection != null) {
-                if (nullableEstablishedConnection.getDbmsConnectionData().equals(connectionData)) {
-                    // connection can be re-used
-                    log.info("Re-use previously established connection (Properties: {})", connectionData);
-                    return nullableEstablishedConnection;
-                } else {
-                    nullableEstablishedConnection.close();
-                }
-            }
-
-            try {
-                log.info("Create new connection (Properties: {})", connectionData);
-
-                loadDriver(connectionData.getDbms().getDriverClassName());
-
-                val options = UserPreferences.INSTANCE.getStoredOptions();
-                DriverManager.setLoginTimeout(options.getLoginTimeout());
-
-                val connection = DriverManager.getConnection(
-                        connectionData.getJdbcConnectionString(),
-                        connectionData.getUser(),
-                        connectionData.getPassword());
-                connection.setAutoCommit(false);
-
-                return new EstablishedConnection(connection, connectionData);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }).getConnection();
-    }
-
     public static void disconnect() {
         CONNECTION_CACHE.updateAndGet(nullableEstablishedConnection -> {
             if (nullableEstablishedConnection != null) {
@@ -90,6 +55,44 @@ public class DatabaseConnectionFactory {
 
             return null;
         });
+    }
+
+    private static Connection getOrCreateConnection(final DbmsConnectionData connectionData) {
+        return CONNECTION_CACHE.updateAndGet(establishedConnection -> {
+            try {
+                if (establishedConnection != null) {
+                    if (!establishedConnection.getConnection().isClosed() &&
+                            establishedConnection.getDbmsConnectionData().equals(connectionData)) {
+                        // connection can be re-used
+                        log.info("Re-use previously established connection (Properties: {})", connectionData);
+                        return establishedConnection;
+                    } else {
+                        establishedConnection.close();
+                    }
+                }
+
+                return new EstablishedConnection(createConnection(connectionData), connectionData);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).getConnection();
+    }
+
+    private static Connection createConnection(final DbmsConnectionData connectionData) throws SQLException {
+        log.info("Create new connection (Properties: {})", connectionData);
+
+        loadDriver(connectionData.getDbms().getDriverClassName());
+
+        val options = UserPreferences.INSTANCE.getStoredOptions();
+        DriverManager.setLoginTimeout(options.getLoginTimeout());
+
+        val connection = DriverManager.getConnection(
+                connectionData.getJdbcConnectionString(),
+                connectionData.getUser(),
+                connectionData.getPassword());
+        connection.setAutoCommit(false);
+
+        return connection;
     }
 
     private static void loadDriver(String jdbcDriverClass) {

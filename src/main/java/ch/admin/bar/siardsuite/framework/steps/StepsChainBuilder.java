@@ -133,9 +133,10 @@ public class StepsChainBuilder {
                         transformedData.updateAndGet(transformator::transform);
                     }
 
+                    log.info("Navigate {}->{} with data {}", stepIndex, targetStepIndex, transformedData.get());
+
                     cachedInputDataByStepIndex.put(targetStepIndex, transformedData.get());
                     onNextListener.accept(preparedSteps.get(targetStepIndex));
-                    log.info("Navigated to next {}->{} with data {}", currentStep.getStepIndex(), targetStep.getStepIndex(), transformedData.get());
                 }
 
                 @Override
@@ -147,8 +148,9 @@ public class StepsChainBuilder {
                         throw new IllegalStateException("No previous step is available");
                     }
 
+                    log.info("Navigate {}->{}", stepIndex, targetStepIndex);
+
                     onPreviousListener.accept(preparedSteps.get(targetStepIndex));
-                    log.info("Navigated to previous {}->{}", stepIndex, targetStepIndex);
                 }
             };
         }

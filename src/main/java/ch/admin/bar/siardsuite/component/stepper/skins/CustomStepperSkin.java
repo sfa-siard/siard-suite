@@ -1,7 +1,6 @@
-package ch.admin.bar.siardsuite.view.skins;
+package ch.admin.bar.siardsuite.component.stepper.skins;
 
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.SiardEvent;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.utils.AnimationUtils;
@@ -24,7 +23,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
+import lombok.val;
 
 import java.util.stream.Collectors;
 
@@ -37,7 +36,7 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
   private boolean buttonWasPressed = false;
   private final MFXStepper stepper;
 
-  public CustomStepperSkin(MFXStepper stepper, Stage stage) {
+  public CustomStepperSkin(MFXStepper stepper) {
     super(stepper);
     this.stepper = stepper;
     this.track.setHeight(2.0);
@@ -64,7 +63,13 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     container.setTop(this.stepperBar);
     container.setCenter(this.contentPane);
     this.getChildren().add(container);
-    this.setListeners(stage);
+    this.setListeners();
+  }
+
+  public void refresh() {
+      val stepper = this.getSkinnable();
+      stepper.requestLayout();
+      layoutWidth(stepper);
   }
 
   private void layoutWidth(MFXStepper stepper) {
@@ -84,13 +89,8 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
     this.track.setWidth(toggleWidth);
   }
 
-  private void setListeners(Stage stage) {
+  private void setListeners() {
     MFXStepper stepper = this.getSkinnable();
-
-    stage.addEventHandler(SiardEvent.UPDATE_LANGUAGE_EVENT, event -> {
-      stepper.requestLayout();
-      layoutWidth(stepper);
-    });
 
     stepper.addEventFilter(MFXStepper.MFXStepperEvent.FORCE_LAYOUT_UPDATE_EVENT, (event) -> {
       stepper.requestLayout();

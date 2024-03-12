@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.component.stepper.StepperInitializer;
+import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
@@ -13,7 +13,6 @@ import ch.admin.bar.siardsuite.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
-import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import lombok.val;
 
@@ -38,18 +37,19 @@ public class UploadStepperPresenter extends Presenter {
             new StepDefinition<>(RESULT_TITLE, UploadResultPresenter::load);
 
     @FXML
-    private MFXStepper stepper;
+    private DrilledMFXStepper stepper;
 
     @Override
     public void init(Controller controller, RootStage stage) {
         val chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,
-                nextDisplayedStep -> stepper.next(),
+                nextDisplayedStep -> stepper.display(nextDisplayedStep),
                 nextDisplayedStep -> {
-                    stepper.previous();
-
                     if (nextDisplayedStep.getDefinition().equals(UPLOAD_ARCHIVE)) {
-                        stepper.previous();
+                        // skip without displaying it
+                        nextDisplayedStep.getNavigator().previous();
+                    } else {
+                        stepper.display(nextDisplayedStep);
                     }
                 })
                 .register(SELECT_DBMS)
@@ -61,8 +61,7 @@ public class UploadStepperPresenter extends Presenter {
                 .register(UPLOAD_RESULTS)
                 .build();
 
-        new StepperInitializer(stage, stepper)
-                .init(chain.getSteps());
+        stepper.init(chain.getSteps());
 
         controller.getRecentDatabaseConnection()
                 .ifPresent(recentConnection -> {
