@@ -13,17 +13,15 @@ public interface DbInteractionService {
      * Executes the specified instruction to load a database.
      *
      * @param instruction The instruction to load a database.
-     * @throws SQLException If an error occurs during the execution of the load database instruction.
      */
-    void execute(LoadDatabaseInstruction instruction) throws SQLException;
+    void execute(LoadDatabaseInstruction instruction);
 
     /**
      * Executes the specified instruction to upload a database.
      *
      * @param instruction The instruction to upload a database.
-     * @throws SQLException If an error occurs during the execution of the upload database instruction.
      */
-    void execute(UploadDatabaseInstruction instruction) throws SQLException;
+    void execute(UploadDatabaseInstruction instruction);
 
     /**
      * Cancels any running database operation.

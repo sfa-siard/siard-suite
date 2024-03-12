@@ -81,32 +81,26 @@ public class ArchiveLoadingPreviewPresenter {
         buttonsBox.cancel().setOnAction(event -> dialogs
                 .openDialog(View.ARCHIVE_ABORT_DIALOG));
 
-        try {
-            // FIXME saveAt needs to be defined --> Temp Archive!
-            dbInteractionService.execute(LoadDatabaseInstruction.builder()
-                    .connectionData(dbmsConnectionData)
-                    .loadOnlyMetadata(true)
-                    .onSuccess(siardArchive -> {
-                        navigator.next(SiardArchiveWithConnectionData.builder()
-                                .dbmsConnectionData(dbmsConnectionData)
-                                .siardArchive(siardArchive)
-                                .build());
-                    })
-                    .onFailure(event -> {
-                        navigator.previous();
-                        errorHandler.handle(event.getSource().getException());
-                    })
-                    .onProgress((o, oldValue, newValue) -> {
-                        progressBar.progressProperty().set(newValue.doubleValue());
-                    })
-                    .onSingleValueCompleted((o1, oldValue, newValue) -> {
-                        newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
-                    })
-                    .build());
-        } catch (Exception e) {
-            navigator.previous();
-            errorHandler.handle(e);
-        }
+        dbInteractionService.execute(LoadDatabaseInstruction.builder()
+                .connectionData(dbmsConnectionData)
+                .loadOnlyMetadata(true)
+                .onSuccess(siardArchive -> {
+                    navigator.next(SiardArchiveWithConnectionData.builder()
+                            .dbmsConnectionData(dbmsConnectionData)
+                            .siardArchive(siardArchive)
+                            .build());
+                })
+                .onFailure(event -> {
+                    navigator.previous();
+                    errorHandler.handle(event.getSource().getException());
+                })
+                .onProgress((o, oldValue, newValue) -> {
+                    progressBar.progressProperty().set(newValue.doubleValue());
+                })
+                .onSingleValueCompleted((o1, oldValue, newValue) -> {
+                    newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
+                })
+                .build());
     }
 
     private void addLoadingItem(String text, Integer pos) {

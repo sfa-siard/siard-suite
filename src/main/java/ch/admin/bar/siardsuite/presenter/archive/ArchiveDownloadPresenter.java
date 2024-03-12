@@ -138,29 +138,24 @@ public class ArchiveDownloadPresenter {
     private void downloadAndArchiveDatabase() {
         loadingSpinner.play();
 
-        try {
-            dbInteractionService.execute(LoadDatabaseInstruction.builder()
-                    .connectionData(userDefinedMetadata.getDbmsConnectionData())
-                    .saveAt(userDefinedMetadata.getSaveAt())
-                    .loadOnlyMetadata(false)
-                    .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
-                    .onSuccess(siardArchive -> handleDownloadSuccess())
-                    .onFailure(event -> handleDownloadFailure(event.getSource().getException()))
-                    .onSingleValueCompleted((observable, oldValue, newValue) -> {
-                        AtomicInteger pos = new AtomicInteger();
-                        newValue.forEach(p ->
-                                addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
-                        );
-                    })
-                    .onProgress((observable, oldValue, newValue) -> {
-                        double pos = newValue.doubleValue();
-                        progressBar.progressProperty().set(pos);
-                    })
-                    .build());
-        } catch (SQLException e) {
-            errorHandler.handle(e);
-            ;
-        }
+        dbInteractionService.execute(LoadDatabaseInstruction.builder()
+                .connectionData(userDefinedMetadata.getDbmsConnectionData())
+                .saveAt(userDefinedMetadata.getSaveAt())
+                .loadOnlyMetadata(false)
+                .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
+                .onSuccess(siardArchive -> handleDownloadSuccess())
+                .onFailure(event -> handleDownloadFailure(event.getSource().getException()))
+                .onSingleValueCompleted((observable, oldValue, newValue) -> {
+                    AtomicInteger pos = new AtomicInteger();
+                    newValue.forEach(p ->
+                            addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
+                    );
+                })
+                .onProgress((observable, oldValue, newValue) -> {
+                    double pos = newValue.doubleValue();
+                    progressBar.progressProperty().set(pos);
+                })
+                .build());
     }
 
     private void handleDownloadSuccess() {

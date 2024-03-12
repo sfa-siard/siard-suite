@@ -7,14 +7,16 @@ import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.enterag.utils.background.Progress;
 import javafx.concurrent.Task;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import java.sql.Connection;
 import java.util.Map;
+import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 public class DatabaseUploadTask extends Task<String> implements Progress {
 
-  private final Connection connection;
+  private final Supplier<Connection> connectionSupplier;
   private final Archive archive;
   private final Map<String, String> schemaNameMapping;
 
@@ -30,7 +32,8 @@ public class DatabaseUploadTask extends Task<String> implements Progress {
 
   @Override
   protected String call() throws Exception {
-    connection.setAutoCommit(false);
+    val connection = connectionSupplier.get();
+
     int timeout = UserPreferences.INSTANCE.getStoredOptions().getQueryTimeout();
 
     // TODO overwrite and metadataonly?

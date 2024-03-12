@@ -12,13 +12,15 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import java.sql.Connection;
+import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress {
 
-    private final Connection connection;
+    private final Supplier<Connection> connectionSupplier;
     private final Model model;
     private final String dbName;
     private final Archive archive;
@@ -27,9 +29,9 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
 
     @Override
     protected ObservableList<Pair<String, Long>> call() throws Exception {
+        val connection = connectionSupplier.get();
 
         ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
-        connection.setAutoCommit(false);
         int timeout = UserPreferences.INSTANCE.getStoredOptions().getQueryTimeout();
 
         archive.getMetaData().setDbName(dbName);

@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.framework.steps;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.function.Supplier;
 /**
  * A builder class for constructing a chain of steps in a stepper.
  */
+@Slf4j
 @RequiredArgsConstructor
 public class StepsChainBuilder {
 
@@ -62,10 +64,17 @@ public class StepsChainBuilder {
             val navigator = createNavigator(stepIndex);
 
             final Supplier<LoadedFxml> viewLoader = () -> {
-                val data = cachedInputDataByStepIndex.get(stepIndex);
+                try {
+                    val data = cachedInputDataByStepIndex.get(stepIndex);
 
-                return step.getViewLoader()
-                        .load((TOutPrevious) data, navigator, servicesFacade);
+                    val casted = (TOutPrevious) data;
+
+                    return step.getViewLoader()
+                            .load(casted, navigator, servicesFacade);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    throw ex;
+                }
             };
 
             preparedSteps.add(Step.builder()
@@ -126,6 +135,7 @@ public class StepsChainBuilder {
 
                     cachedInputDataByStepIndex.put(targetStepIndex, transformedData.get());
                     onNextListener.accept(preparedSteps.get(targetStepIndex));
+                    log.info("Navigated to next {}->{} with data {}", currentStep.getStepIndex(), targetStep.getStepIndex(), transformedData.get());
                 }
 
                 @Override
@@ -138,6 +148,7 @@ public class StepsChainBuilder {
                     }
 
                     onPreviousListener.accept(preparedSteps.get(targetStepIndex));
+                    log.info("Navigated to previous {}->{}", stepIndex, targetStepIndex);
                 }
             };
         }

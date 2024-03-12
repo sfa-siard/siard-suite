@@ -55,17 +55,23 @@ public class Controller implements DbInteractionService {
             boolean viewsAsTables,
             EventHandler<WorkerStateEvent> onSuccess,
             EventHandler<WorkerStateEvent> onFailure
-    ) throws SQLException {
+    ) {
         final Archive archive = model.initArchive(target, onlyMetaData);
-        this.databaseLoadService = DatabaseConnectionFactory.getInstance(model, connectionData)
-                .createDatabaseLoader(archive, onlyMetaData, viewsAsTables);
+        this.databaseLoadService = DatabaseConnectionFactory.INSTANCE
+                .createDatabaseLoader(
+                        connectionData,
+                        model,
+                        archive,
+                        onlyMetaData,
+                        viewsAsTables
+                );
         this.onDatabaseLoadSuccess(onSuccess);
         this.onDatabaseLoadFailed(onFailure);
         this.databaseLoadService.start();
     }
 
     @Override
-    public void execute(LoadDatabaseInstruction instruction) throws SQLException {
+    public void execute(LoadDatabaseInstruction instruction) {
         loadDatabase(
                 instruction.getConnectionData(),
                 instruction.getSaveAt()
@@ -80,7 +86,6 @@ public class Controller implements DbInteractionService {
                 instruction.isViewsAsTables(),
                 event -> {
                     instruction.getOnSuccess().accept(getSiardArchive());
-                    DatabaseConnectionFactory.disconnect();
                 },
                 instruction.getOnFailure()
         );
@@ -90,7 +95,7 @@ public class Controller implements DbInteractionService {
     }
 
     @Override
-    public void execute(UploadDatabaseInstruction instruction) throws SQLException {
+    public void execute(UploadDatabaseInstruction instruction) {
         uploadArchive(
                 instruction.getConnectionData(),
                 instruction.getArchive(),
@@ -153,10 +158,12 @@ public class Controller implements DbInteractionService {
             Map<String, String> schemaNameMappings,
             EventHandler<WorkerStateEvent> onSuccess,
             EventHandler<WorkerStateEvent> onFailure
-    ) throws SQLException {
-        this.databaseUploadService = DatabaseConnectionFactory
-                .getInstance(model, connectionData)
-                .createDatabaseUploader(archive, schemaNameMappings);
+    ) {
+        this.databaseUploadService = DatabaseConnectionFactory.INSTANCE
+                .createDatabaseUploader(
+                        connectionData,
+                        archive,
+                        schemaNameMappings);
         this.onDatabaseUploadSuccess(onSuccess);
         this.onDatabaseUploadFailed(onFailure);
         this.databaseUploadService.start();

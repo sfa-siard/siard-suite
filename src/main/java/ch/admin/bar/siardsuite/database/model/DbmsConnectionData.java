@@ -4,11 +4,13 @@ import ch.admin.bar.siardsuite.util.FileHelper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
 @EqualsAndHashCode
+@ToString
 public class DbmsConnectionData {
 
     @Getter
@@ -17,15 +19,19 @@ public class DbmsConnectionData {
     private final DbmsConnectionProperties<?> properties;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private final Supplier<String> jdbsConnectionStringSupplier;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private final Supplier<String> userSupplier;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private final Supplier<String> passwordSupplier;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private final Supplier<String> dbNameSupplier;
 
     public DbmsConnectionData(

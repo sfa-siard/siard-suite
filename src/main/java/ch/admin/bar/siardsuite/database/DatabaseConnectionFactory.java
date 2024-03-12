@@ -4,65 +4,116 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
+import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
+@Slf4j
 public class DatabaseConnectionFactory {
-  private static DatabaseConnectionFactory instance;
-  private static Connection connection;
-  private static Model model;
+    public static final DatabaseConnectionFactory INSTANCE = new DatabaseConnectionFactory();
 
-  private final DbmsConnectionData connectionData;
+    private static final AtomicReference<EstablishedConnection> CONNECTION_CACHE = new AtomicReference();
 
-  private DatabaseConnectionFactory(Model model, DbmsConnectionData connectionData) throws SQLException {
-    this.connectionData = connectionData;
-
-    DatabaseConnectionFactory.model = model;
-    val options = UserPreferences.INSTANCE.getStoredOptions();
-
-    loadDriver(connectionData.getDbms().getDriverClassName());
-
-    DriverManager.setLoginTimeout(options.getLoginTimeout());
-    connection = DriverManager.getConnection(
-            connectionData.getJdbcConnectionString(),
-            connectionData.getUser(),
-            connectionData.getPassword());
-  }
-
-  public static DatabaseConnectionFactory getInstance(Model model, DbmsConnectionData connectionData) throws SQLException {
-    if (instance == null || connection.isClosed()) {
-      instance = new DatabaseConnectionFactory(model, connectionData);
+    public DatabaseLoadService createDatabaseLoader(
+            final DbmsConnectionData connectionData,
+            final Model model,
+            final Archive archive,
+            final boolean onlyMetaData,
+            final boolean viewsAsTables
+    ) {
+        return new DatabaseLoadService(
+                () -> getOrCreateConnection(connectionData),
+                model,
+                connectionData.getDbName(),
+                archive,
+                onlyMetaData,
+                viewsAsTables);
     }
-    return instance;
-  }
 
-  public DatabaseLoadService createDatabaseLoader(final Archive archive, boolean onlyMetaData, boolean viewsAsTables) {
-    return new DatabaseLoadService(connection, model, connectionData.getDbName(), archive, onlyMetaData, viewsAsTables);
-  }
-
-  public DatabaseUploadService createDatabaseUploader(final Archive archive, final Map<String, String> schemaNameMappings) {
-    return new DatabaseUploadService(connection, archive, schemaNameMappings);
-  }
-
-  public static void disconnect() {
-    if (connection != null) {
-      try {
-        connection.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
+    @SneakyThrows
+    public DatabaseUploadService createDatabaseUploader(
+            final DbmsConnectionData connectionData,
+            final Archive archive,
+            final Map<String, String> schemaNameMappings) {
+        return new DatabaseUploadService(
+                () -> getOrCreateConnection(connectionData),
+                archive,
+                schemaNameMappings);
     }
-  }
 
-  private void loadDriver(String jdbcDriverClass) {
-    try {
-      Class.forName(jdbcDriverClass);
-    } catch (ClassNotFoundException var7) {
-      throw new RuntimeException("Driver " + jdbcDriverClass + " could not be loaded!");
+    private static Connection getOrCreateConnection(final DbmsConnectionData connectionData) {
+        return CONNECTION_CACHE.updateAndGet(nullableEstablishedConnection -> {
+            if (nullableEstablishedConnection != null) {
+                if (nullableEstablishedConnection.getDbmsConnectionData().equals(connectionData)) {
+                    // connection can be re-used
+                    log.info("Re-use previously established connection (Properties: {})", connectionData);
+                    return nullableEstablishedConnection;
+                } else {
+                    nullableEstablishedConnection.close();
+                }
+            }
+
+            try {
+                log.info("Create new connection (Properties: {})", connectionData);
+
+                loadDriver(connectionData.getDbms().getDriverClassName());
+
+                val options = UserPreferences.INSTANCE.getStoredOptions();
+                DriverManager.setLoginTimeout(options.getLoginTimeout());
+
+                val connection = DriverManager.getConnection(
+                        connectionData.getJdbcConnectionString(),
+                        connectionData.getUser(),
+                        connectionData.getPassword());
+                connection.setAutoCommit(false);
+
+                return new EstablishedConnection(connection, connectionData);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).getConnection();
     }
-  }
+
+    public static void disconnect() {
+        CONNECTION_CACHE.updateAndGet(nullableEstablishedConnection -> {
+            if (nullableEstablishedConnection != null) {
+                nullableEstablishedConnection.close();
+            }
+
+            return null;
+        });
+    }
+
+    private static void loadDriver(String jdbcDriverClass) {
+        try {
+            Class.forName(jdbcDriverClass);
+        } catch (ClassNotFoundException var7) {
+            throw new RuntimeException("Driver " + jdbcDriverClass + " could not be loaded!");
+        }
+    }
+
+    @Value
+    private static class EstablishedConnection {
+        @NonNull Connection connection;
+        @NonNull DbmsConnectionData dbmsConnectionData;
+
+        public void close() {
+            try {
+                log.info("Close previously established connection (Properties: {})", dbmsConnectionData);
+                connection.close();
+            } catch (SQLException e) {
+                log.error("Can not close established connection for properties {} cause '{}'",
+                        dbmsConnectionData,
+                        e.getMessage());
+            }
+        }
+    }
 }

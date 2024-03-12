@@ -15,6 +15,7 @@ import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXStepper;
+import io.github.palexdev.materialfx.enums.StepperToggleState;
 import javafx.fxml.FXML;
 import lombok.val;
 

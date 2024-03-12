@@ -10,12 +10,14 @@ import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import javafx.scene.control.Button;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 public class StepperInitializer {
 
@@ -58,7 +60,10 @@ public class StepperInitializer {
         toggle.stateProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if (StepperToggleState.SELECTED.equals(newValue)) {
-                        toggle.setContent(step.getViewSupplier().get().getNode());
+                        log.debug("Display step {}", step.getStepIndex());
+
+                        val loaded = step.getViewSupplier().get();
+                        toggle.setContent(loaded.getNode());
                     }
                 });
 
