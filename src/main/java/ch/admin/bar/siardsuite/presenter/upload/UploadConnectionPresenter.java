@@ -1,21 +1,25 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
-import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.database.model.Dbms;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionProperties;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
-import ch.admin.bar.siardsuite.presenter.StepperPresenter;
+import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
+import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm;
+import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
+import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.SiardEvent;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXStepper;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -26,16 +30,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.val;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DEFAULT;
 
-public class UploadConnectionPresenter extends StepperPresenter {
+public class UploadConnectionPresenter {
 
     private static final I18nKey TOOLTIP = I18nKey.of("uploadConnection.view.tooltip");
     private static final I18nKey SCHEMA_NAME_TITLE = I18nKey.of("uploadConnection.view.new.schema.name");
@@ -44,8 +48,6 @@ public class UploadConnectionPresenter extends StepperPresenter {
 
     @FXML
     public BorderPane borderPane;
-    @FXML
-    private ButtonBox buttonsBox;
     @FXML
     public MFXButton infoButton;
     @FXML
@@ -64,66 +66,58 @@ public class UploadConnectionPresenter extends StepperPresenter {
     public Label schemaValidationMsg;
 
 
-    private List<DatabaseSchema> schemas = new ArrayList<>();
+    private List<String> simpleSchemaNames;
     private final Map<String, String> schemaMap = new HashMap<>();
 
+    public void init(
+            final Dbms dbms,
+            final Archive archive,
+            final Optional<RecentDbConnection> initialValue,
+            final StepperNavigator<UploadArchiveData> navigator,
+            final ServicesFacade servicesFacade
+    ) {
+        simpleSchemaNames = ListAssembler.assemble(archive.getSchemas(), archive::getSchema).stream()
+                .map(schema -> schema.getMetaSchema().getName())
+                .collect(Collectors.toList());
 
-    @Override
-    public void init(Controller controller, RootStage stage) {
-        this.controller = controller;
-        this.stage = stage;
-    }
-
-    @Override
-    public void init(Controller controller, RootStage stage, MFXStepper stepper) {
-        this.init(controller, stage);
-
-        schemas = controller.getSiardArchive().schemas();
+        initSchemaFields();
 
         titleNewSchemaName.textProperty().bind(DisplayableText.of(SCHEMA_NAME_TITLE).bindable());
         currentNameLabel.textProperty().bind(DisplayableText.of(CURRENT_NAME).bindable());
         newNameLabel.textProperty().bind(DisplayableText.of(NEW_NAME).bindable());
-
-
         new SiardTooltip(TOOLTIP).showOnMouseOn(infoButton);
-        buttonsBox = new ButtonBox().make(DEFAULT);
+
+        val buttonsBox = new ButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
 
-        setListeners(stepper);
-    }
+        connectionForm.show(dbms);
 
-    private void setListeners(MFXStepper stepper) {
-        stepper.addEventHandler(SiardEvent.RECENT_CONNECTION_SELECTED_EVENT, event -> {
-            val recentConnection = event.getRecentConnectionData();
+        initialValue.ifPresent(recentDbConnection -> {
+            val dbmsConnectionData = recentDbConnection.mapToDbmsConnectionData();
+            final DbmsConnectionProperties properties = dbmsConnectionData.getProperties();
 
-            final Dbms dbms = recentConnection.mapToDbmsConnectionData().getDbms();
-            final DbmsConnectionProperties properties = recentConnection.mapToDbmsConnectionData().getProperties();
-
-            connectionForm.show(dbms, properties, recentConnection.getName());
+            connectionForm.show(dbms, properties, recentDbConnection.getName());
         });
 
-        stepper.addEventHandler(SiardEvent.UPLOAD_DBMS_SELECTED, event -> {
-            connectionForm.show(event.getSelectedDbms());
-            initSchemaFields();
-        });
+        buttonsBox.next()
+                .setOnAction((event) -> {
+                    val allPropsValid = connectionForm.isValid();
+                    val validSchemaFields = validSchemaFields();
 
-        buttonsBox.next().setOnAction((event) -> {
-            val allPropsValid = connectionForm.isValid();
-            val validSchemaFields = validSchemaFields();
+                    if (allPropsValid && validSchemaFields) {
+                        val connectionData = connectionForm.getConnectionData();
 
-            if (allPropsValid && validSchemaFields) {
-                val connectionData = connectionForm.getConnectionData();
+                        navigator.next(UploadArchiveData.builder()
+                                .schemaNameMappings(schemaMap)
+                                .connectionData(connectionData)
+                                .build());
+                    }
+                });
 
-                controller.updateSchemaMap(schemaMap);
-                controller.setDatabaseConnectionData(Optional.of(connectionData));
-
-                stepper.next();
-                stepper.fireEvent(new SiardEvent.DbmsConnectionDataReadyEvent(SiardEvent.UPLOAD_CONNECTION_UPDATED, connectionData));
-            }
-        });
-
-        this.buttonsBox.previous().setOnAction((event) -> stepper.previous());
-        this.buttonsBox.cancel().setOnAction((event) -> stage.openDialog(View.UPLOAD_ABORT_DIALOG));
+        buttonsBox.previous().setOnAction((event) -> navigator.previous());
+        buttonsBox.cancel().setOnAction((event) -> servicesFacade
+                .dialogs()
+                .openDialog(View.UPLOAD_ABORT_DIALOG));
     }
 
     private boolean validSchemaFields() {
@@ -154,12 +148,12 @@ public class UploadConnectionPresenter extends StepperPresenter {
     private void initSchemaFields() {
         schemaFields.getChildren().clear();
 
-        for (DatabaseSchema schema : schemas) {
+        for (String schemaName : simpleSchemaNames) {
             Label currentName = new Label();
             Label iconLabel = new Label();
             TextField newName = new TextField();
-            currentName.setText(schema.getName());
-            newName.setText(schema.getName());
+            currentName.setText(schemaName);
+            newName.setText(schemaName);
             HBox container = new HBox();
             container.setPrefSize(200.0, 48.0);
             currentName.setPrefSize(253.0, 48.0);
@@ -173,5 +167,21 @@ public class UploadConnectionPresenter extends StepperPresenter {
             HBox.setMargin(newName, new Insets(10, 0, 0, 0));
             schemaFields.getChildren().add(container);
         }
+    }
+
+    public static LoadedFxml<UploadConnectionPresenter> load(
+            final ArchiveAdder<DbmsWithInitialValue> data,
+            final StepperNavigator<UploadArchiveData> navigator,
+            final ServicesFacade servicesFacade
+    ) {
+        val loaded = FXMLLoadHelper.<UploadConnectionPresenter>load("fxml/upload/upload-db-connection.fxml");
+        loaded.getController().init(
+                data.getData().getDbms(),
+                data.getArchive(),
+                data.getData().getInitialValue(),
+                navigator,
+                servicesFacade);
+
+        return loaded;
     }
 }

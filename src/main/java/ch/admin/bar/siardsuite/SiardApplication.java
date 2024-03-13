@@ -5,16 +5,20 @@ import ch.admin.bar.siardsuite.view.RootStage;
 import ch.enterag.utils.ProgramInfo;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
+@Slf4j
 public class SiardApplication extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
+    log.info("Application started");
+
     Model model = new Model();
     Controller controller = new Controller(model);
     // trial to fix the bad font rendering issue from javafx

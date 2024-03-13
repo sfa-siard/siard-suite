@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.database.model;
 
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.Value;
 
 import java.util.Optional;
@@ -13,7 +14,10 @@ public class ServerBasedDbmsConnectionProperties implements DbmsConnectionProper
     @NonNull String port;
     @NonNull String dbName;
     @NonNull String user;
-    @NonNull String password;
+
+    @NonNull
+    @ToString.Exclude
+    String password;
 
     @Builder.Default
     @NonNull

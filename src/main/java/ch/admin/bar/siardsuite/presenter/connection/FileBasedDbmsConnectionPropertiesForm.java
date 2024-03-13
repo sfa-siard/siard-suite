@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.presenter.connection;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
-import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.presenter.connection.fields.FileChooserFormField;
 import ch.admin.bar.siardsuite.presenter.connection.fields.StringFormField;
 import ch.admin.bar.siardsuite.util.Validator;

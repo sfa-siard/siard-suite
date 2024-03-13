@@ -56,6 +56,7 @@ public class OpenArchiveBrowser extends Presenter {
         });
 
         this.loadedFxml = GenericArchiveBrowserPresenter.load(
+                null,
                 stage,
                 DisplayableText.of(TITLE),
                 DisplayableText.of(TEXT),

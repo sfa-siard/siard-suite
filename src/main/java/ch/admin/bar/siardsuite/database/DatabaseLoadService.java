@@ -9,11 +9,12 @@ import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
+import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 public class DatabaseLoadService extends Service<ObservableList<Pair<String, Long>>> {
 
-  private final Connection connection;
+  private final Supplier<Connection> connectionSupplier;
   private final Model model;
   private final String dbName;
   private final Archive archive;
@@ -22,6 +23,6 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
 
   @Override
   protected Task<ObservableList<Pair<String, Long>>> createTask() {
-    return new DatabaseLoadTask(connection, model, dbName, archive, onlyMetaData, viewsAsTables);
+    return new DatabaseLoadTask(connectionSupplier, model, dbName, archive, onlyMetaData, viewsAsTables);
   }
 }

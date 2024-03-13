@@ -6,7 +6,6 @@ import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.FileUtils;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OS;
-import ch.admin.bar.siardsuite.util.SiardEvent;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.enterag.utils.ProgramInfo;
 import ch.enterag.utils.io.SpecialFolder;
@@ -88,7 +87,6 @@ public class RootPresenter extends Presenter {
             item.setOnAction(event -> {
                 RadioMenuItem cmi = (RadioMenuItem) event.getSource();
                 I18n.setLocale(new Locale(cmi.getId()));
-                stage.fireEvent(new SiardEvent(SiardEvent.UPDATE_LANGUAGE_EVENT));
             });
             item.setToggleGroup(items);
         });

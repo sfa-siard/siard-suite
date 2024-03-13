@@ -5,8 +5,6 @@ import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
 import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
 import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
-import ch.admin.bar.siardsuite.util.Validator;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import lombok.val;
 
 import java.io.File;

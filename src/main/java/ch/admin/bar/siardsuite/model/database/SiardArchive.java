@@ -5,8 +5,6 @@ import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.facades.ArchiveFacade;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
-import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
-import ch.admin.bar.siardsuite.visitor.ArchiveVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.enterag.utils.io.DiskFile;
 import lombok.Getter;
@@ -85,24 +83,6 @@ public class SiardArchive {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    public void shareObject(ArchiveVisitor visitor) {
-        if (archive != null) {
-            visitor.visit(archive);
-        }
-    }
-
-    public void shareProperties(ArchiveVisitor visitor) {
-        if (archive != null) {
-            visitor.visit(archive.getMetaData());
-        }
-    }
-
-    public void shareProperties(SiardArchiveMetaDataDetailsVisitor visitor) {
-        if (metaData != null) {
-            metaData.accept(visitor);
         }
     }
 

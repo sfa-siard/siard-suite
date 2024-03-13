@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.model.database;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.MetaData;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
-import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import lombok.Getter;
 import lombok.Setter;
@@ -85,26 +84,6 @@ public class SiardArchiveMetaData {
         archiverContact = metaData.getArchiverContact();
         lobFolder = metaData.getLobFolder();
     }
-
-    public void accept(SiardArchiveMetaDataDetailsVisitor visitor) {
-        visitor.visit(
-                siardFormatVersion,
-                databaseName,
-                databaseProduct,
-                databaseConnectionURL,
-                databaseUsername,
-                databaseDescription,
-                dataOwner,
-                dataOriginTimespan,
-                archivingDate,
-                archiverName,
-                archiverContact,
-                targetArchive,
-                lobFolder,
-                viewsAsTables
-        );
-    }
-
 
     public void shareObject(SiardArchiveMetaDataVisitor visitor) {
         visitor.visit(this);

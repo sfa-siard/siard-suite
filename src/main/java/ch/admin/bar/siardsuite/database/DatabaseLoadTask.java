@@ -5,26 +5,22 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.model.Model;
-import ch.admin.bar.siardsuite.model.database.SiardArchiveMetaData;
-import ch.admin.bar.siardsuite.presenter.tree.SiardArchiveMetaDataDetailsVisitor;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
 import ch.enterag.utils.background.Progress;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-import java.io.File;
-import java.net.URI;
 import java.sql.Connection;
-import java.time.LocalDate;
+import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress {
 
-    private final Connection connection;
+    private final Supplier<Connection> connectionSupplier;
     private final Model model;
     private final String dbName;
     private final Archive archive;
@@ -33,9 +29,9 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
 
     @Override
     protected ObservableList<Pair<String, Long>> call() throws Exception {
+        val connection = connectionSupplier.get();
 
         ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
-        connection.setAutoCommit(false);
         int timeout = UserPreferences.INSTANCE.getStoredOptions().getQueryTimeout();
 
         archive.getMetaData().setDbName(dbName);

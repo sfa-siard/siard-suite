@@ -1,15 +1,12 @@
-package ch.admin.bar.siardsuite.view.skins;
+package ch.admin.bar.siardsuite.component.stepper.skins;
 
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.SiardEvent;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.utils.TextUtils;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 
 public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
   private final HBox container;
@@ -18,7 +15,7 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
 
   private Boolean visible;
 
-  public CustomStepperToggleSkin(MFXStepperToggle stepperToggle, Boolean visible, Stage stage) {
+  public CustomStepperToggleSkin(MFXStepperToggle stepperToggle, Boolean visible) {
     super(stepperToggle);
       this.visible = visible;
       this.label = new TextField();
@@ -35,21 +32,22 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
         this.container.setMinHeight(52.0);
         this.label.setLayoutY(0);
         this.label.setMinHeight(52.0);
-        this.getChildren().addAll(new Node[]{this.container});
-        this.setListeners(stage);
+        this.getChildren().addAll(this.container);
+        this.setListeners();
       } else {
         this.icon.setMaxWidth(0);
         this.container = new HBox();
       }
-
   }
 
-  private void setListeners(Stage stage) {
+  public void refresh() {
+    layoutChildren(0,0,0,0);
+  }
+
+  private void setListeners() {
     MFXStepperToggle stepperToggle = this.getSkinnable();
 
     this.label.visibleProperty().bind(stepperToggle.textProperty().isEmpty().not());
-
-    stage.addEventHandler(SiardEvent.UPDATE_LANGUAGE_EVENT, event -> layoutChildren(0,0,0,0));
   }
 
   protected double computeMinHeight(double width, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -71,8 +69,6 @@ public class CustomStepperToggleSkin extends SkinBase<MFXStepperToggle> {
     this.label.setTranslateX(0.0);
     this.label.resizeRelocate(lx, 0.0, lw, lh);
   }
-
-
 }
 
 

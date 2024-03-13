@@ -39,7 +39,7 @@ public class UploadAbortDialogPresenter extends DialogPresenter {
         I18n.bind(confirm.textProperty(), "uploadAbortDialog.confirm");
 
         confirm.setOnAction(event -> {
-            controller.cancelUpload();
+            controller.cancelRunning();
             stage.closeDialog();
             stage.navigate(View.START);
         });

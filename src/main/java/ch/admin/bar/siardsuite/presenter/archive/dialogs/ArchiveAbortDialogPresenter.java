@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.presenter.archive;
+package ch.admin.bar.siardsuite.presenter.archive.dialogs;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
@@ -45,7 +45,7 @@ public class ArchiveAbortDialogPresenter extends DialogPresenter {
         cancelArchiveButton.setManaged(true);
 
         cancelArchiveButton.setOnAction(event -> {
-            controller.cancelDownload();
+            controller.cancelRunning();
             stage.closeDialog();
             stage.navigate(View.START);
         });
