@@ -87,12 +87,23 @@ public class RootStage extends Stage implements ErrorHandler, Dialogs {
   }
 
   public void navigate(View view) {
-    setCenter(rootPane, view);
+    val loaded = previouslyLoadedView.updateAndGet(previouslyLoadedFxml -> {
+      if (previouslyLoadedFxml != null) {
+        CastHelper.tryCast(previouslyLoadedFxml.getController(), Destructible.class)
+                .ifPresent(Destructible::destruct);
+      }
+
+      return view.getViewCreator().apply(controller, this);
+    });
+
+    rootPane.setCenter(loaded.getNode());
   }
 
   @Override
   public void openDialog(View view) {
-    setCenter(dialogPane, view);
+    val loaded = view.getViewCreator().apply(controller, this);
+
+    dialogPane.setCenter(loaded.getNode());
     dialogPane.setVisible(true);
   }
 
