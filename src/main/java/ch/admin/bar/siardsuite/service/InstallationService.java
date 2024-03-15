@@ -1,19 +1,20 @@
 package ch.admin.bar.siardsuite.service;
 
+import ch.admin.bar.siard2.cmd.utils.ResourcesLoader;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.util.OS;
 import ch.enterag.utils.io.SpecialFolder;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import mslinks.ShellLink;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 @Slf4j
@@ -22,41 +23,69 @@ public class InstallationService {
     public void installToDesktop() throws IOException {
         log.info("Install SIARD-Suite to desktop");
 
-        String java = OS.IS_WINDOWS ? "javaw.exe" : "java";
+        File javaExecutable = findJavaExecutable();
 
-        String javaHome = System.getProperty("java.home"); // TODO: what happens if java home is not set?
-        File javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
-        String applicationFolder = new File(SiardApplication.class.getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .getPath()).getParent();
-        log.info("Got an application folder: {}", applicationFolder);
+        val applicationFolder = findAppFile().getParent();
 
-        Properties props = new Properties();
-        props.load(SiardApplication.class.getResourceAsStream("version.properties"));
-        String version = (String) props.get("version");
-        log.info("Got an application version: {}", version);
-        List<String> arguments = Arrays.asList(
+        val version = findAppVersion();
+
+        val arguments = Arrays.asList(
                 "-Xmx1024m",
                 "-Dsun.awt.disablegrab=true",
                 "-jar",
                 applicationFolder + File.separator + "siard-suite-" + version + ".jar"
         );
 
-        InputStream resourceAsStream = SiardApplication.class.getResourceAsStream("icons/archive_red.ico");
-        Files.copy(resourceAsStream,
-                Paths.get(applicationFolder + File.separator + "archive_red.ico"),
-                StandardCopyOption.REPLACE_EXISTING);
-        String description = "SIARD Suite: view and modify archived data from relational databases";
+        try (val inputStream = ResourcesLoader.loadResource("ch/admin/bar/siardsuite/icons/archive_red.ico")) {
+            Files.copy(inputStream,
+                    Paths.get(applicationFolder + File.separator + "archive_red.ico"),
+                    StandardCopyOption.REPLACE_EXISTING);
+        }
 
-        ShellLink shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
+        val shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
         shellLink.setCMDArgs(String.join(" ",
-                arguments)); // TODO: Hartwig used ~20 lines to format the arguments. Why?
+                arguments));
         shellLink.setWorkingDir(applicationFolder);
         shellLink.setIconLocation(applicationFolder + File.separator + "archive_red.ico");
-        shellLink.setName(description); // TODO: why set the name to description?
+        shellLink.setName("SIARD Suite: view and modify archived data from relational databases");
         shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite-" + version + ".lnk");
 
         log.info("Installation successful");
+    }
+
+    private static File findAppFile() {
+        val appFile = new File(SiardApplication.class.getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .getPath());
+
+        log.info("Location of application: {}", appFile.getAbsolutePath());
+
+        return appFile;
+    }
+
+    private static String findAppVersion() throws IOException {
+        val props = new Properties();
+        props.load(ResourcesLoader.loadResource("ch/admin/bar/siardsuite/version.properties"));
+
+        val version = Optional.ofNullable(props.get("version"))
+                .map(Object::toString)
+                .orElseThrow(() -> new IllegalStateException("Failed to read version from version.properties"));
+
+        log.info("Got an application version: {}", version);
+
+        return version;
+    }
+
+    private static File findJavaExecutable() {
+        val java = OS.IS_WINDOWS ? "javaw.exe" : "java";
+
+        return Optional.ofNullable(System.getProperty("java.home"))
+                .map(javaHome -> {
+                    val javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
+                    log.info("Java executable found at {}", javaExecutable.getAbsolutePath());
+                    return javaExecutable;
+                })
+                .orElseThrow(() -> new IllegalStateException("Can not find java executable"));
     }
 }

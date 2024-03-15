@@ -6,7 +6,6 @@ import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;

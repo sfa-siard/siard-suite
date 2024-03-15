@@ -5,7 +5,6 @@ import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import lombok.NonNull;
 import lombok.Value;
 
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Value
