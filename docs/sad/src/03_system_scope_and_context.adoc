@@ -5,7 +5,17 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 === Business Context
 
-image::../diagrams/generated/context.png[]
+[mermaid]
+----
+graph LR
+    db[(DB)]
+    suite
+
+
+
+
+----
+
 
 **<Diagram or Table>**
 
