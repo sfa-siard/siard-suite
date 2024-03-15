@@ -14,16 +14,6 @@ public class Controller {
 
     private SiardArchive siardArchive = new SiardArchive();
 
-    @Setter
-    @Getter
-    @NonNull
-    private Optional<RecentDbConnection> recentDatabaseConnection = Optional.empty();
-
-    @Setter
-    @Getter
-    @NonNull
-    private Optional<DbmsConnectionData> databaseConnectionData = Optional.empty();
-
     public void setSiardArchive(String name, Archive archive) {
         setSiardArchive(name, archive, false);
     }

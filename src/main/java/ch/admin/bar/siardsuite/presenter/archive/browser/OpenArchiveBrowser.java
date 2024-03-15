@@ -3,8 +3,10 @@ package ch.admin.bar.siardsuite.presenter.archive.browser;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.Presenter;
+import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -13,7 +15,6 @@ import javafx.scene.Node;
 import lombok.val;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.OPEN_PREVIEW;
 
@@ -30,19 +31,25 @@ public class OpenArchiveBrowser extends Presenter {
         val dialogs = ServicesFacade.INSTANCE.dialogs(); // TODO
         val navigator = ServicesFacade.INSTANCE.navigator(); // TODO
         val archiveHandler = ServicesFacade.INSTANCE.archiveHandler(); // TODO
+        val siardArchive = controller.getSiardArchive();
 
-        val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), false);
+        val archiveBrowserView = new TreeBuilder(siardArchive, false);
 
         val buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
-        buttonsBox.cancel().setOnAction(event -> {
-            dialogs.openRecentConnectionsDialogForUploading(
-                    () -> navigator.navigate(View.UPLOAD_STEPPER),
-                    dbConnection -> {
-                        controller.setRecentDatabaseConnection(Optional.of(dbConnection));
-                        navigator.navigate(View.UPLOAD_STEPPER);
-                    }
-            );
-        });
+        buttonsBox.cancel().setOnAction(event -> dialogs.open(
+                View.RECENT_CONNECTIONS_FOR_UPLOAD,
+                optionalRecentDbConnection -> OptionalHelper.when(optionalRecentDbConnection)
+                        .isPresent(recentDbConnection -> navigator.navigate(
+                                View.UPLOAD_STEPPER_WITH_RECENT_CONNECTION,
+                                new Tuple<>(
+                                        siardArchive.getArchive(),
+                                        recentDbConnection
+                                )))
+                        .orElse(() -> navigator.navigate(
+                                View.UPLOAD_STEPPER,
+                                siardArchive.getArchive()))
+
+        ));
         buttonsBox.previous().setOnAction(event -> dialogs.openDialog(View.EXPORT_SELECT_TABLES));
         buttonsBox.next().setOnAction(event -> {
             try {

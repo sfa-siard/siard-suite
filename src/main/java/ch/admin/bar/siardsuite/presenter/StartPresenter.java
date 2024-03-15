@@ -6,7 +6,9 @@ import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.animations.Animation;
@@ -140,17 +142,14 @@ public class StartPresenter {
     }
 
     private void initializeWorkflow(Workflow workflow) {
-        controller.setRecentDatabaseConnection(Optional.empty());
-
         switch (workflow) {
             case ARCHIVE:
-                dialogs.openRecentConnectionsDialogForArchiving(
-                        () -> navigator.navigate(View.ARCHIVE_STEPPER),
-                        dbConnection -> {
-                            controller.setRecentDatabaseConnection(Optional.of(dbConnection));
-                            navigator.navigate(View.ARCHIVE_STEPPER);
-                        }
-                );
+                dialogs.open(
+                        View.RECENT_CONNECTIONS_FOR_ARCHIVING,
+                        optionalRecentDbConnection -> navigator.navigate(
+                                View.ARCHIVE_STEPPER,
+                                optionalRecentDbConnection
+                        ));
                 break;
             case OPEN:
                 dialogs.open(
@@ -171,16 +170,18 @@ public class StartPresenter {
             case UPLOAD:
                 dialogs.open(
                         View.OPEN_SIARD_ARCHIVE_DIALOG,
-                        (file, archive) -> {
-                            controller.setSiardArchive(file.getName(), archive);
-                            dialogs.openRecentConnectionsDialogForUploading(
-                                    () -> navigator.navigate(View.UPLOAD_STEPPER),
-                                    dbConnection -> {
-                                        controller.setRecentDatabaseConnection(Optional.of(dbConnection));
-                                        navigator.navigate(View.UPLOAD_STEPPER);
-                                    }
-                            );
-                        });
+                        (file, archive) -> dialogs.open(
+                                View.RECENT_CONNECTIONS_FOR_UPLOAD,
+                                optionalRecentDbConnection -> OptionalHelper.when(optionalRecentDbConnection)
+                                        .isPresent(recentDbConnection -> navigator.navigate(
+                                                View.UPLOAD_STEPPER_WITH_RECENT_CONNECTION,
+                                                new Tuple<>(archive, recentDbConnection)
+                                        ))
+                                        .orElse(() -> navigator.navigate(
+                                                View.UPLOAD_STEPPER,
+                                                archive
+                                        ))
+                        ));
                 break;
         }
     }

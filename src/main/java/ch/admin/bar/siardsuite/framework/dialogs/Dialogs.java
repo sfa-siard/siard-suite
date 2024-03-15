@@ -84,42 +84,4 @@ public class Dialogs implements DialogCloser {
 
         rootStage.displayDialog(loaded.getNode());
     }
-
-    /**
-     * Opens a dialog for selecting recent database connections for archiving.
-     *
-     * @param onNewConnection            The callback to be invoked when creating a new connection.
-     * @param onRecentConnectionSelected The callback to be invoked with the selected recent database connection.
-     */
-    public void openRecentConnectionsDialogForArchiving(
-            final Runnable onNewConnection,
-            final Consumer<RecentDbConnection> onRecentConnectionSelected
-    ) {
-        val loaded = ArchiveRecentConnectionsDialogPresenter.loadForArchiving(
-                rootStage::closeDialog,
-                onNewConnection,
-                onRecentConnectionSelected
-        );
-
-        rootStage.displayDialog(loaded.getNode());
-    }
-
-    /**
-     * Opens a dialog for selecting recent database connections for uploading.
-     *
-     * @param onNewConnection            The callback to be invoked when creating a new connection.
-     * @param onRecentConnectionSelected The callback to be invoked with the selected recent database connection.
-     */
-    public void openRecentConnectionsDialogForUploading(
-            final Runnable onNewConnection,
-            final Consumer<RecentDbConnection> onRecentConnectionSelected
-    ) {
-        val loaded = ArchiveRecentConnectionsDialogPresenter.loadForUpload(
-                rootStage::closeDialog,
-                onNewConnection,
-                onRecentConnectionSelected
-        );
-
-        rootStage.displayDialog(loaded.getNode());
-    }
 }

@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive.dialogs;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
@@ -18,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import lombok.val;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -151,6 +153,44 @@ public class ArchiveRecentConnectionsDialogPresenter {
                 dialogCloser,
                 onNewConnection,
                 onRecentConnectionSelected,
+                DisplayableText.of(ARCHIVE_TITLE),
+                DisplayableText.of(ARCHIVE_TEXT));
+
+        return loaded;
+    }
+
+
+
+
+
+
+
+    public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForUpload(
+            final Consumer<Optional<RecentDbConnection>> onRecentConnectionSelected,
+            final ServicesFacade servicesFacade
+    ) {
+        val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
+
+        loaded.getController().init(
+                servicesFacade.dialogs(),
+                () -> onRecentConnectionSelected.accept(Optional.empty()),
+                recentDbConnection -> onRecentConnectionSelected.accept(Optional.of(recentDbConnection)),
+                DisplayableText.of(UPLOAD_TITLE),
+                DisplayableText.of(UPLOAD_TEXT));
+
+        return loaded;
+    }
+
+    public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForArchiving(
+            final Consumer<Optional<RecentDbConnection>> onRecentConnectionSelected,
+            final ServicesFacade servicesFacade
+    ) {
+        val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
+
+        loaded.getController().init(
+                servicesFacade.dialogs(),
+                () -> onRecentConnectionSelected.accept(Optional.empty()),
+                recentDbConnection -> onRecentConnectionSelected.accept(Optional.of(recentDbConnection)),
                 DisplayableText.of(ARCHIVE_TITLE),
                 DisplayableText.of(ARCHIVE_TEXT));
 

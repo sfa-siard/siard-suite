@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.framework.general.Destructible;
@@ -10,20 +9,19 @@ import ch.admin.bar.siardsuite.framework.steps.StepChain;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
 import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.presenter.Presenter;
-import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import javafx.fxml.FXML;
 import lombok.val;
 
 import java.util.Optional;
 
-public class ArchiveStepperPresenter extends Presenter implements Destructible {
+public class ArchiveStepperPresenter implements Destructible {
 
     private static final I18nKey SELECT_DBMS_TITLE = I18nKey.of("archive.step.name.dbms");
     private static final I18nKey DB_CONNECTION_TITLE = I18nKey.of("archive.step.name.databaseConnectionURL");
@@ -55,9 +53,11 @@ public class ArchiveStepperPresenter extends Presenter implements Destructible {
     private DbInteractionService dbInteractionService;
     private StepChain chain;
 
-    @Override
-    public void init(Controller controller, RootStage stage) {
-        dbInteractionService = ServicesFacade.INSTANCE.dbInteractionService(); // TODO
+    public void init(
+            final Optional<RecentDbConnection> recentDbConnection,
+            final DbInteractionService dbInteractionService
+    ) {
+        this.dbInteractionService = dbInteractionService;
 
         chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,
@@ -80,20 +80,25 @@ public class ArchiveStepperPresenter extends Presenter implements Destructible {
 
         stepper.init(chain.getSteps());
 
-        controller.getRecentDatabaseConnection()
-                .ifPresent(recentConnection -> {
-                    // skip select dbms step
-                    chain.getNavigatorOfStep(SELECT_DBMS)
-                            .next(DbmsWithInitialValue.builder()
-                                    .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
-                                    .initialValue(Optional.of(recentConnection))
-                                    .build());
-                });
+        recentDbConnection.ifPresent(recentConnection -> {
+            // skip select dbms step
+            chain.getNavigatorOfStep(SELECT_DBMS)
+                    .next(DbmsWithInitialValue.builder()
+                            .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
+                            .initialValue(Optional.of(recentConnection))
+                            .build());
+        });
     }
 
-    public static LoadedFxml<ArchiveStepperPresenter> load(Controller controller, RootStage stage) {
+    public static LoadedFxml<ArchiveStepperPresenter> load(
+            final Optional<RecentDbConnection> data,
+            final ServicesFacade servicesFacade
+    ) {
         val loaded = FXMLLoadHelper.<ArchiveStepperPresenter>load("fxml/archive/archive-stepper.fxml");
-        loaded.getController().init(controller, stage);
+        loaded.getController().init(
+                data,
+                servicesFacade.dbInteractionService()
+        );
 
         return loaded;
     }
