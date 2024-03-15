@@ -1,7 +1,8 @@
 package ch.admin.bar.siardsuite.service;
 
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siard2.api.Schema;
+import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,11 @@ import java.util.stream.Collectors;
 public class TableExporterService {
 
     @NonNull
-    private final List<DatabaseSchema> schemas;
+    private final List<Schema> schemas;
 
     @NonNull
     @Builder.Default
-    private final Predicate<DatabaseTable> shouldBeExportedFilter = databaseTable -> true;
+    private final Predicate<Table> shouldBeExportedFilter = databaseTable -> true;
 
     @NonNull
     private final File exportDir;
@@ -39,8 +40,8 @@ public class TableExporterService {
         }
     }
 
-    private void export(DatabaseSchema schema) throws IOException {
-        val filtered = schema.getTables().stream()
+    private void export(Schema schema) throws IOException {
+        val filtered = ListAssembler.assemble(schema.getTables(), schema::getTable).stream()
                 .filter(shouldBeExportedFilter)
                 .collect(Collectors.toList());
 
@@ -49,12 +50,12 @@ public class TableExporterService {
         }
     }
 
-    private void export(DatabaseTable table) throws IOException {
-        File destination = new File(exportDir.getAbsolutePath(), table.getName() + ".html");
+    private void export(Table table) throws IOException {
+        File destination = new File(exportDir.getAbsolutePath(), table.getMetaTable().getName() + ".html");
         File lobFolder = new File(exportDir, lobsDirName);
 
         try (OutputStream outPutStream = Files.newOutputStream(destination.toPath())) {
-            table.getTable().exportAsHtml(outPutStream, lobFolder);
+            table.exportAsHtml(outPutStream, lobFolder);
         }
     }
 }

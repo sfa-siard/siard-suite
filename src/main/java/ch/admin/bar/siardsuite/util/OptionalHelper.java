@@ -11,12 +11,33 @@ public class OptionalHelper {
     /**
      * Helper method, because the ifPresentOrElse-method on an {@link Optional} is not available in Java 8
      */
-    public static <T> void ifPresentOrElse(final Optional<T> optional, Consumer<? super T> action, Runnable emptyAction) {
+    public static <T> void ifPresentOrElse(final Optional<T> optional, Consumer<T> action, Runnable emptyAction) {
         if (optional.isPresent()) {
             action.accept(optional.get());
         } else {
             emptyAction.run();
         }
+    }
+
+    /**
+     * Helper method, because the ifPresentOrElse-method on an {@link Optional} is not available in Java 8
+     */
+    public static <T> IsPresent<T> when(final Optional<T> optional) {
+        return consumer ->
+            runnable ->
+                ifPresentOrElse(
+                        optional,
+                        consumer,
+                        runnable
+                );
+    }
+
+    public interface IsPresent<T> {
+        OrElse isPresent(Consumer<T> present);
+    }
+
+    public interface OrElse {
+        void orElse(Runnable runnable);
     }
 
     /**

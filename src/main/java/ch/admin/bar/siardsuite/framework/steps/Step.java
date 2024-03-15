@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
@@ -17,7 +17,7 @@ public class Step {
     int stepIndex;
     @NonNull StepDefinition definition;
     @NonNull StepperNavigator navigator;
-    @NonNull Supplier<LoadedFxml> viewSupplier;
+    @NonNull Supplier<LoadedView> viewSupplier;
 
     @NonNull
     @Singular

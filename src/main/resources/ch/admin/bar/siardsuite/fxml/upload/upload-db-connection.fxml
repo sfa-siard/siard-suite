@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm?>
+<?import ch.admin.bar.siardsuite.ui.presenter.connection.ConnectionForm?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -13,7 +13,7 @@
             stylesheets="@../../css/root.css"
             xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadConnectionPresenter"
+            fx:controller="ch.admin.bar.siardsuite.ui.presenter.upload.UploadConnectionPresenter"
             maxHeight="1.7976931348623157E308"
             maxWidth="1.7976931348623157E308">
     <BorderPane style="-fx-background-color: white"

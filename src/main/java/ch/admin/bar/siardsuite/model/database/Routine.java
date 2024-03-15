@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.MetaParameter;
 import ch.admin.bar.siard2.api.MetaRoutine;
-import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import lombok.Getter;
 import lombok.Setter;
 

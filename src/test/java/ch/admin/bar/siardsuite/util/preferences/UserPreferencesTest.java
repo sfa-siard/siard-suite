@@ -1,5 +1,10 @@
 package ch.admin.bar.siardsuite.util.preferences;
 
+import ch.admin.bar.siardsuite.service.preferences.Options;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.service.preferences.RecentFile;
+import ch.admin.bar.siardsuite.service.preferences.StorageData;
+import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.Test;

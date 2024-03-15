@@ -1,40 +1,51 @@
 package ch.admin.bar.siardsuite.framework.navigation;
 
-import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.Workflow;
-import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.ViewDisplay;
+import ch.admin.bar.siardsuite.framework.hooks.HooksCaller;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 
 /**
  * Navigator class for controlling navigation within the application.
  */
+@Slf4j
 @RequiredArgsConstructor
 public class Navigator {
 
-    private final Controller controller;
-    private final RootStage stage;
+    private final ViewDisplay viewDisplay;
+    private final ServicesFacade servicesFacade;
 
-    /**
-     * Initializes the specified workflow.
-     */
-    public void initializeWorkflow(Workflow workflow) {
-        controller.initializeWorkflow(workflow, stage);
+    private final HooksCaller hooksCaller = new HooksCaller();
+
+    public void navigate(SimpleNavigationTarget target) {
+        val nextView = target.getViewSupplier().apply(servicesFacade);
+
+        log.info("Navigate {}->{} without data",
+                hooksCaller.getPreviouslyLoadedView()
+                        .map(loadedView -> loadedView.getController().getClass().getSimpleName())
+                        .orElse("n/a"),
+                nextView.getController().getClass().getSimpleName());
+
+        navigate(nextView);
     }
 
-    /**
-     * Opens the specified SIARD archive in a browser view.
-     */
-    public void openArchive(Archive archive) {
-        controller.setSiardArchive(archive.getFile().getName(), archive);
-        stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+    public <T> void navigate(NavigationTarget<T> target, T data) {
+        val nextView = target.getViewSupplier().apply(data, servicesFacade);
+
+        log.info("Navigate {}->{} with data {}",
+                hooksCaller.getPreviouslyLoadedView()
+                        .map(loadedView -> loadedView.getController().getClass().getSimpleName())
+                        .orElse(""),
+                nextView.getController().getClass().getSimpleName(),
+                data);
+
+        navigate(nextView);
     }
 
-    /**
-     * Navigates to the specified view.
-     */
-    public void navigate(View view) {
-        stage.navigate(view);
+    private void navigate(final LoadedView loadedView) {
+        viewDisplay.displayView(hooksCaller.nextView(loadedView).getNode());
     }
 }

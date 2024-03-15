@@ -23,6 +23,10 @@ public final class CastHelper {
         return t -> tryCast(t, type);
     }
 
+    public static <I, O> Function<I, Stream<O>> tryCastInStream(final Class<O> type) {
+        return t -> tryCastWithStream(t, type);
+    }
+
     /**
      * Helper method, because the stream-method on an {@link Optional} is not available in Java 8
      */
