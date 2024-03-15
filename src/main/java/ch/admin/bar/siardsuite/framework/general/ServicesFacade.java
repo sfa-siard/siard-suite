@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
+import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.view.ErrorHandler;
 import ch.admin.bar.siardsuite.view.RootStage;
 import lombok.Setter;
@@ -54,17 +55,6 @@ public class ServicesFacade {
     }
 
     /**
-     * Returns the legacy controller instance.
-     *
-     * @deprecated This method is deprecated and should not be used. It exists only for compatibility
-     * reasons  and will be removed in further releases.
-     */
-    @Deprecated
-    public Controller controller() {
-        return controller;
-    }
-
-    /**
      * Returns the error handler for handling application errors.
      */
     public ErrorHandler errorHandler() {
@@ -74,5 +64,9 @@ public class ServicesFacade {
 
     public ArchiveHandler archiveHandler() {
         return new ArchiveHandler();
+    }
+
+    public InstallationService installationService() {
+        return new InstallationService();
     }
 }

@@ -1,41 +1,38 @@
 package ch.admin.bar.siardsuite.presenter;
 
-import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.util.FileUtils;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.view.ErrorHandler;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.enterag.utils.ProgramInfo;
-import ch.enterag.utils.io.SpecialFolder;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.stage.WindowEvent;
 import lombok.val;
-import mslinks.ShellLink;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 
-public class RootPresenter extends Presenter {
+public class RootPresenter {
 
     @FXML
     public Menu menuItemLanguage;
@@ -55,23 +52,25 @@ public class RootPresenter extends Presenter {
     public Label applicationLabel;
 
     private Dialogs dialogs;
+    private ErrorHandler errorHandler;
+    private InstallationService installationService;
+    private RootStage stage;
 
-    public void init(Controller controller, RootStage stage) {
-        this.controller = controller;
+    public void init(
+            Dialogs dialogs,
+            InstallationService installationService,
+            ErrorHandler errorHandler,
+            RootStage stage
+    ) {
+        this.dialogs = dialogs;
+        this.installationService = installationService;
+        this.errorHandler = errorHandler;
         this.stage = stage;
-        this.dialogs = ServicesFacade.INSTANCE.dialogs(); // TODO
-
-        allowStageRepositioning(windowHeader);
 
         I18n.bind(stage.titleProperty(), "window.title", ProgramInfo.getProgramInfo().getVersion());
         I18n.bind(applicationLabel, "window.title", ProgramInfo.getProgramInfo().getVersion());
 
         initMenu();
-
-        stage.setOnCloseRequest(t -> {
-            Platform.exit();
-            System.exit(0);
-        });
     }
 
     private void initMenu() {
@@ -104,7 +103,7 @@ public class RootPresenter extends Presenter {
         });
         this.menuItemInfo.setOnAction(event -> this.dialogs.open(View.INFO_DIALOG));
         this.menuItemOptions.setOnAction(event -> this.dialogs.open(View.OPTION_DIALOG));
-        this.menuItemInstall.setOnAction(this::installToDesktop);
+        this.menuItemInstall.setOnAction(event -> errorHandler.wrap(installationService::installToDesktop));
         this.helpButton.setOnAction(event -> {
             try {
                 File p = new File("user-manual.pdf");
@@ -122,58 +121,17 @@ public class RootPresenter extends Presenter {
         });
     }
 
-    private void installToDesktop(ActionEvent actionEvent) {
-        try {
-
-            String java = OS.IS_WINDOWS ? "javaw.exe" : "java";
-
-            String javaHome = System.getProperty("java.home"); // TODO: what happens if java home is not set?
-            File javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
-            String applicationFolder = new File(SiardApplication.class.getProtectionDomain()
-                                                                      .getCodeSource()
-                                                                      .getLocation()
-                                                                      .getPath()).getParent();
-            System.out.println("got an application folder: " + applicationFolder);
-
-            Properties props = new Properties();
-            props.load(SiardApplication.class.getResourceAsStream("version.properties"));
-            String version = (String) props.get("version");
-            System.out.println("got an application version: " + version);
-            List<String> arguments = Arrays.asList(new String[]{
-                    "-Xmx1024m",
-                    "-Dsun.awt.disablegrab=true",
-                    "-jar",
-                    applicationFolder + File.separator + "siard-suite-" + version + ".jar"
-            });
-
-            InputStream resourceAsStream = SiardApplication.class.getResourceAsStream("icons/archive_red.ico");
-            Files.copy(resourceAsStream,
-                       Paths.get(applicationFolder + File.separator + "archive_red.ico"),
-                       StandardCopyOption.REPLACE_EXISTING);
-            String description = "SIARD Suite: view and modify archived data from relational databases";
-
-            ShellLink shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
-            shellLink.setCMDArgs(String.join(" ",
-                                             arguments)); // TODO: Hartwig used ~20 lines to format the arguments. Why?
-            shellLink.setWorkingDir(applicationFolder);
-            shellLink.setIconLocation(applicationFolder + File.separator + "archive_red.ico");
-            shellLink.setName(description); // TODO: why set the name to description?
-            shellLink.saveTo(SpecialFolder.getDesktopFolder() + File.separator + "SIARD Suite-" + version + ".lnk");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public static LoadedFxml<RootPresenter> load(
-            final Controller controller,
-            final RootStage rootStage
+            final ServicesFacade servicesFacade,
+            final RootStage stage
     ) {
         val loaded = FXMLLoadHelper.<RootPresenter>load("fxml/root.fxml");
         loaded.getController().init(
-                controller,
-                rootStage);
+                servicesFacade.dialogs(),
+                servicesFacade.installationService(),
+                servicesFacade.errorHandler(),
+                stage
+        );
 
         return loaded;
     }

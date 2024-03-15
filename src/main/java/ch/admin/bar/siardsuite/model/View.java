@@ -4,7 +4,6 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.framework.dialogs.LegacyShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.dialogs.ShowDialogTarget;
-import ch.admin.bar.siardsuite.framework.navigation.LegacyNavigationTarget;
 import ch.admin.bar.siardsuite.framework.navigation.NavigationTarget;
 import ch.admin.bar.siardsuite.framework.navigation.SimpleNavigationTarget;
 import ch.admin.bar.siardsuite.presenter.StartPresenter;

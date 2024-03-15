@@ -28,14 +28,6 @@ public class Navigator {
 
     private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
 
-    /**
-     * Navigates to the specified view.
-     */
-    @Deprecated
-    public void navigate(LegacyNavigationTarget target) {
-        navigate(target.getViewSupplier().apply(controller, stage));
-    }
-
     public void navigate(SimpleNavigationTarget target) {
         navigate(target.getViewSupplier().apply(servicesFacade));
     }

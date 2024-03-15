@@ -11,6 +11,7 @@ import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.RootPresenter;
 import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -29,10 +30,14 @@ public class RootStage extends Stage implements ErrorHandler {
     private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
 
     public RootStage() {
+        setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
         ServicesFacade.INSTANCE.setRootStage(this);
 
-        rootPane = RootPresenter.load(new Controller(), this)
+        rootPane = RootPresenter.load(ServicesFacade.INSTANCE, this)
                 .getNode();
 
         dialogPane = DialogPresenter.load(new Controller(), this)
