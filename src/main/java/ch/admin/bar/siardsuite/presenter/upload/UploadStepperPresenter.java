@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
-import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
 import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepChain;
@@ -14,6 +13,7 @@ import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
+import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.fxml.FXML;
@@ -46,7 +46,7 @@ public class UploadStepperPresenter extends Presenter implements Destructible {
 
     @Override
     public void init(Controller controller, RootStage stage) {
-        dbInteractionService = controller;
+        dbInteractionService = ServicesFacade.INSTANCE.dbInteractionService(); // TODO
 
         chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,

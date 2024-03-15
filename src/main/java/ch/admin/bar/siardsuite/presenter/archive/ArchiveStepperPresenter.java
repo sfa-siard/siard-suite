@@ -1,18 +1,19 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
 import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepChain;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
+import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.presenter.Presenter;
 import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
-import ch.admin.bar.siardsuite.presenter.archive.model.SiardArchiveWithConnectionData;
-import ch.admin.bar.siardsuite.presenter.archive.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
@@ -36,16 +37,16 @@ public class ArchiveStepperPresenter extends Presenter implements Destructible {
     private static final StepDefinition<DbmsWithInitialValue, DbmsConnectionData> EDIT_DB_CONNECTION_PROPERTIES =
             new StepDefinition<>(DB_CONNECTION_TITLE, ArchiveConnectionPresenter::load);
 
-    private static final StepDefinition<DbmsConnectionData, SiardArchiveWithConnectionData> DOWNLOAD_METADATA =
+    private static final StepDefinition<DbmsConnectionData, Tuple<Archive, DbmsConnectionData>> DOWNLOAD_METADATA =
             new StepDefinition<>(ArchiveLoadingPreviewPresenter::load);
 
-    private static final StepDefinition<SiardArchiveWithConnectionData, SiardArchiveWithConnectionData> PREVIEW_METADATA =
+    private static final StepDefinition<Tuple<Archive, DbmsConnectionData>, Tuple<Archive, DbmsConnectionData>> PREVIEW_METADATA =
             new StepDefinition<>(DB_PREVIEW_TITLE, PreviewArchiveBrowser::load);
 
-    private static final StepDefinition<SiardArchiveWithConnectionData, UserDefinedMetadata> EDIT_USER_DEFINED_METADATA =
+    private static final StepDefinition<Tuple<Archive, DbmsConnectionData>, Tuple<UserDefinedMetadata, DbmsConnectionData>> EDIT_USER_DEFINED_METADATA =
             new StepDefinition<>(EDIT_META_DATA_TITLE, ArchiveMetaDataEditorPresenter::load);
 
-    private static final StepDefinition<UserDefinedMetadata, Void> DOWNLOAD_DB =
+    private static final StepDefinition<Tuple<UserDefinedMetadata, DbmsConnectionData>, Void> DOWNLOAD_DB =
             new StepDefinition<>(DB_DOWNLOAD_TITLE, ArchiveDownloadPresenter::load);
 
     @FXML
@@ -56,7 +57,7 @@ public class ArchiveStepperPresenter extends Presenter implements Destructible {
 
     @Override
     public void init(Controller controller, RootStage stage) {
-        dbInteractionService = controller;
+        dbInteractionService = ServicesFacade.INSTANCE.dbInteractionService(); // TODO
 
         chain = new StepsChainBuilder(
                 ServicesFacade.INSTANCE,

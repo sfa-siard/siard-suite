@@ -1,18 +1,19 @@
 package ch.admin.bar.siardsuite.presenter.archive;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
-import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.ProgressItem;
 import ch.admin.bar.siardsuite.presenter.ProgressItems;
-import ch.admin.bar.siardsuite.presenter.archive.model.SiardArchiveWithConnectionData;
+import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
@@ -60,7 +61,7 @@ public class ArchiveLoadingPreviewPresenter {
 
     public void init(
             final DbmsConnectionData dbmsConnectionData,
-            final StepperNavigator<SiardArchiveWithConnectionData> navigator,
+            final StepperNavigator<Tuple<Archive, DbmsConnectionData>> navigator,
             final DbInteractionService dbInteractionService,
             final Dialogs dialogs,
             final ErrorHandler errorHandler
@@ -84,11 +85,13 @@ public class ArchiveLoadingPreviewPresenter {
         dbInteractionService.execute(LoadDatabaseInstruction.builder()
                 .connectionData(dbmsConnectionData)
                 .loadOnlyMetadata(true)
-                .onSuccess(siardArchive -> {
-                    navigator.next(SiardArchiveWithConnectionData.builder()
-                            .dbmsConnectionData(dbmsConnectionData)
-                            .siardArchive(siardArchive)
-                            .build());
+                .onSuccess(downloadedArchive -> {
+                    downloadedArchive.getMetaData().setDbName(dbmsConnectionData.getDbName());
+
+                    navigator.next(new Tuple<>(
+                            downloadedArchive,
+                            dbmsConnectionData
+                    ));
                 })
                 .onFailure(event -> {
                     navigator.previous();
@@ -120,7 +123,7 @@ public class ArchiveLoadingPreviewPresenter {
 
     public static LoadedFxml<ArchiveLoadingPreviewPresenter> load(
             final DbmsConnectionData dbmsConnectionData,
-            final StepperNavigator<SiardArchiveWithConnectionData> navigator,
+            final StepperNavigator<Tuple<Archive, DbmsConnectionData>> navigator,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveLoadingPreviewPresenter>load("fxml/archive/archive-loading-preview.fxml");

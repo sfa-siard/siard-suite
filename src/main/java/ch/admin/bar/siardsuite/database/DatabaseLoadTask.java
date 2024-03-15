@@ -4,9 +4,9 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.enterag.utils.background.Progress;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -15,14 +15,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import java.sql.Connection;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress {
 
     private final Supplier<Connection> connectionSupplier;
-    private final Model model;
-    private final String dbName;
+    private final Consumer<Archive> resultConsumer;
     private final Archive archive;
     private final boolean onlyMetaData;
     private final boolean viewsAsTables;
@@ -34,8 +34,6 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
         ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
         int timeout = UserPreferences.INSTANCE.getStoredOptions().getQueryTimeout();
 
-        archive.getMetaData().setDbName(dbName);
-
         MetaDataFromDb metaDataFromDb = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
         metaDataFromDb.setQueryTimeout(timeout);
 
@@ -44,15 +42,6 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
 
         metaDataFromDb.download(viewsAsTables, false, this);
 
-        // store user defined metadata to archive (if present)
-        model.provideDatabaseArchiveMetaDataObject(metaData -> {
-            if (metaData != null) {
-                metaData.write(archive);
-            }
-        });
-
-
-        // TODO: replace the boolean flag with a strategy pattern
         if (!onlyMetaData) {
             PrimaryDataFromDb data = PrimaryDataFromDb.newInstance(connection, archive);
             data.setQueryTimeout(timeout);
@@ -72,9 +61,12 @@ public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> i
             updateValue(progressData);
         }
 
-        model.setSiardArchive(null, archive, onlyMetaData);
-        // Closing is mandatory to write the archive to the filesystem
-        archive.close();
+        /*
+        Workaround: It seems that the default onSucceed mechanism sometimes is not very stable in java fx 8.
+        For that reason, the result is returned with a callback.
+         */
+        Platform.runLater(() -> resultConsumer.accept(archive));
+
         return progressData;
     }
 

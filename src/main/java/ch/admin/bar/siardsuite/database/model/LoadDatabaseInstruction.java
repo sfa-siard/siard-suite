@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.database.model;
 
+import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -21,7 +22,7 @@ public class LoadDatabaseInstruction {
     Optional<File> saveAt;
     boolean loadOnlyMetadata;
     boolean viewsAsTables;
-    Consumer<SiardArchive> onSuccess;
+    Consumer<Archive> onSuccess;
     EventHandler<WorkerStateEvent> onFailure;
     ChangeListener<Number> onProgress;
     ChangeListener<ObservableList<Pair<String, Long>>> onStepCompleted;
@@ -32,7 +33,7 @@ public class LoadDatabaseInstruction {
             @Nullable File saveAt,
             @Nullable Boolean loadOnlyMetadata,
             @Nullable Boolean viewsAsTables,
-            @Nullable Consumer<SiardArchive> onSuccess,
+            @Nullable Consumer<Archive> onSuccess,
             @Nullable EventHandler<WorkerStateEvent> onFailure,
             @Nullable ChangeListener<Number> onProgress,
             @Nullable ChangeListener<ObservableList<Pair<String, Long>>> onSingleValueCompleted

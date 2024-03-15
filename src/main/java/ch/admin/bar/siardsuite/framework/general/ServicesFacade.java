@@ -4,6 +4,8 @@ import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.service.ArchiveHandler;
+import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.view.ErrorHandler;
 import ch.admin.bar.siardsuite.view.RootStage;
 import lombok.Setter;
@@ -19,6 +21,9 @@ public class ServicesFacade {
 
     @Setter
     private Controller controller;
+
+    private final ArchiveHandler archiveHandler = new ArchiveHandler();
+    private final DbInteractionService dbInteractionService = new DbInteractionService(archiveHandler);
 
     /**
      * Returns the database management system registry.
@@ -45,7 +50,7 @@ public class ServicesFacade {
      * Returns the database interaction service.
      */
     public DbInteractionService dbInteractionService() {
-        return controller;
+        return dbInteractionService;
     }
 
     /**
@@ -64,5 +69,10 @@ public class ServicesFacade {
      */
     public ErrorHandler errorHandler() {
         return rootStage;
+    }
+
+
+    public ArchiveHandler archiveHandler() {
+        return new ArchiveHandler();
     }
 }

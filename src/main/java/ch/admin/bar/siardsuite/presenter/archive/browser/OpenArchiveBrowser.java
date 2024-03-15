@@ -1,23 +1,19 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.Presenter;
-import ch.admin.bar.siardsuite.presenter.StartPresenter;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.scene.Node;
 import lombok.val;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.OPEN_PREVIEW;
 
@@ -33,6 +29,7 @@ public class OpenArchiveBrowser extends Presenter {
         this.stage = stage;
         val dialogs = ServicesFacade.INSTANCE.dialogs(); // TODO
         val navigator = ServicesFacade.INSTANCE.navigator(); // TODO
+        val archiveHandler = ServicesFacade.INSTANCE.archiveHandler(); // TODO
 
         val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), false);
 
@@ -49,7 +46,8 @@ public class OpenArchiveBrowser extends Presenter {
         buttonsBox.previous().setOnAction(event -> dialogs.openDialog(View.EXPORT_SELECT_TABLES));
         buttonsBox.next().setOnAction(event -> {
             try {
-                this.controller.saveArchiveOnlyMetaData();
+                val archive = controller.getSiardArchive().getArchive();
+                archiveHandler.save(archive, archive.getFile());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

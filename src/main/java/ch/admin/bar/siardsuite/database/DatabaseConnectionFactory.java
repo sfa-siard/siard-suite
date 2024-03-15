@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 @Slf4j
 public class DatabaseConnectionFactory {
@@ -23,15 +24,14 @@ public class DatabaseConnectionFactory {
 
     public DatabaseLoadService createDatabaseLoader(
             final DbmsConnectionData connectionData,
-            final Model model,
+            final Consumer<Archive> resultConsumer,
             final Archive archive,
             final boolean onlyMetaData,
             final boolean viewsAsTables
     ) {
         return new DatabaseLoadService(
                 () -> getOrCreateConnection(connectionData),
-                model,
-                connectionData.getDbName(),
+                resultConsumer,
                 archive,
                 onlyMetaData,
                 viewsAsTables);

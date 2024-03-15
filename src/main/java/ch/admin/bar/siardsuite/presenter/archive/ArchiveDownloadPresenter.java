@@ -8,14 +8,17 @@ import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.component.SystemFileBrowser;
+import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
-import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.archive.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.service.ArchiveHandler;
+import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
@@ -27,6 +30,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.io.File;
@@ -38,6 +43,7 @@ import static ch.admin.bar.siardsuite.component.ButtonBox.Type.DOWNLOAD_FINISHED
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.TO_START;
 import static ch.admin.bar.siardsuite.model.View.START;
 
+@Slf4j
 public class ArchiveDownloadPresenter {
 
     @FXML
@@ -73,24 +79,32 @@ public class ArchiveDownloadPresenter {
     private Spinner loadingSpinner;
     private long total;
 
-    private ErrorHandler errorHandler;
     private UserDefinedMetadata userDefinedMetadata;
+    private DbmsConnectionData connectionData;
+
+    private ErrorHandler errorHandler;
     private DbInteractionService dbInteractionService;
     private Dialogs dialogs;
     private Navigator navigator;
+    private ArchiveHandler archiveHandler;
 
     public void init(
             final UserDefinedMetadata userDefinedMetadata,
+            final DbmsConnectionData connectionData,
             final ErrorHandler errorHandler,
             final DbInteractionService dbInteractionService,
             final Dialogs dialogs,
-            final Navigator navigator
+            final Navigator navigator,
+            final ArchiveHandler archiveHandler
     ) {
         this.userDefinedMetadata = userDefinedMetadata;
+        this.connectionData = connectionData;
+
         this.errorHandler = errorHandler;
         this.dbInteractionService = dbInteractionService;
         this.dialogs = dialogs;
         this.navigator = navigator;
+        this.archiveHandler = archiveHandler;
 
         this.loader.setImage(Icon.loading);
         loadingSpinner = new Spinner(this.loader);
@@ -138,11 +152,11 @@ public class ArchiveDownloadPresenter {
         loadingSpinner.play();
 
         dbInteractionService.execute(LoadDatabaseInstruction.builder()
-                .connectionData(userDefinedMetadata.getDbmsConnectionData())
+                .connectionData(connectionData)
                 .saveAt(userDefinedMetadata.getSaveAt())
                 .loadOnlyMetadata(false)
                 .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
-                .onSuccess(siardArchive -> handleDownloadSuccess())
+                .onSuccess(downloaded -> handleDownloadSuccess(downloaded))
                 .onFailure(event -> handleDownloadFailure(event.getSource().getException()))
                 .onSingleValueCompleted((observable, oldValue, newValue) -> {
                     AtomicInteger pos = new AtomicInteger();
@@ -157,7 +171,13 @@ public class ArchiveDownloadPresenter {
                 .build());
     }
 
-    private void handleDownloadSuccess() {
+    @SneakyThrows // TODO FIXME
+    private void handleDownloadSuccess(Archive archive) {
+        userDefinedMetadata.writeTo(archive.getMetaData());
+        archiveHandler.save(archive, userDefinedMetadata.getSaveAt());
+
+        log.info("Downloaded archive successfully stored to {}", userDefinedMetadata.getSaveAt().getAbsolutePath());
+
         loadingSpinner.hide();
         this.title.setVisible(false);
         this.resultTitle.setVisible(true);
@@ -226,17 +246,19 @@ public class ArchiveDownloadPresenter {
     }
 
     public static LoadedFxml<ArchiveDownloadPresenter> load(
-            final UserDefinedMetadata userDefinedMetadata,
+            final Tuple<UserDefinedMetadata, DbmsConnectionData> data,
             final StepperNavigator<Void> navigator,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveDownloadPresenter>load("fxml/archive/archive-download.fxml");
         loaded.getController().init(
-                userDefinedMetadata,
+                data.getValue1(),
+                data.getValue2(),
                 servicesFacade.errorHandler(),
                 servicesFacade.dbInteractionService(),
                 servicesFacade.dialogs(),
-                servicesFacade.navigator()
+                servicesFacade.navigator(),
+                servicesFacade.archiveHandler()
         );
 
         return loaded;

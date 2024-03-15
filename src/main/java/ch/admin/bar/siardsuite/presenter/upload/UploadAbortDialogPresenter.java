@@ -34,6 +34,7 @@ public class UploadAbortDialogPresenter extends DialogPresenter {
         this.controller = controller;
         this.stage = stage;
         val navigator = ServicesFacade.INSTANCE.navigator();
+        val dbInteractionService = ServicesFacade.INSTANCE.dbInteractionService();
 
         I18n.bind(title.textProperty(), "uploadAbortDialog.title");
         I18n.bind(text.textProperty(), "uploadAbortDialog.text");
@@ -42,7 +43,7 @@ public class UploadAbortDialogPresenter extends DialogPresenter {
         I18n.bind(confirm.textProperty(), "uploadAbortDialog.confirm");
 
         confirm.setOnAction(event -> {
-            controller.cancelRunning();
+            dbInteractionService.cancelRunning();
             stage.closeDialog();
             navigator.navigate(View.START);
         });
