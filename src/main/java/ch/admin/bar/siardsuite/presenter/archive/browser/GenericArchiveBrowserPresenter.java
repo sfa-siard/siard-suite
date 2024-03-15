@@ -5,14 +5,17 @@ import ch.admin.bar.siardsuite.component.TwoStatesButton;
 import ch.admin.bar.siardsuite.component.rendering.FormRenderer;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.util.DeactivatableListener;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.model.Tuple;
+import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.util.DeactivatableListener;
+import ch.admin.bar.siardsuite.util.OptionalHelper;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -111,11 +114,10 @@ public class GenericArchiveBrowserPresenter {
 
         this.saveChangesButton.setOnAction(() -> {
             val report = currentFormRenderer.saveChanges();
-            ifPresentOrElse(
-                    report.getFailedMessage(),
-                    this::showErrorMessage,
-                    this::hideErrorMessage
-            );
+
+            OptionalHelper.when(report.getFailedMessage())
+                    .isPresent(this::showErrorMessage)
+                    .orElse(this::hideErrorMessage);
         });
 
         this.dropChangesButton.setOnAction(() -> {
@@ -124,17 +126,20 @@ public class GenericArchiveBrowserPresenter {
         });
 
         tableSearchButton.setNormalStateAction(event ->
-                dialogs.openSearchTableDialog(optionalSearchTerm -> ifPresentOrElse(optionalSearchTerm,
-                        s -> currentFormRenderer.applySearchTerm(s),
-                        () -> tableSearchButton.setState(TwoStatesButton.State.NORMAL)
-                )));
+                dialogs.open(
+                        View.SEARCH_TABLE,
+                        optionalSearchTerm -> OptionalHelper.when(optionalSearchTerm)
+                                .isPresent(searchTerm -> currentFormRenderer.applySearchTerm(searchTerm))
+                                .orElse(() -> tableSearchButton.setState(TwoStatesButton.State.NORMAL))
+                ));
         tableSearchButton.setBoldStateAction(event -> currentFormRenderer.clearSearchTerm());
 
         val explorer = TreeItemsExplorer.from(rootTreeItem);
-        metaSearchButton.setOnAction(event -> dialogs.openSearchMetaDataDialog(
-                explorer,
-                treeItem -> treeView.getSelectionModel().select(treeItem)
-        ));
+        metaSearchButton.setOnAction(event -> dialogs.open(View.SEARCH_METADATA,
+                new Tuple<>(
+                        explorer,
+                        treeItem -> treeView.getSelectionModel().select(treeItem)
+                )));
 
         treeView.getSelectionModel()
                 .selectedItemProperty()
@@ -149,36 +154,38 @@ public class GenericArchiveBrowserPresenter {
             return;
         }
 
-        this.dialogs.openUnsavedChangesDialog(result -> {
-            switch (result) {
-                case CANCEL:
-                    change.getDeactivatableListener().deactivate();
-                    change.getOldValue().ifPresent(previousSelectedItem ->
-                            treeView.getSelectionModel()
-                                    .select(previousSelectedItem));
-                    change.getDeactivatableListener().activate();
-                    break;
-                case DROP_CHANGES:
-                    currentFormRenderer.dropChanges();
-                    refreshContentPane(change.getNewValue().getValue());
-                    break;
-                case SAVE_CHANGES:
-                    val report = currentFormRenderer.saveChanges();
-                    ifPresentOrElse(
-                            report.getFailedMessage(),
-                            errorMessage -> {
-                                showErrorMessage(errorMessage);
-                                change.getDeactivatableListener().deactivate();
-                                change.getOldValue().ifPresent(previousSelectedItem ->
-                                        treeView.getSelectionModel()
-                                                .select(previousSelectedItem));
-                                change.getDeactivatableListener().activate();
-                            },
-                            () -> refreshContentPane(change.getNewValue().getValue())
-                    );
-                    break;
-            }
-        });
+        this.dialogs.open(
+                View.UNSAVED_CHANGES,
+                result -> {
+                    switch (result) {
+                        case CANCEL:
+                            change.getDeactivatableListener().deactivate();
+                            change.getOldValue().ifPresent(previousSelectedItem ->
+                                    treeView.getSelectionModel()
+                                            .select(previousSelectedItem));
+                            change.getDeactivatableListener().activate();
+                            break;
+                        case DROP_CHANGES:
+                            currentFormRenderer.dropChanges();
+                            refreshContentPane(change.getNewValue().getValue());
+                            break;
+                        case SAVE_CHANGES:
+                            val report = currentFormRenderer.saveChanges();
+                            ifPresentOrElse(
+                                    report.getFailedMessage(),
+                                    errorMessage -> {
+                                        showErrorMessage(errorMessage);
+                                        change.getDeactivatableListener().deactivate();
+                                        change.getOldValue().ifPresent(previousSelectedItem ->
+                                                treeView.getSelectionModel()
+                                                        .select(previousSelectedItem));
+                                        change.getDeactivatableListener().activate();
+                                    },
+                                    () -> refreshContentPane(change.getNewValue().getValue())
+                            );
+                            break;
+                    }
+                });
     }
 
     private void refreshContentPane(TreeAttributeWrapper wrapper) {

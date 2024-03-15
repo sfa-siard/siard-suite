@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.dialogues;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
@@ -61,11 +62,11 @@ public class SearchTableDialogPresenter {
     }
 
     public static LoadedView<SearchTableDialogPresenter> load(
-            final DialogCloser dialogCloser,
-            final Consumer<Optional<String>> resultConsumer
-    ) {
+            final Consumer<Optional<String>> resultConsumer,
+            final ServicesFacade servicesFacade
+            ) {
         val loaded = FXMLLoadHelper.<SearchTableDialogPresenter>load("fxml/search/search-table-dialog.fxml");
-        loaded.getController().init(dialogCloser, resultConsumer);
+        loaded.getController().init(servicesFacade.dialogs(), resultConsumer);
 
         return loaded;
     }

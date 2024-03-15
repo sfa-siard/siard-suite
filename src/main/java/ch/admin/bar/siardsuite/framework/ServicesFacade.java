@@ -18,6 +18,7 @@ public class ServicesFacade {
 
     private final ViewDisplay viewDisplay;
     private final DialogDisplay dialogDisplay;
+    private final ErrorHandler errorHandler;
 
     private final List<Object> registeredServices;
 
@@ -62,6 +63,6 @@ public class ServicesFacade {
      * Returns the error handler for handling application errors.
      */
     public ErrorHandler errorHandler() {
-        return dialogs().errorHandler();
+        return errorHandler;
     }
 }
