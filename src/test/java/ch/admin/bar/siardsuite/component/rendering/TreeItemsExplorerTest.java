@@ -1,11 +1,12 @@
 package ch.admin.bar.siardsuite.component.rendering;
 
-import ch.admin.bar.siardsuite.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.component.rendering.model.RenderableFormGroup;
+import ch.admin.bar.siardsuite.ui.component.rendering.TreeItemsExplorer;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.MetaSearchTerm;
+import ch.admin.bar.siardsuite.ui.common.MetaSearchTerm;
 import javafx.scene.control.TreeItem;
 import lombok.Value;
 import lombok.val;

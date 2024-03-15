@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import ch.admin.bar.siardsuite.component.IconButton?>
+<?import ch.admin.bar.siardsuite.ui.component.IconButton?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -13,13 +13,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
-<?import ch.admin.bar.siardsuite.component.TwoStatesButton?>
+<?import ch.admin.bar.siardsuite.ui.component.TwoStatesButton?>
 
 <AnchorPane styleClass="root-center"
             stylesheets="@../css/root.css"
             xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.browser.GenericArchiveBrowserPresenter">
+            fx:controller="ch.admin.bar.siardsuite.ui.presenter.archive.browser.GenericArchiveBrowserPresenter">
     <ScrollPane fitToHeight="true"
                 maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308"

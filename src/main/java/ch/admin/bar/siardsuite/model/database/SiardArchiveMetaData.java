@@ -29,36 +29,7 @@ public class SiardArchiveMetaData {
     private final LocalDate archivingDate;
     private String archiverName;
     private String archiverContact;
-    private File targetArchive; // not sure if this is the correct place here... maybe just use the model?
     private URI lobFolder;
-    private boolean viewsAsTables;
-
-    public SiardArchiveMetaData(
-            String databaseName,
-            String databaseDescription,
-            String dataOwner,
-            String dataOriginTimespan,
-            String archiverName,
-            String archiverContact,
-            URI lobFolder,
-            File targetArchive,
-            boolean viewsAsTables) {
-
-        this.siardFormatVersion = "";
-        this.databaseName = databaseName;
-        this.databaseProduct = "";
-        this.databaseConnectionURL = "";
-        this.databaseUsername = "";
-        this.databaseDescription = databaseDescription;
-        this.dataOwner = dataOwner;
-        this.dataOriginTimespan = dataOriginTimespan;
-        this.archivingDate = LocalDate.now();
-        this.archiverName = archiverName;
-        this.archiverContact = archiverContact;
-        this.targetArchive = targetArchive;
-        this.lobFolder = lobFolder;
-        this.viewsAsTables = viewsAsTables;
-    }
 
     public SiardArchiveMetaData(MetaData metaData) {
         siardFormatVersion = metaData.getVersion();

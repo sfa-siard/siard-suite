@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.component.rendering.utils;
 
+import ch.admin.bar.siardsuite.ui.component.rendering.utils.LoadingBatch;
 import lombok.val;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

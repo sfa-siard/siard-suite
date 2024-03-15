@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm?>
+<?import ch.admin.bar.siardsuite.ui.presenter.connection.ConnectionForm?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -11,7 +11,7 @@
             stylesheets="@../../css/root.css"
             xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveConnectionPresenter">
+            fx:controller="ch.admin.bar.siardsuite.ui.presenter.archive.ArchiveConnectionPresenter">
     <BorderPane fx:id="borderPane"
                 maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308"

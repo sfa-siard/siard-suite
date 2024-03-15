@@ -1,11 +1,12 @@
 package ch.admin.bar.siardsuite.component;
 
+import ch.admin.bar.siardsuite.ui.component.ButtonBox;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 
-import static ch.admin.bar.siardsuite.component.ButtonBox.Type.*;
+import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.*;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

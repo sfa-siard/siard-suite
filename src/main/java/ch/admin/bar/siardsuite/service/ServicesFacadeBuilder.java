@@ -7,7 +7,7 @@ import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.ui.RootStage;
 import lombok.Setter;
 import lombok.val;
 

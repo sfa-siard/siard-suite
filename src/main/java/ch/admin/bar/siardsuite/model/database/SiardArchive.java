@@ -26,9 +26,6 @@ public class SiardArchive {
     @Getter
     protected SiardArchiveMetaData metaData;
 
-    public SiardArchive() {
-    }
-
     public SiardArchive(
             String name,
             Archive archive,

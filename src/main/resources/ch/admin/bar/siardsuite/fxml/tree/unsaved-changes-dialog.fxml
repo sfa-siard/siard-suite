@@ -18,7 +18,7 @@
         BorderPane.alignment="CENTER"
         xmlns="http://javafx.com/javafx/1.8"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter">
+        fx:controller="ch.admin.bar.siardsuite.ui.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter">
     <center>
         <BorderPane
                 minHeight="-Infinity"

@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite;
 
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.ui.RootStage;
 import ch.enterag.utils.ProgramInfo;
 import javafx.application.Application;
 import javafx.stage.Stage;

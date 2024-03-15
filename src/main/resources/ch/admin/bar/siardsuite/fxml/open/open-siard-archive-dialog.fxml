@@ -12,7 +12,7 @@
             minWidth="-Infinity" prefHeight="585.0" prefWidth="480.0" styleClass="dialog"
             stylesheets="@../../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/1.8"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.open.OpenSiardArchiveDialogPresenter">
+            fx:controller="ch.admin.bar.siardsuite.ui.presenter.open.OpenSiardArchiveDialogPresenter">
     <center>
         <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefWidth="418.0" BorderPane.alignment="CENTER">
             <top>

@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.framework;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.util.CastHelper;
-import ch.admin.bar.siardsuite.view.RootStage;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

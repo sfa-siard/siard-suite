@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import ch.admin.bar.siardsuite.component.stepper.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import ch.admin.bar.siardsuite.ui.component.stepper.DrilledMFXStepper?>
 <AnchorPane styleClass="root-center" stylesheets="@../../css/root.css" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ch.admin.bar.siardsuite.presenter.archive.ArchiveStepperPresenter">
+            fx:controller="ch.admin.bar.siardsuite.ui.presenter.archive.ArchiveStepperPresenter">
     <DrilledMFXStepper fx:id="stepper" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                        AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.0"
                        AnchorPane.topAnchor="40.0"/>

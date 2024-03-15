@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.service;
 
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.api.Table;
-import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
