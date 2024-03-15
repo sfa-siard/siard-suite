@@ -1,19 +1,31 @@
 package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.Icon;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.animations.Animation;
 import javafx.animation.PathTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.TextFlow;
+import lombok.val;
 
-import static ch.admin.bar.siardsuite.Workflow.*;
+import java.util.Optional;
+
+import static ch.admin.bar.siardsuite.Workflow.ARCHIVE;
+import static ch.admin.bar.siardsuite.Workflow.EXPORT;
+import static ch.admin.bar.siardsuite.Workflow.OPEN;
+import static ch.admin.bar.siardsuite.Workflow.UPLOAD;
 import static ch.admin.bar.siardsuite.util.I18n.bind;
 
-public class StartPresenter extends Presenter {
+public class StartPresenter {
 
     @FXML
     private ImageView dbImg;
@@ -52,13 +64,27 @@ public class StartPresenter extends Presenter {
 
     Animation animation = new Animation(new PathTransition());
 
-    public void init(Controller controller, RootStage stage) {
+    private Dialogs dialogs;
+    private Navigator navigator;
+    private Controller controller; // FIXME temporary needed
+
+    public void init(
+            Optional<Workflow> initWorkflow,
+            Dialogs dialogs,
+            Navigator navigator,
+            Controller controller // FIXME temp
+    ) {
+        this.dialogs = dialogs;
+        this.navigator = navigator;
         this.controller = controller;
-        this.stage = stage;
+
+        controller.getModel().clearSiardArchive();
 
         resetImageViews();
         setListener();
         bindLabels();
+
+        initWorkflow.ifPresent(this::initializeWorkflow);
     }
 
     private void bindLabels() {
@@ -72,10 +98,10 @@ public class StartPresenter extends Presenter {
     }
 
     private void setListener() {
-        this.archive.setOnAction(event -> this.controller.initializeWorkflow(ARCHIVE, stage));
-        this.upload.setOnAction(event -> this.controller.initializeWorkflow(UPLOAD, stage));
-        this.export.setOnAction(event -> this.controller.initializeWorkflow(EXPORT, stage));
-        this.open.setOnAction(event -> this.controller.initializeWorkflow(OPEN, stage));
+        this.archive.setOnAction(event -> initializeWorkflow(ARCHIVE));
+        this.upload.setOnAction(event -> initializeWorkflow(UPLOAD));
+        this.export.setOnAction(event -> initializeWorkflow(EXPORT));
+        this.open.setOnAction(event -> initializeWorkflow(OPEN));
 
         archive.setOnMouseEntered(event -> {
             dbImg.setImage(Icon.siardDbRed);
@@ -113,4 +139,61 @@ public class StartPresenter extends Presenter {
         exportBubble.setVisible(false);
     }
 
+    private void initializeWorkflow(Workflow workflow) {
+        controller.getModel().clearSiardArchive();
+        controller.setRecentDatabaseConnection(Optional.empty());
+
+        switch (workflow) {
+            case ARCHIVE:
+                dialogs.openRecentConnectionsDialogForArchiving(
+                        () -> navigator.navigate(View.ARCHIVE_STEPPER),
+                        dbConnection -> {
+                            controller.setRecentDatabaseConnection(Optional.of(dbConnection));
+                            navigator.navigate(View.ARCHIVE_STEPPER);
+                        }
+                );
+                break;
+            case OPEN:
+                dialogs.openSelectSiardFileDialog((file, archive) -> {
+                            controller.setSiardArchive(file.getName(), archive);
+                            navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+                        }
+                );
+                break;
+            case EXPORT:
+                dialogs.openSelectSiardFileDialog((file, archive) -> {
+                            controller.setSiardArchive(file.getName(), archive);
+                            dialogs.openDialog(View.EXPORT_SELECT_TABLES);
+                        }
+                );
+                break;
+            case UPLOAD:
+                dialogs.openSelectSiardFileDialog((file, archive) -> {
+                            controller.setSiardArchive(file.getName(), archive);
+                            dialogs.openRecentConnectionsDialogForUploading(
+                                    () -> navigator.navigate(View.UPLOAD_STEPPER),
+                                    dbConnection -> {
+                                        controller.setRecentDatabaseConnection(Optional.of(dbConnection));
+                                        navigator.navigate(View.UPLOAD_STEPPER);
+                                    }
+                            );
+                        }
+                );
+                break;
+        }
+    }
+
+    public static LoadedFxml<StartPresenter> load(
+            final Optional<Workflow> initWorkflow,
+            final ServicesFacade servicesFacade
+    ) {
+        val loaded = FXMLLoadHelper.<StartPresenter>load("fxml/start.fxml");
+        loaded.getController().init(
+                initWorkflow,
+                servicesFacade.dialogs(),
+                servicesFacade.navigator(),
+                servicesFacade.controller());
+
+        return loaded;
+    }
 }

@@ -10,7 +10,7 @@ import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.component.SystemFileBrowser;
 import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
-import ch.admin.bar.siardsuite.framework.general.Dialogs;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
@@ -31,7 +31,6 @@ import lombok.val;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.CANCEL;

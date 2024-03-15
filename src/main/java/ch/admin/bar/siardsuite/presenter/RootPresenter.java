@@ -2,10 +2,15 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
+import ch.admin.bar.siardsuite.Workflow;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.FileUtils;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OS;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.enterag.utils.ProgramInfo;
 import ch.enterag.utils.io.SpecialFolder;
@@ -16,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.WindowEvent;
+import lombok.val;
 import mslinks.ShellLink;
 
 import javax.swing.*;
@@ -28,6 +34,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Properties;
 
 public class RootPresenter extends Presenter {
@@ -49,9 +56,12 @@ public class RootPresenter extends Presenter {
     @FXML
     public Label applicationLabel;
 
+    private Dialogs dialogs;
+
     public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
+        this.dialogs = ServicesFacade.INSTANCE.dialogs(); // TODO
 
         allowStageRepositioning(windowHeader);
 
@@ -94,8 +104,8 @@ public class RootPresenter extends Presenter {
         this.menuItemClose.setOnAction(event -> {
             this.stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
-        this.menuItemInfo.setOnAction(event -> this.stage.openDialog(View.INFO_DIALOG));
-        this.menuItemOptions.setOnAction(event -> this.stage.openDialog(View.OPTION_DIALOG));
+        this.menuItemInfo.setOnAction(event -> this.dialogs.openDialog(View.INFO_DIALOG));
+        this.menuItemOptions.setOnAction(event -> this.dialogs.openDialog(View.OPTION_DIALOG));
         this.menuItemInstall.setOnAction(this::installToDesktop);
         this.helpButton.setOnAction(event -> {
             try {
@@ -156,5 +166,17 @@ public class RootPresenter extends Presenter {
             e.printStackTrace();
         }
 
+    }
+
+    public static LoadedFxml<RootPresenter> load(
+            final Controller controller,
+            final RootStage rootStage
+    ) {
+        val loaded = FXMLLoadHelper.<RootPresenter>load("fxml/root.fxml");
+        loaded.getController().init(
+                controller,
+                rootStage);
+
+        return loaded;
     }
 }

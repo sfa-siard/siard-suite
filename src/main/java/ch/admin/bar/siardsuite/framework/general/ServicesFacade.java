@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.framework.general;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.database.DbmsRegistry;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.view.ErrorHandler;
 import ch.admin.bar.siardsuite.view.RootStage;
@@ -37,7 +38,7 @@ public class ServicesFacade {
      * Returns the dialogs service for displaying various dialogs.
      */
     public Dialogs dialogs() {
-        return rootStage;
+        return new Dialogs(controller, rootStage);
     }
 
     /**

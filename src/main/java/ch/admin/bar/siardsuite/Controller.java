@@ -29,6 +29,7 @@ import java.util.Optional;
 
 public class Controller implements DbInteractionService {
 
+    @Getter
     private final Model model;
     private Archive tmpArchive;
     private DatabaseLoadService databaseLoadService;
@@ -187,55 +188,6 @@ public class Controller implements DbInteractionService {
             }
         } catch (Exception ignored) {
         }
-    }
-
-    public void initializeWorkflow(Workflow workflow, RootStage stage) {
-        this.model.clearSiardArchive();
-        this.setRecentDatabaseConnection(Optional.empty());
-
-        switch (workflow) {
-            case ARCHIVE:
-                stage.openRecentConnectionsDialogForArchiving(
-                        () -> stage.navigate(View.ARCHIVE_STEPPER),
-                        dbConnection -> {
-                            setRecentDatabaseConnection(Optional.of(dbConnection));
-                            stage.navigate(View.ARCHIVE_STEPPER);
-                        }
-                );
-                break;
-            case OPEN:
-                stage.openSelectSiardFileDialog((file, archive) -> {
-                            setSiardArchive(file.getName(), archive);
-                            stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
-                        }
-                );
-                break;
-            case EXPORT:
-                stage.openSelectSiardFileDialog((file, archive) -> {
-                            setSiardArchive(file.getName(), archive);
-                            stage.openDialog(View.EXPORT_SELECT_TABLES);
-                        }
-                );
-                break;
-            case UPLOAD:
-                stage.openSelectSiardFileDialog((file, archive) -> {
-                            setSiardArchive(file.getName(), archive);
-                            stage.openRecentConnectionsDialogForUploading(
-                                    () -> stage.navigate(View.UPLOAD_STEPPER),
-                                    dbConnection -> {
-                                        setRecentDatabaseConnection(Optional.of(dbConnection));
-                                        stage.navigate(View.UPLOAD_STEPPER);
-                                    }
-                            );
-                        }
-                );
-                break;
-        }
-    }
-
-    public void start(RootStage stage) {
-        this.model.clearSiardArchive();
-        stage.navigate(View.START);
     }
 
     public SiardArchive getSiardArchive() {

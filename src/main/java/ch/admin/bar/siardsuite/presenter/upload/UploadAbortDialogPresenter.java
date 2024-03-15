@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.util.I18n;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import lombok.val;
 
 public class UploadAbortDialogPresenter extends DialogPresenter {
 
@@ -31,6 +33,7 @@ public class UploadAbortDialogPresenter extends DialogPresenter {
     public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
+        val navigator = ServicesFacade.INSTANCE.navigator();
 
         I18n.bind(title.textProperty(), "uploadAbortDialog.title");
         I18n.bind(text.textProperty(), "uploadAbortDialog.text");
@@ -41,7 +44,7 @@ public class UploadAbortDialogPresenter extends DialogPresenter {
         confirm.setOnAction(event -> {
             controller.cancelRunning();
             stage.closeDialog();
-            stage.navigate(View.START);
+            navigator.navigate(View.START);
         });
 
         closeButton.setOnAction(event -> stage.closeDialog());

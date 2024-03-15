@@ -6,7 +6,7 @@ import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.framework.general.DbInteractionService;
-import ch.admin.bar.siardsuite.framework.general.Dialogs;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;

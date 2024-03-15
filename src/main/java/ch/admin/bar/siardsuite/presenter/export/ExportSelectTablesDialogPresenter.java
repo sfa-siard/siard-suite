@@ -1,6 +1,8 @@
 package ch.admin.bar.siardsuite.presenter.export;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.service.TableExporterService;
@@ -46,10 +48,13 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
     @FXML
     public TreeView tableSelector;
 
+    private Dialogs dialogs;
+
     @Override
     public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
+        this.dialogs = ServicesFacade.INSTANCE.dialogs(); // TODO
 
         this.title.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.title"));
         this.text.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.text"));
@@ -85,8 +90,7 @@ public class ExportSelectTablesDialogPresenter extends DialogPresenter {
                                     .build()
                                     .export();
 
-                this.stage.closeDialog();
-                this.stage.openDialog(View.EXPORT_SUCCESS);
+                this.dialogs.openDialog(View.EXPORT_SUCCESS);
             } catch (Exception e) {
                 // TODO: show failure message
                 e.printStackTrace();

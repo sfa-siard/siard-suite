@@ -1,9 +1,13 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser;
 
 import ch.admin.bar.siardsuite.Controller;
+import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.ButtonBox;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.Presenter;
+import ch.admin.bar.siardsuite.presenter.StartPresenter;
+import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
@@ -18,12 +22,6 @@ import java.util.function.BiFunction;
 import static ch.admin.bar.siardsuite.component.ButtonBox.Type.OPEN_PREVIEW;
 
 public class OpenArchiveBrowser extends Presenter {
-    public static final BiFunction<Controller, RootStage, LoadedFxml<Presenter>> VIEW_CREATOR = (controller, rootStage) -> {
-        val browser = new OpenArchiveBrowser();
-        browser.init(controller, rootStage);
-        return new LoadedFxml<>(browser::getView, browser);
-    };
-
     private static final I18nKey TITLE = I18nKey.of("open.siard.archive.preview.title");
     private static final I18nKey TEXT = I18nKey.of("open.siard.archive.preview.text");
 
@@ -33,26 +31,29 @@ public class OpenArchiveBrowser extends Presenter {
     public void init(Controller controller, RootStage stage) {
         this.controller = controller;
         this.stage = stage;
+        val dialogs = ServicesFacade.INSTANCE.dialogs(); // TODO
+        val navigator = ServicesFacade.INSTANCE.navigator(); // TODO
+
         val archiveBrowserView = new TreeBuilder(controller.getSiardArchive(), false);
 
         val buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
         buttonsBox.cancel().setOnAction(event -> {
-            stage.openRecentConnectionsDialogForUploading(
-                    () -> stage.openDialog(View.UPLOAD_STEPPER),
+            dialogs.openRecentConnectionsDialogForUploading(
+                    () -> dialogs.openDialog(View.UPLOAD_STEPPER),
                     dbConnection -> {
                         controller.setRecentDatabaseConnection(Optional.of(dbConnection));
-                        stage.openDialog(View.UPLOAD_STEPPER);
+                        dialogs.openDialog(View.UPLOAD_STEPPER);
                     }
             );
         });
-        buttonsBox.previous().setOnAction(event -> stage.openDialog(View.EXPORT_SELECT_TABLES));
+        buttonsBox.previous().setOnAction(event -> dialogs.openDialog(View.EXPORT_SELECT_TABLES));
         buttonsBox.next().setOnAction(event -> {
             try {
                 this.controller.saveArchiveOnlyMetaData();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            this.controller.start(stage);
+            navigator.navigate(View.START);
         });
 
         this.loadedFxml = GenericArchiveBrowserPresenter.load(
@@ -66,5 +67,14 @@ public class OpenArchiveBrowser extends Presenter {
 
     public Node getView() {
         return loadedFxml.getNode();
+    }
+
+    public static LoadedFxml<OpenArchiveBrowser> load(
+            final Controller controller,
+            final RootStage stage
+    ) {
+        val browser = new OpenArchiveBrowser();
+        browser.init(controller, stage);
+        return new LoadedFxml<>(browser::getView, browser);
     }
 }

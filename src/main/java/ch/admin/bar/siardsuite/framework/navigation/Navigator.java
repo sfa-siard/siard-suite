@@ -3,9 +3,18 @@ package ch.admin.bar.siardsuite.framework.navigation;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.Workflow;
+import ch.admin.bar.siardsuite.framework.general.Destructible;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.presenter.StartPresenter;
+import ch.admin.bar.siardsuite.util.CastHelper;
+import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Navigator class for controlling navigation within the application.
@@ -15,12 +24,17 @@ public class Navigator {
 
     private final Controller controller;
     private final RootStage stage;
+    private final ServicesFacade servicesFacade = ServicesFacade.INSTANCE; // TODO
+
+    private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
 
     /**
      * Initializes the specified workflow.
      */
+    @Deprecated
     public void initializeWorkflow(Workflow workflow) {
-        controller.initializeWorkflow(workflow, stage);
+        val loaded = StartPresenter.load(Optional.of(workflow), servicesFacade);
+        navigate(loaded);
     }
 
     /**
@@ -28,13 +42,36 @@ public class Navigator {
      */
     public void openArchive(Archive archive) {
         controller.setSiardArchive(archive.getFile().getName(), archive);
-        stage.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
+        navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
     }
 
     /**
      * Navigates to the specified view.
      */
+    @Deprecated
     public void navigate(View view) {
-        stage.navigate(view);
+        navigate(view.getViewCreator().apply(controller, stage));
+    }
+
+    @Deprecated
+    public void navigate(LegacyNavigationTarget target) {
+        navigate(target.getViewSupplier().apply(controller, stage));
+    }
+
+    public <T> void navigate(NavigationTarget<T> target, T data) {
+        navigate(target.getViewSupplier().apply(data, servicesFacade));
+    }
+
+    private void navigate(final LoadedFxml loadedFxml) {
+        val loaded = previouslyLoadedView.updateAndGet(previouslyLoadedFxml -> {
+            if (previouslyLoadedFxml != null) {
+                CastHelper.tryCast(previouslyLoadedFxml.getController(), Destructible.class)
+                        .ifPresent(Destructible::destruct);
+            }
+
+            return loadedFxml;
+        });
+
+        stage.displayView(loaded.getNode());
     }
 }
