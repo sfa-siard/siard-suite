@@ -29,15 +29,6 @@ public class Navigator {
     private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
 
     /**
-     * Initializes the specified workflow.
-     */
-    @Deprecated
-    public void initializeWorkflow(Workflow workflow) {
-        val loaded = StartPresenter.load(Optional.of(workflow), servicesFacade);
-        navigate(loaded);
-    }
-
-    /**
      * Opens the specified SIARD archive in a browser view.
      */
     public void openArchive(Archive archive) {
@@ -49,13 +40,12 @@ public class Navigator {
      * Navigates to the specified view.
      */
     @Deprecated
-    public void navigate(View view) {
-        navigate(view.getViewCreator().apply(controller, stage));
-    }
-
-    @Deprecated
     public void navigate(LegacyNavigationTarget target) {
         navigate(target.getViewSupplier().apply(controller, stage));
+    }
+
+    public void navigate(SimpleNavigationTarget target) {
+        navigate(target.getViewSupplier().apply(servicesFacade));
     }
 
     public <T> void navigate(NavigationTarget<T> target, T data) {

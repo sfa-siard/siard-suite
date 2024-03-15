@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.presenter.open;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
@@ -178,12 +179,14 @@ public class OpenSiardArchiveDialogPresenter {
     }
 
     public static LoadedFxml<OpenSiardArchiveDialogPresenter> load(
-            final DialogCloser dialogCloser,
-            final ErrorHandler errorHandler,
-            final BiConsumer<File, Archive> onArchiveSelected
-    ) {
+            final BiConsumer<File, Archive> onArchiveSelected,
+            final ServicesFacade servicesFacade
+            ) {
         val loaded = FXMLLoadHelper.<OpenSiardArchiveDialogPresenter>load("fxml/open/open-siard-archive-dialog.fxml");
-        loaded.getController().init(dialogCloser, errorHandler, onArchiveSelected);
+        loaded.getController().init(
+                servicesFacade.dialogs(),
+                servicesFacade.errorHandler(),
+                onArchiveSelected);
 
         return loaded;
     }

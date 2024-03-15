@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.SiardApplication;
-import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;

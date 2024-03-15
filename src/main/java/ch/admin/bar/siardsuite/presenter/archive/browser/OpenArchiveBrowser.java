@@ -36,10 +36,10 @@ public class OpenArchiveBrowser extends Presenter {
         val buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
         buttonsBox.cancel().setOnAction(event -> {
             dialogs.openRecentConnectionsDialogForUploading(
-                    () -> dialogs.openDialog(View.UPLOAD_STEPPER),
+                    () -> navigator.navigate(View.UPLOAD_STEPPER),
                     dbConnection -> {
                         controller.setRecentDatabaseConnection(Optional.of(dbConnection));
-                        dialogs.openDialog(View.UPLOAD_STEPPER);
+                        navigator.navigate(View.UPLOAD_STEPPER);
                     }
             );
         });
@@ -67,7 +67,7 @@ public class OpenArchiveBrowser extends Presenter {
         return loadedFxml.getNode();
     }
 
-    public static LoadedFxml<OpenArchiveBrowser> load(
+    public static LoadedFxml<Presenter> load(
             final Controller controller,
             final RootStage stage
     ) {

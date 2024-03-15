@@ -1,32 +1,28 @@
 package ch.admin.bar.siardsuite.framework.dialogs;
 
-import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.dialogs.ArchiveRecentConnectionsDialogPresenter;
-import ch.admin.bar.siardsuite.presenter.open.OpenSiardArchiveDialogPresenter;
 import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.view.DialogCloser;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.scene.control.TreeItem;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import java.io.File;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
  * Defines a set of methods for displaying various dialogs.
  */
 @RequiredArgsConstructor
-public class Dialogs {
+public class Dialogs implements DialogCloser {
 
     private final Controller controller;
     private final RootStage rootStage;
@@ -34,17 +30,19 @@ public class Dialogs {
 
     /**
      * Opens the specified view as a dialog.
-     *
-     * @param view The view to be opened as a dialog.
-     * @deprecated This method is deprecated and should not be used. It exists only for compatibility
-     * reasons (legacy way to display a dialog) and will be removed in further releases.
      */
     @Deprecated
-    public void openDialog(View view) {
-        val loaded = view.getViewCreator().apply(controller, rootStage);
+    public void openDialog(LegacyShowDialogTarget target) {
+        val loaded = target.getViewSupplier().apply(controller, rootStage);
+        rootStage.displayDialog(loaded);
+    }
+
+    public <T> void open(final ShowDialogTarget<T> target, final T data) {
+        val loaded = target.getViewSupplier().apply(data, servicesFacade);
         rootStage.displayDialog(loaded.getNode());
     }
 
+    @Override
     @Deprecated
     public void closeDialog() {
         rootStage.closeDialog();
@@ -90,7 +88,7 @@ public class Dialogs {
     /**
      * Opens a dialog for selecting recent database connections for archiving.
      *
-     * @param onNewConnection The callback to be invoked when creating a new connection.
+     * @param onNewConnection            The callback to be invoked when creating a new connection.
      * @param onRecentConnectionSelected The callback to be invoked with the selected recent database connection.
      */
     public void openRecentConnectionsDialogForArchiving(
@@ -109,7 +107,7 @@ public class Dialogs {
     /**
      * Opens a dialog for selecting recent database connections for uploading.
      *
-     * @param onNewConnection The callback to be invoked when creating a new connection.
+     * @param onNewConnection            The callback to be invoked when creating a new connection.
      * @param onRecentConnectionSelected The callback to be invoked with the selected recent database connection.
      */
     public void openRecentConnectionsDialogForUploading(
@@ -120,19 +118,6 @@ public class Dialogs {
                 rootStage::closeDialog,
                 onNewConnection,
                 onRecentConnectionSelected
-        );
-
-        rootStage.displayDialog(loaded.getNode());
-    }
-
-    /**
-     * Opens a dialog for selecting a SIARD file, invoking the specified callback upon selection.
-     */
-    public void openSelectSiardFileDialog(final BiConsumer<File, Archive> onArchiveSelected) {
-        val loaded = OpenSiardArchiveDialogPresenter.load(
-                rootStage::closeDialog,
-                servicesFacade.errorHandler(),
-                onArchiveSelected
         );
 
         rootStage.displayDialog(loaded.getNode());

@@ -80,7 +80,7 @@ public class ArchiveChooseDbmsPresenter {
         });
         this.buttonsBox.previous().setOnAction((event) -> servicesFacade
                 .navigator()
-                .initializeWorkflow(Workflow.ARCHIVE));
+                .navigate(View.START_WITH_WORKFLOW, Workflow.ARCHIVE));
         this.buttonsBox.cancel().setOnAction((event) -> servicesFacade
                 .dialogs()
                 .openDialog(View.ARCHIVE_ABORT_DIALOG));

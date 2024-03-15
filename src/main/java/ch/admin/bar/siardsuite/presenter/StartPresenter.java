@@ -153,21 +153,25 @@ public class StartPresenter {
                 );
                 break;
             case OPEN:
-                dialogs.openSelectSiardFileDialog((file, archive) -> {
+                dialogs.open(
+                        View.OPEN_SIARD_ARCHIVE_DIALOG,
+                        (file, archive) -> {
                             controller.setSiardArchive(file.getName(), archive);
                             navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
-                        }
-                );
+                        });
                 break;
             case EXPORT:
-                dialogs.openSelectSiardFileDialog((file, archive) -> {
+                dialogs.open(
+                        View.OPEN_SIARD_ARCHIVE_DIALOG,
+                        (file, archive) -> {
                             controller.setSiardArchive(file.getName(), archive);
                             dialogs.openDialog(View.EXPORT_SELECT_TABLES);
-                        }
-                );
+                        });
                 break;
             case UPLOAD:
-                dialogs.openSelectSiardFileDialog((file, archive) -> {
+                dialogs.open(
+                        View.OPEN_SIARD_ARCHIVE_DIALOG,
+                        (file, archive) -> {
                             controller.setSiardArchive(file.getName(), archive);
                             dialogs.openRecentConnectionsDialogForUploading(
                                     () -> navigator.navigate(View.UPLOAD_STEPPER),
@@ -176,19 +180,29 @@ public class StartPresenter {
                                         navigator.navigate(View.UPLOAD_STEPPER);
                                     }
                             );
-                        }
-                );
+                        });
                 break;
         }
     }
 
+    public static LoadedFxml<StartPresenter> load(final ServicesFacade servicesFacade) {
+        val loaded = FXMLLoadHelper.<StartPresenter>load("fxml/start.fxml");
+        loaded.getController().init(
+                Optional.empty(),
+                servicesFacade.dialogs(),
+                servicesFacade.navigator(),
+                servicesFacade.controller());
+
+        return loaded;
+    }
+
     public static LoadedFxml<StartPresenter> load(
-            final Optional<Workflow> initWorkflow,
+            final Workflow initWorkflow,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<StartPresenter>load("fxml/start.fxml");
         loaded.getController().init(
-                initWorkflow,
+                Optional.of(initWorkflow),
                 servicesFacade.dialogs(),
                 servicesFacade.navigator(),
                 servicesFacade.controller());
