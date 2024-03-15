@@ -1,7 +1,8 @@
-package ch.admin.bar.siardsuite.util;
+package ch.admin.bar.siardsuite.framework.i18n;
 
-import ch.admin.bar.siardsuite.util.helper.I18nTestHelper;
-import ch.admin.bar.siardsuite.util.helper.StringTestHelper;
+import ch.admin.bar.siardsuite.util.CastHelper;
+import ch.admin.bar.siardsuite.framework.i18n.helper.I18nTestHelper;
+import ch.admin.bar.siardsuite.framework.i18n.helper.StringTestHelper;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
 import ch.admin.bar.siardsuite.framework.i18n.keys.Key;

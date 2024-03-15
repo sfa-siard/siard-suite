@@ -1,6 +1,5 @@
-package ch.admin.bar.siardsuite.component;
+package ch.admin.bar.siardsuite.ui.component;
 
-import ch.admin.bar.siardsuite.ui.component.ButtonBox;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

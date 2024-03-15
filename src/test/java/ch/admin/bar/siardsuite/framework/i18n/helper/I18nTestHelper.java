@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.util.helper;
+package ch.admin.bar.siardsuite.framework.i18n.helper;
 
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.framework.i18n.keys.Key;

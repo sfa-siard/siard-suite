@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.util;
+package ch.admin.bar.siardsuite.framework.i18n;
 
 import ch.admin.bar.siardsuite.framework.i18n.keys.Key;
 import lombok.NonNull;
@@ -14,8 +14,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ch.admin.bar.siardsuite.util.helper.I18nTestHelper.BUNDLES;
-import static ch.admin.bar.siardsuite.util.helper.I18nTestHelper.extractStaticKeyDefinitions;
+import static ch.admin.bar.siardsuite.framework.i18n.helper.I18nTestHelper.BUNDLES;
+import static ch.admin.bar.siardsuite.framework.i18n.helper.I18nTestHelper.extractStaticKeyDefinitions;
 
 class I18nAvailableTranslationsTest {
 

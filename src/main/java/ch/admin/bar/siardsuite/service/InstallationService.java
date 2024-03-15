@@ -67,7 +67,7 @@ public class InstallationService {
 
     private static String findAppVersion() throws IOException {
         val props = new Properties();
-        props.load(ResourcesLoader.loadResource("ch/admin/bar/siardsuite/version.properties"));
+        props.load(ResourcesResolver.loadResource("ch/admin/bar/siardsuite/version.properties"));
 
         val version = Optional.ofNullable(props.get("version"))
                 .map(Object::toString)

@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendering.utils;
+package ch.admin.bar.siardsuite.ui.component.rendering.utils;
 
 import ch.admin.bar.siardsuite.ui.component.rendering.utils.LoadingBatch;
 import lombok.val;

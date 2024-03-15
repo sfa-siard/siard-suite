@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.presenter;
+package ch.admin.bar.siardsuite.ui.component;
 
 import ch.admin.bar.siardsuite.ui.component.ValidationProperties;
 import ch.admin.bar.siardsuite.ui.component.ValidationProperty;

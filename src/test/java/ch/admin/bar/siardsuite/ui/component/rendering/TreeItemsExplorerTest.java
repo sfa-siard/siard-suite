@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.component.rendering;
+package ch.admin.bar.siardsuite.ui.component.rendering;
 
 import ch.admin.bar.siardsuite.ui.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;

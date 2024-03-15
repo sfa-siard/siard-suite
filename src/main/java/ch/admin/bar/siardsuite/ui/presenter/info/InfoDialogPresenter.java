@@ -1,12 +1,14 @@
 package ch.admin.bar.siardsuite.ui.presenter.info;
 
-import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
+import ch.enterag.utils.ProgramInfo;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -16,7 +18,7 @@ import lombok.val;
 
 public class InfoDialogPresenter {
 
-    private static final I18nKey TITLE = I18nKey.of("info.dialog.title");
+    private static final I18nKeyArg<String> TITLE = I18nKeyArg.of("info.dialog.title");
     private static final I18nKey TEXT = I18nKey.of("info.dialog.text");
 
     @FXML
@@ -29,7 +31,10 @@ public class InfoDialogPresenter {
     protected HBox buttonBox;
 
     public void init(DialogCloser dialogCloser) {
-        title.textProperty().bind(DisplayableText.of(TITLE).bindable());
+        val appVersion = ProgramInfo.getProgramInfo()
+                .getVersion();
+
+        title.textProperty().bind(DisplayableText.of(TITLE, appVersion).bindable());
         text.textProperty().bind(DisplayableText.of(TEXT).bindable());
 
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
