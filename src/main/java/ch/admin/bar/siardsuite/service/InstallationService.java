@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.service;
 
-import ch.admin.bar.siard2.cmd.utils.ResourcesLoader;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.util.OS;
+import ch.admin.bar.siardsuite.util.ResourcesResolver;
 import ch.enterag.utils.io.SpecialFolder;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -10,6 +10,7 @@ import mslinks.ShellLink;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -36,7 +37,7 @@ public class InstallationService {
                 applicationFolder + File.separator + "siard-suite-" + version + ".jar"
         );
 
-        try (val inputStream = ResourcesLoader.loadResource("ch/admin/bar/siardsuite/icons/archive_red.ico")) {
+        try (InputStream inputStream = ResourcesResolver.loadResource("ch/admin/bar/siardsuite/icons/archive_red.ico")) {
             Files.copy(inputStream,
                     Paths.get(applicationFolder + File.separator + "archive_red.ico"),
                     StandardCopyOption.REPLACE_EXISTING);

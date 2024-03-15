@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.service;
 
-import ch.admin.bar.siard2.cmd.utils.ResourcesLoader;
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.ResourcesResolver;
 import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class FilesService {
     @SneakyThrows
     public void openUserManual() {
         val userManualFile = getOrCreateTemporaryFile("user-manual.pdf");
-        InputStream is = ResourcesLoader.loadResource("ch/admin/bar/siardsuite/doc/" + I18n.getLocale().toLanguageTag() + "/user-manual.pdf");
+        InputStream is = ResourcesResolver.loadResource("ch/admin/bar/siardsuite/doc/" + I18n.getLocale().toLanguageTag() + "/user-manual.pdf");
 
         Files.copy(is, userManualFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
