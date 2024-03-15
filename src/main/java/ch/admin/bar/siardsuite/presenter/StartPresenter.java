@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.presenter;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
@@ -68,19 +67,14 @@ public class StartPresenter {
 
     private Dialogs dialogs;
     private Navigator navigator;
-    private Controller controller; // FIXME temporary needed
 
     public void init(
             Optional<Workflow> initWorkflow,
             Dialogs dialogs,
-            Navigator navigator,
-            Controller controller // FIXME temp
+            Navigator navigator
     ) {
         this.dialogs = dialogs;
         this.navigator = navigator;
-        this.controller = controller;
-
-        controller.clearSiardArchive();
 
         resetImageViews();
         setListener();
@@ -154,10 +148,10 @@ public class StartPresenter {
             case OPEN:
                 dialogs.open(
                         View.OPEN_SIARD_ARCHIVE_DIALOG,
-                        (file, archive) -> {
-                            controller.setSiardArchive(file.getName(), archive);
-                            navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
-                        });
+                        (file, archive) -> navigator.navigate(
+                                View.OPEN_SIARD_ARCHIVE_PREVIEW,
+                                archive
+                        ));
                 break;
             case EXPORT:
                 dialogs.open(
@@ -193,8 +187,7 @@ public class StartPresenter {
         loaded.getController().init(
                 Optional.empty(),
                 servicesFacade.dialogs(),
-                servicesFacade.navigator(),
-                servicesFacade.controller());
+                servicesFacade.navigator());
 
         return loaded;
     }
@@ -207,8 +200,7 @@ public class StartPresenter {
         loaded.getController().init(
                 Optional.of(initWorkflow),
                 servicesFacade.dialogs(),
-                servicesFacade.navigator(),
-                servicesFacade.controller());
+                servicesFacade.navigator());
 
         return loaded;
     }

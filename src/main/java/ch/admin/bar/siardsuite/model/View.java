@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public class View {
     public static final SimpleNavigationTarget START = new SimpleNavigationTarget(StartPresenter::load);
     public static final NavigationTarget<Workflow> START_WITH_WORKFLOW = new NavigationTarget<>(StartPresenter::load);
-    public static final LegacyNavigationTarget OPEN_SIARD_ARCHIVE_PREVIEW = new LegacyNavigationTarget(OpenArchiveBrowser::load);
+    public static final NavigationTarget<Archive> OPEN_SIARD_ARCHIVE_PREVIEW = new NavigationTarget<>(OpenArchiveBrowser::load);
 
     public static final NavigationTarget<Optional<RecentDbConnection>> ARCHIVE_STEPPER = new NavigationTarget<>(ArchiveStepperPresenter::load);
     public static final NavigationTarget<Archive> UPLOAD_STEPPER = new NavigationTarget<>(UploadStepperPresenter::load);

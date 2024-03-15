@@ -29,14 +29,6 @@ public class Navigator {
     private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
 
     /**
-     * Opens the specified SIARD archive in a browser view.
-     */
-    public void openArchive(Archive archive) {
-        controller.setSiardArchive(archive.getFile().getName(), archive);
-        navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW);
-    }
-
-    /**
      * Navigates to the specified view.
      */
     @Deprecated

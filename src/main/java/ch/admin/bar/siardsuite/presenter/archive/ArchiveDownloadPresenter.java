@@ -127,7 +127,7 @@ public class ArchiveDownloadPresenter {
                     try {
                         final Archive archive = ArchiveImpl.newInstance();
                         archive.open(userDefinedMetadata.getSaveAt());
-                        navigator.openArchive(archive);
+                        navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW, archive);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

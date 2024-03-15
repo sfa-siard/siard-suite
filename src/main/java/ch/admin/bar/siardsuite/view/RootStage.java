@@ -22,23 +22,20 @@ import lombok.val;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class RootStage extends Stage implements ErrorHandler {
-    private final Controller controller;
 
     private final BorderPane rootPane;
     private final BorderPane dialogPane;
 
     private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
 
-    public RootStage(Controller controller) {
-        this.controller = controller;
+    public RootStage() {
 
         ServicesFacade.INSTANCE.setRootStage(this);
-        ServicesFacade.INSTANCE.setController(controller);
 
-        rootPane = RootPresenter.load(controller, this)
+        rootPane = RootPresenter.load(new Controller(), this)
                 .getNode();
 
-        dialogPane = DialogPresenter.load(controller, this)
+        dialogPane = DialogPresenter.load(new Controller(), this)
                         .getNode();
 
         dialogPane.setVisible(false);
