@@ -3,16 +3,14 @@ package ch.admin.bar.siardsuite.framework.general;
 import ch.admin.bar.siardsuite.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
-import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
+import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.view.ErrorHandler;
 import ch.admin.bar.siardsuite.view.RootStage;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * Facade class for accessing various services in the application.
@@ -23,6 +21,7 @@ public class ServicesFacade {
     @Setter
     private RootStage rootStage;
 
+    private final UserPreferences userPreferences = new UserPreferences();
     private final ArchiveHandler archiveHandler = new ArchiveHandler();
     private final DbInteractionService dbInteractionService = new DbInteractionService(archiveHandler);
 
@@ -70,6 +69,10 @@ public class ServicesFacade {
     }
 
     public UserPreferences userPreferences() {
-        return UserPreferences.INSTANCE; // TODO
+        return userPreferences;
+    }
+
+    public FilesService filesService() {
+        return new FilesService();
     }
 }

@@ -24,9 +24,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserPreferences {
 
-    public static final UserPreferences INSTANCE = new UserPreferences(Preferences::userRoot);
+    public static final UserPreferences INSTANCE = new UserPreferences();
 
     private final PreferencesWrapper preferencesWrapper;
+
+    public UserPreferences() {
+        preferencesWrapper = Preferences::userRoot;
+    }
 
     public void push(final RecentDbConnection recentDbConnection) {
         val preferences = node(NodePath.DATABASE_CONNECTION).node(recentDbConnection.getName());

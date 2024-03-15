@@ -3,8 +3,8 @@ package ch.admin.bar.siardsuite.presenter;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.service.InstallationService;
-import ch.admin.bar.siardsuite.util.FileUtils;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
@@ -24,12 +24,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.WindowEvent;
 import lombok.val;
 
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 
 public class RootPresenter {
@@ -54,17 +48,20 @@ public class RootPresenter {
     private Dialogs dialogs;
     private ErrorHandler errorHandler;
     private InstallationService installationService;
+    private FilesService filesService;
     private RootStage stage;
 
     public void init(
-            Dialogs dialogs,
-            InstallationService installationService,
-            ErrorHandler errorHandler,
-            RootStage stage
+            final Dialogs dialogs,
+            final InstallationService installationService,
+            final FilesService filesService,
+            final ErrorHandler errorHandler,
+            final RootStage stage
     ) {
         this.dialogs = dialogs;
         this.installationService = installationService;
         this.errorHandler = errorHandler;
+        this.filesService = filesService;
         this.stage = stage;
 
         I18n.bind(stage.titleProperty(), "window.title", ProgramInfo.getProgramInfo().getVersion());
@@ -104,21 +101,7 @@ public class RootPresenter {
         this.menuItemInfo.setOnAction(event -> this.dialogs.open(View.INFO_DIALOG));
         this.menuItemOptions.setOnAction(event -> this.dialogs.open(View.OPTION_DIALOG));
         this.menuItemInstall.setOnAction(event -> errorHandler.wrap(installationService::installToDesktop));
-        this.helpButton.setOnAction(event -> {
-            try {
-                File p = new File("user-manual.pdf");
-                InputStream is = FileUtils.getFileFromResource(
-                        "ch/admin/bar/siardsuite/doc/" + I18n.getLocale().toLanguageTag() + "/user-manual.pdf");
-
-                Files.copy(is, p.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                Runnable openFile = FileUtils.getOpenFile(p);
-                // otherwise JavaFX-Thread is blocked and the file never opens.
-                SwingUtilities.invokeLater(openFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        this.helpButton.setOnAction(event -> filesService.openUserManual());
     }
 
     public static LoadedFxml<RootPresenter> load(
@@ -129,6 +112,7 @@ public class RootPresenter {
         loaded.getController().init(
                 servicesFacade.dialogs(),
                 servicesFacade.installationService(),
+                servicesFacade.filesService(),
                 servicesFacade.errorHandler(),
                 stage
         );
