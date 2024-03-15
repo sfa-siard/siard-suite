@@ -4,7 +4,7 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import ch.admin.bar.siardsuite.service.TableExporterService;
 import ch.admin.bar.siardsuite.util.I18n;

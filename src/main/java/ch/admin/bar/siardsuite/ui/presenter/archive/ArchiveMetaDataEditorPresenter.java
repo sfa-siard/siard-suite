@@ -9,7 +9,7 @@ import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.component.ValidationProperties;
 import ch.admin.bar.siardsuite.ui.component.ValidationProperty;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;

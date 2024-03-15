@@ -15,7 +15,7 @@ import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.CANCEL;
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.DOWNLOAD_FINISHED;
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.TO_START;
-import static ch.admin.bar.siardsuite.model.View.START;
+import static ch.admin.bar.siardsuite.ui.View.START;
 
 @Slf4j
 public class ArchiveDownloadPresenter {

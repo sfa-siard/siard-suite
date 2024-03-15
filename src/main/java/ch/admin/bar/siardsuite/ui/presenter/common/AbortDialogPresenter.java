@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.ui.presenter.common;
 import ch.admin.bar.siardsuite.framework.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;

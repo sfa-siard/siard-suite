@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.ui.presenter;
 
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.util.I18n;

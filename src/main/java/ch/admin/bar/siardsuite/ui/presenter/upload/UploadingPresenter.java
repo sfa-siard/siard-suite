@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ch.admin.bar.siardsuite.model.View.UPLOAD_ABORT_DIALOG;
+import static ch.admin.bar.siardsuite.ui.View.UPLOAD_ABORT_DIALOG;
 
 public class UploadingPresenter {
     @FXML

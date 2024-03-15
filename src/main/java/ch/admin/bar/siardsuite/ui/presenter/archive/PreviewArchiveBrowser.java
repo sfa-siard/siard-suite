@@ -7,7 +7,7 @@ import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.GenericArchiveBrowserPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.TreeBuilder;

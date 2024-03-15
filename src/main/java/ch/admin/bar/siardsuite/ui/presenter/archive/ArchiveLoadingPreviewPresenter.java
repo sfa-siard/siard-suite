@@ -9,7 +9,7 @@ import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.component.ProgressItem;
 import ch.admin.bar.siardsuite.ui.component.ProgressItems;
 import ch.admin.bar.siardsuite.service.DbInteractionService;

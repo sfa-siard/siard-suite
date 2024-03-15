@@ -1,7 +1,10 @@
-package ch.admin.bar.siardsuite.model;
+package ch.admin.bar.siardsuite.ui;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.Workflow;
+import ch.admin.bar.siardsuite.model.Failure;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.model.Tuple;
+import ch.admin.bar.siardsuite.ui.common.Workflow;
 import ch.admin.bar.siardsuite.ui.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.framework.dialogs.ShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.dialogs.SimpleShowDialogTarget;

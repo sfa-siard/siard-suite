@@ -1,12 +1,12 @@
 package ch.admin.bar.siardsuite.ui.presenter;
 
-import ch.admin.bar.siardsuite.Workflow;
+import ch.admin.bar.siardsuite.ui.common.Workflow;
 import ch.admin.bar.siardsuite.ui.component.Icon;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
@@ -20,10 +20,10 @@ import lombok.val;
 
 import java.util.Optional;
 
-import static ch.admin.bar.siardsuite.Workflow.ARCHIVE;
-import static ch.admin.bar.siardsuite.Workflow.EXPORT;
-import static ch.admin.bar.siardsuite.Workflow.OPEN;
-import static ch.admin.bar.siardsuite.Workflow.UPLOAD;
+import static ch.admin.bar.siardsuite.ui.common.Workflow.ARCHIVE;
+import static ch.admin.bar.siardsuite.ui.common.Workflow.EXPORT;
+import static ch.admin.bar.siardsuite.ui.common.Workflow.OPEN;
+import static ch.admin.bar.siardsuite.ui.common.Workflow.UPLOAD;
 import static ch.admin.bar.siardsuite.util.I18n.bind;
 
 public class StartPresenter {

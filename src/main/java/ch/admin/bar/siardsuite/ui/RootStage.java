@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.ui;
 import ch.admin.bar.siardsuite.ui.component.Icon;
 import ch.admin.bar.siardsuite.framework.DialogDisplay;
 import ch.admin.bar.siardsuite.framework.ViewDisplay;
-import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.ui.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.RootPresenter;
 import ch.admin.bar.siardsuite.service.ServicesFacadeBuilder;

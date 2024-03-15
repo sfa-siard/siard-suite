@@ -29,7 +29,7 @@ import java.util.Optional;
 
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.FAILED;
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.TO_START;
-import static ch.admin.bar.siardsuite.model.View.START;
+import static ch.admin.bar.siardsuite.ui.View.START;
 
 public class UploadResultPresenter {
 

@@ -1,12 +1,12 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive;
 
-import ch.admin.bar.siardsuite.Workflow;
+import ch.admin.bar.siardsuite.ui.common.Workflow;
 import ch.admin.bar.siardsuite.ui.component.ButtonBox;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;

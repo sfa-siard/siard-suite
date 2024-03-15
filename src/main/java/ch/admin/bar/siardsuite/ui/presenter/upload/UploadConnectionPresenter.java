@@ -8,7 +8,7 @@ import ch.admin.bar.siardsuite.service.database.model.Dbms;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionProperties;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import ch.admin.bar.siardsuite.ui.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.ui.presenter.connection.ConnectionForm;

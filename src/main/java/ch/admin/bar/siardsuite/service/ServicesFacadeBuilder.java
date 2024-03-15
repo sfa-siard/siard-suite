@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.ui.RootStage;

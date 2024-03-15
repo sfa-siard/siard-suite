@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite;
+package ch.admin.bar.siardsuite.ui.common;
 
 // representation of the four major workflows
 public enum Workflow {
