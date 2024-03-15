@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.ui.component.stepper;
 
-import ch.admin.bar.siardsuite.framework.Destructible;
+import ch.admin.bar.siardsuite.framework.hooks.Destructible;
 import ch.admin.bar.siardsuite.framework.steps.Step;
 import ch.admin.bar.siardsuite.ui.component.stepper.skins.CustomStepperToggleSkin;
 import ch.admin.bar.siardsuite.util.I18n;

@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.ui.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.ui.component.stepper.DrilledMFXStepper;
-import ch.admin.bar.siardsuite.framework.Destructible;
+import ch.admin.bar.siardsuite.framework.hooks.Destructible;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepChain;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;

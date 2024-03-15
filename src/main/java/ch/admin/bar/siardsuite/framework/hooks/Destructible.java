@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.framework;
+package ch.admin.bar.siardsuite.framework.hooks;
 
 /**
  * An interface representing objects that can be destructed.

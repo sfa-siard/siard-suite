@@ -1,14 +1,11 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
-import ch.admin.bar.siardsuite.framework.Destructible;
-import ch.admin.bar.siardsuite.util.CastHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.hooks.Destructible;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Represents a chain of steps in a workflow, providing access to the list of steps and a method to retrieve the
@@ -21,7 +18,7 @@ public class StepChain implements Destructible {
     private final List<Step> steps;
 
     @NonNull
-    private final AtomicReference<LoadedView> lastLoaded;
+    private final Runnable cleanUp;
 
     /**
      * Gets the navigator for a specific step in the workflow.
@@ -35,19 +32,12 @@ public class StepChain implements Destructible {
         return steps.stream()
                 .filter(step -> step.getDefinition() == stepDefinition)
                 .findAny()
-                .map(step -> (StepperNavigator<TOut>)step.getNavigator())
+                .map(step -> (StepperNavigator<TOut>) step.getNavigator())
                 .orElseThrow(() -> new IllegalArgumentException("Searched step not found"));
     }
 
     @Override
     public void destruct() {
-        lastLoaded.updateAndGet(lastLoadedFxml -> {
-            if (lastLoadedFxml != null) {
-                CastHelper.tryCast(lastLoadedFxml.getController(), Destructible.class)
-                        .ifPresent(Destructible::destruct);
-            }
-
-            return null;
-        });
+        cleanUp.run();
     }
 }

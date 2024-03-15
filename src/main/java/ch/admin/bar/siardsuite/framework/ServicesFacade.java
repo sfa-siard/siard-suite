@@ -3,7 +3,6 @@ package ch.admin.bar.siardsuite.framework;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.util.CastHelper;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import java.util.List;
@@ -12,14 +11,22 @@ import java.util.stream.Collectors;
 /**
  * Facade class for accessing various services in the application.
  */
-@RequiredArgsConstructor
 public class ServicesFacade {
 
-    private final ViewDisplay viewDisplay;
-    private final DialogDisplay dialogDisplay;
     private final ErrorHandler errorHandler;
 
     private final List<Object> registeredServices;
+
+    private final Navigator navigator;
+    private final Dialogs dialogs;
+
+    public ServicesFacade(ViewDisplay viewDisplay, DialogDisplay dialogDisplay, ErrorHandler errorHandler, List<Object> registeredServices) {
+        this.errorHandler = errorHandler;
+        this.registeredServices = registeredServices;
+
+        this.navigator = new Navigator(viewDisplay, this);
+        this.dialogs = new Dialogs(dialogDisplay, this);
+    }
 
     public <T> T getService(final Class<T> serviceType) {
         val matchingServices = registeredServices.stream()
@@ -48,14 +55,14 @@ public class ServicesFacade {
      * Returns the navigator for navigation within the application.
      */
     public Navigator navigator() {
-        return new Navigator(viewDisplay, this);
+        return navigator;
     }
 
     /**
      * Returns the dialogs service for displaying various dialogs.
      */
     public Dialogs dialogs() {
-        return new Dialogs(dialogDisplay, this);
+        return dialogs;
     }
 
     /**

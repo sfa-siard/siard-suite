@@ -1,8 +1,7 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
-import ch.admin.bar.siardsuite.framework.Destructible;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.util.CastHelper;
+import ch.admin.bar.siardsuite.framework.hooks.HooksCaller;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +54,7 @@ public class StepsChainBuilder {
         private final Map<Integer, Object> cachedInputDataByStepIndex = new HashMap<>();
         private final List<Step> preparedSteps = new ArrayList<>();
 
-        private final AtomicReference<LoadedView> previouslyLoaded = new AtomicReference<>();
+        private final HooksCaller hooksCaller = new HooksCaller();
 
         /**
          * Registers a step in the steps chain.
@@ -73,15 +72,8 @@ public class StepsChainBuilder {
 
                     val casted = (TOutPrevious) data;
 
-                    return previouslyLoaded.updateAndGet(previouslyLoadedFxml -> {
-                        if (previouslyLoadedFxml != null) {
-                            CastHelper.tryCast(previouslyLoadedFxml.getController(), Destructible.class)
-                                    .ifPresent(Destructible::destruct);
-                        }
-
-                        return step.getViewLoader()
-                                .load(casted, navigator, servicesFacade);
-                    });
+                    return hooksCaller.nextView(step.getViewLoader()
+                            .load(casted, navigator, servicesFacade));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     throw ex;
@@ -121,7 +113,7 @@ public class StepsChainBuilder {
          * Builds the step chain based on the registered steps.
          */
         public StepChain build() {
-            return new StepChain(Collections.unmodifiableList(preparedSteps), previouslyLoaded);
+            return new StepChain(Collections.unmodifiableList(preparedSteps), hooksCaller::clear);
         }
 
         private StepperNavigator createNavigator(final int stepIndex) {
