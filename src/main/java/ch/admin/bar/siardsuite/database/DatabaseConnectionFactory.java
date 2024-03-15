@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.database;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
 import lombok.NonNull;
 import lombok.Value;

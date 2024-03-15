@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.database;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.model.Model;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;

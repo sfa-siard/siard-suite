@@ -1,17 +1,11 @@
 package ch.admin.bar.siardsuite.model.database;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.MetaData;
-import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.facades.ArchiveFacade;
 import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
-import ch.admin.bar.siardsuite.visitor.SiardArchiveMetaDataVisitor;
-import ch.enterag.utils.io.DiskFile;
 import lombok.Getter;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +17,6 @@ public class SiardArchive {
     @Getter
     private Archive archive;
     private Optional<String> name;
-    // another hack to reuse tmp file for metadata export
-    private DiskFile tmpPath;
     private boolean onlyMetaData = false;
 
     @Getter
@@ -43,7 +35,6 @@ public class SiardArchive {
             boolean onlyMetaData
     ) {
         this.archive = archive;
-        this.tmpPath = ((ArchiveImpl) archive).getZipFile().getDiskFile();
         this.onlyMetaData = onlyMetaData;
         this.name = Optional.ofNullable(name);
         metaData = new SiardArchiveMetaData(archive.getMetaData());
@@ -54,42 +45,6 @@ public class SiardArchive {
         MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         this.users = metaDataFacade.users();
         this.priviliges = metaDataFacade.priviliges();
-    }
-
-    public void addArchiveMetaData(String dbName, String databaseDescription, String databaseOwner,
-                                   String dataOriginTimespan,
-                                   String archiverName, String archiverContact, URI lobFolder, File targetArchive,
-                                   boolean viewsAsTables) {
-        this.metaData = new SiardArchiveMetaData(dbName,
-                databaseDescription,
-                databaseOwner,
-                dataOriginTimespan,
-                archiverName,
-                archiverContact,
-                lobFolder,
-                targetArchive,
-                viewsAsTables);
-        // set metadata in existing archive -> needed in metadata only export, otherwise metadata and archive is generated in DownloadTask
-        if (this.archive != null && this.archive.getMetaData() != null) {
-            MetaData meta = this.archive.getMetaData();
-            meta.setDbName(dbName);
-            meta.setDescription(databaseDescription);
-            meta.setDataOwner(databaseOwner);
-            meta.setDataOriginTimespan(dataOriginTimespan);
-            meta.setArchiver(archiverName);
-            meta.setArchiverContact(archiverContact);
-            try {
-                new MetaDataFacade(meta).setLobFolder(lobFolder);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public void shareObject(SiardArchiveMetaDataVisitor visitor) {
-        if (metaData != null) {
-            metaData.shareObject(visitor);
-        }
     }
 
     public Optional<String> getName() {
@@ -115,10 +70,6 @@ public class SiardArchive {
     public void save() throws IOException {
         this.archive.saveMetaData();
         this.archive.close();
-    }
-
-    public DiskFile getTmpPath() {
-        return tmpPath;
     }
 }
 

@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite;
 
-import ch.admin.bar.siardsuite.model.Model;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.enterag.utils.ProgramInfo;
 import javafx.application.Application;
@@ -19,8 +18,7 @@ public class SiardApplication extends Application {
   public void start(Stage stage) throws IOException {
     log.info("Application started");
 
-    Model model = new Model();
-    Controller controller = new Controller(model);
+    Controller controller = new Controller();
     // trial to fix the bad font rendering issue from javafx
     System.setProperty("prism.lcdtext", "false");
     System.setProperty("prism.text", "t2k");

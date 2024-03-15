@@ -78,7 +78,7 @@ public class StartPresenter {
         this.navigator = navigator;
         this.controller = controller;
 
-        controller.getModel().clearSiardArchive();
+        controller.clearSiardArchive();
 
         resetImageViews();
         setListener();
@@ -140,7 +140,6 @@ public class StartPresenter {
     }
 
     private void initializeWorkflow(Workflow workflow) {
-        controller.getModel().clearSiardArchive();
         controller.setRecentDatabaseConnection(Optional.empty());
 
         switch (workflow) {
