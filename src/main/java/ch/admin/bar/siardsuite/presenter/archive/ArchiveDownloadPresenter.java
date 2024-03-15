@@ -133,7 +133,7 @@ public class ArchiveDownloadPresenter {
                     }
                 });
             } else {
-                this.buttonsBox.cancel().setOnAction((event) -> dialogs.openDialog(View.ARCHIVE_ABORT_DIALOG));
+                this.buttonsBox.cancel().setOnAction((event) -> dialogs.open(View.ARCHIVE_ABORT_DIALOG));
             }
         }
         if (this.buttonsBox.next() != null) {

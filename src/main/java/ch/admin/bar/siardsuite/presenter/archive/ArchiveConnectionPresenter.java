@@ -54,7 +54,7 @@ public class ArchiveConnectionPresenter {
         buttonsBox.previous().setOnAction((event) -> navigator.previous());
         buttonsBox.cancel().setOnAction((event) -> servicesFacade
                 .dialogs()
-                .openDialog(View.ARCHIVE_ABORT_DIALOG));
+                .open(View.ARCHIVE_ABORT_DIALOG));
     }
 
     public static LoadedFxml<ArchiveConnectionPresenter> load(

@@ -7,8 +7,6 @@ import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
-import ch.admin.bar.siardsuite.presenter.archive.dialogs.ArchiveRecentConnectionsDialogPresenter;
-import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.view.DialogCloser;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.scene.control.TreeItem;
@@ -32,7 +30,7 @@ public class Dialogs implements DialogCloser {
      * Opens the specified view as a dialog.
      */
     @Deprecated
-    public void openDialog(LegacyShowDialogTarget target) {
+    public void open(LegacyShowDialogTarget target) {
         val loaded = target.getViewSupplier().apply(controller, rootStage);
         rootStage.displayDialog(loaded);
     }

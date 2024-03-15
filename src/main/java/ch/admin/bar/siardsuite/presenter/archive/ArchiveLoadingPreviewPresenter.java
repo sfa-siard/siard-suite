@@ -80,7 +80,7 @@ public class ArchiveLoadingPreviewPresenter {
             dbInteractionService.cancelRunning();
         });
         buttonsBox.cancel().setOnAction(event -> dialogs
-                .openDialog(View.ARCHIVE_ABORT_DIALOG));
+                .open(View.ARCHIVE_ABORT_DIALOG));
 
         dbInteractionService.execute(LoadDatabaseInstruction.builder()
                 .connectionData(dbmsConnectionData)

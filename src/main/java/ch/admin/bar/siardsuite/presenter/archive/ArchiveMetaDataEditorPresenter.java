@@ -32,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -135,7 +134,7 @@ public class ArchiveMetaDataEditorPresenter {
         this.borderPane.setBottom(buttonsBox);
         this.buttonsBox.previous().setOnAction(event -> navigator.previous());
         this.buttonsBox.cancel().setOnAction((event) -> dialogs
-                .openDialog(View.ARCHIVE_ABORT_DIALOG));
+                .open(View.ARCHIVE_ABORT_DIALOG));
         this.buttonsBox.next().setOnAction((event) -> {
             tryReadValidUserDefinedMetadata()
                     .ifPresent(userDefinedMetadata ->

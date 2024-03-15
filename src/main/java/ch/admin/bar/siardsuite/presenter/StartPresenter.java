@@ -163,8 +163,10 @@ public class StartPresenter {
                 dialogs.open(
                         View.OPEN_SIARD_ARCHIVE_DIALOG,
                         (file, archive) -> {
-                            controller.setSiardArchive(file.getName(), archive);
-                            dialogs.openDialog(View.EXPORT_SELECT_TABLES);
+                            dialogs.open(
+                                    View.EXPORT_SELECT_TABLES,
+                                    archive
+                            );
                         });
                 break;
             case UPLOAD:

@@ -63,7 +63,7 @@ public class UploadingPresenter {
         I18n.bind(progress.textProperty(), "upload.records.uploaded.message");
         I18n.bind(cancel.textProperty(), "button.cancel");
 
-        cancel.setOnAction(event -> dialogs.openDialog(UPLOAD_ABORT_DIALOG)); // TODO: how to cancel the upload task
+        cancel.setOnAction(event -> dialogs.open(UPLOAD_ABORT_DIALOG)); // TODO: how to cancel the upload task
 
         scrollBox.getChildren().clear();
 

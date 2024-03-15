@@ -33,7 +33,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Properties;
 
 public class RootPresenter extends Presenter {
@@ -103,8 +102,8 @@ public class RootPresenter extends Presenter {
         this.menuItemClose.setOnAction(event -> {
             this.stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
-        this.menuItemInfo.setOnAction(event -> this.dialogs.openDialog(View.INFO_DIALOG));
-        this.menuItemOptions.setOnAction(event -> this.dialogs.openDialog(View.OPTION_DIALOG));
+        this.menuItemInfo.setOnAction(event -> this.dialogs.open(View.INFO_DIALOG));
+        this.menuItemOptions.setOnAction(event -> this.dialogs.open(View.OPTION_DIALOG));
         this.menuItemInstall.setOnAction(this::installToDesktop);
         this.helpButton.setOnAction(event -> {
             try {

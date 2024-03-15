@@ -11,6 +11,7 @@ import ch.admin.bar.siardsuite.presenter.StartPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.ArchiveStepperPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.OpenArchiveBrowser;
 import ch.admin.bar.siardsuite.presenter.archive.dialogs.ArchiveRecentConnectionsDialogPresenter;
+import ch.admin.bar.siardsuite.presenter.export.ExportSelectTablesDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.open.OpenSiardArchiveDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.upload.UploadStepperPresenter;
 import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
@@ -30,7 +31,8 @@ public class View {
     public static final NavigationTarget<Tuple<Archive, RecentDbConnection>> UPLOAD_STEPPER_WITH_RECENT_CONNECTION = new NavigationTarget<>(UploadStepperPresenter::loadWithRecentConnection);
 
     public static final ShowDialogTarget<BiConsumer<File, Archive>> OPEN_SIARD_ARCHIVE_DIALOG = new ShowDialogTarget<>(OpenSiardArchiveDialogPresenter::load);
-    public static final LegacyShowDialogTarget EXPORT_SELECT_TABLES = new LegacyShowDialogTarget("fxml/export/export-select-tables-dialog.fxml");
+    public static final ShowDialogTarget<Archive> EXPORT_SELECT_TABLES = new ShowDialogTarget<>(ExportSelectTablesDialogPresenter::load);
+
     public static final LegacyShowDialogTarget EXPORT_SUCCESS = new LegacyShowDialogTarget("fxml/export/export-success-dialog.fxml");
     public static final LegacyShowDialogTarget INFO_DIALOG = new LegacyShowDialogTarget("fxml/info/info-dialog.fxml");
     public static final LegacyShowDialogTarget OPTION_DIALOG = new LegacyShowDialogTarget("fxml/option/option-dialog.fxml");

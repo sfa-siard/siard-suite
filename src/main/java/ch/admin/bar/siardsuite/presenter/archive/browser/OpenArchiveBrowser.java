@@ -50,7 +50,10 @@ public class OpenArchiveBrowser extends Presenter {
                                 siardArchive.getArchive()))
 
         ));
-        buttonsBox.previous().setOnAction(event -> dialogs.openDialog(View.EXPORT_SELECT_TABLES));
+        buttonsBox.previous().setOnAction(event -> dialogs.open(
+                View.EXPORT_SELECT_TABLES,
+                siardArchive.getArchive()
+        ));
         buttonsBox.next().setOnAction(event -> {
             try {
                 val archive = controller.getSiardArchive().getArchive();

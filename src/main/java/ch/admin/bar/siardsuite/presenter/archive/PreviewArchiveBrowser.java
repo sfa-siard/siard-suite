@@ -43,7 +43,7 @@ public class PreviewArchiveBrowser {
         buttonsBox.previous().setOnAction((event) -> navigator.previous());
         buttonsBox.cancel().setOnAction((event) -> servicesFacade
                 .dialogs()
-                .openDialog(View.ARCHIVE_ABORT_DIALOG));
+                .open(View.ARCHIVE_ABORT_DIALOG));
 
 
         this.loadedFxml = GenericArchiveBrowserPresenter.load(

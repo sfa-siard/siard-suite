@@ -117,7 +117,7 @@ public class UploadConnectionPresenter {
         buttonsBox.previous().setOnAction((event) -> navigator.previous());
         buttonsBox.cancel().setOnAction((event) -> servicesFacade
                 .dialogs()
-                .openDialog(View.UPLOAD_ABORT_DIALOG));
+                .open(View.UPLOAD_ABORT_DIALOG));
     }
 
     private boolean validSchemaFields() {

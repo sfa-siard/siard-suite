@@ -83,7 +83,7 @@ public class ArchiveChooseDbmsPresenter {
                 .navigate(View.START_WITH_WORKFLOW, Workflow.ARCHIVE));
         this.buttonsBox.cancel().setOnAction((event) -> servicesFacade
                 .dialogs()
-                .openDialog(View.ARCHIVE_ABORT_DIALOG));
+                .open(View.ARCHIVE_ABORT_DIALOG));
     }
 
     private void createRadioToVBox(String s) {
