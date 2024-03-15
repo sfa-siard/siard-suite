@@ -7,9 +7,7 @@ import java.net.URL;
 import java.util.Optional;
 
 /**
- * Helper class for resolving class-path-resources in tests.
- * <p>
- * Caution: Does not working in packed jar-archives!
+ * Helper class for resolving class-path-resources
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResourcesResolver {

@@ -2,9 +2,9 @@ package ch.admin.bar.siardsuite.util;
 
 import ch.admin.bar.siardsuite.util.helper.I18nTestHelper;
 import ch.admin.bar.siardsuite.util.helper.StringTestHelper;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKeyArg;
-import ch.admin.bar.siardsuite.util.i18n.keys.Key;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
+import ch.admin.bar.siardsuite.framework.i18n.keys.Key;
 import lombok.Value;
 import lombok.val;
 import org.assertj.core.api.Assertions;

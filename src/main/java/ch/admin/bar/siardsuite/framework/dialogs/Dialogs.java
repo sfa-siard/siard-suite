@@ -1,16 +1,16 @@
 package ch.admin.bar.siardsuite.framework.dialogs;
 
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.DialogDisplay;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
-import ch.admin.bar.siardsuite.view.DialogCloser;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
-import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.scene.control.TreeItem;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -24,15 +24,15 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class Dialogs implements DialogCloser {
 
-    private final RootStage rootStage;
-    private final ServicesFacade servicesFacade = ServicesFacade.INSTANCE; // TODO
+    private final DialogDisplay dialogDisplay;
+    private final ServicesFacade servicesFacade;
 
     /**
      * Opens the specified view as a dialog.
      */
     public void open(SimpleShowDialogTarget target) {
         val loaded = target.getViewSupplier().apply(servicesFacade);
-        rootStage.displayDialog(loaded.getNode());
+        dialogDisplay.displayDialog(loaded.getNode());
     }
 
     /**
@@ -40,20 +40,20 @@ public class Dialogs implements DialogCloser {
      */
     public <T> void open(final ShowDialogTarget<T> target, final T data) {
         val loaded = target.getViewSupplier().apply(data, servicesFacade);
-        rootStage.displayDialog(loaded.getNode());
+        dialogDisplay.displayDialog(loaded.getNode());
     }
 
     public ErrorHandler errorHandler() {
         return ex -> {
             val loaded = ErrorDialogPresenter.load(new Failure(ex), servicesFacade);
-            rootStage.displayDialog(loaded.getNode());
+            dialogDisplay.displayDialog(loaded.getNode());
         };
     }
 
     @Override
     @Deprecated
     public void closeDialog() {
-        rootStage.closeDialog();
+        dialogDisplay.closeDialog();
     }
 
     /**
@@ -61,20 +61,20 @@ public class Dialogs implements DialogCloser {
      */
     public void openUnsavedChangesDialog(final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
         val loaded = UnsavedChangesDialogPresenter.load(result -> {
-            rootStage.closeDialog();
+            closeDialog();
             resultCallback.accept(result);
         });
 
-        rootStage.displayDialog(loaded.getNode());
+        dialogDisplay.displayDialog(loaded.getNode());
     }
 
     /**
      * Opens a dialog for searching tables, invoking the specified callback with the search term upon completion.
      */
     public void openSearchTableDialog(final Consumer<Optional<String>> searchTermConsumer) {
-        val loaded = SearchTableDialogPresenter.load(rootStage::closeDialog, searchTermConsumer);
+        val loaded = SearchTableDialogPresenter.load(this::closeDialog, searchTermConsumer);
 
-        rootStage.displayDialog(loaded.getNode());
+        dialogDisplay.displayDialog(loaded.getNode());
     }
 
     /**
@@ -85,11 +85,11 @@ public class Dialogs implements DialogCloser {
             final TreeItemsExplorer treeItemsExplorer,
             final Consumer<TreeItem<TreeAttributeWrapper>> onSelected) {
         val loaded = SearchMetadataDialogPresenter.load(
-                rootStage::closeDialog,
+                this::closeDialog,
                 treeItemsExplorer,
                 onSelected
         );
 
-        rootStage.displayDialog(loaded.getNode());
+        dialogDisplay.displayDialog(loaded.getNode());
     }
 }

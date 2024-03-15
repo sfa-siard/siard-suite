@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.presenter.archive.model;
 
-import ch.admin.bar.siardsuite.database.model.Dbms;
-import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.service.database.model.Dbms;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;

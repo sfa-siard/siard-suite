@@ -2,13 +2,13 @@ package ch.admin.bar.siardsuite.presenter.option;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.component.DialogButton;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.service.preferences.Options;
+import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.preferences.Options;
-import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.view.DialogCloser;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -27,7 +27,7 @@ public class OptionDialogPresenter {
     @FXML
     public TextField queryTimeoutText;
     @FXML
-    public TextField  loginTimeoutText;
+    public TextField loginTimeoutText;
     @FXML
     public Label loginTimeoutLabel;
     @FXML
@@ -37,7 +37,7 @@ public class OptionDialogPresenter {
     public void init(
             final UserPreferences userPreferences,
             final DialogCloser dialogCloser
-            ) {
+    ) {
 
         I18n.bind(title.textProperty(), "option.dialog.title");
         I18n.bind(loginTimeoutLabel.textProperty(), "option.dialog.login-timeout.label");
@@ -62,9 +62,12 @@ public class OptionDialogPresenter {
         loginTimeoutText.setText(options.getLoginTimeout() + "");
     }
 
-    public static LoadedFxml<OptionDialogPresenter> load(final ServicesFacade servicesFacade) {
+    public static LoadedView<OptionDialogPresenter> load(final ServicesFacade servicesFacade) {
         val loaded = FXMLLoadHelper.<OptionDialogPresenter>load("fxml/option/option-dialog.fxml");
-        loaded.getController().init(servicesFacade.userPreferences(), servicesFacade.dialogs());
+        loaded.getController().init(
+                servicesFacade.getService(UserPreferences.class),
+                servicesFacade.dialogs()
+        );
 
         return loaded;
     }

@@ -5,20 +5,20 @@ import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.UploadDatabaseInstruction;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.UploadDatabaseInstruction;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.fxml.FXML;
@@ -104,7 +104,7 @@ public class UploadingPresenter {
                 new LabelIcon(text, pos, IconView.IconType.LOADING));
     }
 
-    public static LoadedFxml<UploadingPresenter> load(
+    public static LoadedView<UploadingPresenter> load(
             final ArchiveAdder<UploadArchiveData> data,
             final StepperNavigator<ShowUploadResultsData> navigator,
             final ServicesFacade servicesFacade
@@ -116,7 +116,7 @@ public class UploadingPresenter {
                 data.getData().getSchemaNameMappings(),
                 navigator,
                 servicesFacade.errorHandler(),
-                servicesFacade.dbInteractionService(),
+                servicesFacade.getService(DbInteractionService.class),
                 servicesFacade.dialogs());
 
         return loaded;

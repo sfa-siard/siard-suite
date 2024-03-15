@@ -1,11 +1,12 @@
 package ch.admin.bar.siardsuite.util.preferences;
 
-import ch.admin.bar.siardsuite.database.DbmsRegistry;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
-import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
-import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
-import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
+import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.FileBasedDbms;
+import ch.admin.bar.siardsuite.service.database.model.FileBasedDbmsConnectionProperties;
+import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbms;
+import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbmsConnectionProperties;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.testfx.assertions.api.Assertions;

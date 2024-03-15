@@ -3,13 +3,13 @@ package ch.admin.bar.siardsuite.presenter;
 import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.view.animations.Animation;
 import javafx.animation.PathTransition;
 import javafx.fxml.FXML;
@@ -182,7 +182,7 @@ public class StartPresenter {
         }
     }
 
-    public static LoadedFxml<StartPresenter> load(final ServicesFacade servicesFacade) {
+    public static LoadedView<StartPresenter> load(final ServicesFacade servicesFacade) {
         val loaded = FXMLLoadHelper.<StartPresenter>load("fxml/start.fxml");
         loaded.getController().init(
                 Optional.empty(),
@@ -192,7 +192,7 @@ public class StartPresenter {
         return loaded;
     }
 
-    public static LoadedFxml<StartPresenter> load(
+    public static LoadedView<StartPresenter> load(
             final Workflow initWorkflow,
             final ServicesFacade servicesFacade
     ) {

@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.presenter.upload.model;
 
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;

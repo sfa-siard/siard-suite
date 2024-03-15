@@ -1,12 +1,12 @@
 package ch.admin.bar.siardsuite.presenter;
 
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.DialogCloser;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.DialogCloser;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -36,7 +36,7 @@ public class ErrorDialogPresenter {
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
     }
 
-    public static LoadedFxml<ErrorDialogPresenter> load(final Failure failure, final ServicesFacade servicesFacade) {
+    public static LoadedView<ErrorDialogPresenter> load(final Failure failure, final ServicesFacade servicesFacade) {
         val loaded = FXMLLoadHelper.<ErrorDialogPresenter>load("fxml/error-dialog.fxml");
         loaded.getController().init(failure, servicesFacade.dialogs());
 

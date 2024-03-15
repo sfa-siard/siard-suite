@@ -1,14 +1,13 @@
 package ch.admin.bar.siardsuite.presenter.connection;
 
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.presenter.connection.fields.FormField;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.scene.layout.VBox;
 import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class ConnectionPropertiesForm extends VBox {

@@ -2,14 +2,17 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.component.ButtonBox;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -48,16 +51,16 @@ public class ArchiveChooseDbmsPresenter {
     private boolean next = true;
 
     public void init(
-            final StepperNavigator<DbmsWithInitialValue> navigator,
-            final ServicesFacade servicesFacade
+            final StepperNavigator<DbmsWithInitialValue> stepperNavigator,
+            final Navigator navigator,
+            final Dialogs dialogs,
+            final DbmsRegistry dbmsRegistry
     ) {
         title.textProperty().bind(DisplayableText.of(TITLE).bindable());
         text.textProperty().bind(DisplayableText.of(TEXT).bindable());
         errorMessage.textProperty().bind(DisplayableText.of(ERROR).bindable());
 
         this.errorMessage.setVisible(false);
-
-        val dbmsRegistry = servicesFacade.dbmsRegistry();
 
         dbmsRegistry.getSupportedDbms()
                 .forEach(this::createRadioToVBox);
@@ -71,18 +74,16 @@ public class ArchiveChooseDbmsPresenter {
                 val selectedDbms = dbmsRegistry.findDbmsByName(selected.getText());
                 this.errorMessage.setVisible(false);
 
-                navigator.next(DbmsWithInitialValue.builder()
+                stepperNavigator.next(DbmsWithInitialValue.builder()
                         .dbms(selectedDbms)
                         .build());
             } else {
                 this.errorMessage.setVisible(true);
             }
         });
-        this.buttonsBox.previous().setOnAction((event) -> servicesFacade
-                .navigator()
+        this.buttonsBox.previous().setOnAction((event) -> navigator
                 .navigate(View.START_WITH_WORKFLOW, Workflow.ARCHIVE));
-        this.buttonsBox.cancel().setOnAction((event) -> servicesFacade
-                .dialogs()
+        this.buttonsBox.cancel().setOnAction((event) -> dialogs
                 .open(View.ARCHIVE_ABORT_DIALOG));
     }
 
@@ -95,12 +96,17 @@ public class ArchiveChooseDbmsPresenter {
         VBox.setMargin(radioButton, new Insets(0, 0, 25, 0));
     }
 
-    public static LoadedFxml<ArchiveChooseDbmsPresenter> load(
+    public static LoadedView<ArchiveChooseDbmsPresenter> load(
             final StepperNavigator<DbmsWithInitialValue> navigator,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveChooseDbmsPresenter>load("fxml/archive/archive-choose-dbms.fxml");
-        loaded.getController().init(navigator, servicesFacade);
+        loaded.getController().init(
+                navigator,
+                servicesFacade.navigator(),
+                servicesFacade.dialogs(),
+                servicesFacade.getService(DbmsRegistry.class)
+        );
 
         return loaded;
     }

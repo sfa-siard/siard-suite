@@ -4,21 +4,21 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.Icon;
 import ch.admin.bar.siardsuite.component.Spinner;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.ProgressItem;
-import ch.admin.bar.siardsuite.presenter.ProgressItems;
+import ch.admin.bar.siardsuite.component.ProgressItem;
+import ch.admin.bar.siardsuite.component.ProgressItems;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -121,7 +121,7 @@ public class ArchiveLoadingPreviewPresenter {
         }
     }
 
-    public static LoadedFxml<ArchiveLoadingPreviewPresenter> load(
+    public static LoadedView<ArchiveLoadingPreviewPresenter> load(
             final DbmsConnectionData dbmsConnectionData,
             final StepperNavigator<Tuple<Archive, DbmsConnectionData>> navigator,
             final ServicesFacade servicesFacade
@@ -130,7 +130,7 @@ public class ArchiveLoadingPreviewPresenter {
         loaded.getController().init(
                 dbmsConnectionData,
                 navigator,
-                servicesFacade.dbInteractionService(),
+                servicesFacade.getService(DbInteractionService.class),
                 servicesFacade.dialogs(),
                 servicesFacade.errorHandler()
         );

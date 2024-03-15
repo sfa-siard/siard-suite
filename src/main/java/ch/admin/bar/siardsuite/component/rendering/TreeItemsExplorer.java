@@ -5,7 +5,7 @@ import ch.admin.bar.siardsuite.component.rendering.model.ReadWriteStringProperty
 import ch.admin.bar.siardsuite.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.util.MetaSearchTerm;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import javafx.scene.control.TreeItem;
 import lombok.Builder;
 import lombok.NonNull;

@@ -1,10 +1,10 @@
 package ch.admin.bar.siardsuite.framework.navigation;
 
-import ch.admin.bar.siardsuite.framework.general.Destructible;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.Destructible;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.ViewDisplay;
 import ch.admin.bar.siardsuite.util.CastHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.view.RootStage;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -16,10 +16,10 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class Navigator {
 
-    private final RootStage stage;
-    private final ServicesFacade servicesFacade = ServicesFacade.INSTANCE; // TODO
+    private final ViewDisplay viewDisplay;
+    private final ServicesFacade servicesFacade;
 
-    private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
+    private final AtomicReference<LoadedView> previouslyLoadedView = new AtomicReference<>();
 
     public void navigate(SimpleNavigationTarget target) {
         navigate(target.getViewSupplier().apply(servicesFacade));
@@ -29,16 +29,16 @@ public class Navigator {
         navigate(target.getViewSupplier().apply(data, servicesFacade));
     }
 
-    private void navigate(final LoadedFxml loadedFxml) {
+    private void navigate(final LoadedView loadedView) {
         val loaded = previouslyLoadedView.updateAndGet(previouslyLoadedFxml -> {
             if (previouslyLoadedFxml != null) {
                 CastHelper.tryCast(previouslyLoadedFxml.getController(), Destructible.class)
                         .ifPresent(Destructible::destruct);
             }
 
-            return loadedFxml;
+            return loadedView;
         });
 
-        stage.displayView(loaded.getNode());
+        viewDisplay.displayView(loaded.getNode());
     }
 }

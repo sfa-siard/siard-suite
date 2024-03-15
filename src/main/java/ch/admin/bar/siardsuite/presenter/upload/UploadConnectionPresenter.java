@@ -3,9 +3,10 @@ package ch.admin.bar.siardsuite.presenter.upload;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.database.model.Dbms;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionProperties;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.service.database.model.Dbms;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionProperties;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
@@ -14,11 +15,11 @@ import ch.admin.bar.siardsuite.presenter.connection.ConnectionForm;
 import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -74,7 +75,7 @@ public class UploadConnectionPresenter {
             final Archive archive,
             final Optional<RecentDbConnection> initialValue,
             final StepperNavigator<UploadArchiveData> navigator,
-            final ServicesFacade servicesFacade
+            final Dialogs dialogs
     ) {
         simpleSchemaNames = ListAssembler.assemble(archive.getSchemas(), archive::getSchema).stream()
                 .map(schema -> schema.getMetaSchema().getName())
@@ -115,8 +116,7 @@ public class UploadConnectionPresenter {
                 });
 
         buttonsBox.previous().setOnAction((event) -> navigator.previous());
-        buttonsBox.cancel().setOnAction((event) -> servicesFacade
-                .dialogs()
+        buttonsBox.cancel().setOnAction((event) -> dialogs
                 .open(View.UPLOAD_ABORT_DIALOG));
     }
 
@@ -169,7 +169,7 @@ public class UploadConnectionPresenter {
         }
     }
 
-    public static LoadedFxml<UploadConnectionPresenter> load(
+    public static LoadedView<UploadConnectionPresenter> load(
             final ArchiveAdder<DbmsWithInitialValue> data,
             final StepperNavigator<UploadArchiveData> navigator,
             final ServicesFacade servicesFacade
@@ -180,7 +180,7 @@ public class UploadConnectionPresenter {
                 data.getArchive(),
                 data.getData().getInitialValue(),
                 navigator,
-                servicesFacade);
+                servicesFacade.dialogs());
 
         return loaded;
     }

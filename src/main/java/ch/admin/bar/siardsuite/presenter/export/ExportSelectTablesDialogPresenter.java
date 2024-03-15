@@ -1,15 +1,15 @@
 package ch.admin.bar.siardsuite.presenter.export;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.archive.browser.forms.utils.ListAssembler;
 import ch.admin.bar.siardsuite.service.TableExporterService;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -63,7 +63,7 @@ public class ExportSelectTablesDialogPresenter {
             final Archive archive,
             final Dialogs dialogs,
             final ErrorHandler errorHandler
-            ) {
+    ) {
         this.archive = archive;
         this.dialogs = dialogs;
         this.errorHandler = errorHandler;
@@ -151,7 +151,7 @@ public class ExportSelectTablesDialogPresenter {
         );
     }
 
-    public static LoadedFxml<ExportSelectTablesDialogPresenter> load(
+    public static LoadedView<ExportSelectTablesDialogPresenter> load(
             final Archive data,
             final ServicesFacade servicesFacade
     ) {

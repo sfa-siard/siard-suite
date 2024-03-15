@@ -1,5 +1,7 @@
 package ch.admin.bar.siardsuite.presenter;
 
+import ch.admin.bar.siardsuite.component.ValidationProperties;
+import ch.admin.bar.siardsuite.component.ValidationProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.junit.Before;

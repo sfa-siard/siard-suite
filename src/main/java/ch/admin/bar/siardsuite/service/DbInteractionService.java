@@ -1,10 +1,10 @@
 package ch.admin.bar.siardsuite.service;
 
-import ch.admin.bar.siardsuite.database.DatabaseConnectionFactory;
-import ch.admin.bar.siardsuite.database.DatabaseLoadService;
-import ch.admin.bar.siardsuite.database.DatabaseUploadService;
-import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
-import ch.admin.bar.siardsuite.database.model.UploadDatabaseInstruction;
+import ch.admin.bar.siardsuite.service.database.DatabaseConnectionFactory;
+import ch.admin.bar.siardsuite.service.database.DatabaseLoadService;
+import ch.admin.bar.siardsuite.service.database.DatabaseUploadService;
+import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.service.database.model.UploadDatabaseInstruction;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

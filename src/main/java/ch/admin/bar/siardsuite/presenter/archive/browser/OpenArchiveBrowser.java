@@ -3,17 +3,17 @@ package ch.admin.bar.siardsuite.presenter.archive.browser;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import javafx.scene.Node;
 import lombok.val;
 
@@ -25,7 +25,7 @@ public class OpenArchiveBrowser {
     private static final I18nKey TITLE = I18nKey.of("open.siard.archive.preview.title");
     private static final I18nKey TEXT = I18nKey.of("open.siard.archive.preview.text");
 
-    private LoadedFxml<GenericArchiveBrowserPresenter> loadedFxml;
+    private LoadedView<GenericArchiveBrowserPresenter> loadedView;
 
     public void init(
             final Archive archive,
@@ -64,7 +64,7 @@ public class OpenArchiveBrowser {
             navigator.navigate(View.START);
         });
 
-        this.loadedFxml = GenericArchiveBrowserPresenter.load(
+        this.loadedView = GenericArchiveBrowserPresenter.load(
                 dialogs,
                 errorHandler,
                 DisplayableText.of(TITLE),
@@ -74,10 +74,10 @@ public class OpenArchiveBrowser {
     }
 
     public Node getView() {
-        return loadedFxml.getNode();
+        return loadedView.getNode();
     }
 
-    public static LoadedFxml<OpenArchiveBrowser> load(
+    public static LoadedView<OpenArchiveBrowser> load(
             final Archive data,
             final ServicesFacade servicesFacade
     ) {
@@ -87,7 +87,7 @@ public class OpenArchiveBrowser {
                 servicesFacade.dialogs(),
                 servicesFacade.navigator(),
                 servicesFacade.errorHandler(),
-                servicesFacade.archiveHandler());
-        return new LoadedFxml<>(browser::getView, browser);
+                servicesFacade.getService(ArchiveHandler.class));
+        return new LoadedView<>(browser::getView, browser);
     }
 }

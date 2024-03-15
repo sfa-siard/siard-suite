@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
-import ch.admin.bar.siardsuite.framework.general.Destructible;
+import ch.admin.bar.siardsuite.framework.Destructible;
 import ch.admin.bar.siardsuite.util.CastHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class StepChain implements Destructible {
     private final List<Step> steps;
 
     @NonNull
-    private final AtomicReference<LoadedFxml> lastLoaded;
+    private final AtomicReference<LoadedView> lastLoaded;
 
     /**
      * Gets the navigator for a specific step in the workflow.

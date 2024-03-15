@@ -1,14 +1,14 @@
 package ch.admin.bar.siardsuite.presenter.connection;
 
-import ch.admin.bar.siardsuite.database.DbmsRegistry;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.ServerBasedDbms;
-import ch.admin.bar.siardsuite.database.model.ServerBasedDbmsConnectionProperties;
+import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbms;
+import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.presenter.connection.fields.StringFormField;
 import ch.admin.bar.siardsuite.util.Validator;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.TranslatableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import lombok.NonNull;

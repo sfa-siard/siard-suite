@@ -1,16 +1,15 @@
 package ch.admin.bar.siardsuite.component.stepper;
 
-import ch.admin.bar.siardsuite.framework.general.Destructible;
+import ch.admin.bar.siardsuite.framework.Destructible;
 import ch.admin.bar.siardsuite.framework.steps.Step;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.component.stepper.skins.CustomStepperSkin;
 import ch.admin.bar.siardsuite.component.stepper.skins.CustomStepperToggleSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.WeakChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import lombok.extern.slf4j.Slf4j;

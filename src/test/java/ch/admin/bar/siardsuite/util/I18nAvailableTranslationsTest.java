@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.util;
 
-import ch.admin.bar.siardsuite.util.i18n.keys.Key;
+import ch.admin.bar.siardsuite.framework.i18n.keys.Key;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;

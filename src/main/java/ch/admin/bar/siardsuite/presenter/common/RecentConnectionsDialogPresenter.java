@@ -1,15 +1,15 @@
 package ch.admin.bar.siardsuite.presenter.common;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
-import ch.admin.bar.siardsuite.util.preferences.StorageData;
-import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.view.DialogCloser;
+import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.service.preferences.StorageData;
+import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -125,7 +125,7 @@ public class RecentConnectionsDialogPresenter {
         return recentConnectionsBox;
     }
 
-    public static LoadedFxml<RecentConnectionsDialogPresenter> loadForUpload(
+    public static LoadedView<RecentConnectionsDialogPresenter> loadForUpload(
             final Consumer<Optional<RecentDbConnection>> onRecentConnectionSelected,
             final ServicesFacade servicesFacade
     ) {
@@ -141,7 +141,7 @@ public class RecentConnectionsDialogPresenter {
         return loaded;
     }
 
-    public static LoadedFxml<RecentConnectionsDialogPresenter> loadForArchiving(
+    public static LoadedView<RecentConnectionsDialogPresenter> loadForArchiving(
             final Consumer<Optional<RecentDbConnection>> onRecentConnectionSelected,
             final ServicesFacade servicesFacade
     ) {

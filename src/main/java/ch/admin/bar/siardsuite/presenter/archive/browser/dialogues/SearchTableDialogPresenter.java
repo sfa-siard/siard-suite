@@ -1,11 +1,11 @@
 package ch.admin.bar.siardsuite.presenter.archive.browser.dialogues;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.DialogCloser;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.DialogCloser;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -60,7 +60,7 @@ public class SearchTableDialogPresenter {
         text.textProperty().bind(DisplayableText.of(TEXT).bindable());
     }
 
-    public static LoadedFxml<SearchTableDialogPresenter> load(
+    public static LoadedView<SearchTableDialogPresenter> load(
             final DialogCloser dialogCloser,
             final Consumer<Optional<String>> resultConsumer
     ) {

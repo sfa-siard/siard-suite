@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import lombok.NonNull;
 import lombok.Value;
 import org.jetbrains.annotations.Nullable;
@@ -71,14 +71,14 @@ public class StepDefinition<TIn, TOut> {
     }
 
     public interface StepViewLoader<TIn, TOut> {
-        LoadedFxml load(TIn data, StepperNavigator<TOut> navigator, ServicesFacade servicesFacade);
+        LoadedView load(TIn data, StepperNavigator<TOut> navigator, ServicesFacade servicesFacade);
     }
 
     public interface StepViewLoaderWithoutServices<TIn, TOut> {
-        LoadedFxml load(TIn data, StepperNavigator<TOut> navigator);
+        LoadedView load(TIn data, StepperNavigator<TOut> navigator);
     }
 
     public interface StepViewLoaderWithoutData<TIn, TOut> {
-        LoadedFxml load(StepperNavigator<TOut> navigator, ServicesFacade servicesFacade);
+        LoadedView load(StepperNavigator<TOut> navigator, ServicesFacade servicesFacade);
     }
 }

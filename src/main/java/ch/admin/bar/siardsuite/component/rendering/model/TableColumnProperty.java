@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.component.rendering.model;
 
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import lombok.NonNull;
 import lombok.Value;
 

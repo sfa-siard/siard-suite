@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.component.IconButton;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.Validator;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

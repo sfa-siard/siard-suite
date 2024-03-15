@@ -1,13 +1,13 @@
 package ch.admin.bar.siardsuite.presenter.common;
 
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.DialogCloser;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -62,7 +62,7 @@ public class AbortDialogPresenter {
         cancel.setOnAction(event -> dialogCloser.closeDialog());
     }
 
-    public static LoadedFxml<AbortDialogPresenter> loadForUpload(
+    public static LoadedView<AbortDialogPresenter> loadForUpload(
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<AbortDialogPresenter>load("fxml/upload/upload-abort-dialog.fxml");
@@ -78,7 +78,7 @@ public class AbortDialogPresenter {
         return loaded;
     }
 
-    public static LoadedFxml<AbortDialogPresenter> loadForArchive(
+    public static LoadedView<AbortDialogPresenter> loadForArchive(
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<AbortDialogPresenter>load("fxml/upload/upload-abort-dialog.fxml");

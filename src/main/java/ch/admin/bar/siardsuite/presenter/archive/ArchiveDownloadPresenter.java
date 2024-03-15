@@ -8,21 +8,21 @@ import ch.admin.bar.siardsuite.component.IconView;
 import ch.admin.bar.siardsuite.component.LabelIcon;
 import ch.admin.bar.siardsuite.component.Spinner;
 import ch.admin.bar.siardsuite.component.SystemFileBrowser;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -245,7 +245,7 @@ public class ArchiveDownloadPresenter {
         }
     }
 
-    public static LoadedFxml<ArchiveDownloadPresenter> load(
+    public static LoadedView<ArchiveDownloadPresenter> load(
             final Tuple<UserDefinedMetadata, DbmsConnectionData> data,
             final StepperNavigator<Void> navigator,
             final ServicesFacade servicesFacade
@@ -255,10 +255,10 @@ public class ArchiveDownloadPresenter {
                 data.getValue1(),
                 data.getValue2(),
                 servicesFacade.errorHandler(),
-                servicesFacade.dbInteractionService(),
+                servicesFacade.getService(DbInteractionService.class),
                 servicesFacade.dialogs(),
                 servicesFacade.navigator(),
-                servicesFacade.archiveHandler()
+                servicesFacade.getService(ArchiveHandler.class)
         );
 
         return loaded;

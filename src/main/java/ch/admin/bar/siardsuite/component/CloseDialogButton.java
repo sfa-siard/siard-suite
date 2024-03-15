@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.component;
 
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.view.DialogCloser;
+import ch.admin.bar.siardsuite.framework.DialogCloser;
 import ch.admin.bar.siardsuite.view.RootStage;
 import io.github.palexdev.materialfx.controls.MFXButton;
 

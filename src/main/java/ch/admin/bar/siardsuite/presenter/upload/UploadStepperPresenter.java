@@ -2,8 +2,8 @@ package ch.admin.bar.siardsuite.presenter.upload;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
-import ch.admin.bar.siardsuite.framework.general.Destructible;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.Destructible;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepChain;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
@@ -14,10 +14,10 @@ import ch.admin.bar.siardsuite.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.fxml.FXML;
 import lombok.val;
 
@@ -50,12 +50,13 @@ public class UploadStepperPresenter implements Destructible {
     public void init(
             final Archive archive,
             final Optional<RecentDbConnection> recentDbConnection,
-            final DbInteractionService dbInteractionService
-            ) {
+            final DbInteractionService dbInteractionService,
+            final ServicesFacade servicesFacade
+    ) {
         this.dbInteractionService = dbInteractionService;
 
         chain = new StepsChainBuilder(
-                ServicesFacade.INSTANCE,
+                servicesFacade,
                 nextDisplayedStep -> stepper.display(nextDisplayedStep),
                 nextDisplayedStep -> {
                     if (nextDisplayedStep.getDefinition().equals(UPLOAD_ARCHIVE)) {
@@ -76,14 +77,14 @@ public class UploadStepperPresenter implements Destructible {
 
         stepper.init(chain.getSteps());
 
-       recentDbConnection.ifPresent(recentConnection -> {
-                    // skip select dbms step
-                    chain.getNavigatorOfStep(SELECT_DBMS)
-                            .next(DbmsWithInitialValue.builder()
-                                    .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
-                                    .initialValue(Optional.of(recentConnection))
-                                    .build());
-                });
+        recentDbConnection.ifPresent(recentConnection -> {
+            // skip select dbms step
+            chain.getNavigatorOfStep(SELECT_DBMS)
+                    .next(DbmsWithInitialValue.builder()
+                            .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
+                            .initialValue(Optional.of(recentConnection))
+                            .build());
+        });
 
     }
 
@@ -94,7 +95,7 @@ public class UploadStepperPresenter implements Destructible {
         dbInteractionService.cancelRunning();
     }
 
-    public static LoadedFxml<UploadStepperPresenter> load(
+    public static LoadedView<UploadStepperPresenter> load(
             final Archive data,
             final ServicesFacade servicesFacade
     ) {
@@ -102,13 +103,14 @@ public class UploadStepperPresenter implements Destructible {
         loaded.getController().init(
                 data,
                 Optional.empty(),
-                servicesFacade.dbInteractionService()
+                servicesFacade.getService(DbInteractionService.class),
+                servicesFacade
         );
 
         return loaded;
     }
 
-    public static LoadedFxml<UploadStepperPresenter> loadWithRecentConnection(
+    public static LoadedView<UploadStepperPresenter> loadWithRecentConnection(
             final Tuple<Archive, RecentDbConnection> data,
             final ServicesFacade servicesFacade
     ) {
@@ -116,7 +118,8 @@ public class UploadStepperPresenter implements Destructible {
         loaded.getController().init(
                 data.getValue1(),
                 Optional.of(data.getValue2()),
-                servicesFacade.dbInteractionService()
+                servicesFacade.getService(DbInteractionService.class),
+                servicesFacade
         );
 
         return loaded;

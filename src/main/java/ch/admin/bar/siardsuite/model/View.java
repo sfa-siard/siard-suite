@@ -17,7 +17,7 @@ import ch.admin.bar.siardsuite.presenter.open.OpenSiardArchiveDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.option.OptionDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.common.AbortDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.upload.UploadStepperPresenter;
-import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 
 import java.io.File;
 import java.util.Optional;

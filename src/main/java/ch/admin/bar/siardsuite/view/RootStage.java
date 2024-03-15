@@ -1,11 +1,12 @@
 package ch.admin.bar.siardsuite.view;
 
 import ch.admin.bar.siardsuite.component.Icon;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.DialogDisplay;
+import ch.admin.bar.siardsuite.framework.ViewDisplay;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.presenter.RootPresenter;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.service.ServicesFacadeBuilder;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -13,15 +14,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.val;
 
-import java.util.concurrent.atomic.AtomicReference;
-
-public class RootStage extends Stage {
+public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
 
     private final BorderPane rootPane;
     private final BorderPane dialogPane;
-
-    private final AtomicReference<LoadedFxml> previouslyLoadedView = new AtomicReference<>();
 
     public RootStage() {
         setOnCloseRequest(t -> {
@@ -29,9 +27,9 @@ public class RootStage extends Stage {
             System.exit(0);
         });
 
-        ServicesFacade.INSTANCE.setRootStage(this);
+        val servicesFacade = new ServicesFacadeBuilder().build(this);
 
-        rootPane = RootPresenter.load(ServicesFacade.INSTANCE, this)
+        rootPane = RootPresenter.load(servicesFacade, this)
                 .getNode();
 
         dialogPane = DialogPresenter.load()
@@ -40,7 +38,8 @@ public class RootStage extends Stage {
         dialogPane.setVisible(false);
 
         // load start view
-        ServicesFacade.INSTANCE.navigator().navigate(View.START);
+        servicesFacade.navigator()
+                .navigate(View.START);
 
         // set overall stack pane
         StackPane stackPane = new StackPane(rootPane, dialogPane);
@@ -56,15 +55,18 @@ public class RootStage extends Stage {
         this.show();
     }
 
+    @Override
     public void displayView(final Node node) {
         rootPane.setCenter(node);
     }
 
+    @Override
     public void displayDialog(final Node node) {
         dialogPane.setCenter(node);
         dialogPane.setVisible(true);
     }
 
+    @Override
     public void closeDialog() {
         dialogPane.setVisible(false);
     }

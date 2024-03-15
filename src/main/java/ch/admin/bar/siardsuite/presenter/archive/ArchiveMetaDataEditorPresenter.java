@@ -3,22 +3,22 @@ package ch.admin.bar.siardsuite.presenter.archive;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.component.ButtonBox;
 import ch.admin.bar.siardsuite.component.SiardTooltip;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.ValidationProperties;
-import ch.admin.bar.siardsuite.presenter.ValidationProperty;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.model.View;
+import ch.admin.bar.siardsuite.component.ValidationProperties;
+import ch.admin.bar.siardsuite.component.ValidationProperty;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -138,7 +138,7 @@ public class ArchiveMetaDataEditorPresenter {
         this.buttonsBox.next().setOnAction((event) -> {
             tryReadValidUserDefinedMetadata()
                     .ifPresent(userDefinedMetadata ->
-                        navigator.next(new Tuple<>(userDefinedMetadata, connectionData)));
+                            navigator.next(new Tuple<>(userDefinedMetadata, connectionData)));
         });
 
         val saveArchiveButton = new MFXButton();
@@ -249,7 +249,7 @@ public class ArchiveMetaDataEditorPresenter {
         return new ValidationProperties(validationProperties).validate();
     }
 
-    public static LoadedFxml<ArchiveMetaDataEditorPresenter> load(
+    public static LoadedView<ArchiveMetaDataEditorPresenter> load(
             final Tuple<Archive, DbmsConnectionData> data,
             final StepperNavigator<Tuple<UserDefinedMetadata, DbmsConnectionData>> navigator,
             final ServicesFacade servicesFacade
@@ -261,7 +261,7 @@ public class ArchiveMetaDataEditorPresenter {
                 navigator,
                 servicesFacade.errorHandler(),
                 servicesFacade.dialogs(),
-                servicesFacade.archiveHandler()
+                servicesFacade.getService(ArchiveHandler.class)
         );
 
         return loaded;

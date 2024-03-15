@@ -2,9 +2,8 @@ package ch.admin.bar.siardsuite.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.component.stepper.DrilledMFXStepper;
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.framework.general.Destructible;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.Destructible;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.steps.StepChain;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
@@ -12,10 +11,11 @@ import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
 import ch.admin.bar.siardsuite.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.fxml.FXML;
 import lombok.val;
 
@@ -55,12 +55,13 @@ public class ArchiveStepperPresenter implements Destructible {
 
     public void init(
             final Optional<RecentDbConnection> recentDbConnection,
-            final DbInteractionService dbInteractionService
+            final DbInteractionService dbInteractionService,
+            final ServicesFacade servicesFacade
     ) {
         this.dbInteractionService = dbInteractionService;
 
         chain = new StepsChainBuilder(
-                ServicesFacade.INSTANCE,
+                servicesFacade,
                 nextDisplayedStep -> stepper.display(nextDisplayedStep),
                 nextDisplayedStep -> {
                     if (nextDisplayedStep.getDefinition().equals(DOWNLOAD_METADATA)) {
@@ -90,14 +91,15 @@ public class ArchiveStepperPresenter implements Destructible {
         });
     }
 
-    public static LoadedFxml<ArchiveStepperPresenter> load(
+    public static LoadedView<ArchiveStepperPresenter> load(
             final Optional<RecentDbConnection> data,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveStepperPresenter>load("fxml/archive/archive-stepper.fxml");
         loaded.getController().init(
                 data,
-                servicesFacade.dbInteractionService()
+                servicesFacade.getService(DbInteractionService.class),
+                servicesFacade
         );
 
         return loaded;

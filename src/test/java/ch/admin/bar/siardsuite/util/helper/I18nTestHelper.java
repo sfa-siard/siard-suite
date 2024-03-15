@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.util.helper;
 
 import ch.admin.bar.siardsuite.SiardApplication;
-import ch.admin.bar.siardsuite.util.i18n.keys.Key;
+import ch.admin.bar.siardsuite.framework.i18n.keys.Key;
 import lombok.val;
 
 import java.io.File;

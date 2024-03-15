@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.scene.Node;
 import lombok.Getter;
 import lombok.val;
@@ -184,11 +184,11 @@ class StepsChainBuilderTest {
         private StepperNavigator<TOut> navigator = null;
         private final List<TIn> injectedData = new ArrayList<>();
 
-        public LoadedFxml load(final TIn data, final StepperNavigator<TOut> navigator) {
+        public LoadedView load(final TIn data, final StepperNavigator<TOut> navigator) {
             this.navigator = navigator;
             this.injectedData.add(data);
 
-            return new LoadedFxml(() -> Mockito.mock(Node.class), new Object());
+            return new LoadedView(() -> Mockito.mock(Node.class), new Object());
         }
 
         public void reset() {

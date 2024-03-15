@@ -1,9 +1,9 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
-import ch.admin.bar.siardsuite.framework.general.Destructible;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.Destructible;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.util.CastHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -55,7 +55,7 @@ public class StepsChainBuilder {
         private final Map<Integer, Object> cachedInputDataByStepIndex = new HashMap<>();
         private final List<Step> preparedSteps = new ArrayList<>();
 
-        private final AtomicReference<LoadedFxml> previouslyLoaded = new AtomicReference<>();
+        private final AtomicReference<LoadedView> previouslyLoaded = new AtomicReference<>();
 
         /**
          * Registers a step in the steps chain.
@@ -67,7 +67,7 @@ public class StepsChainBuilder {
             val stepIndex = indexNextStep.getAndIncrement();
             val navigator = createNavigator(stepIndex);
 
-            final Supplier<LoadedFxml> viewLoader = () -> {
+            final Supplier<LoadedView> viewLoader = () -> {
                 try {
                     val data = cachedInputDataByStepIndex.get(stepIndex);
 

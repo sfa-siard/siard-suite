@@ -1,14 +1,14 @@
 package ch.admin.bar.siardsuite.presenter.connection;
 
-import ch.admin.bar.siardsuite.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.database.model.FileBasedDbms;
-import ch.admin.bar.siardsuite.database.model.FileBasedDbmsConnectionProperties;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.FileBasedDbms;
+import ch.admin.bar.siardsuite.service.database.model.FileBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.presenter.connection.fields.FileChooserFormField;
 import ch.admin.bar.siardsuite.presenter.connection.fields.StringFormField;
 import ch.admin.bar.siardsuite.util.Validator;
-import ch.admin.bar.siardsuite.util.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.i18n.TranslatableText;
-import ch.admin.bar.siardsuite.util.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.TranslatableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;

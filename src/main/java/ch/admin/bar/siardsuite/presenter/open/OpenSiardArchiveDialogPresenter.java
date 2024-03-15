@@ -3,15 +3,16 @@ package ch.admin.bar.siardsuite.presenter.open;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.util.preferences.RecentFile;
-import ch.admin.bar.siardsuite.util.preferences.StorageData;
-import ch.admin.bar.siardsuite.util.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.view.DialogCloser;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.service.preferences.RecentFile;
+import ch.admin.bar.siardsuite.service.preferences.StorageData;
+import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,6 +31,17 @@ import java.io.IOException;
 import java.util.function.BiConsumer;
 
 public class OpenSiardArchiveDialogPresenter {
+
+    private static final I18nKey TITLE = I18nKey.of("open.siard.archive.dialog.title");
+    private static final I18nKey TEXT = I18nKey.of("open.siard.archive.dialog.text");
+    private static final I18nKey HEADER_NAME = I18nKey.of("dialog.recent.files.header.name");
+    private static final I18nKey HEADER_DATE = I18nKey.of("dialog.recent.files.header.date");
+    private static final I18nKey DROP_FILE_TEXT_TOP = I18nKey.of("dialog.drop.file.text.top");
+    private static final I18nKey DROP_FILE_TEXT_MIDDLE = I18nKey.of("dialog.drop.file.text.middle");
+    private static final I18nKey CHOOSE_FILE_BUTTON = I18nKey.of("open.siard.archive.dialog.choose.file.button");
+    private static final I18nKey FILE_CHOOSER_TITLE = I18nKey.of("open.siard.archive.dialog.choose.file.title");
+    private static final I18nKey NO_DATA = I18nKey.of("dialog.recent.files.nodata");
+
 
     @FXML
     protected Label title;
@@ -69,11 +81,13 @@ public class OpenSiardArchiveDialogPresenter {
         this.errorHandler = errorHandler;
         this.onArchiveSelected = onArchiveSelected;
 
-        I18n.bind(title.textProperty(), "open.siard.archive.dialog.title");
-        I18n.bind(text.textProperty(), "open.siard.archive.dialog.text");
-
-        I18n.bind(recentFilesHeaderName.textProperty(), "dialog.recent.files.header.name");
-        I18n.bind(recentFilesHeaderDate.textProperty(), "dialog.recent.files.header.date");
+        title.textProperty().bind(DisplayableText.of(TITLE).bindable());
+        text.textProperty().bind(DisplayableText.of(TEXT).bindable());
+        recentFilesHeaderName.textProperty().bind(DisplayableText.of(HEADER_NAME).bindable());
+        recentFilesHeaderDate.textProperty().bind(DisplayableText.of(HEADER_DATE).bindable());
+        dropFileTextTop.textProperty().bind(DisplayableText.of(DROP_FILE_TEXT_TOP).bindable());
+        dropFileTextMiddle.textProperty().bind(DisplayableText.of(DROP_FILE_TEXT_MIDDLE).bindable());
+        chooseFileButton.textProperty().bind(DisplayableText.of(CHOOSE_FILE_BUTTON).bindable());
 
         UserPreferences.INSTANCE.getRecentFiles()
                 .forEach(recentFileStorageData -> recentFilesBox.getChildren()
@@ -85,13 +99,9 @@ public class OpenSiardArchiveDialogPresenter {
             recentFilesBox.getChildren().removeIf(child -> recentFilesBox.getChildren().indexOf(child) > 2);
         }
 
-        I18n.bind(dropFileTextTop.textProperty(), "dialog.drop.file.text.top");
-        I18n.bind(dropFileTextMiddle.textProperty(), "dialog.drop.file.text.middle");
-
         dropFileBox.setOnDragOver(this::handleDragOver);
         dropFileBox.setOnDragDropped(this::handleDragDropped);
 
-        I18n.bind(chooseFileButton.textProperty(), "open.siard.archive.dialog.choose.file.button");
         chooseFileButton.getStyleClass().setAll("button", "secondary");
 
         chooseFileButton.setOnAction(this::handleChooseFile);
@@ -124,7 +134,7 @@ public class OpenSiardArchiveDialogPresenter {
 
     private void handleChooseFile(ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(I18n.get("open.siard.archive.dialog.choose.file.title"));
+        fileChooser.setTitle(DisplayableText.of(FILE_CHOOSER_TITLE).getText());
         final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
         fileChooser.getExtensionFilters().add(extensionFilter);
         final File file = fileChooser.showOpenDialog(title.getScene().getWindow());
@@ -133,7 +143,7 @@ public class OpenSiardArchiveDialogPresenter {
 
     private void showNoRecentFiles() {
         recentFilesBox.setStyle("-fx-background-color: #f8f6f69e; -fx-alignment: center");
-        final Label label = new Label(I18n.get("dialog.recent.files.nodata"));
+        final Label label = new Label(DisplayableText.of(NO_DATA).getText());
         recentFilesBox.getChildren().add(label);
         label.setStyle("-fx-text-fill: #2a2a2a82");
     }
@@ -178,10 +188,10 @@ public class OpenSiardArchiveDialogPresenter {
         }
     }
 
-    public static LoadedFxml<OpenSiardArchiveDialogPresenter> load(
+    public static LoadedView<OpenSiardArchiveDialogPresenter> load(
             final BiConsumer<File, Archive> onArchiveSelected,
             final ServicesFacade servicesFacade
-            ) {
+    ) {
         val loaded = FXMLLoadHelper.<OpenSiardArchiveDialogPresenter>load("fxml/open/open-siard-archive-dialog.fxml");
         loaded.getController().init(
                 servicesFacade.dialogs(),

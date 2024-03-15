@@ -1,15 +1,15 @@
 package ch.admin.bar.siardsuite.presenter;
 
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OS;
-import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
-import ch.admin.bar.siardsuite.view.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.view.RootStage;
 import ch.enterag.utils.ProgramInfo;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -104,15 +104,15 @@ public class RootPresenter {
         this.helpButton.setOnAction(event -> filesService.openUserManual());
     }
 
-    public static LoadedFxml<RootPresenter> load(
+    public static LoadedView<RootPresenter> load(
             final ServicesFacade servicesFacade,
             final RootStage stage
     ) {
         val loaded = FXMLLoadHelper.<RootPresenter>load("fxml/root.fxml");
         loaded.getController().init(
                 servicesFacade.dialogs(),
-                servicesFacade.installationService(),
-                servicesFacade.filesService(),
+                servicesFacade.getService(InstallationService.class),
+                servicesFacade.getService(FilesService.class),
                 servicesFacade.errorHandler(),
                 stage
         );
