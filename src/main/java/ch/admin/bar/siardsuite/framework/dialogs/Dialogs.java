@@ -1,13 +1,15 @@
 package ch.admin.bar.siardsuite.framework.dialogs;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
+import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
 import ch.admin.bar.siardsuite.view.DialogCloser;
+import ch.admin.bar.siardsuite.view.ErrorHandler;
 import ch.admin.bar.siardsuite.view.RootStage;
 import javafx.scene.control.TreeItem;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +24,30 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class Dialogs implements DialogCloser {
 
-    private final Controller controller;
     private final RootStage rootStage;
     private final ServicesFacade servicesFacade = ServicesFacade.INSTANCE; // TODO
 
     /**
      * Opens the specified view as a dialog.
      */
-    @Deprecated
-    public void open(LegacyShowDialogTarget target) {
-        val loaded = target.getViewSupplier().apply(controller, rootStage);
-        rootStage.displayDialog(loaded);
+    public void open(SimpleShowDialogTarget target) {
+        val loaded = target.getViewSupplier().apply(servicesFacade);
+        rootStage.displayDialog(loaded.getNode());
     }
 
+    /**
+     * Opens the specified view as a dialog.
+     */
     public <T> void open(final ShowDialogTarget<T> target, final T data) {
         val loaded = target.getViewSupplier().apply(data, servicesFacade);
         rootStage.displayDialog(loaded.getNode());
+    }
+
+    public ErrorHandler errorHandler() {
+        return ex -> {
+            val loaded = ErrorDialogPresenter.load(new Failure(ex), servicesFacade);
+            rootStage.displayDialog(loaded.getNode());
+        };
     }
 
     @Override

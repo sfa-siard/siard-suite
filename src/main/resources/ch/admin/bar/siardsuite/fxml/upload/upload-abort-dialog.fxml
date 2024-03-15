@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" styleClass="dialog" stylesheets="@../../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.upload.UploadAbortDialogPresenter">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" styleClass="dialog" stylesheets="@../../css/root.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/1.8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.admin.bar.siardsuite.presenter.common.AbortDialogPresenter">
     <center>
         <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="418.0" BorderPane.alignment="CENTER">
             <top>

@@ -1,19 +1,13 @@
 package ch.admin.bar.siardsuite.framework.navigation;
 
-import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.Controller;
-import ch.admin.bar.siardsuite.Workflow;
 import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
-import ch.admin.bar.siardsuite.model.View;
-import ch.admin.bar.siardsuite.presenter.StartPresenter;
 import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import ch.admin.bar.siardsuite.view.RootStage;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -22,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class Navigator {
 
-    private final Controller controller;
     private final RootStage stage;
     private final ServicesFacade servicesFacade = ServicesFacade.INSTANCE; // TODO
 

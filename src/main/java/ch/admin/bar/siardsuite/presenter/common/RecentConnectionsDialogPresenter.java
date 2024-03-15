@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.presenter.archive.dialogs;
+package ch.admin.bar.siardsuite.presenter.common;
 
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class ArchiveRecentConnectionsDialogPresenter {
+public class RecentConnectionsDialogPresenter {
 
     private static final I18nKey ARCHIVE_TITLE = I18nKey.of("archiveDbDialog.title");
     private static final I18nKey ARCHIVE_TEXT = I18nKey.of("archiveDbDialog.text");
@@ -125,51 +125,11 @@ public class ArchiveRecentConnectionsDialogPresenter {
         return recentConnectionsBox;
     }
 
-    public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForUpload(
-            final DialogCloser dialogCloser,
-            final Runnable onNewConnection,
-            final Consumer<RecentDbConnection> onRecentConnectionSelected
-    ) {
-        val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
-
-        loaded.getController().init(
-                dialogCloser,
-                onNewConnection,
-                onRecentConnectionSelected,
-                DisplayableText.of(UPLOAD_TITLE),
-                DisplayableText.of(UPLOAD_TEXT));
-
-        return loaded;
-    }
-
-    public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForArchiving(
-            final DialogCloser dialogCloser,
-            final Runnable onNewConnection,
-            final Consumer<RecentDbConnection> onRecentConnectionSelected
-    ) {
-        val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
-
-        loaded.getController().init(
-                dialogCloser,
-                onNewConnection,
-                onRecentConnectionSelected,
-                DisplayableText.of(ARCHIVE_TITLE),
-                DisplayableText.of(ARCHIVE_TEXT));
-
-        return loaded;
-    }
-
-
-
-
-
-
-
-    public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForUpload(
+    public static LoadedFxml<RecentConnectionsDialogPresenter> loadForUpload(
             final Consumer<Optional<RecentDbConnection>> onRecentConnectionSelected,
             final ServicesFacade servicesFacade
     ) {
-        val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
+        val loaded = FXMLLoadHelper.<RecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
 
         loaded.getController().init(
                 servicesFacade.dialogs(),
@@ -181,11 +141,11 @@ public class ArchiveRecentConnectionsDialogPresenter {
         return loaded;
     }
 
-    public static LoadedFxml<ArchiveRecentConnectionsDialogPresenter> loadForArchiving(
+    public static LoadedFxml<RecentConnectionsDialogPresenter> loadForArchiving(
             final Consumer<Optional<RecentDbConnection>> onRecentConnectionSelected,
             final ServicesFacade servicesFacade
     ) {
-        val loaded = FXMLLoadHelper.<ArchiveRecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
+        val loaded = FXMLLoadHelper.<RecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
 
         loaded.getController().init(
                 servicesFacade.dialogs(),

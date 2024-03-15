@@ -18,7 +18,6 @@ public class SiardApplication extends Application {
   public void start(Stage stage) throws IOException {
     log.info("Application started");
 
-    Controller controller = new Controller();
     // trial to fix the bad font rendering issue from javafx
     System.setProperty("prism.lcdtext", "false");
     System.setProperty("prism.text", "t2k");

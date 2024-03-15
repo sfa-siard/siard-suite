@@ -3,7 +3,9 @@ package ch.admin.bar.siardsuite.presenter.archive.browser.dialogues;
 import ch.admin.bar.siardsuite.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.component.SearchButton;
 import ch.admin.bar.siardsuite.component.rendering.TreeItemsExplorer;
+import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.util.MetaSearchTerm;
 import ch.admin.bar.siardsuite.util.fxml.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
@@ -68,17 +70,6 @@ public class SearchMetadataDialogPresenter {
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
         buttonBox.getChildren().add(new CloseDialogButton(dialogCloser));
         buttonBox.getChildren().add(new SearchButton(event -> search(new MetaSearchTerm(searchField.getText()))));
-    }
-
-    public static LoadedFxml<SearchMetadataDialogPresenter> load(
-            final DialogCloser dialogCloser,
-            final TreeItemsExplorer treeItemsExplorer,
-            final Consumer<TreeItem<TreeAttributeWrapper>> onSelected
-    ) {
-        val loaded = FXMLLoadHelper.<SearchMetadataDialogPresenter>load("fxml/search/search-metadata-dialog.fxml");
-        loaded.getController().init(dialogCloser, treeItemsExplorer, onSelected);
-
-        return loaded;
     }
 
     private void search(final MetaSearchTerm searchTerm) {
@@ -158,5 +149,30 @@ public class SearchMetadataDialogPresenter {
         @EqualsAndHashCode.Exclude
         @NonNull
         TreeItem<TreeAttributeWrapper> treeItem;
+    }
+
+    public static LoadedFxml<SearchMetadataDialogPresenter> load(
+            final DialogCloser dialogCloser,
+            final TreeItemsExplorer treeItemsExplorer,
+            final Consumer<TreeItem<TreeAttributeWrapper>> onSelected
+    ) {
+        val loaded = FXMLLoadHelper.<SearchMetadataDialogPresenter>load("fxml/search/search-metadata-dialog.fxml");
+        loaded.getController().init(dialogCloser, treeItemsExplorer, onSelected);
+
+        return loaded;
+    }
+
+    public static LoadedFxml<SearchMetadataDialogPresenter> load(
+            final Tuple<TreeItemsExplorer, Consumer<TreeItem<TreeAttributeWrapper>>> data,
+            final ServicesFacade servicesFacade
+    ) {
+        val loaded = FXMLLoadHelper.<SearchMetadataDialogPresenter>load("fxml/search/search-metadata-dialog.fxml");
+        loaded.getController().init(
+                servicesFacade.dialogs(),
+                data.getValue1(),
+                data.getValue2()
+        );
+
+        return loaded;
     }
 }

@@ -1,15 +1,10 @@
 package ch.admin.bar.siardsuite.view;
 
-import ch.admin.bar.siardsuite.Controller;
 import ch.admin.bar.siardsuite.component.Icon;
-import ch.admin.bar.siardsuite.framework.general.Destructible;
 import ch.admin.bar.siardsuite.framework.general.ServicesFacade;
-import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.View;
 import ch.admin.bar.siardsuite.presenter.DialogPresenter;
-import ch.admin.bar.siardsuite.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.presenter.RootPresenter;
-import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.util.fxml.LoadedFxml;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -18,11 +13,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import lombok.val;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class RootStage extends Stage implements ErrorHandler {
+public class RootStage extends Stage {
 
     private final BorderPane rootPane;
     private final BorderPane dialogPane;
@@ -40,8 +34,8 @@ public class RootStage extends Stage implements ErrorHandler {
         rootPane = RootPresenter.load(ServicesFacade.INSTANCE, this)
                 .getNode();
 
-        dialogPane = DialogPresenter.load(new Controller(), this)
-                        .getNode();
+        dialogPane = DialogPresenter.load()
+                .getNode();
 
         dialogPane.setVisible(false);
 
@@ -73,13 +67,5 @@ public class RootStage extends Stage implements ErrorHandler {
 
     public void closeDialog() {
         dialogPane.setVisible(false);
-    }
-
-    @Override
-    public void handle(final Throwable e) {
-        val loaded = ErrorDialogPresenter.load(new Failure(e), this::closeDialog);
-
-        dialogPane.setCenter(loaded.getNode());
-        dialogPane.setVisible(true);
     }
 }
