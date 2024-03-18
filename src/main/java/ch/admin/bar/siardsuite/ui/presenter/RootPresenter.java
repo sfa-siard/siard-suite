@@ -1,20 +1,18 @@
 package ch.admin.bar.siardsuite.ui.presenter;
 
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
-import ch.admin.bar.siardsuite.service.LogService;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.service.FilesService;
-import ch.admin.bar.siardsuite.service.InstallationService;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
-import ch.admin.bar.siardsuite.ui.RootStage;
+import ch.admin.bar.siardsuite.service.FilesService;
+import ch.admin.bar.siardsuite.service.InstallationService;
+import ch.admin.bar.siardsuite.service.LogService;
+import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.enterag.utils.ProgramInfo;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -25,7 +23,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
-import javafx.stage.WindowEvent;
 import lombok.val;
 
 import java.io.IOException;
@@ -124,7 +121,7 @@ public class RootPresenter {
             }
         });
         this.menuItemInstall.setOnAction(event -> errorHandler.wrap(installationService::installToDesktop));
-        this.helpButton.setOnAction(event -> filesService.openUserManual());
+        this.helpButton.setOnAction(event -> errorHandler.wrap(filesService::openUserManual));
     }
 
     public static LoadedView<RootPresenter> load(
