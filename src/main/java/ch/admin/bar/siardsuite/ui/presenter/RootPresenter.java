@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.ui.presenter;
 
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;

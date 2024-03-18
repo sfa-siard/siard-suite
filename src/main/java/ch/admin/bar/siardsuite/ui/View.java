@@ -10,7 +10,7 @@ import ch.admin.bar.siardsuite.framework.dialogs.ShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.dialogs.SimpleShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.navigation.NavigationTarget;
 import ch.admin.bar.siardsuite.framework.navigation.SimpleNavigationTarget;
-import ch.admin.bar.siardsuite.ui.model.WarningDefinition;
+import ch.admin.bar.siardsuite.framework.errors.WarningDefinition;
 import ch.admin.bar.siardsuite.ui.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.StartPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.archive.ArchiveStepperPresenter;

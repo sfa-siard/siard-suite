@@ -8,7 +8,7 @@ import ch.admin.bar.siardsuite.ui.component.Icon;
 import ch.admin.bar.siardsuite.ui.component.IconView;
 import ch.admin.bar.siardsuite.ui.component.LabelIcon;
 import ch.admin.bar.siardsuite.ui.component.Spinner;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;

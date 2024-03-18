@@ -1,7 +1,10 @@
 package ch.admin.bar.siardsuite.ui;
 
-import ch.admin.bar.siardsuite.framework.DialogDisplay;
-import ch.admin.bar.siardsuite.framework.ViewDisplay;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogDisplay;
+import ch.admin.bar.siardsuite.framework.errors.HandlingInstruction;
+import ch.admin.bar.siardsuite.framework.errors.TypeMatcher;
+import ch.admin.bar.siardsuite.framework.errors.WarningDefinition;
+import ch.admin.bar.siardsuite.framework.view.ViewDisplay;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
 import ch.admin.bar.siardsuite.service.FilesService;
@@ -12,6 +15,8 @@ import ch.admin.bar.siardsuite.ui.component.Icon;
 import ch.admin.bar.siardsuite.ui.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.RootPresenter;
 import ch.enterag.utils.ProgramInfo;
+import com.ibm.db2.jcc.am.SqlException;
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,8 +25,10 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
+@Slf4j
 public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
 
     private static final I18nKeyArg<String> WINDOW_TITLE = I18nKeyArg.of("window.title");
@@ -37,6 +44,27 @@ public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
         titleProperty().bind(DisplayableText.of(WINDOW_TITLE, ProgramInfo.getProgramInfo().getVersion()).bindable());
 
         val servicesFacade = new ServicesFacadeBuilder().build(this);
+
+        servicesFacade.errorHandler()
+                .registerInstruction(HandlingInstruction.builder()
+                        .matcher(TypeMatcher.builder()
+                                .exceptionType(CommunicationsException.class)
+                                .build())
+                        .warningDefinition(WarningDefinition.builder()
+                                .title(DisplayableText.of("Unerwarteter Host"))
+                                .message(DisplayableText.of("Der angegeben Datenbank-Host ist unbekannt"))
+                                .build())
+                        .build())
+                .registerInstruction(HandlingInstruction.builder()
+                        .matcher(TypeMatcher.builder()
+                                .exceptionType(SqlException.class)
+                                .build())
+                        .warningDefinition(WarningDefinition.builder()
+                                .title(DisplayableText.of("Unerwarteter Fehler"))
+                                .message(DisplayableText.of("Bei der Interaktion mit der Datenbank ist ein unerwarteter Fehler aufgetreten"))
+                                .build())
+                        .build());
+        Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> servicesFacade.errorHandler().handle(ex));
 
         rootPane = RootPresenter.load(
                         servicesFacade.dialogs(),

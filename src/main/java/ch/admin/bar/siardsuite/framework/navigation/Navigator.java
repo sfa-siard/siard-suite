@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.framework.navigation;
 
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.ViewDisplay;
+import ch.admin.bar.siardsuite.framework.view.ViewDisplay;
 import ch.admin.bar.siardsuite.framework.hooks.HooksCaller;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import lombok.RequiredArgsConstructor;

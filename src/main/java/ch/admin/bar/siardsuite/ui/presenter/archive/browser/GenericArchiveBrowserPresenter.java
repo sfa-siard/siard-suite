@@ -5,7 +5,7 @@ import ch.admin.bar.siardsuite.ui.component.TwoStatesButton;
 import ch.admin.bar.siardsuite.ui.component.rendering.FormRenderer;
 import ch.admin.bar.siardsuite.ui.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;

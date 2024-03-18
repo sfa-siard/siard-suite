@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.ui.presenter.info;
 
-import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;

@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.ui.presenter.archive;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.ui.component.ButtonBox;
 import ch.admin.bar.siardsuite.ui.component.SiardTooltip;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;

@@ -1,6 +1,6 @@
 package ch.admin.bar.siardsuite.ui.presenter;
 
-import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
@@ -8,7 +8,7 @@ import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.ui.component.IconButton;
-import ch.admin.bar.siardsuite.ui.model.WarningDefinition;
+import ch.admin.bar.siardsuite.framework.errors.WarningDefinition;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -17,8 +17,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-import lombok.Builder;
-import lombok.Value;
 import lombok.val;
 
 import java.util.Optional;

@@ -1,13 +1,14 @@
 package ch.admin.bar.siardsuite.service;
 
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.model.Failure;
-import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.framework.errors.FailureDisplay;
+import ch.admin.bar.siardsuite.framework.errors.WarningDefinition;
 import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import ch.admin.bar.siardsuite.ui.RootStage;
+import ch.admin.bar.siardsuite.ui.View;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
@@ -24,12 +25,12 @@ public class ServicesFacadeBuilder {
 
         val dbInteractionService = new DbInteractionService(archiveHandler);
 
-        val errorHandler = new ShowErrorDialog();
+        val failureDisplay = new ShowDialogFailureDisplay();
 
         val services = new ServicesFacade(
                 stage,
                 stage,
-                errorHandler,
+                failureDisplay,
                 Arrays.asList(
                         archiveHandler,
                         dbmsRegistry,
@@ -40,19 +41,20 @@ public class ServicesFacadeBuilder {
                         logService
                 ));
 
-        errorHandler.setDialogs(services.dialogs());
+        failureDisplay.setDialogs(services.dialogs());
 
         return services;
     }
 
-    private final class ShowErrorDialog implements ErrorHandler {
+    @Getter
+    @Setter
+    private static class ShowDialogFailureDisplay implements FailureDisplay {
 
-        @Setter
         private Dialogs dialogs;
 
         @Override
-        public void handle(Throwable e) {
-            dialogs.open(View.ERROR, new Failure(e));
+        public void displayFailure(WarningDefinition failure) {
+            dialogs.open(View.WARNING, failure);
         }
     }
 }
