@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.ui.component;
+package ch.admin.bar.siardsuite.ui.common;
 
 import java.util.ArrayList;
 import java.util.List;

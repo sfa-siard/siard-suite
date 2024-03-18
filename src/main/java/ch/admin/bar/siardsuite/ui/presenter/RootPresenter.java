@@ -1,16 +1,18 @@
 package ch.admin.bar.siardsuite.ui.presenter;
 
+import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.service.FilesService;
-import ch.admin.bar.siardsuite.service.InstallationService;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.OS;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
-import ch.admin.bar.siardsuite.ui.RootStage;
+import ch.admin.bar.siardsuite.service.FilesService;
+import ch.admin.bar.siardsuite.service.InstallationService;
+import ch.admin.bar.siardsuite.service.LogService;
+import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.enterag.utils.ProgramInfo;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -21,17 +23,27 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
-import javafx.stage.WindowEvent;
 import lombok.val;
 
+import java.io.IOException;
 import java.util.Locale;
 
 public class RootPresenter {
 
+    private static final I18nKeyArg<String> WINDOW_TITLE = I18nKeyArg.of("window.title");
+
+    private static final I18nKey LANGUAGE = I18nKey.of("menu.item.language");
+    private static final I18nKey OPTIONS = I18nKey.of("menu.item.options");
+    private static final I18nKey SHOW_LOG_FILE = I18nKey.of("menu.item.showLogFile");
+    private static final I18nKey INFO = I18nKey.of("menu.item.info");
+    private static final I18nKey INSTALL = I18nKey.of("menu.item.install");
+    private static final I18nKey CLOSE = I18nKey.of("menu.item.close");
+
+
     @FXML
     public Menu menuItemLanguage;
     @FXML
-    public MenuItem menuItemOptions, menuItemInfo, menuItemInstall, menuItemClose;
+    public MenuItem menuItemOptions, menuItemInfo, menuItemInstall, menuItemClose, menuItemShowLogFile;
 
     @FXML
     public HBox windowHeader;
@@ -49,23 +61,25 @@ public class RootPresenter {
     private ErrorHandler errorHandler;
     private InstallationService installationService;
     private FilesService filesService;
-    private RootStage stage;
+    private LogService logService;
+    private Runnable appCloser;
 
     public void init(
             final Dialogs dialogs,
             final InstallationService installationService,
             final FilesService filesService,
+            final LogService logService,
             final ErrorHandler errorHandler,
-            final RootStage stage
+            final Runnable appCloser
     ) {
         this.dialogs = dialogs;
         this.installationService = installationService;
         this.errorHandler = errorHandler;
         this.filesService = filesService;
-        this.stage = stage;
+        this.logService = logService;
+        this.appCloser = appCloser;
 
-        I18n.bind(stage.titleProperty(), "window.title", ProgramInfo.getProgramInfo().getVersion());
-        I18n.bind(applicationLabel, "window.title", ProgramInfo.getProgramInfo().getVersion());
+        applicationLabel.textProperty().bind(DisplayableText.of(WINDOW_TITLE, ProgramInfo.getProgramInfo().getVersion()).bindable());
 
         initMenu();
     }
@@ -73,13 +87,13 @@ public class RootPresenter {
     private void initMenu() {
         this.menuBar.setOnMouseClicked(event -> this.menuContainer.show());
 
-        I18n.bind(menuItemLanguage.textProperty(), "menu.item.language");
-        I18n.bind(menuItemOptions.textProperty(), "menu.item.options");
-        I18n.bind(menuItemInfo.textProperty(), "menu.item.info");
-        I18n.bind(menuItemInstall.textProperty(), "menu.item.install");
+        menuItemLanguage.textProperty().bind(DisplayableText.of(LANGUAGE).bindable());
+        menuItemOptions.textProperty().bind(DisplayableText.of(OPTIONS).bindable());
+        menuItemInfo.textProperty().bind(DisplayableText.of(INFO).bindable());
+        menuItemShowLogFile.textProperty().bind(DisplayableText.of(SHOW_LOG_FILE).bindable());
+        menuItemInstall.textProperty().bind(DisplayableText.of(INSTALL).bindable());
         menuItemInstall.setVisible(OS.IS_WINDOWS);
-
-        I18n.bind(menuItemClose.textProperty(), "menu.item.close");
+        menuItemClose.textProperty().bind(DisplayableText.of(CLOSE).bindable());
 
         // Language
         ToggleGroup items = new ToggleGroup();
@@ -95,26 +109,37 @@ public class RootPresenter {
             item.setToggleGroup(items);
         });
 
-        this.menuItemClose.setOnAction(event -> {
-            this.stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-        });
+        this.menuItemClose.setOnAction(event -> appCloser.run());
         this.menuItemInfo.setOnAction(event -> this.dialogs.open(View.INFO_DIALOG));
         this.menuItemOptions.setOnAction(event -> this.dialogs.open(View.OPTION_DIALOG));
+        this.menuItemShowLogFile.setOnAction(event -> {
+            val logFile = logService.getLogFile();
+            try {
+                filesService.openInFileBrowser(logFile);
+            } catch (IOException e) {
+                errorHandler.handle(e);
+            }
+        });
         this.menuItemInstall.setOnAction(event -> errorHandler.wrap(installationService::installToDesktop));
-        this.helpButton.setOnAction(event -> filesService.openUserManual());
+        this.helpButton.setOnAction(event -> errorHandler.wrap(filesService::openUserManual));
     }
 
     public static LoadedView<RootPresenter> load(
-            final ServicesFacade servicesFacade,
-            final RootStage stage
+            final Dialogs dialogs,
+            final InstallationService installationService,
+            final FilesService filesService,
+            final LogService logService,
+            final ErrorHandler errorHandler,
+            final Runnable appCloser
     ) {
         val loaded = FXMLLoadHelper.<RootPresenter>load("fxml/root.fxml");
         loaded.getController().init(
-                servicesFacade.dialogs(),
-                servicesFacade.getService(InstallationService.class),
-                servicesFacade.getService(FilesService.class),
-                servicesFacade.errorHandler(),
-                stage
+                dialogs,
+                installationService,
+                filesService,
+                logService,
+                errorHandler,
+                appCloser
         );
 
         return loaded;

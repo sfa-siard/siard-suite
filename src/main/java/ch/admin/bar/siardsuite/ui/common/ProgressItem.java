@@ -1,5 +1,7 @@
-package ch.admin.bar.siardsuite.ui.component;
+package ch.admin.bar.siardsuite.ui.common;
 
+import ch.admin.bar.siardsuite.ui.component.IconView;
+import ch.admin.bar.siardsuite.ui.component.LabelIcon;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 

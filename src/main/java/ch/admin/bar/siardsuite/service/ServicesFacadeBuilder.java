@@ -20,6 +20,7 @@ public class ServicesFacadeBuilder {
         val installationService = new InstallationService();
         val userPreferences = new UserPreferences();
         val filesService = new FilesService();
+        val logService = new LogService();
 
         val dbInteractionService = new DbInteractionService(archiveHandler);
 
@@ -35,7 +36,8 @@ public class ServicesFacadeBuilder {
                         installationService,
                         userPreferences,
                         filesService,
-                        dbInteractionService
+                        dbInteractionService,
+                        logService
                 ));
 
         errorHandler.setDialogs(services.dialogs());
