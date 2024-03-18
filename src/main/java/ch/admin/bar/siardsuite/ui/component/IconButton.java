@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.ui.component;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,8 @@ public class IconButton extends Label {
         SELECT_FILE(resolve("ch/admin/bar/siardsuite/icons/select_file_icon_gray.png")),
         INFO(resolve("ch/admin/bar/siardsuite/icons/info.png")),
         SERVER(resolve("ch/admin/bar/siardsuite/icons/server.png")),
+        CIRCLE_WARN(resolve("ch/admin/bar/siardsuite/icons/circle-warn.png")),
+        CIRCLE_ERROR(resolve("ch/admin/bar/siardsuite/icons/x-circle-red.png")),
         USER(resolve("ch/admin/bar/siardsuite/icons/user.png"));
 
 
@@ -56,6 +59,10 @@ public class IconButton extends Label {
 
         public ImageView toImageView() {
             return new ImageView(this.url.toString());
+        }
+
+        public Image toImage() {
+            return new Image(this.url.toString());
         }
     }
 }
