@@ -2,12 +2,12 @@ package ch.admin.bar.siardsuite.ui.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
+import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.ui.component.ButtonBox;
 import ch.admin.bar.siardsuite.ui.component.Icon;
 import ch.admin.bar.siardsuite.ui.component.IconView;
 import ch.admin.bar.siardsuite.ui.component.LabelIcon;
 import ch.admin.bar.siardsuite.ui.component.Spinner;
-import ch.admin.bar.siardsuite.ui.component.SystemFileBrowser;
 import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
@@ -87,6 +87,7 @@ public class ArchiveDownloadPresenter {
     private Dialogs dialogs;
     private Navigator navigator;
     private ArchiveHandler archiveHandler;
+    private FilesService filesService;
 
     public void init(
             final UserDefinedMetadata userDefinedMetadata,
@@ -95,7 +96,8 @@ public class ArchiveDownloadPresenter {
             final DbInteractionService dbInteractionService,
             final Dialogs dialogs,
             final Navigator navigator,
-            final ArchiveHandler archiveHandler
+            final ArchiveHandler archiveHandler,
+            final FilesService filesService
     ) {
         this.userDefinedMetadata = userDefinedMetadata;
         this.connectionData = connectionData;
@@ -212,9 +214,9 @@ public class ArchiveDownloadPresenter {
 
     private void openArchiveDirectory(File file) {
         try {
-            new SystemFileBrowser(file).show();
+            filesService.openInFileBrowser(file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            errorHandler.handle(e);
         }
     }
 
@@ -258,7 +260,8 @@ public class ArchiveDownloadPresenter {
                 servicesFacade.getService(DbInteractionService.class),
                 servicesFacade.dialogs(),
                 servicesFacade.navigator(),
-                servicesFacade.getService(ArchiveHandler.class)
+                servicesFacade.getService(ArchiveHandler.class),
+                servicesFacade.getService(FilesService.class)
         );
 
         return loaded;

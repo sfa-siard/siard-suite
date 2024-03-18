@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.ui.component;
+package ch.admin.bar.siardsuite.ui.common;
 
 import ch.admin.bar.siardsuite.util.I18n;
 import javafx.scene.control.Label;

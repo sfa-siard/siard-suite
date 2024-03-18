@@ -2,6 +2,7 @@ package ch.admin.bar.siardsuite.service;
 
 import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.ResourcesResolver;
 import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
 import lombok.SneakyThrows;
@@ -27,6 +28,15 @@ public class FilesService {
 
         // separate non-FX thread, otherwise JavaFX-Thread is blocked and the file never opens
         new Thread(() -> open(userManualFile)).start();
+    }
+
+    public void openInFileBrowser(final File fileOrDir) throws IOException {
+        val file = fileOrDir.isDirectory() ? fileOrDir.getParentFile() : fileOrDir;
+
+        if (OS.UNSUPPORTED) throw new UnsupportedOperationException("Open file browser is not supported on your OS");
+        if (OS.IS_WINDOWS) Runtime.getRuntime().exec("explorer /select, "+ file.getAbsolutePath());
+        if (OS.IS_UNIX) Runtime.getRuntime().exec("xdg-open "+ file.getParentFile().getAbsolutePath()); // for linux: pass a directory to show, not the file itself
+        if (OS.IS_MAC) Runtime.getRuntime().exec("open -R " + file.getAbsolutePath());
     }
 
     private void open(final File file) {
