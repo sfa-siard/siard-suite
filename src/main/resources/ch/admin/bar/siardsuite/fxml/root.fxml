@@ -19,6 +19,7 @@
                             <MenuItem fx:id="menuItemOptions" mnemonicParsing="false" />
                             <MenuItem fx:id="menuItemInfo" mnemonicParsing="false" />
                             <MenuItem fx:id="menuItemInstall" mnemonicParsing="false" />
+                            <MenuItem fx:id="menuItemShowLogFile" mnemonicParsing="false" />
                             <MenuItem fx:id="menuItemClose" mnemonicParsing="false" />
                         </items>
                     </Menu>
