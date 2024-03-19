@@ -107,6 +107,7 @@ public class ArchiveDownloadPresenter {
         this.dialogs = dialogs;
         this.navigator = navigator;
         this.archiveHandler = archiveHandler;
+        this.filesService = filesService;
 
         this.loader.setImage(Icon.loading);
         loadingSpinner = new Spinner(this.loader);

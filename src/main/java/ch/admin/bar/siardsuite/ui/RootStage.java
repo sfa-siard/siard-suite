@@ -3,7 +3,7 @@ package ch.admin.bar.siardsuite.ui;
 import ch.admin.bar.siardsuite.framework.dialogs.DialogDisplay;
 import ch.admin.bar.siardsuite.framework.errors.HandlingInstruction;
 import ch.admin.bar.siardsuite.framework.errors.TypeMatcher;
-import ch.admin.bar.siardsuite.framework.errors.WarningDefinition;
+import ch.admin.bar.siardsuite.framework.errors.NewFailure;
 import ch.admin.bar.siardsuite.framework.view.ViewDisplay;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
@@ -46,23 +46,19 @@ public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
         val servicesFacade = new ServicesFacadeBuilder().build(this);
 
         servicesFacade.errorHandler()
-                .registerInstruction(HandlingInstruction.builder()
+                .register(HandlingInstruction.builder()
                         .matcher(TypeMatcher.builder()
                                 .exceptionType(CommunicationsException.class)
                                 .build())
-                        .warningDefinition(WarningDefinition.builder()
-                                .title(DisplayableText.of("Unerwarteter Host"))
-                                .message(DisplayableText.of("Der angegeben Datenbank-Host ist unbekannt"))
-                                .build())
+                        .title(DisplayableText.of("Unerwarteter Host"))
+                        .message(DisplayableText.of("Der angegeben Datenbank-Host ist unbekannt"))
                         .build())
-                .registerInstruction(HandlingInstruction.builder()
+                .register(HandlingInstruction.builder()
                         .matcher(TypeMatcher.builder()
                                 .exceptionType(SqlException.class)
                                 .build())
-                        .warningDefinition(WarningDefinition.builder()
-                                .title(DisplayableText.of("Unerwarteter Fehler"))
-                                .message(DisplayableText.of("Bei der Interaktion mit der Datenbank ist ein unerwarteter Fehler aufgetreten"))
-                                .build())
+                        .title(DisplayableText.of("Unerwarteter Fehler"))
+                        .message(DisplayableText.of("Bei der Interaktion mit der Datenbank ist ein unerwarteter Fehler aufgetreten"))
                         .build());
         Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> servicesFacade.errorHandler().handle(ex));
 

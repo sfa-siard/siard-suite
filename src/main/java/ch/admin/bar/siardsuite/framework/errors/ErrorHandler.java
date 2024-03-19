@@ -19,15 +19,21 @@ public class ErrorHandler {
 
     private final List<HandlingInstruction> generalHandlingInstructions = new ArrayList<>();
 
-    public void handle(Optional<WarningDefinition> warningDefinition, Throwable throwable) {
+    public void handle(Optional<NewFailure> warningDefinition, Throwable throwable) {
         val definition = OptionalHelper.firstPresent(
                         () -> warningDefinition,
-                        () -> findMatchingWarningDefinition(throwable),
+                        () -> findMatchingWarningDefinition(throwable)
+                                .map(handlingInstruction -> NewFailure.builder()
+                                        .title(DisplayableText.of("Unbekannter Fehler"))
+                                        .message(DisplayableText.of("Es ist ein unbekannter Fehler aufgetreten"))
+                                        .throwable(Optional.of(throwable))
+                                        .build()),
                         () -> {
                             log.error("Unhandled exception", throwable);
-                            return Optional.of(WarningDefinition.builder()
+                            return Optional.of(NewFailure.builder()
                                     .title(DisplayableText.of("Unbekannter Fehler"))
                                     .message(DisplayableText.of("Es ist ein unbekannter Fehler aufgetreten"))
+                                    .throwable(Optional.of(throwable))
                                     .build());
                         })
                 .get();
@@ -39,8 +45,8 @@ public class ErrorHandler {
         handle(Optional.empty(), e);
     }
 
-    public void handle(WarningDefinition warningDefinition, Throwable e) {
-        handle(Optional.of(warningDefinition), e);
+    public void handle(NewFailure newFailure, Throwable e) {
+        handle(Optional.of(newFailure), e);
     }
 
     public void wrap(final ThrowingRunnable throwingRunnable) {
@@ -51,19 +57,18 @@ public class ErrorHandler {
         }
     }
 
-    public ErrorHandler registerInstruction(final HandlingInstruction handlingInstruction) {
+    public ErrorHandler register(final HandlingInstruction handlingInstruction) {
         this.generalHandlingInstructions.add(handlingInstruction);
         return this;
     }
 
-    private Optional<WarningDefinition> findMatchingWarningDefinition(final Throwable throwable) {
+    private Optional<HandlingInstruction> findMatchingWarningDefinition(final Throwable throwable) {
         val unwrapped = CastHelper.tryCast(throwable, RuntimeException.class)
                 .map(Throwable::getCause)
                 .orElse(throwable);
 
         return generalHandlingInstructions.stream()
                 .filter(handlingInstruction -> handlingInstruction.getMatcher().test(unwrapped))
-                .map(HandlingInstruction::getWarningDefinition)
                 .findFirst();
     }
 }
