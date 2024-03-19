@@ -9,7 +9,7 @@ import ch.admin.bar.siardsuite.framework.dialogs.ShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.dialogs.SimpleShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.navigation.NavigationTarget;
 import ch.admin.bar.siardsuite.framework.navigation.SimpleNavigationTarget;
-import ch.admin.bar.siardsuite.framework.errors.NewFailure;
+import ch.admin.bar.siardsuite.framework.errors.Failure;
 import ch.admin.bar.siardsuite.ui.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.StartPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.archive.ArchiveStepperPresenter;
@@ -71,6 +71,6 @@ public class View {
             new ShowDialogTarget<>(SearchTableDialogPresenter::load);
     public static final ShowDialogTarget<Tuple<TreeItemsExplorer, Consumer<TreeItem<TreeAttributeWrapper>>>> SEARCH_METADATA =
             new ShowDialogTarget<>(SearchMetadataDialogPresenter::load);
-    public static final ShowDialogTarget<NewFailure> ERROR =
+    public static final ShowDialogTarget<Failure> ERROR =
             new ShowDialogTarget<>(ErrorDialogPresenter::load);
 }

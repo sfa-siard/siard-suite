@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Value
 @Builder
-public class NewFailure { // TODO Rename
+public class Failure {
     @NonNull DisplayableText title;
     @NonNull DisplayableText message;
 

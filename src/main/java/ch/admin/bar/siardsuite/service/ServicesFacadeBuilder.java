@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.errors.FailureDisplay;
 import ch.admin.bar.siardsuite.framework.errors.HandlingInstruction;
-import ch.admin.bar.siardsuite.framework.errors.NewFailure;
+import ch.admin.bar.siardsuite.framework.errors.Failure;
 import ch.admin.bar.siardsuite.framework.errors.TypeAndMessageMatcher;
 import ch.admin.bar.siardsuite.framework.errors.TypeMatcher;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
@@ -100,7 +100,7 @@ public class ServicesFacadeBuilder {
         private Dialogs dialogs;
 
         @Override
-        public void displayFailure(NewFailure failure) {
+        public void displayFailure(Failure failure) {
             dialogs.open(View.ERROR, failure);
         }
     }

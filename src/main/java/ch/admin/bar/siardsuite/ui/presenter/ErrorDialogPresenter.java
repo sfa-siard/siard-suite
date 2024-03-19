@@ -6,9 +6,8 @@ import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.ui.component.IconButton;
-import ch.admin.bar.siardsuite.framework.errors.NewFailure;
+import ch.admin.bar.siardsuite.framework.errors.Failure;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -91,7 +90,7 @@ public class ErrorDialogPresenter {
     }
 
     public static LoadedView<ErrorDialogPresenter> load(
-            final NewFailure data,
+            final Failure data,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ErrorDialogPresenter>load("fxml/error-dialog.fxml");
@@ -106,7 +105,7 @@ public class ErrorDialogPresenter {
         return loaded;
     }
 
-    private static IconButton.Icon getIcon(final NewFailure.Type failureType) {
+    private static IconButton.Icon getIcon(final Failure.Type failureType) {
         switch (failureType) {
             case ERROR:
                 return IconButton.Icon.CIRCLE_ERROR;

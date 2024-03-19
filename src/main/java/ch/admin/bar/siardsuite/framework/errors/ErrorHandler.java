@@ -23,24 +23,9 @@ public class ErrorHandler {
 
     private final List<HandlingInstruction> generalHandlingInstructions = new ArrayList<>();
 
-    public void handle(Optional<NewFailure> warningDefinition, Throwable throwable) {
-        val definition = OptionalHelper.firstPresent(
-                        () -> warningDefinition,
-                        () -> tryFindMatchingWarningDefinition(throwable)
-                                .map(handlingInstruction -> NewFailure.builder()
-                                        .title(handlingInstruction.getTitle())
-                                        .message(handlingInstruction.getMessage())
-                                        .throwable(Optional.of(throwable))
-                                        .build()),
-                        () -> {
-                            log.error("Unhandled exception", throwable);
-                            return Optional.of(NewFailure.builder()
-                                    .title(DisplayableText.of(UNEXPECTED_ERROR_TITLE))
-                                    .message(DisplayableText.of(UNEXPECTED_ERROR_MESSAGE))
-                                    .throwable(Optional.of(throwable))
-                                    .build());
-                        })
-                .get();
+    public void handle(Optional<Failure> warningDefinition, Throwable throwable) {
+        val definition = warningDefinition
+                .orElseGet(() -> mapToFailure(throwable));
 
         failureDisplay.displayFailure(definition);
     }
@@ -49,8 +34,8 @@ public class ErrorHandler {
         handle(Optional.empty(), e);
     }
 
-    public void handle(NewFailure newFailure, Throwable e) {
-        handle(Optional.of(newFailure), e);
+    public void handle(Failure failure, Throwable e) {
+        handle(Optional.of(failure), e);
     }
 
     public void wrap(final ThrowingRunnable throwingRunnable) {
@@ -59,6 +44,25 @@ public class ErrorHandler {
         } catch (Exception e) {
             handle(e);
         }
+    }
+
+    public Failure mapToFailure(Throwable throwable) {
+        return OptionalHelper.firstPresent(
+                        () -> tryFindMatchingWarningDefinition(throwable)
+                                .map(handlingInstruction -> Failure.builder()
+                                        .title(handlingInstruction.getTitle())
+                                        .message(handlingInstruction.getMessage())
+                                        .throwable(Optional.of(throwable))
+                                        .build()),
+                        () -> {
+                            log.error("Unhandled exception", throwable);
+                            return Optional.of(Failure.builder()
+                                    .title(DisplayableText.of(UNEXPECTED_ERROR_TITLE))
+                                    .message(DisplayableText.of(UNEXPECTED_ERROR_MESSAGE))
+                                    .throwable(Optional.of(throwable))
+                                    .build());
+                        })
+                .get();
     }
 
     public ErrorHandler register(final HandlingInstruction handlingInstruction) {

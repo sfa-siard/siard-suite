@@ -9,9 +9,7 @@ import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
-import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.ui.presenter.upload.model.ArchiveAdder;
-import ch.admin.bar.siardsuite.ui.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.ui.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
@@ -28,7 +26,6 @@ import javafx.scene.layout.VBox;
 import lombok.val;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.ui.View.UPLOAD_ABORT_DIALOG;
@@ -51,7 +48,7 @@ public class UploadingPresenter {
             final DbmsConnectionData dbmsConnectionData,
             final Archive archive,
             final Map<String, String> schemaNameMappings,
-            final StepperNavigator<ShowUploadResultsData> navigator,
+            final StepperNavigator<Void> navigator,
             final ErrorHandler errorHandler,
             final DbInteractionService dbInteractionService,
             final Dialogs dialogs
@@ -72,12 +69,10 @@ public class UploadingPresenter {
                     .connectionData(dbmsConnectionData)
                     .archive(archive)
                     .schemaNameMappings(schemaNameMappings)
-                    .onSuccess(event -> navigator.next(ShowUploadResultsData.builder()
-                            .build()))
+                    .onSuccess(event -> navigator.next(null))
                     .onFailure(event -> {
-                        navigator.next(ShowUploadResultsData.builder()
-                                .failure(Optional.of(new Failure(event.getSource().getException())))
-                                .build());
+                        navigator.previous();
+                        errorHandler.handle(event.getSource().getException());
                     })
                     .onProgress((observable, oldValue, newValue) -> {
                         double pos = newValue.doubleValue();
@@ -106,7 +101,7 @@ public class UploadingPresenter {
 
     public static LoadedView<UploadingPresenter> load(
             final ArchiveAdder<UploadArchiveData> data,
-            final StepperNavigator<ShowUploadResultsData> navigator,
+            final StepperNavigator<Void> navigator,
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<UploadingPresenter>load("fxml/upload/upload-uploading.fxml");

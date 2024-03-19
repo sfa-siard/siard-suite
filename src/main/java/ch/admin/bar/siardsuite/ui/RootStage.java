@@ -1,9 +1,6 @@
 package ch.admin.bar.siardsuite.ui;
 
 import ch.admin.bar.siardsuite.framework.dialogs.DialogDisplay;
-import ch.admin.bar.siardsuite.framework.errors.HandlingInstruction;
-import ch.admin.bar.siardsuite.framework.errors.TypeMatcher;
-import ch.admin.bar.siardsuite.framework.errors.NewFailure;
 import ch.admin.bar.siardsuite.framework.view.ViewDisplay;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
@@ -15,8 +12,6 @@ import ch.admin.bar.siardsuite.ui.component.Icon;
 import ch.admin.bar.siardsuite.ui.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.RootPresenter;
 import ch.enterag.utils.ProgramInfo;
-import com.ibm.db2.jcc.am.SqlException;
-import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
