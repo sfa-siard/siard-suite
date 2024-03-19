@@ -59,7 +59,8 @@ public class ArchiveHandler {
      * @param archive     The archive to be saved.
      * @param destination The destination file.
      */
-    public void save(@NonNull final Archive archive, @NonNull final File destination) throws IOException {
+    @SneakyThrows
+    public void save(@NonNull final Archive archive, @NonNull final File destination) {
         if (archive.getFile() == null) {
             // archive is not open
             archive.open(destination);
@@ -80,7 +81,8 @@ public class ArchiveHandler {
      * @param destination The destination file.
      * @return The copied archive.
      */
-    public Archive copy(final Archive archive, final File destination) throws IOException {
+    @SneakyThrows
+    public Archive copy(final Archive archive, final File destination) {
         if (archive.getFile() == null) {
             // archive is not open, no file can be accessed
             archive.open(createTempFile());

@@ -56,11 +56,7 @@ public class OpenArchiveBrowser {
                 archive
         ));
         buttonsBox.next().setOnAction(event -> {
-            try {
-                archiveHandler.save(archive, archive.getFile());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            archiveHandler.save(archive, archive.getFile());
             navigator.navigate(View.START);
         });
 

@@ -10,6 +10,9 @@ import lombok.val;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for handling errors and mapping them into failures (which contains displayable information for users)
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class ErrorHandler {
@@ -20,19 +23,15 @@ public class ErrorHandler {
     private final FailureDisplay failureDisplay;
     private final List<HandlingInstruction> generalHandlingInstructions;
 
-    public void handle(Optional<Failure> warningDefinition, Throwable throwable) {
-        val definition = warningDefinition
-                .orElseGet(() -> mapToFailure(throwable));
+
+    public void handle(final Throwable throwable) {
+        val definition = mapToFailure(throwable);
 
         failureDisplay.displayFailure(definition);
     }
 
-    public void handle(final Throwable e) {
-        handle(Optional.empty(), e);
-    }
-
-    public void handle(Failure failure, Throwable e) {
-        handle(Optional.of(failure), e);
+    public void handle(Failure failure) {
+        failureDisplay.displayFailure(failure);
     }
 
     public void wrap(final ThrowingRunnable throwingRunnable) {

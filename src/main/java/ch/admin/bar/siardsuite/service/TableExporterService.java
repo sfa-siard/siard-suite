@@ -6,6 +6,7 @@ import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAsse
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 import java.io.File;
@@ -34,7 +35,8 @@ public class TableExporterService {
     @Builder.Default
     private final String lobsDirName = "lobs";
 
-    public void export() throws IOException {
+    @SneakyThrows
+    public void export() {
         for (val schema : schemas) {
             export(schema);
         }

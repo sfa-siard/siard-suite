@@ -1,24 +1,24 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.ui.component.ButtonBox;
-import ch.admin.bar.siardsuite.ui.component.SiardTooltip;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.service.ArchiveHandler;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.common.ValidationProperties;
 import ch.admin.bar.siardsuite.ui.common.ValidationProperty;
-import ch.admin.bar.siardsuite.service.ArchiveHandler;
-import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.ui.component.ButtonBox;
+import ch.admin.bar.siardsuite.ui.component.SiardTooltip;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -178,15 +178,9 @@ public class ArchiveMetaDataEditorPresenter {
     private void saveOnlyMetaData() {
         tryReadValidUserDefinedMetadata()
                 .ifPresent(userDefinedMetadata -> {
-                    try {
-                        val archiveCopy = archiveHandler.copy(archive, userDefinedMetadata.getSaveAt());
-                        userDefinedMetadata.writeTo(archiveCopy.getMetaData());
-                        archiveCopy.saveMetaData();
-                        archiveCopy.close();
-                    } catch (Exception e) {
-                        log.error("Failed to save metadata only", e);
-                        errorHandler.handle(e);
-                    }
+                    val archiveCopy = archiveHandler.copy(archive, userDefinedMetadata.getSaveAt());
+                    userDefinedMetadata.writeTo(archiveCopy.getMetaData());
+                    archiveHandler.save(archiveCopy, userDefinedMetadata.getSaveAt());
                 });
     }
 

@@ -5,6 +5,7 @@ import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.ResourcesResolver;
 import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
@@ -26,7 +27,8 @@ public class FilesService {
      *
      * @throws IOException If an I/O error occurs.
      */
-    public void openUserManual() throws IOException {
+    @SneakyThrows
+    public void openUserManual() {
         val userManualFile = getOrCreateTemporaryFile("user-manual.pdf");
         InputStream is = ResourcesResolver.loadResource("ch/admin/bar/siardsuite/doc/" + I18n.getLocale().toLanguageTag() + "/user-manual.pdf");
 
@@ -36,7 +38,8 @@ public class FilesService {
         new Thread(() -> open(userManualFile)).start();
     }
 
-    public void openInFileBrowser(final File fileOrDir) throws IOException {
+    @SneakyThrows
+    public void openInFileBrowser(final File fileOrDir) {
         val file = fileOrDir.isDirectory() ? fileOrDir.getParentFile() : fileOrDir;
 
         if (OS.UNSUPPORTED) throw new UnsupportedOperationException("Open file browser is not supported on your OS");

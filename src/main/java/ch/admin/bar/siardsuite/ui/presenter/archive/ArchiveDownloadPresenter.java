@@ -34,7 +34,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -116,7 +115,7 @@ public class ArchiveDownloadPresenter {
         addButtons();
         setListeners();
 
-        this.openLink.setOnMouseClicked(event -> openArchiveDirectory(userDefinedMetadata.getSaveAt()));
+        this.openLink.setOnMouseClicked(event -> filesService.openInFileBrowser(userDefinedMetadata.getSaveAt()));
         this.archivePath.setText(userDefinedMetadata.getSaveAt().getAbsolutePath());
         this.subtitle1.setText(userDefinedMetadata.getDbName());
 
@@ -159,7 +158,7 @@ public class ArchiveDownloadPresenter {
                 .saveAt(userDefinedMetadata.getSaveAt())
                 .loadOnlyMetadata(false)
                 .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
-                .onSuccess(downloaded -> handleDownloadSuccess(downloaded))
+                .onSuccess(this::handleDownloadSuccess)
                 .onFailure(event -> handleDownloadFailure(event.getSource().getException()))
                 .onSingleValueCompleted((observable, oldValue, newValue) -> {
                     AtomicInteger pos = new AtomicInteger();
@@ -174,7 +173,6 @@ public class ArchiveDownloadPresenter {
                 .build());
     }
 
-    @SneakyThrows // TODO FIXME
     private void handleDownloadSuccess(Archive archive) {
         userDefinedMetadata.writeTo(archive.getMetaData());
         archiveHandler.save(archive, userDefinedMetadata.getSaveAt());
@@ -211,14 +209,6 @@ public class ArchiveDownloadPresenter {
     private void addButtons() {
         this.borderPane.setBottom(buttonsBox);
         setListeners();
-    }
-
-    private void openArchiveDirectory(File file) {
-        try {
-            filesService.openInFileBrowser(file);
-        } catch (IOException e) {
-            errorHandler.handle(e);
-        }
     }
 
     private void setResultData() {
