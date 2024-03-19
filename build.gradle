@@ -65,8 +65,7 @@ dependencies {
 
     // transitive dependencies (for jar's in lib-folder)
     implementation 'org.apache.tika:tika-core:2.9.1' // used from lib/siardcmd.jar
-
-
+    implementation 'com.mysql:mysql-connector-j:8.3.0' // used from lib/jdbcmysql-2-2-2.jar
 
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
