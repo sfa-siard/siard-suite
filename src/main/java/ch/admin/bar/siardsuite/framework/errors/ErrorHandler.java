@@ -2,7 +2,6 @@ package ch.admin.bar.siardsuite.framework.errors;
 
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.ThrowingRunnable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -23,25 +22,23 @@ public class ErrorHandler {
     private final FailureDisplay failureDisplay;
     private final List<HandlingInstruction> generalHandlingInstructions;
 
-
+    /**
+     * Handles a throwable by mapping it to a failure and displaying it.
+     *
+     * @param throwable The throwable to handle.
+     */
     public void handle(final Throwable throwable) {
         val definition = mapToFailure(throwable);
 
         failureDisplay.displayFailure(definition);
     }
 
-    public void handle(Failure failure) {
-        failureDisplay.displayFailure(failure);
-    }
-
-    public void wrap(final ThrowingRunnable throwingRunnable) {
-        try {
-            throwingRunnable.run();
-        } catch (Exception e) {
-            handle(e);
-        }
-    }
-
+    /**
+     * Maps a throwable to a failure representation.
+     *
+     * @param throwable The throwable to map.
+     * @return The mapped failure.
+     */
     public Failure mapToFailure(Throwable throwable) {
         return tryFindMatchingWarningDefinition(throwable)
                 .map(handlingInstruction -> Failure.builder()
@@ -59,6 +56,16 @@ public class ErrorHandler {
                 });
     }
 
+    /**
+     * Tries to find a matching handling instruction for the given throwable.
+     * <p>
+     * It is a recursive search: If no matching {@link HandlingInstruction} is found
+     * for a given {@link Throwable}, but the {@link Throwable#getCause()} does return a cause,
+     * then the registered handling instructions are searched for a match with that cause.
+     *
+     * @param throwable The throwable to find a matching handling instruction for.
+     * @return The optional matching handling instruction.
+     */
     private Optional<HandlingInstruction> tryFindMatchingWarningDefinition(final Throwable throwable) {
         val matching = generalHandlingInstructions.stream()
                 .filter(handlingInstruction -> handlingInstruction.getMatcher().test(throwable))
