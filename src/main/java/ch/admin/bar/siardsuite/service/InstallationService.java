@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.ResourcesResolver;
 import ch.enterag.utils.io.SpecialFolder;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import mslinks.ShellLink;
@@ -21,7 +22,8 @@ import java.util.Properties;
 @Slf4j
 public class InstallationService {
 
-    public void installToDesktop() throws IOException {
+    @SneakyThrows
+    public void installToDesktop() {
         log.info("Install SIARD-Suite to desktop");
 
         File javaExecutable = findJavaExecutable();

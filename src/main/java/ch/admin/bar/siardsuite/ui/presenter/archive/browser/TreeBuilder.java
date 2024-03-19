@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser;
 
 import ch.admin.bar.siard2.api.MetaParameter;
-import ch.admin.bar.siardsuite.ui.component.Icon;
+import ch.admin.bar.siardsuite.ui.common.Icon;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.AttributeDetailsForm;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.ColumnDetailsForm;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.MetadataDetailsForm;
@@ -32,6 +32,7 @@ import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -95,7 +96,7 @@ public class TreeBuilder {
                                 .readOnlyForm(readonly)
                                 .build())
                         .build(),
-                new ImageView(Icon.db));
+                new ImageView(Icon.DB.toResizedImageOfHeight(16)));
 
         rootItem.setExpanded(true);
         rootItem.getChildren().add(createItemForSchemas());

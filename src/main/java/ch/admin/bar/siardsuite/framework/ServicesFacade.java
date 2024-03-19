@@ -1,8 +1,17 @@
 package ch.admin.bar.siardsuite.framework;
 
+import ch.admin.bar.siardsuite.framework.dialogs.DialogDisplay;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.errors.FailureDisplay;
+import ch.admin.bar.siardsuite.framework.errors.HandlingInstruction;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.framework.view.ViewDisplay;
 import ch.admin.bar.siardsuite.util.CastHelper;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Singular;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.util.List;
@@ -11,21 +20,28 @@ import java.util.stream.Collectors;
 /**
  * Facade class for accessing various services in the application.
  */
+@Slf4j
 public class ServicesFacade {
-
-    private final ErrorHandler errorHandler;
 
     private final List<Object> registeredServices;
 
     private final Navigator navigator;
     private final Dialogs dialogs;
+    private final ErrorHandler errorHandler;
 
-    public ServicesFacade(ViewDisplay viewDisplay, DialogDisplay dialogDisplay, ErrorHandler errorHandler, List<Object> registeredServices) {
-        this.errorHandler = errorHandler;
-        this.registeredServices = registeredServices;
+    @Builder
+    public ServicesFacade(
+            @NonNull final ViewDisplay viewDisplay,
+            @NonNull final DialogDisplay dialogDisplay,
+            @NonNull final FailureDisplay failureDisplay,
+            @NonNull @Singular final List<Object> services,
+            @NonNull @Singular final List<HandlingInstruction> errorHandlers
+    ) {
+        this.registeredServices = services;
 
         this.navigator = new Navigator(viewDisplay, this);
         this.dialogs = new Dialogs(dialogDisplay, this);
+        this.errorHandler = new ErrorHandler(failureDisplay, errorHandlers);
     }
 
     public <T> T getService(final Class<T> serviceType) {

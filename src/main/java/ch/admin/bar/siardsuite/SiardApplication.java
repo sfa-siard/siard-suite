@@ -43,6 +43,7 @@ public class SiardApplication extends Application {
         System.out.println("TrayIcon could not be added.");
       }
     }
+
     new RootStage();
   }
 

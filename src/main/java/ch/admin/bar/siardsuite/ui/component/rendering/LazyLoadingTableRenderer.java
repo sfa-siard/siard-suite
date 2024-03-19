@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.ui.component.rendering.model.LazyLoadingDataSourc
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableLazyLoadingTable;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.utils.LoadingBatchManager;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;

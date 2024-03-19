@@ -5,6 +5,7 @@ import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.util.ThrowingSupplier;
 import ch.enterag.utils.background.Progress;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class DatabaseLoadTask extends Task<ObservableList<Pair<String, Long>>> implements Progress {
 
-    private final Supplier<Connection> connectionSupplier;
+    private final ThrowingSupplier<Connection> connectionSupplier;
     private final Consumer<Archive> resultConsumer;
     private final Archive archive;
     private final boolean onlyMetaData;

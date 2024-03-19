@@ -1,8 +1,7 @@
 package ch.admin.bar.siardsuite.ui.component;
 
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.framework.DialogCloser;
-import ch.admin.bar.siardsuite.ui.RootStage;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import io.github.palexdev.materialfx.controls.MFXButton;
 
 // understands a button that can close a dialog...

@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.ui.presenter;
 
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
@@ -114,14 +114,10 @@ public class RootPresenter {
         this.menuItemOptions.setOnAction(event -> this.dialogs.open(View.OPTION_DIALOG));
         this.menuItemShowLogFile.setOnAction(event -> {
             val logFile = logService.getLogFile();
-            try {
-                filesService.openInFileBrowser(logFile);
-            } catch (IOException e) {
-                errorHandler.handle(e);
-            }
+            filesService.openInFileBrowser(logFile);
         });
-        this.menuItemInstall.setOnAction(event -> errorHandler.wrap(installationService::installToDesktop));
-        this.helpButton.setOnAction(event -> errorHandler.wrap(filesService::openUserManual));
+        this.menuItemInstall.setOnAction(event -> installationService.installToDesktop());
+        this.helpButton.setOnAction(event -> filesService.openUserManual());
     }
 
     public static LoadedView<RootPresenter> load(

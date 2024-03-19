@@ -1,7 +1,5 @@
 package ch.admin.bar.siardsuite.framework.dialogs;
 
-import ch.admin.bar.siardsuite.framework.DialogCloser;
-import ch.admin.bar.siardsuite.framework.DialogDisplay;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.hooks.HooksCaller;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;

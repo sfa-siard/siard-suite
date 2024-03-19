@@ -2,7 +2,7 @@ package ch.admin.bar.siardsuite.ui.presenter.option;
 
 import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.ui.component.DialogButton;
-import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.service.preferences.Options;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;

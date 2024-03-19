@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.ui.presenter.export;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.ui.View;
@@ -57,16 +57,13 @@ public class ExportSelectTablesDialogPresenter {
     private Archive archive;
 
     private Dialogs dialogs;
-    private ErrorHandler errorHandler;
 
     public void init(
             final Archive archive,
-            final Dialogs dialogs,
-            final ErrorHandler errorHandler
+            final Dialogs dialogs
     ) {
         this.archive = archive;
         this.dialogs = dialogs;
-        this.errorHandler = errorHandler;
 
         this.title.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.title"));
         this.text.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.text"));
@@ -89,23 +86,19 @@ public class ExportSelectTablesDialogPresenter {
         directoryChooser.setTitle(I18n.get("export.choose-location.text"));
         File file = directoryChooser.showDialog(title.getScene().getWindow());
         if (Objects.nonNull(file)) {
-            try {
-                val namesOfSelectedTables = findCheckedItems().stream()
-                        .map(TreeItem::getValue)
-                        .collect(Collectors.toSet());
+            val namesOfSelectedTables = findCheckedItems().stream()
+                    .map(TreeItem::getValue)
+                    .collect(Collectors.toSet());
 
-                TableExporterService.builder()
-                        .exportDir(file)
-                        .schemas(ListAssembler.assemble(archive.getSchemas(), archive::getSchema))
-                        .shouldBeExportedFilter(table -> namesOfSelectedTables.contains(
-                                table.getMetaTable().getName()))
-                        .build()
-                        .export();
+            TableExporterService.builder()
+                    .exportDir(file)
+                    .schemas(ListAssembler.assemble(archive.getSchemas(), archive::getSchema))
+                    .shouldBeExportedFilter(table -> namesOfSelectedTables.contains(
+                            table.getMetaTable().getName()))
+                    .build()
+                    .export();
 
-                this.dialogs.open(View.EXPORT_SUCCESS);
-            } catch (Exception e) {
-                errorHandler.handle(e);
-            }
+            this.dialogs.open(View.EXPORT_SUCCESS);
         }
     }
 
@@ -158,8 +151,7 @@ public class ExportSelectTablesDialogPresenter {
         val loaded = FXMLLoadHelper.<ExportSelectTablesDialogPresenter>load("fxml/export/export-select-tables-dialog.fxml");
         loaded.getController().init(
                 data,
-                servicesFacade.dialogs(),
-                servicesFacade.errorHandler()
+                servicesFacade.dialogs()
         );
 
         return loaded;

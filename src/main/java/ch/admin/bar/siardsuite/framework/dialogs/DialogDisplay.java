@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.framework;
+package ch.admin.bar.siardsuite.framework.dialogs;
 
 import javafx.scene.Node;
 

@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.ui.presenter.common;
 
 import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.framework.DialogCloser;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.service.preferences.StorageData;

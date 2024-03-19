@@ -1,6 +1,7 @@
 package ch.admin.bar.siardsuite.service.database;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siardsuite.util.ThrowingSupplier;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -14,7 +15,7 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class DatabaseLoadService extends Service<ObservableList<Pair<String, Long>>> {
 
-  private final Supplier<Connection> connectionSupplier;
+  private final ThrowingSupplier<Connection> connectionSupplier;
   private final Consumer<Archive> resultConsumer;
   private final Archive archive;
   private final boolean onlyMetaData;

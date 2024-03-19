@@ -1,16 +1,16 @@
 package ch.admin.bar.siardsuite.ui.presenter;
 
-import ch.admin.bar.siardsuite.ui.common.Workflow;
-import ch.admin.bar.siardsuite.ui.component.Icon;
-import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
-import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.model.Tuple;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.animations.Animation;
+import ch.admin.bar.siardsuite.ui.common.Icon;
+import ch.admin.bar.siardsuite.ui.common.Workflow;
+import ch.admin.bar.siardsuite.util.OptionalHelper;
 import javafx.animation.PathTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -100,36 +100,36 @@ public class StartPresenter {
         this.open.setOnAction(event -> initializeWorkflow(OPEN));
 
         archive.setOnMouseEntered(event -> {
-            dbImg.setImage(Icon.siardDbRed);
-            archiveImg.setImage(Icon.archiveRed);
+            dbImg.setImage(Icon.SIARD_DB_RED.toImage());
+            archiveImg.setImage(Icon.ARCHIVE_RED.toImage());
             animation.start(archiveArrow, archiveBubble);
         });
         archive.setOnMouseExited(event -> resetImageViews());
 
         upload.setOnMouseEntered(event -> {
-            dbRightImg.setImage(Icon.siardDbRed);
-            archiveImg.setImage(Icon.archiveRed);
+            dbRightImg.setImage(Icon.SIARD_DB_RED.toImage());
+            archiveImg.setImage(Icon.ARCHIVE_RED.toImage());
             animation.start(uploadArrow, uploadBubble);
         });
         upload.setOnMouseExited(event -> resetImageViews());
 
         export.setOnMouseEntered(event -> {
-            exportImg.setImage(Icon.exportRed);
-            archiveImg.setImage(Icon.archiveRed);
+            exportImg.setImage(Icon.EXPORT_RED.toImage());
+            archiveImg.setImage(Icon.ARCHIVE_RED.toImage());
             animation.start(exportArrow, exportBubble);
         });
         export.setOnMouseExited(event -> resetImageViews());
 
-        open.setOnMouseMoved(event -> archiveImg.setImage(Icon.archiveRed));
-        open.setOnMouseExited(event -> archiveImg.setImage(Icon.archive));
+        open.setOnMouseMoved(event -> archiveImg.setImage(Icon.ARCHIVE_RED.toImage()));
+        open.setOnMouseExited(event -> archiveImg.setImage(Icon.ARCHIVE.toImage()));
     }
 
     private void resetImageViews() {
         animation.stop();
-        dbImg.setImage(Icon.siardDb);
-        dbRightImg.setImage(Icon.siardDb);
-        archiveImg.setImage(Icon.archive);
-        exportImg.setImage(Icon.export);
+        dbImg.setImage(Icon.SIARD_DB.toImage());
+        dbRightImg.setImage(Icon.SIARD_DB.toImage());
+        archiveImg.setImage(Icon.ARCHIVE.toImage());
+        exportImg.setImage(Icon.EXPORT.toImage());
         archiveBubble.setVisible(false);
         uploadBubble.setVisible(false);
         exportBubble.setVisible(false);

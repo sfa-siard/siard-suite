@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="39.273643mm"
+   height="39.273643mm"
+   viewBox="0 0 39.273643 39.273643"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="circle-warn.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="4.1798822"
+     inkscape:cx="70.935014"
+     inkscape:cy="102.51485"
+     inkscape:window-width="3440"
+     inkscape:window-height="1369"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" /><defs
+     id="defs1" /><g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-179.95061,-146.42708)"><circle
+       style="opacity:1;fill:none;stroke:#ffcc00;stroke-width:3.96875;stroke-dasharray:none;stroke-opacity:1"
+       id="circle1"
+       cx="199.58743"
+       cy="166.0639"
+       r="17.652447" /><rect
+       style="opacity:1;fill:#ffcc00;fill-opacity:1;stroke:none;stroke-width:3.96875;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1"
+       width="3.96875"
+       height="11.246449"
+       x="197.60306"
+       y="157.3499"
+       rx="1.984375"
+       ry="1.984375" /><circle
+       style="opacity:1;fill:#ffcc00;fill-opacity:1;stroke:none;stroke-width:3.96875;stroke-dasharray:none;stroke-opacity:1"
+       id="path2"
+       cx="199.58743"
+       cy="171.85817"
+       r="1.984375" /></g></svg>

@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.ui;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.ui.common.Workflow;
@@ -10,6 +9,7 @@ import ch.admin.bar.siardsuite.framework.dialogs.ShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.dialogs.SimpleShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.navigation.NavigationTarget;
 import ch.admin.bar.siardsuite.framework.navigation.SimpleNavigationTarget;
+import ch.admin.bar.siardsuite.framework.errors.Failure;
 import ch.admin.bar.siardsuite.ui.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.StartPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.archive.ArchiveStepperPresenter;
@@ -73,5 +73,4 @@ public class View {
             new ShowDialogTarget<>(SearchMetadataDialogPresenter::load);
     public static final ShowDialogTarget<Failure> ERROR =
             new ShowDialogTarget<>(ErrorDialogPresenter::load);
-
 }

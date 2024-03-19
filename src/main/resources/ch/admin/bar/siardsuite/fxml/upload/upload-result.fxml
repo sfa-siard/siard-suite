@@ -20,16 +20,6 @@
                             <Insets top="25.0" />
                         </VBox.margin>
                     </Label>
-                    <Label fx:id="errorMessage">
-                        <VBox.margin>
-                            <Insets top="25.0" />
-                        </VBox.margin>
-                    </Label>
-                    <TextArea fx:id="stackTrace" editable="false">
-                        <VBox.margin>
-                            <Insets top="25.0" />
-                        </VBox.margin>
-                    </TextArea>
                     <Label fx:id="subtitle1" visible="false">
                         <styleClass>
                             <String fx:value="h4" />

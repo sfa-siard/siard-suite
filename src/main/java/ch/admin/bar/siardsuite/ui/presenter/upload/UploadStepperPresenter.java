@@ -11,7 +11,6 @@ import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.ui.presenter.archive.ArchiveChooseDbmsPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.ui.presenter.upload.model.ArchiveAdder;
-import ch.admin.bar.siardsuite.ui.presenter.upload.model.ShowUploadResultsData;
 import ch.admin.bar.siardsuite.ui.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
@@ -35,10 +34,10 @@ public class UploadStepperPresenter implements Destructible {
     private static final StepDefinition<ArchiveAdder<DbmsWithInitialValue>, UploadArchiveData> EDIT_DB_CONNECTION_PROPERTIES =
             new StepDefinition<>(DB_CONNECTION_TITLE, UploadConnectionPresenter::load);
 
-    private static final StepDefinition<ArchiveAdder<UploadArchiveData>, ShowUploadResultsData> UPLOAD_ARCHIVE =
+    private static final StepDefinition<ArchiveAdder<UploadArchiveData>, Void> UPLOAD_ARCHIVE =
             new StepDefinition<>(UploadingPresenter::load);
 
-    private static final StepDefinition<ArchiveAdder<ShowUploadResultsData>, Void> UPLOAD_RESULTS =
+    private static final StepDefinition<Archive, Void> UPLOAD_RESULTS =
             new StepDefinition<>(RESULT_TITLE, UploadResultPresenter::load);
 
     @FXML
@@ -71,7 +70,7 @@ public class UploadStepperPresenter implements Destructible {
                 .register(EDIT_DB_CONNECTION_PROPERTIES)
                 .transform(data -> new ArchiveAdder<>(archive, data))
                 .register(UPLOAD_ARCHIVE)
-                .transform(data -> new ArchiveAdder<>(archive, data))
+                .transform(unused -> archive)
                 .register(UPLOAD_RESULTS)
                 .build();
 
@@ -85,7 +84,6 @@ public class UploadStepperPresenter implements Destructible {
                             .initialValue(Optional.of(recentConnection))
                             .build());
         });
-
     }
 
     @Override

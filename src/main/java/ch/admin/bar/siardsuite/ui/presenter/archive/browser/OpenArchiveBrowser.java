@@ -13,7 +13,7 @@ import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.framework.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import javafx.scene.Node;
 import lombok.val;
 
@@ -56,11 +56,7 @@ public class OpenArchiveBrowser {
                 archive
         ));
         buttonsBox.next().setOnAction(event -> {
-            try {
-                archiveHandler.save(archive, archive.getFile());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            archiveHandler.save(archive, archive.getFile());
             navigator.navigate(View.START);
         });
 
