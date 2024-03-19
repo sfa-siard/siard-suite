@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.service;
+package ch.admin.bar.siardsuite.ui;
 
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
@@ -9,10 +9,13 @@ import ch.admin.bar.siardsuite.framework.errors.TypeAndMessageMatcher;
 import ch.admin.bar.siardsuite.framework.errors.TypeMatcher;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.service.ArchiveHandler;
+import ch.admin.bar.siardsuite.service.DbInteractionService;
+import ch.admin.bar.siardsuite.service.FilesService;
+import ch.admin.bar.siardsuite.service.InstallationService;
+import ch.admin.bar.siardsuite.service.LogService;
 import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.ui.RootStage;
-import ch.admin.bar.siardsuite.ui.View;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;

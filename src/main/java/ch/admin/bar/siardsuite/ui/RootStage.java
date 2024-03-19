@@ -7,7 +7,6 @@ import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
 import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.service.LogService;
-import ch.admin.bar.siardsuite.service.ServicesFacadeBuilder;
 import ch.admin.bar.siardsuite.ui.common.Icon;
 import ch.admin.bar.siardsuite.ui.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.RootPresenter;
