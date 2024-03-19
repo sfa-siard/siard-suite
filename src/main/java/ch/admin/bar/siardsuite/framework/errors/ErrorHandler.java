@@ -16,8 +16,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ErrorHandler {
 
-    private static final I18nKey UNEXPECTED_ERROR_TITLE = I18nKey.of("errors.unexpected.title");
-    private static final I18nKey UNEXPECTED_ERROR_MESSAGE = I18nKey.of("errors.unexpected.message");
+    static final I18nKey UNEXPECTED_ERROR_TITLE = I18nKey.of("errors.unexpected.title");
+    static final I18nKey UNEXPECTED_ERROR_MESSAGE = I18nKey.of("errors.unexpected.message");
 
     private final FailureDisplay failureDisplay;
     private final List<HandlingInstruction> generalHandlingInstructions;
