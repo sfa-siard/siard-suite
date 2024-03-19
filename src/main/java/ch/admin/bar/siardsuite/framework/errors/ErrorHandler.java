@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.framework.errors;
 
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.util.CastHelper;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.ThrowingRunnable;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,10 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class ErrorHandler {
+
+    private static final I18nKey UNEXPECTED_ERROR_TITLE = I18nKey.of("errors.unexpected.title");
+    private static final I18nKey UNEXPECTED_ERROR_MESSAGE = I18nKey.of("errors.unexpected.message");
+
     private final FailureDisplay failureDisplay;
 
     private final List<HandlingInstruction> generalHandlingInstructions = new ArrayList<>();
@@ -22,17 +26,17 @@ public class ErrorHandler {
     public void handle(Optional<NewFailure> warningDefinition, Throwable throwable) {
         val definition = OptionalHelper.firstPresent(
                         () -> warningDefinition,
-                        () -> findMatchingWarningDefinition(throwable)
+                        () -> tryFindMatchingWarningDefinition(throwable)
                                 .map(handlingInstruction -> NewFailure.builder()
-                                        .title(DisplayableText.of("Unbekannter Fehler"))
-                                        .message(DisplayableText.of("Es ist ein unbekannter Fehler aufgetreten"))
+                                        .title(handlingInstruction.getTitle())
+                                        .message(handlingInstruction.getMessage())
                                         .throwable(Optional.of(throwable))
                                         .build()),
                         () -> {
                             log.error("Unhandled exception", throwable);
                             return Optional.of(NewFailure.builder()
-                                    .title(DisplayableText.of("Unbekannter Fehler"))
-                                    .message(DisplayableText.of("Es ist ein unbekannter Fehler aufgetreten"))
+                                    .title(DisplayableText.of(UNEXPECTED_ERROR_TITLE))
+                                    .message(DisplayableText.of(UNEXPECTED_ERROR_MESSAGE))
                                     .throwable(Optional.of(throwable))
                                     .build());
                         })
@@ -62,13 +66,16 @@ public class ErrorHandler {
         return this;
     }
 
-    private Optional<HandlingInstruction> findMatchingWarningDefinition(final Throwable throwable) {
-        val unwrapped = CastHelper.tryCast(throwable, RuntimeException.class)
-                .map(Throwable::getCause)
-                .orElse(throwable);
-
-        return generalHandlingInstructions.stream()
-                .filter(handlingInstruction -> handlingInstruction.getMatcher().test(unwrapped))
+    private Optional<HandlingInstruction> tryFindMatchingWarningDefinition(final Throwable throwable) {
+        val matching = generalHandlingInstructions.stream()
+                .filter(handlingInstruction -> handlingInstruction.getMatcher().test(throwable))
                 .findFirst();
+
+        if (!matching.isPresent()) {
+            return Optional.ofNullable(throwable.getCause())
+                    .flatMap(this::tryFindMatchingWarningDefinition);
+        }
+
+        return matching;
     }
 }

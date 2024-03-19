@@ -45,21 +45,7 @@ public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
 
         val servicesFacade = new ServicesFacadeBuilder().build(this);
 
-        servicesFacade.errorHandler()
-                .register(HandlingInstruction.builder()
-                        .matcher(TypeMatcher.builder()
-                                .exceptionType(CommunicationsException.class)
-                                .build())
-                        .title(DisplayableText.of("Unerwarteter Host"))
-                        .message(DisplayableText.of("Der angegeben Datenbank-Host ist unbekannt"))
-                        .build())
-                .register(HandlingInstruction.builder()
-                        .matcher(TypeMatcher.builder()
-                                .exceptionType(SqlException.class)
-                                .build())
-                        .title(DisplayableText.of("Unerwarteter Fehler"))
-                        .message(DisplayableText.of("Bei der Interaktion mit der Datenbank ist ein unerwarteter Fehler aufgetreten"))
-                        .build());
+
         Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> servicesFacade.errorHandler().handle(ex));
 
         rootPane = RootPresenter.load(

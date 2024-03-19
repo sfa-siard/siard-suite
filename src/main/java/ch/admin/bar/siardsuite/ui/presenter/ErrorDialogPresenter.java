@@ -24,7 +24,6 @@ import java.util.Optional;
 
 public class ErrorDialogPresenter {
 
-    private static final I18nKey TITLE = I18nKey.of("error.title");
     private static final I18nKey SHOW_DETAILS = I18nKey.of("error.button.details.show");
     private static final I18nKey HIDE_DETAILS = I18nKey.of("error.button.details.hide");
 
@@ -45,18 +44,6 @@ public class ErrorDialogPresenter {
 
     @FXML
     public Label detailsLabel;
-
-    public void init(final Failure failure, final DialogCloser dialogCloser) {
-
-        iconImageView.setImage(IconButton.Icon.CIRCLE_WARN.toImage());
-
-        detailsLabel.textProperty().bind(DisplayableText.of(SHOW_DETAILS).bindable());
-
-        title.textProperty().bind(DisplayableText.of(TITLE).bindable());
-        message.textProperty().setValue(failure.message());
-        stacktraceTextArea.setText(failure.stacktrace());
-        closeButton.setOnAction(event -> dialogCloser.closeDialog());
-    }
 
     public void init(
             final DisplayableText titleText,
@@ -101,13 +88,6 @@ public class ErrorDialogPresenter {
                 stacktraceTextArea.setManaged(true);
             }
         });
-    }
-
-    public static LoadedView<ErrorDialogPresenter> load(final Failure failure, final ServicesFacade servicesFacade) {
-        val loaded = FXMLLoadHelper.<ErrorDialogPresenter>load("fxml/error-dialog.fxml");
-        loaded.getController().init(failure, servicesFacade.dialogs());
-
-        return loaded;
     }
 
     public static LoadedView<ErrorDialogPresenter> load(

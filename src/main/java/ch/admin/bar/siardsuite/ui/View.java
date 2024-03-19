@@ -1,7 +1,6 @@
 package ch.admin.bar.siardsuite.ui;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.model.Failure;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.ui.common.Workflow;
@@ -72,9 +71,6 @@ public class View {
             new ShowDialogTarget<>(SearchTableDialogPresenter::load);
     public static final ShowDialogTarget<Tuple<TreeItemsExplorer, Consumer<TreeItem<TreeAttributeWrapper>>>> SEARCH_METADATA =
             new ShowDialogTarget<>(SearchMetadataDialogPresenter::load);
-
-    public static final ShowDialogTarget<Failure> ERROR =
-            new ShowDialogTarget<>(ErrorDialogPresenter::load);
-    public static final ShowDialogTarget<NewFailure> WARNING =
+    public static final ShowDialogTarget<NewFailure> ERROR =
             new ShowDialogTarget<>(ErrorDialogPresenter::load);
 }
