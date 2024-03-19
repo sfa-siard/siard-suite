@@ -41,7 +41,6 @@ public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
 
         val servicesFacade = new ServicesFacadeBuilder().build(this);
 
-
         Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> servicesFacade.errorHandler().handle(ex));
 
         rootPane = RootPresenter.load(

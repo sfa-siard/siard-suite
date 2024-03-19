@@ -2,13 +2,11 @@ package ch.admin.bar.siardsuite.framework.errors;
 
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.OptionalHelper;
 import ch.admin.bar.siardsuite.util.ThrowingRunnable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +18,7 @@ public class ErrorHandler {
     private static final I18nKey UNEXPECTED_ERROR_MESSAGE = I18nKey.of("errors.unexpected.message");
 
     private final FailureDisplay failureDisplay;
-
-    private final List<HandlingInstruction> generalHandlingInstructions = new ArrayList<>();
+    private final List<HandlingInstruction> generalHandlingInstructions;
 
     public void handle(Optional<Failure> warningDefinition, Throwable throwable) {
         val definition = warningDefinition
@@ -47,27 +44,20 @@ public class ErrorHandler {
     }
 
     public Failure mapToFailure(Throwable throwable) {
-        return OptionalHelper.firstPresent(
-                        () -> tryFindMatchingWarningDefinition(throwable)
-                                .map(handlingInstruction -> Failure.builder()
-                                        .title(handlingInstruction.getTitle())
-                                        .message(handlingInstruction.getMessage())
-                                        .throwable(Optional.of(throwable))
-                                        .build()),
-                        () -> {
-                            log.error("Unhandled exception", throwable);
-                            return Optional.of(Failure.builder()
-                                    .title(DisplayableText.of(UNEXPECTED_ERROR_TITLE))
-                                    .message(DisplayableText.of(UNEXPECTED_ERROR_MESSAGE))
-                                    .throwable(Optional.of(throwable))
-                                    .build());
-                        })
-                .get();
-    }
-
-    public ErrorHandler register(final HandlingInstruction handlingInstruction) {
-        this.generalHandlingInstructions.add(handlingInstruction);
-        return this;
+        return tryFindMatchingWarningDefinition(throwable)
+                .map(handlingInstruction -> Failure.builder()
+                        .title(handlingInstruction.getTitle())
+                        .message(handlingInstruction.getMessage())
+                        .throwable(Optional.of(throwable))
+                        .build())
+                .orElseGet(() -> {
+                    log.error("Unhandled exception", throwable);
+                    return Failure.builder()
+                            .title(DisplayableText.of(UNEXPECTED_ERROR_TITLE))
+                            .message(DisplayableText.of(UNEXPECTED_ERROR_MESSAGE))
+                            .throwable(Optional.of(throwable))
+                            .build();
+                });
     }
 
     private Optional<HandlingInstruction> tryFindMatchingWarningDefinition(final Throwable throwable) {

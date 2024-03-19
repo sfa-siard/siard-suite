@@ -2,9 +2,9 @@ package ch.admin.bar.siardsuite.service;
 
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.errors.Failure;
 import ch.admin.bar.siardsuite.framework.errors.FailureDisplay;
 import ch.admin.bar.siardsuite.framework.errors.HandlingInstruction;
-import ch.admin.bar.siardsuite.framework.errors.Failure;
 import ch.admin.bar.siardsuite.framework.errors.TypeAndMessageMatcher;
 import ch.admin.bar.siardsuite.framework.errors.TypeMatcher;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
@@ -18,7 +18,6 @@ import lombok.Setter;
 import lombok.val;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ServicesFacadeBuilder {
 
@@ -69,26 +68,26 @@ public class ServicesFacadeBuilder {
 
         val failureDisplay = new ShowDialogFailureDisplay();
 
-        val services = new ServicesFacade(
-                stage,
-                stage,
-                failureDisplay,
-                Arrays.asList(
-                        archiveHandler,
-                        dbmsRegistry,
-                        installationService,
-                        userPreferences,
-                        filesService,
-                        dbInteractionService,
-                        logService
-                ));
+        val services = ServicesFacade.builder()
+                .viewDisplay(stage)
+                .dialogDisplay(stage)
+                .failureDisplay(failureDisplay)
+
+                .service(archiveHandler)
+                .service(dbmsRegistry)
+                .service(installationService)
+                .service(userPreferences)
+                .service(filesService)
+                .service(dbInteractionService)
+                .service(logService)
+
+                .errorHandler(ACCESS_DENIED)
+                .errorHandler(UNKNOWN_HOST)
+                .errorHandler(CORRUPTED_SIARD_ARCHIVE)
+
+                .build();
 
         failureDisplay.setDialogs(services.dialogs());
-
-        services.errorHandler()
-                .register(ACCESS_DENIED)
-                .register(UNKNOWN_HOST)
-                .register(CORRUPTED_SIARD_ARCHIVE);
 
         return services;
     }

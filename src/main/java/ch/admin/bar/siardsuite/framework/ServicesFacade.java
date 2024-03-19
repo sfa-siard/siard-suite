@@ -4,9 +4,13 @@ import ch.admin.bar.siardsuite.framework.dialogs.DialogDisplay;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.errors.FailureDisplay;
+import ch.admin.bar.siardsuite.framework.errors.HandlingInstruction;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.view.ViewDisplay;
 import ch.admin.bar.siardsuite.util.CastHelper;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Singular;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
@@ -25,17 +29,19 @@ public class ServicesFacade {
     private final Dialogs dialogs;
     private final ErrorHandler errorHandler;
 
+    @Builder
     public ServicesFacade(
-            final ViewDisplay viewDisplay,
-            final DialogDisplay dialogDisplay,
-            final FailureDisplay failureDisplay,
-            final List<Object> registeredServices
+            @NonNull final ViewDisplay viewDisplay,
+            @NonNull final DialogDisplay dialogDisplay,
+            @NonNull final FailureDisplay failureDisplay,
+            @NonNull @Singular final List<Object> services,
+            @NonNull @Singular final List<HandlingInstruction> errorHandlers
     ) {
-        this.registeredServices = registeredServices;
+        this.registeredServices = services;
 
         this.navigator = new Navigator(viewDisplay, this);
         this.dialogs = new Dialogs(dialogDisplay, this);
-        this.errorHandler = new ErrorHandler(failureDisplay);
+        this.errorHandler = new ErrorHandler(failureDisplay, errorHandlers);
     }
 
     public <T> T getService(final Class<T> serviceType) {
