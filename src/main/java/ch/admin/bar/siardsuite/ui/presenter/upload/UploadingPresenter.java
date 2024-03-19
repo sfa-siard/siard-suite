@@ -1,22 +1,22 @@
 package ch.admin.bar.siardsuite.ui.presenter.upload;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.ui.component.Icon;
-import ch.admin.bar.siardsuite.ui.component.IconView;
-import ch.admin.bar.siardsuite.ui.component.LabelIcon;
-import ch.admin.bar.siardsuite.ui.component.Spinner;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
-import ch.admin.bar.siardsuite.ui.presenter.upload.model.ArchiveAdder;
-import ch.admin.bar.siardsuite.ui.presenter.upload.model.UploadArchiveData;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.service.database.model.UploadDatabaseInstruction;
+import ch.admin.bar.siardsuite.ui.common.Icon;
+import ch.admin.bar.siardsuite.ui.component.IconView;
+import ch.admin.bar.siardsuite.ui.component.LabelIcon;
+import ch.admin.bar.siardsuite.ui.component.Spinner;
+import ch.admin.bar.siardsuite.ui.presenter.upload.model.ArchiveAdder;
+import ch.admin.bar.siardsuite.ui.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.fxml.FXML;
@@ -53,7 +53,7 @@ public class UploadingPresenter {
             final DbInteractionService dbInteractionService,
             final Dialogs dialogs
     ) {
-        this.loader.setImage(Icon.loading);
+        this.loader.setImage(Icon.LOADING.toImage());
         Spinner loadingSpinner = new Spinner(this.loader);
         loadingSpinner.play();
         I18n.bind(title.textProperty(), "upload.inProgress.title");

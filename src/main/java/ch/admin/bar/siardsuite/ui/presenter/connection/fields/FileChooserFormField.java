@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.ui.presenter.connection.fields;
 
+import ch.admin.bar.siardsuite.ui.common.Icon;
 import ch.admin.bar.siardsuite.ui.component.IconButton;
 import ch.admin.bar.siardsuite.ui.common.Validator;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
@@ -59,7 +60,7 @@ public class FileChooserFormField extends FormField<File> {
                         }
                 ));
 
-        val searchFileButton = new IconButton(IconButton.Icon.SELECT_FILE);
+        val searchFileButton = new IconButton(Icon.SELECT_FILE);
         searchFileButton.setOnAction(() -> showFileChooser()
                 .ifPresent(file -> {
                     pathField.setText(file.getPath());

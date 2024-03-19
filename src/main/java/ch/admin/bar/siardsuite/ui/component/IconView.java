@@ -1,14 +1,15 @@
 package ch.admin.bar.siardsuite.ui.component;
 
+import ch.admin.bar.siardsuite.ui.common.Icon;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class IconView extends ImageView {
 
   public enum IconType {
-    LOADING(Icon.loading, "loading-icon"),
-    OK(Icon.ok, ""),
-    ERROR(Icon.error, "");
+    LOADING(Icon.LOADING.toImage(), "loading-icon"),
+    OK(Icon.OK.toImage(), ""),
+    ERROR(Icon.CIRCLE_ERROR.toImage(), "");
 
     private final Image icon;
     private final String styleClass;
@@ -26,5 +27,4 @@ public class IconView extends ImageView {
     this.getStyleClass().addAll(type.styleClass, "icon-button");
     this.setId("dataLoader" + pos);
   }
-
 }

@@ -1,10 +1,11 @@
 package ch.admin.bar.siardsuite.ui.presenter.connection.fields;
 
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.ui.common.Icon;
+import ch.admin.bar.siardsuite.ui.common.Validator;
 import ch.admin.bar.siardsuite.ui.component.IconButton;
 import ch.admin.bar.siardsuite.ui.component.SiardTooltip;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
-import ch.admin.bar.siardsuite.ui.common.Validator;
-import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -39,7 +40,7 @@ public abstract class FormField<T> extends VBox {
             @Nullable final DisplayableText hint,
             @Nullable final Collection<Validator<T>> validators,
             @Nullable final Boolean deactivable
-            ) {
+    ) {
         this.validators = Optional.ofNullable(validators).orElse(new ArrayList<>());
 
         val titleLabel = new Label();
@@ -69,7 +70,7 @@ public abstract class FormField<T> extends VBox {
         this.title.setFillHeight(true);
 
         Optional.ofNullable(hint).ifPresent(displayableText -> {
-            val iconButton = new IconButton(IconButton.Icon.INFO);
+            val iconButton = new IconButton(Icon.INFO);
 
             titleLabel.setContentDisplay(ContentDisplay.RIGHT);
             titleLabel.setGraphic(iconButton);
@@ -93,7 +94,7 @@ public abstract class FormField<T> extends VBox {
     }
 
     public boolean hasInvalidValueAndIfSoShowValidationMessage() {
-                val failingValidator = findFailingValidator();
+        val failingValidator = findFailingValidator();
 
         OptionalHelper.ifPresentOrElse(
                 failingValidator,

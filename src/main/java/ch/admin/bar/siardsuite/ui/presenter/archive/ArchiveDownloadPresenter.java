@@ -2,27 +2,27 @@ package ch.admin.bar.siardsuite.ui.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.model.Tuple;
+import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.service.ArchiveHandler;
+import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.service.FilesService;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.ui.common.Icon;
 import ch.admin.bar.siardsuite.ui.component.ButtonBox;
-import ch.admin.bar.siardsuite.ui.component.Icon;
 import ch.admin.bar.siardsuite.ui.component.IconView;
 import ch.admin.bar.siardsuite.ui.component.LabelIcon;
 import ch.admin.bar.siardsuite.ui.component.Spinner;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
-import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.navigation.Navigator;
-import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
-import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.service.ArchiveHandler;
-import ch.admin.bar.siardsuite.service.DbInteractionService;
-import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -38,10 +38,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static ch.admin.bar.siardsuite.ui.View.START;
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.CANCEL;
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.DOWNLOAD_FINISHED;
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.TO_START;
-import static ch.admin.bar.siardsuite.ui.View.START;
 
 @Slf4j
 public class ArchiveDownloadPresenter {
@@ -109,7 +109,7 @@ public class ArchiveDownloadPresenter {
         this.archiveHandler = archiveHandler;
         this.filesService = filesService;
 
-        this.loader.setImage(Icon.loading);
+        this.loader.setImage(Icon.LOADING.toImage());
         loadingSpinner = new Spinner(this.loader);
         this.bindTexts();
         this.buttonsBox = new ButtonBox().make(CANCEL);

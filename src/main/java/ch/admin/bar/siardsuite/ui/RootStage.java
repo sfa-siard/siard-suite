@@ -8,7 +8,7 @@ import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.service.LogService;
 import ch.admin.bar.siardsuite.service.ServicesFacadeBuilder;
-import ch.admin.bar.siardsuite.ui.component.Icon;
+import ch.admin.bar.siardsuite.ui.common.Icon;
 import ch.admin.bar.siardsuite.ui.presenter.DialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.RootPresenter;
 import ch.enterag.utils.ProgramInfo;
@@ -22,6 +22,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+
 
 @Slf4j
 public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
@@ -71,7 +72,7 @@ public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
 
         this.setMaximized(true);
         this.initStyle(StageStyle.DECORATED);
-        this.getIcons().add(Icon.archiveRed);
+        this.getIcons().add(Icon.ARCHIVE_RED.toImage());
         this.setScene(scene);
         this.show();
     }

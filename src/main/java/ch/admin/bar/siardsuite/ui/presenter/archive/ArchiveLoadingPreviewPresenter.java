@@ -1,24 +1,24 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.ui.component.ButtonBox;
-import ch.admin.bar.siardsuite.ui.component.Icon;
-import ch.admin.bar.siardsuite.ui.component.Spinner;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.ui.common.ProgressItem;
-import ch.admin.bar.siardsuite.ui.common.ProgressItems;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.ui.common.Icon;
+import ch.admin.bar.siardsuite.ui.common.ProgressItem;
+import ch.admin.bar.siardsuite.ui.common.ProgressItems;
+import ch.admin.bar.siardsuite.ui.component.ButtonBox;
+import ch.admin.bar.siardsuite.ui.component.Spinner;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -55,7 +55,7 @@ public class ArchiveLoadingPreviewPresenter {
     @FXML
     public MFXProgressBar progressBar;
 
-    private final Image loading = Icon.loading;
+    private final Image loading = Icon.LOADING.toImage();
 
     private final ProgressItems progressItems = new ProgressItems();
 

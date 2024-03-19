@@ -1,13 +1,13 @@
 package ch.admin.bar.siardsuite.ui.presenter;
 
-import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
+import ch.admin.bar.siardsuite.framework.errors.Failure;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.ui.component.IconButton;
-import ch.admin.bar.siardsuite.framework.errors.Failure;
+import ch.admin.bar.siardsuite.ui.common.Icon;
 import ch.admin.bar.siardsuite.util.OptionalHelper;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -47,7 +47,7 @@ public class ErrorDialogPresenter {
     public void init(
             final DisplayableText titleText,
             final DisplayableText messageText,
-            final IconButton.Icon icon,
+            final Icon icon,
             final Optional<Throwable> optionalThrowable,
             final DialogCloser dialogCloser
     ) {
@@ -105,12 +105,12 @@ public class ErrorDialogPresenter {
         return loaded;
     }
 
-    private static IconButton.Icon getIcon(final Failure.Type failureType) {
+    private static Icon getIcon(final Failure.Type failureType) {
         switch (failureType) {
             case ERROR:
-                return IconButton.Icon.CIRCLE_ERROR;
+                return Icon.CIRCLE_ERROR;
             case WARNING:
-                return IconButton.Icon.CIRCLE_WARN;
+                return Icon.CIRCLE_WARN;
         }
 
         throw new IllegalArgumentException("Not supported: " + failureType);
