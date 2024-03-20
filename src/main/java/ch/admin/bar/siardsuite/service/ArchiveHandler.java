@@ -1,7 +1,12 @@
 package ch.admin.bar.siardsuite.service;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.MetaColumn;
+import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
+import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
+import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +16,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.file.Files;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Utility class to handle archive operations.
@@ -105,6 +114,59 @@ public class ArchiveHandler {
                 destination.getAbsolutePath());
 
         return archiveCopy;
+    }
+
+    @SneakyThrows
+    public ArchiveHandler write(final Archive archive, final UserDefinedMetadata userDefinedMetadata) {
+        val metaData = archive.getMetaData();
+
+        metaData.setDbName(userDefinedMetadata.getDbName());
+        metaData.setDescription(userDefinedMetadata.getDescription());
+        metaData.setDataOwner(userDefinedMetadata.getOwner());
+        metaData.setDataOriginTimespan(userDefinedMetadata.getDataOriginTimespan());
+        metaData.setArchiver(userDefinedMetadata.getArchiverName());
+        metaData.setArchiverContact(userDefinedMetadata.getArchiverContact());
+
+        Optional.ofNullable(userDefinedMetadata.getLobFolder())
+                .ifPresent(uri -> setExternalLobFolder(archive, uri));
+
+        return this;
+    }
+
+    /**
+     * Sets the (external) location for LOB's. Caution: Can only be called, if the
+     * archive contains just metadata and no content yet!
+     */
+    @SneakyThrows
+    public void setExternalLobFolder(final Archive archive, final URI lobsDest) {
+        val lobDestAsString = lobsDest.toString().toLowerCase();
+        val root = lobDestAsString.endsWith("/") ? lobDestAsString : lobDestAsString + "/";
+        archive.getMetaData().setLobFolder(new URI(root));
+
+        val blobColumns = findBlobColumns(archive);
+
+        for (val blobColumn : blobColumns) {
+            val schemaName = blobColumn.getParentMetaTable().getParentMetaSchema().getName().toLowerCase();
+            val tableName = blobColumn.getParentMetaTable().getName().toLowerCase();
+            val columnName = blobColumn.getName().toLowerCase();
+
+            val columnBlobUri = new URI(schemaName + "/" + tableName + "/" + columnName + "/"); // relative to the lob-folder of the siard-archive
+            blobColumn.setLobFolder(columnBlobUri);
+        }
+    }
+
+    private List<MetaColumn> findBlobColumns(final Archive archive) {
+        return ListAssembler.assemble(archive.getSchemas(), archive::getSchema).stream()
+                .flatMap(schema -> ListAssembler.assemble(schema.getTables(), schema::getTable).stream()
+                        .map(Table::getMetaTable)
+                        .flatMap(table -> ListAssembler.assemble(table.getMetaColumns(), table::getMetaColumn).stream()
+                                .filter(this::isBlobColumn)))
+                .collect(Collectors.toList());
+    }
+
+    @SneakyThrows
+    private boolean isBlobColumn(final MetaColumn metaColumn) {
+        return new PreTypeFacade(metaColumn.getPreType()).isBlob();
     }
 
     private static void copyFileUsingStream(File source, File dest) throws IOException {
