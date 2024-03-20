@@ -1,18 +1,17 @@
 package ch.admin.bar.siardsuite.ui.presenter.open;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.service.ArchiveHandler;
 import ch.admin.bar.siardsuite.service.preferences.RecentFile;
 import ch.admin.bar.siardsuite.service.preferences.StorageData;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,7 +26,6 @@ import javafx.stage.FileChooser;
 import lombok.val;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.function.BiConsumer;
 
 public class OpenSiardArchiveDialogPresenter {
@@ -69,16 +67,19 @@ public class OpenSiardArchiveDialogPresenter {
     protected HBox buttonBox;
 
     private DialogCloser dialogCloser;
-    private ErrorHandler errorHandler;
+    private UserPreferences userPreferences;
+    private ArchiveHandler archiveHandler;
     private BiConsumer<File, Archive> onArchiveSelected;
 
     public void init(
             final DialogCloser dialogCloser,
-            final ErrorHandler errorHandler,
+            final UserPreferences userPreferences,
+            final ArchiveHandler archiveHandler,
             final BiConsumer<File, Archive> onArchiveSelected
     ) {
         this.dialogCloser = dialogCloser;
-        this.errorHandler = errorHandler;
+        this.userPreferences = userPreferences;
+        this.archiveHandler = archiveHandler;
         this.onArchiveSelected = onArchiveSelected;
 
         title.textProperty().bind(DisplayableText.of(TITLE).bindable());
@@ -176,15 +177,10 @@ public class OpenSiardArchiveDialogPresenter {
 
     private void readArchive(File file) {
         if (file != null && isSiardArchive(file)) {
-            try {
-                final Archive archive = ArchiveImpl.newInstance();
-                archive.open(file);
-                dialogCloser.closeDialog();
-                onArchiveSelected.accept(file, archive);
-            } catch (IOException e) {
-                errorHandler.handle(e);
-            }
-            UserPreferences.INSTANCE.push(new RecentFile(file));
+            dialogCloser.closeDialog();
+            val archive = archiveHandler.open(file);
+            userPreferences.push(new RecentFile(file));
+            onArchiveSelected.accept(file, archive);
         }
     }
 
@@ -195,7 +191,8 @@ public class OpenSiardArchiveDialogPresenter {
         val loaded = FXMLLoadHelper.<OpenSiardArchiveDialogPresenter>load("fxml/open/open-siard-archive-dialog.fxml");
         loaded.getController().init(
                 servicesFacade.dialogs(),
-                servicesFacade.errorHandler(),
+                servicesFacade.getService(UserPreferences.class),
+                servicesFacade.getService(ArchiveHandler.class),
                 onArchiveSelected);
 
         return loaded;

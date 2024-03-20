@@ -124,15 +124,7 @@ public class ArchiveDownloadPresenter {
     private void setListeners() {
         if (this.buttonsBox.cancel() != null) {
             if (this.resultTitle.isVisible()) {
-                this.buttonsBox.cancel().setOnAction((event) -> {
-                    try {
-                        final Archive archive = ArchiveImpl.newInstance(); // TODO FIXME
-                        archive.open(userDefinedMetadata.getSaveAt());
-                        navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW, archive);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                this.buttonsBox.cancel().setOnAction((event) -> archiveHandler.open(userDefinedMetadata.getSaveAt()));
             } else {
                 this.buttonsBox.cancel().setOnAction((event) -> dialogs.open(View.ARCHIVE_ABORT_DIALOG));
             }

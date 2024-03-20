@@ -6,6 +6,7 @@ import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
+import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -81,6 +82,14 @@ public class ArchiveHandler {
         archive.close();
 
         log.info("Archive saved to {}", destination.getAbsolutePath());
+    }
+
+    @SneakyThrows
+    public Archive open(final File file) {
+        val archive = ArchiveImpl.newInstance();
+        archive.open(file);
+
+        return archive;
     }
 
     /**
