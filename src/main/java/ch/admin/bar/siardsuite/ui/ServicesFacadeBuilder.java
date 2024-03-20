@@ -30,6 +30,9 @@ public class ServicesFacadeBuilder {
     private static final I18nKey UNKNOWN_HOST_TITLE = I18nKey.of("errors.unknownHost.title");
     private static final I18nKey UNKNOWN_HOST_MESSAGE = I18nKey.of("errors.unknownHost.message");
 
+    private static final I18nKey CONNECTION_REFUSED_TITLE = I18nKey.of("errors.connectionRefused.title");
+    private static final I18nKey CONNECTION_REFUSED_MESSAGE = I18nKey.of("errors.connectionRefused.message");
+
     private static final I18nKey CORRUPTED_SIARD_ARCHIVE_TITLE = I18nKey.of("errors.corruptedSiardFile.title");
     private static final I18nKey CORRUPTED_SIARD_ARCHIVE_MESSAGE = I18nKey.of("errors.corruptedSiardFile.message");
 
@@ -48,6 +51,14 @@ public class ServicesFacadeBuilder {
                     .build())
             .title(DisplayableText.of(UNKNOWN_HOST_TITLE))
             .message(DisplayableText.of(UNKNOWN_HOST_MESSAGE))
+            .build();
+
+    private static final HandlingInstruction CONNECTION_REFUSED = HandlingInstruction.builder()
+            .matcher(TypeMatcher.builder()
+                    .expectedExceptionType(java.net.ConnectException.class)
+                    .build())
+            .title(DisplayableText.of(CONNECTION_REFUSED_TITLE))
+            .message(DisplayableText.of(CONNECTION_REFUSED_MESSAGE))
             .build();
 
     private static final HandlingInstruction CORRUPTED_SIARD_ARCHIVE = HandlingInstruction.builder()
@@ -86,6 +97,7 @@ public class ServicesFacadeBuilder {
 
                 .errorHandler(ACCESS_DENIED)
                 .errorHandler(UNKNOWN_HOST)
+                .errorHandler(CONNECTION_REFUSED)
                 .errorHandler(CORRUPTED_SIARD_ARCHIVE)
 
                 .build();
