@@ -12,40 +12,44 @@ import lombok.Value;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 @Value
+@Builder
 public class LoadDatabaseInstruction {
-    DbmsConnectionData connectionData;
-    Optional<File> saveAt;
-    boolean loadOnlyMetadata;
-    boolean viewsAsTables;
-    Consumer<Archive> onSuccess;
-    EventHandler<WorkerStateEvent> onFailure;
-    ChangeListener<Number> onProgress;
-    ChangeListener<ObservableList<Pair<String, Long>>> onStepCompleted;
+    @NonNull DbmsConnectionData connectionData;
 
-    @Builder
-    public LoadDatabaseInstruction(
-            @NonNull DbmsConnectionData connectionData,
-            @Nullable File saveAt,
-            @Nullable Boolean loadOnlyMetadata,
-            @Nullable Boolean viewsAsTables,
-            @Nullable Consumer<Archive> onSuccess,
-            @Nullable EventHandler<WorkerStateEvent> onFailure,
-            @Nullable ChangeListener<Number> onProgress,
-            @Nullable ChangeListener<ObservableList<Pair<String, Long>>> onSingleValueCompleted
-    ) {
-        this.connectionData = connectionData;
-        this.saveAt = Optional.ofNullable(saveAt);
-        this.loadOnlyMetadata = Optional.ofNullable(loadOnlyMetadata).orElse(false);
-        this.viewsAsTables = Optional.ofNullable(viewsAsTables).orElse(false);
-        this.onSuccess = Optional.ofNullable(onSuccess).orElse(archive -> {});
-        this.onFailure = Optional.ofNullable(onFailure).orElse(event -> {});
-        this.onProgress = Optional.ofNullable(onProgress)
-                .orElse((observable, oldValue, newValue) -> {});
-        this.onStepCompleted = Optional.ofNullable(onSingleValueCompleted)
-                .orElse((observable, oldValue, newValue) -> {});
-    }
+    @NonNull
+    @Builder.Default
+    Optional<File> saveAt = Optional.empty();
+
+    @NonNull
+    @Builder.Default
+    Optional<URI> externalLobs = Optional.empty();
+
+    @NonNull
+    @Builder.Default
+    Boolean loadOnlyMetadata = false;
+
+    @NonNull
+    @Builder.Default
+    Boolean viewsAsTables = false;
+
+    @NonNull
+    @Builder.Default
+    Consumer<Archive> onSuccess = archive -> {};
+
+    @NonNull
+    @Builder.Default
+    EventHandler<WorkerStateEvent> onFailure = workerStateEvent -> {};
+
+    @NonNull
+    @Builder.Default
+    ChangeListener<Number> onProgress = (observableValue, number, t1) -> {};
+
+    @NonNull
+    @Builder.Default
+    ChangeListener<ObservableList<Pair<String, Long>>> onStepCompleted = (observableValue, pairs, t1) -> {};
 }

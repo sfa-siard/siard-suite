@@ -62,11 +62,9 @@ public class ColumnDetailsForm {
                                 POSITION,
                                 Converter.intToString(DatabaseColumn::getIndex)
                         ))
-                        .property(new ReadWriteStringProperty<>(
+                        .property(new ReadOnlyStringProperty<>(
                                 LOB,
-                                DatabaseColumn::getLobFolder,
-                                DatabaseColumn::setLobFolder,
-                                IS_VALID_PATH_TO_LOB_FOLDER_VALIDATOR
+                                DatabaseColumn::getLobFolder
                         ))
                         .property(new ReadWriteStringProperty<>(
                                 MIME,

@@ -179,8 +179,9 @@ public class ArchiveMetaDataEditorPresenter {
         tryReadValidUserDefinedMetadata()
                 .ifPresent(userDefinedMetadata -> {
                     val archiveCopy = archiveHandler.copy(archive, userDefinedMetadata.getSaveAt());
-                    userDefinedMetadata.writeTo(archiveCopy.getMetaData());
-                    archiveHandler.save(archiveCopy, userDefinedMetadata.getSaveAt());
+                    archiveHandler
+                            .write(archiveCopy, userDefinedMetadata)
+                            .save(archiveCopy, userDefinedMetadata.getSaveAt());
                 });
     }
 

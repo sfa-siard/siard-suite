@@ -1,6 +1,5 @@
 package ch.admin.bar.siardsuite.service.database;
 
-import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import lombok.NonNull;
@@ -11,43 +10,15 @@ import lombok.val;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 @Slf4j
 public class DatabaseConnectionFactory {
-    public static final DatabaseConnectionFactory INSTANCE = new DatabaseConnectionFactory();
 
-    private static final AtomicReference<EstablishedConnection> CONNECTION_CACHE = new AtomicReference();
+    private final AtomicReference<EstablishedConnection> connectionCache = new AtomicReference();
 
-    public DatabaseLoadService createDatabaseLoader(
-            final DbmsConnectionData connectionData,
-            final Consumer<Archive> resultConsumer,
-            final Archive archive,
-            final boolean onlyMetaData,
-            final boolean viewsAsTables
-    ) {
-        return new DatabaseLoadService(
-                () -> getOrCreateConnection(connectionData),
-                resultConsumer,
-                archive,
-                onlyMetaData,
-                viewsAsTables);
-    }
-
-    public DatabaseUploadService createDatabaseUploader(
-            final DbmsConnectionData connectionData,
-            final Archive archive,
-            final Map<String, String> schemaNameMappings) {
-        return new DatabaseUploadService(
-                () -> getOrCreateConnection(connectionData),
-                archive,
-                schemaNameMappings);
-    }
-
-    public static void disconnect() {
-        CONNECTION_CACHE.updateAndGet(nullableEstablishedConnection -> {
+    public void disconnect() {
+        connectionCache.updateAndGet(nullableEstablishedConnection -> {
             if (nullableEstablishedConnection != null) {
                 nullableEstablishedConnection.close();
             }
@@ -56,8 +27,8 @@ public class DatabaseConnectionFactory {
         });
     }
 
-    private static Connection getOrCreateConnection(final DbmsConnectionData connectionData) {
-        return CONNECTION_CACHE.updateAndGet(establishedConnection -> {
+    public Connection getOrCreateConnection(final DbmsConnectionData connectionData) {
+        return connectionCache.updateAndGet(establishedConnection -> {
             try {
                 if (establishedConnection != null) {
                     if (!establishedConnection.getConnection().isClosed() &&

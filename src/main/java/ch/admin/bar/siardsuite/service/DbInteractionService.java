@@ -5,8 +5,8 @@ import ch.admin.bar.siardsuite.service.database.DatabaseLoadService;
 import ch.admin.bar.siardsuite.service.database.DatabaseUploadService;
 import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
 import ch.admin.bar.siardsuite.service.database.model.UploadDatabaseInstruction;
+import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Defines a service for interacting with a database, providing methods to execute specific instructions.
@@ -18,6 +18,8 @@ public class DbInteractionService {
     private DatabaseUploadService databaseUploadService;
 
     private final ArchiveHandler archiveHandler;
+    private final UserPreferences userPreferences;
+    private final DatabaseConnectionFactory databaseConnectionFactory;
 
     /**
      * Executes the specified instruction to load a database.
@@ -25,24 +27,13 @@ public class DbInteractionService {
      * @param instruction The instruction to load a database.
      */
     public void execute(LoadDatabaseInstruction instruction) {
-        val archive = instruction.getSaveAt()
-                .map(archiveHandler::init)
-                .orElseGet(archiveHandler::init);
-
-        this.databaseLoadService = DatabaseConnectionFactory.INSTANCE
-                .createDatabaseLoader(
-                        instruction.getConnectionData(),
-                        instruction.getOnSuccess(),
-                        archive,
-                        instruction.isLoadOnlyMetadata(),
-                        instruction.isViewsAsTables());
-
-        this.databaseLoadService.setOnFailed(instruction.getOnFailure());
+        this.databaseLoadService = new DatabaseLoadService(
+                databaseConnectionFactory,
+                archiveHandler,
+                userPreferences,
+                instruction);
 
         this.databaseLoadService.start();
-
-        this.databaseLoadService.valueProperty().addListener(instruction.getOnStepCompleted());
-        this.databaseLoadService.progressProperty().addListener(instruction.getOnProgress());
     }
 
     /**
@@ -51,18 +42,12 @@ public class DbInteractionService {
      * @param instruction The instruction to upload a database.
      */
     public void execute(UploadDatabaseInstruction instruction) {
-        this.databaseUploadService = DatabaseConnectionFactory.INSTANCE
-                .createDatabaseUploader(
-                        instruction.getConnectionData(),
-                        instruction.getArchive(),
-                        instruction.getSchemaNameMappings());
-        this.databaseUploadService.setOnSucceeded(instruction.getOnSuccess());
-        this.databaseUploadService.setOnFailed(instruction.getOnFailure());
+        this.databaseUploadService = new DatabaseUploadService(
+                databaseConnectionFactory,
+                userPreferences,
+                instruction);
 
         this.databaseUploadService.start();
-
-        this.databaseUploadService.valueProperty().addListener(instruction.getOnStepCompleted());
-        this.databaseUploadService.progressProperty().addListener(instruction.getOnProgress());
     }
 
     /**
@@ -77,6 +62,6 @@ public class DbInteractionService {
             this.databaseUploadService.cancel();
         }
 
-        DatabaseConnectionFactory.disconnect();
+        databaseConnectionFactory.disconnect();
     }
 }

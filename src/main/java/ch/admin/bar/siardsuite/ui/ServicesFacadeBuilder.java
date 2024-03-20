@@ -14,6 +14,7 @@ import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.service.LogService;
+import ch.admin.bar.siardsuite.service.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import lombok.Getter;
@@ -77,8 +78,9 @@ public class ServicesFacadeBuilder {
         val userPreferences = new UserPreferences();
         val filesService = new FilesService();
         val logService = new LogService();
+        val databaseConnectionFactory = new DatabaseConnectionFactory();
 
-        val dbInteractionService = new DbInteractionService(archiveHandler);
+        val dbInteractionService = new DbInteractionService(archiveHandler, userPreferences, databaseConnectionFactory);
 
         val failureDisplay = new ShowDialogFailureDisplay();
 

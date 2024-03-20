@@ -35,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ch.admin.bar.siardsuite.ui.View.START;
@@ -86,7 +87,6 @@ public class ArchiveDownloadPresenter {
     private Dialogs dialogs;
     private Navigator navigator;
     private ArchiveHandler archiveHandler;
-    private FilesService filesService;
 
     public void init(
             final UserDefinedMetadata userDefinedMetadata,
@@ -106,7 +106,6 @@ public class ArchiveDownloadPresenter {
         this.dialogs = dialogs;
         this.navigator = navigator;
         this.archiveHandler = archiveHandler;
-        this.filesService = filesService;
 
         this.loader.setImage(Icon.LOADING.toImage());
         loadingSpinner = new Spinner(this.loader);
@@ -125,15 +124,7 @@ public class ArchiveDownloadPresenter {
     private void setListeners() {
         if (this.buttonsBox.cancel() != null) {
             if (this.resultTitle.isVisible()) {
-                this.buttonsBox.cancel().setOnAction((event) -> {
-                    try {
-                        final Archive archive = ArchiveImpl.newInstance();
-                        archive.open(userDefinedMetadata.getSaveAt());
-                        navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW, archive);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                this.buttonsBox.cancel().setOnAction((event) -> archiveHandler.open(userDefinedMetadata.getSaveAt()));
             } else {
                 this.buttonsBox.cancel().setOnAction((event) -> dialogs.open(View.ARCHIVE_ABORT_DIALOG));
             }
@@ -155,12 +146,13 @@ public class ArchiveDownloadPresenter {
 
         dbInteractionService.execute(LoadDatabaseInstruction.builder()
                 .connectionData(connectionData)
-                .saveAt(userDefinedMetadata.getSaveAt())
+                .saveAt(Optional.of(userDefinedMetadata.getSaveAt()))
+                .externalLobs(Optional.ofNullable(userDefinedMetadata.getLobFolder()))
                 .loadOnlyMetadata(false)
                 .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
                 .onSuccess(this::handleDownloadSuccess)
                 .onFailure(event -> handleDownloadFailure(event.getSource().getException()))
-                .onSingleValueCompleted((observable, oldValue, newValue) -> {
+                .onStepCompleted((observable, oldValue, newValue) -> {
                     AtomicInteger pos = new AtomicInteger();
                     newValue.forEach(p ->
                             addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
@@ -174,8 +166,9 @@ public class ArchiveDownloadPresenter {
     }
 
     private void handleDownloadSuccess(Archive archive) {
-        userDefinedMetadata.writeTo(archive.getMetaData());
-        archiveHandler.save(archive, userDefinedMetadata.getSaveAt());
+        archiveHandler
+                .write(archive, userDefinedMetadata)
+                .save(archive, userDefinedMetadata.getSaveAt());
 
         log.info("Downloaded archive successfully stored to {}", userDefinedMetadata.getSaveAt().getAbsolutePath());
 

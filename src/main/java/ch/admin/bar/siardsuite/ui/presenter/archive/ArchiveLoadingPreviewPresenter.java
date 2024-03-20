@@ -100,7 +100,7 @@ public class ArchiveLoadingPreviewPresenter {
                 .onProgress((o, oldValue, newValue) -> {
                     progressBar.progressProperty().set(newValue.doubleValue());
                 })
-                .onSingleValueCompleted((o1, oldValue, newValue) -> {
+                .onStepCompleted((o1, oldValue, newValue) -> {
                     newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
                 })
                 .build());
