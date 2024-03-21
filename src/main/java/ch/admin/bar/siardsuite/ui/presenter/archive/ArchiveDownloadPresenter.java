@@ -1,10 +1,14 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.hooks.Destructible;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArgArg;
 import ch.admin.bar.siardsuite.framework.navigation.Navigator;
 import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
@@ -22,7 +26,6 @@ import ch.admin.bar.siardsuite.ui.component.ButtonBox;
 import ch.admin.bar.siardsuite.ui.component.IconView;
 import ch.admin.bar.siardsuite.ui.component.LabelIcon;
 import ch.admin.bar.siardsuite.ui.component.Spinner;
-import ch.admin.bar.siardsuite.util.I18n;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -30,21 +33,31 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ch.admin.bar.siardsuite.ui.View.START;
-import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.CANCEL;
-import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.DOWNLOAD_FINISHED;
-import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.TO_START;
 
 @Slf4j
-public class ArchiveDownloadPresenter {
+public class ArchiveDownloadPresenter implements Destructible {
+
+
+    private static final I18nKey BUTTON_HOME = I18nKey.of("button.home");
+    private static final I18nKey BUTTON_CANCEL = I18nKey.of("button.cancel");
+    private static final I18nKey BUTTON_VIEW_ARCHIVE = I18nKey.of("button.view-archive");
+
+    private static final I18nKey IN_PROGRESS_TITLE = I18nKey.of("archiveDownload.view.title.inProgress");
+    private static final I18nKey IN_PROGRESS_MESSAGE = I18nKey.of("archiveDownload.view.message.inProgress");
+    private static final I18nKey PATH_TITLE = I18nKey.of("archiveDownload.view.pathTitle");
+    private static final I18nKey OPEN_LINK = I18nKey.of("archiveDownload.view.openLink");
+    private static final I18nKey SUCCESS_TITLE = I18nKey.of("archiveDownload.view.title.success");
+    private static final I18nKeyArg<Long> SUCCESS_MESSAGE = I18nKeyArg.of("archiveDownload.view.message.success");
+    private static final I18nKey FAILED_TITLE = I18nKey.of("archiveDownload.view.title.failed");
+    private static final I18nKey FAILED_MESSAGE = I18nKey.of("archiveDownload.view.message.failed");
+
+    private static final I18nKeyArgArg<String, Long> TABLE_ROWS = I18nKeyArgArg.of("upload.result.success.table.rows");
 
     @FXML
     public BorderPane borderPane;
@@ -73,8 +86,6 @@ public class ArchiveDownloadPresenter {
     @FXML
     public MFXProgressBar progressBar;
     public VBox scrollBox2;
-    @FXML
-    private ButtonBox buttonsBox;
 
     private Spinner loadingSpinner;
     private long total;
@@ -84,7 +95,6 @@ public class ArchiveDownloadPresenter {
 
     private ErrorHandler errorHandler;
     private DbInteractionService dbInteractionService;
-    private Dialogs dialogs;
     private Navigator navigator;
     private ArchiveHandler archiveHandler;
 
@@ -103,16 +113,24 @@ public class ArchiveDownloadPresenter {
 
         this.errorHandler = errorHandler;
         this.dbInteractionService = dbInteractionService;
-        this.dialogs = dialogs;
         this.navigator = navigator;
         this.archiveHandler = archiveHandler;
 
         this.loader.setImage(Icon.LOADING.toImage());
         loadingSpinner = new Spinner(this.loader);
-        this.bindTexts();
-        this.buttonsBox = new ButtonBox().make(CANCEL);
-        addButtons();
-        setListeners();
+
+        title.textProperty().bind(DisplayableText.of(IN_PROGRESS_TITLE).bindable());
+        recordsLoaded.textProperty().bind(DisplayableText.of(IN_PROGRESS_MESSAGE).bindable());
+        pathTitle.textProperty().bind(DisplayableText.of(PATH_TITLE).bindable());
+        openLink.textProperty().bind(DisplayableText.of(OPEN_LINK).bindable());
+
+        this.borderPane.setBottom(ButtonBox.create(
+                ButtonBox.ButtonDescriber.builder()
+                        .title(BUTTON_CANCEL)
+                        .style(ButtonBox.ButtonStyle.SECONDARY)
+                        .onAction(() -> dialogs.open(View.ARCHIVE_ABORT_DIALOG))
+                        .build()
+        ));
 
         this.openLink.setOnMouseClicked(event -> filesService.openInFileBrowser(userDefinedMetadata.getSaveAt()));
         this.archivePath.setText(userDefinedMetadata.getSaveAt().getAbsolutePath());
@@ -121,24 +139,9 @@ public class ArchiveDownloadPresenter {
         downloadAndArchiveDatabase();
     }
 
-    private void setListeners() {
-        if (this.buttonsBox.cancel() != null) {
-            if (this.resultTitle.isVisible()) {
-                this.buttonsBox.cancel().setOnAction((event) -> archiveHandler.open(userDefinedMetadata.getSaveAt()));
-            } else {
-                this.buttonsBox.cancel().setOnAction((event) -> dialogs.open(View.ARCHIVE_ABORT_DIALOG));
-            }
-        }
-        if (this.buttonsBox.next() != null) {
-            this.buttonsBox.next().setOnAction((event) -> navigator.navigate(START));
-        }
-    }
-
-    private void bindTexts() {
-        I18n.bind(title.textProperty(), "archiveDownload.view.title.inProgress");
-        I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.inProgress");
-        I18n.bind(pathTitle.textProperty(), "archiveDownload.view.pathTitle");
-        I18n.bind(openLink.textProperty(), "archiveDownload.view.openLink");
+    @Override
+    public void destruct() {
+        dbInteractionService.cancelRunning();
     }
 
     private void downloadAndArchiveDatabase() {
@@ -147,7 +150,7 @@ public class ArchiveDownloadPresenter {
         dbInteractionService.execute(LoadDatabaseInstruction.builder()
                 .connectionData(connectionData)
                 .saveAt(Optional.of(userDefinedMetadata.getSaveAt()))
-                .externalLobs(Optional.ofNullable(userDefinedMetadata.getLobFolder()))
+                .externalLobs(userDefinedMetadata.getLobFolder())
                 .loadOnlyMetadata(false)
                 .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
                 .onSuccess(this::handleDownloadSuccess)
@@ -173,15 +176,33 @@ public class ArchiveDownloadPresenter {
         log.info("Downloaded archive successfully stored to {}", userDefinedMetadata.getSaveAt().getAbsolutePath());
 
         loadingSpinner.hide();
-        this.title.setVisible(false);
-        this.resultTitle.setVisible(true);
-        this.fileSystemBox.setVisible(true);
-        I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.success");
-        resultTitle.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
-        setResultData();
+        title.setVisible(false);
+        fileSystemBox.setVisible(true);
 
-        this.buttonsBox = new ButtonBox().make(DOWNLOAD_FINISHED);
-        addButtons();
+        resultTitle.setVisible(true);
+        resultTitle.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
+        resultTitle.textProperty().bind(DisplayableText.of(SUCCESS_TITLE).bindable());
+        recordsLoaded.textProperty().bind(DisplayableText.of(SUCCESS_MESSAGE, total).bindable());
+
+        progressBar.setVisible(false);
+        scrollBox.setVisible(false);
+        scrollBox2.setVisible(true);
+
+        this.borderPane.setBottom(ButtonBox.create(
+                ButtonBox.ButtonDescriber.builder()
+                        .title(BUTTON_HOME)
+                        .style(ButtonBox.ButtonStyle.PRIMARY)
+                        .onAction(() -> navigator.navigate(View.START))
+                        .build(),
+                ButtonBox.ButtonDescriber.builder()
+                        .title(BUTTON_VIEW_ARCHIVE)
+                        .style(ButtonBox.ButtonStyle.SECONDARY)
+                        .onAction(() -> {
+                            val openArchive = archiveHandler.open(userDefinedMetadata.getSaveAt());
+                            navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW, openArchive);
+                        })
+                        .build()
+        ));
     }
 
     private void handleDownloadFailure(final Throwable throwable) {
@@ -191,25 +212,19 @@ public class ArchiveDownloadPresenter {
         this.resultTitle.setVisible(true);
         this.subtitle1.setVisible(false);
         this.resultBox.setVisible(false);
-        I18n.bind(resultTitle.textProperty(), "archiveDownload.view.title.failed");
-        I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.failed");
+        resultTitle.textProperty().bind(DisplayableText.of(FAILED_TITLE).bindable());
+        recordsLoaded.textProperty().bind(DisplayableText.of(FAILED_MESSAGE).bindable());
         resultTitle.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
-        this.buttonsBox = new ButtonBox().make(TO_START);
+
+        this.borderPane.setBottom(ButtonBox.create(
+                ButtonBox.ButtonDescriber.builder()
+                        .title(BUTTON_HOME)
+                        .style(ButtonBox.ButtonStyle.PRIMARY)
+                        .onAction(() -> navigator.navigate(View.START))
+                        .build()
+        ));
+
         errorHandler.handle(throwable);
-        addButtons();
-    }
-
-    private void addButtons() {
-        this.borderPane.setBottom(buttonsBox);
-        setListeners();
-    }
-
-    private void setResultData() {
-        // remove progressbar
-        progressBar.setVisible(false);
-        scrollBox.setVisible(false);
-        scrollBox2.setVisible(true);
-        I18n.bind(recordsLoaded.textProperty(), "archiveDownload.view.message.success", total);
     }
 
 
@@ -225,7 +240,7 @@ public class ArchiveDownloadPresenter {
                     new LabelIcon(text, pos, IconView.IconType.LOADING));
         } else {
             LabelIcon label = new LabelIcon(text, pos, IconView.IconType.OK);
-            I18n.bind(label.textProperty(), "upload.result.success.table.rows", text, rows);
+            label.textProperty().bind(DisplayableText.of(TABLE_ROWS, text, rows).bindable());
             scrollBox2.getChildren().add(label);
             total += rows;
         }

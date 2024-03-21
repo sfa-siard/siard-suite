@@ -6,7 +6,6 @@ import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
 import ch.admin.bar.siardsuite.model.facades.PreTypeFacade;
-import ch.admin.bar.siardsuite.ui.View;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -20,7 +19,6 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -130,13 +128,13 @@ public class ArchiveHandler {
         val metaData = archive.getMetaData();
 
         metaData.setDbName(userDefinedMetadata.getDbName());
-        metaData.setDescription(userDefinedMetadata.getDescription());
+        userDefinedMetadata.getDescription().ifPresent(metaData::setDescription);
         metaData.setDataOwner(userDefinedMetadata.getOwner());
         metaData.setDataOriginTimespan(userDefinedMetadata.getDataOriginTimespan());
-        metaData.setArchiver(userDefinedMetadata.getArchiverName());
-        metaData.setArchiverContact(userDefinedMetadata.getArchiverContact());
+        userDefinedMetadata.getArchiverName().ifPresent(metaData::setArchiver);
+        userDefinedMetadata.getArchiverContact().ifPresent(metaData::setArchiverContact);
 
-        Optional.ofNullable(userDefinedMetadata.getLobFolder())
+        userDefinedMetadata.getLobFolder()
                 .ifPresent(uri -> setExternalLobFolder(archive, uri));
 
         return this;

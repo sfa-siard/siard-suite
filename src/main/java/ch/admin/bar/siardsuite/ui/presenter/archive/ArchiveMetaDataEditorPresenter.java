@@ -189,23 +189,25 @@ public class ArchiveMetaDataEditorPresenter {
         if (this.validateProperties()) {
             File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
 
-            URI lobFolder = null;
-            try {
-                lobFolder = new URI(lobExportLocation.getText()
-                        .replace("\\",
-                                "/")); // replace backslashes with slashes that work on all platforms
-            } catch (URISyntaxException e) {
-                errorHandler.handle(e);
-            }
+            val lobFolder = Optional.ofNullable(lobExportLocation.getText())
+                    .filter(text -> !text.isEmpty())
+                    .map(text -> text.replace("\\", "/")) // replace backslashes with slashes that work on all platforms
+                    .map(text -> {
+                        try {
+                            return new URI(text);
+                        } catch (URISyntaxException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
 
             if (targetArchive != null) {
                 return Optional.of(UserDefinedMetadata.builder()
                         .dbName(this.name.getText())
-                        .description(this.description.getText())
+                        .description(Optional.ofNullable(this.description.getText()).filter(text -> !text.isEmpty()))
                         .owner(this.owner.getText())
                         .dataOriginTimespan(this.dataOriginTimespan.getText())
-                        .archiverName(this.archiverName.getText())
-                        .archiverContact(this.archiverContact.getText())
+                        .archiverName(Optional.ofNullable(this.archiverName.getText()).filter(text -> !text.isEmpty()))
+                        .archiverContact(Optional.ofNullable(this.archiverContact.getText()).filter(text -> !text.isEmpty()))
                         .lobFolder(lobFolder)
                         .saveAt(targetArchive)
                         .exportViewsAsTables(exportViewsAsTables.isSelected())
