@@ -71,6 +71,39 @@ public class ServicesFacadeBuilder {
             .message(DisplayableText.of(CORRUPTED_SIARD_ARCHIVE_MESSAGE))
             .build();
 
+    private static final I18nKey NO_SCHEMA_TITLE = I18nKey.of("errors.noSchema.title");
+    private static final I18nKey NO_SCHEMA_MESSAGE = I18nKey.of("errors.noSchema.message");
+    private static final HandlingInstruction NO_SCHEMA = HandlingInstruction.builder()
+            .matcher(TypeAndMessageMatcher.builder()
+                    .expectedExceptionType(org.xml.sax.SAXParseException.class)
+                    .expectedTextFragment("The content of element 'schemas' is not complete")
+                    .build())
+            .title(DisplayableText.of(NO_SCHEMA_TITLE))
+            .message(DisplayableText.of(NO_SCHEMA_MESSAGE))
+            .build();
+
+    private static final I18nKey NO_COLUMNS_TITLE = I18nKey.of("errors.noColumns.title");
+    private static final I18nKey NO_COLUMNS_MESSAGE = I18nKey.of("errors.noColumns.message");
+    private static final HandlingInstruction NO_COLUMNS_AVAILABLE = HandlingInstruction.builder()
+            .matcher(TypeAndMessageMatcher.builder()
+                    .expectedExceptionType(org.xml.sax.SAXParseException.class)
+                    .expectedTextFragment("The content of element 'columns' is not complete")
+                    .build())
+            .title(DisplayableText.of(NO_COLUMNS_TITLE))
+            .message(DisplayableText.of(NO_COLUMNS_MESSAGE))
+            .build();
+
+    private static final I18nKey NO_USER_TITLE = I18nKey.of("errors.noUser.title");
+    private static final I18nKey NO_USER_MESSAGE = I18nKey.of("errors.noUser.message");
+    private static final HandlingInstruction NO_USER = HandlingInstruction.builder()
+            .matcher(TypeAndMessageMatcher.builder()
+                    .expectedExceptionType(org.xml.sax.SAXParseException.class)
+                    .expectedTextFragment("The content of element 'users' is not complete")
+                    .build())
+            .title(DisplayableText.of(NO_USER_TITLE))
+            .message(DisplayableText.of(NO_USER_MESSAGE))
+            .build();
+
     public ServicesFacade build(final RootStage stage) {
         val archiveHandler = new ArchiveHandler();
         val dbmsRegistry = new DbmsRegistry();
@@ -101,6 +134,9 @@ public class ServicesFacadeBuilder {
                 .errorHandler(UNKNOWN_HOST)
                 .errorHandler(CONNECTION_REFUSED)
                 .errorHandler(CORRUPTED_SIARD_ARCHIVE)
+                .errorHandler(NO_SCHEMA)
+                .errorHandler(NO_USER)
+                .errorHandler(NO_COLUMNS_AVAILABLE)
 
                 .build();
 
