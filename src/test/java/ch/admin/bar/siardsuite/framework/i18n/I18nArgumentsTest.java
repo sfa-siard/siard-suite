@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.framework.i18n;
 
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArgArg;
 import ch.admin.bar.siardsuite.util.CastHelper;
 import ch.admin.bar.siardsuite.framework.i18n.helper.I18nTestHelper;
 import ch.admin.bar.siardsuite.framework.i18n.helper.StringTestHelper;
@@ -58,6 +59,29 @@ public class I18nArgumentsTest {
 
         val valuesWithWrongAmountOfPlaceholders = values.stream()
                 .filter(keyWithValue -> StringTestHelper.getNumberOfPlaceholders(keyWithValue.getText()) != 1)
+                .collect(Collectors.toList());
+
+        Assertions.assertThat(valuesWithWrongAmountOfPlaceholders).isEmpty();
+    }
+
+    @Test
+    public void containTheValuesOfAllStaticDefinedI18nKeyArgArgPlaceholder() {
+        // given
+        val keys = I18nTestHelper.extractStaticKeyDefinitions().stream()
+                .flatMap(key -> CastHelper.tryCastWithStream(key, I18nKeyArgArg.class))
+                .collect(Collectors.toSet());
+
+        // when
+        val values = keys.stream()
+                .flatMap(key -> findValues(key).stream())
+                .collect(Collectors.toList());
+
+        // then
+        Assertions.assertThat(keys).isNotEmpty();
+        Assertions.assertThat(values).isNotEmpty();
+
+        val valuesWithWrongAmountOfPlaceholders = values.stream()
+                .filter(keyWithValue -> StringTestHelper.getNumberOfPlaceholders(keyWithValue.getText()) != 2)
                 .collect(Collectors.toList());
 
         Assertions.assertThat(valuesWithWrongAmountOfPlaceholders).isEmpty();

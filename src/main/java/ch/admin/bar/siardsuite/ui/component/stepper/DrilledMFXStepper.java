@@ -72,7 +72,7 @@ public class DrilledMFXStepper extends MFXStepper implements Destructible {
             }
             if (counter < index) {
                 // before searched
-                toggle.setState(StepperToggleState.NONE);
+                toggle.setState(StepperToggleState.COMPLETED);
             }
             if (counter > index) {
                 // after searched

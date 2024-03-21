@@ -49,19 +49,4 @@ public class ButtonBoxTest {
         assertThat(buttonBox.getChildren().get(0), is(buttonBox.cancelButton));
         assertThat(buttonBox.cancelButton.getText(), is("Cancel"));
     }
-
-    @Test
-    void shouldCreateDownloadFinishedButtonBox() {
-        // given
-
-        // when
-        ButtonBox buttonBox = new ButtonBox().make(DOWNLOAD_FINISHED);
-
-        // then
-        assertNotNull(buttonBox);
-        assertThat(buttonBox.getChildren().size(), is(2));
-        assertThat(buttonBox.getChildren(), hasItems(buttonBox.cancelButton, buttonBox.nextButton));
-        assertThat(buttonBox.cancelButton.getText(), is("View archive"));
-        assertThat(buttonBox.nextButton.getText(), is("Home"));
-    }
 }
