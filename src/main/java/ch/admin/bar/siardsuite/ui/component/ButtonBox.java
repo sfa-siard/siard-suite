@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ButtonBox extends HBox {
 
     public enum Type {
-        DEFAULT, CANCEL, DOWNLOAD_FINISHED, FAILED, TO_START, OPEN_PREVIEW
+        DEFAULT, CANCEL, FAILED, TO_START, OPEN_PREVIEW
     }
 
     @FXML
@@ -32,8 +32,6 @@ public class ButtonBox extends HBox {
         switch (type) {
             case CANCEL:
                 return new CancelButtonBox();
-            case DOWNLOAD_FINISHED:
-                return new DownloadFinishedButtonBox();
             case DEFAULT:
                 return new DefaultButtonBox();
             case FAILED:
@@ -102,22 +100,7 @@ public class ButtonBox extends HBox {
             this.initialize();
         }
     }
-
-    private static class DownloadFinishedButtonBox extends ButtonBox {
-
-        DownloadFinishedButtonBox() {
-            I18n.bind(this.nextButton.textProperty(), "button.home");
-            this.nextButton.getStyleClass().setAll("button", "primary");
-            this.nextButton.setManaged(true);
-            I18n.bind(this.cancelButton.textProperty(), "button.view-archive");
-            this.cancelButton.getStyleClass().setAll("button", "secondary");
-            this.cancelButton.setManaged(true);
-            this.getChildren().addAll(this.nextButton, this.cancelButton);
-            this.initialize();
-        }
-    }
-
-
+    
     private static class FailedButtonBox extends ButtonBox {
 
         FailedButtonBox() {
