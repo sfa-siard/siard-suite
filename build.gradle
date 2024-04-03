@@ -52,7 +52,9 @@ jar {
                         '            jdbcpostgres.jar           \n' +
                         '            jfxrt.jar                  xsdlib-2010.1.jar\n' +
                         '            json-simple-1.1.1.jar      zip64.jar\n' +
-                        '            jts-1.14.jar               tika-app-2.8.0.jar'
+                        '            jts-1.14.jar               tika-app-2.8.0.jar\n' +
+                        '            slf4j-api-2.0.9.jar        logback-classic-1.3.14.jar\n' +
+                        '            logback-core-1.3.14.jar'
         )
     }
 }
