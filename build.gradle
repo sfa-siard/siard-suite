@@ -39,7 +39,7 @@ jar {
                         '            enterutils.jar             ojdbc6.jar\n' +
                         '            hamcrest-core-1.3.jar      postgresql-42.2.5.jar\n' +
                         '            ini4j-0.5.4.jar            siardapi.jar\n' +
-                        '            jackcess-2.1.6a.jar        siardcmd.jar\n' +
+                        '            jackcess-2.1.6a.jar        siardcmd-2.2.11.jar\n' +
                         '            jaxb-api.jar               siard-suite-2.2.118.jar\n' +
                         '            jaxb-core.jar              sqljdbc41.jar\n' +
                         '            jaxb-impl.jar              sqlparser.jar\n' +
