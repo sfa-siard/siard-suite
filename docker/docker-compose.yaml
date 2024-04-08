@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  mssql:
+    build:
+      context: ./mssql
+      dockerfile: Dockerfile
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Yukon900
+    ports:
+      - 1433:1433

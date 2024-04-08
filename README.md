@@ -62,6 +62,8 @@ sudo apt install alien
 
 ## Versioning, tags and releases
 
+⚠️ Please check the [release guide](release-guide.md) before creating a new version and pushing it to main! ⚠️ 
+
 Versions and tags are managed with the Axion Release Plugin for Gradle (https://github.com/allegro/axion-release-plugin)
 
 Short overview:
