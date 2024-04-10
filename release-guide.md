@@ -7,7 +7,7 @@ The development of SIARD Suite is financed by the Swiss Federal Archives (SFA), 
 - Pre-installed Java 8 (+JavaFX) with no possibility to switch to another JRE.
 - Inability to download and run any form of executable binary or script (e.g. `SIARD-suite.bat`).
 
-The only way SFA staff can run the application is with the following cli command
+The only way SFA staff can run the application is with the following cli command:
 
 ```bash
 java -jar lib/siard-suite.jar
@@ -15,25 +15,30 @@ java -jar lib/siard-suite.jar
 
 Due to these constraints, the application will often run fine when using native installers or start scripts (with bundled JRE), but not with the above command, without anyone noticing until an SFA staff member tries to run the application without success.
 
-That's why it is recommended to perform the following steps to make sure that the application really works for SFA staff and for users of different distributions.
+That's why it is recommended to perform the following steps, to make sure that the application really works for SFA staff and for users of different distributions.
 
 
 ## Test script
 
-First, run a build and create native installers and packaged distributions:
+First, switch to use Java 17 with JavaFX via sdkman (or any other way of switching between Java versions): 
+
+```bash
+sdk use java 17.0.10.fx-zulu
+```
+
+Run a build and create native installers and packaged distributions: 
 
 ```bash
 ./gradlew clean jpackage
 ```
 
-Start some databases to do some smoke tests:
+Start some databases:
 
 ```bash
 docker-compose up -d --build
 ```
 
-
-### Smoke test for SFA environment
+## Smoke tests for SFA environment
 
 Switch to the unpacked distribution of your application:
 
@@ -41,35 +46,31 @@ Switch to the unpacked distribution of your application:
 cd build/install/SIARD-Suite/
 ```
 
-Use Java 8 with JavaFX via asdf:
+Use Java 8 with JavaFX via sdkman:
 
+```bash
+sdk use java 8.0.402.fx-zulu
 ```
-asdf local java zulu-jre-javafx-8.76.0.17
-```
-
-Note: If you don't use asdf, but sdkman or any other way of switching between Java versions, it is important to use a Java 8 JRE with JavaFX in this step!
 
 Run the application:
 
 ````bash
-java -jar lib java -jar lib/siard-suite-2.2.*.jar 
+java -jar lib/siard-suite-2.2.*.jar 
 ````
 
-Next, please carry out the following steps:
+In the application, please carry out the following steps to archive data sources:
 
-* Configure the data source for archiving
-* Change the metadata to some values
-* Save the archive and select "Open archive" at the end of the wizard.
+* Configure the data source for archiving: Select "Archive" and "Use new connection".
+* Fill out metadata.
+* Save the archive and select "View archive" at the end of the wizard.
 
-Repeat these steps for the following connections
-
-* Microsoft SQL Server
+### Microsoft SQL Server
   * Connection URL: jdbc:sqlserver://localhost:1433;databaseName=siard
   * Username: sa
   * Password: Yukon900
 
-* MS Access
-  * Location: ./docker/mssaccess/Northwind.accdb
+### MS Access
+  * MS Access file: /home/<username>/<your-directory>/siard-suite/docker/msaccess/Northwind.accdb
 
 
 ## Smoke tests for packaged distributions
@@ -86,10 +87,7 @@ Run the application:
 ./bin/SIARD-Suite(.bat)
 ```
 
-Run the tests described above for both data sources.
-
-
-If everything works, push changes to the main branch and run the release task according to the readme.
+Run the tests described above for both data sources. If everything works, push changes to the main branch and run the release task according to the readme.
 
 
 ## Considerations
