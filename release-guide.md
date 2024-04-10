@@ -54,9 +54,9 @@ sdk use java 8.0.402.fx-zulu
 
 Run the application:
 
-````bash
+```bash
 java -jar lib/siard-suite-2.2.*.jar 
-````
+```
 
 In the application, please carry out the following steps to archive data sources:
 
@@ -70,7 +70,7 @@ In the application, please carry out the following steps to archive data sources
   * Password: Yukon900
 
 ### MS Access
-  * MS Access file: /home/<username>/<your-directory>/siard-suite/docker/msaccess/Northwind.accdb
+  * MS Access file: `/home/<username>/<your-directory>/siard-suite/docker/msaccess/Northwind.accdb`
 
 
 ## Smoke tests for packaged distributions
