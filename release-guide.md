@@ -2,7 +2,7 @@
 
 ## Motivation
 
-The development of SIARD Suite is financed by the Swiss Federal Archives (SFA), which is one of the main stakeholders of the project. The SFA is also one of the main users of the application. There are many restrictions on the workstations that can be used by SFA staff:
+The development of SIARD Suite is financed by the Swiss Federal Archives (SFA), which are one of the main stakeholders of the project. The SFA are also one of the main users of the application. There are many restrictions on SFA staff workstations:
 
 - Pre-installed Java 8 (+JavaFX) with no possibility to switch to another JRE.
 - Inability to download and run any form of executable binary or script (e.g. `SIARD-suite.bat`).
@@ -13,9 +13,9 @@ The only way SFA staff can run the application is with the following cli command
 java -jar lib/siard-suite.jar
 ```
 
-Due to other constraints, it has happened on a regular basis that the application runs fine when using the native installers or start scripts (with bundled jre), but not with the above command, without anyone noticing until an SFA staff member tries to run the application without success.
+Due to these constraints, the application will often run fine when using native installers or start scripts (with bundled JRE), but not with the above command, without anyone noticing until an SFA staff member tries to run the application without success.
 
-That's why it is recommended to perform the following steps to make sure that the application really works for SFA staff and users of different distributions (native installers).
+That's why it is recommended to perform the following steps to make sure that the application really works for SFA staff and for users of different distributions.
 
 
 ## Test script
@@ -47,7 +47,7 @@ Use Java 8 with JavaFX via asdf:
 asdf local java zulu-jre-javafx-8.76.0.17
 ```
 
-Note: If you don't use asdf, but e.g. sdk man or some other way to switch between Java versions: it is important to use a java8 jre with javafx in this step!
+Note: If you don't use asdf, but sdkman or any other way of switching between Java versions, it is important to use a Java 8 JRE with JavaFX in this step!
 
 Run the application:
 
@@ -55,7 +55,7 @@ Run the application:
 java -jar lib java -jar lib/siard-suite-2.2.*.jar 
 ````
 
-Please carry out the following steps:
+Next, please carry out the following steps:
 
 * Configure the data source for archiving
 * Change the metadata to some values
@@ -89,7 +89,7 @@ Run the application:
 Run the tests described above for both data sources.
 
 
-If everything seems to work, push everything to the main branch and run the release task according to the readme.
+If everything works, push changes to the main branch and run the release task according to the readme.
 
 
 ## Considerations
