@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   mssql:
     build:
@@ -10,3 +8,14 @@ services:
       SA_PASSWORD: Yukon900
     ports:
       - 1433:1433
+
+  oracle-xe:
+    image: gvenzl/oracle-xe:21-faststart
+    environment:
+      ORACLE_RANDOM_PASSWORD: yes
+      ORACLE_DATABASE: siard
+      APP_USER: siard
+      APP_USER_PASSWORD: siard
+    ports:
+      - 1521:1521
+

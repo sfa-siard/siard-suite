@@ -69,6 +69,11 @@ In the application, please carry out the following steps to archive data sources
   * Username: sa
   * Password: Yukon900
 
+### Oracle
+   * Connection URL: jdbc:oracle:thin:@localhost:1521/siard
+   * Username: siard
+   * Password: siard
+
 ### MS Access
   * MS Access file: `/home/<username>/<your-directory>/siard-suite/docker/msaccess/Northwind.accdb`
 
