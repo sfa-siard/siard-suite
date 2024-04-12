@@ -9,5 +9,9 @@ sourceControl {
     gitRepository("https://github.com/sfa-siard/SiardCmd.git") {
         producesModule("ch.admin.bar:siardcmd")
     }
+
+    gitRepository("https://github.com/sfa-siard/EnterUtilities.git") {
+        producesModule("ch.admin.bar:enterutilities")
+    }
 }
 
