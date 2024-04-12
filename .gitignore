@@ -9,6 +9,9 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 .idea/GitlabLint.xml
+.idea/misc.xml
+.idea/gradle.xml
+.idea/workspace.xml
 *.iws
 *.iml
 *.ipr
