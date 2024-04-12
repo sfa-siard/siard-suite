@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_TEST_SOURCES" value="false" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="41b83dbc-2f90-4fbb-bd4e-50e4737a31e8" name="Changes" comment="setup: add vcs.xml config">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/enterutils.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ElmWorkspace">
+    <elmProjects />
+    <settings elmCompilerPath="" elmFormatPath="" elmTestPath="" isElmFormatOnSaveEnabled="false" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="siard-suite" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="siard-suite" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2aiieqgSvqwurqFdDmW8xBLAjwG" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.UserPreferencesTest.getStoredOptions_withPreviouslyStoredOptions_expectPreviouslyStored.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.siard-suite [:Launcher.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.siard-suite [:SiardApplication.main()].executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.source.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/introduce-source-dependencies&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/mburri/git/siard/siard-suite&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.elm.workspace.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlserver&quot;,
+      &quot;oracle&quot;
+    ],
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;TEXT&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docker/msaccess" />
+      <recent name="$PROJECT_DIR$/docker/mssql" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.UserPreferencesTest.getStoredOptions_withPreviouslyStoredOptions_expectPreviouslyStored">
+    <configuration name="Launcher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ch.admin.bar.siardsuite.Launcher" />
+      <module name="siard-suite.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ch.admin.bar.siardsuite.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserPreferencesTest.getStoredOptions_withPreviouslyStoredOptions_expectPreviouslyStored" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ch.admin.bar.siardsuite.util.preferences.UserPreferencesTest.getStoredOptions_withPreviouslyStoredOptions_expectPreviouslyStored&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="source" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/ead61b63-b0a6-4ff2-a49a-86be75ccfd1a/source?file=%2Fhome%2Fmburri%2Fgit%2Fsiard%2Fsiard-suite%2Fdocs%2Fsad%2Farc42-template.adoc&amp;mac=K9W4iK4pFEKOcMZ1Rm722fsOtuElWFSYbWI8xTb7RiQ=&amp;projectUrl=%2Fhome%2Fmburri%2Fgit%2Fsiard%2Fsiard-suite" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.UserPreferencesTest.getStoredOptions_withPreviouslyStoredOptions_expectPreviouslyStored" />
+        <item itemvalue="Application.Launcher" />
+        <item itemvalue="JavaScript Debug.source" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="41b83dbc-2f90-4fbb-bd4e-50e4737a31e8" name="Changes" comment="" />
+      <created>1704807900768</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1704807900768</updated>
+      <workItem from="1704807903004" duration="815000" />
+      <workItem from="1705400931536" duration="7000" />
+      <workItem from="1706260425711" duration="782000" />
+      <workItem from="1709539236110" duration="2845000" />
+      <workItem from="1709544369203" duration="3249000" />
+      <workItem from="1709549360419" duration="1350000" />
+      <workItem from="1709802114466" duration="4590000" />
+      <workItem from="1709888542011" duration="570000" />
+      <workItem from="1709889119998" duration="3043000" />
+      <workItem from="1710144184929" duration="6000" />
+      <workItem from="1710160817395" duration="769000" />
+      <workItem from="1710499055057" duration="1955000" />
+      <workItem from="1712148065595" duration="2143000" />
+      <workItem from="1712212524573" duration="2012000" />
+      <workItem from="1712238549829" duration="2727000" />
+      <workItem from="1712298909362" duration="6927000" />
+      <workItem from="1712561322563" duration="3188000" />
+      <workItem from="1712565751090" duration="8883000" />
+      <workItem from="1712738575558" duration="958000" />
+      <workItem from="1712761571756" duration="13077000" />
+      <workItem from="1712926987071" duration="4818000" />
+      <workItem from="1712946174591" duration="3286000" />
+      <workItem from="1712952251728" duration="24000" />
+    </task>
+    <task id="LOCAL-00001" summary="doc: poc for markdown + mermaid on github">
+      <option name="closed" value="true" />
+      <created>1709544399418</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1709544399418</updated>
+    </task>
+    <task id="LOCAL-00002" summary="doc: poc for asciidoc + plantuml on github">
+      <option name="closed" value="true" />
+      <created>1709819544712</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1709819544712</updated>
+    </task>
+    <task id="LOCAL-00003" summary="doc: poc for asciidoc + plantuml on github">
+      <option name="closed" value="true" />
+      <created>1709819552772</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1709819552772</updated>
+    </task>
+    <task id="LOCAL-00004" summary="doc: generate plantuml diagrams">
+      <option name="closed" value="true" />
+      <created>1709893276340</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1709893276340</updated>
+    </task>
+    <task id="LOCAL-00005" summary="doc: run github action for doc/* branches">
+      <option name="closed" value="true" />
+      <created>1709893539588</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1709893539588</updated>
+    </task>
+    <task id="LOCAL-00006" summary="doc: commit generated diagrams for simplicity">
+      <option name="closed" value="true" />
+      <created>1709893864842</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1709893864842</updated>
+    </task>
+    <task id="LOCAL-00007" summary="doc: wip">
+      <option name="closed" value="true" />
+      <created>1710499081611</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1710499081611</updated>
+    </task>
+    <task id="LOCAL-00008" summary="chore: add slf4j dependencies to manifest">
+      <option name="closed" value="true" />
+      <created>1712149572429</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1712149572429</updated>
+    </task>
+    <task id="LOCAL-00009" summary="chore: generate class-path (in Manifest.MF) from compileClasspath instead of maintaining it manually">
+      <option name="closed" value="true" />
+      <created>1712565828930</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1712565828930</updated>
+    </task>
+    <task id="LOCAL-00010" summary="doc: add release guide and provide means for easy smoke testing">
+      <option name="closed" value="true" />
+      <created>1712578499094</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1712578499094</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fix: add java.security.jgss to modules that should be included in the runtime &#10;&#10;this fixes: https://github.com/sfa-siard/JdbcOracle/issues/4">
+      <option name="closed" value="true" />
+      <created>1712910759674</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1712910759674</updated>
+    </task>
+    <task id="LOCAL-00012" summary="chore: linebreaks for better readability of jwmArgs">
+      <option name="closed" value="true" />
+      <created>1712910821529</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1712910821529</updated>
+    </task>
+    <task id="LOCAL-00013" summary="doc: add oracle db to test setup">
+      <option name="closed" value="true" />
+      <created>1712911077224</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1712911077224</updated>
+    </task>
+    <task id="LOCAL-00014" summary="setup: define siard cmd as dependency in gradle">
+      <option name="closed" value="true" />
+      <created>1712926354813</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1712926354813</updated>
+    </task>
+    <task id="LOCAL-00015" summary="setup: add additional idea files to .gitignore">
+      <option name="closed" value="true" />
+      <created>1712927073806</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1712927073806</updated>
+    </task>
+    <task id="LOCAL-00016" summary="doc: context and building block view. Technical risks">
+      <option name="closed" value="true" />
+      <created>1712931137476</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1712931137476</updated>
+    </task>
+    <task id="LOCAL-00017" summary="setup: add vcs.xml config">
+      <option name="closed" value="true" />
+      <created>1712931172119</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1712931172119</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="doc: poc for markdown + mermaid on github" />
+    <MESSAGE value="doc: poc for asciidoc + plantuml on github" />
+    <MESSAGE value="doc: generate plantuml diagrams" />
+    <MESSAGE value="doc: run github action for doc/* branches" />
+    <MESSAGE value="doc: commit generated diagrams for simplicity" />
+    <MESSAGE value="doc: wip" />
+    <MESSAGE value="chore: add slf4j dependencies to manifest" />
+    <MESSAGE value="chore: generate class-path (in Manifest.MF) from compileClasspath instead of maintaining it manually" />
+    <MESSAGE value="doc: add release guide and provide means for easy smoke testing" />
+    <MESSAGE value="fix: add java.security.jgss to modules that should be included in the runtime &#10;&#10;this fixes: https://github.com/sfa-siard/JdbcOracle/issues/4" />
+    <MESSAGE value="chore: linebreaks for better readability of jwmArgs" />
+    <MESSAGE value="doc: add oracle db to test setup" />
+    <MESSAGE value="setup: define siard cmd as dependency in gradle" />
+    <MESSAGE value="setup: add additional idea files to .gitignore" />
+    <MESSAGE value="doc: context and building block view. Technical risks" />
+    <MESSAGE value="setup: add vcs.xml config" />
+    <option name="LAST_COMMIT_MESSAGE" value="setup: add vcs.xml config" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
