@@ -84,7 +84,8 @@ runtime {
             'java.logging',
             'java.sql',
             'java.management',
-            'java.naming'
+            'java.naming',
+            'java.security.jgss',
     ]
 
     imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}.zip")
