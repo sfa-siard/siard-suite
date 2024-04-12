@@ -5,107 +5,72 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 == Building Block View
 
-
-
 === Whitebox Overall System
 
+[mermaid]
+----
+graph TD
+    siardsuite[SiardSuite]
+    siardapi[SiardApi]
+    siardcmd[SiardCmd]
+    sqlparser[SqlParser]
+    jdbcbase[JdbcBase]
+    jdbcaccess[JdbcAccess]
+    jdbcdb2[JdbcDb2]
+    jdbcoracle[JdbcOracle]
+    jdbcmssql[JdbcMssql]
+    jdbcmysql[JdbcMysql]
+    enterutils[EnterUtils]
+    zip64file[Zip64File]
 
+    siardsuite --- siardapi
+    siardsuite --- siardcmd
+    siardsuite --- sqlparser
+    siardsuite --- zip64file
+    siardsuite --- enterutils
 
-_**<Overview Diagram>**_
+    siardapi --- sqlparser
+    siardapi --- enterutils
+    siardapi --- zip64file
+    zip64file --- enterutils
+    sqlparser --- enterutils
 
-Motivation::
+    siardcmd --- siardapi
+    siardcmd --- sqlparser
+    siardcmd --- jdbc
+    siardcmd --- enterutils
 
-_<text explanation>_
+    jdbc --- enterutils
+    jdbc --- sqlparser
+
+    subgraph jdbc
+    jdbcaccess --> jdbcbase
+    jdbcdb2 --> jdbcbase
+    jdbcoracle --> jdbcbase
+    jdbcpostgres --> jdbcbase
+    jdbcmssql --> jdbcbase
+    jdbcmysql --> jdbcbase
+    end
+
+----
 
 
 Contained Building Blocks::
-_<Description of contained building block (black boxes)>_
 
-Important Interfaces::
-_<Description of important interfaces>_
+[options="header",cols="1,2"]
+|===
+|Module | Repository
+|SiardSuite |
+|SiardApi |
+|SiardCmd |
+|SqlParser |
+|JdbcBase |
+|JdbcAccess |
+|JdbcDb2 |
+|JdbcOracle |
+|JdbcMssql |
+|JdbcMysql |
+|EnterUtils |
+|Zip64File |
+|===
 
-
-
-
-==== <Name black box 1>
-
-
-
-_<Purpose/Responsibility>_
-
-_<Interface(s)>_
-
-_<(Optional) Quality/Performance Characteristics>_
-
-_<(Optional) Directory/File Location>_
-
-_<(Optional) Fulfilled Requirements>_
-
-_<(optional) Open Issues/Problems/Risks>_
-
-
-
-
-==== <Name black box 2>
-
-_<black box template>_
-
-==== <Name black box n>
-
-_<black box template>_
-
-
-==== <Name interface 1>
-
-...
-
-==== <Name interface m>
-
-
-
-=== Level 2
-
-
-
-==== White Box _<building block 1>_
-
-
-
-_<white box template>_
-
-==== White Box _<building block 2>_
-
-
-_<white box template>_
-
-...
-
-==== White Box _<building block m>_
-
-
-_<white box template>_
-
-
-
-=== Level 3
-
-
-
-
-==== White Box <_building block x.1_>
-
-
-
-
-_<white box template>_
-
-
-==== White Box <_building block x.2_>
-
-_<white box template>_
-
-
-
-==== White Box <_building block y.1_>
-
-_<white box template>_

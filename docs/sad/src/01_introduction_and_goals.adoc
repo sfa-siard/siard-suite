@@ -23,8 +23,9 @@ Main Features:
 [options="header",cols="1,2"]
 |===
 |Quality Goal|Motivation and Description
-| Swiss Federal Archive | https://github.com/sfa-siard
+| Swiss Federal Archive | -
 | Archives world wide | -
+| Developers/ Contributors | -
 
 |===
 
@@ -33,9 +34,23 @@ Main Features:
 [options="header",cols="1,2,2"]
 |===
 |Role/Name|Contact|Expectations
-| Swiss Federal Archive | https://github.com/sfa-siard | _<Expectation-1>_
-| Archives world wide | - | _<Expectation-2>_
-| SIARD Suite users | - |
+| Swiss Federal Archive | https://github.com/sfa-siard | Long-term archiving of data sets.<br/>Support for common relational database systems.
+
+Reliable, correct archiving of big data sets
+
+The Software must run given the contstraints on SFA Laptops and Workstations.
+
+Cost efficient maintanance and flexible software
+| Archives world wide | - | Long-term archiving of data sets. Support for common relational database systems.
+
+Reliable, correct archiving of big data sets
+
+Quick Issue handling
+| SIARD Suite users | - | Good User Experience
+Support for a variaty of different DBMS
 | Puzzle ITC GmbH (main contributor| https://github.com/puzzle |
-| Developers, Contributors | - | |
+| Developers, Contributors | - | Modern Java, clean codebase.
+
+Simple setup including a variety of databases with test data
+|
 |===
