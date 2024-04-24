@@ -13,9 +13,8 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileHelper {
 
-    public static Path createTempFile(final String filename, final byte[] data) throws IOException {
-        val suffix = extractFileExtension(filename);
-        val tempFilePath = Files.createTempFile(filename, "." + suffix);
+    public static Path createTempFile(final String extension, final byte[] data) throws IOException {
+        val tempFilePath = Files.createTempFile("", extension);
         Files.write(tempFilePath, data);
 
         return tempFilePath;

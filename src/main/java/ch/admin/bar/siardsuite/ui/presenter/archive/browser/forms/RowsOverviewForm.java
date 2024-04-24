@@ -3,28 +3,20 @@ package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siard2.api.Record;
 import ch.admin.bar.siard2.api.Table;
-import ch.admin.bar.siard2.api.primary.CellImpl;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.LazyLoadingDataSource;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableLazyLoadingTable;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.TableColumnProperty;
-import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.Converter;
-import ch.admin.bar.siardsuite.util.FileHelper;
-import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
+import ch.admin.bar.siardsuite.model.database.DatabaseTable;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.*;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.Converter;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
+import ch.admin.bar.siardsuite.util.FileHelper;
+import ch.admin.bar.siardsuite.util.OS;
 import ch.enterag.utils.BU;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import ch.enterag.utils.mime.MimeTypes;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
+import org.apache.tika.Tika;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -34,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.Converter.catchExceptions;
 
 @Slf4j
 public class RowsOverviewForm {
@@ -180,8 +170,10 @@ public class RowsOverviewForm {
             val cell = value.findCell(column.getName());
 
             if (absoluteLobFolder == null) {
-                val cellImpl = (CellImpl) cell;
-                Path tempFilePath = FileHelper.createTempFile(cellImpl.getLobFilename(), cell.getBytes());
+                Tika tika = new Tika();
+                String mimeType = tika.detect(cell.getBytes());
+                String extension = "." + MimeTypes.getExtension(mimeType);
+                Path tempFilePath = FileHelper.createTempFile(extension, cell.getBytes());
                 OS.openFile(String.valueOf(tempFilePath));
             } else {
                 OS.openFile(absoluteLobFolder + cell.getFilename());
