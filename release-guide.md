@@ -35,7 +35,8 @@ Run a build and create native installers and packaged distributions:
 Start some databases:
 
 ```bash
-docker-compose up -d --build
+cd docker
+docker compose up -d --build
 ```
 
 ## Smoke tests for SFA environment

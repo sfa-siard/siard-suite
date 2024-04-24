@@ -62,7 +62,9 @@ public class DatabaseColumn {
     }
 
     public void write() throws IOException {
-        column.setLobFolder(URI.create(lobFolder));
+        if (!lobFolder.isEmpty()) {
+            column.setLobFolder(URI.create(lobFolder));
+        }
         column.setMimeType(mimeType);
         column.setDescription(description);
     }

@@ -1,0 +1,43 @@
+ifndef::imagesdir[:imagesdir: ../images]
+
+[[section-system-scope-and-context]]
+== System Scope and Context
+
+=== Business Context
+
+[mermaid]
+----
+graph LR
+    access[(MS Access)]
+    mssqlserver[(MS SQL Server)]
+    oracle[(Oracle)]
+    postgres[(PostGreSQL)]
+    mysql[(MySQL)]
+    mariadb[(Maria DB)]
+    db2[(IBM DB2)]
+    suite[SIARD Suite]
+    archive[[SIARD Archive]]
+    html[[HTML]]
+
+
+access <--> suite
+mssqlserver <--> suite
+oracle <--> suite
+postgres <--> suite
+mysql <--> suite
+mariadb <--> suite
+db2 <--> suite
+
+suite <--> archive
+suite --> html
+
+----
+
+The Application `SIARD Suite` is able to read data from various database systems in order to create a SIARD Archive file. The application can also read a SIARD Archive and upload it into a database. This is not necessarily the same DBMS as the original data source.
+
+A (somewhat limited) export function allows users to export data from an archive as html files.
+
+
+=== Technical Context
+
+SIARD Suite is a standalone Java Application that runs on Linux, Windows and Mac. The connection to the databases is done using vendor specific JDBC drivers using a jdbc url.

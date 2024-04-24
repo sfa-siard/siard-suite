@@ -19,3 +19,21 @@ services:
     ports:
       - 1521:1521
 
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+  mariadb:
+    image: mariadb:10.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: public
+      MYSQL_USER: public
+      MYSQL_PASSWORD: public
+    ports:
+      - 3306:3306
+

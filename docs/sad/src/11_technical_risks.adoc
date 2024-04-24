@@ -1,0 +1,11 @@
+ifndef::imagesdir[:imagesdir: ../images]
+
+[[section-technical-risks]]
+== Risks and Technical Debts
+
+=== Java 8
+
+The usage of Java 8 is a risk and debt of the project. Workstations provided by the BIT use the Amazon Corretto Java 8 distribution that is still supported, but usually, open source libraries do not support Java 8 any more. The MaterialFX library (https://github.com/palexdev/MaterialFX) requires Java9+ but we were lucky, that there was a backport to java 8 (https://github.com/Glavo/MaterialFX-Java8)
+
+Using Java 9+ on the other hand simplifies support for native installers and distributions with an included JRE. That's why Java9+ (currently: Java 17) is used for development. Because of that, developers oftentimes forget to test the application with Java 8 - leading to releases that are not usable for SFA staff.
+

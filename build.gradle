@@ -6,6 +6,7 @@ plugins {
     id 'org.asciidoctor.jvm.pdf' version '3.3.2'
     id 'pl.allegro.tech.build.axion-release' version '1.14.3'
     id 'io.freefair.lombok' version '6.5.0'
+    id 'com.cosminpolifronie.gradle.plantuml' version '1.6.0'
 }
 
 repositories {
@@ -219,11 +220,19 @@ asciidoctorPdf {
     dependsOn(asciidoctor)
 }
 
+plantUml {
+    render input: 'docs/sad/diagrams/*.puml', output: 'docs/sad/diagrams/generated', format: "png"
+}
+
 tasks.register('copyDocumentation', Copy) {
     from layout.buildDirectory.dir("docs/pdf")
     into layout.projectDirectory.dir('./src/main/resources/ch/admin/bar/siardsuite/doc')
 }
 
 tasks.named("asciidoctorPdf") { finalizedBy(copyDocumentation)}
-tasks.named("build") { dependsOn(asciidoctorPdf)}
+tasks.named("build") {
+    dependsOn(asciidoctorPdf)
+    dependsOn("plantUml")
+}
+
 tasks.named("processResources") { dependsOn(copyDocumentation)}
