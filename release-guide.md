@@ -76,7 +76,9 @@ In the application, please carry out the following steps to archive data sources
    * Password: siard
 
 ### MS Access
-  * MS Access file: `/home/<username>/<your-directory>/siard-suite/docker/msaccess/Northwind.accdb`
+  * MS Access files: 
+    * `/home/<username>/<your-directory>/siard-suite/docker/msaccess/Northwind.accdb`
+    * `/home/<username>/<your-directory>/siard-suite/docker/msaccess/nations.accdb`
 
 
 ## Smoke tests for packaged distributions
