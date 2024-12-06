@@ -132,7 +132,7 @@ runtime {
         imageOptions += ['--icon', "src/main/resources/ch/admin/bar/siardsuite/icons/archive_red.$imgType"]
 
         installerOptions += ['--resource-dir', "src/main/resources"]
-        installerOptions += ['--vendor', 'BUAR']
+        installerOptions += ['--vendor', 'BAR']
         if (currentOs.windows) {
             installerOptions += [
                     '--win-per-user-install',

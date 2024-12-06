@@ -77,7 +77,7 @@ Short overview:
 Run the release task to create a new patch version and push it to remote. The GitHub Actions will create the
 deliverables.
 
-__NOTE: the official GitHub Release has to be created manually by BUAR!__
+__NOTE: the official GitHub Release has to be created manually by BAR!__
 
 While the versioning scheme looks like it's semver it is actually not! The major and minor version represent the
 supported SIARD Format version (currently 2.2)
