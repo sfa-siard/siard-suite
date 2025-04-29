@@ -35,19 +35,19 @@ jobs:
         run: ./gradlew build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
       - name: Store reports
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: reports
           path: |
             **/build/reports/
             **/build/test-results/
       - name: upload zip archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: siard-suite-snapshot
           path: build/distributions/SIARD-Suite-*.zip
       - name: upload user-manual.pdf
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: user-manual
           path: build/docs/pdf/en/user-manual.pdf
