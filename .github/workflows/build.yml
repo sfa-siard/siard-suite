@@ -42,7 +42,7 @@ jobs:
             **/build/reports/
             **/build/test-results/
       - name: upload zip archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: siard-suite-snapshot
           path: build/distributions/SIARD-Suite-*.zip
