@@ -36,6 +36,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private final StringFormField port;
     private final StringFormField dbName;
     private final StringFormField jdbcUrl;
+    private String connectionOptions;
 
     public ServerBasedDbmsConnectionPropertiesForm(
             @NonNull final ServerBasedDbms dbms,
@@ -131,6 +132,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                         host.setValue(decoded.getHost());
                         port.setValue(decoded.getPort());
                         dbName.setValue(decoded.getDbName());
+                        connectionOptions = decoded.getOptions().orElse(null);
                     } catch (Exception e) {
                         // should not be thrown, because of validator
                     }
@@ -159,6 +161,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .dbName(dbName.getValue())
                 .user(username.getValue())
                 .password(password.getValue())
+                .options(Optional.ofNullable(connectionOptions))
                 .build();
     }
 
