@@ -4,3 +4,10 @@
 
 rootProject.name = 'siard-suite'
 
+
+sourceControl {
+    gitRepository("https://github.com/sfa-siard/SiardCmd.git") {
+        producesModule("ch.admin.bar:siardcmd")
+    }
+}
+
