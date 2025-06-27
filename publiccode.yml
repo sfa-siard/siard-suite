@@ -41,6 +41,8 @@ maintenance:
     - name: "Puzzle ITC AG"
       email: "info@puzzle.ch"
       website: "https://www.puzzle.ch"
+      until: "2025-12-31"
+
   type: contract
 localisation:
   localisationReady: true
