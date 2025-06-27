@@ -1,0 +1,47 @@
+publiccodeYmlVersion: 0.4.0
+name: SIARD Suite
+url: https://github.com/sfa-siard/siard-suite/
+landingURL: https://www.bar.admin.ch/bar/en/home/archiving/tools/siard-suite.html
+softwareVersion: "2.2"
+releaseDate: 2024-04-16
+platforms:
+  - windows
+  - ios
+  - mac
+  - linux
+categories:
+  - backup
+  - document-management
+  - data-collection
+developmentStatus: stable
+softwareType: standalone/desktop
+description:
+  en:
+    localisedName: SIARD Suite
+    shortDescription: "SIARD Suite: Intuitive app for archiving, restoring,
+      searching, and exporting relational database content in the SIARD format."
+    longDescription: The SIARD (Software-Independent Archival of Relational
+      Databases) standard defines a format for the long-term archival of
+      relational database contents. To facilitate this process, the "Siard
+      Suite" application offers a user-friendly graphical interface for
+      archiving, restoring, searching, and exporting SIARD archives. With its
+      intuitive design Siard Suite makes it easy to preserve valuable data from
+      relational databases in a way that ensures its longevity and
+      accessibility.
+    documentation: https://www.bar.admin.ch/dam/bar/de/dokumente/kundeninformation/Manual_SIARD-Suite2.1.pdf.download.pdf/Handbuch%20Suite%202.2%20(engl.).pdf
+    features:
+      - Archiving of relational databases
+      - International SIARD format
+    screenshots:
+      - https://www.bar.admin.ch/bar/de/home/archivierung/tools---hilfsmittel/siard-suite/_jcr_content/par/image/image.imagespooler.jpg/1694677161206/newGUI.JPG.jpg
+legal:
+  license: CDDL-1.0
+maintenance:
+  type: contract
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - de
+    - en
+    - fr
+    - it
