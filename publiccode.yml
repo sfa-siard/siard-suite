@@ -1,6 +1,6 @@
 publiccodeYmlVersion: 0.4.0
 name: SIARD Suite
-url: https://github.com/sfa-siard/siard-suite/
+url: https://github.com/sfa-siard/siard-suite
 landingURL: https://www.bar.admin.ch/bar/en/home/archiving/tools/siard-suite.html
 softwareVersion: "2.2"
 releaseDate: 2024-04-16
