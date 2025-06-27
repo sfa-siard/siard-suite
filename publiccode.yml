@@ -37,6 +37,10 @@ description:
 legal:
   license: CDDL-1.0
 maintenance:
+  contractors:
+    - name: "Puzzle ITC AG"
+      email: "info@puzzle.ch"
+      website: "https://www.puzzle.ch"
   type: contract
 localisation:
   localisationReady: true
