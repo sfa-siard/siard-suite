@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class LoadingBatchManager<T> {
@@ -56,22 +57,18 @@ public class LoadingBatchManager<T> {
 
         completeList.addAll(data);
         
-        for (T item : data) {
-            if (currentFilter.test(item)) {
-                observableList.add(item);
-            }
-        }
+        observableList.addAll(data.stream()
+                .filter(currentFilter)
+                .collect(Collectors.toList()));
     }
 
     public void applyFilter(Predicate<T> filter) {
         this.currentFilter = filter;
         
         observableList.clear();
-        for (T item : completeList) {
-            if (filter.test(item)) {
-                observableList.add(item);
-            }
-        }
+        observableList.addAll(completeList.stream()
+                .filter(filter)
+                .collect(Collectors.toList()));
     }
 
     public void clearFilter() {
