@@ -17,15 +17,15 @@ import lombok.val;
 
 import java.util.stream.Collectors;
 
-public class LazyLoadingTableRenderer<T, I> {
+public class LazyLoadingTableRenderer<T, I> implements SearchableFormEntry {
 
     private static final String TABLE_STYLE_CLASS = "tree-table-view";
 
     private final RenderableLazyLoadingTable<T, I> renderableTable;
     private final LazyLoadingDataSource<I> lazyLoadingDataSource;
-
     private final ErrorHandler errorHandler;
-
+    private LoadingBatchManager<I> loadingBatchManager;
+    private TableView<I> tableView;
 
     @Builder
     public LazyLoadingTableRenderer(
@@ -38,9 +38,8 @@ public class LazyLoadingTableRenderer<T, I> {
     }
 
     public TableView<I> render() {
-
-        val loadingBatchManager = new LoadingBatchManager<>(lazyLoadingDataSource);
-        val tableView = new TableView<>(loadingBatchManager.getObservableList());
+        loadingBatchManager = new LoadingBatchManager<>(lazyLoadingDataSource);
+        tableView = new TableView<>(loadingBatchManager.getObservableList());
 
         val issueConcealer = new JumpingScrollingPositionIssueConcealer(loadingBatchManager, tableView);
 
@@ -94,6 +93,25 @@ public class LazyLoadingTableRenderer<T, I> {
         tableView.autosize();
 
         return tableView;
+    }
+
+    @Override
+    public void applySearchTerm(final String searchTerm) {
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            clearSearchTerm();
+            return;
+        }
+        
+        loadingBatchManager.applyFilter(item -> 
+            renderableTable.getProperties().stream()
+                .map(property -> property.getValueExtractor().apply(item))
+                .anyMatch(value -> value != null && value.contains(searchTerm))
+        );
+    }
+
+    @Override
+    public void clearSearchTerm() {
+        loadingBatchManager.clearFilter();
     }
 
     private TableColumn<I, String> column(final TableColumnProperty<I> columnProperty) {

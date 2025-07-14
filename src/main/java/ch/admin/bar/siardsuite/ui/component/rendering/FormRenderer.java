@@ -105,12 +105,14 @@ public class FormRenderer<T> {
                     }
 
                     if (renderableProperty instanceof RenderableLazyLoadingTable) {
-                        return LazyLoadingTableRenderer.<T, Object>builder()
+                        val renderer = LazyLoadingTableRenderer.<T, Object>builder()
                                 .dataHolder(data)
                                 .errorHandler(errorHandler)
                                 .renderableTable((RenderableLazyLoadingTable<T, Object>) renderableProperty)
-                                .build()
-                                .render();
+                                .build();
+                        searchableFormEntries.add(renderer);
+
+                        return renderer.render();
                     }
 
                     throw new IllegalArgumentException(String.format(
