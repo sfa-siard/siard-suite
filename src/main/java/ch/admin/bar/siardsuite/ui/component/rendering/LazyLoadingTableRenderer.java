@@ -105,7 +105,7 @@ public class LazyLoadingTableRenderer<T, I> implements SearchableFormEntry {
         loadingBatchManager.applyFilter(item -> 
             renderableTable.getProperties().stream()
                 .map(property -> property.getValueExtractor().apply(item))
-                .anyMatch(value -> value != null && value.toLowerCase().contains(searchTerm.toLowerCase()))
+                .anyMatch(value -> value != null && value.contains(searchTerm))
         );
     }
 
