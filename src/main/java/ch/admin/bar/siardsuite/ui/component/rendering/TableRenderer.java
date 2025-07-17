@@ -57,7 +57,7 @@ public class TableRenderer<T, I> implements SearchableFormEntry {
     public void applySearchTerm(final String searchTerm) {
         filteredTableItems.setPredicate(i -> renderableTable.getProperties().stream()
                     .map(iReadOnlyStringProperty -> iReadOnlyStringProperty.getValueExtractor().apply(i))
-                    .anyMatch(s -> s.contains(searchTerm)));
+                    .anyMatch(s -> s != null && s.toLowerCase().contains(searchTerm.toLowerCase())));
     }
 
     @Override
