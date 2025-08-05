@@ -21,8 +21,16 @@ description = 'SIARD Suite'
 
 version = scmVersion.version
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
+
 mainClassName = "ch.admin.bar.siardsuite.Launcher"
 applicationName = "SIARD-Suite"
 
@@ -85,7 +93,8 @@ tasks.withType(JavaExec) {
     jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
             "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
-            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED")
+            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang=ALL-UNNAMED")
 }
 
 runtime {
@@ -154,7 +163,8 @@ runtime {
 test {
     useJUnitPlatform()
     // run tets in headless mode -for testFX
-    jvmArgs "-Djava.awt.headless=true", "-Dtestfx.headless=true", "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
+    jvmArgs "-Djava.awt.headless=true", "-Dtestfx.headless=true", "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",  "--add-opens=java.base/java.lang=ALL-UNNAMED"
+
 }
 
 
