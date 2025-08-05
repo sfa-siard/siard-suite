@@ -257,9 +257,11 @@ tasks.register('copyDocumentation', Copy) {
 }
 
 tasks.named("asciidoctorPdf") { finalizedBy(copyDocumentation)}
+/*
 tasks.named("build") {
     dependsOn(asciidoctorPdf)
     dependsOn("plantUml")
 }
+*/
 
 tasks.named("processResources") { dependsOn(copyDocumentation)}
