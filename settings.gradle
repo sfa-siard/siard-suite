@@ -42,10 +42,6 @@ sourceControl {
         producesModule("ch.admin.bar:jdbc-mysql")
     }
 
-    gitRepository(URI.create("https://github.com/sfa-siard/JdbcMySql")) {
-        producesModule("ch.admin.bar:jdbc-mysql")
-    }
-
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcBase")) {
         producesModule("ch.admin.bar:jdbc-base")
     }
