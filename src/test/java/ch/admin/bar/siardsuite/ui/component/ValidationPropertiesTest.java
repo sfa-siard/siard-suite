@@ -4,7 +4,7 @@ import ch.admin.bar.siardsuite.ui.common.ValidationProperties;
 import ch.admin.bar.siardsuite.ui.common.ValidationProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +23,8 @@ class ValidationPropertiesTest {
     private Label msg2;
     private ValidationProperties validationProperties;
 
-    @Before
-    public void setUpHeadlessMode() {
+    @BeforeAll
+    public static void setUpHeadlessMode() {
         System.setProperty("java.awt.headless", "true");
         System.setProperty("testfx.headless", "true");
     }
