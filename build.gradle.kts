@@ -25,8 +25,8 @@ repositories {
 dependencies {
     implementation("org.antlr:antlr4-runtime:4.5.2")
 
-    implementation("ch.admin.bar:enterutilities:v2.2.3")
-    implementation("ch.admin.bar:SqlParser:v2.2.2")
+    implementation("ch.admin.bar:enterutilities:v2.2.4")
+    implementation("ch.admin.bar:SqlParser:v2.2.3")
 
     implementation(fileTree("lib") { include("*.jar") })
 
