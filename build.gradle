@@ -49,20 +49,20 @@ jar {
 }
 
 dependencies {
-    implementation 'ch.admin.bar:siardcmd:v2.2.20'
+    implementation 'ch.admin.bar:siardcmd:v2.2.21'
 
-    implementation("ch.admin.bar:siard-api:v2.2.128")
-    implementation("ch.admin.bar:SqlParser:v2.2.2")
-    implementation("ch.admin.bar:Zip64File:v2.2.2")
-    implementation("ch.admin.bar:enterutilities:v2.2.3")
+    implementation("ch.admin.bar:siard-api:v2.2.130")
+    implementation("ch.admin.bar:SqlParser:v2.2.3")
+    implementation("ch.admin.bar:Zip64File:v2.2.4")
+    implementation("ch.admin.bar:enterutilities:v2.2.4")
 
-    implementation("ch.admin.bar:jdbc-base:v2.2.9")
-    implementation("ch.admin.bar:JdbcPostgres:v2.2.2")
-    implementation("ch.admin.bar:jdbcoracle:v2.2.4")
+    implementation("ch.admin.bar:jdbc-base:v2.2.10")
+    implementation("ch.admin.bar:JdbcPostgres:v2.2.3")
+    implementation("ch.admin.bar:jdbcoracle:v2.2.5")
     implementation("ch.admin.bar:jdbcmssql:v2.2.3")
     implementation("ch.admin.bar:jdbc-mysql:v2.2.3")
-    implementation("ch.admin.bar:jdbc-access:v2.2.2")
-    implementation("ch.admin.bar:jdbc-db2:v2.2.2")
+    implementation("ch.admin.bar:jdbc-access:v2.2.3")
+    implementation("ch.admin.bar:jdbc-db2:v2.2.3")
 
     implementation("com.github.vatbub:mslinks:1.0.6.2")
     implementation 'org.apache.tika:tika-core:2.9.1'
