@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 
 import ch.admin.bar.siard2.api.Cell;
-import ch.admin.bar.siard2.api.Record;
 import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siard2.api.TableRecord;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
@@ -51,25 +51,25 @@ public class RowsOverviewForm {
                         .property(new ReadOnlyStringProperty<>(
                                 LABEL_NUMBER_OF_ROWS,
                                 Converter.longToString(DatabaseTable::getNumberOfRows)))
-                        .property(RenderableLazyLoadingTable.<DatabaseTable, RecordWrapper>builder()
-                                .dataExtractor(databaseTable -> new RecordDataSource(table.getTable()))
+                        .property(RenderableLazyLoadingTable.<DatabaseTable, TableRecordWrapper>builder()
+                                .dataExtractor(databaseTable -> new TableRecordDataSource(table.getTable()))
                                 .properties(tableProperties)
                                 .build())
                         .build())
                 .build();
     }
 
-    public static class RecordWrapper {
+    public static class TableRecordWrapper {
         @Getter
-        private final Record record;
+        private final TableRecord tableRecord;
         private final Map<String, Cell> cellsByName;
 
-        public RecordWrapper(@NonNull Record record) {
-            this.record = record;
+        public TableRecordWrapper(@NonNull TableRecord tableRecord) {
+            this.tableRecord = tableRecord;
 
             val cells = new ListAssembler<>(
-                    Converter.catchExceptions(record::getCells),
-                    Converter.catchExceptions(record::getCell)
+                    Converter.catchExceptions(tableRecord::getCells),
+                    Converter.catchExceptions(tableRecord::getCell)
             ).assemble();
 
             this.cellsByName = cells.stream()
@@ -118,32 +118,32 @@ public class RowsOverviewForm {
     }
 
     @RequiredArgsConstructor
-    public static class RecordDataSource implements LazyLoadingDataSource<RecordWrapper> {
+    public static class TableRecordDataSource implements LazyLoadingDataSource<TableRecordWrapper> {
         private final Table table;
 
         @SneakyThrows
         @Override
-        public List<RecordWrapper> load(int startIndex, int nrOfItems) {
-            val recordDispenser = table.openRecords();
-            recordDispenser.skip(startIndex);
+        public List<TableRecordWrapper> load(int startIndex, int nrOfItems) {
+            val tableRecordDispenser = table.openTableRecords();
+            tableRecordDispenser.skip(startIndex);
 
-            final List<RecordWrapper> collected = new ArrayList<>();
+            final List<TableRecordWrapper> collected = new ArrayList<>();
             for (int x = 0; x < nrOfItems; x++) {
-                val record = recordDispenser.get();
+                val record = tableRecordDispenser.get();
 
                 if (record == null) {
                     break;
                 }
 
-                collected.add(new RecordWrapper(record));
+                collected.add(new TableRecordWrapper(record));
             }
 
             return collected;
         }
 
         @Override
-        public long findIndexOf(RecordWrapper item) {
-            return item.getRecord().getRecord();
+        public long findIndexOf(TableRecordWrapper item) {
+            return item.getTableRecord().getRecord();
         }
 
         @Override
@@ -152,7 +152,7 @@ public class RowsOverviewForm {
         }
     }
 
-    private static Optional<TableColumnProperty.CellClickedListener<RecordWrapper>> createCellClickListener(final DatabaseColumn column) {
+    private static Optional<TableColumnProperty.CellClickedListener<TableRecordWrapper>> createCellClickListener(final DatabaseColumn column) {
         try {
             val type = column.getColumn().getPreType();
             val clickListenerSupported = type == Types.BINARY || type == Types.VARBINARY || type == Types.BLOB;
