@@ -230,6 +230,8 @@ distZip {
 }
 
 installDist {
+    dependsOn(siardFromDb)
+    dependsOn(siardToDb)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 asciidoctor {
@@ -282,3 +284,7 @@ tasks.named("build") {
 }
 
 tasks.named("processResources") { dependsOn(copyDocumentation)}
+
+tasks.named('jpackageImage') {
+    dependsOn tasks.named('runtime')
+}
