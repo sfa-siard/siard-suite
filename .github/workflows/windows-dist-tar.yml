@@ -31,7 +31,11 @@ jobs:
           java-version: '8'
           distribution: 'zulu'
           cache: 'gradle'
+
+      - name: Java Version
+        run: java -version
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Execute Gradle build
-        run: ./gradlew distTar -x test --info
+        run: ./gradlew distTar -x test --warning-mode all
