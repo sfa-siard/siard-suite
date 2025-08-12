@@ -33,7 +33,5 @@ jobs:
           cache: 'gradle'
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Show current application version
-        run: ./gradlew cV
       - name: Execute Gradle build
         run: ./gradlew distTar -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
