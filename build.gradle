@@ -49,7 +49,11 @@ jar {
 }
 
 dependencies {
-    implementation('ch.admin.bar:siardcmd:v2.2.21')
+    implementation('ch.admin.bar:siardcmd') {
+        version {
+            branch = "chore/fix-windows-build"
+        }
+    }
 
     implementation("ch.admin.bar:siard-api") {
         version {
