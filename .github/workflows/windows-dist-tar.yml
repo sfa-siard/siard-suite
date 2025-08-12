@@ -34,4 +34,4 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Execute Gradle build
-        run: ./gradlew distTar -x test
+        run: ./gradlew distTar -x test --info
