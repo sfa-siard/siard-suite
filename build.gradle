@@ -49,11 +49,13 @@ jar {
 }
 
 dependencies {
-    implementation('ch.admin.bar:siardcmd:v2.2.21')  {
-        exclude(group = "ch.admin.bar", module = "siard-api")
-    }
+    implementation('ch.admin.bar:siardcmd:v2.2.21')
 
-    implementation("ch.admin.bar:siard-api:v2.2.130")
+    implementation("ch.admin.bar:siard-api") {
+        version {
+            branch = "chore/windows-build"
+        }
+    }
     implementation("ch.admin.bar:SqlParser:v2.2.3")
     implementation("ch.admin.bar:Zip64File:v2.2.4")
     implementation("ch.admin.bar:enterutilities:v2.2.4")
