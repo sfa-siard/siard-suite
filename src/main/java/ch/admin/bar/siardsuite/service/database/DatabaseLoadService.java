@@ -68,11 +68,19 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
             updateValue(FXCollections.observableArrayList(new Pair<>("Metadata", -1L)));
             updateProgress(0, 100);
 
-            metaDataFromDb.download(
-                    instruction.getViewsAsTables(),
-                    false,
-                    ((ServerBasedDbmsConnectionProperties) instruction.getConnectionData().getProperties()).getSchema(), // TODO: may fail if not server based
-                    new SiardCmdProgressListener(this::updateProgress));
+            if (instruction.getConnectionData().getProperties() instanceof ServerBasedDbmsConnectionProperties) {
+                String schemaName = ((ServerBasedDbmsConnectionProperties) instruction.getConnectionData().getProperties()).getSchema();
+                metaDataFromDb.download(
+                        instruction.getViewsAsTables(),
+                        false,
+                        schemaName,
+                        new SiardCmdProgressListener(this::updateProgress));
+            } else {
+                metaDataFromDb.download(
+                        instruction.getViewsAsTables(),
+                        false,
+                        new SiardCmdProgressListener(this::updateProgress));
+            }
 
             instruction.getExternalLobs()
                     .ifPresent(uri -> archiveHandler.setExternalLobFolder(archive, uri));
