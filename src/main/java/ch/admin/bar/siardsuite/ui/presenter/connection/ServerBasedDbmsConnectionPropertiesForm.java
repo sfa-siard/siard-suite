@@ -43,7 +43,8 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
 
     public ServerBasedDbmsConnectionPropertiesForm(
             @NonNull final ServerBasedDbms dbms,
-            @NonNull final Optional<ServerBasedDbmsConnectionProperties> initialValue
+            @NonNull final Optional<ServerBasedDbmsConnectionProperties> initialValue,
+            final boolean showSchemaField
     ) {
         this.serverBasedDbms = dbms;
 
@@ -161,12 +162,20 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         HBox.setMargin(jdbcUrl, new Insets(25));
         val thirdLineHBox = new HBox(jdbcUrl);
 
-        this.getChildren().addAll(
-                firstLineHBox,
-                secondLineHBox,
-                schemaNameBox,
-                thirdLineHBox
-        );
+        if (showSchemaField) {
+            this.getChildren().addAll(
+                    firstLineHBox,
+                    secondLineHBox,
+                    schemaNameBox,
+                    thirdLineHBox
+            );
+        } else {
+            this.getChildren().addAll(
+                    firstLineHBox,
+                    secondLineHBox,
+                    thirdLineHBox
+            );
+        }
 
         formFields.add(host);
         formFields.add(port);
@@ -174,17 +183,25 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         formFields.add(username);
         formFields.add(password);
         formFields.add(jdbcUrl);
-        formFields.add(schema);
+        if (showSchemaField) {
+            formFields.add(schema);
+        }
 
-        connectionPropertiesSupplier = () -> ServerBasedDbmsConnectionProperties.builder()
-                .host(host.getValue())
-                .port(port.getValue())
-                .dbName(dbName.getValue())
-                .schema(schema.getValue())
-                .user(username.getValue())
-                .password(password.getValue())
-                .options(Optional.ofNullable(connectionOptions))
-                .build();
+        connectionPropertiesSupplier = () -> {
+            val builder = ServerBasedDbmsConnectionProperties.builder()
+                    .host(host.getValue())
+                    .port(port.getValue())
+                    .dbName(dbName.getValue())
+                    .user(username.getValue())
+                    .password(password.getValue())
+                    .options(Optional.ofNullable(connectionOptions));
+
+            if (showSchemaField) {
+                builder.schema(schema.getValue());
+            }
+
+            return builder.build();
+        };
     }
 
     @Override
