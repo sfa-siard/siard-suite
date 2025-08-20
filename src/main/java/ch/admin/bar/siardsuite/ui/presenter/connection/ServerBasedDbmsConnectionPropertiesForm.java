@@ -10,6 +10,7 @@ import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.TranslatableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import lombok.NonNull;
 import lombok.val;
@@ -123,7 +124,11 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                                 .build();
 
         HBox.setMargin(schema, new Insets(25));
-        val schemaNameBox = new HBox(schema);
+        val placeHolder = new Label();
+        placeHolder.setPrefWidth(FORM_FIELD_WITH);
+        placeHolder.setVisible(false);
+        HBox.setMargin(placeHolder, new Insets(25));
+        val schemaNameBox = new HBox(schema, placeHolder);
 
         jdbcUrl = StringFormField.builder()
                 .title(TranslatableText.of(JDBC_URL_LABEL))
@@ -159,7 +164,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         this.getChildren().addAll(
                 firstLineHBox,
                 secondLineHBox,
-                schemaNameBox, // todo: add only if dbms is oracle
+                schemaNameBox,
                 thirdLineHBox
         );
 
