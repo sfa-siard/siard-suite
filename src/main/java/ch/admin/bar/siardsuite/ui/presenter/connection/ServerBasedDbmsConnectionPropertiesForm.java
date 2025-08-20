@@ -162,7 +162,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         HBox.setMargin(jdbcUrl, new Insets(25));
         val thirdLineHBox = new HBox(jdbcUrl);
 
-        if (showSchemaField && "oracle".equals(dbms.getId())) {
+        if (shouldShowSchemaField(showSchemaField, dbms)) {
             this.getChildren().addAll(
                     firstLineHBox,
                     secondLineHBox,
@@ -183,7 +183,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         formFields.add(username);
         formFields.add(password);
         formFields.add(jdbcUrl);
-        if (showSchemaField && "oracle".equals(dbms.getId())) {
+        if (shouldShowSchemaField(showSchemaField, dbms)) {
             formFields.add(schema);
         }
 
@@ -196,7 +196,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                     .password(password.getValue())
                     .options(Optional.ofNullable(connectionOptions));
 
-            if (showSchemaField && "oracle".equals(dbms.getId())) {
+            if (shouldShowSchemaField(showSchemaField, dbms)) {
                 builder.schema(schema.getValue());
             }
 
@@ -225,5 +225,9 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .message(DisplayableText.of(INVALID_JDBC_URL_MESSAGE))
                 .isValidCheck(DbmsRegistry.checkJdbcUrlValidity(serverBasedDbms))
                 .build();
+    }
+
+    private boolean shouldShowSchemaField(boolean showSchemaField, ServerBasedDbms dbms) {
+        return showSchemaField && "oracle".equals(dbms.getId());
     }
 }
