@@ -5,6 +5,7 @@ import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;
 import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -70,6 +71,7 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
             metaDataFromDb.download(
                     instruction.getViewsAsTables(),
                     false,
+                    ((ServerBasedDbmsConnectionProperties) instruction.getConnectionData().getProperties()).getSchema(), // TODO: may fail if not server based
                     new SiardCmdProgressListener(this::updateProgress));
 
             instruction.getExternalLobs()

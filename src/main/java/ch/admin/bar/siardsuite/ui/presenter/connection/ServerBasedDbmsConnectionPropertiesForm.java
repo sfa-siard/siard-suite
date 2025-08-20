@@ -28,6 +28,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private static final I18nKey DB_NAME_LABEL = I18nKey.of("connection.view.databaseName.label");
     private static final I18nKey USERNAME_LABEL = I18nKey.of("connection.view.username.label");
     private static final I18nKey PASSWORD_LABEL = I18nKey.of("connection.view.password.label");
+    private static final I18nKey SCHEMA_LABEL = I18nKey.of("connection.view.schema.label");
 
     private final Supplier<ServerBasedDbmsConnectionProperties> connectionPropertiesSupplier;
     private final ServerBasedDbms serverBasedDbms;
@@ -36,6 +37,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private final StringFormField port;
     private final StringFormField dbName;
     private final StringFormField jdbcUrl;
+    private final StringFormField schema;
     private String connectionOptions;
 
     public ServerBasedDbmsConnectionPropertiesForm(
@@ -83,6 +85,8 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .onNewUserInput(newHost -> handleJdbcUrl())
                 .build();
 
+
+
         val username = StringFormField.builder()
                 .title(TranslatableText.of(USERNAME_LABEL))
                 .hint(TranslatableText.of(RIGHT_INFO_TEXT))
@@ -110,6 +114,16 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         HBox.setMargin(dbName, new Insets(25));
         HBox.setMargin(password, new Insets(25));
         val secondLineHBox = new HBox(dbName, password);
+
+        schema = StringFormField.builder()
+                .title(TranslatableText.of(SCHEMA_LABEL))
+                .initialValue(username.getValue())
+                                .prefWidth(FORM_FIELD_WITH)
+                                .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
+                                .build();
+
+        HBox.setMargin(schema, new Insets(25));
+        val schemaNameBox = new HBox(schema);
 
         jdbcUrl = StringFormField.builder()
                 .title(TranslatableText.of(JDBC_URL_LABEL))
@@ -145,6 +159,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         this.getChildren().addAll(
                 firstLineHBox,
                 secondLineHBox,
+                schemaNameBox, // todo: add only if dbms is oracle
                 thirdLineHBox
         );
 
@@ -154,11 +169,13 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         formFields.add(username);
         formFields.add(password);
         formFields.add(jdbcUrl);
+        formFields.add(schema);
 
         connectionPropertiesSupplier = () -> ServerBasedDbmsConnectionProperties.builder()
                 .host(host.getValue())
                 .port(port.getValue())
                 .dbName(dbName.getValue())
+                .schema(schema.getValue())
                 .user(username.getValue())
                 .password(password.getValue())
                 .options(Optional.ofNullable(connectionOptions))
