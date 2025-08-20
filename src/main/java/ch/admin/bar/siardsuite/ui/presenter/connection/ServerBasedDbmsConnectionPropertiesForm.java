@@ -119,7 +119,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
 
         schema = StringFormField.builder()
                 .title(TranslatableText.of(SCHEMA_LABEL))
-                .initialValue(username.getValue())
+                .initialValue("%")
                                 .prefWidth(FORM_FIELD_WITH)
                                 .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
                                 .build();
