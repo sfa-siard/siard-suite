@@ -38,13 +38,13 @@ public class ArchiveConnectionPresenter {
         val buttonsBox = new ButtonBox().make(DEFAULT);
         borderPane.setBottom(buttonsBox);
 
-        connectionForm.show(dbms);
+        connectionForm.show(dbms, true);
 
         initialValue.ifPresent(recentDbConnection -> {
             val dbmsConnectionData = recentDbConnection.mapToDbmsConnectionData();
             final DbmsConnectionProperties properties = dbmsConnectionData.getProperties();
 
-            connectionForm.show(dbms, properties, recentDbConnection.getName());
+            connectionForm.show(dbms, properties, recentDbConnection.getName(), true);
         });
 
         buttonsBox.next()

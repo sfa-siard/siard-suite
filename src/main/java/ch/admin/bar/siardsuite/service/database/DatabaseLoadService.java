@@ -5,6 +5,7 @@ import ch.admin.bar.siard2.cmd.MetaDataFromDb;
 import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
 import ch.admin.bar.siardsuite.service.ArchiveHandler;
 import ch.admin.bar.siardsuite.service.database.model.LoadDatabaseInstruction;
+import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -67,10 +68,7 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
             updateValue(FXCollections.observableArrayList(new Pair<>("Metadata", -1L)));
             updateProgress(0, 100);
 
-            metaDataFromDb.download(
-                    instruction.getViewsAsTables(),
-                    false,
-                    new SiardCmdProgressListener(this::updateProgress));
+            downloadMetadata(metaDataFromDb);
 
             instruction.getExternalLobs()
                     .ifPresent(uri -> archiveHandler.setExternalLobFolder(archive, uri));
@@ -103,6 +101,22 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
             Platform.runLater(() -> instruction.getOnSuccess().accept(archive));
 
             return progressData;
+        }
+
+        private void downloadMetadata(MetaDataFromDb metaDataFromDb) throws Exception {
+            if (instruction.getConnectionData().getProperties() instanceof ServerBasedDbmsConnectionProperties) {
+                String schemaName = ((ServerBasedDbmsConnectionProperties) instruction.getConnectionData().getProperties()).getSchema();
+                metaDataFromDb.download(
+                        instruction.getViewsAsTables(),
+                        false,
+                        schemaName,
+                        new SiardCmdProgressListener(this::updateProgress));
+            } else {
+                metaDataFromDb.download(
+                        instruction.getViewsAsTables(),
+                        false,
+                        new SiardCmdProgressListener(this::updateProgress));
+            }
         }
     }
 }

@@ -70,7 +70,14 @@ public class ConnectionForm extends VBox {
     }
 
     public <T extends DbmsConnectionProperties> void show(final Dbms<T> dbms) {
-        show(dbms, Optional.empty(), "");
+        show(dbms, Optional.empty(), "", false);
+    }
+
+    public <T extends DbmsConnectionProperties> void show(
+            final Dbms<T> dbms,
+            final boolean showSchemaField
+    ) {
+        show(dbms, Optional.empty(), "", showSchemaField);
     }
 
     public <T extends DbmsConnectionProperties> void show(
@@ -78,15 +85,25 @@ public class ConnectionForm extends VBox {
             final DbmsConnectionProperties<T> initialValue,
             final String connectionName
     ) {
-        show(dbms, Optional.of(initialValue), connectionName);
+        show(dbms, Optional.of(initialValue), connectionName, false);
+    }
+
+    public <T extends DbmsConnectionProperties> void show(
+            final Dbms<T> dbms,
+            final DbmsConnectionProperties<T> initialValue,
+            final String connectionName,
+            final boolean showSchemaField
+    ) {
+        show(dbms, Optional.of(initialValue), connectionName, showSchemaField);
     }
 
     private <T extends DbmsConnectionProperties> void show(
             final Dbms<T> dbms,
             final Optional<DbmsConnectionProperties<T>> initialValue,
-            final String connectionName
+            final String connectionName,
+            final boolean showSchemaField
     ) {
-        connectionPropertiesForm = this.getConnectionPropertiesForm(dbms, initialValue);
+        connectionPropertiesForm = this.getConnectionPropertiesForm(dbms, initialValue, showSchemaField);
         HBox.setHgrow(connectionPropertiesForm, Priority.ALWAYS);
 
         connectionNameField = StringFormField.builder()
@@ -140,12 +157,14 @@ public class ConnectionForm extends VBox {
 
     private <T extends DbmsConnectionProperties> ConnectionPropertiesForm getConnectionPropertiesForm(
             final Dbms<T> dbms,
-            final Optional<DbmsConnectionProperties<T>> initialValue
+            final Optional<DbmsConnectionProperties<T>> initialValue,
+            final boolean showSchemaField
     ) {
         if (dbms instanceof ServerBasedDbms) {
             return new ServerBasedDbmsConnectionPropertiesForm(
                     (ServerBasedDbms) dbms,
-                    initialValue.flatMap(CastHelper.tryCast(ServerBasedDbmsConnectionProperties.class)));
+                    initialValue.flatMap(CastHelper.tryCast(ServerBasedDbmsConnectionProperties.class)),
+                    showSchemaField);
         }
 
         if (dbms instanceof FileBasedDbms) {

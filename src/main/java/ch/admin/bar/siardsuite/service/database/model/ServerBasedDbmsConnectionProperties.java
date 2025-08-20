@@ -14,6 +14,7 @@ public class ServerBasedDbmsConnectionProperties implements DbmsConnectionProper
     @NonNull String port;
     @NonNull String dbName;
     @NonNull String user;
+    @NonNull @Builder.Default String schema = "%";
 
     @NonNull
     @ToString.Exclude

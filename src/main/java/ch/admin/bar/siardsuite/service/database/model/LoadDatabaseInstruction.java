@@ -35,6 +35,10 @@ public class LoadDatabaseInstruction {
 
     @NonNull
     @Builder.Default
+    String schema = "%";
+
+    @NonNull
+    @Builder.Default
     Boolean viewsAsTables = false;
 
     @NonNull

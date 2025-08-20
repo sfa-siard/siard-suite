@@ -10,6 +10,7 @@ import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.TranslatableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import lombok.NonNull;
 import lombok.val;
@@ -28,6 +29,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private static final I18nKey DB_NAME_LABEL = I18nKey.of("connection.view.databaseName.label");
     private static final I18nKey USERNAME_LABEL = I18nKey.of("connection.view.username.label");
     private static final I18nKey PASSWORD_LABEL = I18nKey.of("connection.view.password.label");
+    private static final I18nKey SCHEMA_LABEL = I18nKey.of("connection.view.schema.label");
 
     private final Supplier<ServerBasedDbmsConnectionProperties> connectionPropertiesSupplier;
     private final ServerBasedDbms serverBasedDbms;
@@ -36,11 +38,13 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private final StringFormField port;
     private final StringFormField dbName;
     private final StringFormField jdbcUrl;
+    private final StringFormField schema;
     private String connectionOptions;
 
     public ServerBasedDbmsConnectionPropertiesForm(
             @NonNull final ServerBasedDbms dbms,
-            @NonNull final Optional<ServerBasedDbmsConnectionProperties> initialValue
+            @NonNull final Optional<ServerBasedDbmsConnectionProperties> initialValue,
+            final boolean showSchemaField
     ) {
         this.serverBasedDbms = dbms;
 
@@ -83,6 +87,8 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .onNewUserInput(newHost -> handleJdbcUrl())
                 .build();
 
+
+
         val username = StringFormField.builder()
                 .title(TranslatableText.of(USERNAME_LABEL))
                 .hint(TranslatableText.of(RIGHT_INFO_TEXT))
@@ -110,6 +116,20 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         HBox.setMargin(dbName, new Insets(25));
         HBox.setMargin(password, new Insets(25));
         val secondLineHBox = new HBox(dbName, password);
+
+        schema = StringFormField.builder()
+                .title(TranslatableText.of(SCHEMA_LABEL))
+                .initialValue("%")
+                                .prefWidth(FORM_FIELD_WITH)
+                                .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
+                                .build();
+
+        HBox.setMargin(schema, new Insets(25));
+        val placeHolder = new Label();
+        placeHolder.setPrefWidth(FORM_FIELD_WITH);
+        placeHolder.setVisible(false);
+        HBox.setMargin(placeHolder, new Insets(25));
+        val schemaNameBox = new HBox(schema, placeHolder);
 
         jdbcUrl = StringFormField.builder()
                 .title(TranslatableText.of(JDBC_URL_LABEL))
@@ -142,11 +162,20 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         HBox.setMargin(jdbcUrl, new Insets(25));
         val thirdLineHBox = new HBox(jdbcUrl);
 
-        this.getChildren().addAll(
-                firstLineHBox,
-                secondLineHBox,
-                thirdLineHBox
-        );
+        if (shouldShowSchemaField(showSchemaField, dbms)) {
+            this.getChildren().addAll(
+                    firstLineHBox,
+                    secondLineHBox,
+                    schemaNameBox,
+                    thirdLineHBox
+            );
+        } else {
+            this.getChildren().addAll(
+                    firstLineHBox,
+                    secondLineHBox,
+                    thirdLineHBox
+            );
+        }
 
         formFields.add(host);
         formFields.add(port);
@@ -154,15 +183,25 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         formFields.add(username);
         formFields.add(password);
         formFields.add(jdbcUrl);
+        if (shouldShowSchemaField(showSchemaField, dbms)) {
+            formFields.add(schema);
+        }
 
-        connectionPropertiesSupplier = () -> ServerBasedDbmsConnectionProperties.builder()
-                .host(host.getValue())
-                .port(port.getValue())
-                .dbName(dbName.getValue())
-                .user(username.getValue())
-                .password(password.getValue())
-                .options(Optional.ofNullable(connectionOptions))
-                .build();
+        connectionPropertiesSupplier = () -> {
+            val builder = ServerBasedDbmsConnectionProperties.builder()
+                    .host(host.getValue())
+                    .port(port.getValue())
+                    .dbName(dbName.getValue())
+                    .user(username.getValue())
+                    .password(password.getValue())
+                    .options(Optional.ofNullable(connectionOptions));
+
+            if (shouldShowSchemaField(showSchemaField, dbms)) {
+                builder.schema(schema.getValue());
+            }
+
+            return builder.build();
+        };
     }
 
     @Override
@@ -186,5 +225,9 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                 .message(DisplayableText.of(INVALID_JDBC_URL_MESSAGE))
                 .isValidCheck(DbmsRegistry.checkJdbcUrlValidity(serverBasedDbms))
                 .build();
+    }
+
+    private boolean shouldShowSchemaField(boolean showSchemaField, ServerBasedDbms dbms) {
+        return showSchemaField && "oracle".equals(dbms.getId());
     }
 }
