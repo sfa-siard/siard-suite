@@ -162,7 +162,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         HBox.setMargin(jdbcUrl, new Insets(25));
         val thirdLineHBox = new HBox(jdbcUrl);
 
-        if (showSchemaField) {
+        if (showSchemaField && "oracle".equals(dbms.getId())) {
             this.getChildren().addAll(
                     firstLineHBox,
                     secondLineHBox,
@@ -183,7 +183,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         formFields.add(username);
         formFields.add(password);
         formFields.add(jdbcUrl);
-        if (showSchemaField) {
+        if (showSchemaField && "oracle".equals(dbms.getId())) {
             formFields.add(schema);
         }
 
@@ -196,7 +196,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                     .password(password.getValue())
                     .options(Optional.ofNullable(connectionOptions));
 
-            if (showSchemaField) {
+            if (showSchemaField && "oracle".equals(dbms.getId())) {
                 builder.schema(schema.getValue());
             }
 
