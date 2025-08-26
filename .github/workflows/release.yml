@@ -17,10 +17,10 @@ jobs:
           fetch-depth: 0
       - name: Set TAG-Env
         run: echo "NAME_TAG=${PROJECT_NAME}-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Set up JDK 8
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '17'
           distribution: 'adopt'
 
       # Tests need a running DB instance
@@ -46,7 +46,7 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew build
       - name: upload artefact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}
           path: build/libs/
