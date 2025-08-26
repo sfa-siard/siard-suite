@@ -7,13 +7,18 @@ plugins {
     id("io.freefair.lombok") version "6.5.0"
 }
 
+
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 group = "ch.admin.bar"
 version = scmVersion.version
+val versions = mapOf(
+    "jdbc-base" to "v2.2.11",
+)
 
 repositories {
     mavenCentral()
@@ -24,23 +29,25 @@ repositories {
 
 dependencies {
     implementation("org.antlr:antlr4-runtime:4.5.2")
-
-    implementation("ch.admin.bar:enterutilities:v2.2.4")
-    implementation("ch.admin.bar:SqlParser:v2.2.3")
-
+    implementation("ch.admin.bar:enterutilities:v2.2.5")
+    implementation("ch.admin.bar:SqlParser:v2.2.4")
+    implementation("com.oracle.database.xml:xdb6:18.3.0.0")
+    implementation("com.oracle.ojdbc:xdb:19.3.0.0")
+    implementation("com.oracle.database.jdbc:ojdbc6:11.2.0.4")
+    implementation("com.oracle.ojdbc:ojdbc8:19.3.0.0")
+    implementation("com.oracle.ojdbc:xmlparserv2:19.3.0.0")
+    implementation("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}")
     implementation(fileTree("lib") { include("*.jar") })
 
+    // test dependencies
     testImplementation("junit:junit:4.13.1")
     testImplementation("org.hamcrest:hamcrest-core:1.3")
-
-    //necessary for useJUnitPlatform()
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testImplementation("org.junit.vintage:junit-vintage-engine")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-
-    // testcontainers
     testImplementation("org.testcontainers:testcontainers:1.19.0")
     testImplementation("org.testcontainers:oracle-xe:1.19.0")
+    testImplementation(testFixtures("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}"))
 }
 
 tasks.test {

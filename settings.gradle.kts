@@ -1,8 +1,12 @@
 import java.net.URI
 
+plugins {
+    // foojay-resolver plugin allows automatic download of JDKs
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
 rootProject.name = "jdbcoracle"
 include("lib")
-
 
 sourceControl {
     gitRepository(URI.create("https://github.com/sfa-siard/EnterUtilities.git")) {
@@ -12,6 +16,6 @@ sourceControl {
         producesModule("ch.admin.bar:SqlParser")
     }
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcBase.git")) {
-        producesModule("ch.admin.bar:JdbcBase")
+        producesModule("ch.admin.bar:jdbc-base")
     }
 }
