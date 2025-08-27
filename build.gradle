@@ -49,7 +49,11 @@ jar {
 }
 
 dependencies {
-    implementation('ch.admin.bar:siardcmd:v2.2.24-rc1')
+    implementation('ch.admin.bar:siardcmd:v2.2.24-rc1'){
+        version {
+            branch = "fix/siardsuite-140-logging"
+        }
+    }
 
     implementation("ch.admin.bar:siard-api:v2.2.131")
     implementation("ch.admin.bar:SqlParser:v2.2.3")
@@ -101,11 +105,14 @@ tasks.withType(JavaCompile) {
 }
 
 tasks.withType(JavaExec) {
-    jvmArgs("--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+    jvmArgs(
+            "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
             "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
-            "--add-opens=java.base/java.lang=ALL-UNNAMED")
+            "--add-opens=java.base/java.lang=ALL-UNNAMED"
+    )
 }
 
 runtime {
@@ -113,10 +120,13 @@ runtime {
 
     launcher {
         noConsole = false
-        jvmArgs = ["--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
-                   "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
-                   "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
-                   "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"]
+        jvmArgs = [
+                "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+                "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+                "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
+                "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+                "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
+        ]
     }
 
     additive = true
@@ -174,7 +184,16 @@ runtime {
 test {
     useJUnitPlatform()
     // run tets in headless mode -for testFX
-    jvmArgs "-Djava.awt.headless=true", "-Dtestfx.headless=true", "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED", "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED", "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",  "--add-opens=java.base/java.lang=ALL-UNNAMED"
+    jvmArgs(
+            "-Djava.awt.headless=true",
+            "-Dtestfx.headless=true",
+            "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+            "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang=ALL-UNNAMED"
+    )
 
 }
 
@@ -286,4 +305,30 @@ tasks.named("processResources") { dependsOn(copyDocumentation)}
 
 tasks.named('jpackageImage') {
     dependsOn tasks.named('runtime')
+}
+
+tasks.withType(CreateStartScripts).configureEach {
+    doLast {
+        // inject your JVM args into the generated scripts
+        def jvmArgsLine = [
+                "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+                "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+                "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
+                "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+                "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED"
+        ].join(" ")
+
+        // UNIX script
+        unixScript.text = unixScript.text.replace(
+                'DEFAULT_JVM_OPTS=""',
+                "DEFAULT_JVM_OPTS=\"$jvmArgsLine\""
+        )
+
+        // Windows script
+        windowsScript.text = windowsScript.text.replace(
+                'set DEFAULT_JVM_OPTS=',
+                "set DEFAULT_JVM_OPTS=$jvmArgsLine"
+        )
+    }
 }
