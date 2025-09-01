@@ -49,12 +49,7 @@ jar {
 }
 
 dependencies {
-    implementation('ch.admin.bar:siardcmd:v2.2.24-rc1'){
-        version {
-            branch = "fix/siardsuite-140-logging"
-        }
-    }
-
+    implementation('ch.admin.bar:siardcmd:v2.2.25-rc1')
     implementation("ch.admin.bar:siard-api:v2.2.131")
     implementation("ch.admin.bar:SqlParser:v2.2.3")
     implementation("ch.admin.bar:Zip64File:v2.2.4")
