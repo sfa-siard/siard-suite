@@ -6,10 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.*;
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(ApplicationExtension.class)
 public class ButtonBoxTest {
@@ -30,7 +30,9 @@ public class ButtonBoxTest {
         // then
         assertNotNull(buttonBox);
         assertThat(buttonBox.getChildren().size(), is(3));
-        assertThat(buttonBox.getChildren(), hasItems(buttonBox.cancelButton, buttonBox.nextButton, buttonBox.previousButton));
+        assertTrue(buttonBox.getChildren().contains(buttonBox.cancelButton));
+        assertTrue(buttonBox.getChildren().contains(buttonBox.nextButton));
+        assertTrue(buttonBox.getChildren().contains(buttonBox.previousButton));
         assertThat(buttonBox.cancelButton.getText(), is("Cancel"));
         assertThat(buttonBox.nextButton.getText(), is("Next"));
         assertThat(buttonBox.previousButton.getText(), is("Back"));
