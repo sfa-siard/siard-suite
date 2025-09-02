@@ -42,7 +42,7 @@ jar {
 }
 
 dependencies {
-    implementation('ch.admin.bar:siardcmd:v2.2.25-rc1')
+    implementation('ch.admin.bar:siardcmd:v2.2.25')
     implementation("ch.admin.bar:siard-api:v2.2.133")
     implementation("ch.admin.bar:SqlParser:v2.2.4")
     implementation("ch.admin.bar:Zip64File:v2.2.5")
