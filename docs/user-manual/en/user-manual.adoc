@@ -6,7 +6,7 @@ include::../../theme/config.adoc[]
 
 This document is a technical user manual for the SIARD Suite (Software Independent Archival of Relational Databases) application of the Swiss Federal Archives.
 
-It describes the
+It describes the:
 
 - technical requirements for use
 - installation
@@ -14,9 +14,9 @@ It describes the
 
 of the SIARD Suite and its components.
 
-=== User Manual Language
+=== User manual language
 
-The extended version of the user’s manual is only available in English. A short version is also available in French, German or Italian and can be found directly in SIARD-Suite.
+The extended version of the user’s manual is only available in English. A short version is also available in French, German, and Italian.
 
 === Latest release
 
@@ -28,7 +28,7 @@ The SIARD format and the SIARD Suite application were developed by the Swiss Fed
 
 On behalf of the Swiss Federal Archives, Enter AG developed SIARD Format 1.0 and SIARD Suite 1.0 in 2007 and SIARD Suite 2.1 in 2016-2018.
 
-In 2015-2018, version 2.1 of the SIARD format was specified by the Swiss Federal Archives in collaboration with the EU project E-ARK and KOST. Like version 1.0, SIARD format 2.1 has been approved as standard eCH-0165 by the association eCH E-Government Standards. In 2021, the DILCIS Board has developed and approved the enhanced SIARD Format 2.2. Puzzle ITC has been commissioned by the Swiss Federal Archives to develop SIARD Suite 2.2 according to the enhanced format.
+In 2015-2018, version 2.1 of the SIARD format was specified by the Swiss Federal Archives in collaboration with the EU project E-ARK and KOST. Like version 1.0, SIARD format 2.1 has been approved as standard eCH-0165 by the association eCH E-Government Standards. In 2021, the DILCIS Board developed and approved the enhanced SIARD Format 2.2. Puzzle ITC has been commissioned by the Swiss Federal Archives to develop SIARD Suite 2.2 according to the enhanced format.
 
 SIARD Suite 2.2 is the reference implementation for the archiving of relational databases in the standard SIARD format 2.2.
 
@@ -38,18 +38,17 @@ This document is the SIARD Suite 2.2 user manual.
 
 The main new features of SIARD format 2.2 compared to version 2.1 concern:
 
-- Large objects (LOBs) referenced by DATALINKs and stored as external files in the database, according to the SQL standard;
-- large objects (LOBs) stored outside the SIARD archive and segmented into several folders and file parts.
+- Large objects (LOBs) referenced by DATALINKs and stored as external files in the database, according to the SQL standard
+- Large objects (LOBs) stored outside the SIARD archive and segmented into several folders and file parts
+- Improved precision of typeOriginal during metadata extraction
+- Overloaded functions and packages in Oracle databases are now supported
+- Migration to Java 17
 
 SIARD files conforming to SIARD formats prior to 2.2 can be read by SIARD Suite 2.2. However, by saving any changes, SIARD files are automatically converted to SIARD format 2.2.
 
-SIARD Suite 2.2 is the reference implementation for archiving relational databases in the standardized SIARD 2.2 format.
+=== Intellectual property rights
 
-
-=== Intellectual Property Rights
-
-SIARD Suite has been developed by Enter AG and Puzzle ITC GmbH for the Swiss Federal Archives. The copyright holders release SIARD Suite as Open Source software under the CDDL-1.0 license (in the SIARD distribution as licenses/CDDL-1.0.txt).
-
+SIARD Suite has been developed by Enter AG and Puzzle ITC AG for the Swiss Federal Archives. The copyright holders release SIARD Suite as Open Source software under the CDDL-1.0 license (in the SIARD distribution as licenses/CDDL-1.0.txt).
 
 SIARD Suite relies on the following third-party components:
 
@@ -149,48 +148,49 @@ from SUN/Apache https://github.com/kohsuke/msv/
 * EnterUtilities from Enter AG
 ** License: CDDL-1.0 license in the SIARD Distribution as licenses/CDDL-1.0.txt.
 
-A copy of all licenses can be found in the licenses folder of the distribution ZIP file. A copy of all the third party binaries used by SIARD Suite can be found in the lib folder of the distribution.
+A copy of all licenses can be found in the licenses folder of the distribution ZIP file. Third-party dependencies used by SIARD Suite are found in the lib folder of the distribution, or defined in the build.gradle file.
 
 
-== SIARD Concept
+== SIARD concept
 
 The Swiss Federal Archives are obliged to archive the documents of the federal administration regardless of the information medium. Therefore, the problem of long-term archiving of relational databases has to be solved.
 
 Since 2007, the SIARD format has been used by the Swiss Federal Archives and many other archives around the world as a normalization format for the long-term preservation of relational databases.
 
-With the SIARD format 2.2, the databases are stored according to the SQL:2008 standard in order to guarantee long-term availability. The data content is stored as a collection of XML files. Since the resulting archive format is based on these two ISO standards, it is assumed that the data will be readable in the long term.
+With the SIARD format 2.2, databases are stored according to the SQL:2008 standard in order to guarantee long-term availability. The data content is stored as a collection of XML files. Since the resulting archive format is based on these two ISO standards, it is assumed that the data will be readable in the long term.
 
 An important requirement of the data content archived in the SIARD format is that it should have a "documentary character", i.e. the content of the archived tables should be comprehensible independently of any front-end processing applications and should represent the enterprise information of the institutions operating the subject databases. Neither executable code nor objects are archived by the SIARD Suite, but only business information from database tables. This is explained in more detail in the report "Long-term Preservation of Relational Databases, What needs to be preserved how?" by Hartwig Thomas.
 
 The SIARD format stores the archived database schema definition in SQL:2008-compliant XML files, while the table and field documentation and the actual data are also stored in XML files. To avoid excessive XML file size inflation, Binary Large OBjects (BLOBs) and Character Large OBjects (CLOBs) referenced in the XML files are stored in separate (binary) files.
 
+// TODO: Which separate document is being referred to here?
 This document does not further explain the SIARD format and structure, which are described in a separate document delivered with the SIARD Suite. In 2013, the SIARD format was approved as an eCH standard. In 2018, version 2.1 of the SIARD format was made available as standard eCH-0165. In 2021, the DILCIS Board developed and approved the extended SIARD Format 2.2.
 
-== Introduction to Database Archival
+== Introduction to database archival
 
 This is a brief introduction to archiving databases with SIARD Suite. It also deals with organizational issues that should be taken into account.
 
-1. Make sure that you know which parts of the database need to be archived. If necessary, contact the person in charge, for example, the person in charge of the archives.
+1. Make sure that you know which parts of the database need to be archived. If necessary, contact the person in charge - for example, the person in charge of the archives.
 2. Prepare the database for archiving: Create a new user on the database system with read-only privileges for the objects to be archived. If necessary, create a copy of your database (or specific tables/parts of it) or create views. The database must not be modified during the archiving process, otherwise the extraction with SIARD Suite will fail. Do not archive from a live system.
 3. Download the database with SIARD Suite.
 4. Quality control: check the SIARD file to make sure it contains everything you need, test some entries to make sure everything went well.
 5. Advanced quality control: reload the SIARD file on a database system. Execute some defined queries on the original database as well as on the archived one and compare the results.
 6. Add metadata to the SIARD file.
-7. Define which external documentation must be archived with the SIARD file to ensure the comprehensibility of the data (e.g. code tables, system documentation, entity relationship diagram, ...).
+7. Define which external documentation must be archived with the SIARD file to ensure comprehensibility of the data (e.g. code tables, system documentation, entity relationship diagram).
 
 
 == Requirements
 
 === Java
 
-The SIARD Suite application is a Java FX application. As such, it can run on any system where a Java Runtime Environment 8 (JRE) with the JavaFX extension is installed.
+The SIARD Suite application is a JavaFX application. As such, it can run on any system where a Java Runtime Environment (JRE) with the JavaFX extension is installed.
 
-You can download a JRE 8 with the JavaFX extension from various sites:
+You can download a JRE 17 with JavaFX support from various sites:
 
-* https://www.azul.com/downloads/?version=java-8-lts&package=jre-fx#zulu
-* https://www.oracle.com/java/technologies/downloads/#jre8
+* https://www.azul.com/downloads/?version=java-17-lts&package=jre-fx#zulu
+* https://www.oracle.com/java/technologies/downloads/#java17
 
-However, there are distributions of the SIARD Suite that already contain the required Java runtime and there are native Installers for Windows, Linux and Mac that you can use.
+However, there are distributions of SIARD Suite that already contain the required Java runtime and there are native installers for Windows, Linux and Mac that you can use.
 
 Each distribution is listed below. All distributions can be downloaded from https://github.com/sfa-siard/siard-suite/releases.
 
@@ -212,16 +212,16 @@ Each distribution is listed below. All distributions can be downloaded from http
 |SIARD-Suite-v{gradle-project-version}-win-msi
 |Native installer for Windows (msi)
 |SIARD-Suite-v{gradle-project-version}-macOS-dmg
-||Native installer for MacOS
+|Native installer for MacOS
 |===
 
-*Note:* When using the native installer, the Siard CLI (Command Line Interface) is not available. To use the CLI, a distribution with or without an included JRE should be used.
+*Note:* When using the native installer, the SIARD CLI (Command Line Interface) is not available. To use the CLI, a distribution with or without an included JRE should be used.
 
 === Architecture (32-bit/64-bit)
-In previous versions of SIARD Suite, the dependence on ODBC required the use of 32-bit JAVA to access MS Access databases. SIARD Suite 2.2 no longer uses ODBC to access MS Access databases. Therefore, these databases can be accessed on any platform (e.g. LINUX) and SIARD Suite 2.2 is compatible with both 32-bit and 64-bit JAVA. It is recommended to choose the JAVA architecture according to the architecture of your operating system.
+In previous versions of SIARD Suite, reliance on ODBC required the use of 32-bit JAVA to access MS Access databases. SIARD Suite 2.2 no longer uses ODBC to access MS Access databases. Therefore, these databases can be accessed on any platform (e.g. LINUX), and SIARD Suite 2.2 is compatible with both 32-bit and 64-bit JAVA. It is recommended to choose the JAVA architecture according to the architecture of your operating system.
 
 === Databases
-
+// TODO: Is this still correct?
 SIARD Suite 2.2 currently supports the following database systems:
 
     • MS Access 2007 or higher
@@ -231,23 +231,23 @@ SIARD Suite 2.2 currently supports the following database systems:
     • PostgreSQL 11 or higher
     • SQL Server 2012 or higher
 
-Further database systems may be integrated at a later date. The JDBC drivers of the database vendors usually do not conform to SQL:2008. Most of them even fail to conform to the JDBC 4 standard with respect to metadata or advanced data types. Therefore a JDBC wrapper needs to be developed for each database system, which conforms to the standards at least to the extent required by SIARD Suite.
+Further database systems may be integrated at a later date. The JDBC drivers of the database vendors usually do not conform to SQL:2008. Most of them even fail to conform to the JDBC 4 standard with respect to metadata or advanced data types. Therefore, a JDBC wrapper needs to be developed for each database system, which conforms to the standards at least to the extent required by SIARD Suite.
 
-=== Installing and Running the Application
+=== Installing and running the application
 
 When using the native installers, the installation is simply done through the system. If necessary, administrator privileges are used for this. The installers also create the appropriate shortcuts to start the application.
 
-The distributions with and without JRE are delivered as a ZIP archive. This can be unpacked anywhere. After that the application can be started by one of the start scripts:
+The distributions with and without JRE are delivered as a ZIP archive. This can be unpacked anywhere. After that the application can be started by one of the following scripts:
 
 |===
-| script name | description
+| Script name | Description
 
 | siard-suite (.bat) | Start the graphical user interface for Unix or Windows systems
 | siard-from-db (.bat) | Archiving a database (CLI)
 | siard-to-db (.bat) | Upload a SIARD archive to a database (CLI)
 |===
 
-If the installation of SIARD-Suite is prevented due to security barriers on your computer, please follow the instructions in the additional document “SIARD-Suite – getting started”
+If the installation of SIARD-Suite is prevented due to security barriers on your computer, please follow the instructions in the link:../../../release-guide.md[release guide].
 
 == Using the SIARD Suite
 
@@ -261,9 +261,9 @@ The purpose and the use of these components are explained below.
 
 === SIARD Suite GUI
 
-The GUI is the central application to create SIARD archives and to view them later without modifying the primary data of the archive. For complex analysis of the archived data, the archive should be reloaded into a database.
+The GUI is the central application that allows users to create SIARD archives and view them later without modifying the primary data of the archive. For complex analysis of the archived data, the archive should be reloaded into a database.
 
-The start screen is the entry point to the application. The four main functionalities of the application can be initiated from here:
+The start screen is the entry point to the application. The four main functionalities of the application can be accessed from here:
 
 
 image::startscreen.png[]
@@ -272,24 +272,24 @@ image::startscreen.png[]
 * Archive database
 * Open SIARD archive
 * Upload a SIARD archive to a database
-* Export data from a SIARD database
+* Export data from a SIARD archive
 
 The application guides the user through the different operations.
 
-==== Archiving Databases with Binary Data
+==== Archiving databases with binary data
 
 The SIARD Format 2.2 standard specifies that large objects (LOBs) of a database can be stored in the external file system.
 
-The location of the data can be recorded during archiving in the "metadata" step.
+The location of the data can be recorded during archiving at the "Meta Data" stage.
 
 image::metadata.png[]
 
 The path can be absolute as a file URI (`file:/`) or relative, e.g. `../lobs/` - in either case the path must end with a slash (`/`). It is recommended to use relative paths so that the archive can be moved along with the external LOB data - this is not possible if absolute paths are used.
-The structure within the specified folder is then automatically generated and follows the structure of the database: `schema/table/column`. SIARD Suite automatically detects the MIME type and the file extensions are automatically set correctly. This also allows the binary files to be opened directly from SIARD Suite in the correct application installed on the system.
+The structure within the specified folder is then automatically generated and follows the structure of the database: `schema/table/column`. SIARD Suite automatically detects the MIME type and the file extensions are automatically set. This also allows the binary files to be opened directly from SIARD Suite in the correct application installed on the system.
 
 ==== Settings
 
-Under the menu item "Options" you can configure the application.
+The application can be configured under the menu item "Options".
 
 image::options.png[]
 
@@ -322,13 +322,13 @@ siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<im
 ==== Arguments
 
 |===
-| argument | description
+| Argument | Description
 
 | -o | Overwrite output file(s) if available
-| -v | archive views as tables
-| <login timeout> | login timeout in seconds (0 for unlimited)
-| <query timeout> | query timeout in seconds (0 for unlimited)
-| <import metadata> | name of the metadata XML file to use as template
+| -v | Archive views as tables
+| <login timeout> | Login timeout in seconds (0 for unlimited)
+| <query timeout> | Query timeout in seconds (0 for unlimited)
+| <import metadata> | Name of the metadata XML file to use as template
 | <external LOB folder> | Folder where the data of the largest LOB (large object) column of the database should be stored externally (contents with the same name will be overwritten!)
 | <mime type> | MIME type of the data of the largest LOB column of the database (influences the choice of the name extension of the externally stored LOBs)
 | <JDBC URL> | JDBC URL of the database to be downloaded.
@@ -344,15 +344,15 @@ Examples:
 *Oracle:*
 jdbc:oracle:thin:@<host>:1521:orcl
 
-*postgres:*
+*Postgres:*
 jdbc:postgresql://<host>:5432/<db-name>
 
 *SQL server:*
-jdbc:sqlserver://<host>/<db-name>:1433
-| <database user> | database user
-| <database password> | database password
-| <siard file> | name of the .siard file to create
-| <export metadata> | name of the .xml metadata file to export
+jdbc:sqlserver://<host>\<db-name>:1433
+| <database user> | Database user
+| <database password> | Database password
+| <siard file> | Name of the .siard file to create
+| <export metadata> | Name of the .xml metadata file to export
 |===
 
 ==== Notes
@@ -361,7 +361,7 @@ At least one of the two parameters `siard-file` or `export metadata` must be set
 
 __Note: The contents of the database should not be changed during the archiving process - use a snapshot of the database if necessary.__
 
-The option Archive views as tables usually leads to redundant storage of the same data and is therefore not recommended. It is useful if the database user used for archiving can see the contents of the views but not the base tables.
+The option to archive views as tables usually leads to redundant storage of the same data and is therefore not recommended. It is useful if the database user used for archiving can see the contents of the views but not the base tables.
 
 The archiving operation is either completely successful or fails.
 
@@ -373,23 +373,23 @@ It is generally not recommended to use the database administrator (DBA, root, db
 
 === SiardToDb
 
-SiardToDb is a command line program that loads a SIARD archive into a database instance for retrieval.
+SiardToDb is a command-line program that loads a SIARD archive into a database instance for retrieval.
 
 ==== Usage
 
 ```shell
-siard-to-db [-h] [-o] [-l=<login timeout>] [-q=<query timeout>] -s=<siard-file> -j=<JDBC-URL> -u=<database user> -p=<database password [<schema> <mappedschema>]
+siard-to-db [-h] [-o] [-l=<login timeout>] [-q=<query timeout>] -s=<siard-file> -j=<JDBC-URL> -u=<database user> -p=<database password> [<schema> <mappedschema>]
 ```
 
-==== arguments
+==== Arguments
 
 |===
-| argument | description
+| Argument | Description
 
-|-o | overwrite identically named types and/or tables in the database, if any
-| <login timeout> | timeout in seconds for login (0 for unlimited)
-| <query timeout> | query timeout in seconds (0 for unlimited)
-| <siard file> | name of the .siard file to upload
+|-o | Overwrite identically named types and/or tables in the database, if any
+| <login timeout> | Timeout in seconds for login (0 for unlimited)
+| <query timeout> | Query timeout in seconds (0 for unlimited)
+| <siard file> | Name of the .siard file to upload
 | <JDBC URL> | JDBC URL of the target database
 Examples:
 
@@ -397,18 +397,18 @@ Examples:
 
 *DB/2:* jdbc:<host>:50000/<db-name>
 
-*MySQL:* jdbc:mysql://dbserver.enterag.ch:3306/<db-name>
+*MySQL:* jdbc:mysql://<host>:3306/<db-name>
 
 *Oracle:* jdbc:oracle:thin:@<host>:1521:orcl
 
-*postgres:* jdbc:postgres://<host>:5432/<db-name>
+*Postgres:* jdbc:postgres://<host>:5432/<db-name>
 
 *SQL server:* jdbc:sqlserver://<host>\<db-name>:1433
 
-| <database user> | database user
-| <database password> | database password
-| <schema> | name of the schema in the SIARD archive
-| <mappedschema> | name of the schema to be used in the database
+| <database user> | Database user
+| <database password> | Database password
+| <schema> | Name of the schema in the SIARD archive
+| <mappedschema> | Name of the schema to be used in the database
 |===
 
 ==== Notes
@@ -419,13 +419,13 @@ The upload only creates tables and types and tries to activate primary and forei
 
 There may also be limitations when uploading. With MS Access, all tables end up in the same MDB/ACCDB. With Oracle, all names longer than 30 characters are truncated. To avoid collisions, table and column names are given a counter. (For example, "A table name that is way too long for Oracle" becomes "A table name that is Table01").
 
-If the maximum precision and the maximum number of decimal places (e.g. in MS Access) are less than required, the values are uploaded with less precision. SIARD helps itself as much as possible in the target database system. If the metadata of the database is consulted with SiardGui, the correct labels and values can be assigned.
+If the maximum precision and the maximum number of decimal places (e.g. in MS Access) are less than required, the values are uploaded with less precision. SIARD helps itself as much as possible in the target database system.
 
-== Tips and Tricks
+== Tips and tricks
 
 === Preparing a database for download
 
-SIARD Suite downloads all the data visible to the database user used for the connection. The choice of a suitable database user therefore determines the size of the archived database. Often a suitable "technical database user" of a database application is available, which is used to manage the database. This user usually has exactly the access rights needed to archive the database.
+SIARD Suite downloads all data visible to the database user that was used for the connection. The choice of a suitable database user therefore determines the size of the archived database. Often a suitable "technical database user" of a database application is available, which is used to manage the database. This user usually has exactly the access rights needed to archive the database.
 
 However, if such a database user is not available, the database administrator (DBA, dbo, root, SYSTEM, sa, ...) should not be used for the download. This is because this user has read access to many system tables and tables from other databases that are not to be archived. Instead, it is recommended that a database user be created for archiving. This archiving user must have read access to all schemas, tables, views and types belonging to the database to be archived. Refer to your DBMS documentation for information on how to create a user and grant it the necessary privileges.
 
@@ -439,9 +439,9 @@ Ideally, the target schemas should be empty. However, depending on the DBMS secu
 
 The database user whose credentials are used for the upload must have the right to create types and tables in the target schemas and to insert data into these tables. Refer to your DBMS documentation for information on how to create schemas and give the database user the necessary rights. The easiest way, if possible, is to use the credentials of the database administrator. This is because the database administrator usually has all the necessary privileges. In this case, however, the Overwrite option should not be selected. Otherwise, the risk of overwriting important tables or types in the system is too great.
 
-=== Time, Timestamps and Time Zones.
+=== Time, timestamps and time zones.
 
-The conversion of `TIMES` and `TIMESTAMPS` in the database depends on the local time zone. The UTC time 14:30 in the SIARD archive is loaded into the database as local time 15:30 when uploading in Zurich - in winter. To suppress this conversion, SiardToDb must be started with the option `-Duser.timezone=GMT`, which causes SIARD to interpret all database times as UTC times.
+The conversion of `TIMES` and `TIMESTAMPS` in the database depends on the local time zone. The UTC time 14:30 in the SIARD archive is loaded into the database as local time 15:30 when uploading in Zurich during wintertime. To suppress this conversion, SiardToDb must be started with the option `-Duser.timezone=GMT`, which causes SIARD to interpret all database times as UTC times.
 
 == Restrictions
 
@@ -452,4 +452,4 @@ The SIARD format has the following limitations
 
 The SIARD Suite is also limited by
 
-* All the metadata of the database must fit in the JAVA memory (heap). This limitation can occur with an unfavorable constellation of available main memory and complexity of the database metadata. It can be circumvented by starting the SIARD applications on a machine with sufficient main memory and, if necessary, enlarging the JAVA heap with the JAVA command line parameter `-Xmx2000m` or a similar parameter on the JAVA command line.
+* All the metadata of the database must fit in the JAVA memory (heap). This limitation can occur with an unfavorable constellation of available main memory and complexity of the database metadata. It can be circumvented by starting the SIARD applications on a machine with sufficient main memory and, if necessary, enlarging the JAVA heap with the JAVA command-line parameter `-Xmx2000m` or a similar parameter on the JAVA command line.

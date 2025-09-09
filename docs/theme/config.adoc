@@ -17,6 +17,7 @@
 :figure-caption: Abbildung
 :table-caption: Tabelle
 
+:gradle-project-version: 2.2
 
 :sectnums:
 :imagesdir: images
