@@ -52,16 +52,11 @@ SIARD Suite has been developed by Enter AG and Puzzle ITC AG for the Swiss Feder
 
 SIARD Suite relies on the following third-party components:
 
-// TODO: wir müssen prüfen, ob das so noch stimmt.
-* JAVA SE 1.8 or higher from Oracle http://www.oracle.com/technetwork/java/javase/downloads/
-** License: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX in the SIARD distribution as licenses/java-license.txt
+* JAVA SE 17 from Oracle https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html
+** License: Oracle Binary Code License Agreement for the Java SE Platform Products in the SIARD distribution as licenses/java-license.txt
 
-* JavaFX 8 from Oracle as part of JAVA 8 http://www.oracle.com/technetwork/java/javase/downloads/
-** License: Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX in the SIARD distribution as licenses/java-license.txt
-
-* ini4j
-** INI file handler for LINUX desktop links from Apache http://ini4j.sourceforge.net/
-** License: Apache License 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
+* JavaFX 17.0.7 from OpenJFX https://openjfx.io/
+** License: GPL v2 with Classpath Exception
 
 * mslinks
 ** LNK file handler for Windows desktop links from BlackOverlord666 https://github.com/BlackOverlord666/mslinks
@@ -78,6 +73,10 @@ from Sun Microsystems Inc. http://www.java2s.com/Code/Jar/a/Downloadactivationja
 from Oracle http://www.java2s.com/Code/Jar/j/Downloadjaxbapi22jar.htm
 ** License: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)Version 1.11 and the GNU General Public License (GPL) Version 2 (CDDL+GPL 1.1) in the SIARD distribution as licenses/CDDL+GPL_1.1.txt
 
+* Java Architecture for XML Binding (JAXB) Runtime (Version 2.3.9)
+from Eclipse Foundation https://eclipse-ee4j.github.io/jaxb-ri/
+** License: Eclipse Distribution License v1.0 in the SIARD distribution as licenses/Eclipse-Distribution-License-1.0.txt
+
 * Woodstox XML processor
 ** An implementation of the Streaming API for XML (StAX2) for fast XML streaming while validating against an XML schema from Codehaus https://mvnrepository.com/artifact/org.codehaus.woodstox/
 ** License: GNU Lesser Public License 2.1 (LGPLv2.1) in the SIARD distribution as licenses/LGPL2.1.txt
@@ -86,15 +85,35 @@ from Oracle http://www.java2s.com/Code/Jar/j/Downloadjaxbapi22jar.htm
 from SUN/Apache https://github.com/kohsuke/msv/
 ** License: BSD license (BSD-2) in the SIARD distribution as licenses/BSD-2.txt.
 
+* Multi-Schema Validator XSDLib (Version 2013.2.2)
+from SUN/Apache https://github.com/kohsuke/msv/
+** License: BSD license (BSD-2) in the SIARD distribution as licenses/BSD-2.txt.
+
 * Zip64File from Enter AG
-** License: CDDL-1.0 license in der SIARD-Distribution als licenses/CDDL-1.0.txt.
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt.
 
 * SqlParser from Enter AG
-** License: CDDL-1.0 license in the SIARD-Distribution als licenses/CDDL-1.0.txt.
+** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt.
 
 * ANTLR4 (Version 4.5.2)
 ** Parser Generator from Terence Parr http://www.antlr.org/download.html
 ** License: BSD License (BSD-3)) in the SIARD distribution as licenses/BSD-3.txt
+
+* Apache Tika Core (Version 2.9.1)
+** Content detection and analysis framework from Apache https://tika.apache.org/
+** License: Apache License 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
+
+* Logback Classic (Version 1.5.18)
+** Logging framework from QOS.ch https://logback.qos.ch/
+** License: Eclipse Public License v1.0 and the GNU Lesser General Public License version 2.1
+
+* JSON Simple (Version 1.1.1)
+** JSON parser from Google Code https://github.com/fangyidong/json-simple
+** License: Apache License 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
+
+* JetBrains Annotations (Version 24.1.0)
+** Annotations for static analysis from JetBrains https://github.com/JetBrains/java-annotations
+** License: Apache License 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
 
 * SiardCmd from Swiss Federal Archives
 ** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
@@ -114,19 +133,19 @@ from SUN/Apache https://github.com/kohsuke/msv/
 * JdbcOracle from Swiss Federal Archives
 ** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
-* JDBC Driver for Oracle (ojdbc6.jar (version 12.1.0.1.0), xdb6.jar, xmlparserv2.jar) from Oracle
+* JDBC Driver for Oracle (ojdbc6.jar, ojdbc7.jar, ojdbc8.jar, xdb6.jar, xmlparserv2.jar) from Oracle
 ** License: Oracle License in the SIARD distribution as licenses/licenseOracle.txt.
 
 * JdbcMySql from Swiss Federal Archives
 ** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
-* JDBC Driver for MySQL (Version 8.0.18) from Oracle https://dev.mysql.com/downloads/connector/j/
-** License: GNU Generial Public License (GPLv2.0) in the SIARD distribution as licenses/GPLv2.0.txt.
+* JDBC Driver for MySQL (Version 8.3.0) from Oracle https://dev.mysql.com/downloads/connector/j/
+** License: GNU General Public License (GPLv2.0) in the SIARD distribution as licenses/GPLv2.0.txt.
 
 * JdbcMsSql from Swiss Federal Archives
 ** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
-* JDBC Driver for SQL Server (Version 4.1) from Microsoft https://msdn.microsoft.com/library/mt484311.aspx
+* JDBC Driver for SQL Server (Version 12.2.0) from Microsoft https://learn.microsoft.com/en-us/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server
 ** License: Microsoft License in the SIARD distribution as licenses/license41.txt.
 
 * JdbcDb2 from Swiss Federal Archives
@@ -139,7 +158,7 @@ from SUN/Apache https://github.com/kohsuke/msv/
 * JdbcAccess from Swiss Federal Archives
 ** License: CDDL-1.0 license in the SIARD distribution as licenses/CDDL-1.0.txt
 
-* Jackcess (Version 2.1.6) from Health Market Science http://jackcess.sourceforge.net/
+* Jackcess (Version 2.1.12) from Health Market Science http://jackcess.sourceforge.net/
 ** License: Apache License, Version 2.0 in the SIARD distribution as licenses/Apache-license-2.0.txt
 
 * Two parts (commons-lang-2.6 6 and commons-logging-1.1.3 7 ) used by Jackcess from Apache Commons http://commons.apache.org/
@@ -149,7 +168,6 @@ from SUN/Apache https://github.com/kohsuke/msv/
 ** License: CDDL-1.0 license in the SIARD Distribution as licenses/CDDL-1.0.txt.
 
 A copy of all licenses can be found in the licenses folder of the distribution ZIP file. Third-party dependencies used by SIARD Suite are found in the lib folder of the distribution, or defined in the build.gradle file.
-
 
 == SIARD concept
 
