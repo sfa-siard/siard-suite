@@ -18,7 +18,7 @@ Ce document donne un bref aperçu de l'application et de son utilisation. Un man
 
 == Configuration requise et installation
 
-L'application SIARD Suite est une application Java FX. En tant que telle, elle peut en principe être exécutée sur tout système sur lequel un Java Runtime Environment 8 (JRE) avec l'extension JavaFX est installé.
+L'application SIARD Suite est une application Java FX. En tant que telle, elle peut en principe être exécutée sur tout système sur lequel un Java Runtime Environment (JRE) 17 avec l'extension JavaFX est installé.
 
 De plus, des distributions avec JRE inclus ainsi que des installateurs natifs pour Windows, Mac et Linux sont disponibles, de sorte qu'il n'est pas nécessaire d'installer un JRE sur le système.
 
@@ -26,24 +26,24 @@ Les différentes distributions sont présentées ci-dessous. Toutes les distribu
 
 
 |===
-|nom de la distribution | description
+|Nom de la distribution | Description
 
-|SIARD-Suite-v2.2.133
-|distribution sans runtime, nécessite JRE installé avec JavaFX sur le système
-|SIARD-Suite-v2.2.133-Linux
-|distribution avec runtime inclus pour Linux
-|SIARD-Suite-v2.2.133-Windows
-|distribution avec runtime inclus pour Windows
-|SIARD-Suite-v2.2.133-macOS
-|distribution avec runtime inclus pour MacOS
-|SIARD-Suite-v2.2.133-Linux-deb
-|installateur natif pour Linux
-|SIARD-Suite-v2.2.133-win-exe
-|installateur natif pour Windows (exe)
-|SIARD-Suite-v2.2.133-win-msi
-|installateur natif pour Windows (msi)
-|SIARD-Suite-v2.2.133-macOS-dmg
-|installateur natif pour MacOS
+|SIARD-Suite-v2.2
+|Distribution sans runtime, nécessite JRE installé avec JavaFX sur le système
+|SIARD-Suite-v2.2-Linux
+|Distribution avec runtime inclus pour Linux
+|SIARD-Suite-v2.2-Windows
+|Distribution avec runtime inclus pour Windows
+|SIARD-Suite-v2.2-macOS
+|Distribution avec runtime inclus pour MacOS
+|SIARD-Suite-v2.2-Linux-deb
+|Installateur natif pour Linux
+|SIARD-Suite-v2.2-win-exe
+|Installateur natif pour Windows (exe)
+|SIARD-Suite-v2.2-win-msi
+|Installateur natif pour Windows (msi)
+|SIARD-Suite-v2.2-macOS-dmg
+|Installateur natif pour MacOS
 |===
 
 *Note:* Si l'installateur natif est utilisé, le Siard CLI (Command Line Interface) n'est pas disponible. Pour pouvoir utiliser le CLI, il faut utiliser une distribution avec ou sans JRE inclus.
@@ -138,15 +138,15 @@ siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<im
 ==== Arguments
 
 |===
-|argument | description
+|Argument | Description
 
 | -o | Écraser le(s) fichier(s) de sortie, s'il(s) existe(nt)
 | -v | Archiver les vues en tant que tables
 | <login timeout> | Timeout en secondes pour la connexion (login) (0 pour illimité)
-| <query timeout> | timeout en secondes pour l'interrogation (0 pour illimité)
-| <import meta data> | nom du fichier XML de métadonnées à utiliser comme modèle
-| <external LOB folder> | dossier dans lequel les données de la plus grande colonne LOB (large object) de la base de données doivent être enregistrées en externe (les contenus portant le même nom sont écrasés !)
-| <mime type> | type MIME des données de la plus grande colonne LOB de la base de données (influence le choix de l'extension de nom des LOBs stockés en externe)
+| <query timeout> | Timeout en secondes pour l'interrogation (0 pour illimité)
+| <import meta data> | Nom du fichier XML de métadonnées à utiliser comme modèle
+| <external LOB folder> | Dossier dans lequel les données de la plus grande colonne LOB (large object) de la base de données doivent être enregistrées en externe (les contenus portant le même nom sont écrasés !)
+| <mime type> | Type MIME des données de la plus grande colonne LOB de la base de données (influence le choix de l'extension de nom des LOBs stockés en externe)
 | <JDBC URL> | URL JDBC de la base de données qui doit être téléchargée.
 
 Exemples :
@@ -165,10 +165,10 @@ jdbc:postgresql://<host>:5432/<db-name>.
 
 *SQL-Server:*
 jdbc:sqlserver://<host>/<db-name>:1433
-| <database user> | utilisateur de la base de données
-| <database password> | mot de passe de la base de données
-| <siard file> | nom du fichier .siard à créer
-| <export meta data> | nom du fichier de métadonnées .xml à exporter
+| <database user> | Utilisateur de la base de données
+| <database password> | Mot de passe de la base de données
+| <siard file> | Nom du fichier .siard à créer
+| <export meta data> | Nom du fichier de métadonnées .xml à exporter
 
 |===
 
@@ -195,19 +195,19 @@ SiardToDb est un programme en ligne de commande qui charge une archive SIARD dan
 ==== Appel
 ```shell
 siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
--s=<siard-file> -j=<URL JDBC> -u=<utilisateur de la base de données> -p=<mot de passe de la base de données
+-s=<siard-file> -j=<URL JDBC> -u=<utilisateur de la base de données> -p=<mot de passe de la base de données>
 [<schema> <mappedschema>]
 ```
 
 ==== Arguments
 
 |===
-| argument | description
+| Argument | Description
 
 |-o | Écraser (overwrite) les types et/ou les tables de même nom dans la base de données, s'il y en a.
 | <login timeout> | Timeout en secondes pour la connexion (login) (0 pour illimité)
 | <query timeout> | Timeout en secondes pour une requête (query) (0 pour illimité)
-| <siard file> | nom du fichier .siard à télécharger
+| <siard file> | Nom du fichier .siard à télécharger
 | <JDBC URL> | URL JDBC de la base de données cible.
 Exemples :
 
@@ -215,17 +215,17 @@ Exemples :
 
 *DB/2:* jdbc:<host>:50000/<db-name>
 
-*MySQL:* jdbc:mysql://dbserver.enterag.ch:3306/<db-name>
+*MySQL:* jdbc:mysql://<host>:3306/<db-name>
 
 *Oracle:* jdbc:oracle:thin:@<host>:1521:orcl
 
 *Postgres:* jdbc:postgres://<host>:5432/<db-name>
 
 *SQL-Server:* jdbc:sqlserver://<host>\<db-name>:1433
-| <database user> | utilisateur de la base de données
-| <database password> | mot de passe de la base de données
-| <schema> | nom du schéma dans l'archive SIARD
-| <mappedschema> | nom du schéma à utiliser dans la base de données
+| <database user> | Utilisateur de la base de données
+| <database password> | Mot de passe de la base de données
+| <schema> | Nom du schéma dans l'archive SIARD
+| <mappedschema> | Nom du schéma à utiliser dans la base de données
 |===
 
 ==== Remarques

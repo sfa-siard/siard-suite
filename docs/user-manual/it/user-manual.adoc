@@ -18,7 +18,7 @@ Questo documento fornisce una breve panoramica dell'applicazione e del suo utili
 
 == Requisiti di sistema e installazione
 
-L'applicazione SIARD Suite è un'applicazione Java FX. Come tale, può essere eseguita su qualsiasi sistema su cui sia installato un Java Runtime Environment 8 (JRE) con l'estensione JavaFX.
+L'applicazione SIARD Suite è un'applicazione Java FX. Come tale, può essere eseguita su qualsiasi sistema su cui sia installato un Java Runtime Environment (JRE) 17 con l'estensione JavaFX.
 
 Inoltre, sono disponibili distribuzioni con JRE incluso e installatori nativi per Windows, Mac e Linux, in modo che non sia necessario installare JRE sul sistema.
 
@@ -28,22 +28,22 @@ Le singole distribuzioni sono elencate di seguito. Tutte le distribuzioni posson
 |===
 |Nome della distribuzione | Descrizione
 
-|SIARD-Suite-v2.2.133
+|SIARD-Suite-v2.2
 |Distribuzione senza runtime, richiede l'installazione di JRE con JavaFX sul sistema
-|SIARD-Suite-v2.2.133-Linux
+|SIARD-Suite-v2.2-Linux
 |Distribuzione con runtime incluso per Linux
-|SIARD-Suite-v2.2.133-Windows
+|SIARD-Suite-v2.2-Windows
 |Distribuzione con runtime incluso per Windows
-|SIARD-Suite-v2.2.133-macOS
+|SIARD-Suite-v2.2-macOS
 |Distribuzione con runtime incluso per MacOS
-|SIARD-Suite-v2.2.133-Linux-deb
+|SIARD-Suite-v2.2-Linux-deb
 |Installatore nativo per Linux
-|SIARD-Suite-v2.2.133-win-exe
+|SIARD-Suite-v2.2-win-exe
 |Installatore nativo per Windows (exe)
-|SIARD-Suite-v2.2.133-win-msi
+|SIARD-Suite-v2.2-win-msi
 |Installatore nativo per Windows (msi)
-|SIARD-Suite-v2.2.133-macOS-dmg
-||Installatore nativo per MacOS
+|SIARD-Suite-v2.2-macOS-dmg
+|Installatore nativo per MacOS
 |===
 
 *Nota:* Se si utilizza il programma di installazione nativo, la Siard CLI (Command Line Interface) non è disponibile. Per poter utilizzare la CLI, è necessario utilizzare una distribuzione con o senza JRE inclusa.
@@ -137,15 +137,15 @@ siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<im
 ==== Argomenti
 
 |===
-|Argomento | descrizione
+|Argomento | Descrizione
 
-| -o | sovrascrive i file di output, se disponibili
+| -o | Sovrascrive i file di output, se disponibili
 | -v | Archivia le viste come tabelle
 | <login timeout> | Timeout in secondi per il login (0 per illimitato)
 | <query timeout> | Timeout in secondi per la query (0 per illimitato)
 | <import meta data> | Nome del file XML dei meta dati da usare come modello.
 | <cartella LOB esterna> | Cartella in cui memorizzare esternamente i dati della colonna LOB (large object) più grande del database (i contenuti con lo stesso nome verranno sovrascritti).
-<mime type> | Tipo MIME dei dati della colonna LOB più grande del database (influenza la scelta dell'estensione del nome dei LOB memorizzati esternamente)
+| <mime type> | Tipo MIME dei dati della colonna LOB più grande del database (influenza la scelta dell'estensione del nome dei LOB memorizzati esternamente)
 | <JDBC URL> | URL JDBC del database da scaricare.
 
 Esempi:
@@ -165,10 +165,10 @@ jdbc:postgresql://<host>:5432/<nome-del-db>
 *Server SQL:*
 jdbc:sqlserver://<host>/<db-name>:1433
 
-| <utente del database> | utente del database
-| <password del database> | password del database
-| <file siard> | nome del file .siard da creare
-| <export meta data> | nome del file .xml meta data da esportare
+| <utente del database> | Utente del database
+| <password del database> | Password del database
+| <file siard> | Nome del file .siard da creare
+| <export meta data> | Nome del file .xml meta data da esportare
 
 |===
 
@@ -195,15 +195,15 @@ SiardToDb è un programma a riga di comando che carica un archivio SIARD in un d
 ==== Chiamata
 
 ```shell
-siard-to-db [-h] [-o] [-l=<login timeout>] [-q=<query timeout>]
--s=<file siard> -j=<JDBC-URL> -u=<database-user> -p=<database-password
+siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
+-s=<file siard> -j=<JDBC-URL> -u=<database-user> -p=<database-password>
 [<schema> <mappedschema>]
 ```
 
 ==== Argomenti
 
 |===
-| argomento | descrizione
+| Argomento | Descrizione
 |-o | Sovrascrive i tipi e/o le tabelle con lo stesso nome nel database, se presenti.
 | <login timeout> | Timeout in secondi per il login (0 per illimitato)
 | <query timeout> | Timeout in secondi per una richiesta (query) (0 per illimitato)
@@ -215,18 +215,18 @@ Esempi:
 
 *DB/2:* jdbc:<host>:50000/<nome-database>
 
-*MySQL:* jdbc:mysql://dbserver.enterag.ch:3306/<nome-del-db>
+*MySQL:* jdbc:mysql://<host>:3306/<nome-del-db>
 
 *Oracle:* jdbc:oracle:thin:@<host>:1521:orcl
 
-*postgres:* jdbc:postgres://<host>:5432/<nome-del-db>
+*Postgres:* jdbc:postgres://<host>:5432/<nome-del-db>
 
 *Server SQL:* jdbc:sqlserver://<host><nome-del-db>:1433
 
-| <utente del database> | utente del database
-| <password del database> | password del database
-| <schema> | nome dello schema nell'archivio SIARD
-| <mappedschema> | nome dello schema da utilizzare nel database
+| <utente del database> | Utente del database
+| <password del database> | Password del database
+| <schema> | Nome dello schema nell'archivio SIARD
+| <mappedschema> | Nome dello schema da utilizzare nel database
 |===
 
 

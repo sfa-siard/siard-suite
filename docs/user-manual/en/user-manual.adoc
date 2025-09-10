@@ -396,7 +396,7 @@ SiardToDb is a command-line program that loads a SIARD archive into a database i
 ==== Usage
 
 ```shell
-siard-to-db [-h] [-o] [-l=<login timeout>] [-q=<query timeout>] -s=<siard-file> -j=<JDBC-URL> -u=<database user> -p=<database password> [<schema> <mappedschema>]
+siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>] -s=<siard-file> -j=<JDBC-URL> -u=<database user> -p=<database password> [<schema> <mappedschema>]
 ```
 
 ==== Arguments
