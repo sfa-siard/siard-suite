@@ -10,6 +10,7 @@ public class SqlScripts {
         public final static String SIARDSUITE_129_BINARY = "oracle/issues/siardsuite129/binary-types-schema.sql";
         public final static String SIARDSUITE_129_VARCHAR = "oracle/issues/siardsuite129/varchar-types-schema.sql";
         public final static String SIARDSUITE_106_SCHEMA_NAME = "oracle/issues/siardsuite106/schema-with-underscore.sql";
+        public final static String SIARDSUITE_136_DATATYPE_MAPPING = "oracle/issues/siardsuite136/datatype-mapping-oracle.sql";
     }
 
     public static class Postgres {
@@ -27,6 +28,7 @@ public class SqlScripts {
         public final static String JDBCMYSQL_4 = "mysql/issues/jdbcmysql4/nation.sql";
         public final static String JDBCMYSQL_4_WILDCARD = "mysql/issues/jdbcmysql4/wildcard.sql";
         public final static String SIARDSUITE_112 = "mysql/issues/siardsuite112/mysql-file-types.sql";
+        public final static String SIARDSUITE_136_DATATYPE_MAPPING = "mysql/issues/siardsuite136/datatype-mapping-mysql.sql";
     }
 
     public static class MsSQL {
