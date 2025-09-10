@@ -16,7 +16,7 @@ of the SIARD Suite and its components.
 
 === User manual language
 
-The extended version of the user’s manual is only available in English. A short version is also available in French, German, and Italian.
+The extended version of the user’s manual is only available in English. A short version is also available in French, German, and Italian. Additional information about SIARD Suite is available on the Swiss Federal Archives project website: https://www.bar.admin.ch/bar/en/home/archiving/tools/siard-suite.html
 
 === Latest release
 

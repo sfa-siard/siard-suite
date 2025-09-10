@@ -9,7 +9,7 @@ Der Standard SIARD (Software-Independent Archival of Relational Databases) defin
 
 == Kontext
 
-In Zusammenarbeit mit dem EU-Projekt E-ARK und der KOST wurde zwischen 2015 und 2018 die Version 2.1 des SIARD-Formats spezifiziert. Wie schon zuvor die Version 1.0 wurde auch SIARD-Format 2.1 als Standard eCH-0165 vom Verein "eCH E-Government Standards" homologiert. Im Jahr 2021 hat der DILCIS-Vorstand das erweiterte SIARD-Format 2.2 entwickelt und genehmigt.
+In Zusammenarbeit mit dem EU-Projekt E-ARK und der KOST wurde zwischen 2015 und 2018 die Version 2.1 des SIARD-Formats spezifiziert. Wie schon zuvor die Version 1.0, wurde auch SIARD-Format 2.1 als Standard eCH-0165 vom Verein "eCH E-Government Standards" homologiert. Im Jahr 2021 hat der DILCIS-Vorstand das erweiterte SIARD-Format 2.2 entwickelt und genehmigt.
 
 SIARD Suite ist die Referenzimplementation für das Archivieren relationaler Datenbanken im standardisierten SIARD-Format 2.2. Weiter kann SIARD Suite auch SIARD-Archive in den Formaten SIARD 2.1 und SIARD 1.0 einlesen und zu SIARD 2.2 konvertieren.
 
@@ -19,32 +19,31 @@ Dieses Dokument gibt einen kurzen Überblick über die Anwendung und ihre Benutz
 
 == Systemanforderungen und Installation
 
-Die Applikation SIARD Suite ist eine Java FX Applikation. Als solche kann sie grundsätzlich auf jedem System ausgeführt werden, auf welchem ein Java Runtime Environment 8 (JRE) mit der JavaFX Extension installiert ist.
+Die Applikation SIARD Suite ist eine Java FX Applikation. Als solche kann sie grundsätzlich auf jedem System ausgeführt werden, auf welchem ein Java Runtime Environment (JRE) 17 mit der JavaFX Extension installiert ist.
 
 Zusätzlich stehen Distributionen mit inkludierter JRE sowie native Installer für Windows, Mac und Linux zur Verfügung, so dass keine JRE auf dem System installiert sein muss.
 
 In der Folge sind die einzelnen Distributionen aufgeführt. Alle Distributionen können hier heruntergeladen werden: https://github.com/sfa-siard/siard-suite/releases
 
-
 |===
 |Distributionsname | Beschreibung
 
-|SIARD-Suite-v2.2.133
+|SIARD-Suite-v2.2
 |Distribution ohne Runtime, erfordert installierte JRE mit JavaFX auf dem System
-|SIARD-Suite-v2.2.133-Linux
+|SIARD-Suite-v2.2-Linux
 |Distribution mit inkludierter Runtime für Linux
-|SIARD-Suite-v2.2.133-Windows
+|SIARD-Suite-v2.2-Windows
 |Distribution mit inkludierter Runtime für Windows
-|SIARD-Suite-v2.2.133-macOS
+|SIARD-Suite-v2.2-macOS
 |Distribution mit inkludierter Runtime für MacOS
-|SIARD-Suite-v2.2.133-Linux-deb
+|SIARD-Suite-v2.2-Linux-deb
 |Nativer Installer für Linux
-|SIARD-Suite-v2.2.133-win-exe
+|SIARD-Suite-v2.2-win-exe
 |Nativer Installer für Windows (exe)
-|SIARD-Suite-v2.2.133-win-msi
+|SIARD-Suite-v2.2-win-msi
 |Nativer Installer für Windows (msi)
-|SIARD-Suite-v2.2.133-macOS-dmg
-||Nativer Installer für MacOS
+|SIARD-Suite-v2.2-macOS-dmg
+|Nativer Installer für MacOS
 |===
 
 *Hinweis:* Wird der native Installer verwendet, steht das Siard CLI (Command Line Interface) nicht zur Verfügung. Um das CLI verwenden zu können, sollte ein Distribution mit oder ohne inkludierter JRE verwendet werden.
@@ -101,7 +100,7 @@ Der Speicherort der Daten kann während der Archivierung im Schritt "Metadaten" 
 image::metadata.png[]
 
 Der Pfad kann absolut als File-URI (`file:/`) oder relativ angegeben werden, z.b. `../lobs/` - auf jeden Fall muss der Pfad mit einem Schrägstrich (`/`) abgeschlossen werden. Es wird empfohlen relative Pfade anzugeben, so dass das Archiv mitsamt der externen LOB Daten verschoben werden kann - dies ist nicht möglich wenn absolute Pfade verwendet werden.
-Die Struktur innerhalb des spezifizierten Ordners wird anschliessend automatisch generiert und folgt der Struktur der Datenbank: `schema/table/column`. SIARD Suite detektiert automatisch den MIME-Type und die Dateiendungen werden automatisch korrekt gesetzt. Dies ermöglicht auch, dass die Binary-Daten direkt aus der SIARD Suite in der korrekten auf dem System installierten Applikation geöffnet werden können.
+Die Struktur innerhalb des spezifizierten Ordners wird anschliessend automatisch generiert und folgt der Struktur der Datenbank: `schema/table/column`. SIARD Suite detektiert automatisch den MIME-Type und die Dateiendungen werden automatisch gesetzt. Dies ermöglicht auch, dass die Binary-Daten direkt aus der SIARD Suite in der korrekten auf dem System installierten Applikation geöffnet werden können.
 
 ==== Einstellungen
 
@@ -197,7 +196,7 @@ SiardToDb ist ein Kommandozeilenprogramm, das ein SIARD-Archiv zu Recherchezweck
 ==== Aufruf
 ```shell
 siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
--s=<siard-file> -j=<JDBC-URL> -u=<Datenbank-Benutzer> -p=<Datenbank-Passwort
+-s=<siard-file> -j=<JDBC-URL> -u=<Datenbank-Benutzer> -p=<Datenbank-Passwort>
 [<schema> <mappedschema>]
 ```
 
@@ -217,7 +216,7 @@ Beispiele:
 
 *DB/2:* jdbc:<host>:50000/<db-name>
 
-*MySQL:* jdbc:mysql://dbserver.enterag.ch:3306/<db-name>
+*MySQL:* jdbc:mysql://<host>:3306/<db-name>
 
 *Oracle:* jdbc:oracle:thin:@<host>:1521:orcl
 
@@ -227,7 +226,7 @@ Beispiele:
 | <database user> | Datenbank Benutzer
 | <database password> | Datenbank Passwort
 | <schema> | Name des Schemas im SIARD-Archiv
-| <mappedschema> | in der Datenbank zu verwendender Schemaname
+| <mappedschema> | In der Datenbank zu verwendender Schemaname
 |===
 
 ==== Anmerkungen
