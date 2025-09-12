@@ -1,13 +1,10 @@
 ifndef::imagesdir[:imagesdir: ../images]
 
 [[section-quality-scenarios]]
+// TODO: incomplete
 == Quality Requirements
 
-
-
-
 === Quality Tree
-
 
 
 === Quality Scenarios

@@ -1,8 +1,6 @@
 ifndef::imagesdir[:imagesdir: ../images]
 
 [[section-building-block-view]]
-
-
 == Building Block View
 
 === Whitebox Overall System
@@ -54,23 +52,22 @@ graph TD
 
 ----
 
-
-Contained Building Blocks::
+=== Contained Building Blocks
 
 [options="header",cols="1,2"]
 |===
 |Module | Repository
-|SiardSuite |
-|SiardApi |
-|SiardCmd |
-|SqlParser |
-|JdbcBase |
-|JdbcAccess |
-|JdbcDb2 |
-|JdbcOracle |
-|JdbcMssql |
-|JdbcMysql |
-|EnterUtils |
-|Zip64File |
+|SiardSuite | https://github.com/sfa-siard/siard-suite
+|SiardApi | https://github.com/sfa-siard/SiardApi
+|SiardCmd | https://github.com/sfa-siard/SiardCmd
+|SqlParser | https://github.com/sfa-siard/SqlParser
+|JdbcBase | https://github.com/sfa-siard/JdbcBase
+|JdbcAccess | https://github.com/sfa-siard/JdbcAccess
+|JdbcDb2 | https://github.com/sfa-siard/JdbcDb2
+|JdbcOracle | https://github.com/sfa-siard/JdbcOracle
+|JdbcMssql | https://github.com/sfa-siard/JdbcMsSql
+|JdbcMysql | https://github.com/sfa-siard/JdbcMySql
+|JdbcPostgres | https://github.com/sfa-siard/JdbcPostgres
+|EnterUtils | https://github.com/sfa-siard/EnterUtilities
+|Zip64File | https://github.com/sfa-siard/Zip64File
 |===
-

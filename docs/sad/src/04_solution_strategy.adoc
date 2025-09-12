@@ -1,7 +1,9 @@
 ifndef::imagesdir[:imagesdir: ../images]
 
 [[section-solution-strategy]]
+// TODO: incomplete
 == Solution Strategy
+
 
 
 

@@ -1,15 +1,10 @@
 ifndef::imagesdir[:imagesdir: ../images]
 
 [[section-deployment-view]]
-
-
+// TODO: incomplete
 == Deployment View
 
-
-
 === Infrastructure Level 1
-
-
 
 _**<Overview Diagram>**_
 
@@ -26,8 +21,6 @@ _<description of the mapping>_
 
 
 === Infrastructure Level 2
-
-
 
 ==== _<Infrastructure Element 1>_
 

@@ -13,5 +13,5 @@ ifndef::imagesdir[:imagesdir: ../images]
 |Bundesamt für Informatik
 
 |SFA
-|Swiss Federal Archive, Bundesarchiv
+|Swiss Federal Archives, Bundesarchiv
 |===

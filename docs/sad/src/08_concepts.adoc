@@ -1,16 +1,12 @@
 ifndef::imagesdir[:imagesdir: ../images]
 
 [[section-concepts]]
+// TODO: incomplete
 == Cross-cutting Concepts
-
-
-
-
 
 === _<Concept 1>_
 
 _<explanation>_
-
 
 
 === _<Concept 2>_

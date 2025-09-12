@@ -9,8 +9,8 @@ ifndef::imagesdir[:imagesdir: ../images]
 |===
 |Constraint |Explanation, Background
 
-|Must run with Java 8
-|Computers (aka Bundeslaptop) used by the Swiss Federal Archived are managed by the BIT. Users are not allowed to install any software on these machines. The Java Runtime environment is fixed to JRE8 (Corretto) and there is no way for these users to circumvent this restriction.
+|Swiss Federal Archive (SFA) staff cannot execute binary files or scripts
+|Computers (aka Bundeslaptops) used by the SFA are managed by the Bundesamt für Informatik und Telekommunikation (BIT). Users are not allowed to install any software on these machines.
 |===
 
 
