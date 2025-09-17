@@ -6,6 +6,8 @@ import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -32,29 +34,42 @@ public class UnsavedChangesDialogPresenter {
     @FXML
     private HBox buttonBox;
 
-    public void init(final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
+    public void init(final DialogCloser dialogCloser, final Consumer<UnsavedChangesDialogPresenter.Result> resultCallback) {
         title.setText(DisplayableText.of(TITLE).getText());
         text.setText(DisplayableText.of(TEXT).getText());
 
-        closeButton.setOnAction(event -> resultCallback.accept(Result.CANCEL));
-        val cancelButton = new CloseDialogButton(() -> resultCallback.accept(Result.CANCEL));
+        closeButton.setOnAction(event -> {
+            dialogCloser.closeDialog();
+            resultCallback.accept(Result.CANCEL);
+        });
+        
+        val cancelButton = new CloseDialogButton(dialogCloser);
 
         val saveChangesButton = new MFXButton();
         saveChangesButton.getStyleClass().addAll("button", "primary");
-        saveChangesButton.setOnAction(event -> resultCallback.accept(Result.SAVE_CHANGES));
+        saveChangesButton.setOnAction(event -> {
+            dialogCloser.closeDialog();
+            resultCallback.accept(Result.SAVE_CHANGES);
+        });
         I18n.bind(saveChangesButton.textProperty(), DisplayableText.of(SAVE_CHANGES));
 
         val dropChangesButton = new MFXButton();
         dropChangesButton.getStyleClass().addAll("button", "secondary");
-        dropChangesButton.setOnAction(event -> resultCallback.accept(Result.DROP_CHANGES));
+        dropChangesButton.setOnAction(event -> {
+            dialogCloser.closeDialog();
+            resultCallback.accept(Result.DROP_CHANGES);
+        });
         I18n.bind(dropChangesButton.textProperty(), DisplayableText.of(DROP_CHANGES));
 
         buttonBox.getChildren().addAll(cancelButton, saveChangesButton, dropChangesButton);
     }
 
-    public static LoadedView<UnsavedChangesDialogPresenter> load(final Consumer<Result> resultCallback) {
+    public static LoadedView<UnsavedChangesDialogPresenter> load(
+            final Consumer<Result> resultCallback,
+            final ServicesFacade servicesFacade
+            ) {
         val loaded = FXMLLoadHelper.<UnsavedChangesDialogPresenter>load("fxml/tree/unsaved-changes-dialog.fxml");
-        loaded.getController().init(resultCallback);
+        loaded.getController().init(servicesFacade.dialogs(), resultCallback);
 
         return loaded;
     }
