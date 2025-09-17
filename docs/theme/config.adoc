@@ -20,7 +20,6 @@
 :gradle-project-version: 2.2
 
 :sectnums:
-:imagesdir: images
 :stylesdir: ../../theme
 :stylesheet:  siard-theme.css
 :title-logo-image: image::../../../theme/img/logo.png[logo,1900]

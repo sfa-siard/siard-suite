@@ -81,7 +81,7 @@ Die grafische Benutzeroberfläche ist die zentrale Anwendung um SIARD-Archive zu
 Der Startscreen bietet den Einstiegspunkt in die Applikation. Hier können die vier wesentlichen Funktionalitäten der Applikation initiiert werden:
 
 
-image::startscreen.png[]
+image::images/startscreen.png[]
 
 
 * Datenbank archivieren
@@ -97,7 +97,7 @@ Der Standard SIARD Format 2.2 hält fest, dass grosse Objekte (LOBs) einer Daten
 
 Der Speicherort der Daten kann während der Archivierung im Schritt "Metadaten" erfasst werden.
 
-image::metadata.png[]
+image::images/metadata.png[]
 
 Der Pfad kann absolut als File-URI (`file:/`) oder relativ angegeben werden, z.b. `../lobs/` - auf jeden Fall muss der Pfad mit einem Schrägstrich (`/`) abgeschlossen werden. Es wird empfohlen relative Pfade anzugeben, so dass das Archiv mitsamt der externen LOB Daten verschoben werden kann - dies ist nicht möglich wenn absolute Pfade verwendet werden.
 Die Struktur innerhalb des spezifizierten Ordners wird anschliessend automatisch generiert und folgt der Struktur der Datenbank: `schema/table/column`. SIARD Suite detektiert automatisch den MIME-Type und die Dateiendungen werden automatisch gesetzt. Dies ermöglicht auch, dass die Binary-Daten direkt aus der SIARD Suite in der korrekten auf dem System installierten Applikation geöffnet werden können.
@@ -106,7 +106,7 @@ Die Struktur innerhalb des spezifizierten Ordners wird anschliessend automatisch
 
 Unter dem Menüpunkt "Optionen" kann die Anwendung konfiguriert werden.
 
-image::options.png[]
+image::images/options.png[]
 
 Folgende Einstellungen können vorgenommen werden:
 

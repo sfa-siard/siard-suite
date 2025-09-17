@@ -1,5 +1,3 @@
-ifndef::imagesdir[:imagesdir: ../images]
-
 [[section-concepts]]
 // TODO: incomplete
 == Cross-cutting Concepts

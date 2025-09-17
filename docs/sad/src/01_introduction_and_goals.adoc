@@ -1,5 +1,3 @@
-ifndef::imagesdir[:imagesdir: ../images]
-
 [[section-introduction-and-goals]]
 == Introduction and Goals
 

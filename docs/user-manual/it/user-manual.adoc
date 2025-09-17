@@ -80,7 +80,7 @@ L'interfaccia grafica è l'applicazione centrale per la creazione di archivi SIA
 La schermata di avvio costituisce il punto di accesso all'applicazione. Qui è possibile avviare le quattro funzionalità principali dell'applicazione:
 
 
-image::startscreen.png[]
+image::images/startscreen.png[]
 
 
 * Archivio database
@@ -96,7 +96,7 @@ Lo standard SIARD Format 2.2 prevede che gli oggetti di grandi dimensioni (LOB) 
 
 La posizione di memorizzazione dei dati può essere registrata durante l'archiviazione nella fase "metadati".
 
-image::metadata.png[]
+image::images/metadata.png[]
 
 Il percorso può essere specificato in modo assoluto come URI di file (`file:/`) o relativo, ad esempio `../lobs/` - in ogni caso il percorso deve terminare con una barra (`/`). Si consiglia di specificare percorsi relativi, in modo che l'archivio possa essere spostato insieme ai dati LOB esterni; ciò non è possibile se si utilizzano percorsi assoluti.
 La struttura all'interno della cartella specificata viene generata automaticamente e segue la struttura del database: `schema/tabella/colonna`. SIARD Suite rileva automaticamente il tipo MIME e le estensioni dei file vengono impostate automaticamente in modo corretto. Questo permette anche di aprire i dati binari direttamente da SIARD Suite nell'applicazione corretta installata sul sistema.
@@ -105,7 +105,7 @@ Impostazioni di ====
 
 L'applicazione può essere configurata alla voce di menu "Opzioni".
 
-image::options.png[]
+image::images/options.png[]
 
 È possibile effettuare le seguenti impostazioni:
 

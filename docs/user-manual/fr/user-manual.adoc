@@ -81,7 +81,7 @@ L'interface utilisateur graphique est l'application centrale permettant de crée
 L'écran d'accueil constitue le point d'entrée dans l'application. C'est ici que les quatre fonctionnalités principales de l'application peuvent être initiées :
 
 
-image::startscreen.png[]
+image::images/startscreen.png[]
 
 
 * Archiver la base de données
@@ -97,7 +97,7 @@ La norme SIARD Format 2.2 stipule que les objets volumineux (LOB) d'une base de 
 
 L'emplacement de stockage des données peut être saisi pendant l'archivage dans l'étape "Métadonnées".
 
-image::metadata.png[]
+image::images/metadata.png[]
 
 Le chemin peut être indiqué de manière absolue sous forme de File-URI (`file:/`) ou relative, par exemple `../lobs/` - dans tous les cas, le chemin doit être terminé par une barre oblique (`/`). Il est recommandé de spécifier des chemins d'accès relatifs de manière à ce que l'archive puisse être déplacée avec les données LOB externes - ce qui n'est pas possible si des chemins d'accès absolus sont utilisés.
 La structure à l'intérieur du dossier spécifié est ensuite générée automatiquement et suit la structure de la base de données : `schema/table/column`. SIARD Suite détecte automatiquement le type MIME et les extensions de fichiers sont automatiquement définies correctement. Cela permet également d'ouvrir les données binaires directement à partir de SIARD Suite dans l'application correcte installée sur le système.
@@ -106,7 +106,7 @@ La structure à l'intérieur du dossier spécifié est ensuite générée automa
 
 L'option de menu "Options" permet de configurer l'application.
 
-image::options.png[]
+image::images/options.png[]
 
 Les réglages suivants peuvent être effectués :
 

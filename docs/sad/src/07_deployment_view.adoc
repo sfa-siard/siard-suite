@@ -1,5 +1,3 @@
-ifndef::imagesdir[:imagesdir: ../images]
-
 [[section-deployment-view]]
 // TODO: incomplete
 == Deployment View
