@@ -26,7 +26,9 @@ val versions = mapOf(
 )
 
 dependencies {
-    implementation("ch.admin.bar:enterutilities:v2.2.5")
+    implementation("ch.admin.bar:enterutilities:v2.2.5") {
+        version { branch = "chore/cleanup" }
+    }
     implementation("ch.admin.bar:SqlParser:v2.2.4")
     implementation("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}")
 

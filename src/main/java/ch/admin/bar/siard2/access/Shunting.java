@@ -1,5 +1,6 @@
 package ch.admin.bar.siard2.access;
 
+import ch.admin.bar.siard2.utils.CsvParser;
 import ch.admin.bar.siard2.jdbc.*;
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.DmlStatement;
@@ -13,8 +14,6 @@ import ch.enterag.sqlparser.dml.UpdateStatement;
 import ch.enterag.sqlparser.expression.QuerySpecification;
 import ch.enterag.sqlparser.expression.SelectSublist;
 import ch.enterag.sqlparser.expression.TablePrimary;
-import ch.enterag.utils.csv.CsvParser;
-import ch.enterag.utils.csv.CsvParserImpl;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 import com.healthmarketscience.jackcess.Column;
 import com.healthmarketscience.jackcess.PropertyMap;
@@ -126,7 +125,7 @@ abstract public class Shunting {
                 String sRowSourceType = (String) pm.getValue("RowSourceType");
                 if (sRowSourceType.equals("Value List")) {
                     String sRowSource = (String) pm.getValue("RowSource");
-                    CsvParser cp = new CsvParserImpl(';');
+                    ch.enterag.utils.csv.CsvParser cp = new CsvParser(';');
                     String[] as = cp.parseLine(sRowSource);
                     iCardinality = as.length;
                     // TODO: handle parsing of datetimes!
