@@ -42,11 +42,11 @@ jar {
 }
 
 dependencies {
-    implementation("ch.admin.bar:siardcmd:v2.2.25")
-    implementation("ch.admin.bar:siard-api:v2.2.134")
-    implementation("ch.admin.bar:SqlParser:v2.2.4")
-    implementation("ch.admin.bar:Zip64File:v2.2.5")
-    implementation("ch.admin.bar:enterutilities:v2.2.5")
+    implementation('ch.admin.bar:siardcmd:v2.2.25') {
+        version {
+            branch = "chore/include-description-in-table-export"
+        }
+    }
 
     implementation("com.github.vatbub:mslinks:1.0.6.2")
     implementation ("org.apache.tika:tika-core:2.9.1")
