@@ -1,49 +1,31 @@
 # JdbcMsSql - SIARD 2.2 MySql JDBC Wrapper
-
 This package contains the JDBC Wrapper for MySql for SIARD 2.2.
 
-JdbcMySql 2.1 has been built and tested with JAVA JDK 1.8, 9, and 10.
-
 ## Getting started (for developers)
-
-For building the binaries, Java JDK (1.8 or higher) and Ant must
-have been installed. A copy of build.properties.template must be called
-build.properties. In it using a text editor the local values must be
-entered as directed by the comments.
-
-JdbcMySql 2.1 has been built and tested with JAVA JDK 1.8, 9, and 10.
-
-Run a MySQL 5 Database with: 
-
+For building the binaries, Java JDK 17 must be installed. A running MySQL 5 DB instance is needed before running the tests:
 ```shell
 docker-compose up -d
 ```
 
-### Build application artifacts
-
-Run tests and build the package
-
+### Build the project
 ```shell
-./gradlew build
+./gradlew clean build
 ```
 
-## Versioning, tags and releases
-
-Versions and tags are managed with the Axion Release Plugin for Gradle (https://github.com/allegro/axion-release-plugin)
+### Versioning, tags, and releases
+Versions and tags are managed with the [Axion Release Plugin](https://github.com/allegro/axion-release-plugin) for Gradle.
 
 Short overview:
-
 ```shell
-./gradlew currentVersion # show the current version
+./gradlew currentVersion  # Shows the current version
 
-./gradlew release        # creates a new release adds a tag and pushes it to remote.
+./gradlew release         # Creates a new release, adds a tag, and pushes it to remote
 ```
 
-You may use an IDE of your choice for development (tested with intellij)
-
 ## Documentation
+- [User Manual](https://github.com/sfa-siard/siard-suite/blob/main/docs/user-manual/en/user-manual.adoc)
+- [Software Architecture Document](https://github.com/sfa-siard/siard-suite/blob/main/docs/sad/sad.adoc)
 
-[./doc/manual/user/index.html](./doc/manual/user/index.html) contains the manual for using the binaries.
-[./doc/manual/developer/index.html](./doc/manual/user/index.html) is the manual for developers wishing
-build the binaries or work on the code.  
+## Declaration
+Contributions to the codebase have been made with the support of Windsurf. Windsurf is AI-powered code completion tool, that is trained exclusively on natural language and source code data with [permissive licenses](https://windsurf.com/blog/copilot-trains-on-gpl-codeium-does-not). 
 
