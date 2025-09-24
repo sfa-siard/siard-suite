@@ -1,5 +1,3 @@
-ifndef::imagesdir[:imagesdir: ../images]
-
 [[section-system-scope-and-context]]
 == System Scope and Context
 
@@ -40,4 +38,4 @@ A (somewhat limited) export function allows users to export data from an archive
 
 === Technical Context
 
-SIARD Suite is a standalone Java Application that runs on Linux, Windows and Mac. The connection to the databases is done using vendor specific JDBC drivers using a jdbc url.
+SIARD Suite is a standalone Java Application that runs on Linux, Windows, and Mac. The connection to the databases is done using vendor-specific JDBC drivers using a jdbc url.

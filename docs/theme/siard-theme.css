@@ -803,7 +803,7 @@ p a > code:hover {
 
 #toc a {
     text-decoration: none;
-    color: #ffffff
+    color: #333333
 }
 
 #toc a:active {
@@ -811,7 +811,7 @@ p a > code:hover {
 }
 
 #toctitle {
-    color: #ffffff;
+    color: #333333;
     font-size: 1.2em;
     font-weight: bold
 }
@@ -828,8 +828,8 @@ p a > code:hover {
 
     #toc.toc2 {
         margin-top: 0 !important;
-        color: #ffffff;
-        background-color: #dc0044;
+        color: #333333;
+        background-color: #f8f8f8;
         position: fixed;
         width: 15em;
         left: 0;
