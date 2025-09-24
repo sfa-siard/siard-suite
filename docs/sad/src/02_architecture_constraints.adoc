@@ -7,7 +7,7 @@
 |===
 |Constraint |Explanation, Background
 
-|Swiss Federal Archive (SFA) staff cannot execute binary files or scripts
+|Swiss Federal Archives (SFA) staff cannot execute binary files or scripts
 |Computers (aka Bundeslaptops) used by the SFA are managed by the Bundesamt für Informatik und Telekommunikation (BIT). Users are not allowed to install any software on these machines.
 |===
 

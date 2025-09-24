@@ -14,19 +14,7 @@ Main Features:
 * Graphical user interface (GUI) and command-line interface (CLI) for archiving and restoring data.
 * Clients for Windows, Mac, and Linux.
 
-=== Quality Goals
-// TODO: These are not quality goals. Delete table?
-[options="header",cols="1,2"]
-|===
-|Quality Goal|Motivation and Description
-| Swiss Federal Archives | -
-| Archives worldwide | -
-| Developers, contributors | -
-
-|===
-
 === Stakeholders
-// TODO: Expectations of Puzzle?
 [options="header",cols="1,2,2"]
 |===
 |Role/Name|Contact|Expectations

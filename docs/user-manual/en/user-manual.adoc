@@ -181,7 +181,6 @@ An important requirement of the data content archived in the SIARD format is tha
 
 The SIARD format stores the archived database schema definition in SQL:2008-compliant XML files, while the table and field documentation and the actual data are also stored in XML files. To avoid excessive XML file size inflation, Binary Large OBjects (BLOBs) and Character Large OBjects (CLOBs) referenced in the XML files are stored in separate (binary) files.
 
-// TODO: Which separate document is being referred to here?
 This document does not further explain the SIARD format and structure, which are described in a separate document delivered with the SIARD Suite. In 2013, the SIARD format was approved as an eCH standard. In 2018, version 2.1 of the SIARD format was made available as standard eCH-0165. In 2021, the DILCIS Board developed and approved the extended SIARD Format 2.2.
 
 == Introduction to database archival

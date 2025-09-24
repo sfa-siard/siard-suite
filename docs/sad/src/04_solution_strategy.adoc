@@ -1,3 +1,0 @@
-[[section-solution-strategy]]
-// TODO: incomplete
-== Solution Strategy

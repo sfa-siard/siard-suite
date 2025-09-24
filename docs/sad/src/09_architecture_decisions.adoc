@@ -1,3 +1,0 @@
-[[section-design-decisions]]
-// TODO: incomplete
-== Architecture Decisions
