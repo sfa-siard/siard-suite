@@ -35,7 +35,7 @@ public class MultipleSchemasIT {
 
     // due to non-resolved issue https://github.com/sfa-siard/JdbcOracle/issues/10 expect an exception instead of ignoring the test.
     @Test(expected = SQLSyntaxErrorException.class)
-    public void download() throws IOException, SQLException, ClassNotFoundException {
+    public void downloadMultipleSchemas() throws IOException, SQLException, ClassNotFoundException {
         // given
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
@@ -65,6 +65,41 @@ public class MultipleSchemasIT {
                                                                   .schemaId(Id.of("OTHERUSER"))
                                                                   .tableId(Id.of("SIMPLE_TABLE"))
                                                                   .build()))
+                .isNotPresent();
+    }
+
+    @Test
+    public void downloadSpecificSchema() throws IOException, SQLException, ClassNotFoundException {
+        // given
+        val actualArchive = siardArchivesHandler.prepareEmpty();
+
+        // when
+        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
+                "-o",
+                "-j:" + db.getJdbcUrl(),
+                "-u:" + "testuser",
+                "-p:" + "testpassword",
+                "--schema:" + "TESTUSER",
+                "-s:" + actualArchive.getPathToArchiveFile()
+        });
+
+        // then
+        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+
+        val metadataExplorer = actualArchive.exploreMetadata();
+
+        assertThat(
+                metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
+                        .schemaId(Id.of("TESTUSER"))
+                        .tableId(Id.of("SIMPLE_TABLE"))
+                        .build()))
+                .isPresent();
+
+        assertThat(
+                metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
+                        .schemaId(Id.of("OTHERUSER"))
+                        .tableId(Id.of("SIMPLE_TABLE"))
+                        .build()))
                 .isNotPresent();
     }
 }
