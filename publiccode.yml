@@ -1,5 +1,5 @@
-publiccodeYmlVersion: 0.4.0
-name: SIARD Suite
+publiccodeYmlVersion: 0.5.0
+name: SIARD Suitedfsdfdsf
 url: https://github.com/sfa-siard/siard-suite
 landingURL: https://www.bar.admin.ch/bar/en/home/archiving/tools/siard-suite.html
 softwareVersion: "2.2"
@@ -15,6 +15,9 @@ categories:
   - data-collection
 developmentStatus: stable
 softwareType: standalone/desktop
+organisation:
+  uri: https://ld.admin.ch/office/II.1.4
+  name: Swiss Federal Archives
 description:
   en:
     localisedName: SIARD Suite
@@ -37,12 +40,12 @@ description:
 legal:
   license: CDDL-1.0
 maintenance:
-  contractors:
-    - name: "Puzzle ITC AG"
-      email: "info@puzzle.ch"
-      website: "https://www.puzzle.ch"
-      until: "2025-12-31"
   type: contract
+  contractors:
+    - name: Puzzle ITC AG
+      until: 2025-12-31
+      email: info@puzzle.ch
+      website: https://www.puzzle.ch
 localisation:
   localisationReady: true
   availableLanguages:
