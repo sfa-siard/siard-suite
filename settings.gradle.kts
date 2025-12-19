@@ -1,11 +1,13 @@
+import java.net.URI
+
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-rootProject.name = 'siard-suite'
+rootProject.name = "siard-suite"
 
-include 'siard-suite-app'
-include 'siardcmd'
+include("siard-suite-app")
+include("siardcmd")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/sfa-siard/Zip64File.git")) {
