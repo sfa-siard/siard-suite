@@ -96,8 +96,8 @@ task createVersionsPropertiesFile {
 
         file.withWriter { writer ->
             def properties = new Properties()
-            properties['SIARD-Version'] = siardVersion
-            properties['App-Version'] = "${project.version}"
+            properties['SIARD-Version'] = siardVersion.toString()
+            properties['App-Version'] = project.version.toString()
             properties.store(writer, null)
 
             logger.info("$file successfully generated (SIARD: $siardVersion, App: ${project.version})")
