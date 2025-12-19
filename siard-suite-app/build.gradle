@@ -1,0 +1,293 @@
+plugins {
+    id 'application'
+    id 'org.beryx.runtime' version '1.12.7'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'org.asciidoctor.jvm.pdf' version '3.3.2'
+    id 'io.freefair.lombok' version '6.5.0'
+    id 'com.cosminpolifronie.gradle.plantuml' version '1.6.0'
+}
+
+description = 'SIARD Suite Application'
+
+mainClassName = "ch.admin.bar.siardsuite.Launcher"
+applicationName = "SIARD-Suite"
+
+jar {
+    doFirst {
+        def manifestClasspath = configurations.compileClasspath.collect { it.getName() }.join(' ')
+        manifest {
+            attributes(
+                    'Implementation-Version': '1.0',
+                    'Main-Class': 'ch.admin.bar.siardsuite.SiardApplication',
+                    'Class-Path': manifestClasspath
+            )
+        }
+    }
+
+}
+
+dependencies {
+    implementation(project(':siardcmd'))
+
+    implementation("com.github.vatbub:mslinks:1.0.6.2")
+    implementation ("org.apache.tika:tika-core:2.9.1")
+
+    implementation ("org.glavo.materialfx:materialfx:11.13.5")
+    implementation ("ch.qos.logback:logback-classic:1.5.18")
+    implementation ("org.jetbrains:annotations:24.1.0") // used for @nullable annotation
+
+    String javaFxVersion = '17.0.7'
+
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'linux'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'linux'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'linux'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'linux'
+
+
+    testImplementation ("org.junit.jupiter:junit-jupiter:5.9.0")
+    testImplementation ("org.testfx:testfx-core:4.0.16-alpha")
+    testImplementation ("org.testfx:testfx-junit5:4.0.16-alpha")
+    testImplementation ("org.testfx:openjfx-monocle:jdk-12.0.1+2")
+    testImplementation ("org.mockito:mockito-core:2.1.0")
+
+    // jfxrt.jar seems not to be available on maven central
+    implementation(files("lib/jfxrt.jar"))
+}
+
+
+tasks.withType(JavaExec) {
+    jvmArgs(
+            "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+            "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang=ALL-UNNAMED"
+    )
+}
+
+runtime {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+
+    launcher {
+        noConsole = false
+        jvmArgs = [
+                "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+                "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+                "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
+                "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+                "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
+        ]
+    }
+
+    additive = true
+    modules = [
+            'java.logging',
+            'java.sql',
+            'java.management',
+            'java.naming',
+            'java.security.jgss',
+    ]
+
+    imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}.zip")
+
+    def currentOs = org.gradle.internal.os.OperatingSystem.current()
+    if (currentOs.windows) {
+        imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-win.zip")
+        imageDir = file("$buildDir/SIARD-Suite.${version}-win")
+    } else if (currentOs.linux) {
+        imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-linux.zip")
+        imageDir = file("$buildDir/SIARD-Suite.${version}-linux")
+    } else if (currentOs.macOsX) {
+        imageZip = file("$buildDir/image-zip/SIARD-Suite.${version}-mac.zip")
+        imageDir = file("$buildDir/SIARD-Suite.${version}-mac")
+    }
+
+    jpackage {
+        imageName = "SIARD-Suite"
+        installerName = "SIARD-Suite"
+        appVersion = version
+
+        skipInstaller = false
+
+        def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
+        imageOptions += ['--icon', "src/main/resources/ch/admin/bar/siardsuite/icons/archive_red.$imgType"]
+
+        installerOptions += ['--resource-dir', "src/main/resources"]
+        installerOptions += ['--vendor', 'BAR']
+        if (currentOs.windows) {
+            installerOptions += [
+                    '--win-per-user-install',
+                    '--win-dir-chooser',
+                    '--win-menu',
+                    '--win-menu-group', 'SIARD Suite', // otherwise, the folder will be named "unknown"
+                    '--win-shortcut'
+            ]
+        } else if (currentOs.linux) {
+            installerType = "deb"
+            installerOptions += ['--linux-package-name', 'siard-suite', '--linux-shortcut']
+        } else if (currentOs.macOsX) {
+            installerOptions += ['--mac-package-name', 'siard-suite']
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    // run tets in headless mode -for testFX
+    jvmArgs(
+            "-Djava.awt.headless=true",
+            "-Dtestfx.headless=true",
+            "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+            "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+            "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
+            "--add-opens=java.base/java.lang=ALL-UNNAMED"
+    )
+
+}
+
+
+application {
+    mainClass = mainClassName
+}
+
+processResources {
+    filesMatching ('**/version.properties') {
+        expand projectVersion: project.version
+    }
+}
+
+// create additional scripts for siardcmd...
+// see https://stackoverflow.com/a/62069262/1310321
+
+task siardFromDb(type: CreateStartScripts) {
+    applicationName = "siard-from-db"
+    mainClass = 'ch.admin.bar.siard2.cmd.SiardFromDb'
+    outputDir = file("build/scripts")
+    classpath = project.tasks.getAt(JavaPlugin.JAR_TASK_NAME).outputs.files.plus(project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME))
+    // I took this from ApplicationPlugin.java:129
+}
+
+task siardToDb(type: CreateStartScripts) {
+    applicationName = "siard-to-db"
+    mainClass = 'ch.admin.bar.siard2.cmd.SiardToDb'
+    outputDir = file("build/scripts")
+    classpath = project.tasks.getAt(JavaPlugin.JAR_TASK_NAME).outputs.files.plus(project.configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME))
+    // I took this from ApplicationPlugin.java:129
+}
+
+siardFromDb {
+    dependsOn(siardToDb)
+}
+
+distTar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    into("${applicationName}-${project.version}/licenses") {
+        from 'licenses'
+    }
+    dependsOn(siardFromDb)
+}
+
+distZip {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    into("${applicationName}-${project.version}/licenses") {
+        from 'licenses'
+    }
+    dependsOn(siardFromDb)
+}
+
+installDist {
+    dependsOn(siardFromDb)
+    dependsOn(siardToDb)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+asciidoctor {
+    languages 'en', 'de', 'fr', 'it'
+    baseDirFollowsSourceDir()
+
+    sourceDir 'docs/user-manual/'
+    outputDir file('build/docs')
+    sources {
+        include 'user-manual.adoc'
+    }
+}
+
+
+asciidoctorPdf {
+    languages 'en', 'de', 'fr', 'it'
+    baseDirFollowsSourceDir()
+
+    outputDir 'build/docs/pdf'
+    sourceDir 'docs/user-manual/'
+
+    pdfThemes {
+        local 'basic', {
+            themeDir = 'docs/theme'
+            themeName = 'siard-theme'
+        }
+    }
+
+    asciidoctorj {
+        attributes 'media': 'press',
+                'styles-dir': 'docs/theme',
+                'stylesheet':  'siard-theme.css',
+                'source-highlighter': 'coderay',
+                'imagesdir': 'images',
+                'toc': 'left'
+    }
+    dependsOn(asciidoctor)
+}
+
+
+tasks.register('copyDocumentation', Copy) {
+    from layout.buildDirectory.dir("docs/pdf")
+    into layout.projectDirectory.dir('./src/main/resources/ch/admin/bar/siardsuite/doc')
+}
+
+tasks.named("asciidoctorPdf") { finalizedBy(copyDocumentation)}
+
+tasks.named("build") {
+    dependsOn(asciidoctorPdf)
+}
+
+tasks.named("processResources") { dependsOn(copyDocumentation)}
+
+tasks.named('jpackageImage') {
+    dependsOn tasks.named('runtime')
+}
+
+tasks.withType(CreateStartScripts).configureEach {
+    doLast {
+        // inject your JVM args into the generated scripts
+        def jvmArgsLine = [
+                "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+                "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+                "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
+                "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
+                "--add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED",
+                "--add-opens=java.base/java.lang=ALL-UNNAMED"
+        ].join(" ")
+
+        // UNIX script
+        unixScript.text = unixScript.text.replace(
+                'DEFAULT_JVM_OPTS=""',
+                "DEFAULT_JVM_OPTS=\"$jvmArgsLine\""
+        )
+
+        // Windows script
+        windowsScript.text = windowsScript.text.replace(
+                'set DEFAULT_JVM_OPTS=',
+                "set DEFAULT_JVM_OPTS=$jvmArgsLine"
+        )
+    }
+}
