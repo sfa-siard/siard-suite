@@ -14,6 +14,7 @@ include("sql-parser")
 include("siard-api")
 include("jdbc-base")
 include("jdbc-postgres")
+include("jdbc-mysql")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcPostgres")) {
