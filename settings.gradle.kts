@@ -11,12 +11,9 @@ include("siardcmd")
 include("enter-utilities")
 include("zip64-file")
 include("sql-parser")
+include("siard-api")
 
 sourceControl {
-    gitRepository(URI.create("https://github.com/sfa-siard/SqlParser.git")) {
-        producesModule("ch.admin.bar:SqlParser")
-    }
-
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcPostgres")) {
         producesModule("ch.admin.bar:JdbcPostgres")
     }

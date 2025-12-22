@@ -42,8 +42,8 @@ dependencies {
     implementation("com.mysql:mysql-connector-j:8.3.0") // transitive dependency from lib/jdbcmysql.jar
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.9")
 
-    api("ch.admin.bar:siard-api:v2.2.136")
-    api("ch.admin.bar:SqlParser:v2.2.4")
+    api(project(":siard-api"))
+    api(project(":sql-parser"))
     api(project(":zip64-file"))
     api(project(":enter-utilities"))
     api("ch.admin.bar:jdbc-base:v2.2.11")
