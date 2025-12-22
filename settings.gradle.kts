@@ -13,6 +13,7 @@ include("zip64-file")
 include("sql-parser")
 include("siard-api")
 include("jdbc-base")
+include("jdbc-postgres")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcPostgres")) {
