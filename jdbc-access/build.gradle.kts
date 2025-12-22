@@ -4,31 +4,15 @@ import java.util.*
 plugins {
     `java-library`
     `java-test-fixtures`
-    id("pl.allegro.tech.build.axion-release") version "1.14.3"
     id("io.freefair.lombok") version "6.5.0"
 }
 
-group = "ch.admin.bar"
-version = scmVersion.version
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-val versions = mapOf(
-    "jdbc-base" to "v2.2.12",
-)
+description = "MS Access JDBC Wrapper"
 
 dependencies {
-    implementation("ch.admin.bar:enterutilities:v2.2.6")
-    implementation("ch.admin.bar:SqlParser:v2.2.5")
-    implementation("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}")
+    implementation(project(":enter-utilities"))
+    implementation(project(":sql-parser"))
+    implementation(project(":jdbc-base"))
 
     implementation("org.antlr:antlr4-runtime:4.5.2")
 
@@ -42,7 +26,7 @@ dependencies {
     testImplementation("org.junit.vintage:junit-vintage-engine")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
 
-    testImplementation(testFixtures("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}"))
+    testImplementation(testFixtures(project(":jdbc-base")))
 }
 
 tasks.test {

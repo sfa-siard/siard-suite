@@ -17,6 +17,7 @@ include("jdbc-postgres")
 include("jdbc-mysql")
 include("jdbc-mssql")
 include("jdbc-oracle")
+include("jdbc-access")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcPostgres")) {
