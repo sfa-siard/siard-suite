@@ -12,6 +12,7 @@ include("enter-utilities")
 include("zip64-file")
 include("sql-parser")
 include("siard-api")
+include("jdbc-base")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcPostgres")) {
@@ -26,16 +27,8 @@ sourceControl {
         producesModule("ch.admin.bar:jdbcmssql")
     }
 
-    gitRepository(URI.create("https://github.com/sfa-siard/SiardApi")) {
-        producesModule("ch.admin.bar:siard-api")
-    }
-
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcMySql")) {
         producesModule("ch.admin.bar:jdbc-mysql")
-    }
-
-    gitRepository(URI.create("https://github.com/sfa-siard/JdbcBase")) {
-        producesModule("ch.admin.bar:jdbc-base")
     }
 
     gitRepository(URI.create("https://github.com/sfa-siard/JdbcAccess")) {

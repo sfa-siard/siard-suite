@@ -46,7 +46,7 @@ dependencies {
     api(project(":sql-parser"))
     api(project(":zip64-file"))
     api(project(":enter-utilities"))
-    api("ch.admin.bar:jdbc-base:v2.2.11")
+    api(project(":jdbc-base"))
     api("ch.admin.bar:JdbcPostgres:v2.2.4")
     api("ch.admin.bar:jdbcoracle:v2.2.8")
     api("ch.admin.bar:jdbcmssql:v2.2.5")

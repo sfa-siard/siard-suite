@@ -5,29 +5,17 @@ plugins {
     `java-library`
     `java-test-fixtures`
     `maven-publish`
-    id("pl.allegro.tech.build.axion-release") version "1.14.3"
     id("io.freefair.lombok") version "6.5.0"
 }
 
-group = "ch.admin.bar"
-version = scmVersion.version
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-repositories {
-    mavenCentral()
-}
+description = "Base JDBC Wrapper"
 
 dependencies {
-    implementation("ch.admin.bar:enterutilities:v2.2.6")
-    implementation("ch.admin.bar:SqlParser:v2.2.5")
+    implementation(project(":enter-utilities"))
+    implementation(project(":sql-parser"))
 
-    testFixturesImplementation("ch.admin.bar:enterutilities:v2.2.6")
-    testFixturesImplementation("ch.admin.bar:SqlParser:v2.2.5")
+    testFixturesImplementation(project(":enter-utilities"))
+    testFixturesImplementation(project(":sql-parser"))
     testFixturesImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testFixturesImplementation("org.junit.vintage:junit-vintage-engine")
     testFixturesRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
