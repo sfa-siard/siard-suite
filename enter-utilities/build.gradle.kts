@@ -3,23 +3,10 @@ import java.util.*
 
 plugins {
     `java-library`
-    id("pl.allegro.tech.build.axion-release") version "1.20.1"
     id("io.freefair.lombok") version "8.14.2"
 }
 
-group = "ch.admin.bar"
-version = scmVersion.version
-
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-repositories {
-    mavenCentral()
-}
+description = "Enter Utilities"
 
 dependencies {
     implementation("org.apache.tika:tika-core:3.2.3")

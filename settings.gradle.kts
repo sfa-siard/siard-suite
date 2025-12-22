@@ -8,6 +8,7 @@ rootProject.name = "siard-suite"
 
 include("siard-suite-app")
 include("siardcmd")
+include("enter-utilities")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/sfa-siard/Zip64File.git")) {
