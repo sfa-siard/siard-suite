@@ -1,7 +1,7 @@
-# This workflow will build a Java project with Gradle, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# Parallel test execution for SIARD Suite monorepo
+# Each module runs tests independently for faster feedback
 
-name: Build project
+name: Test Suite
 
 on:
   push:
@@ -10,16 +10,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  # Compile all modules first for fast feedback
+  compile:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Set TAG-Env
-        run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -29,25 +26,171 @@ jobs:
           cache: "gradle"
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Show current application version
+      - name: Show version
         run: ./gradlew cV
-      - name: Execute Gradle build
-        run: ./gradlew build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
-      - name: Store reports
+      - name: Compile all modules
+        run: ./gradlew compileJava compileTestJava -x test
+
+  # Parallel test execution for modules using testcontainers
+  test-with-testcontainers:
+    needs: compile
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - enter-utilities
+          - zip64-file
+          - sql-parser
+          - siard-api
+          - jdbc-base
+          - jdbc-oracle
+          - jdbc-access
+          - jdbc-db2
+          - siard-cmd
+          - siard-suite-app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          java-package: "jdk+fx"
+          cache: "gradle"
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Test ${{ matrix.module }}
+        run: ./gradlew :${{ matrix.module }}:test -Djava.awt.headless=true -Dtestfx.headless=true
+      - name: Upload test reports
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: reports
-          path: |
-            **/build/reports/
-            **/build/test-results/
-      - name: upload zip archive
+          name: test-reports-${{ matrix.module }}
+          path: ${{ matrix.module }}/build/reports/tests/
+
+  # jdbc-postgres uses GitHub Actions service container
+  test-jdbc-postgres:
+    needs: compile
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: "gradle"
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Test jdbc-postgres
+        run: ./gradlew :jdbc-postgres:test
+      - name: Upload test reports
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: siard-suite-snapshot
-          path: build/distributions/SIARD-Suite-*.zip
-      - name: upload user-manual.pdf
+          name: test-reports-jdbc-postgres
+          path: jdbc-postgres/build/reports/tests/
+
+  # jdbc-mssql uses docker-compose with custom Dockerfile
+  test-jdbc-mssql:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: "gradle"
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Start MS SQL Server with docker-compose
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: "-f jdbc-mssql/docker-compose.yml up -d --build"
+      - name: Wait for MS SQL Server to be ready
+        run: sleep 30s
+        shell: bash
+      - name: Check docker-compose logs
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: "-f jdbc-mssql/docker-compose.yml logs"
+      - name: Test jdbc-mssql
+        run: ./gradlew :jdbc-mssql:test
+      - name: Upload test reports
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: user-manual
-          path: build/docs/pdf/en/user-manual.pdf
+          name: test-reports-jdbc-mssql
+          path: jdbc-mssql/build/reports/tests/
+      - name: Cleanup docker-compose
+        if: always()
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: "-f jdbc-mssql/docker-compose.yml down"
+
+  # jdbc-mysql uses docker-compose
+  test-jdbc-mysql:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: "gradle"
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Start MySQL with docker-compose
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: "-f jdbc-mysql/docker-compose.yml up -d --build"
+      - name: Wait for MySQL to be ready
+        run: sleep 20s
+        shell: bash
+      - name: Check docker-compose logs
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: "-f jdbc-mysql/docker-compose.yml logs"
+      - name: Verify MySQL connection
+        run: |
+          mysql --host 127.0.0.1 --port 3306 -uroot -prootpwd -e "SHOW DATABASES"
+      - name: Test jdbc-mysql
+        run: ./gradlew :jdbc-mysql:test
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-jdbc-mysql
+          path: jdbc-mysql/build/reports/tests/
+      - name: Cleanup docker-compose
+        if: always()
+        uses: sudo-bot/action-docker-compose@latest
+        with:
+          cli-args: "-f jdbc-mysql/docker-compose.yml down"
