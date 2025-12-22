@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:18.4.0
+    container_name: oracledb
+    environment:
+      ORACLE_PASSWORD: SYSTEM
+      APP_USER: TESTUSER
+      APP_USER_PASSWORD: testpwd
+    volumes:
+      - ./docker/setup:/container-entrypoint-initdb.d
+    ports:
+      - 1521:1521
+volumes:
+  ora-data:

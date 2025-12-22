@@ -1,0 +1,27 @@
+Release Notes for JdbcOracle 2.1
+================================
+
+2.1.65
+Corrected upload of large arrays.
+
+2.1.63
+Corrected type mapping of NUMBER without precision and scale.
+
+2.1.57
+Corrected handling of DATE data type.
+
+2.1.47
+Added conversion from ANYDATA to Clob.
+
+2.1.41
+Corrected handling of QUERY_TEXT in getTables.
+
+2.1.0
+Release for JAVA 10.
+
+2.0.38
+.gitattributes added.
+OracleArray changed to lazy evaluation (no array type creation, when just reading the database).
+
+2.0.33
+First release of JdbcOracle on GitHub.
