@@ -4,28 +4,16 @@ import java.util.*
 plugins {
     `java-library`
     id("antlr")
-    id("pl.allegro.tech.build.axion-release") version "1.14.3"
 }
 
-group = "ch.admin.bar"
-version = scmVersion.version
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-repositories {
-    mavenCentral()
-}
+description = "SQL Parser"
 
 dependencies {
     antlr("org.antlr:antlr4:4.5.2-1")
     antlr("org.antlr:antlr4-runtime:4.5.2-1")
     antlr("org.antlr:antlr4-master:4.5.2-1")
     implementation("com.microsoft.sqlserver:mssql-jdbc:12.2.0.jre8")
-    implementation("ch.admin.bar:enterutilities:v2.2.6")
+    implementation(project(":enter-utilities"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testImplementation("org.junit.vintage:junit-vintage-engine")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")

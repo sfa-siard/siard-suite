@@ -10,6 +10,7 @@ include("siard-suite-app")
 include("siardcmd")
 include("enter-utilities")
 include("zip64-file")
+include("sql-parser")
 
 sourceControl {
     gitRepository(URI.create("https://github.com/sfa-siard/SqlParser.git")) {
