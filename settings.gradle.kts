@@ -7,7 +7,7 @@ plugins {
 rootProject.name = "siard-suite"
 
 include("siard-suite-app")
-include("siardcmd")
+include("siard-cmd")
 include("enter-utilities")
 include("zip64-file")
 include("sql-parser")

@@ -32,7 +32,7 @@ tasks.jar {
 }
 
 dependencies {
-    implementation(project(":siardcmd"))
+    implementation(project(":siard-cmd"))
 
     implementation("com.github.vatbub:mslinks:1.0.6.2")
     implementation("org.apache.tika:tika-core:2.9.1")
