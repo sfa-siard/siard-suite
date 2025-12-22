@@ -18,29 +18,4 @@ include("jdbc-mysql")
 include("jdbc-mssql")
 include("jdbc-oracle")
 include("jdbc-access")
-
-sourceControl {
-    gitRepository(URI.create("https://github.com/sfa-siard/JdbcPostgres")) {
-        producesModule("ch.admin.bar:JdbcPostgres")
-    }
-
-    gitRepository(URI.create("https://github.com/sfa-siard/JdbcOracle")) {
-        producesModule("ch.admin.bar:jdbcoracle")
-    }
-
-    gitRepository(URI.create("https://github.com/sfa-siard/JdbcMsSql")) {
-        producesModule("ch.admin.bar:jdbcmssql")
-    }
-
-    gitRepository(URI.create("https://github.com/sfa-siard/JdbcMySql")) {
-        producesModule("ch.admin.bar:jdbc-mysql")
-    }
-
-    gitRepository(URI.create("https://github.com/sfa-siard/JdbcAccess")) {
-        producesModule("ch.admin.bar:jdbc-access")
-    }
-
-    gitRepository(URI.create("https://github.com/sfa-siard/JdbcDb2")) {
-        producesModule("ch.admin.bar:jdbc-db2")
-    }
-}
+include("jdbc-db2")
