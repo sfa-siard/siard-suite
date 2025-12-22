@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Created-By: Hartwig Thomas, Enter AG, Rüti ZH, Switzerland; Puzzle ITC GmbH, Switzerland
+Specification-Title: JDBC MSSQL
+Specification-Version: 4
+Specification-Vendor: Enter AG, Rüti ZH, Switzerland; Puzzle ITC GmbH, Switzerland
+Implementation-Title: Microsoft SQL Server JDBC Wrapper
+Implementation-Version: 2.2.2
+Implementation-Vendor: Enter AG, Rüti ZH, Switzerland; Puzzle ITC GmbH, Switzerland
+Built-Date: 29. Aug 2023
+Class-Path: sqljdbc41.jar
+  jdbcbase.jar
+  sqlparser.jar
+  enterutils.jar
+  antlr-runtime-4.5.2.jar
