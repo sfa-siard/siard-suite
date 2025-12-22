@@ -3,25 +3,12 @@ import java.util.Date
 
 plugins {
     `java-library`
-    id("pl.allegro.tech.build.axion-release") version "1.14.3"
     id("io.freefair.lombok") version "6.5.0"
 }
 
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
-group = "ch.admin.bar"
-version = scmVersion.version
-val versions = mapOf(
-    "jdbc-base" to "v2.2.12",
-)
+description = "Oracle JDBC Wrapper"
 
 repositories {
-    mavenCentral()
     flatDir {
         dirs("lib")
     }
@@ -29,11 +16,11 @@ repositories {
 
 dependencies {
     implementation("org.antlr:antlr4-runtime:4.5.2")
-    implementation("ch.admin.bar:enterutilities:v2.2.6")
-    implementation("ch.admin.bar:SqlParser:v2.2.5")
+    implementation(project(":enter-utilities"))
+    implementation(project(":sql-parser"))
     implementation("com.oracle.ojdbc:xdb:19.3.0.0")
     implementation("com.oracle.ojdbc:xmlparserv2:19.3.0.0")
-    implementation("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}")
+    implementation(project(":jdbc-base"))
     implementation(fileTree("lib") { include("*.jar") })
 
     // test dependencies
@@ -44,7 +31,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     testImplementation("org.testcontainers:testcontainers:1.19.0")
     testImplementation("org.testcontainers:oracle-xe:1.19.0")
-    testImplementation(testFixtures("ch.admin.bar:jdbc-base:${versions["jdbc-base"]}"))
+    testImplementation(testFixtures(project(":jdbc-base")))
 }
 
 tasks.test {
