@@ -1,0 +1,17 @@
+Release Notes for JdbcMySql 2.1
+===============================
+
+2.1.38
+Corrected handling of QUERY_TEXT in getTables
+
+2.1.32
+Bugfixes (upload large VARCHAR columns)
+
+2.1.0
+Release for JAVA 10
+
+2.0.28
+.gitattributes added.
+
+2.0.24
+First release of JdbcMySql on GitHub.

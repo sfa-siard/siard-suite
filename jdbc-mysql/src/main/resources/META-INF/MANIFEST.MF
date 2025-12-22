@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Created-By: Simon Jutz, Cytex Media Solutions GmbH, Zurich, Switzerland
+Specification-Title: JDBC 
+Specification-Version: 4
+Specification-Vendor: Enter AG, Rüti ZH, Switzerland
+Implementation-Title: MySql JDBC Wrapper
+Implementation-Version: 2.2.1
+Implementation-Vendor: Enter AG, Rüti ZH, Switzerland
+Built-Date: 25. Nov 2022
+Class-Path: mysql-connector-java-8.0.18.jar
+  jts-1.13.jar
+  jdbcbase.jar
+  sqlparser.jar
+  enterutils.jar
+  antlr-runtime-4.5.2.jar
