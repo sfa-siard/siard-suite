@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Created-By: Puzzle ITC GmbH, Switzerland
+Specification-Title: SIARD API
+Specification-Version: 2.2
+Specification-Vendor: Swiss Federal Archives, Berne, Switzerland
+Implementation-Title: SIARD API
+Implementation-Version: 2.2.124
+Implementation-Vendor: Swiss Federal Archives, Berne, Switzerland
+Built-Date: 24. Apr 2024
+Class-Path: zip64.jar
+  activation-1.1.1.jar
+  jaxb-api.jar
+  jaxb-core.jar
+  jaxb-impl.jar
+  msv-core-2010.2.jar
+  stax2-api-3.1.1.jar
+  woodstox-core-lgpl-4.1.2.jar
+  woodstox-msv-mg-datatype-20020414.jar
+  xsdlib-2010.1.jar
+  enterutils.jar

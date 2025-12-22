@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<xs:schema xmlns="http://www.bar.admin.ch/xmlns/siard/2/table.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.bar.admin.ch/xmlns/siard/2/table.xsd" version="2.2">
+
+    <!-- root element is the table element -->
+    <xs:element name="table">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    Root element of a table of the SIARD archive.
+                    A table consists of rows.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="row" type="recordType"/>
+            </xs:sequence>
+            <xs:attribute name="version" type="versionType" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- complex type record -->
+    <xs:complexType name="recordType">
+        <xs:annotation>
+            <xs:documentation>
+                row type of a table of the SIARD archive.
+                A row consists of columns.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+      <xs:element name="c1" type="xs:string"/>
+      <xs:element minOccurs="0" name="c2" type="xs:string"/>
+      <xs:element minOccurs="0" name="c3" type="clobType"/>
+      <xs:element minOccurs="0" name="c4" type="xs:string"/>
+      <xs:element minOccurs="0" name="c5" type="xs:string"/>
+      <xs:element minOccurs="0" name="c6" type="clobType"/>
+      <xs:element minOccurs="0" name="c7" type="clobType"/>
+      <xs:element minOccurs="0" name="c8" type="xs:hexBinary"/>
+      <xs:element minOccurs="0" name="c9" type="xs:hexBinary"/>
+      <xs:element minOccurs="0" name="c10" type="blobType"/>
+      <xs:element minOccurs="0" name="c11" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="c12" type="xs:decimal"/>
+      <xs:element minOccurs="0" name="c13" type="xs:integer"/>
+      <xs:element minOccurs="0" name="c14" type="xs:integer"/>
+      <xs:element minOccurs="0" name="c15" type="xs:integer"/>
+      <xs:element minOccurs="0" name="c16" type="xs:double"/>
+      <xs:element minOccurs="0" name="c17" type="xs:float"/>
+      <xs:element minOccurs="0" name="c18" type="xs:double"/>
+      <xs:element minOccurs="0" name="c19" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="c20" type="dateType"/>
+      <xs:element minOccurs="0" name="c21" type="timeType"/>
+      <xs:element minOccurs="0" name="c22" type="dateTimeType"/>
+      <xs:element minOccurs="0" name="c23" type="xs:duration"/>
+      <xs:element minOccurs="0" name="c24" type="xs:duration"/>
+      <xs:element minOccurs="0" name="c25" type="xs:duration"/>
+      <xs:element minOccurs="0" name="c26" type="xs:string"/>
+    </xs:sequence>
+    </xs:complexType>
+
+    <!-- type for text large objects -->
+    <xs:complexType name="clobType">
+        <xs:annotation>
+            <xs:documentation>a text large object stored separately (addressed by URI). The digest makes sure, the
+                connection to the object is not completely lost. The length is in characters, not in bytes.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="file" type="xs:anyURI"/>
+                <xs:attribute name="length" type="xs:integer"/>
+                <xs:attribute name="digestType" type="digestTypeType"/>
+                <xs:attribute name="digest" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- type for binary large objects -->
+    <xs:complexType name="blobType">
+        <xs:annotation>
+            <xs:documentation>a binary large object stored separately (addressed by URI). The digest makes sure, the
+                connection to the external object is not completely lost. The length is in bytes.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:hexBinary">
+                <xs:attribute name="file" type="xs:anyURI"/>
+                <xs:attribute name="length" type="xs:integer"/>
+                <xs:attribute name="digestType" type="digestTypeType"/>
+                <xs:attribute name="digest" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!--  type for message digest type -->
+    <xs:simpleType name="digestTypeType">
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:enumeration value="MD5"/>
+            <xs:enumeration value="SHA-1"/>
+            <xs:enumeration value="SHA-256"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- date type between 0001 and 9999 restricted to UTC -->
+    <xs:simpleType name="dateType">
+        <xs:restriction base="xs:date">
+            <xs:minInclusive value="0001-01-01Z"/>
+            <xs:maxExclusive value="10000-01-01Z"/>
+            <xs:pattern value="\d{4}-\d{2}-\d{2}Z?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- time type restricted to UTC -->
+    <xs:simpleType name="timeType">
+        <xs:restriction base="xs:time">
+            <xs:pattern value="\d{2}:\d{2}:\d{2}(\.\d+)?Z?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- dateTime type between 0001 and 9999 restricted to UTC -->
+    <xs:simpleType name="dateTimeType">
+        <xs:restriction base="xs:dateTime">
+            <xs:minInclusive value="0001-01-01T00:00:00.000000000Z"/>
+            <xs:maxExclusive value="10000-01-01T00:00:00.000000000Z"/>
+            <xs:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- simple type for version number -->
+    <xs:simpleType name="versionType">
+        <xs:annotation>
+            <xs:documentation>
+                versionType is constrained to "2.2"
+                for conformity with this XML schema
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:enumeration value="2.2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

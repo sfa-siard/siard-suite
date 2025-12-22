@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns="http://www.bar.admin.ch/xmlns/siard/2/table.xsd"
+        targetNamespace="http://www.bar.admin.ch/xmlns/siard/2/table.xsd"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="2.2">
+
+    <!-- root element is the table element -->
+    <xs:element name="table">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    Root element of a table of the SIARD archive.
+                    A table consists of rows.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="row" type="recordType"/>
+            </xs:sequence>
+            <xs:attribute name="version" type="versionType" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- complex type record -->
+    <xs:complexType name="recordType">
+        <xs:annotation>
+            <xs:documentation>
+                row type of a table of the SIARD archive.
+                A row consists of columns.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- type for text large objects -->
+    <xs:complexType name="clobType">
+        <xs:annotation>
+            <xs:documentation>a text large object stored separately (addressed by URI). The digest makes sure, the
+                connection to the object is not completely lost. The length is in characters, not in bytes.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="file" type="xs:anyURI"/>
+                <xs:attribute name="length" type="xs:integer"/>
+                <xs:attribute name="digestType" type="digestTypeType"/>
+                <xs:attribute name="digest" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- type for binary large objects -->
+    <xs:complexType name="blobType">
+        <xs:annotation>
+            <xs:documentation>a binary large object stored separately (addressed by URI). The digest makes sure, the
+                connection to the external object is not completely lost. The length is in bytes.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:hexBinary">
+                <xs:attribute name="file" type="xs:anyURI"/>
+                <xs:attribute name="length" type="xs:integer"/>
+                <xs:attribute name="digestType" type="digestTypeType"/>
+                <xs:attribute name="digest" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!--  type for message digest type -->
+    <xs:simpleType name="digestTypeType">
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:enumeration value="MD5"/>
+            <xs:enumeration value="SHA-1"/>
+            <xs:enumeration value="SHA-256"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- date type between 0001 and 9999 restricted to UTC -->
+    <xs:simpleType name="dateType">
+        <xs:restriction base="xs:date">
+            <xs:minInclusive value="0001-01-01Z"/>
+            <xs:maxExclusive value="10000-01-01Z"/>
+            <xs:pattern value="\d{4}-\d{2}-\d{2}Z?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- time type restricted to UTC -->
+    <xs:simpleType name="timeType">
+        <xs:restriction base="xs:time">
+            <xs:pattern value="\d{2}:\d{2}:\d{2}(\.\d+)?Z?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- dateTime type between 0001 and 9999 restricted to UTC -->
+    <xs:simpleType name="dateTimeType">
+        <xs:restriction base="xs:dateTime">
+            <xs:minInclusive value="0001-01-01T00:00:00.000000000Z"/>
+            <xs:maxExclusive value="10000-01-01T00:00:00.000000000Z"/>
+            <xs:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- simple type for version number -->
+    <xs:simpleType name="versionType">
+        <xs:annotation>
+            <xs:documentation>
+                versionType is constrained to "2.2"
+                for conformity with this XML schema
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:enumeration value="2.2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

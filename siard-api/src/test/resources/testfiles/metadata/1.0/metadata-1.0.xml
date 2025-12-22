@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<siardArchive xmlns="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0"
+              xsi:schemaLocation="http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd">
+    <dbname>SIARD 1.0 MetaData</dbname>
+    <dataOwner>Puzzle ITC GmbH, Switzerland</dataOwner>
+    <dataOriginTimespan>2022-05-11</dataOriginTimespan>
+    <archivalDate>2022-05-11</archivalDate>
+    <messageDigest></messageDigest>
+    <clientMachine></clientMachine>
+    <databaseUser></databaseUser>
+    <schemas>
+        <schema>
+            <name>test-schema</name>
+            <folder>test</folder>
+            <tables>
+                <table>
+                    <name>table-1</name>
+                    <folder>table-1</folder>
+                    <columns>
+                        <column>
+                            <name>column 1</name>
+                            <type>INT</type>
+                            <nullable>true</nullable>
+                        </column>
+                    </columns>
+                    <rows>0</rows>
+                </table>
+            </tables>
+        </schema>
+    </schemas>
+    <users>
+        <user>
+            <name>test-user</name>
+        </user>
+    </users>
+</siardArchive>

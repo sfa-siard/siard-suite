@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>TCOMPLEX</title>
+  <meta charset="utf-8">
+ </head>
+ <body>
+  <p>TCOMPLEX</p>
+  <p>Sample table with DISTINCT, ROW, ARRAY and UDT types and recursion</p>
+  <table>
+   <tbody>
+    <tr>
+     <th>CID</th>
+     <th>CDISTINCT</th>
+     <th>CUDTS</th>
+     <th>CARRAY</th>
+     <th>CUDTC</th>
+    </tr>
+    <tr>
+     <td>1234567890</td>
+     <td>987654321</td>
+     <td>
+      <dl>
+       <dt>TABLEID</dt>
+       <dd>12345</dd>
+       <dt>TRANSCRIPTION</dt>
+       <dd>
+        <a href="content/schema0/table1/lob2/field1/record0.txt">content/schema0/table1/lob2/field1/record0.txt</a>
+       </dd>
+       <dt>SOUND</dt>
+       <dd>
+        <a href="content/schema0/table1/lob2/field2/record0.bin">content/schema0/table1/lob2/field2/record0.bin</a>
+       </dd>
+       <dt>FILE</dt>
+       <dd>
+        <a href="content/schema0/table1/lob2/field3/record0.bin">content/schema0/table1/lob2/field3/record0.bin</a>
+       </dd>
+      </dl>
+     </td>
+     <td>
+      <ol>
+       <li>element 0,1</li>
+       <li></li>
+       <li>element 0,3</li>
+       <li>element 0,4</li>
+      </ol>
+     </td>
+     <td>
+      <dl>
+       <dt>ID</dt>
+       <dd>-15</dd>
+       <dt>NESTEDROW</dt>
+       <dd>
+        <dl>
+         <dt>TABLEID</dt>
+         <dd>-12345</dd>
+         <dt>TRANSCRIPTION</dt>
+         <dd>
+          <a href="content/schema0/table1/lob4/field1/field1/record0.txt">content/schema0/table1/lob4/field1/field1/record0.txt</a>
+         </dd>
+         <dt>SOUND</dt>
+         <dd>
+          <a href="content/schema0/table1/lob4/field1/field2/record0.bin">content/schema0/table1/lob4/field1/field2/record0.bin</a>
+         </dd>
+         <dt>FILE</dt>
+         <dd>
+          <a href="content/schema0/table1/lob4/field1/field3/record0.bin">content/schema0/table1/lob4/field1/field3/record0.bin</a>
+         </dd>
+        </dl>
+       </dd>
+      </dl>
+     </td>
+    </tr>
+    <tr>
+     <td>1987654321</td>
+     <td></td>
+     <td>
+      <dl>
+       <dt>TABLEID</dt>
+       <dd>4321</dd>
+       <dt>TRANSCRIPTION</dt>
+       <dd></dd>
+       <dt>SOUND</dt>
+       <dd>
+        <a href="content/schema0/table1/lob2/field2/record1.bin">content/schema0/table1/lob2/field2/record1.bin</a>
+       </dd>
+       <dt>FILE</dt>
+       <dd></dd>
+      </dl>
+     </td>
+     <td>
+      <ol>
+       <li>element 1,1</li>
+       <li>element 1,2</li>
+       <li>element 1,3</li>
+       <li>element 1,4</li>
+      </ol>
+     </td>
+     <td>
+      <dl>
+       <dt>ID</dt>
+       <dd>0</dd>
+       <dt>NESTEDROW</dt>
+       <dd>
+        <dl>
+         <dt>TABLEID</dt>
+         <dd>12345</dd>
+         <dt>TRANSCRIPTION</dt>
+         <dd></dd>
+         <dt>SOUND</dt>
+         <dd>
+          <a href="content/schema0/table1/lob4/field1/field2/record1.bin">content/schema0/table1/lob4/field1/field2/record1.bin</a>
+         </dd>
+         <dt>FILE</dt>
+         <dd></dd>
+        </dl>
+       </dd>
+      </dl>
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </body>
+</html>
