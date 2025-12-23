@@ -26,8 +26,8 @@ dependencies {
     testImplementation(testFixtures(project(":jdbc-base")))
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
-    testImplementation("org.testcontainers:junit-jupiter:1.20.1")
-    testImplementation("org.testcontainers:db2:1.21.3")
+    testImplementation("org.testcontainers:junit-jupiter:1.21.4")
+    testImplementation("org.testcontainers:db2:1.21.4")
 }
 
 tasks.test {

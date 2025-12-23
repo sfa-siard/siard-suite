@@ -61,14 +61,14 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.19.0")
 
     // testcontainers
-    testImplementation("org.testcontainers:testcontainers:1.19.0")
-    testImplementation("org.testcontainers:mssqlserver:1.19.0")
-    testImplementation("org.testcontainers:postgresql:1.19.0")
-    testImplementation("org.testcontainers:mysql:1.19.0")
-    testImplementation("org.testcontainers:mariadb:1.19.6")
+    testImplementation("org.testcontainers:testcontainers:1.21.4")
+    testImplementation("org.testcontainers:mssqlserver:1.21.4")
+    testImplementation("org.testcontainers:postgresql:1.21.4")
+    testImplementation("org.testcontainers:mysql:1.21.4")
+    testImplementation("org.testcontainers:mariadb:1.21.4")
     testImplementation("org.mariadb.jdbc:mariadb-java-client:2.7.4") // Used by mariadb testcontainer
-    testImplementation("org.testcontainers:oracle-xe:1.19.0")
-    testImplementation("org.testcontainers:db2:1.19.0")
+    testImplementation("org.testcontainers:oracle-xe:1.21.4")
+    testImplementation("org.testcontainers:db2:1.21.4")
 
     testImplementation(platform("org.junit:junit-bom:5.13.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

@@ -29,8 +29,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testImplementation("org.junit.vintage:junit-vintage-engine")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-    testImplementation("org.testcontainers:testcontainers:1.19.0")
-    testImplementation("org.testcontainers:oracle-xe:1.19.0")
+    testImplementation("org.testcontainers:testcontainers:1.21.4")
+    testImplementation("org.testcontainers:oracle-xe:1.21.4")
     testImplementation(testFixtures(project(":jdbc-base")))
 }
 
