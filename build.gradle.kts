@@ -21,20 +21,6 @@ subprojects {
         }
     }
     
-    // Standardize testcontainers version across all modules
-    configurations.all {
-        resolutionStrategy {
-            force("org.testcontainers:testcontainers:1.20.4")
-            force("org.testcontainers:mssqlserver:1.20.4")
-            force("org.testcontainers:postgresql:1.20.4")
-            force("org.testcontainers:mysql:1.20.4")
-            force("org.testcontainers:mariadb:1.20.4")
-            force("org.testcontainers:oracle-xe:1.20.4")
-            force("org.testcontainers:db2:1.20.4")
-            force("org.testcontainers:junit-jupiter:1.20.4")
-        }
-    }
-    
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
     }
