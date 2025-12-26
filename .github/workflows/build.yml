@@ -1,6 +1,3 @@
-# Parallel test execution for SIARD Suite monorepo
-# Each module runs tests independently for faster feedback
-
 name: Test Suite
 
 on:
@@ -13,7 +10,6 @@ env:
   TZ: Europe/Zurich
 
 jobs:
-  # Compile all modules first for fast feedback
   compile:
     runs-on: ubuntu-latest
     steps:
@@ -34,8 +30,7 @@ jobs:
       - name: Compile all modules
         run: ./gradlew compileJava compileTestJava -x test
 
-  # Parallel test execution for modules using testcontainers
-  test-with-testcontainers:
+  unit-tests:
     needs: compile
     runs-on: ubuntu-latest
     strategy:
