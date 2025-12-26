@@ -28,6 +28,7 @@ public class MultipleSchemasIT {
 
     @Rule
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
+            .withSharedMemorySize(1024 * 1024 * 1024L)
             .withLogConsumer(new ConsoleLogConsumer())
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.MULTPLE_SCHEMAS)

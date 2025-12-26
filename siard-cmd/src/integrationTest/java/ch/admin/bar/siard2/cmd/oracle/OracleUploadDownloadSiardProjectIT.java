@@ -27,6 +27,7 @@ public class OracleUploadDownloadSiardProjectIT {
     @Rule
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withLogConsumer(new ConsoleLogConsumer())
+            .withSharedMemorySize(1024 * 1024 * 1024L)
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES).toPath()),
                     "/container-entrypoint-initdb.d/00_create_user.sql");
