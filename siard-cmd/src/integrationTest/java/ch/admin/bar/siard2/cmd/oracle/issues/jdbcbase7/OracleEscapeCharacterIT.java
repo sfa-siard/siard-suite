@@ -23,8 +23,6 @@ public class OracleEscapeCharacterIT {
 
     @Rule
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
-            .withSharedMemorySize(1024 * 1024 * 1024L) // 1GB required for Oracle XE in CI
-            .withLogConsumer(new ConsoleLogConsumer())
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.JDBCBASE_7).toPath()),
                     "/container-entrypoint-initdb.d/jdbcbase7.sql");

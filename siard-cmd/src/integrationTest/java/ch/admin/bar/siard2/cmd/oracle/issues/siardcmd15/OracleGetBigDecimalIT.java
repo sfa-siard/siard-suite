@@ -23,16 +23,12 @@ public class OracleGetBigDecimalIT {
 
     @Rule
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
-            .withLogConsumer(new ConsoleLogConsumer())
-            .withSharedMemorySize(1024 * 1024 * 1024L)
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDCMD_15).toPath()),
                     "/container-entrypoint-initdb.d/siardcmd15.sql");
 
     @Rule
     public final OracleContainer uploadDb = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
-            .withLogConsumer(new ConsoleLogConsumer())
-            .withSharedMemorySize(1024 * 1024 * 1024L)
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDCMD_15).toPath()),
                     "/container-entrypoint-initdb.d/siardcmd15.sql");
