@@ -12,6 +12,27 @@ env:
 jobs:
   execute-unit-and-integration-tests:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database:
+          - name: postgres
+            task: integrationTestPostgres
+          - name: mysql
+            task: integrationTestMysql
+          - name: mariadb
+            task: integrationTestMariadb
+          - name: mssql
+            task: integrationTestMssql
+          - name: oracle
+            task: integrationTestOracle
+          - name: db2
+            task: integrationTestDb2
+          - name: msaccess
+            task: integrationTestMsaccess
+          - name: utils
+            task: integrationTestUtils
+    name: Integration Tests (${{ matrix.database.name }})
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,8 +57,8 @@ jobs:
           sudo docker image prune -a -f
           echo "Disk space after cleanup:"
           df -h
-      - name: Run integration tests
-        run: ./gradlew :siard-cmd:integrationTest
+      - name: Run ${{ matrix.database.name }} integration tests
+        run: ./gradlew :siard-cmd:${{ matrix.database.task }}
       - name: Dump Docker logs on failure
         if: failure()
         run: |
@@ -49,7 +70,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: integration-test-reports
+          name: integration-test-reports-${{ matrix.database.name }}
           path: |
             siard-cmd/build/reports/
             siard-cmd/build/test-results/

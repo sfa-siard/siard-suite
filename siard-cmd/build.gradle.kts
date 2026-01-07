@@ -87,20 +87,64 @@ tasks.withType<Test> {
     )
 }
 
+// Helper function to create database-specific integration test tasks
+fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskProvider<Test> {
+    return tasks.register<Test>("integrationTest${dbName.capitalize()}") {
+        description = "Runs the $dbName integration tests"
+        group = "verification"
+        testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+        classpath = sourceSets["integrationTest"].runtimeClasspath
+        mustRunAfter(tasks["test"])
+        useJUnitPlatform {
+            includeEngines("junit-jupiter", "junit-vintage")
+        }
+        
+        filter {
+            includeTestsMatching("ch.admin.bar.siard2.cmd.$packagePattern.*")
+        }
+        
+        maxParallelForks = 2
+        
+        testLogging {
+            events("passed", "skipped", "failed")
+            showStandardStreams = true
+        }
+        
+        // Clean up Docker resources after each test class to prevent disk space exhaustion
+        afterTest(KotlinClosure2<TestDescriptor, TestResult, Unit>({ descriptor, result ->
+            if (descriptor.parent == null) {
+                try {
+                    exec {
+                        commandLine("docker", "container", "prune", "-f")
+                        isIgnoreExitValue = true
+                    }
+                } catch (e: Exception) {
+                    logger.warn("Failed to clean up Docker containers: ${e.message}")
+                }
+            }
+        }))
+    }
+}
+
+// Create database-specific test tasks
+val integrationTestPostgres = createDbIntegrationTestTask("postgres", "postgres")
+val integrationTestMysql = createDbIntegrationTestTask("mysql", "mysql")
+val integrationTestMariadb = createDbIntegrationTestTask("mariadb", "mariadb")
+val integrationTestMssql = createDbIntegrationTestTask("mssql", "mssql")
+val integrationTestOracle = createDbIntegrationTestTask("oracle", "oracle")
+val integrationTestDb2 = createDbIntegrationTestTask("db2", "db2")
+val integrationTestMsaccess = createDbIntegrationTestTask("msaccess", "msaccess")
+val integrationTestUtils = createDbIntegrationTestTask("utils", "utils")
+
 task<Test>("integrationTest") {
-    description = "Runs the integration tests"
+    description = "Runs all integration tests"
     group = "verification"
     testClassesDirs = sourceSets["integrationTest"].output.classesDirs
     classpath = sourceSets["integrationTest"].runtimeClasspath
     mustRunAfter(tasks["test"])
     useJUnitPlatform()
     
-    // Run tests sequentially to avoid resource exhaustion with multiple Oracle containers
     maxParallelForks = 2
-    
-    // Increase memory for tests with heavy containers
-    minHeapSize = "512m"
-    maxHeapSize = "2048m"
     
     testLogging {
         events("passed", "skipped", "failed")
@@ -109,7 +153,7 @@ task<Test>("integrationTest") {
     
     // Clean up Docker resources after each test class to prevent disk space exhaustion
     afterTest(KotlinClosure2<TestDescriptor, TestResult, Unit>({ descriptor, result ->
-        if (descriptor.parent == null) { // Only for test classes, not individual test methods
+        if (descriptor.parent == null) {
             try {
                 exec {
                     commandLine("docker", "container", "prune", "-f")
@@ -120,6 +164,23 @@ task<Test>("integrationTest") {
             }
         }
     }))
+    
+    // Depend on all database-specific test tasks
+    dependsOn(
+        integrationTestPostgres,
+        integrationTestMysql,
+        integrationTestMariadb,
+        integrationTestMssql,
+        integrationTestOracle,
+        integrationTestDb2,
+        integrationTestMsaccess,
+        integrationTestUtils
+    )
+    
+    // Don't run tests directly, just aggregate results
+    filter {
+        excludeTestsMatching("*")
+    }
 }
 
 tasks.test {
