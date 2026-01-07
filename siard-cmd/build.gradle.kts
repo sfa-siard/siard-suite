@@ -96,7 +96,7 @@ task<Test>("integrationTest") {
     useJUnitPlatform()
     
     // Run tests sequentially to avoid resource exhaustion with multiple Oracle containers
-    // maxParallelForks = 1
+    maxParallelForks = 2
     
     // Increase memory for tests with heavy containers
     minHeapSize = "512m"
