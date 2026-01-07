@@ -106,6 +106,20 @@ task<Test>("integrationTest") {
         events("passed", "skipped", "failed")
         showStandardStreams = true
     }
+    
+    // Clean up Docker resources after each test class to prevent disk space exhaustion
+    afterTest(KotlinClosure2<TestDescriptor, TestResult, Unit>({ descriptor, result ->
+        if (descriptor.parent == null) { // Only for test classes, not individual test methods
+            try {
+                exec {
+                    commandLine("docker", "container", "prune", "-f")
+                    isIgnoreExitValue = true
+                }
+            } catch (e: Exception) {
+                logger.warn("Failed to clean up Docker containers: ${e.message}")
+            }
+        }
+    }))
 }
 
 tasks.test {
