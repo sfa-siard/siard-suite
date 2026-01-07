@@ -94,6 +94,18 @@ task<Test>("integrationTest") {
     classpath = sourceSets["integrationTest"].runtimeClasspath
     mustRunAfter(tasks["test"])
     useJUnitPlatform()
+    
+    // Run tests sequentially to avoid resource exhaustion with multiple Oracle containers
+    maxParallelForks = 1
+    
+    // Increase memory for tests with heavy containers
+    minHeapSize = "512m"
+    maxHeapSize = "2048m"
+    
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
+    }
 }
 
 tasks.test {
