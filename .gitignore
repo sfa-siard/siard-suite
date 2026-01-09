@@ -49,3 +49,6 @@ build/
 # ignore generated user manuals
 siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/doc
 
+# ignore temporary test files but keep the directories
+**/src/test/resources/tmp/*
+!**/.keep
