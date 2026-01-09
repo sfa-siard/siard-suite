@@ -1,30 +1,37 @@
-# SiardApi - SIARD 2.2 API
-This package contains an API for reading and writing files in the SIARD Format 2.2.
+# siard-api
 
-## Getting started (for developers)
-For building the binaries, Java JDK 17 must be installed.
+Core API for reading and writing SIARD Format 2.2 archives.
 
-### Build the project
-```bash
-./gradlew clean build
-```
+## Module Overview
 
-### Versioning, tags, and releases
-Versions and tags are managed with the [Axion Release Plugin](https://github.com/allegro/axion-release-plugin) for Gradle.
+This module provides the fundamental API for working with SIARD archives, including:
+- Reading and writing SIARD 2.2 format files
+- Metadata management (schemas, tables, columns, types)
+- Data access and manipulation
+- Archive validation and conversion
 
-Short overview:
+## Building and Testing
+
+**Build this module:**
 ```shell
-./gradlew currentVersion  # Shows the current version
-
-./gradlew release         # Creates a new release, adds a tag, and pushes it to remote
+./gradlew :siard-api:build
 ```
 
-## Documentation
-- [User Manual](https://github.com/sfa-siard/siard-suite/blob/main/docs/user-manual/en/user-manual.adoc)
-- [Software Architecture Document](https://github.com/sfa-siard/siard-suite/blob/main/docs/sad/sad.adoc)
+**Run tests:**
+```shell
+./gradlew :siard-api:test
+```
 
-## Declaration
-Contributions to the codebase have been made with the support of Windsurf. Windsurf is AI-powered code completion tool, that is trained exclusively on natural language and source code data with [permissive licenses](https://windsurf.com/blog/copilot-trains-on-gpl-codeium-does-not). 
+**Run specific test:**
+```shell
+./gradlew :siard-api:test --tests "ClassName.testMethod"
+```
+
+## Module-Specific Notes
+
+- Generated sources are created in `src/main/java/ch/admin/bar/siard2/api/generated/` during build
+- JAXB is used for XML schema binding
+- Supports SIARD format versions 1.0, 2.1, and 2.2 
 
 
 

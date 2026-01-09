@@ -1,30 +1,31 @@
-# JdbcOracle - SIARD 2.2 Oracle JDBC Wrapper
-This package contains the JDBC Wrapper for Oracle DBMS for SIARD 2.2.
+# jdbc-oracle
 
-## Getting started (for developers)
-For building the binaries, Java JDK 17 must be installed. A running Oracle DB instance is needed before running the tests:
+JDBC wrapper for Oracle database connectivity in SIARD Suite.
+
+## Module Overview
+
+This module provides Oracle-specific JDBC implementations for:
+- Database metadata extraction
+- Type mapping (Oracle → SIARD)
+- Connection management
+- Query execution and result handling
+
+## Building and Testing
+
+**Build this module:**
+```shell
+./gradlew :jdbc-oracle:build
+```
+
+**Run tests (requires Docker):**
 ```shell
 docker compose up -d
+./gradlew :jdbc-oracle:test
 ```
 
-### Build the project
-```shell
-./gradlew clean build
-```
+## Module-Specific Notes
 
-### Versioning, tags, and releases
-Versions and tags are managed with the [Axion Release Plugin](https://github.com/allegro/axion-release-plugin) for Gradle.
-
-Short overview:
-```shell
-./gradlew currentVersion  # Shows the current version
-
-./gradlew release         # Creates a new release, adds a tag, and pushes it to remote
-```
-
-## Documentation
-- [User Manual](https://github.com/sfa-siard/siard-suite/blob/main/docs/user-manual/en/user-manual.adoc)
-- [Software Architecture Document](https://github.com/sfa-siard/siard-suite/blob/main/docs/sad/sad.adoc)
-
-## Declaration
-Contributions to the codebase have been made with the support of Windsurf. Windsurf is AI-powered code completion tool, that is trained exclusively on natural language and source code data with [permissive licenses](https://windsurf.com/blog/copilot-trains-on-gpl-codeium-does-not). 
+- Tests use docker-compose to start Oracle XE instance
+- Supports Oracle-specific types (XMLTYPE, CLOB, BLOB, etc.)
+- Script `build-oracle-image.sh` helps build Oracle Docker images
+- Connection configuration in `docker-compose.yml` 

@@ -1,51 +1,49 @@
-# SiardCmd - Command-line Interface to download and upload relational databases
+# siard-cmd
 
-This package contains the SIARD command-line interface to download and upload relational databases in the SIARD (Software-Independent Archival of Relational Databases) Format 2.2.
+Command-line interface for downloading and uploading relational databases in SIARD Format 2.2.
 
-## Development
+## Module Overview
 
-### Prerequisites
-- JDK 8
-- Docker (Used for integration tests)
+This module provides CLI tools for:
+- Downloading databases to SIARD archives
+- Uploading SIARD archives to databases
+- Database-to-database migration
+- Metadata extraction and validation
 
-### Build application artifacts
+Supports: PostgreSQL, MySQL, MariaDB, MS SQL Server, Oracle, DB2, and MS Access.
 
-Run tests and build the package
+## Building and Testing
 
+**Build this module:**
 ```shell
-./gradlew build
+./gradlew :siard-cmd:build
 ```
 
-### Integration tests
-
-Runs all integration tests (Note: [TestContainers](https://testcontainers.com/) is used, so Docker is required)
-
+**Run unit tests:**
 ```shell
-./gradlew integrationTest
+./gradlew :siard-cmd:test
 ```
 
-### Deliverables
-
-
+**Run integration tests:**
 ```shell
-./gradlew packDeliverables
+./gradlew :siard-cmd:integrationTest                    # All databases
+./gradlew :siard-cmd:integrationTestPostgres            # PostgreSQL only
+./gradlew :siard-cmd:integrationTestMysql               # MySQL only
+./gradlew :siard-cmd:integrationTestMssql               # MS SQL Server only
+./gradlew :siard-cmd:integrationTestOracle              # Oracle only
+./gradlew :siard-cmd:integrationTestDb2                 # DB2 only
+./gradlew :siard-cmd:integrationTestMsaccess            # MS Access only
 ```
 
-Runs tests, build the artifacts, packages them, and includes all additional required files for execution in a CLI into a single zip file under 'libs/deliverables'.
-
-
-## Versioning, tags and releases
-
-Versions and tags are managed with the Axion Release Plugin for Gradle (https://github.com/allegro/axion-release-plugin)
-
-Short overview:
-
+**Create distribution archives:**
 ```shell
-./gradlew currentVersion # show the current version
-
-./gradlew release        # creates a new release adds a tag and pushes it to remote.
+./gradlew :siard-cmd:assembleDist
 ```
+Creates `.tar` and `.zip` distributions in `build/distributions/`.
 
-Run the release task to create a new patch version and push it to remote. The GitHub Actions will create the
-deliverables.
+## Module-Specific Notes
+
+- Integration tests use [Testcontainers](https://testcontainers.com/) and require Docker
+- Distribution includes all dependencies and launch scripts
+- Configuration files are located in `src/main/resources/`
 

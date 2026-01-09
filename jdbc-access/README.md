@@ -1,28 +1,31 @@
-# JdbcAccess - SIARD 2.2 JDBC Interface to MS Access databases based on Jackcess
-This package contains the JDBC interface for MS Access for SIARD Suite 2.2.
+# jdbc-access
 
-## Getting started (for developers)
-For building the binaries, Java JDK 17 must be installed. No running database is required in order to run the tests (in fact - there is no such thing as a running MS Access Database) - all files or provided in './testfiles'.
+JDBC interface for MS Access databases using Jackcess library.
 
-### Build the project
+## Module Overview
+
+This module provides MS Access-specific JDBC implementations for:
+- Database metadata extraction from .accdb and .mdb files
+- Type mapping (Access → SIARD)
+- File-based database access (no server required)
+- Query execution and result handling
+
+## Building and Testing
+
+**Build this module:**
 ```shell
-./gradlew clean build
+./gradlew :jdbc-access:build
 ```
 
-### Versioning, tags, and releases
-Versions and tags are managed with the [Axion Release Plugin](https://github.com/allegro/axion-release-plugin) for Gradle.
-
-Short overview:
+**Run tests:**
 ```shell
-./gradlew currentVersion  # Shows the current version
-
-./gradlew release         # Creates a new release, adds a tag, and pushes it to remote
+./gradlew :jdbc-access:test
 ```
 
-## Documentation
-- [User Manual](https://github.com/sfa-siard/siard-suite/blob/main/docs/user-manual/en/user-manual.adoc)
-- [Software Architecture Document](https://github.com/sfa-siard/siard-suite/blob/main/docs/sad/sad.adoc)
+## Module-Specific Notes
 
-## Declaration
-Contributions to the codebase have been made with the support of Windsurf. Windsurf is AI-powered code completion tool, that is trained exclusively on natural language and source code data with [permissive licenses](https://windsurf.com/blog/copilot-trains-on-gpl-codeium-does-not). 
+- Uses [Jackcess](http://jackcess.sourceforge.net/) library for Access file parsing
+- No running database server required (file-based access)
+- Test files (.accdb) are provided in `src/test/resources/testfiles/`
+- Supports both .accdb (Access 2007+) and .mdb (Access 97-2003) formats 
 

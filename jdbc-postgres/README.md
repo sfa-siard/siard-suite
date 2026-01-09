@@ -1,32 +1,30 @@
-# JdbcPostgres - SIARD 2.2 Postgres JDBC Wrapper
-This package contains the JDBC Wrapper for Postgres DBMS for SIARD 2.2.
+# jdbc-postgres
 
-## Getting started (for developers)
-For building the binaries, Java JDK 17 must be installed. A running PostgreSQL DB instance is needed before running the tests:
+JDBC wrapper for PostgreSQL database connectivity in SIARD Suite.
 
+## Module Overview
+
+This module provides PostgreSQL-specific JDBC implementations for:
+- Database metadata extraction
+- Type mapping (PostgreSQL → SIARD)
+- Connection management
+- Query execution and result handling
+
+## Building and Testing
+
+**Build this module:**
 ```shell
-docker compose up -d
+./gradlew :jdbc-postgres:build
 ```
 
-### Build the project
+**Run tests:**
 ```shell
-./gradlew clean build
+./gradlew :jdbc-postgres:test
 ```
 
-### Versioning, tags, and releases
-Versions and tags are managed with the [Axion Release Plugin](https://github.com/allegro/axion-release-plugin) for Gradle.
+## Module-Specific Notes
 
-Short overview:
-```shell
-./gradlew currentVersion  # Shows the current version
-
-./gradlew release         # Creates a new release, adds a tag, and pushes it to remote
-```
-
-## Documentation
-- [User Manual](https://github.com/sfa-siard/siard-suite/blob/main/docs/user-manual/en/user-manual.adoc)
-- [Software Architecture Document](https://github.com/sfa-siard/siard-suite/blob/main/docs/sad/sad.adoc)
-
-## Declaration
-Contributions to the codebase have been made with the support of Windsurf. Windsurf is AI-powered code completion tool, that is trained exclusively on natural language and source code data with [permissive licenses](https://windsurf.com/blog/copilot-trains-on-gpl-codeium-does-not). 
+- Tests use GitHub Actions service containers for PostgreSQL
+- Supports PostgreSQL-specific types (arrays, JSON, UUID, etc.)
+- Connection configuration in test resources 
 

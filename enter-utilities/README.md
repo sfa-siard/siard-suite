@@ -1,32 +1,30 @@
-# EnterUtils - SIARD 2.2 Enter Utilities
-This package contains utility classes used by the SIARD Suite.
+# enter-utilities
 
-## Getting started (for developers)
-For building the binaries, Java JDK 17 must be installed. 
+Common utility classes and helper functions used across SIARD Suite modules.
 
-### Run all tests
+## Module Overview
+
+This module provides shared utilities for:
+- String manipulation and encoding
+- File I/O operations
+- Date/time handling
+- XML processing
+- Logging utilities
+
+## Building and Testing
+
+**Build this module:**
 ```shell
-./gradlew check
+./gradlew :enter-utilities:build
 ```
 
-### Build the project
+**Run tests:**
 ```shell
-./gradlew clean build
+./gradlew :enter-utilities:test
 ```
 
-### Versioning, tags, and releases
-Versions and tags are managed with the [Axion Release Plugin](https://github.com/allegro/axion-release-plugin) for Gradle.
+## Module-Specific Notes
 
-Short overview:
-```shell
-./gradlew currentVersion  # Shows the current version
-
-./gradlew release         # Creates a new release, adds a tag, and pushes it to remote
-```
-
-## Documentation
-- [User Manual](https://github.com/sfa-siard/siard-suite/blob/main/docs/user-manual/en/user-manual.adoc)
-- [Software Architecture Document](https://github.com/sfa-siard/siard-suite/blob/main/docs/sad/sad.adoc)
-
-## Declaration
-Contributions to the codebase have been made with the support of Windsurf. Windsurf is AI-powered code completion tool, that is trained exclusively on natural language and source code data with [permissive licenses](https://windsurf.com/blog/copilot-trains-on-gpl-codeium-does-not). 
+- Pure utility library with no external dependencies
+- Used by all other SIARD Suite modules
+- No database or UI dependencies 
