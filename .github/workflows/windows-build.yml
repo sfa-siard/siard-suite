@@ -31,5 +31,14 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Execute Gradle build
-        run: ./gradlew build -x test
+      - name: Execute Gradle build (Windows debug)
+        shell: bash
+        run: |
+          ./gradlew build -x test --info --console=plain --stacktrace 2>&1 | tee gradle.log
+
+      - name: Upload Gradle log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-log-windows
+          path: gradle.log

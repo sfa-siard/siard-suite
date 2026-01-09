@@ -27,17 +27,24 @@ jobs:
       - name: Show current application version
         run: ./gradlew cV
       - name: Execute Gradle build
-        run: ./gradlew build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
+        run: ./gradlew siard-suite-app:build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
+      - name: Build siard-cmd distributions
+        run: ./gradlew siard-cmd:assembleDist --no-daemon
       - name: upload zip archive
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}
-          path: build/distributions/SIARD-Suite-*.zip
+          path: siard-suite-app/build/distributions/SIARD-Suite-*.zip
+      - name: upload siard-cmd distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.NAME_TAG }}-siard-cmd
+          path: siard-cmd/build/distributions/
       - name: upload siard-manual.pdf
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}-user-manual.pdf
-          path: build/docs/pdf/en/user-manual.pdf
+          path: siard-suite-app/build/docs/pdf/en/user-manual.pdf
 
   native-packages:
     runs-on: ${{ matrix.os }}
@@ -68,39 +75,39 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Execute build runtimeZip jpackage
-        run: ./gradlew build runtimeZip jpackage --no-daemon
+        run: ./gradlew :siard-suite-app:build runtimeZip jpackage --no-daemon
       - name: Upload DMG as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}-dmg
-          path: build/jpackage/*.dmg
+          path: siard-suite-app/build/jpackage/*.dmg
           if-no-files-found: ignore
       - name: Upload EXE as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}-win-exe
-          path: build/jpackage/*.exe
+          path: siard-suite-app/build/jpackage/*.exe
           if-no-files-found: ignore
       - name: Upload MSI as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}-win-msi
-          path: build/jpackage/*.msi
+          path: siard-suite-app/build/jpackage/*.msi
           if-no-files-found: ignore
       - name: Upload DEB as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}-deb
-          path: build/jpackage/*.deb
+          path: siard-suite-app/build/jpackage/*.deb
           if-no-files-found: ignore
       - name: Upload RPM as an artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}-rpm
-          path: build/jpackage/*.rpm
+          path: siard-suite-app/build/jpackage/*.rpm
           if-no-files-found: ignore
       - name: Upload application image zip
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}
-          path: build/image-zip/*.zip
+          path: siard-suite-app/build/image-zip/*.zip
