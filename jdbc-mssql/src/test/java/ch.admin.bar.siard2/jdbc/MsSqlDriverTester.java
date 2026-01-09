@@ -4,18 +4,22 @@ import java.sql.*;
 import java.util.*;
 import static org.junit.Assert.*;
 import org.junit.*;
-
-import ch.enterag.utils.base.ConnectionProperties;
+import org.testcontainers.containers.MSSQLServerContainer;
 
 public class MsSqlDriverTester
 {
-  private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+";databaseName="+_cp.getCatalog());
-  private static final String _sDB_USER = _cp.getUser();
-  private static final String _sDB_PASSWORD = _cp.getPassword();
+  private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
+  private static final String SA_PASSWORD = "YourStrong!Passw0rd";
+  
+  @ClassRule
+  public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
+          .acceptLicense()
+          .withPassword(SA_PASSWORD);
+  
+  private static String _sDB_URL;
   private static final String sDRIVER_CLASS = "ch.admin.bar.siard2.jdbc.MsSqlDriver";
   private static final String sTEST_MSSQL_URL = "jdbc:sqlserver://localhost";
-  private static final String sINVALID_MSSQL_URL = "jdbc:oracle:thin:@//localhost:1521/orcl";;
+  private static final String sINVALID_MSSQL_URL = "jdbc:oracle:thin:@//localhost:1521/orcl";
   
   private Driver _driver = null;
   private Connection _conn = null;
@@ -27,8 +31,9 @@ public class MsSqlDriverTester
     catch(ClassNotFoundException cnfe) { fail(cnfe.getClass().getName()+": "+cnfe.getMessage()); }
     try
     {
+      _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
       _driver = DriverManager.getDriver(sTEST_MSSQL_URL);
-      _conn = DriverManager.getConnection(_sDB_URL, _sDB_USER, _sDB_PASSWORD);
+      _conn = DriverManager.getConnection(_sDB_URL, mssqlContainer.getUsername(), mssqlContainer.getPassword());
     }
     catch(SQLException se) { fail(se.getClass().getName()+": "+se.getMessage()); }
   } /* setUp */

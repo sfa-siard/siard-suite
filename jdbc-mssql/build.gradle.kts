@@ -3,6 +3,7 @@ import java.util.*
 
 plugins {
     `java-library`
+    id("io.freefair.lombok") version "6.5.0"
 }
 
 description = "MS SQL Server JDBC Wrapper"

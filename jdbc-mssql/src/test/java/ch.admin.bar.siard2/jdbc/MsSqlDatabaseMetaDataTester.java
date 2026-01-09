@@ -8,6 +8,7 @@ import java.util.regex.*;
 import static org.junit.Assert.*;
 
 import org.junit.*;
+import org.testcontainers.containers.MSSQLServerContainer;
 import ch.enterag.utils.*;
 import ch.enterag.utils.base.*;
 import ch.enterag.utils.database.*;
@@ -17,20 +18,37 @@ import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mssql.*;
 
 public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
-    private static final ConnectionProperties _cp = new ConnectionProperties();
-    private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort() + ";databaseName=" + _cp.getCatalog());
-    private static final String _sDB_USER = _cp.getUser();
-    private static final String _sDB_PASSWORD = _cp.getPassword();
-    private static final String _sDB_CATALOG = _cp.getCatalog();
+    private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
+    private static final String SA_PASSWORD = "YourStrong!Passw0rd";
+    
+    @ClassRule
+    public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
+            .acceptLicense()
+            .withPassword(SA_PASSWORD);
+    
+    private static String _sDB_URL;
+    private static String _sDB_USER;
+    private static String _sDB_PASSWORD;
+    private static String _sDB_CATALOG;
     private static Pattern _patTYPE = Pattern.compile("^(.*?)(\\(\\s*((\\d+)(\\s*,\\s*(\\d+))?)\\s*\\))?$");
-    private static QualifiedId _qiGeometryType = new QualifiedId(_sDB_CATALOG, "sys", "geometry");
-    private static QualifiedId _qiGeographyType = new QualifiedId(_sDB_CATALOG, "sys", "geography");
-    private static QualifiedId _qiHierarchyIdType = new QualifiedId(_sDB_CATALOG, "sys", "hierarchyid");
+    private static QualifiedId _qiGeometryType;
+    private static QualifiedId _qiGeographyType;
+    private static QualifiedId _qiHierarchyIdType;
     private MsSqlDatabaseMetaData _dmdMsSql = null;
 
     @BeforeClass
     public static void setUpClass() {
         try {
+            _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+            _sDB_USER = mssqlContainer.getUsername();
+            _sDB_PASSWORD = mssqlContainer.getPassword();
+            _sDB_CATALOG = "master";
+            
+            // Initialize QualifiedId instances after catalog is set
+            _qiGeometryType = new QualifiedId(_sDB_CATALOG, "sys", "geometry");
+            _qiGeographyType = new QualifiedId(_sDB_CATALOG, "sys", "geography");
+            _qiHierarchyIdType = new QualifiedId(_sDB_CATALOG, "sys", "hierarchyid");
+            
             MsSqlDataSource dsMsSql = new MsSqlDataSource();
             dsMsSql.setUrl(_sDB_URL);
             dsMsSql.setUser(_sDB_USER);
@@ -602,8 +620,8 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
     public void testGetTables() {
         try {
             ResultSet resultSet = _dmdMsSql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[]{"TABLE"});
-            verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "TSQLCOMPLEX", "TABLE");
-            verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "TSQLSIMPLE", "TABLE");
+            verifyTable(resultSet, "master", "TESTSQLSCHEMA", "TSQLCOMPLEX", "TABLE");
+            verifyTable(resultSet, "master", "TESTSQLSCHEMA", "TSQLSIMPLE", "TABLE");
             assertFalse(resultSet.next());
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -613,17 +631,17 @@ public class MsSqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
     @Test
     public void testGetViews() throws SQLException {
-        ResultSet resultSet = _dmdMsSql.getTables("testdb", TestSqlDatabase._sTEST_SCHEMA, "%", new String[]{"VIEW"});
-        verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "VSQLSIMPLE", "VIEW");
+        ResultSet resultSet = _dmdMsSql.getTables("master", TestSqlDatabase._sTEST_SCHEMA, "%", new String[]{"VIEW"});
+        verifyTable(resultSet, "master", "TESTSQLSCHEMA", "VSQLSIMPLE", "VIEW");
         assertFalse(resultSet.next());
     }
 
     @Test
     public void shouldGetAllTypesOfTables() throws SQLException {
         ResultSet resultSet = _dmdMsSql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", null);
-        verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "TSQLCOMPLEX", "TABLE");
-        verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "TSQLSIMPLE", "TABLE");
-        verifyTable(resultSet, "testdb", "TESTSQLSCHEMA", "VSQLSIMPLE", "VIEW");
+        verifyTable(resultSet, "master", "TESTSQLSCHEMA", "TSQLCOMPLEX", "TABLE");
+        verifyTable(resultSet, "master", "TESTSQLSCHEMA", "TSQLSIMPLE", "TABLE");
+        verifyTable(resultSet, "master", "TESTSQLSCHEMA", "VSQLSIMPLE", "VIEW");
         assertFalse(resultSet.next());
     }
 
