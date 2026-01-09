@@ -1,34 +1,5 @@
-# ignore all build directories
-/build/**
-# ignore javadoc folder
-/doc/javadoc/**
-# tmp contains temporary files
-/tmp/**
-# dist contains the binary build results
-/dist/**
-# target is the default deployment folder where the binaries are unzipped.
-/target
-# generated sources
+# Module-specific: generated sources
 /src/main/java/ch/admin/bar/siard2/api/generated/
-# sometimes junit4 produces temporary files that we do not want to check in
-/junit*.*
-# bug tests
-/test/ch/admin/bar/siard2/api/bugs/**
 
-/build/
-/out/
-
-# intellij project files
-.idea/
-*.iml
-
-# asdf configuration
-.tool-versions
-# Ignore Gradle project-specific cache directory
-.gradle
-
-# Ignore Gradle build output directory
-build
-
-/src/test/resources/tmp/
+# Module-specific: test artifacts
 /src/test/resources/testfiles/sample_archive.siard
