@@ -1,23 +1,29 @@
 package ch.admin.bar.siard2.postgres;
 
-import static org.junit.Assert.assertSame;
+import ch.admin.bar.siard2.jdbc.PostgresConnection;
+import ch.admin.bar.siard2.jdbc.PostgresDatabaseMetaData;
+import ch.admin.bar.siard2.postgres.identifier.PostgresQualifiedId;
+import ch.enterag.sqlparser.Interval;
+import ch.enterag.sqlparser.SqlLiterals;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.sqlparser.identifier.SchemaId;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.base.TestUtils;
+import org.postgresql.PGConnection;
+import org.postgresql.largeobject.LargeObject;
+import org.postgresql.largeobject.LargeObjectManager;
 
 import java.io.*;
-import java.math.*;
+import java.math.BigDecimal;
 import java.sql.*;
-import java.sql.Date;
-import java.text.*;
-import java.util.*;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
-import org.postgresql.*;
-import org.postgresql.largeobject.*;
-
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.identifier.*;
-import ch.admin.bar.siard2.jdbc.*;
-import ch.admin.bar.siard2.postgres.identifier.*;
+import static org.junit.Assert.assertSame;
 
 public class TestPostgresDatabase {
     public static final String _sTEST_SCHEMA = "TESTPGSCHEMA";
@@ -82,11 +88,12 @@ public class TestPostgresDatabase {
         return new PostgresQualifiedId(null, _sTEST_SCHEMA, _sTEST_DOUBLE_MATRIX);
     }
 
-    private static int iBUFSIZ = 8192;
+    private static final int iBUFSIZ = 8192;
 
     public static void grantSchemaUser(Connection conn, String sSchema,
                                        String sDbUser) throws SQLException {
-        Statement stmt = conn.createStatement().unwrap(Statement.class);
+        Statement stmt = conn.createStatement()
+                             .unwrap(Statement.class);
         stmt.executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " GRANT ALL ON TABLES TO " + sDbUser);
         stmt.executeUpdate("GRANT ALL ON ALL TABLES IN SCHEMA " + sSchema + " TO " + sDbUser);
         stmt.executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " GRANT ALL ON TYPES TO " + sDbUser);
@@ -101,10 +108,14 @@ public class TestPostgresDatabase {
     public static void revokeSchemaUser(Connection conn, String sSchema,
                                         String sDbUser) throws SQLException {
         Statement stmt = conn.createStatement();
-        stmt.unwrap(Statement.class).executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " REVOKE ALL ON TABLES TO " + sDbUser);
-        stmt.unwrap(Statement.class).executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " REVOKE ALL ON TYPES TO " + sDbUser);
-        stmt.unwrap(Statement.class).executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " REVOKE ALL ON SEQUENCES TO " + sDbUser);
-        stmt.unwrap(Statement.class).executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " REVOKE ALL ON FUNCTIONS TO " + sDbUser);
+        stmt.unwrap(Statement.class)
+            .executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " REVOKE ALL ON TABLES TO " + sDbUser);
+        stmt.unwrap(Statement.class)
+            .executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " REVOKE ALL ON TYPES TO " + sDbUser);
+        stmt.unwrap(Statement.class)
+            .executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " REVOKE ALL ON SEQUENCES TO " + sDbUser);
+        stmt.unwrap(Statement.class)
+            .executeUpdate("ALTER DEFAULT PRIVILEGES IN SCHEMA " + sSchema + " REVOKE ALL ON FUNCTIONS TO " + sDbUser);
         conn.commit();
     }
 
@@ -230,10 +241,12 @@ public class TestPostgresDatabase {
 
         // Numeric Data Types: Fixed-Point Types (Exact Values)
         listCdSimple.add(new ColumnDefinition("CNUMERIC_5_2", PostgresType.NUMERIC.getKeyword() + "(5,2)", BigDecimal.valueOf(12345, 2)));
-        listCdSimple.add(new ColumnDefinition("CDECIMAL_15_5", PostgresType.NUMERIC.getAliases().toArray()[0] + "(15,5)", new BigDecimal("123455679.12345")));
+        listCdSimple.add(new ColumnDefinition("CDECIMAL_15_5", PostgresType.NUMERIC.getAliases()
+                                                                                   .toArray()[0] + "(15,5)", new BigDecimal("123455679.12345")));
         // Numeric Data Types: Floating-Point Types (Approximate Values)
         listCdSimple.add(new ColumnDefinition("CDOUBLE", PostgresType.DOUBLE.getKeyword(), Math.E));
-        listCdSimple.add(new ColumnDefinition("CREAL", PostgresType.REAL.getKeyword(), Double.valueOf(Math.PI).floatValue()));
+        listCdSimple.add(new ColumnDefinition("CREAL", PostgresType.REAL.getKeyword(), Double.valueOf(Math.PI)
+                                                                                             .floatValue()));
         listCdSimple.add(new ColumnDefinition("CBOOL", PostgresType.BOOLEAN.getKeyword(), Boolean.FALSE));
 
         // Date and Time Types
@@ -243,7 +256,7 @@ public class TestPostgresDatabase {
         listCdSimple.add(new ColumnDefinition("CTIMESTAMP", PostgresType.TIMESTAMP.getKeyword(), new Timestamp(2016 - 1900, 10, 30, 12, 34, 56, 0)));
         listCdSimple.add(new ColumnDefinition("CTIMESTAMPTZ", PostgresType.TIMESTAMP.getKeyword(), new Timestamp(2019 - 1900, 07, 29, 9, 34, 56, 0)));
         listCdSimple.add(new ColumnDefinition("CINTERVALYM", PostgresType.INTERVAL.getKeyword() + " year to month", new Interval(1, 1, 3)));
-        listCdSimple.add(new ColumnDefinition("CINTERVALDM", PostgresType.INTERVAL.getKeyword() + " day to second(6)", new Interval(-1, 1, 11, 23, 34, 456789000l)));
+        listCdSimple.add(new ColumnDefinition("CINTERVALDM", PostgresType.INTERVAL.getKeyword() + " day to second(6)", new Interval(-1, 1, 11, 23, 34, 456789000L)));
 
         // CHAR/VARCHAR
         listCdSimple.add(new ColumnDefinition("CCHAR_4", PostgresType.CHAR.getKeyword() + "(4)", TestUtils.getString(3)));
@@ -497,7 +510,8 @@ public class TestPostgresDatabase {
     }
 
     private void dropType(QualifiedId qiType) {
-        if (qiType.getName().equals(_sTEST_INTEGER_DOMAIN))
+        if (qiType.getName()
+                  .equals(_sTEST_INTEGER_DOMAIN))
             executeDrop("DROP DOMAIN " + qiType.format());
         else
             executeDrop("DROP TYPE " + qiType.format());
@@ -540,10 +554,13 @@ public class TestPostgresDatabase {
 
     private void createType(QualifiedId qiType, List<TestColumnDefinition> listAttributes)
             throws SQLException {
-        if (qiType.getName().equals(_sTEST_INTEGER_DOMAIN) || (qiType.getName().equals(_sTEST_YEAR_DOMAIN))) {
+        if (qiType.getName()
+                  .equals(_sTEST_INTEGER_DOMAIN) || (qiType.getName()
+                                                           .equals(_sTEST_YEAR_DOMAIN))) {
             TestColumnDefinition cd = listAttributes.get(0);
             executeCreate("CREATE DOMAIN " + qiType.format() + " AS " + cd.getType());
-        } else if (qiType.getName().equals(_sTEST_TYPE_COMP)) {
+        } else if (qiType.getName()
+                         .equals(_sTEST_TYPE_COMP)) {
             StringBuilder sb = new StringBuilder("CREATE TYPE ");
             sb.append(qiType.format());
             sb.append(" AS (");
@@ -558,10 +575,12 @@ public class TestPostgresDatabase {
             }
             sb.append("\r\n)");
             executeCreate(sb.toString());
-        } else if (qiType.getName().equals(_sTEST_TYPE_ENUM)) {
+        } else if (qiType.getName()
+                         .equals(_sTEST_TYPE_ENUM)) {
             TestColumnDefinition cd = listAttributes.get(0);
             executeCreate("CREATE TYPE " + qiType.format() + " AS " + cd.getType());
-        } else if (qiType.getName().equals(_sTEST_TYPE_RANGE)) {
+        } else if (qiType.getName()
+                         .equals(_sTEST_TYPE_RANGE)) {
             executeCreate("CREATE TYPE " + qiType.format() + " AS RANGE (subtype=text)");
         }
     }
@@ -569,11 +588,11 @@ public class TestPostgresDatabase {
     private void createTables()
             throws SQLException {
         createTable(getQualifiedSimpleTable(), _listCdSimple,
-                Arrays.asList(new String[]{_listCdSimple.get(_iPrimarySimple).getName()}),
-                Arrays.asList(new String[]{_listCdSimple.get(_iCandidateSimple).getName()}));
+                    Arrays.asList(_listCdSimple.get(_iPrimarySimple).getName()),
+                    Arrays.asList(_listCdSimple.get(_iCandidateSimple).getName()));
         createTable(getQualifiedComplexTable(), _listCdComplex,
-                Arrays.asList(new String[]{_listCdComplex.get(_iPrimaryComplex).getName()}),
-                null);
+                    Arrays.asList(_listCdComplex.get(_iPrimaryComplex).getName()),
+                    null);
     }
 
     private void createTable(QualifiedId qiTable, List<TestColumnDefinition> listCd,
@@ -588,11 +607,14 @@ public class TestPostgresDatabase {
                 sbSql.append(",\r\n  ");
             sbSql.append(cd.getName());
             sbSql.append(" ");
-            if (cd.getName().equals("CINT_BUILTIN"))
+            if (cd.getName()
+                  .equals("CINT_BUILTIN"))
                 sbSql.append("int4range");
-            else if (cd.getName().equals("CSTRING_ARRAY"))
+            else if (cd.getName()
+                       .equals("CSTRING_ARRAY"))
                 sbSql.append("text[4]");
-            else if (cd.getName().equals("CDOUBLE_MATRIX"))
+            else if (cd.getName()
+                       .equals("CDOUBLE_MATRIX"))
                 sbSql.append("float8[3][4]");
             else
                 sbSql.append(cd.getType());
@@ -674,7 +696,8 @@ public class TestPostgresDatabase {
                 stmt.close();
 
             } else
-                throw new SQLException("Invalid LOB type " + o.getClass().getName() + "!");
+                throw new SQLException("Invalid LOB type " + o.getClass()
+                                                              .getName() + "!");
         }
         int iResult = pstmt.executeUpdate();
         assertSame("Insert failed!", 1, iResult);
