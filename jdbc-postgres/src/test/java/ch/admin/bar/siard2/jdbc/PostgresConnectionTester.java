@@ -4,16 +4,35 @@ import java.sql.*;
 import static org.junit.Assert.*;
 import org.junit.*;
 import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
 import ch.admin.bar.siard2.jdbcx.*;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 public class PostgresConnectionTester extends BaseConnectionTester
 {
-  private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = PostgresDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+"/"+_cp.getCatalog());
-  private static final String _sDB_USER = _cp.getUser();
-  private static final String _sDB_PASSWORD = _cp.getPassword();
+  private static final PostgreSQLContainer<?> _pg = new PostgreSQLContainer<>("postgres:16-alpine")
+    .withDatabaseName("postgres")
+    .withUsername("postgres")
+    .withPassword("postgres");
+
+  private static String _sDB_URL;
+  private static String _sDB_USER;
+  private static String _sDB_PASSWORD;
+
+  @BeforeClass
+  public static void setUpClass()
+  {
+    _pg.start();
+    _sDB_URL = PostgresDriver.getUrl(_pg.getHost()+":"+_pg.getFirstMappedPort()+"/"+_pg.getDatabaseName());
+    _sDB_USER = _pg.getUsername();
+    _sDB_PASSWORD = _pg.getPassword();
+  }
+
+  @AfterClass
+  public static void tearDownClass()
+  {
+    _pg.stop();
+  }
   
   @Before
   public void setUp()

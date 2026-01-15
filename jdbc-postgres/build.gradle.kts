@@ -17,6 +17,9 @@ dependencies {
     implementation(project(":jdbc-base"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testImplementation("org.junit.vintage:junit-vintage-engine")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.testcontainers:testcontainers:1.21.4")
+    testImplementation("org.testcontainers:postgresql:1.21.4")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
     testImplementation(testFixtures(project(":jdbc-base")))
 }

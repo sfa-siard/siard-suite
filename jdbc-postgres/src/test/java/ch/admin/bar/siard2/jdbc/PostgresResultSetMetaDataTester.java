@@ -14,18 +14,22 @@ import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.postgres.*;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 @Ignore
 public class PostgresResultSetMetaDataTester
   extends BaseResultSetMetaDataTester
 {
+  private static final PostgreSQLContainer<?> _pg = new PostgreSQLContainer<>("postgres:16-alpine")
+    .withDatabaseName("postgres")
+    .withUsername("postgres")
+    .withPassword("postgres");
 
-  private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = PostgresDriver.getUrl(_cp.getHost()+":"+_cp.getPort()+"/"+_cp.getCatalog());
-  private static final String _sDB_USER = _cp.getUser();
-  private static final String _sDB_PASSWORD = _cp.getPassword();
-  private static final String _sDBA_USER = _cp.getDbaUser();
-  private static final String _sDBA_PASSWORD = _cp.getDbaPassword();
+  private static String _sDB_URL;
+  private static String _sDB_USER;
+  private static String _sDB_PASSWORD;
+  private static String _sDBA_USER;
+  private static String _sDBA_PASSWORD;
 
   private static String getTableQuery(QualifiedId qiTable, List<TestColumnDefinition> listCd)
   {
@@ -52,6 +56,12 @@ public class PostgresResultSetMetaDataTester
   {
     try 
     {
+      _pg.start();
+      _sDB_URL = PostgresDriver.getUrl(_pg.getHost()+":"+_pg.getFirstMappedPort()+"/"+_pg.getDatabaseName());
+      _sDB_USER = _pg.getUsername();
+      _sDB_PASSWORD = _pg.getPassword();
+      _sDBA_USER = _pg.getUsername();
+      _sDBA_PASSWORD = _pg.getPassword();
       PostgresDataSource dsPostgres = new PostgresDataSource();
       dsPostgres.setUrl(_sDB_URL);
       dsPostgres.setUser(_sDBA_USER);
@@ -66,6 +76,12 @@ public class PostgresResultSetMetaDataTester
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
     catch(IOException ie) { fail(EU.getExceptionMessage(ie)); }
+  }
+
+  @AfterClass
+  public static void tearDownClass()
+  {
+    _pg.stop();
   }
   
   private Connection closeResultSet()
