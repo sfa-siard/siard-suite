@@ -1,100 +1,90 @@
 package ch.admin.bar.siard2.jdbcx;
 
-import static org.junit.Assert.*;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import ch.admin.bar.siard2.jdbcx.MySqlDataSource;
+import org.junit.*;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.MountableFile;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 public class MySqlDataSourceTester {
-	private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
-		.withDatabaseName("testschema")
-		.withUsername("testuser")
-		.withPassword("testpwd")
-		.withCopyFileToContainer(MountableFile.forClasspathResource("zzz-test-overrides.cnf"), "/etc/mysql/conf.d/zzz-test-overrides.cnf");
+    private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
+            .withDatabaseName("testschema")
+            .withUsername("testuser")
+            .withPassword("testpwd")
+            .withCopyFileToContainer(MountableFile.forClasspathResource("zzz-test-overrides.cnf"), "/etc/mysql/conf.d/zzz-test-overrides.cnf");
 
-	private static String _sDB_URL;
-	private static String _sDB_USER;
-	private static String _sDB_PASSWORD;
+    private static String _sDB_URL;
+    private static String _sDB_USER;
+    private static String _sDB_PASSWORD;
 
-	@BeforeClass
-	public static void setUpClass()
-	{
-		_mysql.start();
-		_sDB_URL = "jdbc:mysql://" + _mysql.getHost() + ":" + _mysql.getFirstMappedPort();
-		_sDB_USER = _mysql.getUsername();
-		_sDB_PASSWORD = _mysql.getPassword();
-	}
+    @BeforeClass
+    public static void setUpClass() {
+        _mysql.start();
+        _sDB_URL = "jdbc:mysql://" + _mysql.getHost() + ":" + _mysql.getFirstMappedPort();
+        _sDB_USER = _mysql.getUsername();
+        _sDB_PASSWORD = _mysql.getPassword();
+    }
 
-	@AfterClass
-	public static void tearDownClass()
-	{
-		_mysql.stop();
-	}
-	
-	private MySqlDataSource _dsMySql = null;
-	private Connection _conn = null;
-	
-	@Before
-	public void setUp() throws Exception {
-		_dsMySql = new MySqlDataSource();
-	} /* setUp */
+    @AfterClass
+    public static void tearDownClass() {
+        _mysql.stop();
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		if((_conn != null) && (!_conn.isClosed())) {
-			_conn.close();
-		}
-	} /* tearDown */
-	
-	@Test
-	public void testWrapper() 
-	{
-		try {
-			Assert.assertSame("Invalid wrapper!", true, _dsMySql.isWrapperFor(DataSource.class));
-			DataSource dsWrapped = _dsMySql.unwrap(DataSource.class);
-			assertSame("Invalid wrapper class!", com.mysql.cj.jdbc.MysqlDataSource.class, dsWrapped.getClass());
-		} catch(SQLException se) {
-			fail(se.getClass().getName() + ": " + se.getMessage());
-		}
-	} /* testWrapper */
+    private MySqlDataSource _dsMySql = null;
+    private Connection _conn = null;
 
-	@Test
-	public void testConnection() 
-	{
-		_dsMySql.setUrl(_sDB_URL);
-		_dsMySql.setUser(_sDB_USER);
-		_dsMySql.setPassword(_sDB_PASSWORD);
-		
-		try {
-			_conn = _dsMySql.getConnection();
-		} catch (SQLException se) {
-			fail(se.getClass().getName() + ": " + se.getMessage());
-		}
-	} /* testConnection */
-	
-	@Test
-	public void testLoginTimeout()
-	{
-		try {
-			int iLoginTimeout = _dsMySql.getLoginTimeout();
-			assertSame("Unexpected login timeout " + String.valueOf(iLoginTimeout) + "!", iLoginTimeout, 0);
-		} catch (SQLException se) {
-			fail(se.getClass().getName() + ": " + se.getMessage());
-		}
-	} /* testLoginTimeout */
-	
+    @Before
+    public void setUp() throws Exception {
+        _dsMySql = new MySqlDataSource();
+    } /* setUp */
+
+    @After
+    public void tearDown() throws Exception {
+        if ((_conn != null) && (!_conn.isClosed())) {
+            _conn.close();
+        }
+    } /* tearDown */
+
+    @Test
+    public void testWrapper() {
+        try {
+            Assert.assertSame("Invalid wrapper!", true, _dsMySql.isWrapperFor(DataSource.class));
+            DataSource dsWrapped = _dsMySql.unwrap(DataSource.class);
+            assertSame("Invalid wrapper class!", com.mysql.cj.jdbc.MysqlDataSource.class, dsWrapped.getClass());
+        } catch (SQLException se) {
+            fail(se.getClass()
+                   .getName() + ": " + se.getMessage());
+        }
+    } /* testWrapper */
+
+    @Test
+    public void testConnection() {
+        _dsMySql.setUrl(_sDB_URL);
+        _dsMySql.setUser(_sDB_USER);
+        _dsMySql.setPassword(_sDB_PASSWORD);
+
+        try {
+            _conn = _dsMySql.getConnection();
+        } catch (SQLException se) {
+            fail(se.getClass()
+                   .getName() + ": " + se.getMessage());
+        }
+    } /* testConnection */
+
+    @Test
+    public void testLoginTimeout() {
+        try {
+            int iLoginTimeout = _dsMySql.getLoginTimeout();
+            assertSame("Unexpected login timeout " + String.valueOf(iLoginTimeout) + "!", iLoginTimeout, 0);
+        } catch (SQLException se) {
+            fail(se.getClass()
+                   .getName() + ": " + se.getMessage());
+        }
+    } /* testLoginTimeout */
+
 } /* class MySqlDataSourceTester */

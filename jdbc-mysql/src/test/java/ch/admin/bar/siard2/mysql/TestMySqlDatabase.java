@@ -1,18 +1,25 @@
 package ch.admin.bar.siard2.mysql;
 
-import java.io.*;
-import java.math.*;
+import ch.admin.bar.siard2.jdbc.MySqlConnection;
+import ch.enterag.sqlparser.SqlLiterals;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.sqlparser.identifier.SchemaId;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.base.TestUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.Assert.*;
-
-import ch.admin.bar.siard2.jdbc.*;
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.identifier.*;
+import static org.junit.Assert.assertSame;
 
 public class TestMySqlDatabase {
     public static final String _sTEST_SCHEMA = "TESTMYSQLSCHEMA";
@@ -81,9 +88,11 @@ public class TestMySqlDatabase {
         listCdSimple.add(new ColumnDefinition("CDECIMAL_15_5", "DECIMAL(15,5)", new BigDecimal("123455679.12345")));
 
         // Numeric Data Types: Floating-Point Types (Approximate Values)
-        listCdSimple.add(new ColumnDefinition("CFLOAT_9_7", "FLOAT(9,7)", Double.valueOf(Math.PI).floatValue()));
+        listCdSimple.add(new ColumnDefinition("CFLOAT_9_7", "FLOAT(9,7)", Double.valueOf(Math.PI)
+                                                                                .floatValue()));
         listCdSimple.add(new ColumnDefinition("CDOUBLE_16_14", "DOUBLE PRECISION(16,14)", Math.E));
-        listCdSimple.add(new ColumnDefinition("CREAL_9_7", "REAL(9,7)", Double.valueOf(Math.PI).floatValue()));
+        listCdSimple.add(new ColumnDefinition("CREAL_9_7", "REAL(9,7)", Double.valueOf(Math.PI)
+                                                                              .floatValue()));
 
         listCdSimple.add(new ColumnDefinition("CBIT", "BIT", Boolean.TRUE));
         listCdSimple.add(new ColumnDefinition("CBOOL", "BOOL", Boolean.FALSE));
@@ -160,7 +169,8 @@ public class TestMySqlDatabase {
         sb.append("@");
         sb.append(SqlLiterals.formatStringLiteral("%"));
         Statement stmt = conn.createStatement();
-        stmt.unwrap(Statement.class).executeUpdate(sb.toString());
+        stmt.unwrap(Statement.class)
+            .executeUpdate(sb.toString());
     }
 
     public static void revokeSchemaUser(Connection conn, String sSchema,
@@ -172,7 +182,8 @@ public class TestMySqlDatabase {
         sb.append("@");
         sb.append(SqlLiterals.formatStringLiteral("%"));
         Statement stmt = conn.createStatement();
-        stmt.unwrap(Statement.class).executeUpdate(sb.toString());
+        stmt.unwrap(Statement.class)
+            .executeUpdate(sb.toString());
         conn.commit();
     }
 
@@ -247,11 +258,11 @@ public class TestMySqlDatabase {
     private void createTables()
             throws SQLException {
         createTable(getQualifiedSimpleTable(), _listCdSimple,
-                Arrays.asList(new String[]{_listCdSimple.get(_iPrimarySimple).getName()}),
-                Arrays.asList(new String[]{_listCdSimple.get(_iCandidateSimple).getName()}));
+                    Arrays.asList(new String[]{_listCdSimple.get(_iPrimarySimple).getName()}),
+                    Arrays.asList(new String[]{_listCdSimple.get(_iCandidateSimple).getName()}));
         createTable(getQualifiedComplexTable(), _listCdComplex,
-                Arrays.asList(new String[]{_listCdComplex.get(_iPrimaryComplex).getName()}),
-                null);
+                    Arrays.asList(new String[]{_listCdComplex.get(_iPrimaryComplex).getName()}),
+                    null);
     }
 
     private void createTable(QualifiedId qiTable, List<TestColumnDefinition> listCd,
@@ -333,7 +344,8 @@ public class TestMySqlDatabase {
                 InputStream isBlob = new ByteArrayInputStream((byte[]) o);
                 pstmt.setBinaryStream(iLob + 1, isBlob);
             } else
-                throw new SQLException("Invalid LOB type " + o.getClass().getName() + "!");
+                throw new SQLException("Invalid LOB type " + o.getClass()
+                                                              .getName() + "!");
         }
         int iResult = pstmt.executeUpdate();
         assertSame("Insert failed!", 1, iResult);
