@@ -10,13 +10,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Set TAG-Env
         run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'zulu'
@@ -31,17 +31,17 @@ jobs:
       - name: Build siard-cmd distributions
         run: ./gradlew siard-cmd:assembleDist --no-daemon
       - name: upload zip archive
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}
           path: siard-suite-app/build/distributions/SIARD-Suite-*.zip
       - name: upload siard-cmd distributions
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-siard-cmd
           path: siard-cmd/build/distributions/
       - name: upload siard-manual.pdf
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-user-manual.pdf
           path: siard-suite-app/build/docs/pdf/en/user-manual.pdf
@@ -56,7 +56,7 @@ jobs:
     name: ${{ matrix.os }}
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       - name: Set TAG-Env
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -64,7 +64,7 @@ jobs:
         if: runner.os == 'Windows'
         run: echo "NAME_TAG=SIARD-Suite-${{ github.ref_name }}" >> $env:GITHUB_ENV
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           java-version: ${{ matrix.java }}
           distribution: 'zulu'
@@ -77,37 +77,37 @@ jobs:
       - name: Execute build runtimeZip jpackage
         run: ./gradlew :siard-suite-app:build runtimeZip jpackage --no-daemon
       - name: Upload DMG as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}-dmg
           path: siard-suite-app/build/jpackage/*.dmg
           if-no-files-found: ignore
       - name: Upload EXE as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-win-exe
           path: siard-suite-app/build/jpackage/*.exe
           if-no-files-found: ignore
       - name: Upload MSI as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-win-msi
           path: siard-suite-app/build/jpackage/*.msi
           if-no-files-found: ignore
       - name: Upload DEB as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}-deb
           path: siard-suite-app/build/jpackage/*.deb
           if-no-files-found: ignore
       - name: Upload RPM as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}-rpm
           path: siard-suite-app/build/jpackage/*.rpm
           if-no-files-found: ignore
       - name: Upload application image zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}
           path: siard-suite-app/build/image-zip/*.zip
