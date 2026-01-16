@@ -10,26 +10,48 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.admin.bar.siard2.jdbc.MySqlConnection;
 import ch.admin.bar.siard2.jdbc.MySqlDriver;
 import ch.enterag.utils.EU;
-import ch.enterag.utils.base.ConnectionProperties;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.MountableFile;
 
 public class MySqlDriverTester {
-	private static final ConnectionProperties _cp = new ConnectionProperties();
-	
-	private static final String _sDB_URL = MySqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort()+"/"+_cp.getCatalog(),true);
-	private static final String _sDB_USER = _cp.getUser();
-	private static final String _sDB_PASSWORD = _cp.getPassword();
+	private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
+		.withDatabaseName("testschema")
+		.withUsername("testuser")
+		.withPassword("testpwd")
+		.withCopyFileToContainer(MountableFile.forClasspathResource("zzz-test-overrides.cnf"), "/etc/mysql/conf.d/zzz-test-overrides.cnf");
+
+	private static String _sDB_URL;
+	private static String _sDB_USER;
+	private static String _sDB_PASSWORD;
 	private static final String _sDRIVER_CLASS = "ch.admin.bar.siard2.jdbc.MySqlDriver";
 	private static final String _sINVALID_MYSQL_URL = "jdbc:oracle:thin:@//localhost";
 	
 	private Driver _driver = null;
 	private Connection _conn = null;
+
+	@BeforeClass
+	public static void setUpClass()
+	{
+		_mysql.start();
+		_sDB_URL = MySqlDriver.getUrl(_mysql.getHost() + ":" + _mysql.getFirstMappedPort()+"/"+_mysql.getDatabaseName(),true);
+		_sDB_USER = _mysql.getUsername();
+		_sDB_PASSWORD = _mysql.getPassword();
+	}
+
+	@AfterClass
+	public static void tearDownClass()
+	{
+		_mysql.stop();
+	}
 
 	@Before
 	public void setUp() {

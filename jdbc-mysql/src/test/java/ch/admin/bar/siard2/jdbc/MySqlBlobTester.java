@@ -12,16 +12,22 @@ import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mysql.*;
 import ch.enterag.sqlparser.identifier.*;
 import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.MountableFile;
 
 public class MySqlBlobTester
 {
-  private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MySqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort()+"/"+_cp.getCatalog(),true);
-  private static final String _sDB_USER = _cp.getUser();
-  private static final String _sDB_PASSWORD = _cp.getPassword();
-  private static final String _sDBA_USER = _cp.getDbaUser();
-  private static final String _sDBA_PASSWORD = _cp.getDbaPassword();
+  private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
+    .withDatabaseName("testschema")
+    .withUsername("testuser")
+    .withPassword("testpwd")
+    .withCopyFileToContainer(MountableFile.forClasspathResource("zzz-test-overrides.cnf"), "/etc/mysql/conf.d/zzz-test-overrides.cnf");
+
+  private static String _sDB_URL;
+  private static String _sDB_USER;
+  private static String _sDB_PASSWORD;
+  private static String _sDBA_USER;
+  private static String _sDBA_PASSWORD;
   
   private static List<String> listPngs = new ArrayList<String>();
   private static List<String> listFlacs = new ArrayList<String>();
@@ -31,12 +37,16 @@ public class MySqlBlobTester
   @BeforeClass 
   public static void setUpClass()
   {
-    for (int iRecord = 0; _cp.getBlobPng(iRecord) != null; iRecord++)
-      listPngs.add(_cp.getBlobPng(iRecord));
-    for (int iRecord = 0; _cp.getBlobFlac(iRecord) != null; iRecord++)
-      listFlacs.add(_cp.getBlobFlac(iRecord));
+    listPngs.add("src/test/resources/png-1.png");
+    listFlacs.add("src/test/resources/sample1.flac");
     try
     {
+      _mysql.start();
+      _sDB_URL = MySqlDriver.getUrl(_mysql.getHost() + ":" + _mysql.getFirstMappedPort()+"/"+_mysql.getDatabaseName(),true);
+      _sDB_USER = _mysql.getUsername();
+      _sDB_PASSWORD = _mysql.getPassword();
+      _sDBA_USER = "root";
+      _sDBA_PASSWORD = _mysql.getPassword();
       MySqlDataSource dsMySql = new MySqlDataSource();
       dsMySql.setUrl(_sDB_URL);
       dsMySql.setUser(_sDBA_USER);
@@ -50,6 +60,12 @@ public class MySqlBlobTester
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
     catch(IOException ie) { fail(EU.getExceptionMessage(ie)); }
   } /* setUpClass */
+
+  @AfterClass
+  public static void tearDownClass()
+  {
+    _mysql.stop();
+  }
 
   
   @Before

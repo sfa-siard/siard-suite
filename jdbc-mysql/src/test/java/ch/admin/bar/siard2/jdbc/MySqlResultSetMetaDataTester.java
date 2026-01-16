@@ -3,22 +3,30 @@ package ch.admin.bar.siard2.jdbc;
 import java.sql.*;
 import java.util.*;
 import static org.junit.Assert.*;
+
+import ch.enterag.utils.base.TestColumnDefinition;
 import org.junit.*;
 import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
 import ch.enterag.sqlparser.identifier.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mysql.*;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.MountableFile;
 
 public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
 {
-  private static final ConnectionProperties _cp = new ConnectionProperties();
-  private static final String _sDB_URL = MySqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort()+"/"+_cp.getCatalog(),true);
-  private static final String _sDB_USER = _cp.getUser();
-  private static final String _sDB_PASSWORD = _cp.getPassword();
-  private static final String _sDBA_USER = _cp.getDbaUser();
-  private static final String _sDBA_PASSWORD = _cp.getDbaPassword();
+  private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
+    .withDatabaseName("testschema")
+    .withUsername("testuser")
+    .withPassword("testpwd")
+    .withCopyFileToContainer(MountableFile.forClasspathResource("zzz-test-overrides.cnf"), "/etc/mysql/conf.d/zzz-test-overrides.cnf");
+
+  private static String _sDB_URL;
+  private static String _sDB_USER;
+  private static String _sDB_PASSWORD;
+  private static String _sDBA_USER;
+  private static String _sDBA_PASSWORD;
 
   private static String getTableQuery(QualifiedId qiTable, List<TestColumnDefinition> listCd)
   {
@@ -40,27 +48,32 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
   private static String _sSqlQuerySimple = getTableQuery(TestSqlDatabase.getQualifiedSimpleTable(),TestSqlDatabase._listCdSimple);
   private static String _sSqlQueryComplex = getTableQuery(TestSqlDatabase.getQualifiedComplexTable(),TestSqlDatabase._listCdComplex);
 
-	@BeforeClass 
-	public static void setUpClass()
+    @BeforeClass
+    public static void setUpClass() throws SQLException {
+        _mysql.start();
+        _sDB_URL = MySqlDriver.getUrl(_mysql.getHost() + ":" + _mysql.getFirstMappedPort() + "/" + _mysql.getDatabaseName(), true);
+        _sDB_USER = _mysql.getUsername();
+        _sDB_PASSWORD = _mysql.getPassword();
+        _sDBA_USER = "root";
+        _sDBA_PASSWORD = _mysql.getPassword();
+        MySqlDataSource dsMySql = new MySqlDataSource();
+        dsMySql.setUrl(_sDB_URL);
+        dsMySql.setUser(_sDBA_USER);
+        dsMySql.setPassword(_sDBA_PASSWORD);
+        MySqlConnection connMySql = (MySqlConnection) dsMySql.getConnection();
+        /* drop and create the test databases */
+        new TestMySqlDatabase(connMySql);
+        TestMySqlDatabase.grantSchemaUser(connMySql, TestMySqlDatabase._sTEST_SCHEMA, _sDB_USER);
+        new TestSqlDatabase(connMySql);
+        TestMySqlDatabase.grantSchemaUser(connMySql, TestSqlDatabase._sTEST_SCHEMA, _sDB_USER);
+        connMySql.close();
+    }
+
+	@AfterClass
+	public static void tearDownClass()
 	{
-		try
-		{
-			MySqlDataSource dsMySql = new MySqlDataSource();
-			dsMySql.setUrl(_sDB_URL);
-			dsMySql.setUser(_sDBA_USER);
-			dsMySql.setPassword(_sDBA_PASSWORD);
-			MySqlConnection connMySql = (MySqlConnection) dsMySql.getConnection();
-      /* drop and create the test databases */
-      new TestMySqlDatabase(connMySql);
-      TestMySqlDatabase.grantSchemaUser(connMySql, 
-        TestMySqlDatabase._sTEST_SCHEMA, _sDB_USER);
-      new TestSqlDatabase(connMySql);
-      TestMySqlDatabase.grantSchemaUser(connMySql, 
-        TestSqlDatabase._sTEST_SCHEMA, _sDB_USER);
-      connMySql.close();
-		}
-		catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
-	} /* setUpClass */
+		_mysql.stop();
+	}
 
   private Connection _conn = null;
   

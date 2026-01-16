@@ -46,6 +46,7 @@ jobs:
           - jdbc-access
           - jdbc-db2
           - jdbc-mssql
+          - jdbc-mysql
           - jdbc-postgres
           - siard-cmd
           - siard-suite-app
@@ -70,47 +71,3 @@ jobs:
         with:
           name: test-reports-${{ matrix.module }}
           path: ${{ matrix.module }}/build/reports/tests/
-
-  # jdbc-mysql uses docker-compose
-  test-jdbc-mysql:
-    needs: compile
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'zulu'
-          cache: "gradle"
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-      - name: Start MySQL with docker-compose
-        uses: sudo-bot/action-docker-compose@latest
-        with:
-          cli-args: "-f jdbc-mysql/docker-compose.yml up -d --build"
-      - name: Wait for MySQL to be ready
-        run: sleep 20s
-        shell: bash
-      - name: Check docker-compose logs
-        uses: sudo-bot/action-docker-compose@latest
-        with:
-          cli-args: "-f jdbc-mysql/docker-compose.yml logs"
-      - name: Verify MySQL connection
-        run: |
-          mysql --host 127.0.0.1 --port 3306 -uroot -prootpwd -e "SHOW DATABASES"
-      - name: Test jdbc-mysql
-        run: ./gradlew :jdbc-mysql:test
-      - name: Upload test reports
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports-jdbc-mysql
-          path: jdbc-mysql/build/reports/tests/
-      - name: Cleanup docker-compose
-        if: always()
-        uses: sudo-bot/action-docker-compose@latest
-        with:
-          cli-args: "-f jdbc-mysql/docker-compose.yml down"

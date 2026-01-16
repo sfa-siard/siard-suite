@@ -9,18 +9,24 @@ import org.junit.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mysql.*;
 import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.MountableFile;
 
 public class MySqlConnectionTester extends BaseConnectionTester
 {
-	private static final ConnectionProperties _cp = new ConnectionProperties();
-	private static final String _sDB_URL = MySqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort()+"/"+_cp.getCatalog(),true);
-	private static final String _sDB_USER = _cp.getUser();
-	private static final String _sDB_PASSWORD = _cp.getPassword();
-	private static final String _sDB_CATALOG = _cp.getCatalog();
-  private static final String _sDBA_USER = _cp.getDbaUser();
-  private static final String _sDBA_PASSWORD = _cp.getDbaPassword();
+	private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
+		.withDatabaseName("testschema")
+		.withUsername("testuser")
+		.withPassword("testpwd")
+		.withCopyFileToContainer(MountableFile.forClasspathResource("zzz-test-overrides.cnf"), "/etc/mysql/conf.d/zzz-test-overrides.cnf");
+
+	private static String _sDB_URL;
+	private static String _sDB_USER;
+	private static String _sDB_PASSWORD;
+	private static String _sDB_CATALOG;
+  private static String _sDBA_USER;
+  private static String _sDBA_PASSWORD;
 
 	private MySqlConnection _connMySql = null;
 	  
@@ -29,11 +35,18 @@ public class MySqlConnectionTester extends BaseConnectionTester
 	{
 	  try
 	  {
-  		MySqlDataSource dsMySql = new MySqlDataSource();
-  		dsMySql.setUrl(_sDB_URL);
-  		dsMySql.setUser(_sDBA_USER);
-  		dsMySql.setPassword(_sDBA_PASSWORD);
-    	MySqlConnection connMySql = (MySqlConnection) dsMySql.getConnection();
+			_mysql.start();
+			_sDB_CATALOG = _mysql.getDatabaseName();
+			_sDB_URL = MySqlDriver.getUrl(_mysql.getHost() + ":" + _mysql.getFirstMappedPort()+"/"+_sDB_CATALOG,true);
+			_sDB_USER = _mysql.getUsername();
+			_sDB_PASSWORD = _mysql.getPassword();
+			_sDBA_USER = "root";
+			_sDBA_PASSWORD = _mysql.getPassword();
+			MySqlDataSource dsMySql = new MySqlDataSource();
+			dsMySql.setUrl(_sDB_URL);
+			dsMySql.setUser(_sDBA_USER);
+			dsMySql.setPassword(_sDBA_PASSWORD);
+	    	MySqlConnection connMySql = (MySqlConnection) dsMySql.getConnection();
       new TestMySqlDatabase(connMySql);
       TestMySqlDatabase.grantSchemaUser(connMySql, 
         TestMySqlDatabase._sTEST_SCHEMA, _sDB_USER);
@@ -47,6 +60,12 @@ public class MySqlConnectionTester extends BaseConnectionTester
 		  fail(EU.getExceptionMessage(se));
 	  }
 	} /* setUpClass */
+
+	@AfterClass
+	public static void tearDownClass()
+	{
+		_mysql.stop();
+	}
 	
 	@Before
 	public void setUp() 
