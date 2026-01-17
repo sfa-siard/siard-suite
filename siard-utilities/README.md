@@ -1,4 +1,4 @@
-# enter-utilities
+# siard-utilities
 
 Common utility classes and helper functions used across SIARD Suite modules.
 
@@ -15,12 +15,12 @@ This module provides shared utilities for:
 
 **Build this module:**
 ```shell
-./gradlew :enter-utilities:build
+./gradlew :siard-utilities:build
 ```
 
 **Run tests:**
 ```shell
-./gradlew :enter-utilities:test
+./gradlew :siard-utilities:test
 ```
 
 ## Module-Specific Notes

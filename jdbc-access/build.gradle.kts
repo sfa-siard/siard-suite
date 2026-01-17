@@ -10,7 +10,7 @@ plugins {
 description = "MS Access JDBC Wrapper"
 
 dependencies {
-    implementation(project(":enter-utilities"))
+    implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
     implementation(project(":jdbc-base"))
 

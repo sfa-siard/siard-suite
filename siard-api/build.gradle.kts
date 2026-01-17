@@ -26,7 +26,7 @@ val xjcConfiguration = configurations.create("xjc")
 
 // Define dependencies similar to Ant classpath definitions
 dependencies {
-    implementation(project(":enter-utilities"))
+    implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
     implementation(project(":zip64-file"))
 

@@ -45,7 +45,7 @@ dependencies {
     api(project(":siard-api"))
     api(project(":sql-parser"))
     api(project(":zip64-file"))
-    api(project(":enter-utilities"))
+    api(project(":siard-utilities"))
     api(project(":jdbc-base"))
     api(project(":jdbc-postgres"))
     api(project(":jdbc-oracle"))

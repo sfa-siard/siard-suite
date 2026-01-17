@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         module:
-          - enter-utilities
+          - siard-utilities
           - zip64-file
           - sql-parser
           - siard-api

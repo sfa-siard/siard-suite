@@ -11,10 +11,10 @@ plugins {
 description = "Base JDBC Wrapper"
 
 dependencies {
-    implementation(project(":enter-utilities"))
+    implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
 
-    testFixturesImplementation(project(":enter-utilities"))
+    testFixturesImplementation(project(":siard-utilities"))
     testFixturesImplementation(project(":sql-parser"))
     testFixturesImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testFixturesImplementation("org.junit.vintage:junit-vintage-engine")

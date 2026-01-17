@@ -6,7 +6,7 @@ plugins {
     id("io.freefair.lombok") version "8.14.2"
 }
 
-description = "Enter Utilities"
+description = "SIARD Utilities"
 
 dependencies {
     implementation("org.apache.tika:tika-core:3.2.3")

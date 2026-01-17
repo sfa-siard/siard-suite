@@ -12,7 +12,7 @@ dependencies {
     implementation("org.antlr:antlr4-runtime:4.5.2")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     implementation("org.postgresql:postgresql:42.2.5")
-    implementation(project(":enter-utilities"))
+    implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
     implementation(project(":jdbc-base"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")

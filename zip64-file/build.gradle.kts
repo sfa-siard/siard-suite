@@ -9,7 +9,7 @@ plugins {
 description = "Zip64 File Library"
 
 dependencies {
-    implementation(project(":enter-utilities"))
+    implementation(project(":siard-utilities"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
 }

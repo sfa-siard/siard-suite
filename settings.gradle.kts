@@ -8,7 +8,7 @@ rootProject.name = "siard-suite"
 
 include("siard-suite-app")
 include("siard-cmd")
-include("enter-utilities")
+include("siard-utilities")
 include("zip64-file")
 include("sql-parser")
 include("siard-api")

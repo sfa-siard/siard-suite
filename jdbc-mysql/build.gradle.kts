@@ -9,7 +9,7 @@ dependencies {
     implementation("com.mysql:mysql-connector-j:8.3.0")
     implementation("com.vividsolutions:jts-core:1.14.0")
     implementation(project(":jdbc-base"))
-    implementation(project(":enter-utilities"))
+    implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
 
     testImplementation("junit:junit:4.13.2")

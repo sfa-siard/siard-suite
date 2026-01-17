@@ -59,8 +59,9 @@ Then run the CLI tools:
 
 **Build all modules:**
 ```shell
-./gradlew clean build
+./gradlew clean build -x test
 ```
+Note: running all tests takes quite long!
 
 **Build specific module:**
 ```shell
@@ -95,7 +96,7 @@ Examples:
 ./gradlew :siard-cmd:integrationTestMysql               # MySQL only
 ```
 
-**Note:** Integration tests require Docker to be running (uses [Testcontainers](https://www.testcontainers.org/)).
+**Note:** all tests require Docker to be running (uses [Testcontainers](https://www.testcontainers.org/)).
 
 ### Creating Platform-Specific Packages
 

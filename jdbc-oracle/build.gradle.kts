@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     implementation("org.antlr:antlr4-runtime:4.5.2")
-    implementation(project(":enter-utilities"))
+    implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
     implementation("com.oracle.ojdbc:xdb:19.3.0.0")
     implementation("com.oracle.ojdbc:xmlparserv2:19.3.0.0")

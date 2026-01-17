@@ -18,7 +18,7 @@ dependencies {
     implementation(fileTree("lib") { include("*.jar") })
 
     implementation("org.antlr:antlr4-runtime:4.5.2")
-    implementation(project(":enter-utilities"))
+    implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
     implementation(project(":jdbc-base"))
 
