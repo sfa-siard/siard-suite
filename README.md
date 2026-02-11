@@ -142,7 +142,7 @@ Documentation is written in [AsciiDoc](https://asciidoctor.org/) and bundled wit
 
 **Generate PDF documentation:**
 ```shell
-./gradlew asciidoctorPdf
+./gradlew :siard-suite-app:asciidoctorPdf
 ```
 
 **Available Documentation:**

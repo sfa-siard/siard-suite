@@ -212,7 +212,7 @@ tasks.asciidoctor {
     languages("en", "de", "fr", "it")
     baseDirFollowsSourceDir()
 
-    sourceDir("docs/user-manual/")
+    sourceDir("../docs/user-manual/")
     setOutputDir(file("build/docs"))
     sources {
         include("user-manual.adoc")
@@ -224,11 +224,11 @@ tasks.asciidoctorPdf {
     baseDirFollowsSourceDir()
 
     setOutputDir(file("build/docs/pdf"))
-    sourceDir("docs/user-manual/")
+    sourceDir("../docs/user-manual/")
 
     pdfThemes {
         local("basic") {
-            themeDir = file("docs/theme")
+            themeDir = file("../docs/theme")
             themeName = "siard-theme"
         }
     }
@@ -237,7 +237,7 @@ tasks.asciidoctorPdf {
         attributes(
             mapOf(
                 "media" to "press",
-                "styles-dir" to "docs/theme",
+                "styles-dir" to "../docs/theme",
                 "stylesheet" to "siard-theme.css",
                 "source-highlighter" to "coderay",
                 "imagesdir" to "images",
