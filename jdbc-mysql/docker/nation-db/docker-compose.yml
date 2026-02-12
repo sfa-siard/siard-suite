@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  mariadb-10.7:
+    image: mariadb:10.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nation
+      MYSQL_USER: nation
+      MYSQL_PASSWORD: nation
+    volumes:
+      - ./mysql/config:/etc/mysql/conf.d
+      - ./scripts:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+  mariadb-10.0.15:
+    image: mariadb:10.0.15
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nation
+      MYSQL_USER: nation
+      MYSQL_PASSWORD: nation
+    volumes:
+      - ./mysql/config:/etc/mysql/conf.d
+      - ./scripts:/docker-entrypoint-initdb.d
+    ports:
+      - 33061:3306
+  mysql-8.0.27:
+    image: mysql:8.0.27
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nation
+      MYSQL_USER: nation
+      MYSQL_PASSWORD: nation
+    volumes:
+      - ./mysql/config:/etc/mysql/conf.d
+      - ./scripts:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306

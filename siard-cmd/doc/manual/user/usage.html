@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ===================================================================
+Users' Manual of SiardCmd: Usage
+Application: SIARD Suite 2.1
+Platform   : HTML5
+========================================================================
+Copyright  : Enter AG, Joweid Zentrum 1, 8036 Rüti ZH, Switzerland, 2018
+==================================================================== -->
+  <head>
+    <title>SiardCmd - Users' Manual - Usage</title>
+    <!-- character set -->
+    <meta charset="utf-8" />
+    <!-- Icon -->
+    <link rel="icon" type="image/gif" href="../assets/img/icon.gif" />
+    <!-- Global style sheet -->
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/print.css">
+    <link rel="stylesheet" href="../assets/css/siard.css" />
+  </head>
+  <body>
+
+    <div class="container container-main">
+      <header>
+        <div class="clearfix">
+          <div class="table-row">
+            <span class="header-logo">
+              <img src="../assets/img/swiss.svg" onerror="this.onerror=null; this.src='../assets/img/swiss.png'" alt="Confederatio Helvetica" />
+            </span>
+            <h1 class="header-title">SiardCmd - Users' Manual</h1>
+          </div>
+        </div>
+      </header>
+      
+      <div class="nav-main navbar" id="main-navigation"></div>
+    
+      <div class="container-fluid hidden-xs">
+        <div class="row">
+          <div class="col-sm-12">
+            <h2 id="br1" class="hidden">Breadcrumbs</h2>
+            <ol class="breadcrumb" role="navigation" aria-labelledby="br1">
+              <li><a href="./index.html">SiardCmd - Users' Manual</a><span class="icon icon--greater"></span></li>
+              <li class="active" aria-selected="true">Usage</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12 main-column" id="content" role="main">
+            <div class="contentHead">
+              <div class="mod mod-contentpage">
+                <h1>SiardCmd - Users' Manual - Usage</h1>
+              </div>
+            </div>  
+            <div class="mod mod-text">
+              <section class="clearfix">
+                <h2>Usage</h2>
+                <p><em>SiardCmd implements the two command-line applications 
+                  <em>SiardFromDb</em> and <em>SiardToDb</em>.</em>
+                <h3><em>SiardFromDb</em></h3>
+                <p><em>SiardFromDb</em> is started by running <em>siardfromdb.cmd</em> (for Windows) 
+                  or <em>siardfromdb.sh</em> (for LINUX) or explicitly starting 
+                  it using the appropriate JAVA executable.</p>
+                <pre>siardfromdb.cmd &lt;arguments&gt;,
+siardfromdb.sh &lt;arguments&gt;, or
+java -cp &lt;siardpath&gt;/lib/siardcmd.jar ch.admin.bar.siard2.cmd.SiardFromDb &lt;arguments&gt;</pre>
+                <p>where <em>&lt;siardpath&gt;</em> refers to the installation folder 
+                  of <em>SiardCmd</em> and <em>&lt;arguments&gt;</em> refers to 
+                  the following arguments that can be specified on the command-line:</p>
+                <pre>[-h][-o][-q=&lt;query timeout&gt;]
+ [-i=&lt;import xml&gt;] [-x=&lt;lob folder&gt;] [-m=&lt;mime type&gt;] [-e=&lt;export xml&gt;]
+ -j=&lt;JDBC URL&gt; -u=&lt;database user&gt; -p=&lt;database password&gt; -s=&lt;siard file&gt;</pre>
+                <p>The square brackets indicate that the argument is optional.</p>
+                
+                <table>
+                 <thead>
+                   <tr><th>argument</th><th>meaning</th></tr>
+                 <thead>
+                 <tbody>
+                   <tr><td valign="top">-h (help)</td><td>will display a short usage notice explaining the arguments.</td></tr>
+                   <tr><td valign="top">-o (overwrite)</td><td>specifies that the &lt;siard file&gt; and &lt;export xml&gt; specified may be overwritten.</td></tr>
+                   <tr><td valign="top">&lt;query timeout&gt;</td><td>indicates the maximum waiting time for the reaction of the database to a query in seconds. The default value is 75. Enter 0 for an infinite timeout.</td></tr>
+                   <tr><td valign="top">&lt;import xml&gt;</td><td>specifies a metadata XML template holding prepared comments to be added.</td></tr>
+                   <tr><td valign="top">&lt;lob folder&gt;</td><td>specifies the external folder name where the LOB (large object) cells content of the largest LOB column is to be stored. If this optional argument is omitted, all database content is stored inside the SIARD file.</td></tr>
+                   <tr><td valign="top">&lt;mime type&gt;</td><td>gives the MIME type of the content of the externally stored LOB cells (influences choice of file extension).</td></tr>
+                   <tr><td valign="top">&lt;export xml&gt;</td><td>specifies a storage location for the metadata XML resulting from the archival.</td></tr>
+                   <tr><td valign="top">&lt;JDBC URL&gt;</td><td>Specifies the JDBC URL of the database instance to be archived. E.g.
+                     <dl>
+                       <dt>for <em>Microsoft Access</em></dt>
+                         <dd><em>jdbc:access:D:/dbfolder/testdb.accdb</em></dd>
+                       <dt>for <em>DB/2</em></dt>
+                         <dd><em>jdbc:dbserver.enterag.ch:50000/testdb</em></dd>
+                       <dt>for <em>H2 database</em></dt>
+                         <dd><em>jdbc:h2:D:/dbfolder/testdb</em></dd>
+                       <dt>for <em>MySQL</em></dt>
+                         <dd><em>jdbc:mysql://dbserver.enterag.ch:3306/testdb</em></dd>
+                       <dt>for <em>Oracle</em></dt>
+                         <dd><em>jdbc:oracle:thin:@dbserver.enterag.ch:1521:orcl</em></dd>
+                       <dt>for <em>Postgres</em></dt>
+                         <dd><em>jdbc:postgresql://dbserver.enterag.ch:5432/testdb</em></dd>
+                       <dt>for SQL Server</dt>
+                         <dd><em>jdbc:sqlserver://dbserver.enterag.ch\testdb:1433</em><br/>
+                           (in bash shell the latter must be quoted with duplicated backslash:<br/>
+                           <em>"jdbc:sqlserver://dbserver.enterag.ch\\testdb:1433"</em>)</dd>
+                     </dl>
+                   </td></tr>
+                   <tr><td valign="top">&lt;database user&gt;</td><td>Database user for archiving. (N.B.: Make sure this user only has access to the data you want to archive. Avoid using database administrators with rights to everything.)</td></tr>
+                   <tr><td valign="top">&lt;database password&gt;</td><td>Password for database user</td></tr>
+                   <tr><td valign="top">&lt;siard file&gt;</td><td>Name of the SIARD file where the archived database is to be stored.</td></tr>
+                 </tbody>
+               </table>
+               
+               
+                <p class="pull-right">
+                  <small><a href="#" class="icon icon--before icon--power hidden-print">Top of page</a></small>
+                </p>
+                
+                <h3><em>SiardToDb</em></h3>
+                <p><em>SiardToDb</em> is started by running <em>siardtodb.cmd</em>
+                  (for Windows) or <em>siardtodb.sh</em> (for LINUX) or 
+                  explicitly starting it using the appropriate JAVA executable.</p>
+                <pre>siardtodb.cmd &lt;arguments&gt;,
+siardtodb.sh &lt;arguments&gt;, or
+java -cp &lt;siardpath&gt;/lib/siardcmd.jar ch.admin.bar.siard2.cmd.SiardToDb &lt;arguments&gt;</pre>
+                <p>where &lt;siardpath&gt; refers to the installation folder of 
+                  <em>SiardCmd</em> and &lt;arguments&gt; refers to the following 
+                  arguments that can be specified on the command-line:</p>
+                <pre>[-h][-o][-q=&lt;query timeout&gt;]
+ -s=&lt;siard file&gt; -j=&lt;JDBC URL&gt; -u=&lt;database user&gt; -p=&lt;database password&gt;
+ [&lt;schema&gt; &lt;mappedschema&gt;]*</pre>
+                <p>The square brackets indicate that the argument is optional. 
+                  The asterisk after the last bracket indicates that any number of schema mappings may follow.</p>
+                  
+                <table>
+                 <thead>
+                   <tr><th>argument</th><th>meaning</th></tr>
+                 <thead>
+                 <tbody>
+                   <tr><td valign="top">-h (help)</td><td>will display a short usage notice explaining the arguments.</td></tr>
+                   <tr><td valign="top">-o (overwrite)</td><td>specifies that UDTs and tables in the target database may be overwritten with types and tables from the SIARD file.</td></tr>
+                   <tr><td valign="top">&lt;query timeout&gt;</td><td>indicates the maximum waiting time for the reaction of the database to a query in seconds. The default value is 75. Enter 0 for an infinite timeout.</td></tr>
+                   <tr><td valign="top">&lt;siard file&gt;</td><td>Name of the SIARD file where the archived database is stored.</td></tr>
+                   <tr><td valign="top">&lt;JDBC URL&gt;</td><td>Specifies the JDBC URL of the database instance where the archived database is to be loaded. E.g.
+                     <dl>
+	                     <dt>for <em>Microsoft Access</em></dt>
+	                       <dd><em>jdbc:access:D:/dbfolder/testdb.accdb</em></dd>
+	                     <dt>for <em>DB/2</em></dt>
+	                       <dd><em>jdbc:dbserver.enterag.ch:50000/testdb</em></dd>
+	                     <dt>for <em>H2 database</em></dt>
+	                       <dd><em>jdbc:h2:D:/dbfolder/testdb</em></dd>
+	                     <dt>for <em>MySQL</em></dt>
+	                       <dd><em>jdbc:mysql://dbserver.enterag.ch:3306/testdb</em></dd>
+	                     <dt>for <em>Oracle</em></dt>
+	                       <dd><em>jdbc:oracle:thin:@dbserver.enterag.ch:1521:orcl</em></dd>
+                       <dt>for <em>Postgres</em></dt>
+                         <dd><em>jdbc:postgresql://dbserver.enterag.ch:5432/testdb</em></dd>
+	                     <dt>for <em>SQL Server</em></dt>
+	                       <dd><em>jdbc:sqlserver://dbserver.enterag.ch\testdb:1433</em><br/>
+	                         (in bash shell the latter must be quoted with duplicated backslash:<br/>
+	                          <em>"jdbc:sqlserver://dbserver.enterag.ch\\testdb:1433"</em>)</dd>
+                     </dl>
+                   </td></tr>
+                   <tr><td valign="top">&lt;database user&gt;</td><td>Database user for upload. (N.B.: Make sure this user has the right to create types and tables in the mapped schemas.)</td></tr>
+                   <tr><td valign="top">&lt;database password&gt;</td><td>Password for database user</td></tr>
+                   <tr><td valign="top">&lt;schema&gt;</td><td>Schema name in SIARD file</td></tr>
+                   <tr><td valign="top">&lt;mapped schema&gt;</td><td>Schema name to be used in database.</td>
+                 </tbody>
+               </table>
+                
+                <p class="pull-right">
+                  <small><a href="#" class="icon icon--before icon--power hidden-print">Top of page</a></small>
+                </p>
+                
+                <h3>External Storage of Large Objects</h3>
+                <p>Usually a single LOB column from a single table contains the LOBs that
+                  are to be stored externally. If the folder for storing these LOBs is given on the command-line
+                  with the -x option, the LOB column with the largest amount of data (SUM(ORACLE_LENGTH(lobcolumn))) 
+                  is detected automatically by <em>SiardCmd</em> as the LOB column to be exported. If a MIME type
+                  was given, the LOBs will be stored with an extension appropriate for that MIME type. 
+                 </p>
+                 <p>When a command like</p>
+                 <pre>siardfromdb.cmd -o -x:tmp/lobs -j:jdbc:mysql://localhost:3306/testschema -u:testuser -p:testpwd -s:tmp/sfdbmysql.siard -e:tmp/sfdbmysql.xml</pre>
+                 <p>is entered, <em>SiardCmd</em> will report the detected LOB column with a message like</p>
+                 <pre>LOBs in database column "CCLOB_2M" in table "tsqlsimple" in schema "testsqlschema" will be stored externally in folder "D:\Projekte\SIARD2\SiardCmd\tmp\lobs"</pre>
+                 <p>The given folder for external storage must exist. Existing LOB files in it will be overwritten.
+                 <em>SiardCmd</em> stores it the SIARD meta data
+                   as a relative URI as can be seen in the <em>sfdbmysql.xml</em> which is exported with the -e option above:   
+                   <pre>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;siardArchive
+ xmlns="http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd"
+ version="2.1"&gt;
+ ...
+ &lt;schemas&gt;
+  &lt;schema&gt;
+   &lt;name&gt;testsqlschema&lt;/name&gt;
+   &lt;folder&gt;schema1&lt;/folder&gt;
+   &lt;tables&gt;
+     ...
+    &lt;table&gt;
+     &lt;name&gt;tsqlsimple&lt;/name&gt;
+       ...
+      &lt;column&gt;
+       &lt;name&gt;CCLOB_2M&lt;/name&gt;
+       <strong>&lt;lobFolder&gt;../lobs/&lt;/lobFolder&gt;</strong>
+       &lt;type&gt;CLOB(16777215)&lt;/type&gt;
+       &lt;typeOriginal&gt;mediumtext&lt;/typeOriginal&gt;
+       &lt;description&gt;&lt;/description&gt;
+      &lt;/column&gt;
+      ...
+    &lt;/table&gt;
+    ...
+   &lt;/tables&gt;
+  &lt;/schema&gt;
+ &lt;/schemas&gt;
+&lt;/siardArchive&gt;</pre>
+                   <p>This makes it possible, to relocate the SIARD file and its LOBs as long
+                   as they retain their original relative position.</p> 
+                
+                <p class="pull-right">
+                  <small><a href="#" class="icon icon--before icon--power hidden-print">Top of page</a></small>
+                </p>
+                
+                <h3>More Control over Exported LOBs</h3>
+                <p>More control over exported LOBs is sometimes desirable when</p>
+                <ul>
+                  <li>the LOB column to be exported is not the largest,</li>
+                  <li>more than one LOB column is to be exported, or</li>
+                  <li>different MIME types for different LOB columns are to be applied</li>
+                </ul>
+                <p>In that case the meta data of the database must be exported first.
+                  In the exported meta data the desired <em>lobFolder</em>/<em>mimeType</em> values must be entered manually.
+                  Then it can be used as a "template" file for the download using the -i option.</p>
+                 <p>First the meta data are exported using a command like</p>
+                 <pre>siardfromdb.cmd -o -j:jdbc:mysql://localhost:3306/testschema -u:testuser -p:testpwd -e:tmp/mysqlblob.xml</pre>
+                 <p>This exports a <em>mysqlblob.xml</em> like</p>
+                 <pre>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;siardArchive xmlns="http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" version="2.1"&gt;
+ &lt;dbname&gt;(...)&lt;/dbname&gt;
+ &lt;dataOwner&gt;(...)&lt;/dataOwner&gt;
+ &lt;dataOriginTimespan&gt;(...)&lt;/dataOriginTimespan&gt;
+ &lt;producerApplication&gt;SiardFromDb 2.1.57 Swiss Federal Archives, Berne, Switzerland, 2008-2016&lt;/producerApplication&gt;
+ &lt;archivalDate&gt;2018-07-18Z&lt;/archivalDate&gt;
+ &lt;clientMachine&gt;vmw10.enterag.ch&lt;/clientMachine&gt;
+ &lt;databaseProduct&gt;MySQL 5.6.34-log&lt;/databaseProduct&gt;
+ &lt;connection&gt;jdbc:mysql://localhost:3306/testschema?verifyServerCertificate=false&amp;useSSL=false&amp;requireSSL=false&lt;/connection&gt;
+ &lt;databaseUser&gt;testuser@localhost&lt;/databaseUser&gt;
+ &lt;schemas&gt;
+  &lt;schema&gt;
+   &lt;name&gt;testblobschema&lt;/name&gt;
+   &lt;folder&gt;schema0&lt;/folder&gt;
+   &lt;tables&gt;
+    &lt;table&gt;
+     &lt;name&gt;tblobsimple&lt;/name&gt;
+     &lt;folder&gt;table0&lt;/folder&gt;
+     &lt;columns&gt;
+      &lt;column&gt;
+       &lt;name&gt;CINT&lt;/name&gt;
+       &lt;type&gt;INTEGER&lt;/type&gt;
+       &lt;typeOriginal&gt;int&lt;/typeOriginal&gt;
+       &lt;nullable&gt;false&lt;/nullable&gt;
+       &lt;defaultValue&gt;0&lt;/defaultValue&gt;
+       &lt;description&gt;&lt;/description&gt;
+      &lt;/column&gt;
+      &lt;column&gt;
+       &lt;name&gt;CPNG&lt;/name&gt;
+       &lt;type&gt;BLOB(2G)&lt;/type&gt;
+       &lt;typeOriginal&gt;longblob&lt;/typeOriginal&gt;
+       &lt;description&gt;&lt;/description&gt;
+      &lt;/column&gt;
+      &lt;column&gt;
+       &lt;name&gt;CFLAC&lt;/name&gt;
+       &lt;type&gt;BLOB(2G)&lt;/type&gt;
+       &lt;typeOriginal&gt;longblob&lt;/typeOriginal&gt;
+       &lt;description&gt;&lt;/description&gt;
+      &lt;/column&gt;
+     &lt;/columns&gt;
+     &lt;primaryKey&gt;
+      &lt;name&gt;PRIMARY&lt;/name&gt;
+      &lt;column&gt;CINT&lt;/column&gt;
+     &lt;/primaryKey&gt;
+     &lt;rows&gt;2&lt;/rows&gt;
+    &lt;/table&gt;
+   &lt;/tables&gt;
+  &lt;/schema&gt;
+ &lt;/schemas&gt;
+ &lt;users&gt;
+  &lt;user&gt;
+   &lt;name&gt;testuser@localhost&lt;/name&gt;
+  &lt;/user&gt;
+ &lt;/users&gt;
+&lt;/siardArchive&gt;</pre>
+                <p>In this file the desired lobFolder and mimeType entries must be added like this:</p>
+                <pre>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;siardArchive
+ xmlns="http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd"
+ version="2.1"&gt;
+ &lt;dbname&gt;(...)&lt;/dbname&gt;
+ &lt;dataOwner&gt;(...)&lt;/dataOwner&gt;
+ &lt;dataOriginTimespan&gt;(...)&lt;/dataOriginTimespan&gt;
+ <strong>&lt;lobFolder&gt;../lobs/&lt;/lobFolder&gt;</strong>
+ &lt;producerApplication&gt;SiardFromDb 2.1.57 Swiss Federal Archives, Berne, Switzerland, 2008-2016&lt;/producerApplication&gt;
+ &lt;archivalDate&gt;2018-07-18Z&lt;/archivalDate&gt;
+ &lt;clientMachine&gt;vmw10.enterag.ch&lt;/clientMachine&gt;
+ &lt;databaseProduct&gt;MySQL 5.6.34-log&lt;/databaseProduct&gt;
+ &lt;connection&gt;jdbc:mysql://localhost:3306/testschema?verifyServerCertificate=false&amp;useSSL=false&amp;requireSSL=false&lt;/connection&gt;
+ &lt;databaseUser&gt;testuser@localhost&lt;/databaseUser&gt;
+ &lt;schemas&gt;
+  &lt;schema&gt;
+   &lt;name&gt;testblobschema&lt;/name&gt;
+   &lt;folder&gt;schema0&lt;/folder&gt;
+   &lt;tables&gt;
+    &lt;table&gt;
+     &lt;name&gt;tblobsimple&lt;/name&gt;
+     &lt;folder&gt;table0&lt;/folder&gt;
+     &lt;columns&gt;
+      &lt;column&gt;
+       &lt;name&gt;CINT&lt;/name&gt;
+       &lt;type&gt;INTEGER&lt;/type&gt;
+       &lt;typeOriginal&gt;int&lt;/typeOriginal&gt;
+       &lt;nullable&gt;false&lt;/nullable&gt;
+       &lt;defaultValue&gt;0&lt;/defaultValue&gt;
+       &lt;description&gt;&lt;/description&gt;
+      &lt;/column&gt;
+      &lt;column&gt;
+       &lt;name&gt;CPNG&lt;/name&gt;
+       <strong>&lt;lobFolder&gt;png/&lt;/lobFolder&gt;</strong>
+       &lt;type&gt;BLOB(2G)&lt;/type&gt;
+       <strong>&lt;mimeType&gt;image/png&lt;/mimeType&gt;</strong>
+       &lt;typeOriginal&gt;longblob&lt;/typeOriginal&gt;
+       &lt;description&gt;&lt;/description&gt;
+      &lt;/column&gt;
+      &lt;column&gt;
+       &lt;name&gt;CFLAC&lt;/name&gt;
+       <strong>&lt;lobFolder&gt;flac/&lt;/lobFolder&gt;</strong>
+       &lt;type&gt;BLOB(2G)&lt;/type&gt;
+       <strong>&lt;mimeType&gt;audio/flac&lt;/mimeType&gt;</strong>
+       &lt;typeOriginal&gt;longblob&lt;/typeOriginal&gt;
+       &lt;description&gt;&lt;/description&gt;
+      &lt;/column&gt;
+     &lt;/columns&gt;
+     &lt;primaryKey&gt;
+      &lt;name&gt;PRIMARY&lt;/name&gt;
+      &lt;column&gt;CINT&lt;/column&gt;
+     &lt;/primaryKey&gt;
+     &lt;rows&gt;2&lt;/rows&gt;
+    &lt;/table&gt;
+   &lt;/tables&gt;
+  &lt;/schema&gt;
+ &lt;/schemas&gt;
+ &lt;users&gt;
+  &lt;user&gt;
+   &lt;name&gt;testuser@localhost&lt;/name&gt;
+  &lt;/user&gt;
+ &lt;/users&gt;
+&lt;/siardArchive&gt;</pre>
+
+                <p>In the example we use relative LOB folder URIs.
+                  The value "../lobs/" in the <em>siardArchive</em> element
+                  indicates, that the LOBs are to be stored in the folder "lobs/"
+                  in the folder where the SIARD file is stored.
+                  The value "png/" in the <em>column</em> element with the name CPNG
+                  indicates, that the LOBs in this column are to be stored in the
+                  "png/" subfolder of the "lobs/" folder. Similarly the LOBs
+                  in the CFLAC column are to be stored in the "flac/" subfolder of
+                  the global "lobs/" folder.</p>
+                <p>The MIME type <em>image/png</em> indicates that the file extension <em>.png</em>
+                  is suitable for the LOBs in the CPNG column. The MIME type <em>audio/flac</em>
+                  indicates that the file extension <em>.flac</em> applies to the LOBs in the CFLAC column.</p>
+                 <p>After these preparations the database can be downloaded with the command:</p>
+                 <pre>siardfromdb.cmd -o -i:tmp/mysqlblob.xml -j:jdbc:mysql://localhost:3306/testschema -u:testuser -p:testpwd -s:tmp/sfdbmysql.siard</pre>
+                 <p>This stores a small SIARD file referencing the BLOBs in the subfolders
+                   <em>lobs/png</em> and <em>lobs/flac</em> of its parent folder <em>tmp</em>:</p>
+                 <img src="../assets/img/blobs.png" alt="directory listing with BLOBs"/>
+                
+                <p class="pull-right">
+                  <small><a href="#" class="icon icon--before icon--power hidden-print">Top of page</a></small>
+                </p>
+                
+                <h3>No GUI for <em>SiardCmd</em></h3>
+                <p><em>SiardCmd</em> implements command-line utilities for
+                  downloading and uploading relational databases in SIARD Format 2.1
+                  from and to an instance of a relational database without a graphical user interface (GUI).
+                  The project <em>SiardGui</em> implements such a GUI for
+                  the functionality implemented by <em>SiardCmd</em>. In addition
+                  it permits editing the meta data in the SIARD files.</p>
+                   
+                <p>The command-line programs of <em>SiardCmd</em> can be used 
+                  in scripts. Therefore it is published as a separate
+                  stand-alone project.</p> 
+
+                <p class="pull-right">
+                  <small><a href="#" class="icon icon--before icon--power hidden-print">Top of page</a></small>
+                </p>
+                
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="container-fluid">
+          <hr class="footer-line">
+          <img src="../assets/img/logo-CH.svg" onerror="this.onerror=null; this.src='../assets/img/logo-CH.png'" />
+          <h1 class="hidden-xs">Swiss Federal Archives</h1>
+          <p class=pull-right><a href="../../../LICENSE.txt">License</a></p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

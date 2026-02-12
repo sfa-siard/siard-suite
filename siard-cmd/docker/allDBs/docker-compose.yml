@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: testschema
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+  oracle:
+    image: gvenzl/oracle-xe:18.4.0
+    environment:
+      ORACLE_PASSWORD: SYSTEM
+      APP_USER: TESTUSER
+      APP_USER_PASSWORD: testpwd
+    ports:
+      - 1521:1521
+  mssql:
+    build:
+      context: ../mssql
+      dockerfile: ../mssql/Dockerfile
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Yukon900
+    ports:
+      - 1433:1433
+  mysql:
+    image: mysql:5.6.51
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpwd
+      MYSQL_DATABASE: testschema
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpwd
+    volumes:
+      - ./docker/mysql/config:/etc/mysql/conf.d
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+  db2:
+    build:
+      context: ../db2
+      dockerfile: ../db2/Dockerfile
+    environment:
+      LICENSE: accept
+      DB2INSTANCE: db2inst1
+      DB2INST1_PASSWORD: mypasswd
+      DBNAME: testdb
+    # privileged true is essential - it will not work otherwise!!!
+    privileged: true
+    ports:
+      - 50000:50000

@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<table xmlns="http://www.bar.admin.ch/xmlns/siard/2/table.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bar.admin.ch/xmlns/siard/2/table.xsd table0.xsd"
+	version="2.2">
+	<row>
+		<c1>!</c1>
+		<c2>!"#$%&amp;'()*+,-./0123456789:;&lt;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\u005C]^_`abcdefghijklmnopqrstuvwxyz{|}~!"#$%&amp;'()*+,-./0123456789:;&lt;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\u005C]^_`abcdefghijklmnopqrstuvwxyz{|}~!"#$%&amp;'()*+,-./0123456789:;&lt;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\u005C]^_`abcd</c2>
+		<c3 digest="D4C22217A73F1C4A2242823CD377E737" digestType="MD5"
+			file="content/schema0/table0/lob2/record0.txt" length="2000000" />
+		<c4>\u0020</c4>
+		<c5>\u0020!"#$%&amp;'()*+,-./0123456789:;&lt;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\u005C]^_`abcdefghijklmnopqrstuvwxyz{|}~\u007F ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ !"#$%&amp;'()*+,-./0123456789:;&lt;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\u005C]^_</c5>
+		<c6 digest="B0AF142692D1D9A2EFCC9126CE0725AF" digestType="MD5"
+			file="content/schema0/table0/lob5/record0.txt" length="1000000" />
+		<c7 digest="605B82B1B69AA126637E6827C5C27F93" digestType="MD5"
+			file="content/schema0/table0/lob6/record0.xml" length="1000" />
+		<c8>00</c8>
+		<c9>000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F808182838485868788898A8B8C8D8E8F909192939495969798999A9B9C9D9E9FA0A1A2A3A4A5A6A7A8A9AAABACADAEAFB0B1B2B3B4B5B6B7B8B9BABBBCBDBEBFC0C1C2C3C4C5C6C7C8C9CACBCCCDCECFD0D1D2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF</c9>
+		<c10 digest="CBECBDB0FDD5CEC1E242493B6008CC79" digestType="MD5"
+			file="content/schema0/table0/lob9/record0.bin" length="1000" />
+		<c11>493824.36</c11>
+		<c12>0.493827156</c12>
+		<c13>12345</c13>
+		<c14>12345678</c14>
+		<c15>12345678901234567</c15>
+		<c16>0.3141592</c16>
+		<c17>0.3141592</c17>
+		<c18>3.14159265359</c18>
+		<c19>true</c19>
+		<c20>2016-08-16Z</c20>
+		<c21>09:08:43.879Z</c21>
+		<c22>2016-08-16T09:08:43.123456789Z</c22>
+		<c23>P7Y3M</c23>
+		<c24>P45DT13H15M0S</c24>
+		<c25>P0DT0H0M12.345S</c25>
+	</row>
+	<row>
+		<c1>"</c1>
+		<c2>efghijklmnopqrstuvwxyz{|}~!"#$%&amp;'()*+,-./0123456789:;&lt;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\u005C]^_`abcdefghijklmnopqrstuvwxyz{|}~!"#$%&amp;'(</c2>
+		<c3 digest="DE1109171D20696D0A463ABDDC2595DE" digestType="MD5"
+			file="content/schema0/table0/lob2/record1.txt" length="2345" />
+		<c4>!</c4>
+		<c5>`abcdefghijklmnopqrstuvwxyz{|}~\u007F ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ</c5>
+		<c7 digest="29A541DE939F013C6397B685FC41B621" digestType="MD5"
+			file="content/schema0/table0/lob6/record1.xml" length="36" />
+		<c8>01</c8>
+		<c9>C8C9CACBCCCDCECFD0D1D2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758</c9>
+		<c10 digest="5C725CBC2DBBE1148159E9D9CF90648F" digestType="MD5"
+			file="content/schema0/table0/lob9/record1.bin" length="1000000" />
+		<c11>617280.45</c11>
+		<c12>0.617283945</c12>
+		<c13>24690</c13>
+		<c14>24691356</c14>
+		<c15>24691357802469134</c15>
+		<c16>0.6283184</c16>
+		<c17>0.3141592</c17>
+		<c18>3.14159265359</c18>
+		<c20>2018-02-01Z</c20>
+		<c21>14:02:30.031Z</c21>
+		<c22>2018-02-01T14:02:30.123456789Z</c22>
+		<c24>-P34DT0H0M0S</c24>
+		<c25>P0DT0H0M23.456S</c25>
+	</row>
+	<row>
+		<c1>#</c1>
+		<c2>)*+,-./0123456789:;&lt;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\u005C]^_`abcdefgh</c2>
+		<c4>"</c4>
+		<c5>\u0020!"#$%&amp;'()*+,-./0123456789:;&lt;=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\u005C]^_</c5>
+		<c6 digest="395E7B680D4A9E19DFD6D0D835484E6C" digestType="MD5"
+			file="content/schema0/table0/lob5/record2.txt" length="1234" />
+		<c7 digest="831276E43B0714851790B02A13C3A8D2" digestType="MD5"
+			file="content/schema0/table0/lob6/record2.xml" length="10000" />
+		<c8>02</c8>
+		<c9>595A5B5C5D5E5F606162636465666768696A6B6C6D6E6F707172737475767778797A7B7C7D7E7F808182838485868788898A8B8C8D8E8F909192939495969798999A9B9C9D9E9FA0A1A2A3A4A5A6A7A8A9AAABACADAEAFB0B1B2B3B4B5B6B7B8B9BABBBCBDBEBFC0C1C2C3C4C5C6C7</c9>
+		<c10 digest="7ACEDD1A84A4CFCB6E7A16003242945E" digestType="MD5"
+			file="content/schema0/table0/lob9/record2.bin" length="100" />
+		<c11>740736.54</c11>
+		<c12>0.740740734</c12>
+		<c13>-28501</c13>
+		<c14>37037034</c14>
+		<c15>37037036703703701</c15>
+		<c16>0.9424776000000001</c16>
+		<c17>0.3141592</c17>
+		<c18>3.14159265359</c18>
+		<c19>false</c19>
+		<c20>2018-02-01Z</c20>
+		<c21>14:02:30.067Z</c21>
+		<c22>2018-02-01T14:02:30.123456789Z</c22>
+		<c23>P17Y1M</c23>
+		<c24>P23DT7H30M0S</c24>
+		<c25>P0DT0H0M34.567S</c25>
+	</row>
+	<row>
+		<c1>$</c1>
+		<c2>ijklmnopqrstuvwxyz{|}~!"#$%&amp;'()*+,-./0123456789:;&lt;=>?@ABCDEFGHIJ</c2>
+		<c3 digest="B183E902CDCAA014910EA5592FC2D5CB" digestType="MD5"
+			file="content/schema0/table0/lob2/record3.txt" length="234567" />
+		<c4>#</c4>
+		<c5>`abcdefghijklmnopqrstuvwxyz{|}~\u007F ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿</c5>
+		<c6 digest="3D30C96D579648D863E77ECD42EBB38D" digestType="MD5"
+			file="content/schema0/table0/lob5/record3.txt" length="123456" />
+		<c8>03</c8>
+		<c9>909192939495969798999A9B9C9D9E9FA0A1A2A3A4A5A6A7A8A9AAABACADAEAFB0B1B2B3B4B5B6B7B8B9BABBBCBDBEBFC0C1C2C3C4C5C6C7C8C9CACBCCCDCECFD0D1D2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF</c9>
+		<c10 digest="7007D9BA10B9A5E64A9F92DF87E94A06" digestType="MD5"
+			file="content/schema0/table0/lob9/record3.bin" length="100000" />
+		<c11>864192.63</c11>
+		<c12>0.864197523</c12>
+		<c13>-16156</c13>
+		<c14>49382712</c14>
+		<c15>49382715604938268</c15>
+		<c16>1.2566368</c16>
+		<c17>0.3141592</c17>
+		<c18>3.14159265359</c18>
+		<c19>true</c19>
+		<c20>2018-02-01Z</c20>
+		<c21>14:02:30.121Z</c21>
+		<c22>2018-02-01T14:02:30.123456789Z</c22>
+		<c23>P1Y11M</c23>
+		<c24>P12DT12H0M0S</c24>
+		<c25>P0DT0H0M45.678S</c25>
+	</row>
+</table>

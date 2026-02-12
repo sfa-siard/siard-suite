@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<siardArchive
+ xmlns="http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd"
+ version="2.1">
+ <dbname>(...)</dbname>
+ <dataOwner>(...)</dataOwner>
+ <dataOriginTimespan>(...)</dataOriginTimespan>
+ <lobFolder>../lobs/</lobFolder>
+ <producerApplication>SiardFromDb 2.1.57 Swiss Federal Archives, Berne, Switzerland, 2008-2016</producerApplication>
+ <archivalDate>2018-07-18Z</archivalDate>
+ <clientMachine>vmw10.enterag.ch</clientMachine>
+ <databaseProduct>MySQL 5.6.34-log</databaseProduct>
+ <connection>jdbc:mysql://localhost:3306/testschema?verifyServerCertificate=false&amp;useSSL=false&amp;requireSSL=false</connection>
+ <databaseUser>testuser@localhost</databaseUser>
+ <schemas>
+  <schema>
+   <name>testblobschema</name>
+   <folder>schema0</folder>
+   <tables>
+    <table>
+     <name>tblobsimple</name>
+     <folder>table0</folder>
+     <columns>
+      <column>
+       <name>CINT</name>
+       <type>INTEGER</type>
+       <typeOriginal>int</typeOriginal>
+       <nullable>false</nullable>
+       <defaultValue>0</defaultValue>
+       <description></description>
+      </column>
+      <column>
+       <name>CPNG</name>
+       <lobFolder>png/</lobFolder>
+       <type>BLOB(2G)</type>
+       <mimeType>image/png</mimeType>
+       <typeOriginal>longblob</typeOriginal>
+       <description></description>
+      </column>
+      <column>
+       <name>CFLAC</name>
+       <lobFolder>flac/</lobFolder>
+       <type>BLOB(2G)</type>
+       <mimeType>audio/flac</mimeType>
+       <typeOriginal>longblob</typeOriginal>
+       <description></description>
+      </column>
+     </columns>
+     <primaryKey>
+      <name>PRIMARY</name>
+      <column>CINT</column>
+     </primaryKey>
+     <rows>2</rows>
+    </table>
+   </tables>
+  </schema>
+ </schemas>
+ <users>
+  <user>
+   <name>testuser@localhost</name>
+  </user>
+ </users>
+</siardArchive>

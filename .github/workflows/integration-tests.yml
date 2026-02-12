@@ -1,0 +1,76 @@
+name: Integration Tests (siard-cmd)
+
+on:
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+env:
+  TZ: Europe/Zurich
+
+jobs:
+  execute-unit-and-integration-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database:
+          - name: postgres
+            task: integrationTestPostgres
+          - name: mysql
+            task: integrationTestMysql
+          - name: mariadb
+            task: integrationTestMariadb
+          - name: mssql
+            task: integrationTestMssql
+          - name: oracle
+            task: integrationTestOracle
+          - name: db2
+            task: integrationTestDb2
+          - name: msaccess
+            task: integrationTestMsaccess
+          - name: utils
+            task: integrationTestUtils
+    name: Integration Tests (${{ matrix.database.name }})
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: "gradle"
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Free up disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+          # Remove unnecessary software to free up disk space
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune -a -f
+          echo "Disk space after cleanup:"
+          df -h
+      - name: Run ${{ matrix.database.name }} integration tests
+        run: ./gradlew :siard-cmd:${{ matrix.database.task }}
+      - name: Dump Docker logs on failure
+        if: failure()
+        run: |
+          echo "=== Docker containers ==="
+          docker ps -a
+          echo "=== Docker logs ==="
+          docker ps -a -q | xargs -I {} docker logs {}
+      - name: Store reports
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: integration-test-reports-${{ matrix.database.name }}
+          path: |
+            siard-cmd/build/reports/
+            siard-cmd/build/test-results/

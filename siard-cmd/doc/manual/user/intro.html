@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ===================================================================
+Users' Manual of SiardCmd: Introduction
+Application: SIARD Suite 2.1
+Platform   : HTML5
+========================================================================
+Copyright  : Enter AG, Joweid Zentrum 1, 8036 Rüti ZH, Switzerland, 2018
+==================================================================== -->
+  <head>
+    <title>SiardCmd - Users' Manual - Introduction</title>
+    <!-- character set -->
+    <meta charset="utf-8" />
+    <!-- Icon -->
+    <link rel="icon" type="image/gif" href="../assets/img/icon.gif" />
+    <!-- Global style sheet -->
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/print.css">
+    <link rel="stylesheet" href="../assets/css/siard.css" />
+  </head>
+  <body>
+
+    <div class="container container-main">
+      <header>
+        <div class="clearfix">
+          <div class="table-row">
+            <span class="header-logo">
+              <img src="../assets/img/swiss.svg" onerror="this.onerror=null; this.src='../assets/img/swiss.png'" alt="Confederatio Helvetica" />
+            </span>
+            <h1 class="header-title">SiardCmd - Users' Manual</h1>
+          </div>
+        </div>
+      </header>
+      
+      <div class="nav-main navbar" id="main-navigation"></div>
+    
+      <div class="container-fluid hidden-xs">
+        <div class="row">
+          <div class="col-sm-12">
+            <h2 id="br1" class="hidden">Breadcrumbs</h2>
+            <ol class="breadcrumb" role="navigation" aria-labelledby="br1">
+              <li><a href="./index.html">SiardCmd - Users' Manual</a><span class="icon icon--greater"></span></li>
+              <li class="active" aria-selected="true">Introduction</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12 main-column" id="content" role="main">
+            <div class="contentHead">
+              <div class="mod mod-contentpage">
+                <h1>SiardCmd - Users' Manual - Introduction</h1>
+              </div>
+            </div>  
+            <div class="mod mod-text">
+              <section class="clearfix">
+                <h2>Introduction</h2>
+                <p><em>SiardCmd</em> was developed
+                by <a href="http://www.enterag.ch/" target="_blank">Enter AG</a> 
+                for the <a href="https://www.bar.admin.ch/" target="_blank">Swiss Federal Archives</a>
+                as part of the <em>SIARD (Software-Independent Archival of Relational Databases)</em> project.</p>
+                <p>It serves the purpose of providing an API for reading and 
+                  writing SIARD files conforming to the SIARD Format 2.1.</p>
+                <p>This document is the users' manual of <em>SiardCmd</em>.</p>
+                
+                <p class="pull-right">
+                  <small><a href="#" class="icon icon--before icon--power hidden-print">Top of page</a></small>
+                </p>
+                  
+                <h3>Intellectual Property Rights</h3>
+                <p><em>SiardCmd</em> is a development of Enter AG.
+                  It is published under the <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a>
+                  (in the <em>SiardCmd</em> distribution as <em>doc/licenses/CDDL-1.0.txt</em>).</p>
+                <p><em>SiardCmd</em> relies on the following components of other manufacturers:</p>
+                <dl>
+                  <dt>JAVA SE 1.8 or higher</dt>
+                  <dd>from Oracle <a href="http://www.oracle.com/technetwork/java/javase/downloads/" target="_blank">http://www.oracle.com/technetwork/java/javase/downloads/</a><br/>
+                    License: <a href="http://www.oracle.com/technetwork/java/javase/terms/license/index.html" target="_blank">Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX</a>
+                    in the SiardCmd distribution as <em>doc/licenses/java-license.txt</em>
+                  </dd>
+                  <dt>SiardApi</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>
+                  <dt>JavaBeans Activation Framework (Version 1.1.1)</dt>
+                  <dd>from Sun Microsystems Inc. <a href="http://www.java2s.com/Code/Jar/a/Downloadactivationjar.htm" target="_blank">http://www.java2s.com/Code/Jar/a/Downloadactivationjar.htm</a>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a>
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  <dt>Java Architecture for XML Binding (JAXB) (Version 2.3.0)</dt>
+                  <dd>from Oracle <a href="http://www.java2s.com/Code/Jar/j/Downloadjaxbapi22jar.htm" target="_blank">http://www.java2s.com/Code/Jar/j/Downloadjaxbapi22jar.htm</a><br/>
+                    License: <a href="https://glassfish.java.net/public/CDDL+GPL_1_1.html" target="_blank">COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)Version 1.11 and the GNU General Public License (GPL) Version 2 (CDDL+GPL 1.1)</a>
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL+GPL_1.1.txt</em>
+                  </dd>
+                  <dt>Woodstox XML processor</dt>
+                  <dd>An implementation of the Streaming API for XML (StAX2) for fast
+                    XML streaming while validating against an XML schema from 
+                    Codehaus <a href="https://mvnrepository.com/artifact/org.codehaus.woodstox/" target="_blank">https://mvnrepository.com/artifact/org.codehaus.woodstox/</a><br/>
+                    License: <a href="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" target="_blank">GNU Lesser Public License 2.1 (LGPLv2.1)</a>
+                    in the SiardCmd distribution as <em>doc/licenses/LGPL2.1.txt</em>
+                  </dd>
+                  <dt>Multi-Schema Validator (MSV)</dt>
+                  <dd>from SUN/Apache <a href="https://github.com/kohsuke/msv/" target="_blank">https://github.com/kohsuke/msv/</a><br/>
+                    License: <a href="https://directory.fsf.org/wiki?title=License:FreeBSD" target="_blank">BSD license (BSD-2)</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/BSD-2.txt</em>.
+                  </dd>
+                  <dt>Zip64File</dt>
+                  <dd>from Enter AG<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>.
+                  </dd>
+                  <dt>SqlParser</dt>
+                  <dd> from Enter AG<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>.
+                  </dd>
+                  <dt>ANTLR4 (Version 4.5.2)</dt>
+                  <dd>Parser Generator from Terence Parr <a href="http://www.antlr.org/download.html" target="_blank">http://www.antlr.org/download.html</a><br/> 
+                    License: <a href="http://www.antlr.org/license.html" target="_blank">BSD License (BSD-3))</a>
+                    in the SiardCmd distribution as <em>doc/licenses/BSD-3.txt</em>
+                  </dd>
+                  <dt>JTS Topology Suite (Version 1.14 - used by H2 for the GEOMETRY extension)</dt>
+                  <dd>from Martin Davis <a href="http://tsusiatsoftware.net/" target="_blank">http://tsusiatsoftware.net/</a><br/>
+                    License: <a href="http://www.gnu.org/licenses/old-licenses/lgpl-2.0.txt" target="_blank">GNU Library General Public License (LGPLv2.0)</a>
+                    in the SiardCmd distribution as <em>doc/licenses/LGPLv2.0.txt</em>.
+                  </dd>
+                  <dt>JdbcBase</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>                
+                  <dt>JdbcPostgres</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>                
+                  <dt>JDBC Driver for Postgres (postresql-42.2.5.jar)</dt>
+                  <dd>from the PostgreSQL Global Development Group<br/>
+                    License: <a href="https://www.postgresql.org/about/licence/" target="_blank">Postgres License</a>
+                    in the SiardCmd distribution as <em>doc/licenses/licensePostgres.txt</em>.
+                  </dd>
+                  <dt>JdbcOracle</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>                
+                  <dt>JDBC Driver for Oracle (ojdbc6.jar (version 12.1.0.1.0), xdb6.jar, xmlparserv2.jar)</dt>
+                  <dd>from Oracle<br/>
+                    License: <a href="http://www.oracle.com/technetwork/licenses/distribution-license-152002.html" target="_blank">Oracle License</a>
+                    in the SiardCmd distribution as <em>doc/licenses/licenseOracle.txt</em>.
+                  </dd>
+                  <dt>JdbcMySql</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>                
+                  <dt>JDBC Driver for MySQL (Version 8.0.18)</dt>
+                  <dd>from Oracle <a href="https://dev.mysql.com/downloads/connector/j/" target="_blank">https://dev.mysql.com/downloads/connector/j/</a><br/>
+                    License: <a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank">GNU Generial Public License (GPLv2.0)</a>
+                    in the SiardCmd distribution as <em>doc/licenses/GPLv2.0.txt</em>.
+                  </dd>
+                  <dt>JdbcMsSql</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>                
+                  <dt>JDBC Driver for SQL Server (Version 4.1)</dt>
+                  <dd>from Microsoft <a href="https://msdn.microsoft.com/library/mt484311.aspx" target="_blank">https://msdn.microsoft.com/library/mt484311.aspx</a><br/> 
+                    License: <a href="https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=11774" target="_blank">Microsoft License</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/license41.txt</em>.
+                  </dd>
+                  <dt>JdbcH2</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>                
+                  <dt>H2 database (Version 1.3.176)</dt>
+                  <dd>from Thomas Müller <a href="http://www.h2database.com/" target="_blank">http://www.h2database.com/</a><br/> 
+                    License: dual license <a href="https://opensource.org/licenses/eclipse-1.0.txt" target="_blank">Eclipse Public License v1.0 (EPL1.0)</a> and 
+                    <a href="https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt" target="_blank">Mozilla Public License 2.0 (MPL2.0)</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/EPL1.0.txt</em> and <em>doc/licenses/MPL2.0.txt</em>.
+                  </dd>
+                  <dt>JdbcDb2</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>                
+                  <dt>JDBC Driver for DB/2 (Version 4.1)</dt>
+                  <dd>from IBM <a href="http://www-01.ibm.com/support/docview.wss?uid=swg21363866" target="_blank">http://www-01.ibm.com/support/docview.wss?uid=swg21363866</a><br/>
+                     License: <a href="http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-LKSA-94UU9J&title=IBM+Data+Server+Driver+for+JDBC+and+SQLJ+(JCC+Driver)&l=en#LI" target="_blank">IBM license</a>
+                     in the SiardCmd distribution as <em>doc/licenses/IBM JDBC 4 License.txt</em> and <em>doc/licenses/IBM jdbc4_notices.txt</em>.<br/>
+                     This very long license essentially declares that IBM is the copyright 
+                     holder of the software and makes it freely available for using, 
+                     copying and redistributing. However, there are technical “licenses”
+                     which restrict its use for connecting to a DB/2 instance running 
+                     on an operating system platform which is not Windows, LINUX, or UNIX. 
+                     If you want to make use of <em>SIARD Suite</em> in such a context, you need to 
+                     apply to the vendor of the DB/2 database instance for the 
+                     appropriate technical license file from IBM and add it to the 
+                     class path.
+                   </dd>
+                  <dt>JdbcAccess</dt>
+                  <dd>from Swiss Federal Archives<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>
+                  </dd>                
+                  <dt>Jackcess (Version 2.1.6)</dt>
+                  <dd>from Health Market Science <a href="http://jackcess.sourceforge.net/" target="_blank">http://jackcess.sourceforge.net/</a><br/>
+                    License: <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License, Version 2.0</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/Apache-license-2.0.txt</em>
+                  </dd>
+                  <dt>Two parts (commons-lang-2.6 6 and commons-logging-1.1.3 7 ) used by Jackcess</dt>
+                   <dd>from Apache Commons <a href="http://commons.apache.org/" target="_blank">http://commons.apache.org/</a><br/>
+                    License: <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License, Version 2.0</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/Apache-license-2.0.txt</em>
+                  </dd>
+                  <dt>EnterUtilities</dt>
+                  <dd> from Enter AG<br/>
+                    License: <a href="http://opensource.org/licenses/CDDL-1.0" target="_blank">CDDL-1.0 license</a> 
+                    in the SiardCmd distribution as <em>doc/licenses/CDDL-1.0.txt</em>.
+                  </dd>
+                </dl>
+                <p>A copy of all licenses can be found in the <em>doc/licenses</em> 
+                  folder of the distribution ZIP file. A copy of all third party 
+                  binaries used by <em>SIARD Suite</em> can be found in the <em>lib</em>
+                  folder of the distribution.</p>
+
+                <p class="pull-right">
+                  <small><a href="#" class="icon icon--before icon--power hidden-print">Top of page</a></small>
+                </p>
+                
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="container-fluid">
+          <hr class="footer-line">
+          <img src="../assets/img/logo-CH.svg" onerror="this.onerror=null; this.src='../assets/img/logo-CH.png'" />
+          <h1 class="hidden-xs">Swiss Federal Archives</h1>
+          <p class=pull-right><a href="../../../LICENSE.txt" target="_blank">License</a></p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

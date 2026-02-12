@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<table xmlns="http://www.bar.admin.ch/xmlns/siard/2/table.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.bar.admin.ch/xmlns/siard/2/table.xsd table1.xsd"
+	version="2.2">
+	<row>
+		<c1>1234567890</c1>
+		<c2>987654321</c2>
+		<c3>
+			<u1>12345</u1>
+			<u2 digest="A845613E1AC0C153E7C264280F737EA4" digestType="MD5"
+				file="content/schema0/table1/lob2/field1/record0.txt" length="20000" />
+			<u3 digest="51F89E35F05E9E0AE33F3734BFF15F2B" digestType="MD5"
+				file="content/schema0/table1/lob2/field2/record0.bin" length="2016" />
+		</c3>
+		<c4>
+			<a1>element 0,1</a1>
+			<a3>element 0,3</a3>
+			<a4>element 0,4</a4>
+		</c4>
+		<c5>
+			<u1>-15</u1>
+			<u2>
+				<u1>-12345</u1>
+				<u2 digest="8D9A6D54FEBDD16A08E4D943E6EA405D" digestType="MD5"
+					file="content/schema0/table1/lob4/field1/field1/record0.txt"
+					length="2345678" />
+				<u3 digest="4BE0B92E92D58C85E9166514506C01C4" digestType="MD5"
+					file="content/schema0/table1/lob4/field1/field2/record0.bin"
+					length="4567" />
+			</u2>
+		</c5>
+	</row>
+	<row>
+		<c1>1987654321</c1>
+		<c3>
+			<u1>4321</u1>
+			<u3 digest="D1C7F9DD72FE6A50813AC4F0C87121BC" digestType="MD5"
+				file="content/schema0/table1/lob2/field2/record1.bin" length="20000000" />
+		</c3>
+		<c4>
+			<a1>element 1,1</a1>
+			<a2>element 1,2</a2>
+			<a3>element 1,3</a3>
+			<a4>element 1,4</a4>
+		</c4>
+		<c5>
+			<u1>0</u1>
+			<u2>
+				<u1>12345</u1>
+				<u3 digest="7007D9BA10B9A5E64A9F92DF87E94A06" digestType="MD5"
+					file="content/schema0/table1/lob4/field1/field2/record1.bin"
+					length="100000" />
+			</u2>
+		</c5>
+	</row>
+</table>

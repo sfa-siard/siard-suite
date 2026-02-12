@@ -1,0 +1,2 @@
+# Module-specific: folder where build-oracle-image.sh clones oracle/docker-images
+docker-images

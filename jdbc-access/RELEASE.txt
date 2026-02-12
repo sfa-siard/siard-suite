@@ -1,0 +1,43 @@
+Release Notes for JdbcAccess 2.1
+================================
+
+2.1.89
+Some more Access parsing added.
+Transform IllegalArgumentsException to SQLException in getColumns() for views.
+
+2.1.80
+The Nordwind database can now be downloaded. Other complex views may fail, however.
+It is questionable, whether SIARD should implement a full parser for the
+MS ACCESS pseudo-SQL syntax. The table data are stored faithfully.
+Maybe the view columns and their data types are not so important?
+
+2.1.73
+Replaced column meta data of view by full parsing of query.
+
+2.1.72
+Fixed all kinds of exotic problems 
+- append-only pseudo-columns,
+- Table/Query complex data type,
+- ... 
+from the Northwind database.
+
+2.1.56
+Third fix of problem of VIEW meta data views referencing tables in linked tables (Issue 10)
+
+2.1.54
+Second fix of problem of VIEW meta data in linked tables (Issue 10)
+
+2.1.52
+Fixed problem of VIEW meta data in linked tables (Issue 10)
+
+2.1.49 
+Added QUERY_TEXT in DatabaseMetaData (Issue 9)
+
+2.1.40
+Bugfixes (mainly VIEW meta data)
+
+2.1.0 
+Release for JAVA 10
+
+2.0.1
+First release of JdbcAccess.

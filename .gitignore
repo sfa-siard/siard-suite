@@ -1,17 +1,19 @@
+### Build outputs ###
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+dist/
+out/
+
+### Gradle ###
+.gradle/
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-.idea/GitlabLint.xml
-.idea/misc.xml
-.idea/gradle.xml
-.idea/workspace.xml
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -28,12 +30,8 @@ target/
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
-/dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
@@ -41,10 +39,21 @@ build/
 ### Mac OS ###
 .DS_Store
 
-/.gradle/
+### Tool configurations ###
+.tool-versions
 
+### Test artifacts ###
+junit*.*
+**/tmp/
+**/src/test/resources/tmp/*
+!**/.keep
+
+### Javadoc ###
+**/doc/javadoc/
+
+### SIARD-specific ###
 *.siard
 /lobs/
 
 # ignore generated user manuals
-/src/main/resources/ch/admin/bar/siardsuite/doc/
+siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/doc

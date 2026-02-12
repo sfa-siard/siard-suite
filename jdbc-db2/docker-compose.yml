@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  db2:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    environment:
+      LICENSE: accept
+      DB2INSTANCE: db2inst1
+      DB2INST1_PASSWORD: mypasswd
+      DBNAME: testdb
+    # privileged true is essential - it will not work otherwise!!!
+    privileged: true
+    ports:
+      - 50000:50000
+
+

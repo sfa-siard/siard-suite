@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Created-By: Hartwig Thomas, Enter AG, Rüti ZH, Switzerland
+Specification-Title: JDBC 
+Specification-Version: 4
+Implementation-Title: JDBC implementation for MS Access databases
+Implementation-Version: 2.2.1
+Implementation-Vendor: Enter AG, Rüti ZH, Switzerland
+Built-Date: 24. Nov 2022
+Class-Path: jackcess-1.2.6a.jar
+  commons-lang-2.6.jar
+  commons-logging-1.1.3.jar
+  jdbcbase.jar
+  sqlparser.jar
+  antlr-runtime-4.5.2.jar
+  enterutils.jar
+  

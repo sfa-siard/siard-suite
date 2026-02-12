@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Gradle, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Build project
+name: Test Suite
 
 on:
   push:
@@ -9,19 +6,18 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  TZ: Europe/Zurich
+
 jobs:
-  build:
-
+  compile:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Set TAG-Env
-        run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'zulu'
@@ -29,25 +25,49 @@ jobs:
           cache: "gradle"
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Show current application version
+      - name: Show version
         run: ./gradlew cV
-      - name: Execute Gradle build
-        run: ./gradlew build -Djava.awt.headless=true -Dtestfx.headless=true --no-daemon
-      - name: Store reports
+      - name: Compile all modules
+        run: ./gradlew compileJava compileTestJava -x test
+
+  unit-tests:
+    needs: compile
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - siard-utilities
+          - zip64-file
+          - sql-parser
+          - siard-api
+          - jdbc-base
+          - jdbc-oracle
+          - jdbc-access
+          - jdbc-db2
+          - jdbc-mssql
+          - jdbc-mysql
+          - jdbc-postgres
+          - siard-cmd
+          - siard-suite-app
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          java-package: "jdk+fx"
+          cache: "gradle"
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Test ${{ matrix.module }}
+        run: ./gradlew :${{ matrix.module }}:test -Djava.awt.headless=true -Dtestfx.headless=true
+      - name: Upload test reports
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: reports
-          path: |
-            **/build/reports/
-            **/build/test-results/
-      - name: upload zip archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: siard-suite-snapshot
-          path: build/distributions/SIARD-Suite-*.zip
-      - name: upload user-manual.pdf
-        uses: actions/upload-artifact@v4
-        with:
-          name: user-manual
-          path: build/docs/pdf/en/user-manual.pdf
+          name: test-reports-${{ matrix.module }}
+          path: ${{ matrix.module }}/build/reports/tests/

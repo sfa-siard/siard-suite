@@ -1,0 +1,5 @@
+# Module-specific: generated sources
+/src/main/java/ch/admin/bar/siard2/api/generated/
+
+# Module-specific: test artifacts
+/src/test/resources/testfiles/sample_archive.siard

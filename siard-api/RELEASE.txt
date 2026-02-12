@@ -1,0 +1,35 @@
+Release Notes for SiardApi 2.2
+==============================
+
+2.2.110
+Corrected treatment of TIMESTAMP and DATE limits.
+
+2.2.109
+Fixed shrinking array problem.
+ 
+2.2.99
+Corrected another validation error (before date 0001-01-01 and after 9999-12-31 in non-UTC time zone).
+
+2.2.90
+Corrected validation error (Issue 8).
+
+2.2.87
+Caching of validation for speeding up open.
+
+2.2.74
+Small change in metadata.xsd (added length option for VARCHR, NVARCHAR, VARBINARY)
+Small change in xs:date handling: UTC conversion corrected. 
+
+2.2.0
+Release for JAVA 10
+Activation JAR added.
+
+2.1.58
+isEmpty() in TableImpl corrected.
+setLobFolder() in MetaColumnImpl and MetaFieldImpl corrected.
+
+2.1.50
+.gitattributes added.
+
+2.1.45
+First release of SiardApi on GitHub.
