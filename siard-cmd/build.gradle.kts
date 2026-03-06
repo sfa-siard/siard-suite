@@ -98,18 +98,18 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskPro
         useJUnitPlatform {
             includeEngines("junit-jupiter", "junit-vintage")
         }
-        
+
         filter {
             includeTestsMatching("ch.admin.bar.siard2.cmd.$packagePattern.*")
         }
-        
+
         maxParallelForks = 2
-        
+
         testLogging {
             events("passed", "skipped", "failed")
             showStandardStreams = true
         }
-        
+
         // Clean up Docker resources after each test class to prevent disk space exhaustion
         afterTest(KotlinClosure2<TestDescriptor, TestResult, Unit>({ descriptor, result ->
             if (descriptor.parent == null) {
@@ -143,14 +143,14 @@ task<Test>("integrationTest") {
     classpath = sourceSets["integrationTest"].runtimeClasspath
     mustRunAfter(tasks["test"])
     useJUnitPlatform()
-    
+
     maxParallelForks = 2
-    
+
     testLogging {
         events("passed", "skipped", "failed")
         showStandardStreams = true
     }
-    
+
     // Clean up Docker resources after each test class to prevent disk space exhaustion
     afterTest(KotlinClosure2<TestDescriptor, TestResult, Unit>({ descriptor, result ->
         if (descriptor.parent == null) {
@@ -164,7 +164,7 @@ task<Test>("integrationTest") {
             }
         }
     }))
-    
+
     // Depend on all database-specific test tasks
     dependsOn(
         integrationTestPostgres,
@@ -176,7 +176,7 @@ task<Test>("integrationTest") {
         integrationTestMsaccess,
         integrationTestUtils
     )
-    
+
     // Don't run tests directly, just aggregate results
     filter {
         excludeTestsMatching("*")

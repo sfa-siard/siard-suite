@@ -30,7 +30,6 @@ import ch.enterag.utils.cli.Arguments;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-
 /**
  * Stores database content in a SIARD file.
  *
@@ -65,6 +64,7 @@ public class SiardFromDb {
     private String _sJdbcUrl = null;
     private String _sDatabaseUser = null;
     private String _sDatabasePassword = null;
+    private String schemaName = null;
     private File _fileSiard = null;
     private File _fileExportXml = null;
 
@@ -84,7 +84,7 @@ public class SiardFromDb {
         System.out.println("Usage:");
         System.out.println("java -cp <siardpath>/lib/siardcmd.jar ch.admin.bar.siard2.cmd.SiardFromDb [-h]");
         System.out.println(
-                "  [-o][-v][-l=<login timeout>][-q=<query timeout>][-i=<import xml>] [-x=<external lob folder>] [-m=<mime type>]");
+                "  [-o][-v][-l=<login timeout>][-q=<query timeout>][-i=<import xml>] [-x=<external lob folder>] [-m=<mime type>] [--schema=<schema name>]");
         System.out.println(
                 "  -j=<JDBC URL> -u=<database user> -p=<database password> (-s=<siard file> | -e=<export xml>)");
         System.out.println("where");
@@ -92,14 +92,13 @@ public class SiardFromDb {
         System.out.println("  -h (help)            prints this usage information");
         System.out.println("  -o (overwrite)       overwrite existing siard file");
         System.out.println("  -v (views as tables) archive views as tables");
-        System.out.println("  <login timeout>      login timeout in seconds (default: " + String.valueOf(
-                _iLoginTimeoutSeconds) + "), 0 for unlimited");
-        System.out.println("  <query timeout>      query timeout in seconds (default: " + String.valueOf(
-                _iQueryTimeoutSeconds) + "), 0 for unlimited");
+        System.out.println("  <login timeout>      login timeout in seconds (default: " + _iLoginTimeoutSeconds + "), 0 for unlimited");
+        System.out.println("  <query timeout>      query timeout in seconds (default: " + _iQueryTimeoutSeconds + "), 0 for unlimited");
         System.out.println("  <import xml>         name of meta data XML file to be used as a template");
         System.out.println("  <lob folder>         folder for storing largest LOB column of database externally");
         System.out.println("                       (contents will be deleted if they exist!)");
         System.out.println("  <mime type>          MIME type of data in the largest LOB column of database");
+        System.out.println("  <schema name>        name of schema to be downloaded");
         System.out.println("  <JDBC URL>           JDBC URL of database to be downloaded");
         System.out.print("                       e.g. ");
         SiardConnection sc = SiardConnection.getSiardConnection();
@@ -141,6 +140,8 @@ public class SiardFromDb {
         String sExternalLobFolder = args.getOption("x");
         /* MIME type for external LOB */
         _sMimeType = args.getOption("m");
+        /* schema name */
+        schemaName = args.getOption("schema");
         /* JDBC URI */
         _sJdbcUrl = args.getOption("j");
         /* db user */
@@ -199,7 +200,7 @@ public class SiardFromDb {
                                                   .toFile();
                     /* prepend a ../ for exiting the SIARD file and append a / to indicate that it is a folder */
                     try {
-                        _uriExternalLobFolder = new URI("../" + fileRelative.toString() + "/");
+                        _uriExternalLobFolder = new URI("../" + fileRelative + "/");
                     } catch (URISyntaxException use) {
                         System.out.println("External LOB folder  " + _fileExternalLobFolder.getAbsolutePath() + " could not be relativized!");
                         _iReturn = iRETURN_ERROR;
@@ -209,7 +210,7 @@ public class SiardFromDb {
             }
             String sError = SiardConnection.getSiardConnection().loadDriver(_sJdbcUrl);
             if (sError != null) {
-                System.out.println("JDBC URL " + String.valueOf(_sJdbcUrl) + " is not valid!");
+                System.out.println("JDBC URL " + _sJdbcUrl + " is not valid!");
                 System.out.println(sError);
                 _iReturn = iRETURN_ERROR;
             }
@@ -247,14 +248,15 @@ public class SiardFromDb {
                 sb.append("  External LOB MIME type : ").append(_sMimeType).append("\n");
             if (_bViewsAsTables)
                 sb.append("  Archive views as tables: ").append(_bViewsAsTables).append("\n");
+            if (schemaName != null)
+                sb.append("  Schema name            : ").append(schemaName).append("\n");
             sb.append("\n");
 
             val message = sb.toString();
             LOG.info(message);
             System.out.println(message);
         } else printUsage();
-    } /* getParameters */
-
+    }
 
     /**
      * runs main program of SiardFromDb.
@@ -281,7 +283,7 @@ public class SiardFromDb {
                     DriverManager.setLoginTimeout(_iLoginTimeoutSeconds);
                     _conn = siardConnection.createValidConnection(_sJdbcUrl, _sDatabaseUser, _sDatabasePassword);
                     if ((_conn != null) && (!_conn.isClosed())) {
-                        System.out.println("Connected to " + _conn.getMetaData().getURL().toString());
+                        System.out.println("Connected to " + _conn.getMetaData().getURL());
                         _conn.setAutoCommit(false);
                         /* open SIARD archive */
                         _archive = ArchiveImpl.newInstance();
@@ -299,7 +301,7 @@ public class SiardFromDb {
                         /* get meta data from DB */
                         MetaDataFromDb mdfd = MetaDataFromDb.newInstance(_conn.getMetaData(), _archive.getMetaData());
                         mdfd.setQueryTimeout(_iQueryTimeoutSeconds);
-                        mdfd.download(_bViewsAsTables, (_uriExternalLobFolder != null),null);
+                        mdfd.download(_bViewsAsTables, (_uriExternalLobFolder != null), schemaName, null);
                         /* set external LOB stuff */
                         if (_uriExternalLobFolder != null) {
                             MetaColumn mcMaxLob = mdfd.getMaxLobColumn();
@@ -309,8 +311,7 @@ public class SiardFromDb {
                                 String sTableName = mtLob.getName();
                                 MetaSchema msLob = mtLob.getParentMetaSchema();
                                 String sSchemaName = msLob.getName();
-                                String sMessage = "LOBs in database column \"" + sColumnName + "\" in table \"" + sTableName + "\" in schema \"" + sSchemaName + "\" will be stored externally in folder \"" + _fileExternalLobFolder.getAbsolutePath()
-                                                                                                                                                                                                                                     .toString() + "\"";
+                                String sMessage = "LOBs in database column \"" + sColumnName + "\" in table \"" + sTableName + "\" in schema \"" + sSchemaName + "\" will be stored externally in folder \"" + _fileExternalLobFolder.getAbsolutePath() + "\"";
                                 mcMaxLob.setLobFolder(_uriExternalLobFolder);
                                 if (_sMimeType != null) {
                                     mcMaxLob.setMimeType(_sMimeType);
@@ -333,16 +334,11 @@ public class SiardFromDb {
                             pdfd.download(null);
                         } else fileSiard.deleteOnExit();
                         /* close SIARD archive */
-                        /***
-                         FileOutputStream fosXml = new FileOutputStream("D:\\Projekte\\SIARD2\\SiardCmd\\tmp\\export.xml");
-                         _archive.exportMetaData(fosXml);
-                         fosXml.close();
-                         ***/
                         _archive.close();
                         /* close connection */
                         _conn.rollback();
                         _conn.close();
-                    } else System.out.println("Connection to " + _conn.getMetaData().getURL().toString() + " failed!");
+                    } else System.out.println("Connection to " + _conn.getMetaData().getURL() + " failed!");
                 } else System.out.println("Connection to " + _sJdbcUrl + " not supported (" + sError + ")!");
             } else {
                 String sMessage = "File " + _fileSiard.getAbsolutePath();
@@ -354,8 +350,7 @@ public class SiardFromDb {
                 _iReturn = iRETURN_WARNING;
             }
         }
-    } /* constructor SiardFromDb */
-
+    }
 
     /**
      * main entry point starts logging and creates running instance.
