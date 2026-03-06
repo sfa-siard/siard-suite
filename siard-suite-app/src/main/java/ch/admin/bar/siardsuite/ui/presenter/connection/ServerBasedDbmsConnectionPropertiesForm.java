@@ -233,6 +233,6 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     }
 
     private boolean shouldShowSchemaField(boolean showSchemaField, ServerBasedDbms dbms) {
-        return showSchemaField && "oracle".equals(dbms.getId());
+        return showSchemaField && ("oracle".equals(dbms.getId()) || "postgresql".equals(dbms.getId()));
     }
 }
