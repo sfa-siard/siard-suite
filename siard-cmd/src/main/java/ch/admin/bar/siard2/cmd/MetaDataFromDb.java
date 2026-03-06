@@ -1194,11 +1194,30 @@ public class MetaDataFromDb extends MetaDataBase {
     private void getSchemaMetaData() throws IOException, SQLException {
         for (int iSchema = 0; iSchema < _md.getMetaSchemas(); iSchema++) {
             MetaSchema ms = _md.getMetaSchema(iSchema);
-            if (ms.getMetaTables() > 0) {
-                if (!_bViewsAsTables) getViews(ms);
-                getRoutines(ms);
+            if (!_bViewsAsTables) getViews(ms);
+            getRoutines(ms);
+        }
+    }
+
+    /**
+     * ensure schemas matching the filter exist in the archive.
+     * This is necessary because schemas might contain only views/routines and no tables,
+     * and the getTables() method only creates schemas when it finds tables.
+     *
+     * @param schemaName schema filter pattern (e.g., "views_schema" or "%").
+     * @throws IOException  if an I/O error occurred.
+     * @throws SQLException if a database error occurred.
+     */
+    private void ensureSchemasExist(String schemaName) throws IOException, SQLException {
+        ResultSet rs = _dmd.getSchemas(null, schemaName);
+        while (rs.next()) {
+            String sSchemaName = rs.getString("TABLE_SCHEM");
+            if (_md.getArchive().getSchema(sSchemaName) == null) {
+                _md.getArchive().createSchema(sSchemaName);
+                LOG.debug("Created schema '{}' (no tables found, but may contain views/routines)", sSchemaName);
             }
         }
+        rs.close();
     }
 
     /**
@@ -1306,6 +1325,8 @@ public class MetaDataFromDb extends MetaDataBase {
         _bMaxLobNeeded = bMaxLobNeeded;
         /* global meta data */
         logDownload();
+        /* ensure schemas exist (even if they contain only views/routines) */
+        ensureSchemasExist(schema);
         /* get tables (and Types and relevant schemas) */
         getTables(schema);
         /* get schema meta data (Views, Routines and Types) */

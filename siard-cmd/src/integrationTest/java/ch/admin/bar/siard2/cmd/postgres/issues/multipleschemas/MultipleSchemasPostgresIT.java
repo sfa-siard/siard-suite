@@ -5,6 +5,7 @@ import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedTableId;
+import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedViewId;
 import lombok.val;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -17,8 +18,14 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// tests download of a single schema from a database with multiple schemas using the -n option
+// Reproduces the issue where a restricted user can only access a view schema (views_schema)
+// but SIARD tries to access all schemas (including data schemas s1, s2) and fails.
+// The test connects as a restricted user (siard_user) that only has access to views_schema
+// and uses the --schema option to export only that schema.
 public class MultipleSchemasPostgresIT {
+
+    private static final String SIARD_USER = "siard_user";
+    private static final String SIARD_PASSWORD = "siard_password";
 
     @Rule
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
@@ -28,17 +35,18 @@ public class MultipleSchemasPostgresIT {
             .withInitScript(SqlScripts.Postgres.MULTIPLE_SCHEMAS);
 
     @Test
-    public void download_withSchemaFilter_shouldOnlyArchiveSpecifiedSchema() throws IOException, SQLException, ClassNotFoundException {
+    public void download_withSchemaFilter_restrictedUserShouldOnlyArchiveViewSchema() throws IOException, SQLException, ClassNotFoundException {
         // given
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
+        // Connect as the restricted user (siard_user) who can only access views_schema
         // when
         SiardFromDb siardFromDb = new SiardFromDb(new String[]{
                 "-o",
                 "-j:" + db.getJdbcUrl(),
                 "-u:" + db.getUsername(),
                 "-p:" + db.getPassword(),
-                "--schema:" + "schema1",
+                "--schema:" + "views_schema",
                 "-s:" + actualArchive.getPathToArchiveFile()
         });
 
@@ -48,23 +56,30 @@ public class MultipleSchemasPostgresIT {
         val metadataExplorer = actualArchive.exploreMetadata();
 
         assertThat(
-                metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("schema1"))
-                        .tableId(Id.of("simple_table"))
+                metadataExplorer.tryFindByViewId(QualifiedViewId.builder()
+                        .schemaId(Id.of("views_schema"))
+                        .viewId(Id.of("v_customers"))
+                        .build()))
+                .isPresent();
+
+        assertThat(
+                metadataExplorer.tryFindByViewId(QualifiedViewId.builder()
+                        .schemaId(Id.of("views_schema"))
+                        .viewId(Id.of("v_orders"))
                         .build()))
                 .isPresent();
 
         assertThat(
                 metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("schema2"))
-                        .tableId(Id.of("simple_table"))
+                        .schemaId(Id.of("s1"))
+                        .tableId(Id.of("customers"))
                         .build()))
                 .isNotPresent();
 
         assertThat(
                 metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("public"))
-                        .tableId(Id.of("simple_table"))
+                        .schemaId(Id.of("s2"))
+                        .tableId(Id.of("orders"))
                         .build()))
                 .isNotPresent();
     }

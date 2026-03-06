@@ -58,6 +58,10 @@ public class Metadata implements Updatable<Metadata> {
         @Builder.Default
         Set<Table> tables = new HashSet<>();
 
+        @NonNull
+        @Builder.Default
+        Set<View> views = new HashSet<>();
+
         @Override
         public Schema applyUpdates(Updater updater) {
             val updatedThis = updater.applyUpdate(this);
@@ -70,7 +74,10 @@ public class Metadata implements Updatable<Metadata> {
                                      .collect(Collectors.toSet()),
                     updatedThis.tables.stream()
                                       .map(table -> table.applyUpdates(updater))
-                                      .collect(Collectors.toSet())
+                                      .collect(Collectors.toSet()),
+                    updatedThis.views.stream()
+                            .map(view -> view.applyUpdates(updater))
+                            .collect(Collectors.toSet())
             );
         }
     }
@@ -112,6 +119,38 @@ public class Metadata implements Updatable<Metadata> {
                                            .collect(Collectors.toSet()),
                     updatedThis.folder.applyUpdates(updater),
                     updatedThis.description.map(description -> description.applyUpdates(updater))
+            );
+        }
+    }
+
+    @Value
+    @Builder(toBuilder = true)
+    @Jacksonized
+    public static class View implements Updatable<View> {
+        Id<View> name;
+
+        @Builder.Default
+        List<Column> columns = new ArrayList<>();
+
+        @NonNull
+        @Builder.Default
+        Optional<StringWrapper> description = Optional.empty();
+
+        @NonNull
+        @Builder.Default
+        Optional<StringWrapper> queryOriginal = Optional.empty();
+
+        @Override
+        public View applyUpdates(Updater updater) {
+            val updatedThis = updater.applyUpdate(this);
+
+            return new View(
+                    updatedThis.name.applyUpdates(updater),
+                    updatedThis.columns.stream()
+                            .map(column -> column.applyUpdates(updater))
+                            .collect(Collectors.toList()),
+                    updatedThis.description.map(description -> description.applyUpdates(updater)),
+                    updatedThis.queryOriginal.map(query -> query.applyUpdates(updater))
             );
         }
     }
