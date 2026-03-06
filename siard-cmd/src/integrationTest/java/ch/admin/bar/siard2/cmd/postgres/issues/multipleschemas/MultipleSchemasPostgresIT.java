@@ -38,7 +38,7 @@ public class MultipleSchemasPostgresIT {
                 "-j:" + db.getJdbcUrl(),
                 "-u:" + db.getUsername(),
                 "-p:" + db.getPassword(),
-                "-n:" + "schema1",
+                "--schema:" + "schema1",
                 "-s:" + actualArchive.getPathToArchiveFile()
         });
 
