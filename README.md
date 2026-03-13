@@ -55,6 +55,17 @@ Then run the CLI tools:
 ./siard-cmd/build/install/siard-cmd/bin/siard-to-db <arguments>
 ```
 
+##  Code Formatting & Git Blame
+
+We recently performed a bulk reformatting of the entire Java codebase to standardize our style. To avoid seeing "style-only" changes when using git blame, we use a .git-blame-ignore-revs file.
+This file contains the commit hashes of the formatting commits. Github will automatically use this file and does not show the formatting commits in the blame.
+
+To ignore these formatting commits in your local terminal or IDE, run the following command once in the project root:
+
+```bash
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
 ### Building the Project
 
 **Build all modules:**
