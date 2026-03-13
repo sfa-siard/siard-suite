@@ -5,5 +5,6 @@ import lombok.Value;
 
 @Value(staticConstructor = "of")
 public class I18nKeyArgArg<TArg1, TArg2> implements Key {
-    @NonNull String value;
+    @NonNull
+    String value;
 }

@@ -41,7 +41,7 @@ public interface MetaSchema
   /*====================================================================
   schema properties
   ====================================================================*/
-    
+
 
     /**
      * get schema name.
@@ -50,7 +50,6 @@ public interface MetaSchema
      */
     String getName();
 
-    
 
     /**
      * get schema folder.

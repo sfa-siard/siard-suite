@@ -60,25 +60,28 @@ public class MySqlFileTypesIT {
         val metadataExplorer = siardArchive.exploreMetadata();
 
         val columnAllFiles = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("all_files"))
-                .columnId(Id.of("file_data"))
-                .build());
-        Assertions.assertThat(columnAllFiles.getMimeType()).contains(Id.of("mixed"));
+                                                                              .schemaId(Id.of("public"))
+                                                                              .tableId(Id.of("all_files"))
+                                                                              .columnId(Id.of("file_data"))
+                                                                              .build());
+        Assertions.assertThat(columnAllFiles.getMimeType())
+                  .contains(Id.of("mixed"));
 
         val columnJpgFiles = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("jpg_files"))
-                .columnId(Id.of("file_data"))
-                .build());
-        Assertions.assertThat(columnJpgFiles.getMimeType()).contains(Id.of("image/jpeg"));
+                                                                              .schemaId(Id.of("public"))
+                                                                              .tableId(Id.of("jpg_files"))
+                                                                              .columnId(Id.of("file_data"))
+                                                                              .build());
+        Assertions.assertThat(columnJpgFiles.getMimeType())
+                  .contains(Id.of("image/jpeg"));
 
         val columnPdfFiles = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("pdf_files"))
-                .columnId(Id.of("file_data"))
-                .build());
-        Assertions.assertThat(columnPdfFiles.getMimeType()).contains(Id.of("application/pdf"));
+                                                                              .schemaId(Id.of("public"))
+                                                                              .tableId(Id.of("pdf_files"))
+                                                                              .columnId(Id.of("file_data"))
+                                                                              .build());
+        Assertions.assertThat(columnPdfFiles.getMimeType())
+                  .contains(Id.of("application/pdf"));
     }
 
     private void loadFilesIntoDatabase() throws SQLException, IOException {
@@ -141,8 +144,9 @@ public class MySqlFileTypesIT {
             if (resourceUrl != null) {
                 Path dirPath = Paths.get(resourceUrl.toURI());
                 Files.list(dirPath)
-                        .filter(Files::isRegularFile)
-                        .forEach(path -> files.add(path.getFileName().toString()));
+                     .filter(Files::isRegularFile)
+                     .forEach(path -> files.add(path.getFileName()
+                                                    .toString()));
             } else {
                 System.err.println("Resource directory not found");
             }

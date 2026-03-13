@@ -6,7 +6,6 @@ import ch.admin.bar.siard2.db2.datatype.Db2PredefinedType;
 import ch.admin.bar.siard2.jdbcx.Db2DataSource;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
-import ch.enterag.utils.base.ConnectionProperties;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.database.SqlTypes;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;

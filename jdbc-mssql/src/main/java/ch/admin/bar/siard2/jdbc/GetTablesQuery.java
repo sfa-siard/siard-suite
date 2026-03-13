@@ -89,19 +89,21 @@ class GetTablesQuery {
             queryCondition.append("\r\n");
         }
         if (catalog != null)
-            queryCondition.append(" AND DB_NAME() = ").append(SqlLiterals.formatStringLiteral(catalog)).append("\r\n");
+            queryCondition.append(" AND DB_NAME() = ")
+                          .append(SqlLiterals.formatStringLiteral(catalog))
+                          .append("\r\n");
         if (schemaPattern != null)
             queryCondition.append(" AND s.name LIKE ")
-                       .append(SqlLiterals.formatStringLiteral(schemaPattern))
-                       .append(" ESCAPE '")
-                       .append(searchStringEscape)
-                       .append("'\r\n");
+                          .append(SqlLiterals.formatStringLiteral(schemaPattern))
+                          .append(" ESCAPE '")
+                          .append(searchStringEscape)
+                          .append("'\r\n");
         if (tableNamePattern != null)
             queryCondition.append(" AND o.name LIKE ")
-                       .append(SqlLiterals.formatStringLiteral(tableNamePattern))
-                       .append(" ESCAPE '")
-                       .append(searchStringEscape)
-                       .append("'\r\n");
+                          .append(SqlLiterals.formatStringLiteral(tableNamePattern))
+                          .append(" ESCAPE '")
+                          .append(searchStringEscape)
+                          .append("'\r\n");
         return queryCondition;
     }
 }

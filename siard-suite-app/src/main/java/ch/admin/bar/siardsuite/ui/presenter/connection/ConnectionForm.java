@@ -1,19 +1,13 @@
 package ch.admin.bar.siardsuite.ui.presenter.connection;
 
-import ch.admin.bar.siardsuite.service.database.model.Dbms;
-import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionProperties;
-import ch.admin.bar.siardsuite.service.database.model.FileBasedDbms;
-import ch.admin.bar.siardsuite.service.database.model.FileBasedDbmsConnectionProperties;
-import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbms;
-import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbmsConnectionProperties;
-import ch.admin.bar.siardsuite.ui.presenter.connection.fields.StringFormField;
-import ch.admin.bar.siardsuite.util.CastHelper;
-import ch.admin.bar.siardsuite.ui.common.Validator;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.service.database.model.*;
 import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.ui.common.Validator;
+import ch.admin.bar.siardsuite.ui.presenter.connection.fields.StringFormField;
+import ch.admin.bar.siardsuite.util.CastHelper;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -45,10 +39,13 @@ public class ConnectionForm extends VBox {
 
     public ConnectionForm() {
         val title = new Text();
-        title.textProperty().bind(DisplayableText.of(TITLE).bindable());
+        title.textProperty()
+             .bind(DisplayableText.of(TITLE)
+                                  .bindable());
         title.setStrokeType(StrokeType.OUTSIDE);
         title.setStrokeWidth(0);
-        title.getStyleClass().add("h2");
+        title.getStyleClass()
+             .add("h2");
 
         val textflow = new TextFlow(
                 createText(TEXT_0),
@@ -59,14 +56,16 @@ public class ConnectionForm extends VBox {
         );
         textflow.setLineSpacing(8);
 
-        VBox.setMargin(title, new Insets(0,25,0,25));
-        VBox.setMargin(textflow, new Insets(15,25,24,25));
+        VBox.setMargin(title, new Insets(0, 25, 0, 25));
+        VBox.setMargin(textflow, new Insets(15, 25, 24, 25));
         titleBox = new VBox(title, textflow);
 
         formBox = new VBox();
-        formBox.getStyleClass().add("form-container");
+        formBox.getStyleClass()
+               .add("form-container");
 
-        this.getChildren().addAll(titleBox, formBox);
+        this.getChildren()
+            .addAll(titleBox, formBox);
     }
 
     public <T extends DbmsConnectionProperties> void show(final Dbms<T> dbms) {
@@ -107,18 +106,20 @@ public class ConnectionForm extends VBox {
         HBox.setHgrow(connectionPropertiesForm, Priority.ALWAYS);
 
         connectionNameField = StringFormField.builder()
-                .title(DisplayableText.of(CONNECTION_NAME))
-                .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
-                .validator(Validator.SLASH_NOT_ALLOWED_VALIDATOR)
-                .hint(DisplayableText.of(TOGGLE_SAVE_INFO))
-                .initialValue(connectionName)
-                .deactivable(true)
-                .build();
+                                             .title(DisplayableText.of(CONNECTION_NAME))
+                                             .validator(Validator.IS_NOT_EMPTY_STRING_VALIDATOR)
+                                             .validator(Validator.SLASH_NOT_ALLOWED_VALIDATOR)
+                                             .hint(DisplayableText.of(TOGGLE_SAVE_INFO))
+                                             .initialValue(connectionName)
+                                             .deactivable(true)
+                                             .build();
         VBox.setMargin(connectionNameField, new Insets(25));
         VBox.setVgrow(connectionNameField, Priority.ALWAYS);
 
-        this.formBox.getChildren().clear();
-        this.formBox.getChildren().addAll(connectionPropertiesForm, connectionNameField);
+        this.formBox.getChildren()
+                    .clear();
+        this.formBox.getChildren()
+                    .addAll(connectionPropertiesForm, connectionNameField);
     }
 
     public boolean isValid() {
@@ -178,15 +179,19 @@ public class ConnectionForm extends VBox {
 
     private static Text createBoldText(I18nKey textKey) {
         val text = createText(textKey);
-        text.getStyleClass().add("bold");
+        text.getStyleClass()
+            .add("bold");
 
         return text;
     }
 
     private static Text createText(I18nKey textKey) {
         val text = new Text();
-        text.textProperty().bind(DisplayableText.of(textKey).bindable());
-        text.getStyleClass().add("view-text");
+        text.textProperty()
+            .bind(DisplayableText.of(textKey)
+                                 .bindable());
+        text.getStyleClass()
+            .add("view-text");
 
         return text;
     }

@@ -12,8 +12,10 @@ public class SiardTooltip extends Tooltip {
         super();
         this.setPrefSize(328.0, 162);
         this.setAutoHide(true);
-        this.getStyleClass().add("info-tooltip");
-        this.textProperty().bind(displayableText.bindable());
+        this.getStyleClass()
+            .add("info-tooltip");
+        this.textProperty()
+            .bind(displayableText.bindable());
     }
 
     public SiardTooltip(I18nKey i18nKey) {
@@ -24,8 +26,8 @@ public class SiardTooltip extends Tooltip {
         node.setOnMouseMoved(event -> {
             Bounds boundsInScreen = node.localToScreen(node.getBoundsInLocal());
             this.show(node,
-                    (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - this.getWidth() / 2,
-                    boundsInScreen.getMaxY() - boundsInScreen.getHeight() - this.getHeight());
+                      (boundsInScreen.getMaxX() - boundsInScreen.getWidth() / 2) - this.getWidth() / 2,
+                      boundsInScreen.getMaxY() - boundsInScreen.getHeight() - this.getHeight());
         });
 
         node.setOnMouseExited(event -> this.hide());

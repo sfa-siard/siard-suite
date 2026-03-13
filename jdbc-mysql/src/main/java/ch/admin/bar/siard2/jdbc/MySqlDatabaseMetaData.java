@@ -98,7 +98,7 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
 
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT \r\n" + "	 NULL AS TABLE_CAT,\r\n" + "    TABLE_SCHEMA AS TABLE_SCHEM,\r\n" + "    TABLE_NAME,\r\n" + "    NON_UNIQUE,\r\n" + "    INDEX_SCHEMA AS INDEX_QUALIFIER,\r\n" + "    INDEX_NAME,\r\n" + "    CASE INDEX_TYPE\r\n" + "      WHEN 'BTREE' THEN " + String.valueOf(DatabaseMetaData.tableIndexClustered) + "\r\n" + "      WHEN 'HASH' THEN " + String.valueOf(DatabaseMetaData.tableIndexHashed) + "\r\n" + "      ELSE " + String.valueOf(DatabaseMetaData.tableIndexOther) + " END AS TYPE,\r\n" + "    SEQ_IN_INDEX AS ORDINAL_POSITION,\r\n" + "    COLUMN_NAME,\r\n" + "    'A' AS ASC_OR_DESC,\r\n" + // MySql does not have DESC indexes
-                "    CARDINALITY,\r\n" + "    NULL AS PAGES,\r\n" + "    NULL  AS FILTER_CONDITION\r\n" + "FROM INFORMATION_SCHEMA.STATISTICS\r\n");
+                          "    CARDINALITY,\r\n" + "    NULL AS PAGES,\r\n" + "    NULL  AS FILTER_CONDITION\r\n" + "FROM INFORMATION_SCHEMA.STATISTICS\r\n");
 
         // where clause criteria
         ArrayList<String> whereClauseComponents = new ArrayList<>();
@@ -119,7 +119,8 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         sb.append("ORDER BY NON_UNIQUE, INDEX_TYPE, INDEX_NAME, ORDINAL_POSITION");
 
         Statement stmt = getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**
@@ -159,8 +160,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         // order according to the JDBC specification
         sb.append("ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, PRIVILEGE");
 
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**
@@ -182,8 +185,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         }
         // order according to the JDBC specification
         sb.append("ORDER BY COLUMN_NAME");
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**
@@ -228,25 +233,31 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         StringBuilder sbCondition = new StringBuilder();
         if (parentSchema != null) {
             if (sbCondition.length() > 0) sbCondition.append(" AND ");
-            sbCondition.append("LOWER(TCPK.TABLE_SCHEMA) = ").append(SqlLiterals.formatStringLiteral(parentSchema.toLowerCase()));
+            sbCondition.append("LOWER(TCPK.TABLE_SCHEMA) = ")
+                       .append(SqlLiterals.formatStringLiteral(parentSchema.toLowerCase()));
         }
         if (parentTable != null) {
             if (sbCondition.length() > 0) sbCondition.append(" AND ");
-            sbCondition.append("LOWER(TCPK.TABLE_NAME) LIKE ").append(SqlLiterals.formatStringLiteral(parentTable.toLowerCase()));
+            sbCondition.append("LOWER(TCPK.TABLE_NAME) LIKE ")
+                       .append(SqlLiterals.formatStringLiteral(parentTable.toLowerCase()));
         }
         if (foreignSchema != null) {
             if (sbCondition.length() > 0) sbCondition.append(" AND ");
-            sbCondition.append("LOWER(TCFK.TABLE_SCHEMA) = ").append(SqlLiterals.formatStringLiteral(foreignSchema.toLowerCase()));
+            sbCondition.append("LOWER(TCFK.TABLE_SCHEMA) = ")
+                       .append(SqlLiterals.formatStringLiteral(foreignSchema.toLowerCase()));
         }
         if (foreignTable != null) {
             if (sbCondition.length() > 0) sbCondition.append(" AND ");
-            sbCondition.append("LOWER(TCFK.TABLE_NAME) LIKE ").append(SqlLiterals.formatStringLiteral(foreignTable.toLowerCase()));
+            sbCondition.append("LOWER(TCFK.TABLE_NAME) LIKE ")
+                       .append(SqlLiterals.formatStringLiteral(foreignTable.toLowerCase()));
         }
         if (sbCondition.length() > 0)
             sSql = sSql + "WHERE " + sbCondition + "\r\n" + "ORDER BY FKTABLE_SCHEM, FKTABLE_NAME, KEY_SEQ";
         // "ORDER BY TC.TABLE_SCHEMA, TC.TABLE_NAME,KCU.POSITION_IN_UNIQUE_CONSTRAINT";
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sSql);
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sSql);
     }
 
     /**
@@ -268,8 +279,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         }
         // order according to the JDBC specification
         sb.append("ORDER BY KCU.REFERENCED_TABLE_SCHEMA, KCU.REFERENCED_TABLE_NAME, KCU.POSITION_IN_UNIQUE_CONSTRAINT");
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**
@@ -291,8 +304,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         }
         // order according to the JDBC specification
         sb.append("ORDER BY KCU.TABLE_SCHEMA, KCU.TABLE_NAME, KCU.POSITION_IN_UNIQUE_CONSTRAINT");
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**
@@ -327,8 +342,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         // order according to the JDBC specification
         sb.append("ORDER BY FUNCTION_CAT, FUNCTION_SCHEM, FUNCTION_NAME, SPECIFIC_NAME, ORDINAL_POSITION");
 
-        Statement stmt = this.getConnection().createStatement();
-        return new MySqlMetaColumns(stmt.unwrap(Statement.class).executeQuery(sb.toString()), 6, 7, 8, 9, _conn);
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return new MySqlMetaColumns(stmt.unwrap(Statement.class)
+                                        .executeQuery(sb.toString()), 6, 7, 8, 9, _conn);
     }
 
     /**
@@ -363,8 +380,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         // order according to the JDBC specification
         sb.append("ORDER BY PROCEDURE_CAT, PROCEDURE_SCHEM, PROCEDURE_NAME, SPECIFIC_NAME, ORDINAL_POSITION");
 
-        Statement stmt = this.getConnection().createStatement();
-        return new MySqlMetaColumns(stmt.unwrap(Statement.class).executeQuery(sb.toString()), 6, 7, 8, 9, _conn);
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return new MySqlMetaColumns(stmt.unwrap(Statement.class)
+                                        .executeQuery(sb.toString()), 6, 7, 8, 9, _conn);
     }
 
     /**
@@ -395,8 +414,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         // order according to the JDBC specification
         sb.append("ORDER BY FUNCTION_CAT, FUNCTION_SCHEM, FUNCTION_NAME, SPECIFIC_NAME");
 
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**
@@ -427,8 +448,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         // order according to the JDBC specification
         sb.append("ORDER BY PROCEDURE_CAT, PROCEDURE_SCHEM, PROCEDURE_NAME, SPECIFIC_NAME");
 
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**
@@ -437,8 +460,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
     @Override
     public ResultSet getSchemas() throws SQLException {
         String sSql = "SELECT SCHEMA_NAME AS TABLE_SCHEM, NULL AS TABLE_CATALOG FROM INFORMATION_SCHEMA.SCHEMATA";
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sSql);
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sSql);
     }
 
     /**
@@ -463,8 +488,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         // order according to the JDBC specification
         sb.append("ORDER BY TABLE_CATALOG, TABLE_SCHEM");
 
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**
@@ -517,8 +544,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         // order according to the JDBC specification
         sb.append("ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION");
 
-        Statement stmt = this.getConnection().createStatement();
-        return new MySqlMetaColumns(stmt.unwrap(Statement.class).executeQuery(sb.toString()), 5, 6, 7, 7, _conn);
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return new MySqlMetaColumns(stmt.unwrap(Statement.class)
+                                        .executeQuery(sb.toString()), 5, 6, 7, 7, _conn);
     }
 
     /**
@@ -571,8 +600,10 @@ public class MySqlDatabaseMetaData extends BaseDatabaseMetaData implements Datab
         // order according to the JDBC specification
         sb.append("ORDER BY t.TABLE_TYPE, t.TABLE_CATALOG, t.TABLE_SCHEMA, t.TABLE_NAME");
 
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
     /**

@@ -46,27 +46,33 @@ public class MsSqlBitTypesIT {
         val metadataExplorer = siardArchive.exploreMetadata();
 
         val columnBit1 = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("BitSchema"))
-                .tableId(Id.of("BitTest"))
-                .columnId(Id.of("bit1"))
-                .build());
-        Assertions.assertThat(columnBit1.getType()).contains(Id.of("BOOLEAN"));
-        Assertions.assertThat(columnBit1.getTypeOriginal()).contains(Id.of("bit"));
+                                                                          .schemaId(Id.of("BitSchema"))
+                                                                          .tableId(Id.of("BitTest"))
+                                                                          .columnId(Id.of("bit1"))
+                                                                          .build());
+        Assertions.assertThat(columnBit1.getType())
+                  .contains(Id.of("BOOLEAN"));
+        Assertions.assertThat(columnBit1.getTypeOriginal())
+                  .contains(Id.of("bit"));
 
         val columnBitArraySmall = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("BitSchema"))
-                .tableId(Id.of("BitTest"))
-                .columnId(Id.of("bit_array_small"))
-                .build());
-        Assertions.assertThat(columnBitArraySmall.getType()).contains(Id.of("BINARY(8)"));
-        Assertions.assertThat(columnBitArraySmall.getTypeOriginal()).contains(Id.of("binary(8)"));
+                                                                                   .schemaId(Id.of("BitSchema"))
+                                                                                   .tableId(Id.of("BitTest"))
+                                                                                   .columnId(Id.of("bit_array_small"))
+                                                                                   .build());
+        Assertions.assertThat(columnBitArraySmall.getType())
+                  .contains(Id.of("BINARY(8)"));
+        Assertions.assertThat(columnBitArraySmall.getTypeOriginal())
+                  .contains(Id.of("binary(8)"));
 
         val columnBitArrayLarge = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("BitSchema"))
-                .tableId(Id.of("BitTest"))
-                .columnId(Id.of("bit_array_large"))
-                .build());
-        Assertions.assertThat(columnBitArrayLarge.getType()).contains(Id.of("BINARY(64)"));
-        Assertions.assertThat(columnBitArrayLarge.getTypeOriginal()).contains(Id.of("binary(64)"));
+                                                                                   .schemaId(Id.of("BitSchema"))
+                                                                                   .tableId(Id.of("BitTest"))
+                                                                                   .columnId(Id.of("bit_array_large"))
+                                                                                   .build());
+        Assertions.assertThat(columnBitArrayLarge.getType())
+                  .contains(Id.of("BINARY(64)"));
+        Assertions.assertThat(columnBitArrayLarge.getTypeOriginal())
+                  .contains(Id.of("binary(64)"));
     }
 }

@@ -1,34 +1,33 @@
 package ch.enterag.sqlparser.ddl;
 
-import static org.junit.Assert.*;
-import org.junit.*;
-import ch.enterag.sqlparser.*;
+import ch.enterag.sqlparser.BaseSqlFactory;
+import ch.enterag.sqlparser.SqlFactory;
+import org.junit.Before;
+import org.junit.Test;
 
-public class CreateSchemaStatementTester
-{
-  private SqlFactory _sf = new BaseSqlFactory();
-  private CreateSchemaStatement _css = null;
+import static org.junit.Assert.assertEquals;
 
-  @Before
-  public void setUp()
-  {
-    _css = _sf.newCreateSchemaStatement();
-  }
+public class CreateSchemaStatementTester {
+    private SqlFactory _sf = new BaseSqlFactory();
+    private CreateSchemaStatement _css = null;
 
-  @Test
-  public void testSimple()
-  {
-    _css.parse("CREATE SCHEMA cat.\"schema\"");
-    // System.out.println(_css.format());
-    assertEquals("CREATE SCHEMA statement not recognized!","CREATE SCHEMA CAT.\"schema\"",_css.format());
-  }
+    @Before
+    public void setUp() {
+        _css = _sf.newCreateSchemaStatement();
+    }
 
-  @Test
-  public void testComplex()
-  {
-    _css.parse("CREATE SCHEMA \"schema\" AUTHORIZATION me");
-    // System.out.println(_css.format());
-    assertEquals("CREATE SCHEMA statement not recognized!","CREATE SCHEMA \"schema\" AUTHORIZATION ME",_css.format());
-  }
+    @Test
+    public void testSimple() {
+        _css.parse("CREATE SCHEMA cat.\"schema\"");
+        // System.out.println(_css.format());
+        assertEquals("CREATE SCHEMA statement not recognized!", "CREATE SCHEMA CAT.\"schema\"", _css.format());
+    }
+
+    @Test
+    public void testComplex() {
+        _css.parse("CREATE SCHEMA \"schema\" AUTHORIZATION me");
+        // System.out.println(_css.format());
+        assertEquals("CREATE SCHEMA statement not recognized!", "CREATE SCHEMA \"schema\" AUTHORIZATION ME", _css.format());
+    }
 
 }

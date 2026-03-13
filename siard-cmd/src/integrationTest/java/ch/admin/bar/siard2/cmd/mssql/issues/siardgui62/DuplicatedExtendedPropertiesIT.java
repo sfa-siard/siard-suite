@@ -47,10 +47,12 @@ public class DuplicatedExtendedPropertiesIT {
         actualArchive.preserveArchive();
 
         val metadataTable = actualArchive.exploreMetadata()
-                .findByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("dbo"))
-                        .tableId(Id.of("testtable"))
-                        .build());
-        Assertions.assertThat(metadataTable.getDescription().map(StringWrapper::getValue)).contains("Caption.| Description.");
+                                         .findByTableId(QualifiedTableId.builder()
+                                                                        .schemaId(Id.of("dbo"))
+                                                                        .tableId(Id.of("testtable"))
+                                                                        .build());
+        Assertions.assertThat(metadataTable.getDescription()
+                                           .map(StringWrapper::getValue))
+                  .contains("Caption.| Description.");
     }
 }

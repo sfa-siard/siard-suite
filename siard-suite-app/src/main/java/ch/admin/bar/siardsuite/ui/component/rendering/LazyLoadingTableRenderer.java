@@ -1,10 +1,10 @@
 package ch.admin.bar.siardsuite.ui.component.rendering;
 
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.LazyLoadingDataSource;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableLazyLoadingTable;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.TableColumnProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.utils.LoadingBatchManager;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -34,7 +34,8 @@ public class LazyLoadingTableRenderer<T, I> implements SearchableFormEntry {
             @NonNull final ErrorHandler errorHandler) {
         this.renderableTable = renderableTable;
         this.errorHandler = errorHandler;
-        this.lazyLoadingDataSource = renderableTable.getDataExtractor().apply(dataHolder);
+        this.lazyLoadingDataSource = renderableTable.getDataExtractor()
+                                                    .apply(dataHolder);
     }
 
     public TableView<I> render() {
@@ -43,52 +44,60 @@ public class LazyLoadingTableRenderer<T, I> implements SearchableFormEntry {
 
         val issueConcealer = new JumpingScrollingPositionIssueConcealer(loadingBatchManager, tableView);
 
-        tableView.getColumns().addAll(
-                renderableTable.getProperties().stream()
-                        .map(this::column)
-                        .collect(Collectors.toList()));
+        tableView.getColumns()
+                 .addAll(
+                         renderableTable.getProperties()
+                                        .stream()
+                                        .map(this::column)
+                                        .collect(Collectors.toList()));
 
         tableView.setRowFactory(param -> {
             val row = new TableRow<I>();
 
-            row.itemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    val index = lazyLoadingDataSource.findIndexOf(newValue);
-                    loadingBatchManager.loadDataIfNecessary(index);
+            row.itemProperty()
+               .addListener((observable, oldValue, newValue) -> {
+                   if (newValue != null) {
+                       val index = lazyLoadingDataSource.findIndexOf(newValue);
+                       loadingBatchManager.loadDataIfNecessary(index);
 
-                    issueConcealer.concealIssue();
-                }
-            });
+                       issueConcealer.concealIssue();
+                   }
+               });
 
             row.setOnMouseClicked(event -> {
                 val selectionModel = tableView.getSelectionModel();
-                if (selectionModel.getSelectedCells().isEmpty()) {
+                if (selectionModel.getSelectedCells()
+                                  .isEmpty()) {
                     return;
                 }
 
-                val tablePosition = selectionModel.getSelectedCells().get(0);
+                val tablePosition = selectionModel.getSelectedCells()
+                                                  .get(0);
                 if (tablePosition.getColumn() < 0 ||
-                        tablePosition.getColumn() >= renderableTable.getProperties().size()) {
+                        tablePosition.getColumn() >= renderableTable.getProperties()
+                                                                    .size()) {
                     return;
                 }
 
-                val column = renderableTable.getProperties().get(tablePosition.getColumn());
+                val column = renderableTable.getProperties()
+                                            .get(tablePosition.getColumn());
 
                 column.getOnCellClickedListener()
-                        .ifPresent(listener -> {
-                            try {
-                                listener.onClick(column, row.getItem());
-                            } catch (Exception e) {
-                                errorHandler.handle(e);
-                            }
-                        });
+                      .ifPresent(listener -> {
+                          try {
+                              listener.onClick(column, row.getItem());
+                          } catch (Exception e) {
+                              errorHandler.handle(e);
+                          }
+                      });
             });
 
             return row;
         });
 
         VBox.setVgrow(tableView, Priority.ALWAYS);
-        tableView.getStyleClass().add(TABLE_STYLE_CLASS);
+        tableView.getStyleClass()
+                 .add(TABLE_STYLE_CLASS);
         tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         tableView.autosize();
 
@@ -101,11 +110,14 @@ public class LazyLoadingTableRenderer<T, I> implements SearchableFormEntry {
             clearSearchTerm();
             return;
         }
-        
-        loadingBatchManager.applyFilter(item -> 
-            renderableTable.getProperties().stream()
-                .map(property -> property.getValueExtractor().apply(item))
-                .anyMatch(value -> value != null && value.toLowerCase().contains(searchTerm.toLowerCase()))
+
+        loadingBatchManager.applyFilter(item ->
+                                                renderableTable.getProperties()
+                                                               .stream()
+                                                               .map(property -> property.getValueExtractor()
+                                                                                        .apply(item))
+                                                               .anyMatch(value -> value != null && value.toLowerCase()
+                                                                                                        .contains(searchTerm.toLowerCase()))
         );
     }
 
@@ -115,11 +127,13 @@ public class LazyLoadingTableRenderer<T, I> implements SearchableFormEntry {
     }
 
     private TableColumn<I, String> column(final TableColumnProperty<I> columnProperty) {
-        val column = new TableColumn<I, String>(columnProperty.getTitle().getText());
+        val column = new TableColumn<I, String>(columnProperty.getTitle()
+                                                              .getText());
 
         column.setSortable(false); // Not sortable because of lazy loading
         column.setCellValueFactory(cellData -> {
-            val value = columnProperty.getValueExtractor().apply(cellData.getValue());
+            val value = columnProperty.getValueExtractor()
+                                      .apply(cellData.getValue());
             return new SimpleStringProperty(value);
         });
 

@@ -16,7 +16,7 @@ class MimeTypeHandler {
 
     // used to keep track of detected mime types per column (name)
     private final Map<String, Set<String>> mimeTypes;
-    
+
     // used to keep track of detected mime types per individual record
     private final Map<Value, String> individualMimeTypes;
 
@@ -58,8 +58,10 @@ class MimeTypeHandler {
     }
 
     public void applyColumnMimeType(Table table) throws IOException {
-        for (int i = 0; i < table.getMetaTable().getMetaColumns(); i++) {
-            MetaColumn metaColumn = table.getMetaTable().getMetaColumn(i);
+        for (int i = 0; i < table.getMetaTable()
+                                 .getMetaColumns(); i++) {
+            MetaColumn metaColumn = table.getMetaTable()
+                                         .getMetaColumn(i);
             applyMimeType(metaColumn);
         }
     }
@@ -101,25 +103,29 @@ class MimeTypeHandler {
     }
 
     private void add(Cell cell, String mimeType) {
-        add(mimeType, cell.getMetaColumn().getName());
+        add(mimeType, cell.getMetaColumn()
+                          .getName());
     }
 
     private void add(Field field, String mimeType) {
-        add(mimeType, field.getMetaField().getName());
+        add(mimeType, field.getMetaField()
+                           .getName());
     }
 
     private void add(String mimeType, String name) {
         if (!mimeTypes.containsKey(name)) {
             mimeTypes.put(name, new HashSet<>(Collections.singletonList(mimeType)));
         } else {
-            mimeTypes.get(name).add(mimeType);
+            mimeTypes.get(name)
+                     .add(mimeType);
         }
     }
 
     private void applyMimeType(Cell cell) throws IOException {
         String individualMimeType = individualMimeTypes.get(cell);
         if (individualMimeType != null) {
-            cell.getMetaColumn().setMimeType(individualMimeType);
+            cell.getMetaColumn()
+                .setMimeType(individualMimeType);
             return;
         }
         applyMimeType(cell.getMetaColumn());
@@ -128,7 +134,8 @@ class MimeTypeHandler {
     private void applyMimeType(Field field) throws IOException {
         String individualMimeType = individualMimeTypes.get(field);
         if (individualMimeType != null) {
-            field.getMetaField().setMimeType(individualMimeType);
+            field.getMetaField()
+                 .setMimeType(individualMimeType);
             return;
         }
         applyMimeType(field.getMetaField());

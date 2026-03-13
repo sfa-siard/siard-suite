@@ -2,12 +2,11 @@ package ch.admin.bar.siard2.cmd.oracle;
 
 import ch.admin.bar.siard2.cmd.SiardFromDb;
 import ch.admin.bar.siard2.cmd.SiardToDb;
-import ch.admin.bar.siard2.cmd.utils.ConsoleLogConsumer;
 import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
-import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
+import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
 import lombok.val;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -27,7 +26,8 @@ public class OracleUploadDownloadSiardProjectIT {
     @Rule
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/00_create_user.sql");
 
     @Test
@@ -57,11 +57,11 @@ public class OracleUploadDownloadSiardProjectIT {
         Assert.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
 
         SiardArchiveAssertions.builder()
-                .expectedArchive(expectedArchive)
-                .actualArchive(actualArchive)
-                .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?
-                .assertionModifier(SiardArchiveAssertions.IGNORE_PRIMARY_KEY_NAME) // Probably an oracle-restriction (primary key names are generated)
-                .assertionModifier(SiardArchiveAssertions.IGNORE_METADATA) // FIXME: Ignore metadata until https://github.com/sfa-siard/JdbcOracle/issues/12 and https://github.com/sfa-siard/JdbcOracle/issues/13 are fixed
-                .assertEqual();
+                              .expectedArchive(expectedArchive)
+                              .actualArchive(actualArchive)
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_PRIMARY_KEY_NAME) // Probably an oracle-restriction (primary key names are generated)
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_METADATA) // FIXME: Ignore metadata until https://github.com/sfa-siard/JdbcOracle/issues/12 and https://github.com/sfa-siard/JdbcOracle/issues/13 are fixed
+                              .assertEqual();
     }
 }

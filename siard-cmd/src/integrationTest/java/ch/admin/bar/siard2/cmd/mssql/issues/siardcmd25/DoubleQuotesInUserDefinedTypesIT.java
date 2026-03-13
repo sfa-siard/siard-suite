@@ -46,18 +46,20 @@ public class DoubleQuotesInUserDefinedTypesIT {
         val metadataExplorer = actualArchive.exploreMetadata();
 
         val column = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("dbo"))
-                .tableId(Id.of("testtable"))
-                .columnId(Id.of("DAY"))
-                .build());
+                                                                      .schemaId(Id.of("dbo"))
+                                                                      .tableId(Id.of("testtable"))
+                                                                      .columnId(Id.of("DAY"))
+                                                                      .build());
 
-        Assertions.assertThat(column.getTypeName()).contains(Id.of("dtDay2"));
+        Assertions.assertThat(column.getTypeName())
+                  .contains(Id.of("dtDay2"));
 
         val type = metadataExplorer.tryFindByTypeId(QualifiedTypeId.builder()
-                .schemaId(Id.of("dbo"))
-                .typeId(Id.of("dtDay2"))
-                .build());
+                                                                   .schemaId(Id.of("dbo"))
+                                                                   .typeId(Id.of("dtDay2"))
+                                                                   .build());
 
-        Assertions.assertThat(type).isPresent();
+        Assertions.assertThat(type)
+                  .isPresent();
     }
 }

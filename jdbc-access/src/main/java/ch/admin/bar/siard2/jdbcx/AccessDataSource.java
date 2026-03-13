@@ -165,6 +165,7 @@ public class AccessDataSource
   /*======================================================================
   Interface methods 
   ======================================================================*/
+
     /** {@link DataSource} for JDK 1.7
      @Override public Logger getParentLogger()
      throws SQLFeatureNotSupportedException
@@ -173,7 +174,7 @@ public class AccessDataSource
      }
 
 
-    /** {@link DataSource} */
+     /** {@link DataSource} */
     @Override
     public Connection getConnection() throws SQLException {
         return new AccessConnection(_sDatabaseName, _sUser, _sPassword, _bReadOnly, _pwLogWriter);

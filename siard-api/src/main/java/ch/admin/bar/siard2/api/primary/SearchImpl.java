@@ -47,7 +47,7 @@ public class SearchImpl
     @Override
     public long getFoundRow() {
         return _tableRecord.getRecord();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -56,7 +56,7 @@ public class SearchImpl
     public int getFoundPosition() {
         return _cell.getMetaColumn()
                     .getPosition();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -78,7 +78,7 @@ public class SearchImpl
                 s = du.fromSqlTimestamp((Timestamp) o);
         }
         return s;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -86,7 +86,7 @@ public class SearchImpl
     @Override
     public int getFoundOffset() {
         return _iFoundOffset;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -109,7 +109,7 @@ public class SearchImpl
             _rd = table.openTableRecords();
         } else
             throw new IllegalArgumentException("List of columns must not be empty for search!");
-    } 
+    }
 
     /**
      * find another occurrence of the find string in the current cell.
@@ -131,7 +131,7 @@ public class SearchImpl
         } else
             _iFoundOffset = -1;
         return _iFoundOffset;
-    } 
+    }
 
     /**
      * find another occurrence of the find string in the current record.
@@ -154,7 +154,7 @@ public class SearchImpl
                 _cell = null;
         }
         return _cell;
-    } 
+    }
 
     /**
      * find another occurrence of the find string in the rest of the table.
@@ -175,7 +175,7 @@ public class SearchImpl
             _sFindString = null;
         }
         return _cell;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -201,7 +201,7 @@ public class SearchImpl
                 _cell = findInTable(du);
         }
         return _cell;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -209,6 +209,6 @@ public class SearchImpl
     @Override
     public boolean canFindNext() {
         return (_sFindString != null);
-    } 
+    }
 
 } 

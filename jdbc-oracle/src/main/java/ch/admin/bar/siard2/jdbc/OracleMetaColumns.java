@@ -10,18 +10,21 @@ Created    : 19.05.2016, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.jdbc;
 
-import java.math.*;
-import java.sql.*;
-import java.text.*;
-import java.util.*;
-import java.util.regex.*;
+import ch.enterag.sqlparser.BaseSqlFactory;
+import ch.enterag.sqlparser.SqlLiterals;
+import ch.enterag.sqlparser.datatype.PredefinedType;
+import ch.enterag.sqlparser.datatype.enums.PreType;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.utils.database.SqlTypes;
+import ch.enterag.utils.logging.IndentLogger;
 
-import ch.enterag.utils.database.*;
-import ch.enterag.utils.logging.*;
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.datatype.*;
-import ch.enterag.sqlparser.datatype.enums.*;
-import ch.enterag.sqlparser.identifier.*;
+import java.math.BigDecimal;
+import java.sql.*;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * OracleMetaColumns implements the type translation from Oracle to ISO SQL.
@@ -37,10 +40,10 @@ public class OracleMetaColumns
     private static IndentLogger _il = IndentLogger.getIndentLogger(OracleMetaColumns.class.getName());
     private static Pattern _patVarrayText =
             Pattern.compile("^TYPE.*VARRAY\\s*\\((\\d+)\\)\\s+OF\\s+(.*?)\\s*;?\\s*$",
-                    Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
+                            Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
     private static Pattern _patTableText =
             Pattern.compile("^TYPE.*TABLE\\s+OF\\s+\\(([^)]+)\\).*$",
-                    Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
+                            Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
     private static Pattern _patType = Pattern.compile("^(.*?)(\\(\\s*(\\d+)\\s*(,\\s*(\\d)+\\s*)?\\))?$");
     private static final int _iDEFAULT_TABLE_MAXIMUM = Integer.MAX_VALUE;
 
@@ -150,7 +153,8 @@ public class OracleMetaColumns
             String baseTypeName = getBaseTypeName(qiTypeName.getName());
             PredefinedType preType = getPredefinedType(baseTypeName, (int) lColumnSize, iDecimals);
             if (preType.getType() != null)
-                iType = preType.getType().getSqlType();
+                iType = preType.getType()
+                               .getSqlType();
             else if ("ANYDATA".equals(qiTypeName.getName()) && "SYS".equals(qiTypeName.getSchema()))
                 iType = Types.CLOB;
             else
@@ -173,7 +177,7 @@ public class OracleMetaColumns
                               String sSchemaName)
             throws SQLException {
         int iDataType = getDataType(iType, sTypeName, lColumnSize, iDecimals,
-                conn, sCatalogName, sSchemaName);
+                                    conn, sCatalogName, sSchemaName);
         if ((iDataType == Types.CLOB) ||
                 (iDataType == Types.BLOB) ||
                 (iDataType == Types.NCLOB) ||
@@ -219,7 +223,8 @@ public class OracleMetaColumns
             String sColumnSize = matchType.group(3);
             String sDecimals = matchType.group(5);
             if (sColumnSize != null) {
-                if (!sBaseType.toUpperCase().startsWith("TIME"))
+                if (!sBaseType.toUpperCase()
+                              .startsWith("TIME"))
                     iColumnSize = Integer.parseInt(sColumnSize);
                 else
                     iDecimals = Integer.parseInt(sColumnSize);

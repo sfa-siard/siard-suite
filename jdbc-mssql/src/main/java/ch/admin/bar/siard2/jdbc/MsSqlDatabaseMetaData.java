@@ -160,8 +160,8 @@ public class MsSqlDatabaseMetaData
                                 String tableNamePattern, String columnNamePattern)
             throws SQLException {
         return new MsSqlMetaColumns(super.getColumns(catalog, schemaPattern,
-                tableNamePattern, columnNamePattern), _conn,
-                1, 2, 5, 6, 7, 7, 9);
+                                                     tableNamePattern, columnNamePattern), _conn,
+                                    1, 2, 5, 6, 7, 7, 9);
     }
 
     /**
@@ -204,8 +204,8 @@ public class MsSqlDatabaseMetaData
     public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern,
                                String[] types) throws SQLException {
         return getConnection().createStatement()
-                .unwrap(Statement.class)
-                .executeQuery(new GetTablesQuery(catalog, schemaPattern, tableNamePattern, types, getSearchStringEscape()).build());
+                              .unwrap(Statement.class)
+                              .executeQuery(new GetTablesQuery(catalog, schemaPattern, tableNamePattern, types, getSearchStringEscape()).build());
     }
 
     @Override
@@ -274,7 +274,8 @@ public class MsSqlDatabaseMetaData
                 sbCaseBaseType.append("when ");
                 sbCaseBaseType.append(mst.getSystemTypeId());
                 sbCaseBaseType.append(" then ");
-                sbCaseBaseType.append(_mapTYPE_TO_ISO.get(iType).toString());
+                sbCaseBaseType.append(_mapTYPE_TO_ISO.get(iType)
+                                                     .toString());
             }
         }
         sbCaseBaseType.append("\r\nelse NULL\r\n");
@@ -300,7 +301,8 @@ public class MsSqlDatabaseMetaData
                 "WHERE " + sbCondition +
                 "ORDER BY DATA_TYPE, TYPE_CAT, TYPE_SCHEM, TYPE_NAME";
         Statement stmt = getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sSql);
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sSql);
     }
 
     /**
@@ -427,8 +429,10 @@ public class MsSqlDatabaseMetaData
             sSql = sSql + "WHERE " + sbCondition + "\r\n" +
                     "ORDER BY FKTABLE_SCHEM, FKTABLE_NAME, KEY_SEQ";
         // "ORDER BY TC.TABLE_SCHEMA, TC.TABLE_NAME,KCU.POSITION_IN_UNIQUE_CONSTRAINT";
-        Statement stmt = this.getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sSql);
+        Statement stmt = this.getConnection()
+                             .createStatement();
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sSql);
     }
 
     @Override
@@ -447,7 +451,7 @@ public class MsSqlDatabaseMetaData
 
         if (schemaPattern != null) {
             whereClauses.add("SCHEMA_NAME LIKE " + SqlLiterals.formatStringLiteral(schemaPattern) +
-                    " ESCAPE '" + getSearchStringEscape() + "'");
+                                     " ESCAPE '" + getSearchStringEscape() + "'");
         }
 
         if (!whereClauses.isEmpty()) {
@@ -459,7 +463,8 @@ public class MsSqlDatabaseMetaData
         sb.append("ORDER BY TABLE_CATALOG, TABLE_SCHEM");
 
         Statement stmt = getConnection().createStatement();
-        return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+        return stmt.unwrap(Statement.class)
+                   .executeQuery(sb.toString());
     }
 
 

@@ -19,7 +19,8 @@ public class ResourcesLoaderTest {
         InputStream is = ResourcesLoader.loadResource(EXISTING_RESOURCE);
 
         // then
-        Assertions.assertThat(is).isNotEmpty();
+        Assertions.assertThat(is)
+                  .isNotEmpty();
         is.close();
     }
 
@@ -28,10 +29,12 @@ public class ResourcesLoaderTest {
         // given
 
         // when
-        Throwable throwable = Assertions.catchThrowable(() -> ResourcesLoader.loadResource(NOT_EXISTING_RESOURCE).close());
+        Throwable throwable = Assertions.catchThrowable(() -> ResourcesLoader.loadResource(NOT_EXISTING_RESOURCE)
+                                                                             .close());
 
         // then
-        Assertions.assertThat(throwable).hasMessageContainingAll("", "not found");
+        Assertions.assertThat(throwable)
+                  .hasMessageContainingAll("", "not found");
     }
 
 }

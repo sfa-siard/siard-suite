@@ -6,19 +6,19 @@ import java.nio.charset.StandardCharsets;
 /**
  * Configuration record for HTML export operations.
  * Provides customizable options for HTML generation behavior.
- * 
+ *
  * @param charset the character encoding for HTML output
  * @param dateFormat the date format pattern for date values
  * @param maxCellContentLength the maximum cell content length (-1 for unlimited)
  * @param prettifyOutput whether to format output with proper indentation
  */
 record HtmlExportConfig(
-    Charset charset,
-    String dateFormat,
-    int maxCellContentLength,
-    boolean prettifyOutput
+        Charset charset,
+        String dateFormat,
+        int maxCellContentLength,
+        boolean prettifyOutput
 ) {
-    
+
     /**
      * Create a default configuration with sensible defaults.
      *
@@ -27,7 +27,7 @@ record HtmlExportConfig(
     static HtmlExportConfig defaultConfig() {
         return new Builder().build();
     }
-    
+
     /**
      * Create a new builder for constructing HtmlExportConfig instances.
      *
@@ -36,7 +36,7 @@ record HtmlExportConfig(
     static Builder builder() {
         return new Builder();
     }
-    
+
     /**
      * Builder class for creating HtmlExportConfig instances with fluent API.
      */
@@ -45,7 +45,7 @@ record HtmlExportConfig(
         private String dateFormat = "yyyy-MM-dd";
         private int maxCellContentLength = -1; // unlimited
         private boolean prettifyOutput = true;
-        
+
         /**
          * Set the charset for HTML output.
          *
@@ -56,7 +56,7 @@ record HtmlExportConfig(
             this.charset = charset;
             return this;
         }
-        
+
         /**
          * Set the date format pattern.
          *
@@ -67,7 +67,7 @@ record HtmlExportConfig(
             this.dateFormat = format;
             return this;
         }
-        
+
         /**
          * Set the maximum cell content length.
          *
@@ -78,7 +78,7 @@ record HtmlExportConfig(
             this.maxCellContentLength = length;
             return this;
         }
-        
+
         /**
          * Set whether to prettify output with proper indentation.
          *
@@ -89,7 +89,7 @@ record HtmlExportConfig(
             this.prettifyOutput = prettify;
             return this;
         }
-        
+
         /**
          * Build the configuration record.
          *

@@ -59,6 +59,7 @@ public class AccessResultSet
     private int _iFetchDirection = ResultSet.FETCH_UNKNOWN;
     /** record NULL value */
     private boolean _bWasNull = false;
+
     /** constructor with a header and a cursor.
      * @param conn Connection object.
      * @param stmt Statement object.

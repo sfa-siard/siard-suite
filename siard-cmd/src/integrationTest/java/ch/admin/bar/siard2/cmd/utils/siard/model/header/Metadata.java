@@ -23,7 +23,8 @@ import java.util.stream.Collectors;
 @Jacksonized
 @JacksonXmlRootElement(localName = "siardArchive")
 public class Metadata implements Updatable<Metadata> {
-    @NonNull StringWrapper dbname;
+    @NonNull
+    StringWrapper dbname;
 
     @NonNull
     @Builder.Default
@@ -36,16 +37,18 @@ public class Metadata implements Updatable<Metadata> {
         return new Metadata(
                 updatedThis.dbname.applyUpdates(updater),
                 updatedThis.schemas.stream()
-                        .map(schema -> schema.applyUpdates(updater))
-                        .collect(Collectors.toSet()));
+                                   .map(schema -> schema.applyUpdates(updater))
+                                   .collect(Collectors.toSet()));
     }
 
     @Value
     @Builder(toBuilder = true)
     @Jacksonized
     public static class Schema implements Updatable<Schema> {
-        @NonNull Id<Schema> name;
-        @NonNull FolderId folder;
+        @NonNull
+        Id<Schema> name;
+        @NonNull
+        FolderId folder;
 
         @NonNull
         @Builder.Default
@@ -63,11 +66,11 @@ public class Metadata implements Updatable<Metadata> {
                     updatedThis.name.applyUpdates(updater),
                     updatedThis.folder.applyUpdates(updater),
                     updatedThis.types.stream()
-                            .map(type -> type.applyUpdates(updater))
-                            .collect(Collectors.toSet()),
+                                     .map(type -> type.applyUpdates(updater))
+                                     .collect(Collectors.toSet()),
                     updatedThis.tables.stream()
-                            .map(table -> table.applyUpdates(updater))
-                            .collect(Collectors.toSet())
+                                      .map(table -> table.applyUpdates(updater))
+                                      .collect(Collectors.toSet())
             );
         }
     }
@@ -101,12 +104,12 @@ public class Metadata implements Updatable<Metadata> {
             return new Table(
                     updatedThis.name.applyUpdates(updater),
                     updatedThis.columns.stream()
-                            .map(column -> column.applyUpdates(updater))
-                            .collect(Collectors.toList()),
+                                       .map(column -> column.applyUpdates(updater))
+                                       .collect(Collectors.toList()),
                     updatedThis.primaryKey.map(primaryKey -> primaryKey.applyUpdates(updater)),
                     updatedThis.foreignKeys.stream()
-                            .map(foreignKey -> foreignKey.applyUpdates(updater))
-                            .collect(Collectors.toSet()),
+                                           .map(foreignKey -> foreignKey.applyUpdates(updater))
+                                           .collect(Collectors.toSet()),
                     updatedThis.folder.applyUpdates(updater),
                     updatedThis.description.map(description -> description.applyUpdates(updater))
             );
@@ -178,8 +181,8 @@ public class Metadata implements Updatable<Metadata> {
             return new PrimaryKey(
                     updatedThis.name.applyUpdates(updater),
                     updatedThis.columns.stream()
-                            .map(columnId -> columnId.applyUpdates(updater))
-                            .collect(Collectors.toSet()));
+                                       .map(columnId -> columnId.applyUpdates(updater))
+                                       .collect(Collectors.toSet()));
         }
     }
 
@@ -212,8 +215,8 @@ public class Metadata implements Updatable<Metadata> {
                     updatedThis.referencedSchema.applyUpdates(updater),
                     updatedThis.referencedTable.applyUpdates(updater),
                     updatedThis.references.stream()
-                            .map(reference -> reference.applyUpdates(updater))
-                            .collect(Collectors.toSet()),
+                                          .map(reference -> reference.applyUpdates(updater))
+                                          .collect(Collectors.toSet()),
                     updatedThis.deleteAction.map(s -> s.applyUpdates(updater)),
                     updatedThis.updateAction.map(s -> s.applyUpdates(updater)));
         }
@@ -240,9 +243,12 @@ public class Metadata implements Updatable<Metadata> {
     @Builder
     @Jacksonized
     public static class Type implements Updatable<Type> {
-        @NonNull Id<Type> name;
-        @NonNull Category category;
-        @NonNull Boolean instantiable;
+        @NonNull
+        Id<Type> name;
+        @NonNull
+        Category category;
+        @NonNull
+        Boolean instantiable;
 
         @JsonProperty("final")
         @NonNull

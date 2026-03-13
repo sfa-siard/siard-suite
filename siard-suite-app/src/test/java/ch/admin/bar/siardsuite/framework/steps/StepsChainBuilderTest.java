@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import javafx.scene.Node;
 import lombok.Getter;
 import lombok.val;
@@ -43,8 +43,10 @@ class StepsChainBuilderTest {
         // given
         val chain = new StepsChainBuilder(
                 servicesFacadeMock,
-                step -> step.getViewSupplier().get(),
-                step -> step.getViewSupplier().get()
+                step -> step.getViewSupplier()
+                            .get(),
+                step -> step.getViewSupplier()
+                            .get()
         )
                 .register(FIRST_STEP)
                 .register(SECOND_STEP)
@@ -57,14 +59,20 @@ class StepsChainBuilderTest {
         val fourthStepData = new FourthStepData();
 
         // when
-        chain.getNavigatorOfStep(FIRST_STEP).next(secondStepData);
-        chain.getNavigatorOfStep(SECOND_STEP).next(thirdStepData);
-        chain.getNavigatorOfStep(THIRD_STEP).next(fourthStepData);
+        chain.getNavigatorOfStep(FIRST_STEP)
+             .next(secondStepData);
+        chain.getNavigatorOfStep(SECOND_STEP)
+             .next(thirdStepData);
+        chain.getNavigatorOfStep(THIRD_STEP)
+             .next(fourthStepData);
 
         // then
-        Assertions.assertThat(SECOND_VIEW.injectedData).containsExactly(secondStepData);
-        Assertions.assertThat(THIRD_VIEW.injectedData).containsExactly(thirdStepData);
-        Assertions.assertThat(FOURTH_VIEW.injectedData).containsExactly(fourthStepData);
+        Assertions.assertThat(SECOND_VIEW.injectedData)
+                  .containsExactly(secondStepData);
+        Assertions.assertThat(THIRD_VIEW.injectedData)
+                  .containsExactly(thirdStepData);
+        Assertions.assertThat(FOURTH_VIEW.injectedData)
+                  .containsExactly(fourthStepData);
     }
 
     @Test
@@ -72,8 +80,10 @@ class StepsChainBuilderTest {
         // given
         val chain = new StepsChainBuilder(
                 servicesFacadeMock,
-                step -> step.getViewSupplier().get(),
-                step -> step.getViewSupplier().get()
+                step -> step.getViewSupplier()
+                            .get(),
+                step -> step.getViewSupplier()
+                            .get()
         )
                 .register(FIRST_STEP)
                 .register(SECOND_STEP)
@@ -86,18 +96,28 @@ class StepsChainBuilderTest {
         val fourthStepData = new FourthStepData();
 
         // when
-        chain.getNavigatorOfStep(FIRST_STEP).next(secondStepData);
-        chain.getNavigatorOfStep(SECOND_STEP).next(thirdStepData);
-        chain.getNavigatorOfStep(THIRD_STEP).next(fourthStepData);
-        chain.getNavigatorOfStep(FOURTH_STEP).previous();
-        chain.getNavigatorOfStep(THIRD_STEP).previous();
-        chain.getNavigatorOfStep(SECOND_STEP).previous();
+        chain.getNavigatorOfStep(FIRST_STEP)
+             .next(secondStepData);
+        chain.getNavigatorOfStep(SECOND_STEP)
+             .next(thirdStepData);
+        chain.getNavigatorOfStep(THIRD_STEP)
+             .next(fourthStepData);
+        chain.getNavigatorOfStep(FOURTH_STEP)
+             .previous();
+        chain.getNavigatorOfStep(THIRD_STEP)
+             .previous();
+        chain.getNavigatorOfStep(SECOND_STEP)
+             .previous();
 
         // then
-        Assertions.assertThat(FIRST_VIEW.injectedData).hasSize(1);
-        Assertions.assertThat(SECOND_VIEW.injectedData).containsExactly(secondStepData, secondStepData);
-        Assertions.assertThat(THIRD_VIEW.injectedData).containsExactly(thirdStepData, thirdStepData);
-        Assertions.assertThat(FOURTH_VIEW.injectedData).containsExactly(fourthStepData);
+        Assertions.assertThat(FIRST_VIEW.injectedData)
+                  .hasSize(1);
+        Assertions.assertThat(SECOND_VIEW.injectedData)
+                  .containsExactly(secondStepData, secondStepData);
+        Assertions.assertThat(THIRD_VIEW.injectedData)
+                  .containsExactly(thirdStepData, thirdStepData);
+        Assertions.assertThat(FOURTH_VIEW.injectedData)
+                  .containsExactly(fourthStepData);
     }
 
     @Test
@@ -109,33 +129,43 @@ class StepsChainBuilderTest {
 
         val chain = new StepsChainBuilder(
                 servicesFacadeMock,
-                step -> step.getViewSupplier().get(),
-                step -> step.getViewSupplier().get()
+                step -> step.getViewSupplier()
+                            .get(),
+                step -> step.getViewSupplier()
+                            .get()
         )
                 .register(FIRST_STEP)
                 .transform(data -> {
-                    Assertions.assertThat(data).isEqualTo(secondStepData);
+                    Assertions.assertThat(data)
+                              .isEqualTo(secondStepData);
                     return thirdStepData;
                 })
                 .transform(data -> {
-                    Assertions.assertThat(data).isEqualTo(thirdStepData);
+                    Assertions.assertThat(data)
+                              .isEqualTo(thirdStepData);
                     return fourthStepData;
                 })
                 .register(FOURTH_STEP)
                 .build();
 
         // when
-        chain.getNavigatorOfStep(FIRST_STEP).next(secondStepData);
+        chain.getNavigatorOfStep(FIRST_STEP)
+             .next(secondStepData);
 
         // then
-        Assertions.assertThatThrownBy(() -> chain.getNavigatorOfStep(SECOND_STEP).next(thirdStepData))
-                        .isInstanceOf(IllegalArgumentException.class);
-        Assertions.assertThatThrownBy(() -> chain.getNavigatorOfStep(THIRD_STEP).next(fourthStepData))
-                        .isInstanceOf(IllegalArgumentException.class);
+        Assertions.assertThatThrownBy(() -> chain.getNavigatorOfStep(SECOND_STEP)
+                                                 .next(thirdStepData))
+                  .isInstanceOf(IllegalArgumentException.class);
+        Assertions.assertThatThrownBy(() -> chain.getNavigatorOfStep(THIRD_STEP)
+                                                 .next(fourthStepData))
+                  .isInstanceOf(IllegalArgumentException.class);
 
-        Assertions.assertThat(SECOND_VIEW.injectedData).isEmpty();
-        Assertions.assertThat(THIRD_VIEW.injectedData).isEmpty();
-        Assertions.assertThat(FOURTH_VIEW.injectedData).containsExactly(fourthStepData);
+        Assertions.assertThat(SECOND_VIEW.injectedData)
+                  .isEmpty();
+        Assertions.assertThat(THIRD_VIEW.injectedData)
+                  .isEmpty();
+        Assertions.assertThat(FOURTH_VIEW.injectedData)
+                  .containsExactly(fourthStepData);
     }
 
     @Test
@@ -147,36 +177,49 @@ class StepsChainBuilderTest {
 
         val chain = new StepsChainBuilder(
                 servicesFacadeMock,
-                step -> step.getViewSupplier().get(),
-                step -> step.getViewSupplier().get()
+                step -> step.getViewSupplier()
+                            .get(),
+                step -> step.getViewSupplier()
+                            .get()
         )
                 .register(FIRST_STEP)
                 .transform(data -> {
-                    Assertions.assertThat(data).isEqualTo(secondStepData);
+                    Assertions.assertThat(data)
+                              .isEqualTo(secondStepData);
                     return thirdStepData;
                 })
                 .transform(data -> {
-                    Assertions.assertThat(data).isEqualTo(thirdStepData);
+                    Assertions.assertThat(data)
+                              .isEqualTo(thirdStepData);
                     return fourthStepData;
                 })
                 .register(FOURTH_STEP)
                 .build();
 
         // when
-        chain.getNavigatorOfStep(FIRST_STEP).next(secondStepData);
-        chain.getNavigatorOfStep(FOURTH_STEP).previous();
+        chain.getNavigatorOfStep(FIRST_STEP)
+             .next(secondStepData);
+        chain.getNavigatorOfStep(FOURTH_STEP)
+             .previous();
 
         // then
-        Assertions.assertThatThrownBy(() -> chain.getNavigatorOfStep(SECOND_STEP).next(thirdStepData))
-                .isInstanceOf(IllegalArgumentException.class);
-        Assertions.assertThatThrownBy(() -> chain.getNavigatorOfStep(THIRD_STEP).next(fourthStepData))
-                .isInstanceOf(IllegalArgumentException.class);
+        Assertions.assertThatThrownBy(() -> chain.getNavigatorOfStep(SECOND_STEP)
+                                                 .next(thirdStepData))
+                  .isInstanceOf(IllegalArgumentException.class);
+        Assertions.assertThatThrownBy(() -> chain.getNavigatorOfStep(THIRD_STEP)
+                                                 .next(fourthStepData))
+                  .isInstanceOf(IllegalArgumentException.class);
 
-        Assertions.assertThat(FIRST_VIEW.injectedData).hasSize(1);
-        Assertions.assertThat(FIRST_VIEW.injectedData.get(0)).isNull();
-        Assertions.assertThat(SECOND_VIEW.injectedData).isEmpty();
-        Assertions.assertThat(THIRD_VIEW.injectedData).isEmpty();
-        Assertions.assertThat(FOURTH_VIEW.injectedData).containsExactly(fourthStepData);
+        Assertions.assertThat(FIRST_VIEW.injectedData)
+                  .hasSize(1);
+        Assertions.assertThat(FIRST_VIEW.injectedData.get(0))
+                  .isNull();
+        Assertions.assertThat(SECOND_VIEW.injectedData)
+                  .isEmpty();
+        Assertions.assertThat(THIRD_VIEW.injectedData)
+                  .isEmpty();
+        Assertions.assertThat(FOURTH_VIEW.injectedData)
+                  .containsExactly(fourthStepData);
     }
 
     @Getter

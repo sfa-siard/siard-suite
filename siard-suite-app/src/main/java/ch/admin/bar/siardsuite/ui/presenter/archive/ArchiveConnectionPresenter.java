@@ -1,18 +1,18 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive;
 
-import ch.admin.bar.siardsuite.ui.component.ButtonBox;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.service.database.model.Dbms;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionProperties;
-import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.ui.component.ButtonBox;
 import ch.admin.bar.siardsuite.ui.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.ui.presenter.connection.ConnectionForm;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import lombok.val;
@@ -48,13 +48,15 @@ public class ArchiveConnectionPresenter {
         });
 
         buttonsBox.next()
-                .setOnAction((event) -> connectionForm
-                        .tryGetValidConnectionData()
-                        .ifPresent(stepperNavigator::next));
+                  .setOnAction((event) -> connectionForm
+                          .tryGetValidConnectionData()
+                          .ifPresent(stepperNavigator::next));
 
-        buttonsBox.previous().setOnAction((event) -> stepperNavigator.previous());
-        buttonsBox.cancel().setOnAction((event) -> dialogs
-                .open(View.ARCHIVE_ABORT_DIALOG));
+        buttonsBox.previous()
+                  .setOnAction((event) -> stepperNavigator.previous());
+        buttonsBox.cancel()
+                  .setOnAction((event) -> dialogs
+                          .open(View.ARCHIVE_ABORT_DIALOG));
     }
 
     public static LoadedView<ArchiveConnectionPresenter> load(
@@ -63,12 +65,13 @@ public class ArchiveConnectionPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveConnectionPresenter>load("fxml/archive/archive-connection.fxml");
-        loaded.getController().init(
-                dbmsSelected.getDbms(),
-                dbmsSelected.getInitialValue(),
-                navigator,
-                servicesFacade.dialogs()
-        );
+        loaded.getController()
+              .init(
+                      dbmsSelected.getDbms(),
+                      dbmsSelected.getInitialValue(),
+                      navigator,
+                      servicesFacade.dialogs()
+              );
 
         return loaded;
     }

@@ -6,7 +6,8 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public class StaticText implements DisplayableText {
 
-    @NonNull String staticText;
+    @NonNull
+    String staticText;
 
     @Override
     public String getText() {

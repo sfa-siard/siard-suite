@@ -45,7 +45,7 @@ public class MetaUserImpl
      */
     private ArchiveImpl getArchive() {
         return (ArchiveImpl) getParentMetaData().getArchive();
-    } 
+    }
 
     /**
      * set template meta data.
@@ -55,7 +55,7 @@ public class MetaUserImpl
     public void setTemplate(UserType utTemplate) {
         if (!SU.isNotEmpty(getDescription()))
             setDescription(XU.fromXml(utTemplate.getDescription()));
-    } 
+    }
 
     /**
      * constructor
@@ -66,7 +66,7 @@ public class MetaUserImpl
     private MetaUserImpl(MetaData mdParent, UserType ut) {
         _mdParent = mdParent;
         _ut = ut;
-    } 
+    }
 
     /**
      * factory
@@ -77,7 +77,7 @@ public class MetaUserImpl
      */
     public static MetaUser newInstance(MetaData mdParent, UserType ut) {
         return new MetaUserImpl(mdParent, ut);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -87,7 +87,6 @@ public class MetaUserImpl
         return XU.fromXml(_ut.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -96,7 +95,7 @@ public class MetaUserImpl
     public void setDescription(String sDescription) {
         if (getArchive().isMetaDataDifferent(getDescription(), sDescription))
             _ut.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -117,7 +116,7 @@ public class MetaUserImpl
                         getName(),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

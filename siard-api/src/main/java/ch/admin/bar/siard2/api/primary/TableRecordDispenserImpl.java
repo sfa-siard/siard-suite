@@ -8,9 +8,9 @@ Created    : 04.09.2017, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.api.primary;
 
+import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.TableRecord;
 import ch.admin.bar.siard2.api.TableRecordDispenser;
-import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.generated.table.RecordType;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jaxb.XMLStreamFactory;
@@ -96,7 +96,7 @@ public class TableRecordDispenserImpl
         public long getByteCount() {
             return _lCount;
         }
-    } 
+    }
     /*==================================================================*/
 
     /**
@@ -107,7 +107,7 @@ public class TableRecordDispenserImpl
     private ArchiveImpl getArchiveImpl() {
         return (ArchiveImpl) _table.getParentSchema()
                                    .getParentArchive();
-    } 
+    }
 
     /**
      * read the header of the table XML and position reader on first record.
@@ -135,7 +135,7 @@ public class TableRecordDispenserImpl
             throw new IOException("XMLStreamReader cannot be created!", xse);
         }
         return xsr;
-    } 
+    }
 
     /**
      * constructor opens a RecordInputStream to a table.
@@ -159,7 +159,7 @@ public class TableRecordDispenserImpl
             _lRecord = 0;
         } else
             throw new IOException("Table cannot be opened for reading!");
-    } 
+    }
 
     /**
      * get the row as a DOM element from the XML stream reader.
@@ -206,7 +206,7 @@ public class TableRecordDispenserImpl
             }
         }
         return elRow;
-    } 
+    }
 
     /**
      * get the record type with "any" elements for cells.
@@ -240,7 +240,7 @@ public class TableRecordDispenserImpl
         if (!(xsr.isStartElement() || xsr.isEndElement()))
             xsr.nextTag();
         return rt;
-    } 
+    }
 
     /**
      * read a record from the XML stream reader.
@@ -260,7 +260,7 @@ public class TableRecordDispenserImpl
         } else
             throw new IOException("Unexpected tag " + xsr.getLocalName() + " encountered");
         return tableRecord;
-    } 
+    }
 
     /**
      * {@inheritDoc}

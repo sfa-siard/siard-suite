@@ -1,17 +1,15 @@
 package ch.admin.bar.siard2.jdbc;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.testcontainers.containers.Db2Container;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.DriverPropertyInfo;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
-import org.junit.*;
-
-import org.testcontainers.containers.Db2Container;
+import static org.junit.Assert.*;
 
 public class Db2DriverTester {
 

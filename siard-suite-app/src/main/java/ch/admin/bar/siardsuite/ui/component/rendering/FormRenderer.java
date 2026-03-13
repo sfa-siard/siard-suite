@@ -1,16 +1,11 @@
 package ch.admin.bar.siardsuite.ui.component.rendering;
 
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableLazyLoadingTable;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.util.OptionalHelper;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.*;
+import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.util.OptionalHelper;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
@@ -64,17 +59,20 @@ public class FormRenderer<T> {
         this.errorHandler = errorHandler;
         this.hasChanged = hasChanged;
 
-        this.data = renderableForm.getDataSupplier().get();
+        this.data = renderableForm.getDataSupplier()
+                                  .get();
         this.rendered = renderForm();
     }
 
     private VBox renderForm() {
         val vbox = new VBox();
-        val groups = renderableForm.getGroups().stream()
-                .map(renderableGroup -> createGroup(renderableGroup, data))
-                .collect(Collectors.toList());
+        val groups = renderableForm.getGroups()
+                                   .stream()
+                                   .map(renderableGroup -> createGroup(renderableGroup, data))
+                                   .collect(Collectors.toList());
 
-        vbox.getChildren().setAll(groups);
+        vbox.getChildren()
+            .setAll(groups);
         vbox.setSpacing(40); // space between groups
         VBox.setVgrow(vbox, Priority.ALWAYS);
 
@@ -83,46 +81,49 @@ public class FormRenderer<T> {
 
     private VBox createGroup(final RenderableFormGroup<T> group, final T data) {
         val vbox = new VBox();
-        val fields = group.getProperties().stream()
-                .map(renderableProperty -> {
-                    if (renderableProperty instanceof ReadWriteStringProperty) {
-                        return createField((ReadWriteStringProperty<T>) renderableProperty, data);
-                    }
+        val fields = group.getProperties()
+                          .stream()
+                          .map(renderableProperty -> {
+                              if (renderableProperty instanceof ReadWriteStringProperty) {
+                                  return createField((ReadWriteStringProperty<T>) renderableProperty, data);
+                              }
 
-                    if (renderableProperty instanceof ReadOnlyStringProperty) {
-                        return createField((ReadOnlyStringProperty<T>) renderableProperty, data);
-                    }
+                              if (renderableProperty instanceof ReadOnlyStringProperty) {
+                                  return createField((ReadOnlyStringProperty<T>) renderableProperty, data);
+                              }
 
-                    if (renderableProperty instanceof RenderableTable) {
-                        val renderer = TableRenderer.<T, Object>builder()
-                                .data(data)
-                                .renderableTable((RenderableTable<T, Object>) renderableProperty)
-                                .build();
-                        searchableFormEntries.add(renderer);
+                              if (renderableProperty instanceof RenderableTable) {
+                                  val renderer = TableRenderer.<T, Object>builder()
+                                                              .data(data)
+                                                              .renderableTable((RenderableTable<T, Object>) renderableProperty)
+                                                              .build();
+                                  searchableFormEntries.add(renderer);
 
-                        return renderer
-                                .render();
-                    }
+                                  return renderer
+                                          .render();
+                              }
 
-                    if (renderableProperty instanceof RenderableLazyLoadingTable) {
-                        val renderer = LazyLoadingTableRenderer.<T, Object>builder()
-                                .dataHolder(data)
-                                .errorHandler(errorHandler)
-                                .renderableTable((RenderableLazyLoadingTable<T, Object>) renderableProperty)
-                                .build();
-                        searchableFormEntries.add(renderer);
+                              if (renderableProperty instanceof RenderableLazyLoadingTable) {
+                                  val renderer = LazyLoadingTableRenderer.<T, Object>builder()
+                                                                         .dataHolder(data)
+                                                                         .errorHandler(errorHandler)
+                                                                         .renderableTable((RenderableLazyLoadingTable<T, Object>) renderableProperty)
+                                                                         .build();
+                                  searchableFormEntries.add(renderer);
 
-                        return renderer.render();
-                    }
+                                  return renderer.render();
+                              }
 
-                    throw new IllegalArgumentException(String.format(
-                            "Property type %s ins not supported yet.",
-                            renderableProperty.getClass().getName()
-                    ));
-                })
-                .collect(Collectors.toList());
+                              throw new IllegalArgumentException(String.format(
+                                      "Property type %s ins not supported yet.",
+                                      renderableProperty.getClass()
+                                                        .getName()
+                              ));
+                          })
+                          .collect(Collectors.toList());
 
-        vbox.getChildren().setAll(fields);
+        vbox.getChildren()
+            .setAll(fields);
         vbox.setSpacing(10);
         VBox.setVgrow(vbox, Priority.ALWAYS);
 
@@ -154,20 +155,21 @@ public class FormRenderer<T> {
 
     public SaveChangesReport saveChanges() {
         val invalidFields = this.editableFormFields.stream()
-                .filter(editableFormField -> !editableFormField.hasValidValue())
-                .collect(Collectors.toList());
+                                                   .filter(editableFormField -> !editableFormField.hasValidValue())
+                                                   .collect(Collectors.toList());
 
         if (!invalidFields.isEmpty()) {
-            return new SaveChangesReport(DisplayableText.of(VALIDATION_ERRORS).getText());
+            return new SaveChangesReport(DisplayableText.of(VALIDATION_ERRORS)
+                                                        .getText());
         }
 
         val failedFields = this.editableFormFields.stream()
-                .filter(editableFormField -> !editableFormField.save())
-                .collect(Collectors.toList());
+                                                  .filter(editableFormField -> !editableFormField.save())
+                                                  .collect(Collectors.toList());
 
         try {
             this.renderableForm.getAfterSaveAction()
-                    .doAfterSaveChanges(data);
+                               .doAfterSaveChanges(data);
 
             if (failedFields.isEmpty()) {
                 hasChanged.set(false);
@@ -175,9 +177,10 @@ public class FormRenderer<T> {
             }
         } catch (Exception e) {
             log.error("Storage failed because of after-storage-action because {}",
-                    e.getMessage());
+                      e.getMessage());
         }
-        return new SaveChangesReport(DisplayableText.of(UNKNOWN_ERROR).getText());
+        return new SaveChangesReport(DisplayableText.of(UNKNOWN_ERROR)
+                                                    .getText());
     }
 
     public void applySearchTerm(final String searchTerm) {
@@ -204,17 +207,20 @@ public class FormRenderer<T> {
 
             titleLabel = new Label();
             titleLabel.textProperty()
-                    .bind(I18n.bind(title));
-            titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
+                      .bind(I18n.bind(title));
+            titleLabel.getStyleClass()
+                      .add(TITLE_STYLE_CLASS);
 
             val value = valueExtractor.apply(data);
 
             valueTextField = new TextField();
             valueTextField.setText(value);
             valueTextField.setEditable(false);
-            valueTextField.getStyleClass().add(FIELD_STYLE_CLASS);
+            valueTextField.getStyleClass()
+                          .add(FIELD_STYLE_CLASS);
 
-            this.getChildren().setAll(titleLabel, valueTextField);
+            this.getChildren()
+                .setAll(titleLabel, valueTextField);
         }
 
         public ReadOnlyFormField(
@@ -241,35 +247,43 @@ public class FormRenderer<T> {
             this.data = data;
 
             title = new Label();
-            val titleSuffix = property.getValueValidators().stream()
-                    .map(validator -> validator.getTitleSuffix().orElse(""))
-                    .collect(Collectors.joining());
+            val titleSuffix = property.getValueValidators()
+                                      .stream()
+                                      .map(validator -> validator.getTitleSuffix()
+                                                                 .orElse(""))
+                                      .collect(Collectors.joining());
 
             title.textProperty()
-                    .bind(Bindings
-                            .concat(I18n.bind(property.getTitle()))
-                            .concat(titleSuffix));
-            title.getStyleClass().add(TITLE_STYLE_CLASS);
+                 .bind(Bindings
+                               .concat(I18n.bind(property.getTitle()))
+                               .concat(titleSuffix));
+            title.getStyleClass()
+                 .add(TITLE_STYLE_CLASS);
 
             value = new TextField();
-            value.getStyleClass().add(FIELD_STYLE_CLASS);
+            value.getStyleClass()
+                 .add(FIELD_STYLE_CLASS);
 
             validationMsg = new Label();
-            validationMsg.getStyleClass().add(VALIDATION_STYLE_CLASS);
+            validationMsg.getStyleClass()
+                         .add(VALIDATION_STYLE_CLASS);
             hideValidationLabel();
 
             reset();
             value.textProperty()
-                    .addListener((observable, oldValue, newValue) -> hasChanged.set(true));
+                 .addListener((observable, oldValue, newValue) -> hasChanged.set(true));
 
-            this.getChildren().setAll(title, value, validationMsg);
+            this.getChildren()
+                .setAll(title, value, validationMsg);
         }
 
         public boolean hasValidValue() {
             val currentValue = value.getText();
-            val failedValidator = this.property.getValueValidators().stream()
-                    .filter(validator -> !validator.getIsValidCheck().test(currentValue))
-                    .findAny();
+            val failedValidator = this.property.getValueValidators()
+                                               .stream()
+                                               .filter(validator -> !validator.getIsValidCheck()
+                                                                              .test(currentValue))
+                                               .findAny();
 
             OptionalHelper.ifPresentOrElse(
                     failedValidator,
@@ -281,13 +295,15 @@ public class FormRenderer<T> {
         }
 
         public void reset() {
-            val originalValue = property.getValueExtractor().apply(data);
+            val originalValue = property.getValueExtractor()
+                                        .apply(data);
             value.setText(originalValue);
             hideValidationLabel();
         }
 
         public boolean hasChanges() {
-            val originalValue = property.getValueExtractor().apply(data);
+            val originalValue = property.getValueExtractor()
+                                        .apply(data);
             return !Objects.equals(originalValue, value.getText());
         }
 
@@ -304,9 +320,9 @@ public class FormRenderer<T> {
                 return true;
             } catch (Exception e) {
                 log.error("Storage failed for field {} with value {} because {}",
-                        title.getText(),
-                        currentValue,
-                        e.getMessage());
+                          title.getText(),
+                          currentValue,
+                          e.getMessage());
                 showValidationLabel(DisplayableText.of(SINGLE_FIELD_UNKNOWN_ERROR));
                 return false;
             }

@@ -90,7 +90,7 @@ public class TestSqlDatabase {
             _conn.rollback();
         } catch (SQLException seRollback) {
             System.err.println("Rollback failed: " +
-                    EU.getExceptionMessage(seRollback));
+                                       EU.getExceptionMessage(seRollback));
         }
     }
 
@@ -169,7 +169,7 @@ public class TestSqlDatabase {
         IdList ilPrimary = new IdList();
         for (TestColumnDefinition tcd : listCdPrimary) {
             ilPrimary.get()
-                    .add(tcd.getName());
+                     .add(tcd.getName());
         }
         TableConstraintDefinition tcd = _sf.newTableConstraintDefinition();
         tcd.initPrimaryKey(new QualifiedId(null, null, sPkName), ilPrimary);
@@ -183,17 +183,17 @@ public class TestSqlDatabase {
         IdList ilForeign = new IdList();
         for (TestColumnDefinition tcd : listCdForeign) {
             ilForeign.get()
-                    .add(tcd.getName());
+                     .add(tcd.getName());
         }
         IdList ilReferenced = new IdList();
         for (TestColumnDefinition tcd : listCdReferenced) {
             ilReferenced.get()
-                    .add(tcd.getName());
+                        .add(tcd.getName());
         }
         TableConstraintDefinition tcd = _sf.newTableConstraintDefinition();
         tcd.initialize(new QualifiedId(null, null, sFkName), TableConstraintType.FOREIGN_KEY,
-                ilForeign, qiTableReferenced, ilReferenced, null, ReferentialAction.CASCADE,
-                null, null, null, null);
+                       ilForeign, qiTableReferenced, ilReferenced, null, ReferentialAction.CASCADE,
+                       null, null, null, null);
         TableElement te = _sf.newTableElement();
         te.initTableConstraintDefinition(tcd);
         return te;
@@ -211,10 +211,10 @@ public class TestSqlDatabase {
         listTableElements.add(getPrimaryTableElement("PK" + qiTable.getName(), listCdPrimary));
         if (listCdForeign != null)
             listTableElements.add(getForeignTableElement("FK" + qiTable.getName(),
-                    listCdForeign, qiTableReferenced, listCdReferenced));
+                                                         listCdForeign, qiTableReferenced, listCdReferenced));
         cts.initTableElements(null,
-                qiTable,
-                listTableElements, null);
+                              qiTable,
+                              listTableElements, null);
         // System.out.println(cts.format());
         Statement stmt = _conn.createStatement();
         int iResult = stmt.executeUpdate(cts.format());
@@ -233,8 +233,8 @@ public class TestSqlDatabase {
     private void createTables()
             throws SQLException {
         createTable(getQualifiedSimpleTable(), _listCdSimple,
-                getSingle(_listCdSimple.get(_iPrimarySimple)),
-                null, null, null);
+                    getSingle(_listCdSimple.get(_iPrimarySimple)),
+                    null, null, null);
     }
 
     private CommonValueExpression getCommonValueExpression() {
@@ -258,7 +258,7 @@ public class TestSqlDatabase {
         gvs.initialize(new ColonId(), new ColonId(), new IdChain(), GeneralValue.QUESTION_MARK);
         CommonValueExpression cve = getCommonValueExpression();
         cve.getValueExpressionPrimary()
-                .setGeneralValueSpecification(gvs);
+           .setGeneralValueSpecification(gvs);
         return cve;
     }
 
@@ -302,8 +302,8 @@ public class TestSqlDatabase {
             String s = (String) o;
             if (s.length() < 256)
                 cve.getValueExpressionPrimary()
-                        .getUnsignedLit().
-                        initCharacterString(s);
+                   .getUnsignedLit().
+                   initCharacterString(s);
             else {
                 cve = getCommonValueExpressionDynamic();
                 listLobs.add(tcd);
@@ -312,8 +312,8 @@ public class TestSqlDatabase {
             byte[] buf = (byte[]) o;
             if (buf.length < 256)
                 cve.getValueExpressionPrimary()
-                        .getUnsignedLit().
-                        initBytes(buf);
+                   .getUnsignedLit().
+                   initBytes(buf);
             else {
                 cve = getCommonValueExpressionDynamic();
                 listLobs.add(tcd);
@@ -321,89 +321,89 @@ public class TestSqlDatabase {
         } else if (o instanceof BigDecimal) {
             BigDecimal bd = (BigDecimal) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initBigDecimal(bd.abs());
+               .getValueExpressionPrimary()
+               .getUnsignedLit().
+               initBigDecimal(bd.abs());
             if (bd.signum() < 0)
                 cve.getNumericValueExpression().
-                        setSign(Sign.MINUS_SIGN);
+                   setSign(Sign.MINUS_SIGN);
         } else if (o instanceof BigInteger) {
             BigInteger bi = (BigInteger) o;
             BigDecimal bd = new BigDecimal(bi);
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initBigDecimal(bd.abs());
+               .getValueExpressionPrimary()
+               .getUnsignedLit().
+               initBigDecimal(bd.abs());
             if (bd.signum() < 0)
                 cve.getNumericValueExpression().
-                        setSign(Sign.MINUS_SIGN);
+                   setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Short) {
             short sh = (Short) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initInteger(Math.abs(sh));
+               .getValueExpressionPrimary()
+               .getUnsignedLit().
+               initInteger(Math.abs(sh));
             if (sh < 0)
                 cve.getNumericValueExpression().
-                        setSign(Sign.MINUS_SIGN);
+                   setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Integer) {
             int i = (Integer) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initInteger(Math.abs(i));
+               .getValueExpressionPrimary()
+               .getUnsignedLit().
+               initInteger(Math.abs(i));
             if (i < 0)
                 cve.getNumericValueExpression().
-                        setSign(Sign.MINUS_SIGN);
+                   setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Long) {
             long l = (Long) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initLong(Math.abs(l));
+               .getValueExpressionPrimary()
+               .getUnsignedLit().
+               initLong(Math.abs(l));
             if (l < 0)
                 cve.getNumericValueExpression().
-                        setSign(Sign.MINUS_SIGN);
+                   setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Float) {
             double d = ((Float) o).doubleValue();
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initDouble(Math.abs(d));
+               .getValueExpressionPrimary()
+               .getUnsignedLit().
+               initDouble(Math.abs(d));
             if (d < 0)
                 cve.getNumericValueExpression().
-                        setSign(Sign.MINUS_SIGN);
+                   setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Double) {
             double d = (Double) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initDouble(Math.abs(d));
+               .getValueExpressionPrimary()
+               .getUnsignedLit().
+               initDouble(Math.abs(d));
             if (d < 0)
                 cve.getNumericValueExpression().
-                        setSign(Sign.MINUS_SIGN);
+                   setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Boolean) {
             boolean b = (Boolean) o;
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initBoolean(b ? BooleanLiteral.TRUE : BooleanLiteral.FALSE);
+               .getUnsignedLit().
+               initBoolean(b ? BooleanLiteral.TRUE : BooleanLiteral.FALSE);
         } else if (o instanceof Date) {
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initDate((Date) o);
+               .getUnsignedLit().
+               initDate((Date) o);
         } else if (o instanceof Time) {
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initTime((Time) o);
+               .getUnsignedLit().
+               initTime((Time) o);
         } else if (o instanceof Timestamp) {
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit().
-                    initTimestamp((Timestamp) o);
+               .getUnsignedLit().
+               initTimestamp((Timestamp) o);
         } else if (o instanceof Interval) {
             Interval iv = (Interval) o;
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initInterval(iv);
+               .getUnsignedLit()
+               .initInterval(iv);
         } else if (o instanceof List<?>) {
             try {
                 QualifiedId qiType = new QualifiedId(tcd.getType());
@@ -414,13 +414,13 @@ public class TestSqlDatabase {
                     listAttributeValues.add(getAttributeValue(tcdAttribute, listLobs));
                 }
                 cve.getValueExpressionPrimary().
-                        initUdtValueConstructor(qiType, listAttributeValues);
+                   initUdtValueConstructor(qiType, listAttributeValues);
             } catch (ParseException pe) {
                 throw new SQLException("Type name " + tcd.getType() + " could not be parsed!", pe);
             }
         } else
             throw new SQLException("Unexpected value type " + o.getClass()
-                    .getName() + "!");
+                                                               .getName() + "!");
         ve.initialize(cve, null, null);
         return ve;
     }
@@ -452,13 +452,13 @@ public class TestSqlDatabase {
         List<TestColumnDefinition> listLobs = new ArrayList<>();
         for (TestColumnDefinition tcd : listCd) {
             ilColumns.get()
-                    .add(tcd.getName());
+                     .add(tcd.getName());
             ar.getUpdateSources()
-                    .add(getUpdateSource(tcd, listLobs));
+              .add(getUpdateSource(tcd, listLobs));
         }
         InsertStatement is = _sf.newInsertStatement();
         is.initialize(qiTable, ilColumns, listValues,
-                null, null, false);
+                      null, null, false);
         // System.out.println(is.format());
         PreparedStatement pstmt = _conn.prepareStatement(is.format());
         for (int iLob = 0; iLob < listLobs.size(); iLob++) {

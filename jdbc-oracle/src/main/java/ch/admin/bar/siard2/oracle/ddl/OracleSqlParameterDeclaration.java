@@ -15,37 +15,39 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.SqlParameterDeclaration;
 
 /*====================================================================*/
+
 /** OracleSqlParameterDeclaration overrides the formatting
  * of the SqlParameterDeclaration
  * @author Simon Jutz
  *
  */
 public class OracleSqlParameterDeclaration
-	extends SqlParameterDeclaration
-{
+        extends SqlParameterDeclaration {
     /*------------------------------------------------------------------*/
-	/**
-	 * format the sql parameter declaration
-	 * @return the SQL string corresponding to a sql parameter declaration
-	 */
-	@Override
-	public String format() {
-	    String sDeclaration = "";
-	    if (getParameterName().isSet())
-	      sDeclaration = sDeclaration + getParameterName().quote();
-	    if (getParameterMode() != null)
-		      sDeclaration = getParameterMode().getKeywords() + sSP;
-	    if (getDataType() != null)
-	      sDeclaration = sDeclaration + sSP + getDataType().format();
-	    
-	    return sDeclaration;
-	} /* format */
+
+    /**
+     * format the sql parameter declaration
+     * @return the SQL string corresponding to a sql parameter declaration
+     */
+    @Override
+    public String format() {
+        String sDeclaration = "";
+        if (getParameterName().isSet())
+            sDeclaration = sDeclaration + getParameterName().quote();
+        if (getParameterMode() != null)
+            sDeclaration = getParameterMode().getKeywords() + sSP;
+        if (getDataType() != null)
+            sDeclaration = sDeclaration + sSP + getDataType().format();
+
+        return sDeclaration;
+    } /* format */
 
     /*------------------------------------------------------------------*/
+
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
-	public OracleSqlParameterDeclaration(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
+    public OracleSqlParameterDeclaration(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 }

@@ -8,14 +8,17 @@ import lombok.Value;
 @Value
 @Builder
 public class QualifiedColumnId {
-    @NonNull Id<Metadata.Schema> schemaId;
-    @NonNull Id<Metadata.Table> tableId;
-    @NonNull Id<Metadata.Column> columnId;
+    @NonNull
+    Id<Metadata.Schema> schemaId;
+    @NonNull
+    Id<Metadata.Table> tableId;
+    @NonNull
+    Id<Metadata.Column> columnId;
 
     public QualifiedTableId getQualifiedTableId() {
         return QualifiedTableId.builder()
-                .schemaId(schemaId)
-                .tableId(tableId)
-                .build();
+                               .schemaId(schemaId)
+                               .tableId(tableId)
+                               .build();
     }
 }

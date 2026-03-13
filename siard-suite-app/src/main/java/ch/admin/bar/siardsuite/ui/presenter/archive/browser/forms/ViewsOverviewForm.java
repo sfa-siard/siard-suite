@@ -1,13 +1,9 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseView;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.*;
 import lombok.NonNull;
 
 public class ViewsOverviewForm {
@@ -23,37 +19,38 @@ public class ViewsOverviewForm {
     public static RenderableForm create(@NonNull final DatabaseSchema schema) {
 
         return RenderableForm.<DatabaseSchema>builder()
-                .dataSupplier(() -> schema)
-                .afterSaveAction(DatabaseSchema::write)
-                .group(RenderableFormGroup.<DatabaseSchema>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                LABEL_SCHEMA,
-                                DatabaseSchema::getName))
-                        .property(new ReadWriteStringProperty<>(
-                                LABEL_DESC_SCHEMA,
-                                DatabaseSchema::getDescription,
-                                DatabaseSchema::setDescription
-                        ))
-                        .property(RenderableTable.<DatabaseSchema, DatabaseView>builder()
-                                .dataExtractor(DatabaseSchema::getViews)
-                                .property(new ReadOnlyStringProperty<>(
-                                        ROW,
-                                        databaseView -> String.valueOf(schema.getViews().indexOf(databaseView) + 1)
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        VIEW_NAME,
-                                        DatabaseView::name
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        NUMBER_OF_COLUMNS,
-                                        DatabaseView::getNumberOfColumns
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        NUMBER_OF_ROWS,
-                                        DatabaseView::getNumberOfRows
-                                ))
-                                .build())
-                        .build())
-                .build();
+                             .dataSupplier(() -> schema)
+                             .afterSaveAction(DatabaseSchema::write)
+                             .group(RenderableFormGroup.<DatabaseSchema>builder()
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               LABEL_SCHEMA,
+                                                               DatabaseSchema::getName))
+                                                       .property(new ReadWriteStringProperty<>(
+                                                               LABEL_DESC_SCHEMA,
+                                                               DatabaseSchema::getDescription,
+                                                               DatabaseSchema::setDescription
+                                                       ))
+                                                       .property(RenderableTable.<DatabaseSchema, DatabaseView>builder()
+                                                                                .dataExtractor(DatabaseSchema::getViews)
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        ROW,
+                                                                                        databaseView -> String.valueOf(schema.getViews()
+                                                                                                                             .indexOf(databaseView) + 1)
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        VIEW_NAME,
+                                                                                        DatabaseView::name
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        NUMBER_OF_COLUMNS,
+                                                                                        DatabaseView::getNumberOfColumns
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        NUMBER_OF_ROWS,
+                                                                                        DatabaseView::getNumberOfRows
+                                                                                ))
+                                                                                .build())
+                                                       .build())
+                             .build();
     }
 }

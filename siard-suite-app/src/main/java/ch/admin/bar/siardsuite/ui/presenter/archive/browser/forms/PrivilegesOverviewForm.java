@@ -1,12 +1,12 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.model.database.Privilige;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.model.database.Privilige;
-import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import lombok.NonNull;
 
 public class PrivilegesOverviewForm {
@@ -20,36 +20,36 @@ public class PrivilegesOverviewForm {
 
     public static RenderableForm<SiardArchive> create(@NonNull final SiardArchive siardArchive) {
         return RenderableForm.<SiardArchive>builder()
-                .dataSupplier(() -> siardArchive)
-                .group(RenderableFormGroup.<SiardArchive>builder()
-                        .property(RenderableTable.<SiardArchive, Privilige>builder()
-                                .dataExtractor(SiardArchive::priviliges)
-                                .property(new ReadOnlyStringProperty<>(
-                                        TYPE,
-                                        Privilige::getType
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        OBJECT,
-                                        Privilige::getObject
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        GRANTOR,
-                                        Privilige::getGrantor
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        RECEIVER,
-                                        Privilige::getGrantee
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        OPTION,
-                                        Privilige::getOption
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        DESCRIPTION,
-                                        Privilige::getDescription
-                                ))
-                                .build())
-                        .build())
-                .build();
+                             .dataSupplier(() -> siardArchive)
+                             .group(RenderableFormGroup.<SiardArchive>builder()
+                                                       .property(RenderableTable.<SiardArchive, Privilige>builder()
+                                                                                .dataExtractor(SiardArchive::priviliges)
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        TYPE,
+                                                                                        Privilige::getType
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        OBJECT,
+                                                                                        Privilige::getObject
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        GRANTOR,
+                                                                                        Privilige::getGrantor
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        RECEIVER,
+                                                                                        Privilige::getGrantee
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        OPTION,
+                                                                                        Privilige::getOption
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        DESCRIPTION,
+                                                                                        Privilige::getDescription
+                                                                                ))
+                                                                                .build())
+                                                       .build())
+                             .build();
     }
 }

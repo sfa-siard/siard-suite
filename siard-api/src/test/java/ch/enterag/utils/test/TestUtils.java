@@ -24,7 +24,7 @@ public abstract class TestUtils {
             buf[i] = (byte) j;
         }
         return buf;
-    } 
+    }
 
     public static byte[] getBytes(InputStream is) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -37,7 +37,7 @@ public abstract class TestUtils {
                                  .getName() + ": " + ie.getMessage());
         }
         return baos.toByteArray();
-    } 
+    }
 
     public static String getString(int iLength) {
         StringBuilder sb = new StringBuilder();
@@ -46,7 +46,7 @@ public abstract class TestUtils {
             sb.appendCodePoint(33 + j);
         }
         return sb.toString();
-    } 
+    }
 
     public static String getString(Reader rdr) {
         StringWriter sw = new StringWriter();
@@ -60,7 +60,7 @@ public abstract class TestUtils {
         }
         return sw.getBuffer()
                  .toString();
-    } 
+    }
 
     public static String getNString(int iLength) {
         /* generate random bytes in the range [x20,xFF] */
@@ -74,7 +74,7 @@ public abstract class TestUtils {
         }
         /* read them into a string as 1252 */
         return SU.getIsoLatin1String(buf);
-    } 
+    }
 
     public static String getNString(Reader rdr) {
         StringWriter sw = new StringWriter();
@@ -88,7 +88,7 @@ public abstract class TestUtils {
         }
         return sw.getBuffer()
                  .toString();
-    } 
+    }
 
     /* reading deflated stuff does not always fill the buffer ... */
     private static int fillCharBuffer(Reader rdr, char[] cbuf)
@@ -131,7 +131,7 @@ public abstract class TestUtils {
         rdr1.close();
         rdr2.close();
         return bEqual;
-    } 
+    }
 
     /* reading deflated stuff does not always fill the buffer ... */
     private static int fillByteBuffer(InputStream is, byte[] buf)
@@ -174,7 +174,7 @@ public abstract class TestUtils {
         is1.close();
         is2.close();
         return bEqual;
-    } 
+    }
 
     public static int getRandomInteger() {
         return _random.nextInt();

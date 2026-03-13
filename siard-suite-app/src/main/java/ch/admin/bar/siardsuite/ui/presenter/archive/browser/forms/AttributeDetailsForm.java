@@ -1,11 +1,11 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.Converter;
 import lombok.NonNull;
 

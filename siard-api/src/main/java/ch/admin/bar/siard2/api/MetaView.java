@@ -34,7 +34,7 @@ public interface MetaView
   /*====================================================================
   view properties
   ====================================================================*/
-    
+
 
     /**
      * get view name.
@@ -43,7 +43,6 @@ public interface MetaView
      */
     String getName();
 
-    
 
     /**
      * set the SQL:2008 (ISO 9075) query defining the view.
@@ -59,7 +58,6 @@ public interface MetaView
      */
     String getQuery();
 
-    
 
     /**
      * set the original query string defining the view.
@@ -79,7 +77,6 @@ public interface MetaView
      */
     String getQueryOriginal();
 
-    
 
     /**
      * set description of the table.
@@ -95,7 +92,6 @@ public interface MetaView
      */
     String getDescription();
 
-    
 
     /**
      * set the number of rows of the view.

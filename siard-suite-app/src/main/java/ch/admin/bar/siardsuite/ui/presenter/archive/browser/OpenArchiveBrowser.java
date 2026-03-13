@@ -1,23 +1,21 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.ui.component.ButtonBox;
-import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.navigation.Navigator;
-import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.service.ArchiveHandler;
-import ch.admin.bar.siardsuite.util.OptionalHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
+import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.model.Tuple;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
+import ch.admin.bar.siardsuite.service.ArchiveHandler;
+import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.ui.component.ButtonBox;
+import ch.admin.bar.siardsuite.util.OptionalHelper;
 import javafx.scene.Node;
 import lombok.val;
-
-import java.io.IOException;
 
 import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.OPEN_PREVIEW;
 
@@ -34,31 +32,35 @@ public class OpenArchiveBrowser {
             final ErrorHandler errorHandler,
             final ArchiveHandler archiveHandler
     ) {
-        val archiveBrowserView = new TreeBuilder(new SiardArchive(archive.getFile().getName(), archive, false), false);
+        val archiveBrowserView = new TreeBuilder(new SiardArchive(archive.getFile()
+                                                                         .getName(), archive, false), false);
 
         val buttonsBox = new ButtonBox().make(OPEN_PREVIEW);
-        buttonsBox.cancel().setOnAction(event -> dialogs.open(
-                View.RECENT_CONNECTIONS_FOR_UPLOAD,
-                optionalRecentDbConnection -> OptionalHelper.when(optionalRecentDbConnection)
-                        .isPresent(recentDbConnection -> navigator.navigate(
-                                View.UPLOAD_STEPPER_WITH_RECENT_CONNECTION,
-                                new Tuple<>(
-                                        archive,
-                                        recentDbConnection
-                                )))
-                        .orElse(() -> navigator.navigate(
-                                View.UPLOAD_STEPPER,
-                                archive))
+        buttonsBox.cancel()
+                  .setOnAction(event -> dialogs.open(
+                          View.RECENT_CONNECTIONS_FOR_UPLOAD,
+                          optionalRecentDbConnection -> OptionalHelper.when(optionalRecentDbConnection)
+                                                                      .isPresent(recentDbConnection -> navigator.navigate(
+                                                                              View.UPLOAD_STEPPER_WITH_RECENT_CONNECTION,
+                                                                              new Tuple<>(
+                                                                                      archive,
+                                                                                      recentDbConnection
+                                                                              )))
+                                                                      .orElse(() -> navigator.navigate(
+                                                                              View.UPLOAD_STEPPER,
+                                                                              archive))
 
-        ));
-        buttonsBox.previous().setOnAction(event -> dialogs.open(
-                View.EXPORT_SELECT_TABLES,
-                archive
-        ));
-        buttonsBox.next().setOnAction(event -> {
-            archiveHandler.save(archive, archive.getFile());
-            navigator.navigate(View.START);
-        });
+                  ));
+        buttonsBox.previous()
+                  .setOnAction(event -> dialogs.open(
+                          View.EXPORT_SELECT_TABLES,
+                          archive
+                  ));
+        buttonsBox.next()
+                  .setOnAction(event -> {
+                      archiveHandler.save(archive, archive.getFile());
+                      navigator.navigate(View.START);
+                  });
 
         this.loadedView = GenericArchiveBrowserPresenter.load(
                 dialogs,

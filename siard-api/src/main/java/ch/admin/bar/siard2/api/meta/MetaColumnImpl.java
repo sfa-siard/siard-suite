@@ -59,7 +59,7 @@ public class MetaColumnImpl
             }
         }
         return _mapMetaFields;
-    } 
+    }
 
     private String _sFolder = null; // internal folder for LOB data
 
@@ -108,7 +108,7 @@ public class MetaColumnImpl
             ((MetaFieldImpl) mf).getFieldType();
         }
         return _ct;
-    } 
+    }
 
     /**
      * get table.
@@ -120,7 +120,7 @@ public class MetaColumnImpl
         if (getParentMetaTable() != null)
             table = getParentMetaTable().getTable();
         return table;
-    } 
+    }
 
     /**
      * get archive
@@ -138,7 +138,7 @@ public class MetaColumnImpl
                                          .getSchema()
                                          .getParentArchive();
         return (ArchiveImpl) archive;
-    } 
+    }
 
     /**
      * get schema meta data.
@@ -189,7 +189,7 @@ public class MetaColumnImpl
                 }
             }
         }
-    } 
+    }
 
     /**
      * open all sub field meta data.
@@ -208,7 +208,7 @@ public class MetaColumnImpl
                 _mapMetaFields.put(mf.getName(), mf);
             }
         }
-    } 
+    }
 
     /**
      * constructor
@@ -226,7 +226,7 @@ public class MetaColumnImpl
         _ct = ct;
         _sFolder = _sLOB_FOLDER_PREFIX + (iPosition - 1) + "/";
         openMetaFields();
-    } 
+    }
 
     /**
      * constructor
@@ -243,7 +243,7 @@ public class MetaColumnImpl
         _mvParent = mvParent;
         _ct = ct;
         openMetaFields();
-    } 
+    }
 
     /**
      * factory
@@ -258,7 +258,7 @@ public class MetaColumnImpl
     public static MetaColumn newInstance(MetaTable mtParent, int iPosition, ColumnType ct)
             throws IOException {
         return new MetaColumnImpl(mtParent, ct, iPosition);
-    } 
+    }
 
     /**
      * factory
@@ -273,9 +273,8 @@ public class MetaColumnImpl
     public static MetaColumn newInstance(MetaView mvParent, int iPosition, ColumnType ct)
             throws IOException {
         return new MetaColumnImpl(mvParent, ct, iPosition);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -296,9 +295,8 @@ public class MetaColumnImpl
         if (getLobFolder() == null)
             sFolder = _sFolder;
         return sFolder;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -344,7 +342,7 @@ public class MetaColumnImpl
             }
         } else
             throw new IOException("LOB folder value cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -359,7 +357,7 @@ public class MetaColumnImpl
             }
         }
         return uriLobFolder;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -379,9 +377,8 @@ public class MetaColumnImpl
             }
         }
         return uriLocal;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -403,7 +400,7 @@ public class MetaColumnImpl
                 _ct.setType(XU.toXml(pt.format()));
         } else
             throw new IOException("Type cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -416,7 +413,7 @@ public class MetaColumnImpl
         prt.initialize(iDataType, lPrecision, iScale);
         String sType = prt.format();
         setType(sType);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -447,7 +444,7 @@ public class MetaColumnImpl
         } else if (cat == CategoryType.DISTINCT)
             iDataType = mt.getBasePreType();
         return iDataType;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -486,7 +483,7 @@ public class MetaColumnImpl
         } else if (cat == CategoryType.DISTINCT)
             lLength = mt.getBaseLength();
         return lLength;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -508,9 +505,8 @@ public class MetaColumnImpl
         } else if (cat == CategoryType.DISTINCT)
             iScale = mt.getBaseScale();
         return iScale;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -523,7 +519,7 @@ public class MetaColumnImpl
                 _ct.setTypeOriginal(XU.toXml(sTypeOriginal));
         } else
             throw new IOException("Original type cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -533,7 +529,6 @@ public class MetaColumnImpl
         return XU.fromXml(_ct.getTypeOriginal());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -546,7 +541,7 @@ public class MetaColumnImpl
                 _ct.setNullable(bNullable);
         } else
             throw new IOException("Nullability cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -558,9 +553,8 @@ public class MetaColumnImpl
             bNullable = _ct.isNullable()
                            .booleanValue();
         return bNullable;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -573,7 +567,7 @@ public class MetaColumnImpl
                 _ct.setDefaultValue(XU.toXml(sDefaultValue));
         } else
             throw new IOException("Default value cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -601,7 +595,6 @@ public class MetaColumnImpl
         return XU.fromXml(_ct.getMimeType());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -616,7 +609,7 @@ public class MetaColumnImpl
                 _ct.setTypeSchema(XU.toXml(sTypeSchema));
         } else
             throw new IOException("Type schema cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -626,7 +619,6 @@ public class MetaColumnImpl
         return XU.fromXml(_ct.getTypeSchema());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -644,7 +636,7 @@ public class MetaColumnImpl
             }
         } else
             throw new IOException("Type name cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -667,7 +659,7 @@ public class MetaColumnImpl
                            .getMetaType(getTypeName());
         }
         return mt;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -676,7 +668,7 @@ public class MetaColumnImpl
     public int getMetaFields()
             throws IOException {
         return getMetaFieldsMap().size();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -700,7 +692,7 @@ public class MetaColumnImpl
                 mf = mfi;
         }
         return mf;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -718,7 +710,7 @@ public class MetaColumnImpl
             }
         }
         return getMetaFieldsMap().get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -768,9 +760,8 @@ public class MetaColumnImpl
         } else
             throw new IOException("New field cannot be added!");
         return mf;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -783,7 +774,7 @@ public class MetaColumnImpl
                 _ct.setCardinality(BigInteger.valueOf(iCardinality));
         } else
             throw new IOException("Cardinality cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -796,9 +787,8 @@ public class MetaColumnImpl
         if (bi != null)
             iCardinality = bi.intValue();
         return iCardinality;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -807,7 +797,7 @@ public class MetaColumnImpl
     public void setDescription(String sDescription) {
         if (getArchiveImpl().isMetaDataDifferent(getDescription(), sDescription))
             _ct.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -838,7 +828,7 @@ public class MetaColumnImpl
                         (getCardinality() <= 0) ? "" : String.valueOf(getCardinality()),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

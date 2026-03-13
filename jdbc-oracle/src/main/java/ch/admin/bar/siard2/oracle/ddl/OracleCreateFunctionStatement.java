@@ -16,33 +16,35 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.CreateFunctionStatement;
 
 /*====================================================================*/
+
 /** OracleCreateFunctionStatement overrides the formatting
  * of the CreateFunctionStatement
  * @author jutzs
  *
  */
 public class OracleCreateFunctionStatement
-	extends CreateFunctionStatement
-{
+        extends CreateFunctionStatement {
     /*------------------------------------------------------------------*/
-	/**
-	 * format the drop schema statement
-	 * @return the SQL string corresponding to a drop schema statement
-	 */
-	@Override
-	public String format() {
-	    String sStatement = K.CREATE.getKeyword() + sSP + K.FUNCTION.getKeyword() + sSP +
-	  	      getFunctionName().quote() + formatParameters() + sSP + getReturnsClause().format();
-	  	    if (getRoutineBody() != null)
-	  	      sStatement = sStatement + K.IS.getKeyword() + sNEW_LINE + getRoutineBody().format();
-	  	    return sStatement;
-	} /* format */
+
+    /**
+     * format the drop schema statement
+     * @return the SQL string corresponding to a drop schema statement
+     */
+    @Override
+    public String format() {
+        String sStatement = K.CREATE.getKeyword() + sSP + K.FUNCTION.getKeyword() + sSP +
+                getFunctionName().quote() + formatParameters() + sSP + getReturnsClause().format();
+        if (getRoutineBody() != null)
+            sStatement = sStatement + K.IS.getKeyword() + sNEW_LINE + getRoutineBody().format();
+        return sStatement;
+    } /* format */
 
     /*------------------------------------------------------------------*/
+
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
-	public OracleCreateFunctionStatement(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
+    public OracleCreateFunctionStatement(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 }

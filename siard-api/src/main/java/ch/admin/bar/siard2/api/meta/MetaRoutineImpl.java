@@ -62,7 +62,7 @@ public class MetaRoutineImpl
                 bValid = false;
         }
         return bValid;
-    } 
+    }
 
     private RoutineType _rt = null;
 
@@ -73,7 +73,7 @@ public class MetaRoutineImpl
             ((MetaParameterImpl) mp).getParameterType();
         }
         return _rt;
-    } 
+    }
 
     /**
      * get archive
@@ -83,7 +83,7 @@ public class MetaRoutineImpl
     private ArchiveImpl getArchive() {
         return (ArchiveImpl) getParentMetaSchema().getSchema()
                                                   .getParentArchive();
-    } 
+    }
 
     private RoutineType _rtTemplate = null;
 
@@ -113,7 +113,7 @@ public class MetaRoutineImpl
                 }
             }
         }
-    } 
+    }
 
     /**
      * constructor
@@ -137,7 +137,7 @@ public class MetaRoutineImpl
                 _mapMetaParameters.put(XU.fromXml(pt.getName()), mp);
             }
         }
-    } 
+    }
 
     /**
      * factory
@@ -150,7 +150,7 @@ public class MetaRoutineImpl
     public static MetaRoutine newInstance(MetaSchema msParent, RoutineType rt)
             throws IOException {
         return new MetaRoutineImpl(msParent, rt);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -160,7 +160,6 @@ public class MetaRoutineImpl
         return XU.fromXml(_rt.getSpecificName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -169,7 +168,7 @@ public class MetaRoutineImpl
     public void setName(String sName) {
         if (getArchive().isMetaDataDifferent(getName(), sName))
             _rt.setName(XU.toXml(sName));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -179,7 +178,6 @@ public class MetaRoutineImpl
         return XU.fromXml(_rt.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -188,7 +186,7 @@ public class MetaRoutineImpl
     public void setBody(String sBody) {
         if (getArchive().isMetaDataDifferent(getBody(), sBody))
             _rt.setBody(XU.toXml(sBody));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -198,7 +196,6 @@ public class MetaRoutineImpl
         return XU.fromXml(_rt.getBody());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -211,7 +208,7 @@ public class MetaRoutineImpl
                 _rt.setSource(XU.toXml(sSource));
         } else
             throw new IOException("Source cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -221,7 +218,6 @@ public class MetaRoutineImpl
         return XU.fromXml(_rt.getSource());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -230,7 +226,7 @@ public class MetaRoutineImpl
     public void setDescription(String sDescription) {
         if (getArchive().isMetaDataDifferent(getDescription(), sDescription))
             _rt.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -240,7 +236,6 @@ public class MetaRoutineImpl
         return XU.fromXml(_rt.getDescription());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -253,7 +248,7 @@ public class MetaRoutineImpl
                 _rt.setCharacteristic(XU.toXml(sCharacteristic));
         } else
             throw new IOException("Characteristic cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -263,7 +258,6 @@ public class MetaRoutineImpl
         return XU.fromXml(_rt.getCharacteristic());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -276,7 +270,7 @@ public class MetaRoutineImpl
                 _rt.setReturnType(XU.toXml(sReturnType));
         } else
             throw new IOException("ReturnType cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -289,7 +283,7 @@ public class MetaRoutineImpl
         prt.initialize(iReturnType, lPrecision, iScale);
         String sReturnType = prt.format();
         setReturnType(sReturnType);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -299,7 +293,6 @@ public class MetaRoutineImpl
         return XU.fromXml(_rt.getReturnType());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -323,7 +316,7 @@ public class MetaRoutineImpl
             mp = getMetaParameter(sName);
         }
         return mp;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -331,7 +324,7 @@ public class MetaRoutineImpl
     @Override
     public MetaParameter getMetaParameter(String sName) {
         return _mapMetaParameters.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -377,7 +370,7 @@ public class MetaRoutineImpl
         } else
             throw new IOException("New parameters can only be created if archive is open for modification of primary data.");
         return mp;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -389,7 +382,7 @@ public class MetaRoutineImpl
         for (int iParameter = 0; iParameter < getMetaParameters(); iParameter++)
             ams[iParameter] = getMetaParameter(iParameter);
         return ams;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -407,7 +400,7 @@ public class MetaRoutineImpl
                         getReturnType(),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

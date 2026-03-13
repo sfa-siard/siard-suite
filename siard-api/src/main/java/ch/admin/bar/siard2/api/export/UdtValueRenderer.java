@@ -14,7 +14,7 @@ import java.io.IOException;
  * Renders UDT values as HTML definition lists with field names and values.
  */
 class UdtValueRenderer implements ValueRenderer {
-    
+
     @SneakyThrows
     @Override
     public boolean canRender(Value value) {
@@ -22,7 +22,7 @@ class UdtValueRenderer implements ValueRenderer {
         MetaType metaType = metaValue.getMetaType();
         return metaType != null && metaType.getCategoryType() == CategoryType.UDT;
     }
-    
+
     @SneakyThrows
     @Override
     public String render(Value value, ValueRenderingContext context) {
@@ -32,16 +32,17 @@ class UdtValueRenderer implements ValueRenderer {
         MetaValue mv = value.getMetaValue();
         StringBuilder sb = new StringBuilder();
         sb.append(HtmlTemplate.definitionListStart());
-        
+
         for (int i = 0; i < value.getAttributes(); i++) {
             MetaField mf = mv.getMetaField(i);
             sb.append(HtmlTemplate.definitionTerm(mf.getName()));
-            
+
             // Recursively render the attribute value
-            String attributeValue = context.rendererRegistry().render(value.getAttribute(i), context);
+            String attributeValue = context.rendererRegistry()
+                                           .render(value.getAttribute(i), context);
             sb.append(HtmlTemplate.definitionDescription(attributeValue));
         }
-        
+
         sb.append(HtmlTemplate.definitionListEnd());
         return sb.toString();
     }
@@ -50,8 +51,10 @@ class UdtValueRenderer implements ValueRenderer {
         boolean hasNonEmptyAttribute = false;
 
         for (int i = 0; i < value.getAttributes(); i++) {
-            String attributeValue = context.rendererRegistry().render(value.getAttribute(i), context);
-            if (attributeValue != null && !attributeValue.trim().isEmpty()) {
+            String attributeValue = context.rendererRegistry()
+                                           .render(value.getAttribute(i), context);
+            if (attributeValue != null && !attributeValue.trim()
+                                                         .isEmpty()) {
                 return true;
             }
         }

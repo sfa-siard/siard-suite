@@ -1,25 +1,25 @@
 package ch.admin.bar.siardsuite.ui.presenter.upload;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.ui.component.ButtonBox;
-import ch.admin.bar.siardsuite.ui.component.SiardTooltip;
+import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.service.database.model.Dbms;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionProperties;
-import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.ui.component.ButtonBox;
+import ch.admin.bar.siardsuite.ui.component.SiardTooltip;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
 import ch.admin.bar.siardsuite.ui.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.ui.presenter.connection.ConnectionForm;
 import ch.admin.bar.siardsuite.ui.presenter.upload.model.ArchiveAdder;
 import ch.admin.bar.siardsuite.ui.presenter.upload.model.UploadArchiveData;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -77,15 +77,23 @@ public class UploadConnectionPresenter {
             final StepperNavigator<UploadArchiveData> navigator,
             final Dialogs dialogs
     ) {
-        simpleSchemaNames = ListAssembler.assemble(archive.getSchemas(), archive::getSchema).stream()
-                .map(schema -> schema.getMetaSchema().getName())
-                .collect(Collectors.toList());
+        simpleSchemaNames = ListAssembler.assemble(archive.getSchemas(), archive::getSchema)
+                                         .stream()
+                                         .map(schema -> schema.getMetaSchema()
+                                                              .getName())
+                                         .collect(Collectors.toList());
 
         initSchemaFields();
 
-        titleNewSchemaName.textProperty().bind(DisplayableText.of(SCHEMA_NAME_TITLE).bindable());
-        currentNameLabel.textProperty().bind(DisplayableText.of(CURRENT_NAME).bindable());
-        newNameLabel.textProperty().bind(DisplayableText.of(NEW_NAME).bindable());
+        titleNewSchemaName.textProperty()
+                          .bind(DisplayableText.of(SCHEMA_NAME_TITLE)
+                                               .bindable());
+        currentNameLabel.textProperty()
+                        .bind(DisplayableText.of(CURRENT_NAME)
+                                             .bindable());
+        newNameLabel.textProperty()
+                    .bind(DisplayableText.of(NEW_NAME)
+                                         .bindable());
         new SiardTooltip(TOOLTIP).showOnMouseOn(infoButton);
 
         val buttonsBox = new ButtonBox().make(DEFAULT);
@@ -101,23 +109,25 @@ public class UploadConnectionPresenter {
         });
 
         buttonsBox.next()
-                .setOnAction((event) -> {
-                    val allPropsValid = connectionForm.isValid();
-                    val validSchemaFields = validSchemaFields();
+                  .setOnAction((event) -> {
+                      val allPropsValid = connectionForm.isValid();
+                      val validSchemaFields = validSchemaFields();
 
-                    if (allPropsValid && validSchemaFields) {
-                        val connectionData = connectionForm.getConnectionData();
+                      if (allPropsValid && validSchemaFields) {
+                          val connectionData = connectionForm.getConnectionData();
 
-                        navigator.next(UploadArchiveData.builder()
-                                .schemaNameMappings(schemaMap)
-                                .connectionData(connectionData)
-                                .build());
-                    }
-                });
+                          navigator.next(UploadArchiveData.builder()
+                                                          .schemaNameMappings(schemaMap)
+                                                          .connectionData(connectionData)
+                                                          .build());
+                      }
+                  });
 
-        buttonsBox.previous().setOnAction((event) -> navigator.previous());
-        buttonsBox.cancel().setOnAction((event) -> dialogs
-                .open(View.UPLOAD_ABORT_DIALOG));
+        buttonsBox.previous()
+                  .setOnAction((event) -> navigator.previous());
+        buttonsBox.cancel()
+                  .setOnAction((event) -> dialogs
+                          .open(View.UPLOAD_ABORT_DIALOG));
     }
 
     private boolean validSchemaFields() {
@@ -129,24 +139,26 @@ public class UploadConnectionPresenter {
 
     private boolean hasValidSchemaFields() {
         AtomicBoolean result = new AtomicBoolean(true);
-        schemaFields.getChildren().forEach(container -> {
-            List<Node> nodes = ((HBox) container).getChildren();
-            if (nodes.size() > 2) {
-                String currentName = ((Label) nodes.get(0)).getText();
-                String newName = ((TextField) nodes.get(2)).getText();
-                if (!currentName.isEmpty() && !newName.isEmpty()) {
-                    schemaMap.put(currentName, newName);
-                } else {
-                    result.set(false);
-                }
-            }
-        });
+        schemaFields.getChildren()
+                    .forEach(container -> {
+                        List<Node> nodes = ((HBox) container).getChildren();
+                        if (nodes.size() > 2) {
+                            String currentName = ((Label) nodes.get(0)).getText();
+                            String newName = ((TextField) nodes.get(2)).getText();
+                            if (!currentName.isEmpty() && !newName.isEmpty()) {
+                                schemaMap.put(currentName, newName);
+                            } else {
+                                result.set(false);
+                            }
+                        }
+                    });
 
         return result.get();
     }
 
     private void initSchemaFields() {
-        schemaFields.getChildren().clear();
+        schemaFields.getChildren()
+                    .clear();
 
         for (String schemaName : simpleSchemaNames) {
             Label currentName = new Label();
@@ -158,14 +170,18 @@ public class UploadConnectionPresenter {
             container.setPrefSize(200.0, 48.0);
             currentName.setPrefSize(253.0, 48.0);
             iconLabel.setPrefSize(48.0, 48.0);
-            iconLabel.getStyleClass().add("arrow-right-icon");
+            iconLabel.getStyleClass()
+                     .add("arrow-right-icon");
             newName.setPrefSize(277.0, 48.0);
-            newName.getStyleClass().add("form-field");
-            container.getChildren().addAll(currentName, iconLabel, newName);
+            newName.getStyleClass()
+                   .add("form-field");
+            container.getChildren()
+                     .addAll(currentName, iconLabel, newName);
             HBox.setMargin(currentName, new Insets(10, 0, 0, 0));
             HBox.setMargin(iconLabel, new Insets(10, 0, 0, 0));
             HBox.setMargin(newName, new Insets(10, 0, 0, 0));
-            schemaFields.getChildren().add(container);
+            schemaFields.getChildren()
+                        .add(container);
         }
     }
 
@@ -175,12 +191,15 @@ public class UploadConnectionPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<UploadConnectionPresenter>load("fxml/upload/upload-db-connection.fxml");
-        loaded.getController().init(
-                data.getData().getDbms(),
-                data.getArchive(),
-                data.getData().getInitialValue(),
-                navigator,
-                servicesFacade.dialogs());
+        loaded.getController()
+              .init(
+                      data.getData()
+                          .getDbms(),
+                      data.getArchive(),
+                      data.getData()
+                          .getInitialValue(),
+                      navigator,
+                      servicesFacade.dialogs());
 
         return loaded;
     }

@@ -9,9 +9,9 @@ Created    : 04.09.2017, Hartwig Thomas
 package ch.admin.bar.siard2.api.primary;
 
 import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.TableRecord;
 import ch.admin.bar.siard2.api.TableRecordRetainer;
-import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.generated.table.RecordType;
 import ch.enterag.utils.FU;
 import ch.enterag.utils.SU;
@@ -85,7 +85,7 @@ public class TableRecordRetainerImpl
         public long getByteCount() {
             return _lCount;
         }
-    } 
+    }
     /*==================================================================*/
 
     /**
@@ -96,7 +96,7 @@ public class TableRecordRetainerImpl
     private ArchiveImpl getArchiveImpl() {
         return (ArchiveImpl) _table.getParentSchema()
                                    .getParentArchive();
-    } 
+    }
 
     /**
      * write the header of the table XML.
@@ -126,7 +126,7 @@ public class TableRecordRetainerImpl
             throw new IOException("Start of document could not be written!", xse);
         }
         return xsw;
-    } 
+    }
 
     /**
      * constructor opens a Retainer on the records of a table.
@@ -159,7 +159,7 @@ public class TableRecordRetainerImpl
             _xsw = writeHeader(_osXml, _table);
         } else
             throw new IOException("Table cannot be opened for writing!");
-    } 
+    }
 
     /**
      * put an element (cell or field) to the XML stream writer)
@@ -191,7 +191,7 @@ public class TableRecordRetainerImpl
         }
         // System.out.println();
         xsw.writeEndElement();
-    } 
+    }
 
     /**
      * put the record type with "any" elements for cells to the XML
@@ -209,7 +209,7 @@ public class TableRecordRetainerImpl
             putRowElement((Element) rt.getAny()
                                       .get(i), xsw);
         xsw.writeEndElement();
-    } 
+    }
 
     /**
      * write a record to the XML stream writer.
@@ -222,7 +222,7 @@ public class TableRecordRetainerImpl
     static void writeTableRecord(TableRecord tableRecord, XMLStreamWriter xsw)
             throws IOException, XMLStreamException {
         putRecordType(((TableRecordImpl) tableRecord).getRecordType(), xsw);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -238,7 +238,7 @@ public class TableRecordRetainerImpl
         catch (XMLStreamException xse) {
             throw new IOException("Error writing record " + _lRecord + "!", xse);
         }
-    } 
+    }
 
     /**
      * copy all temporary external LOB files into the ZIP file and
@@ -278,7 +278,7 @@ public class TableRecordRetainerImpl
             }
             fileTempLobFolder.delete();
         }
-    } 
+    }
 
     /**
      * write all terminating elements to the XML stream writer.

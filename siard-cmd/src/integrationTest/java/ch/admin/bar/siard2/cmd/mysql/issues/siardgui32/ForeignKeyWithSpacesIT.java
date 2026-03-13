@@ -44,13 +44,13 @@ public class ForeignKeyWithSpacesIT {
     public void uploadSubmittedArchive_expectNoExceptions() throws SQLException, IOException {
         val submittedArchive = siardArchivesHandler.prepareResource("mysql/issues/siardgui32/submitted-foreign-key.siard");
 
-            SiardToDb siardToDb = new SiardToDb(new String[] {
-                    "-o",
-                    "-j:" + emptyDb.getJdbcUrl(),
-                    "-u:" + emptyDb.getUsername(),
-                    "-p:" + emptyDb.getPassword(),
-                    "-s:" + submittedArchive.getPathToArchiveFile()
-            });
+        SiardToDb siardToDb = new SiardToDb(new String[]{
+                "-o",
+                "-j:" + emptyDb.getJdbcUrl(),
+                "-u:" + emptyDb.getUsername(),
+                "-p:" + emptyDb.getPassword(),
+                "-s:" + submittedArchive.getPathToArchiveFile()
+        });
 
         Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
@@ -73,35 +73,43 @@ public class ForeignKeyWithSpacesIT {
         val metadataExplorer = siardArchive.exploreMetadata();
 
         val ordersOrderId = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("simpledb"))
-                .tableId(Id.of("orders"))
-                .columnId(Id.of("OrderID"))
-                .build());
-        Assertions.assertThat(ordersOrderId.getType()).contains(Id.of("INT"));
-        Assertions.assertThat(ordersOrderId.getTypeOriginal()).contains(Id.of("int(11)"));
+                                                                             .schemaId(Id.of("simpledb"))
+                                                                             .tableId(Id.of("orders"))
+                                                                             .columnId(Id.of("OrderID"))
+                                                                             .build());
+        Assertions.assertThat(ordersOrderId.getType())
+                  .contains(Id.of("INT"));
+        Assertions.assertThat(ordersOrderId.getTypeOriginal())
+                  .contains(Id.of("int(11)"));
 
         val ordersCustomerName = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("simpledb"))
-                .tableId(Id.of("orders"))
-                .columnId(Id.of("CustomerName"))
-                .build());
-        Assertions.assertThat(ordersCustomerName.getType()).contains(Id.of("VARCHAR(100)"));
-        Assertions.assertThat(ordersCustomerName.getTypeOriginal()).contains(Id.of("varchar(100)"));
+                                                                                  .schemaId(Id.of("simpledb"))
+                                                                                  .tableId(Id.of("orders"))
+                                                                                  .columnId(Id.of("CustomerName"))
+                                                                                  .build());
+        Assertions.assertThat(ordersCustomerName.getType())
+                  .contains(Id.of("VARCHAR(100)"));
+        Assertions.assertThat(ordersCustomerName.getTypeOriginal())
+                  .contains(Id.of("varchar(100)"));
 
         val detailsOrderId = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("simpledb"))
-                .tableId(Id.of("order_details"))
-                .columnId(Id.of("OrderID"))
-                .build());
-        Assertions.assertThat(detailsOrderId.getType()).contains(Id.of("INT"));
-        Assertions.assertThat(detailsOrderId.getTypeOriginal()).contains(Id.of("int(11)"));
+                                                                              .schemaId(Id.of("simpledb"))
+                                                                              .tableId(Id.of("order_details"))
+                                                                              .columnId(Id.of("OrderID"))
+                                                                              .build());
+        Assertions.assertThat(detailsOrderId.getType())
+                  .contains(Id.of("INT"));
+        Assertions.assertThat(detailsOrderId.getTypeOriginal())
+                  .contains(Id.of("int(11)"));
 
         val foreignKey = metadataExplorer.findForeignKey(QualifiedForeignKeyId.builder()
-                .schemaId(Id.of("simpledb"))
-                .tableId(Id.of("order_details"))
-                .foreignKeyId(Id.of("Orders Order Details"))
-                .build());
-        Assertions.assertThat(foreignKey.getReferencedSchema()).isEqualTo(Id.of("simpledb"));
-        Assertions.assertThat(foreignKey.getReferencedTable()).isEqualTo(Id.of("orders"));
+                                                                              .schemaId(Id.of("simpledb"))
+                                                                              .tableId(Id.of("order_details"))
+                                                                              .foreignKeyId(Id.of("Orders Order Details"))
+                                                                              .build());
+        Assertions.assertThat(foreignKey.getReferencedSchema())
+                  .isEqualTo(Id.of("simpledb"));
+        Assertions.assertThat(foreignKey.getReferencedTable())
+                  .isEqualTo(Id.of("orders"));
     }
 }

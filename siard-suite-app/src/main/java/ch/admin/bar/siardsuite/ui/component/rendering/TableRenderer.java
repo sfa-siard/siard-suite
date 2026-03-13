@@ -1,9 +1,9 @@
 package ch.admin.bar.siardsuite.ui.component.rendering;
 
+import ch.admin.bar.siardsuite.ui.common.TableSize;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableTable;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.ui.common.TableSize;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,17 +34,21 @@ public class TableRenderer<T, I> implements SearchableFormEntry {
             .filtered(doNotFilter);
 
     public TableView<I> render() {
-        val entries = renderableTable.getDataExtractor().apply(data);
+        val entries = renderableTable.getDataExtractor()
+                                     .apply(data);
         tableItems.setAll(entries);
 
         val tableView = new TableView<>(filteredTableItems);
 
-        tableView.getColumns().addAll(
-                renderableTable.getProperties().stream()
-                        .map(this::column)
-                        .collect(Collectors.toList()));
+        tableView.getColumns()
+                 .addAll(
+                         renderableTable.getProperties()
+                                        .stream()
+                                        .map(this::column)
+                                        .collect(Collectors.toList()));
 
-        tableView.getStyleClass().add(TABLE_STYLE_CLASS);
+        tableView.getStyleClass()
+                 .add(TABLE_STYLE_CLASS);
         VBox.setVgrow(tableView, Priority.ALWAYS);
 
         tableView.autosize();
@@ -55,9 +59,12 @@ public class TableRenderer<T, I> implements SearchableFormEntry {
 
     @Override
     public void applySearchTerm(final String searchTerm) {
-        filteredTableItems.setPredicate(i -> renderableTable.getProperties().stream()
-                    .map(iReadOnlyStringProperty -> iReadOnlyStringProperty.getValueExtractor().apply(i))
-                    .anyMatch(s -> s != null && s.toLowerCase().contains(searchTerm.toLowerCase())));
+        filteredTableItems.setPredicate(i -> renderableTable.getProperties()
+                                                            .stream()
+                                                            .map(iReadOnlyStringProperty -> iReadOnlyStringProperty.getValueExtractor()
+                                                                                                                   .apply(i))
+                                                            .anyMatch(s -> s != null && s.toLowerCase()
+                                                                                         .contains(searchTerm.toLowerCase())));
     }
 
     @Override
@@ -68,10 +75,11 @@ public class TableRenderer<T, I> implements SearchableFormEntry {
     private TableColumn<I, String> column(final ReadOnlyStringProperty<I> columnProperty) {
         val column = new TableColumn<I, String>();
         column.textProperty()
-                .bind(I18n.bind(columnProperty.getTitle()));
+              .bind(I18n.bind(columnProperty.getTitle()));
 
         column.setCellValueFactory(cellData -> {
-            val value = columnProperty.getValueExtractor().apply(cellData.getValue());
+            val value = columnProperty.getValueExtractor()
+                                      .apply(cellData.getValue());
             return new SimpleStringProperty(value);
         });
 

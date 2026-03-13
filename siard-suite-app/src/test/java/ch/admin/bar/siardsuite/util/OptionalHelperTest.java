@@ -1,10 +1,10 @@
 package ch.admin.bar.siardsuite.util;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.Optional;
+import java.util.function.Consumer;
 
 
 class OptionalHelperTest {
@@ -19,12 +19,14 @@ class OptionalHelperTest {
 
         // when
         OptionalHelper.when(emptyOptional)
-                .isPresent(consumerMock)
-                .orElse(runnableMock);
+                      .isPresent(consumerMock)
+                      .orElse(runnableMock);
 
         // then
-        Mockito.verify(consumerMock, Mockito.never()).accept(Mockito.any());
-        Mockito.verify(runnableMock, Mockito.times(1)).run();
+        Mockito.verify(consumerMock, Mockito.never())
+               .accept(Mockito.any());
+        Mockito.verify(runnableMock, Mockito.times(1))
+               .run();
     }
 
     @Test
@@ -34,12 +36,14 @@ class OptionalHelperTest {
 
         // when
         OptionalHelper.when(emptyOptional)
-                .isPresent(consumerMock)
-                .orElse(runnableMock);
+                      .isPresent(consumerMock)
+                      .orElse(runnableMock);
 
         // then
-        Mockito.verify(consumerMock, Mockito.times(1)).accept(Mockito.any());
-        Mockito.verify(runnableMock, Mockito.never()).run();
+        Mockito.verify(consumerMock, Mockito.times(1))
+               .accept(Mockito.any());
+        Mockito.verify(runnableMock, Mockito.never())
+               .run();
     }
 
 }

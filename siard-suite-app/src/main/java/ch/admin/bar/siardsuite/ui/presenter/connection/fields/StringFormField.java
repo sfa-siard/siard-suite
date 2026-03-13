@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.ui.presenter.connection.fields;
 
-import ch.admin.bar.siardsuite.ui.common.Validator;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.ui.common.Validator;
 import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -41,23 +41,28 @@ public class StringFormField extends FormField<String> {
             this.value = new TextField();
         }
 
-        this.value.getStyleClass().add(FIELD_STYLE_CLASS);
+        this.value.getStyleClass()
+                  .add(FIELD_STYLE_CLASS);
         Optional.ofNullable(prompt)
-                .ifPresent(translatableText -> this.value.promptTextProperty().bind(translatableText.bindable()));
-        this.value.getStyleClass().add(FIELD_STYLE_CLASS);
+                .ifPresent(translatableText -> this.value.promptTextProperty()
+                                                         .bind(translatableText.bindable()));
+        this.value.getStyleClass()
+                  .add(FIELD_STYLE_CLASS);
         Optional.ofNullable(initialValue)
                 .ifPresent(this.value::setText);
         Optional.ofNullable(prefWidth)
                 .ifPresent(this.value::setPrefWidth);
         Optional.ofNullable(onNewUserInput)
-                .ifPresent(stringConsumer -> this.value.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                            if (!newValue && oldValue && !hasInvalidValueAndIfSoShowValidationMessage()) {
-                                stringConsumer.accept(this.value.getText());
-                            }
-                        }
-                ));
+                .ifPresent(stringConsumer -> this.value.focusedProperty()
+                                                       .addListener((observable, oldValue, newValue) -> {
+                                                                        if (!newValue && oldValue && !hasInvalidValueAndIfSoShowValidationMessage()) {
+                                                                            stringConsumer.accept(this.value.getText());
+                                                                        }
+                                                                    }
+                                                       ));
 
-        this.getChildren().setAll(this.title, this.value, validationMsg);
+        this.getChildren()
+            .setAll(this.title, this.value, validationMsg);
     }
 
     @Override

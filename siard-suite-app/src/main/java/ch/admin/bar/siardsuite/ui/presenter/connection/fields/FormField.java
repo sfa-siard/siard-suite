@@ -41,12 +41,14 @@ public abstract class FormField<T> extends VBox {
             @Nullable final Collection<Validator<T>> validators,
             @Nullable final Boolean deactivable
     ) {
-        this.validators = Optional.ofNullable(validators).orElse(new ArrayList<>());
+        this.validators = Optional.ofNullable(validators)
+                                  .orElse(new ArrayList<>());
 
         val titleLabel = new Label();
         titleLabel.textProperty()
-                .bind(title.bindable());
-        titleLabel.getStyleClass().add(TITLE_STYLE_CLASS);
+                  .bind(title.bindable());
+        titleLabel.getStyleClass()
+                  .add(TITLE_STYLE_CLASS);
         titleLabel.setAlignment(Pos.CENTER_LEFT);
         titleLabel.setMaxHeight(Double.MAX_VALUE);
 
@@ -69,19 +71,21 @@ public abstract class FormField<T> extends VBox {
         }
         this.title.setFillHeight(true);
 
-        Optional.ofNullable(hint).ifPresent(displayableText -> {
-            val iconButton = new IconButton(Icon.INFO);
+        Optional.ofNullable(hint)
+                .ifPresent(displayableText -> {
+                    val iconButton = new IconButton(Icon.INFO);
 
-            titleLabel.setContentDisplay(ContentDisplay.RIGHT);
-            titleLabel.setGraphic(iconButton);
+                    titleLabel.setContentDisplay(ContentDisplay.RIGHT);
+                    titleLabel.setGraphic(iconButton);
 
-            new SiardTooltip(displayableText).showOnMouseOn(iconButton);
-        });
+                    new SiardTooltip(displayableText).showOnMouseOn(iconButton);
+                });
 
         VBox.setMargin(this.title, new Insets(0, 0, 10, 0));
 
         validationMsg = new Label();
-        validationMsg.getStyleClass().add(VALIDATION_STYLE_CLASS);
+        validationMsg.getStyleClass()
+                     .add(VALIDATION_STYLE_CLASS);
         hideValidationLabel();
     }
 
@@ -122,8 +126,9 @@ public abstract class FormField<T> extends VBox {
 
         val currentValue = getValue();
         return validators.stream()
-                .filter(validator -> !validator.getIsValidCheck().test(currentValue))
-                .findAny();
+                         .filter(validator -> !validator.getIsValidCheck()
+                                                        .test(currentValue))
+                         .findAny();
     }
 
     private void showValidationLabel(final DisplayableText message) {

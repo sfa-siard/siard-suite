@@ -1,13 +1,13 @@
 package ch.admin.bar.siardsuite.ui.presenter.common;
 
-import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.navigation.Navigator;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.navigation.Navigator;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.ui.View;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -48,10 +48,14 @@ public class AbortDialogPresenter {
             DialogCloser dialogCloser,
             Navigator navigator
     ) {
-        title.textProperty().bind(titleText.bindable());
-        text.textProperty().bind(textText.bindable());
-        cancel.textProperty().bind(cancelDialogText.bindable());
-        confirm.textProperty().bind(confirmDialogText.bindable());
+        title.textProperty()
+             .bind(titleText.bindable());
+        text.textProperty()
+            .bind(textText.bindable());
+        cancel.textProperty()
+              .bind(cancelDialogText.bindable());
+        confirm.textProperty()
+               .bind(confirmDialogText.bindable());
 
         confirm.setOnAction(event -> {
             dialogCloser.closeDialog();
@@ -66,14 +70,15 @@ public class AbortDialogPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<AbortDialogPresenter>load("fxml/upload/upload-abort-dialog.fxml");
-        loaded.getController().init(
-                DisplayableText.of(UPLOAD_TITLE),
-                DisplayableText.of(UPLOAD_TEXT),
-                DisplayableText.of(UPLOAD_CANCEL),
-                DisplayableText.of(UPLOAD_CONFIRM),
-                servicesFacade.dialogs(),
-                servicesFacade.navigator()
-        );
+        loaded.getController()
+              .init(
+                      DisplayableText.of(UPLOAD_TITLE),
+                      DisplayableText.of(UPLOAD_TEXT),
+                      DisplayableText.of(UPLOAD_CANCEL),
+                      DisplayableText.of(UPLOAD_CONFIRM),
+                      servicesFacade.dialogs(),
+                      servicesFacade.navigator()
+              );
 
         return loaded;
     }
@@ -82,14 +87,15 @@ public class AbortDialogPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<AbortDialogPresenter>load("fxml/upload/upload-abort-dialog.fxml");
-        loaded.getController().init(
-                DisplayableText.of(ARCHIVE_TITLE),
-                DisplayableText.of(ARCHIVE_TEXT),
-                DisplayableText.of(ARCHIVE_CANCEL),
-                DisplayableText.of(ARCHIVE_CONFIRM),
-                servicesFacade.dialogs(),
-                servicesFacade.navigator()
-        );
+        loaded.getController()
+              .init(
+                      DisplayableText.of(ARCHIVE_TITLE),
+                      DisplayableText.of(ARCHIVE_TEXT),
+                      DisplayableText.of(ARCHIVE_CANCEL),
+                      DisplayableText.of(ARCHIVE_CONFIRM),
+                      servicesFacade.dialogs(),
+                      servicesFacade.navigator()
+              );
 
         return loaded;
     }

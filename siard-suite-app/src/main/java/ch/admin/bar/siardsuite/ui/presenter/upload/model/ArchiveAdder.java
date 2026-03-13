@@ -7,6 +7,8 @@ import lombok.Value;
 
 @Value
 public class ArchiveAdder<T> {
-    @NonNull Archive archive;
-    @NonNull T data;
+    @NonNull
+    Archive archive;
+    @NonNull
+    T data;
 }

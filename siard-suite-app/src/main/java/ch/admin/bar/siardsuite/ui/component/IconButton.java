@@ -28,7 +28,8 @@ public class IconButton extends Label {
 
     public void setIcon(Icon icon) {
         this.icon = icon;
-        this.setGraphic(new ImageView(icon.getUrl().toString()));
+        this.setGraphic(new ImageView(icon.getUrl()
+                                          .toString()));
     }
 
     public final void setOnAction(Runnable value) {

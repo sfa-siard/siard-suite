@@ -8,7 +8,7 @@ import java.io.IOException;
 public class SampleColumn {
     public static void printValue(String sLabel, String sValue) {
         SampleArchive.printValue("  " + sLabel, sValue);
-    } 
+    }
 
     private int readField(MetaField mf, String sField) {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -29,7 +29,7 @@ public class SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     protected int readColumn(MetaColumn mc, String sColumn) {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -56,6 +56,6 @@ public class SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
 } 

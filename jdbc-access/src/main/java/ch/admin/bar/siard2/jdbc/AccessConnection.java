@@ -204,7 +204,6 @@ public class AccessConnection
     }
 
 
-
     /** {@link Connection} */
     @Override
     public boolean getAutoCommit() throws SQLException {

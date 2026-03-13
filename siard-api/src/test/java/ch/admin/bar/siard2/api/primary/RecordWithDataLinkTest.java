@@ -117,62 +117,62 @@ public class RecordWithDataLinkTest {
         assertEquals(26, tableRecord.getCells());
 
         assertEquals("\"", tableRecord.getCell(0)
-                                 .getString());
+                                      .getString());
         assertEquals(
                 "efghijklmnopqrstuvwxyz{|}~!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~!\"#$%&'(",
                 tableRecord.getCell(1)
-                      .getString());
+                           .getString());
         assertEquals(2345L, tableRecord.getCell(2)
-                                  .getCharLength());
+                                       .getCharLength());
         assertTrue(TestUtils.equalReaders(new TestReader(2345L), tableRecord.getCell(2)
-                                                                       .getReader()));
+                                                                            .getReader()));
         assertEquals("!", tableRecord.getCell(3)
-                                .getString());
+                                     .getString());
         assertEquals("`abcdefghijklmnopqrstuvwxyz{|}~\u007F ¡¢£¤¥¦§¨©ª«¬\u00AD®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ", tableRecord.getCell(4)
-                                                                                                                                                                         .getString());
+                                                                                                                                                                              .getString());
         assertTrue("", tableRecord.getCell(5)
-                             .isNull());
+                                  .isNull());
         assertEquals(36, tableRecord.getCell(6)
-                               .getCharLength());
+                                    .getCharLength());
         assertEquals("content/schema0/table0/lob6/record1.xml", tableRecord.getCell(6)
-                                                                      .getFilename());
+                                                                           .getFilename());
         assertEquals("01", tableRecord.getCell(7)
-                                 .getString());
+                                      .getString());
         assertEquals("C8C9CACBCCCDCECFD0D1D2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F505152535455565758",
                      tableRecord.getCell(8)
-                           .getString());
+                                .getString());
         assertEquals("content/schema0/table0/lob9/record1.bin", tableRecord.getCell(9)
-                                                                      .getFilename());
+                                                                           .getFilename());
         assertEquals("617280.45", tableRecord.getCell(10)
-                                        .getString());
+                                             .getString());
         assertEquals("0.617283945", tableRecord.getCell(11)
-                                          .getString());
+                                               .getString());
         assertEquals("24690", tableRecord.getCell(12)
-                                    .getString());
-        assertEquals("24691356", tableRecord.getCell(13)
-                                       .getString());
-        assertEquals("24691357802469134", tableRecord.getCell(14)
-                                                .getString());
-        assertEquals("0.6283184", tableRecord.getCell(15)
-                                        .getString());
-        assertEquals("0.3141592", tableRecord.getCell(16)
-                                        .getString());
-        assertEquals("3.14159265359", tableRecord.getCell(17)
-                                            .getString());
-        assertTrue("", tableRecord.getCell(18)
-                             .isNull());
-        assertEquals("2022-06-01", tableRecord.getCell(19)
                                          .getString());
-        assertEquals("09:45:02.071Z", tableRecord.getCell(20)
+        assertEquals("24691356", tableRecord.getCell(13)
                                             .getString());
-        assertEquals("2022-06-01T09:45:02.123456789Z", tableRecord.getCell(21)
-                                                             .getString());
-        assertTrue("", tableRecord.getCell(22)
-                             .isNull());
-        assertEquals("-P34DT0H0M0S", tableRecord.getCell(23)
-                                           .getString());
-        assertEquals("P0DT0H0M23.456S", tableRecord.getCell(24)
+        assertEquals("24691357802469134", tableRecord.getCell(14)
+                                                     .getString());
+        assertEquals("0.6283184", tableRecord.getCell(15)
+                                             .getString());
+        assertEquals("0.3141592", tableRecord.getCell(16)
+                                             .getString());
+        assertEquals("3.14159265359", tableRecord.getCell(17)
+                                                 .getString());
+        assertTrue("", tableRecord.getCell(18)
+                                  .isNull());
+        assertEquals("2022-06-01", tableRecord.getCell(19)
                                               .getString());
+        assertEquals("09:45:02.071Z", tableRecord.getCell(20)
+                                                 .getString());
+        assertEquals("2022-06-01T09:45:02.123456789Z", tableRecord.getCell(21)
+                                                                  .getString());
+        assertTrue("", tableRecord.getCell(22)
+                                  .isNull());
+        assertEquals("-P34DT0H0M0S", tableRecord.getCell(23)
+                                                .getString());
+        assertEquals("P0DT0H0M23.456S", tableRecord.getCell(24)
+                                                   .getString());
         Cell dataLinkCell = tableRecord.getCell(25);
         assertEquals(79, dataLinkCell.getCharLength());
         assertEquals("content/schema0/table0/lob25/record1.bin", dataLinkCell.getFilename());
@@ -195,9 +195,9 @@ public class RecordWithDataLinkTest {
         // then
         assertEquals(5, tableRecord.getCells());
         assertEquals("1234567890", tableRecord.getCell(0)
-                                         .getString());
+                                              .getString());
         assertEquals("987654321", tableRecord.getCell(1)
-                                        .getString());
+                                             .getString());
 
         Cell cell3 = tableRecord.getCell(2);
         assertEquals(4, cell3.getAttributes());
@@ -211,7 +211,7 @@ public class RecordWithDataLinkTest {
                                                                             .getFilename());
 
         assertEquals("element 0,1element 0,3element 0,4", tableRecord.getCell(3)
-                                                                .getString());
+                                                                     .getString());
 
         Cell cell5 = tableRecord.getCell(4);
         assertEquals(2, cell5.getAttributes());

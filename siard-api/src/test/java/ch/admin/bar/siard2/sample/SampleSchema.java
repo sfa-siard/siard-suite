@@ -11,7 +11,7 @@ public class SampleSchema extends SampleColumn {
 
     SampleSchema(Schema schema) {
         _schema = schema;
-    } 
+    }
 
     private int readParameter(MetaParameter mp, String sParameter) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -23,7 +23,7 @@ public class SampleSchema extends SampleColumn {
         printValue(sParameter + " type name", mp.getTypeName());
         printValue(sParameter + " description", mp.getDescription());
         return iReturn;
-    } 
+    }
 
     private int readRoutine(MetaRoutine mr, String sRoutine) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -40,7 +40,7 @@ public class SampleSchema extends SampleColumn {
             iReturn = readParameter(mp, sParameter);
         }
         return iReturn;
-    } 
+    }
 
     private int readRoutines() {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -52,7 +52,7 @@ public class SampleSchema extends SampleColumn {
             iReturn = readRoutine(mr, sRoutine);
         }
         return iReturn;
-    } 
+    }
 
     private int readView(MetaView mv, String sView) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -68,7 +68,7 @@ public class SampleSchema extends SampleColumn {
             iReturn = readColumn(mc, sColumn);
         }
         return iReturn;
-    } 
+    }
 
     private int readViews() {
         MetaSchema ms = _schema.getMetaSchema();
@@ -80,7 +80,7 @@ public class SampleSchema extends SampleColumn {
             iReturn = readView(mv, sView);
         }
         return iReturn;
-    } 
+    }
 
     private int readAttribute(MetaAttribute ma, String sAttribute) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -91,7 +91,7 @@ public class SampleSchema extends SampleColumn {
         printValue(sAttribute + " type name", ma.getTypeName());
         printValue(sAttribute + " default value", String.valueOf(ma.getDefaultValue()));
         return iReturn;
-    } 
+    }
 
     private int readType(MetaType mt, String sType) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -117,7 +117,7 @@ public class SampleSchema extends SampleColumn {
                 break;
         }
         return iReturn;
-    } 
+    }
 
     private int readTypes() {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -129,7 +129,7 @@ public class SampleSchema extends SampleColumn {
             iReturn = readType(mt, sType);
         }
         return iReturn;
-    } 
+    }
 
     public int readSchema() {
         MetaSchema ms = _schema.getMetaSchema();
@@ -147,7 +147,7 @@ public class SampleSchema extends SampleColumn {
             }
         }
         return iReturn;
-    } 
+    }
 
     private static final String sROUTINE1_NAME = "digest";
     private static final String sPARAMETER_NAME = "i";
@@ -187,7 +187,7 @@ public class SampleSchema extends SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private static final String sVIEW1_NAME = "VIEW1";
     private static final String sVIEW1_QUERY_ORIGINAL = "SELECT * FROM SOMETABLE WHERE SOMECONDITION";
@@ -231,7 +231,7 @@ public class SampleSchema extends SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     public static final String sTYPE_DISTINCT = "TDISTINCT";
     public static final String sTYPE_UDT_SIMPLE = "TUDTS";
@@ -280,7 +280,7 @@ public class SampleSchema extends SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     public int createSchema() {
         int iReturn = createTypes();
@@ -302,6 +302,6 @@ public class SampleSchema extends SampleColumn {
             }
         }
         return iReturn;
-    } 
+    }
 
 } 

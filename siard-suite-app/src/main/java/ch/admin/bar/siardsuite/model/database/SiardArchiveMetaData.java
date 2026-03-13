@@ -6,7 +6,6 @@ import ch.admin.bar.siardsuite.model.facades.MetaDataFacade;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.time.DateTimeException;
@@ -44,8 +43,8 @@ public class SiardArchiveMetaData {
         LocalDate date;
         try {
             date = LocalDate.of(calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH) + 1,
-                    calendar.get(Calendar.DATE));
+                                calendar.get(Calendar.MONTH) + 1,
+                                calendar.get(Calendar.DATE));
         } catch (DateTimeException e) {
             date = LocalDate.now();
         }
@@ -56,12 +55,18 @@ public class SiardArchiveMetaData {
     }
 
     public void write(Archive archive) {
-        archive.getMetaData().setDbName(databaseName);
-        archive.getMetaData().setArchiver(archiverName);
-        archive.getMetaData().setArchiverContact(archiverContact);
-        archive.getMetaData().setDescription(databaseDescription);
-        archive.getMetaData().setDataOwner(dataOwner);
-        archive.getMetaData().setDataOriginTimespan(dataOriginTimespan);
+        archive.getMetaData()
+               .setDbName(databaseName);
+        archive.getMetaData()
+               .setArchiver(archiverName);
+        archive.getMetaData()
+               .setArchiverContact(archiverContact);
+        archive.getMetaData()
+               .setDescription(databaseDescription);
+        archive.getMetaData()
+               .setDataOwner(dataOwner);
+        archive.getMetaData()
+               .setDataOriginTimespan(dataOriginTimespan);
         try {
             if (lobFolder != null) {
                 new MetaDataFacade(archive.getMetaData()).setLobFolder(this.lobFolder);

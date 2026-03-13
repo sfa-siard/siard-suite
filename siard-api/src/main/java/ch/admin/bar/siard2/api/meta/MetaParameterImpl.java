@@ -47,7 +47,7 @@ public class MetaParameterImpl
     public ParameterType getParameterType()
             throws IOException {
         return _pt;
-    } 
+    }
 
     private int _iPosition = -1;
 
@@ -76,7 +76,7 @@ public class MetaParameterImpl
         return (ArchiveImpl) getParentMetaRoutine().getParentMetaSchema()
                                                    .getSchema()
                                                    .getParentArchive();
-    } 
+    }
 
     private ParameterType _ptTemplate = null;
 
@@ -90,7 +90,7 @@ public class MetaParameterImpl
         _ptTemplate = ptTemplate;
         if (!SU.isNotEmpty(getDescription()))
             setDescription(XU.fromXml(_ptTemplate.getDescription()));
-    } 
+    }
 
     /**
      * constructor
@@ -105,7 +105,7 @@ public class MetaParameterImpl
         _mr = mr;
         _pt = pt;
         _iPosition = iPosition;
-    } 
+    }
 
     /**
      * factory
@@ -119,9 +119,8 @@ public class MetaParameterImpl
     public static MetaParameter newInstance(MetaRoutine mr, ParameterType pt, int iPosition)
             throws IOException {
         return new MetaParameterImpl(mr, pt, iPosition);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -131,7 +130,6 @@ public class MetaParameterImpl
         return XU.fromXml(_pt.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -150,7 +148,7 @@ public class MetaParameterImpl
                 throw new IllegalArgumentException("Mode must be IN, OUT or INOUT!");
         } else
             throw new IOException("Mode cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -160,7 +158,6 @@ public class MetaParameterImpl
         return _pt.getMode();
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -181,7 +178,7 @@ public class MetaParameterImpl
                 _pt.setType(XU.toXml(sType));
         } else
             throw new IOException("Type cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -194,7 +191,7 @@ public class MetaParameterImpl
         prt.initialize(iDataType, lPrecision, iScale);
         String sType = prt.format();
         setType(sType);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -224,9 +221,8 @@ public class MetaParameterImpl
         } else if (cat == CategoryType.DISTINCT)
             iDataType = mt.getBasePreType();
         return iDataType;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -240,7 +236,7 @@ public class MetaParameterImpl
                 _pt.setTypeOriginal(XU.toXml(sTypeOriginal));
         } else
             throw new IOException("Original type cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -250,7 +246,6 @@ public class MetaParameterImpl
         return XU.fromXml(_pt.getTypeOriginal());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -265,7 +260,7 @@ public class MetaParameterImpl
                 _pt.setTypeSchema(XU.toXml(sTypeSchema));
         } else
             throw new IOException("Type schema cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -275,7 +270,6 @@ public class MetaParameterImpl
         return XU.fromXml(_pt.getTypeSchema());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -294,7 +288,7 @@ public class MetaParameterImpl
             }
         } else
             throw new IOException("Type name cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -316,9 +310,8 @@ public class MetaParameterImpl
                        .getMetaType(getTypeName());
         }
         return mt;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -331,7 +324,7 @@ public class MetaParameterImpl
                 _pt.setCardinality(BigInteger.valueOf(iCardinality));
         } else
             throw new IOException("Cardinality cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -343,9 +336,8 @@ public class MetaParameterImpl
         if (bi != null)
             iCardinality = bi.intValue();
         return iCardinality;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -354,7 +346,7 @@ public class MetaParameterImpl
     public void setDescription(String sDescription) {
         if (getArchiveImpl().isMetaDataDifferent(getDescription(), sDescription))
             _pt.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -382,7 +374,7 @@ public class MetaParameterImpl
                         (getCardinality() <= 0) ? "" : String.valueOf(getCardinality()),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

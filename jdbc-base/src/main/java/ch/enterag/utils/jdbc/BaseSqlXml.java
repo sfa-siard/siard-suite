@@ -11,9 +11,14 @@ Created    : 30.03.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import java.io.*;
-import java.sql.*;
-import javax.xml.transform.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.sql.SQLException;
+import java.sql.SQLXML;
 
 /**
  * BaseSqlXml implements a wrapped SQLXML object.

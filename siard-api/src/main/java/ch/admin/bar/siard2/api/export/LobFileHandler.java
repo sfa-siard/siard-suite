@@ -12,11 +12,11 @@ import java.sql.Types;
  * Manages copying internal LOBs to external folders and generating appropriate file links.
  */
 class LobFileHandler {
-    
+
     private static final int BUFFER_SIZE = 8192;
-    
+
     private final File lobFolder;
-    
+
     /**
      * Create a new LOB file handler.
      *
@@ -25,7 +25,7 @@ class LobFileHandler {
     LobFileHandler(File lobFolder) {
         this.lobFolder = lobFolder;
     }
-    
+
     /**
      * Process a LOB value and return the appropriate file name/path for HTML links.
      * Handles both external LOBs (already have absolute paths) and internal LOBs (need to be copied).
@@ -38,10 +38,12 @@ class LobFileHandler {
     String processLobFile(Value value, String fileName) throws IOException {
         MetaValue metaValue = value.getMetaValue();
         URI absoluteLobFolder = metaValue.getAbsoluteLobFolder();
-        
+
         if (absoluteLobFolder != null) {
             // External LOB - return absolute URL
-            return absoluteLobFolder.resolve(fileName).toURL().toString();
+            return absoluteLobFolder.resolve(fileName)
+                                    .toURL()
+                                    .toString();
         } else if (lobFolder != null) {
             // Internal LOB - copy to output folder
             copyInternalLobToFolder(value, fileName);
@@ -51,7 +53,7 @@ class LobFileHandler {
             return fileName;
         }
     }
-    
+
     /**
      * Copy an internal LOB file to the configured LOB folder.
      *
@@ -61,23 +63,23 @@ class LobFileHandler {
      */
     private void copyInternalLobToFolder(Value value, String fileName) throws IOException {
         File targetFile = new File(lobFolder, fileName);
-        
+
         // Ensure parent directories exist
         File parentDir = targetFile.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
             parentDir.mkdirs();
         }
-        
+
         MetaValue metaValue = value.getMetaValue();
         int predefinedType = metaValue.getPreType();
-        
+
         if (isBinaryType(predefinedType)) {
             copyBinaryLob(value, targetFile);
         } else {
             copyTextLob(value, targetFile);
         }
     }
-    
+
     /**
      * Check if the given SQL type represents a binary LOB type.
      *
@@ -85,12 +87,12 @@ class LobFileHandler {
      * @return true if the type is binary
      */
     private boolean isBinaryType(int sqlType) {
-        return sqlType == Types.BINARY || 
-               sqlType == Types.VARBINARY || 
-               sqlType == Types.BLOB || 
-               sqlType == Types.DATALINK;
+        return sqlType == Types.BINARY ||
+                sqlType == Types.VARBINARY ||
+                sqlType == Types.BLOB ||
+                sqlType == Types.DATALINK;
     }
-    
+
     /**
      * Copy a binary LOB to the target file.
      *
@@ -111,7 +113,7 @@ class LobFileHandler {
             }
         }
     }
-    
+
     /**
      * Copy a text LOB to the target file.
      *
@@ -132,7 +134,7 @@ class LobFileHandler {
             }
         }
     }
-    
+
     /**
      * Get the configured LOB folder.
      *

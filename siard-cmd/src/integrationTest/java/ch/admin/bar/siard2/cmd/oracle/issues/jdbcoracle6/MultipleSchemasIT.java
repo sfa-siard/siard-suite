@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.jdbcoracle6;
 
 import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.utils.ConsoleLogConsumer;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -90,16 +89,16 @@ public class MultipleSchemasIT {
 
         assertThat(
                 metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("TESTUSER"))
-                        .tableId(Id.of("SIMPLE_TABLE"))
-                        .build()))
+                                                                  .schemaId(Id.of("TESTUSER"))
+                                                                  .tableId(Id.of("SIMPLE_TABLE"))
+                                                                  .build()))
                 .isPresent();
 
         assertThat(
                 metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("OTHERUSER"))
-                        .tableId(Id.of("SIMPLE_TABLE"))
-                        .build()))
+                                                                  .schemaId(Id.of("OTHERUSER"))
+                                                                  .tableId(Id.of("SIMPLE_TABLE"))
+                                                                  .build()))
                 .isNotPresent();
     }
 }

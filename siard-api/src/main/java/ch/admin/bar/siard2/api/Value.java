@@ -483,7 +483,8 @@ public interface Value {
             case Types.CHAR, Types.VARCHAR, Types.NCHAR, Types.NVARCHAR, Types.CLOB, Types.NCLOB, Types.SQLXML,
                  Types.DATALINK -> this.getString();
             case Types.BINARY, Types.VARBINARY, Types.BLOB -> "0x" + BU.toHex(this.getBytes());
-            case Types.NUMERIC, Types.DECIMAL -> this.getBigDecimal() != null ? this.getBigDecimal().toPlainString() : "";
+            case Types.NUMERIC, Types.DECIMAL -> this.getBigDecimal() != null ? this.getBigDecimal()
+                                                                                    .toPlainString() : "";
             case Types.SMALLINT -> this.getInt()
                                        .toString();
             case Types.INTEGER -> this.getLong()
@@ -494,11 +495,14 @@ public interface Value {
                                                   .toString();
             case Types.REAL -> this.getFloat()
                                    .toString();
-            case Types.BOOLEAN -> this.getString().isEmpty() ? "" : this.getBoolean().toString();
+            case Types.BOOLEAN -> this.getString()
+                                      .isEmpty() ? "" : this.getBoolean()
+                                                            .toString();
             case Types.DATE -> dateUtils.fromSqlDate(this.getDate());
             case Types.TIME -> dateUtils.fromSqlTime(this.getTime());
             case Types.TIMESTAMP -> dateUtils.fromSqlTimestamp(this.getTimestamp());
-            case Types.OTHER -> this.getDuration() != null ? SqlLiterals.formatIntervalLiteral(Interval.fromDuration(this.getDuration())) : "";
+            case Types.OTHER ->
+                    this.getDuration() != null ? SqlLiterals.formatIntervalLiteral(Interval.fromDuration(this.getDuration())) : "";
             default -> "";
         };
     }

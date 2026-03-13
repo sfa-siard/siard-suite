@@ -1,20 +1,20 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.ui.component.ButtonBox;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
-import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.GenericArchiveBrowserPresenter;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.TreeBuilder;
-import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.steps.StepperNavigator;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.model.Tuple;
+import ch.admin.bar.siardsuite.model.database.SiardArchive;
+import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
+import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.ui.component.ButtonBox;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.GenericArchiveBrowserPresenter;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.TreeBuilder;
 import javafx.scene.Node;
 import lombok.val;
 
@@ -42,10 +42,13 @@ public class PreviewArchiveBrowser {
         val archiveBrowserView = new TreeBuilder(new SiardArchive("", archive, true), true);
 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
-        buttonsBox.next().setOnAction((event) -> navigator.next(new Tuple<>(archive, connectionData)));
-        buttonsBox.previous().setOnAction((event) -> navigator.previous());
-        buttonsBox.cancel().setOnAction((event) -> dialogs
-                .open(View.ARCHIVE_ABORT_DIALOG));
+        buttonsBox.next()
+                  .setOnAction((event) -> navigator.next(new Tuple<>(archive, connectionData)));
+        buttonsBox.previous()
+                  .setOnAction((event) -> navigator.previous());
+        buttonsBox.cancel()
+                  .setOnAction((event) -> dialogs
+                          .open(View.ARCHIVE_ABORT_DIALOG));
 
 
         this.loadedView = GenericArchiveBrowserPresenter.load(

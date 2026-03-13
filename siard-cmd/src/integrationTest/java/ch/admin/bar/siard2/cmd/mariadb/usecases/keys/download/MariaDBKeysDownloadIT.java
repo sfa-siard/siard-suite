@@ -24,6 +24,7 @@ public class MariaDBKeysDownloadIT {
 
     @Test
     public void download_expectNoExceptions() {
-        MySqlKeysDownload.executeTest(siardArchivesHandler, db.getJdbcUrl().replace("jdbc:mariadb", "jdbc:mysql"));
+        MySqlKeysDownload.executeTest(siardArchivesHandler, db.getJdbcUrl()
+                                                              .replace("jdbc:mariadb", "jdbc:mysql"));
     }
 }

@@ -8,6 +8,8 @@ import lombok.Value;
 @Value
 @Builder
 public class QualifiedTypeId {
-    @NonNull Id<Metadata.Schema> schemaId;
-    @NonNull Id<Metadata.Type> typeId;
+    @NonNull
+    Id<Metadata.Schema> schemaId;
+    @NonNull
+    Id<Metadata.Type> typeId;
 }

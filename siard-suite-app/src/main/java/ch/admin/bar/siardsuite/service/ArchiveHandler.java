@@ -72,7 +72,8 @@ public class ArchiveHandler {
         if (archive.getFile() == null) {
             // archive is not open
             archive.open(destination);
-        } else if (!archive.getFile().equals(destination)) {
+        } else if (!archive.getFile()
+                           .equals(destination)) {
             throw new IllegalArgumentException("Tried to store open archive to different location");
         }
 
@@ -117,8 +118,8 @@ public class ArchiveHandler {
         archiveCopy.open(destination);
 
         log.info("Archive copied from {} to {}",
-                archiveFile.getAbsolutePath(),
-                destination.getAbsolutePath());
+                 archiveFile.getAbsolutePath(),
+                 destination.getAbsolutePath());
 
         return archiveCopy;
     }
@@ -128,14 +129,17 @@ public class ArchiveHandler {
         val metaData = archive.getMetaData();
 
         metaData.setDbName(userDefinedMetadata.getDbName());
-        userDefinedMetadata.getDescription().ifPresent(metaData::setDescription);
+        userDefinedMetadata.getDescription()
+                           .ifPresent(metaData::setDescription);
         metaData.setDataOwner(userDefinedMetadata.getOwner());
         metaData.setDataOriginTimespan(userDefinedMetadata.getDataOriginTimespan());
-        userDefinedMetadata.getArchiverName().ifPresent(metaData::setArchiver);
-        userDefinedMetadata.getArchiverContact().ifPresent(metaData::setArchiverContact);
+        userDefinedMetadata.getArchiverName()
+                           .ifPresent(metaData::setArchiver);
+        userDefinedMetadata.getArchiverContact()
+                           .ifPresent(metaData::setArchiverContact);
 
         userDefinedMetadata.getLobFolder()
-                .ifPresent(uri -> setExternalLobFolder(archive, uri));
+                           .ifPresent(uri -> setExternalLobFolder(archive, uri));
 
         return this;
     }
@@ -146,16 +150,24 @@ public class ArchiveHandler {
      */
     @SneakyThrows
     public void setExternalLobFolder(final Archive archive, final URI lobsDest) {
-        val lobDestAsString = lobsDest.toString().toLowerCase();
+        val lobDestAsString = lobsDest.toString()
+                                      .toLowerCase();
         val root = lobDestAsString.endsWith("/") ? lobDestAsString : lobDestAsString + "/";
-        archive.getMetaData().setLobFolder(new URI(root));
+        archive.getMetaData()
+               .setLobFolder(new URI(root));
 
         val blobColumns = findBlobColumns(archive);
 
         for (val blobColumn : blobColumns) {
-            val schemaName = blobColumn.getParentMetaTable().getParentMetaSchema().getName().toLowerCase();
-            val tableName = blobColumn.getParentMetaTable().getName().toLowerCase();
-            val columnName = blobColumn.getName().toLowerCase();
+            val schemaName = blobColumn.getParentMetaTable()
+                                       .getParentMetaSchema()
+                                       .getName()
+                                       .toLowerCase();
+            val tableName = blobColumn.getParentMetaTable()
+                                      .getName()
+                                      .toLowerCase();
+            val columnName = blobColumn.getName()
+                                       .toLowerCase();
 
             val columnBlobUri = new URI(schemaName + "/" + tableName + "/" + columnName + "/"); // relative to the lob-folder of the siard-archive
             blobColumn.setLobFolder(columnBlobUri);
@@ -163,12 +175,15 @@ public class ArchiveHandler {
     }
 
     private List<MetaColumn> findBlobColumns(final Archive archive) {
-        return ListAssembler.assemble(archive.getSchemas(), archive::getSchema).stream()
-                .flatMap(schema -> ListAssembler.assemble(schema.getTables(), schema::getTable).stream()
-                        .map(Table::getMetaTable)
-                        .flatMap(table -> ListAssembler.assemble(table.getMetaColumns(), table::getMetaColumn).stream()
-                                .filter(this::isBlobColumn)))
-                .collect(Collectors.toList());
+        return ListAssembler.assemble(archive.getSchemas(), archive::getSchema)
+                            .stream()
+                            .flatMap(schema -> ListAssembler.assemble(schema.getTables(), schema::getTable)
+                                                            .stream()
+                                                            .map(Table::getMetaTable)
+                                                            .flatMap(table -> ListAssembler.assemble(table.getMetaColumns(), table::getMetaColumn)
+                                                                                           .stream()
+                                                                                           .filter(this::isBlobColumn)))
+                            .collect(Collectors.toList());
     }
 
     @SneakyThrows

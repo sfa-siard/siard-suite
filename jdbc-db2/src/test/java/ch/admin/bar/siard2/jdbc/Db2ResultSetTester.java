@@ -1,27 +1,31 @@
 package ch.admin.bar.siard2.jdbc;
 
+import ch.admin.bar.siard2.db2.TestDb2Database;
+import ch.admin.bar.siard2.db2.TestSqlDatabase;
+import ch.admin.bar.siard2.jdbcx.Db2DataSource;
+import ch.enterag.sqlparser.Interval;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.SU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.base.TestUtils;
+import ch.enterag.utils.jdbc.BaseResultSet;
+import ch.enterag.utils.jdbc.BaseResultSetTester;
+import org.junit.*;
+import org.testcontainers.containers.Db2Container;
+
+import javax.xml.datatype.Duration;
 import java.io.*;
-import java.math.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.sql.*;
 import java.sql.Date;
-import java.text.*;
+import java.text.ParseException;
 import java.util.*;
 
-import javax.xml.datatype.*;
-
 import static org.junit.Assert.*;
-
-import org.junit.*;
-
-import ch.admin.bar.siard2.db2.*;
-import ch.admin.bar.siard2.jdbcx.*;
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.utils.jdbc.*;
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.identifier.*;
-import org.testcontainers.containers.Db2Container;
 
 public class Db2ResultSetTester extends BaseResultSetTester {
 

@@ -27,35 +27,40 @@ class ContentAssertions {
         val tableIdsDeltas = SetDeltas.findDeltas(expectedContentExplorer.getAllIds(), actualContentExplorer.getAllIds());
 
         Assertions.assertThat(tableIdsDeltas.deltasAvailable())
-                .as("Not the same table ids available: " + tableIdsDeltas)
-                .isFalse();
+                  .as("Not the same table ids available: " + tableIdsDeltas)
+                  .isFalse();
 
-        expectedContentExplorer.getAllIds().forEach(tableId -> {
-            val expectedTable = expectedContentExplorer.findTable(tableId);
-            val actualTable = actualContentExplorer.findTable(tableId);
+        expectedContentExplorer.getAllIds()
+                               .forEach(tableId -> {
+                                   val expectedTable = expectedContentExplorer.findTable(tableId);
+                                   val actualTable = actualContentExplorer.findTable(tableId);
 
-            val rowsDeltas = SetDeltas.findDeltas(
-                    new HashSet<>(expectedTable.getTableContent().getRows()),
-                    new HashSet<>(actualTable.getTableContent().getRows())
-            );
+                                   val rowsDeltas = SetDeltas.findDeltas(
+                                           new HashSet<>(expectedTable.getTableContent()
+                                                                      .getRows()),
+                                           new HashSet<>(actualTable.getTableContent()
+                                                                    .getRows())
+                                   );
 
-            if (rowsDeltas.deltasAvailable()) {
-                Assertions.assertThat(rowsDeltas.getJustInA().stream()
-                                .map(Content.TableRow::toString)
-                                .sorted()
-                                .limit(MAX_DISPLAYED_ROWS)
-                                .collect(Collectors.toList()))
-                        .as("Rows of table %s are not equal (just first %d displayed)", tableId, MAX_DISPLAYED_ROWS)
-                        .isEqualTo(rowsDeltas.getJustInB().stream()
-                                .map(Content.TableRow::toString)
-                                .sorted()
-                                .limit(MAX_DISPLAYED_ROWS)
-                                .collect(Collectors.toList()));
-            }
+                                   if (rowsDeltas.deltasAvailable()) {
+                                       Assertions.assertThat(rowsDeltas.getJustInA()
+                                                                       .stream()
+                                                                       .map(Content.TableRow::toString)
+                                                                       .sorted()
+                                                                       .limit(MAX_DISPLAYED_ROWS)
+                                                                       .collect(Collectors.toList()))
+                                                 .as("Rows of table %s are not equal (just first %d displayed)", tableId, MAX_DISPLAYED_ROWS)
+                                                 .isEqualTo(rowsDeltas.getJustInB()
+                                                                      .stream()
+                                                                      .map(Content.TableRow::toString)
+                                                                      .sorted()
+                                                                      .limit(MAX_DISPLAYED_ROWS)
+                                                                      .collect(Collectors.toList()));
+                                   }
 
-            Assertions.assertThat(actualTable)
-                    .as("The table %s is not equal", tableId)
-                    .isEqualTo(expectedTable);
-        });
+                                   Assertions.assertThat(actualTable)
+                                             .as("The table %s is not equal", tableId)
+                                             .isEqualTo(expectedTable);
+                               });
     }
 }

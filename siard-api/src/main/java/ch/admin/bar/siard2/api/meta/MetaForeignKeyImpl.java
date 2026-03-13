@@ -55,7 +55,7 @@ public class MetaForeignKeyImpl
         return (ArchiveImpl) getParentMetaTable().getTable()
                                                  .getParentSchema()
                                                  .getParentArchive();
-    } 
+    }
 
     private final ForeignKeyType _fkt;
 
@@ -67,7 +67,7 @@ public class MetaForeignKeyImpl
     public void setTemplate(ForeignKeyType fktTemplate) {
         if (!SU.isNotEmpty(getDescription()))
             setDescription(XU.fromXml(fktTemplate.getDescription()));
-    } 
+    }
 
     /**
      * constructor
@@ -78,7 +78,7 @@ public class MetaForeignKeyImpl
     private MetaForeignKeyImpl(MetaTable mtParent, ForeignKeyType fkt) {
         _mtParent = mtParent;
         _fkt = fkt;
-    } 
+    }
 
     /**
      * factory
@@ -89,9 +89,8 @@ public class MetaForeignKeyImpl
      */
     public static MetaForeignKey newInstance(MetaTable mtParent, ForeignKeyType fkt) {
         return new MetaForeignKeyImpl(mtParent, fkt);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -101,7 +100,6 @@ public class MetaForeignKeyImpl
         return XU.fromXml(_fkt.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -114,7 +112,7 @@ public class MetaForeignKeyImpl
                 _fkt.setReferencedSchema(XU.toXml(sReferencedSchema));
         } else
             throw new IOException("Referenced schema cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -124,7 +122,6 @@ public class MetaForeignKeyImpl
         return XU.fromXml(_fkt.getReferencedSchema());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -141,7 +138,7 @@ public class MetaForeignKeyImpl
             }
         } else
             throw new IOException("Referenced table cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -197,7 +194,7 @@ public class MetaForeignKeyImpl
             getArchive().isMetaDataDifferent(null, rt);
         } else
             throw new IOException("Reference cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -211,7 +208,7 @@ public class MetaForeignKeyImpl
             sbColumns.append(getColumn(iReference));
         }
         return sbColumns.toString();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -225,9 +222,8 @@ public class MetaForeignKeyImpl
             sbReferenced.append(getReferenced(iReference));
         }
         return sbReferenced.toString();
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -247,7 +243,7 @@ public class MetaForeignKeyImpl
             }
         } else
             throw new IOException("Match type cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -259,9 +255,8 @@ public class MetaForeignKeyImpl
             sMatchType = _fkt.getMatchType()
                              .value();
         return sMatchType;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -281,7 +276,7 @@ public class MetaForeignKeyImpl
             }
         } else
             throw new IOException("Referential action cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -293,9 +288,8 @@ public class MetaForeignKeyImpl
             sDeleteAction = _fkt.getDeleteAction()
                                 .value();
         return sDeleteAction;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -315,7 +309,7 @@ public class MetaForeignKeyImpl
             }
         } else
             throw new IOException("Referential action cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -327,9 +321,8 @@ public class MetaForeignKeyImpl
             sUpdateAction = _fkt.getUpdateAction()
                                 .value();
         return sUpdateAction;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -338,7 +331,7 @@ public class MetaForeignKeyImpl
     public void setDescription(String sDescription) {
         if (getArchive().isMetaDataDifferent(getDescription(), sDescription))
             _fkt.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -366,7 +359,7 @@ public class MetaForeignKeyImpl
                         getUpdateAction(),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

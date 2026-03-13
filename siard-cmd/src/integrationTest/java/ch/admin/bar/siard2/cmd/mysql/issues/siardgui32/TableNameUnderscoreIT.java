@@ -53,7 +53,7 @@ public class TableNameUnderscoreIT {
     public void uploadSubmittedArchive_expectNoExceptions() throws SQLException, IOException {
         val submittedArchive = siardArchivesHandler.prepareResource("mysql/issues/siardgui32/submitted-table-names-underscore.siard");
 
-        SiardToDb siardToDb = new SiardToDb(new String[] {
+        SiardToDb siardToDb = new SiardToDb(new String[]{
                 "-o",
                 "-j:" + emptyDb.getJdbcUrl(),
                 "-u:" + emptyDb.getUsername(),
@@ -81,22 +81,25 @@ public class TableNameUnderscoreIT {
         val metadataExplorer = siardArchive.exploreMetadata();
 
         val testTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("test_table"))
-                .build());
-        Assertions.assertThat(testTable.getName()).isEqualTo(Id.of("test_table"));
+                                                                       .schemaId(Id.of("public"))
+                                                                       .tableId(Id.of("test_table"))
+                                                                       .build());
+        Assertions.assertThat(testTable.getName())
+                  .isEqualTo(Id.of("test_table"));
 
         val jobHistoryTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("job_history"))
-                .build());
-        Assertions.assertThat(jobHistoryTable.getName()).isEqualTo(Id.of("job_history"));
+                                                                             .schemaId(Id.of("public"))
+                                                                             .tableId(Id.of("job_history"))
+                                                                             .build());
+        Assertions.assertThat(jobHistoryTable.getName())
+                  .isEqualTo(Id.of("job_history"));
 
         val employeesTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("employees"))
-                .build());
-        Assertions.assertThat(employeesTable.getName()).isEqualTo(Id.of("employees"));
+                                                                            .schemaId(Id.of("public"))
+                                                                            .tableId(Id.of("employees"))
+                                                                            .build());
+        Assertions.assertThat(employeesTable.getName())
+                  .isEqualTo(Id.of("employees"));
     }
 
     //The issue had reported an error when uploading back to db
@@ -104,7 +107,7 @@ public class TableNameUnderscoreIT {
     public void uploadSiardArchiveMySql5_expectNoExceptions() throws SQLException, IOException {
         val siardArchive = siardArchivesHandler.prepareResource("mysql/issues/siardgui32/created-table-names-underscore-mysql5.siard");
 
-        SiardToDb siardToDb = new SiardToDb(new String[] {
+        SiardToDb siardToDb = new SiardToDb(new String[]{
                 "-o",
                 "-j:" + dbMySql5.getJdbcUrl(),
                 "-u:" + dbMySql5.getUsername(),
@@ -133,22 +136,25 @@ public class TableNameUnderscoreIT {
         val metadataExplorer = siardArchive.exploreMetadata();
 
         val testTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("test_table"))
-                .build());
-        Assertions.assertThat(testTable.getName()).isEqualTo(Id.of("test_table"));
+                                                                       .schemaId(Id.of("public"))
+                                                                       .tableId(Id.of("test_table"))
+                                                                       .build());
+        Assertions.assertThat(testTable.getName())
+                  .isEqualTo(Id.of("test_table"));
 
         val jobHistoryTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("job_history"))
-                .build());
-        Assertions.assertThat(jobHistoryTable.getName()).isEqualTo(Id.of("job_history"));
+                                                                             .schemaId(Id.of("public"))
+                                                                             .tableId(Id.of("job_history"))
+                                                                             .build());
+        Assertions.assertThat(jobHistoryTable.getName())
+                  .isEqualTo(Id.of("job_history"));
 
         val employeesTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("public"))
-                .tableId(Id.of("employees"))
-                .build());
-        Assertions.assertThat(employeesTable.getName()).isEqualTo(Id.of("employees"));
+                                                                            .schemaId(Id.of("public"))
+                                                                            .tableId(Id.of("employees"))
+                                                                            .build());
+        Assertions.assertThat(employeesTable.getName())
+                  .isEqualTo(Id.of("employees"));
     }
 
     @Test

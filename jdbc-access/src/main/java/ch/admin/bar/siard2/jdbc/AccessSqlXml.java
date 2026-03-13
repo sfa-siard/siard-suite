@@ -62,7 +62,6 @@ public class AccessSqlXml implements SQLXML {
     }
 
 
-
     /** {@link SQLXML} */
     @Override
     public <T extends Source> T getSource(Class<T> arg0)

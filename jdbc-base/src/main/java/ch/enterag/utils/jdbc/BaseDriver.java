@@ -11,12 +11,15 @@ Created    : 08.03.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import java.lang.reflect.*;
-import java.sql.*;
-import java.util.*;
-import java.util.logging.*;
+import ch.enterag.utils.logging.IndentLogger;
 
-import ch.enterag.utils.logging.*;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * BaseDriver implements a wrapped Driver.
@@ -80,12 +83,14 @@ public abstract class BaseDriver
         for (Enumeration<Driver> enumDriver = DriverManager.getDrivers();
              enumDriver.hasMoreElements(); ) {
             Driver driver = enumDriver.nextElement();
-            System.out.println("  " + driver.getClass().getName());
+            System.out.println("  " + driver.getClass()
+                                            .getName());
         }
         System.out.println("DriverMapping:");
         for (String sDriver : _mapWrappedDrivers.keySet()) {
             Driver driverMapped = _mapWrappedDrivers.get(sDriver);
-            System.out.println("  " + sDriver + ": " + driverMapped.getClass().getName());
+            System.out.println("  " + sDriver + ": " + driverMapped.getClass()
+                                                                   .getName());
         }
     }
 
@@ -107,9 +112,14 @@ public abstract class BaseDriver
         for (Enumeration<Driver> enumDriver = DriverManager.getDrivers();
              enumDriver.hasMoreElements(); ) {
             Driver driver = enumDriver.nextElement();
-            if ((driver.getClass().getName().equals(sWrappedDriverClassName)) ||
-                    (driver.getClass().equals(driverRegister.getClass()))) {
-                if (driver.getClass().getName().equals(sWrappedDriverClassName))
+            if ((driver.getClass()
+                       .getName()
+                       .equals(sWrappedDriverClassName)) ||
+                    (driver.getClass()
+                           .equals(driverRegister.getClass()))) {
+                if (driver.getClass()
+                          .getName()
+                          .equals(sWrappedDriverClassName))
                     driverWrapped = driver;
                 DriverManager.deregisterDriver(driver);
             }
@@ -117,7 +127,8 @@ public abstract class BaseDriver
         if (driverWrapped == null) {
             /* get the wrapped driver */
             Class<?> clsBaseDriver = Class.forName(sWrappedDriverClassName);
-            driverWrapped = (Driver) clsBaseDriver.getConstructor().newInstance();
+            driverWrapped = (Driver) clsBaseDriver.getConstructor()
+                                                  .newInstance();
             DriverManager.deregisterDriver(driverWrapped);
         }
         if (driverWrapped != null) {

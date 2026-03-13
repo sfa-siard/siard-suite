@@ -588,10 +588,13 @@ public class TestPostgresDatabase {
     private void createTables()
             throws SQLException {
         createTable(getQualifiedSimpleTable(), _listCdSimple,
-                    Arrays.asList(_listCdSimple.get(_iPrimarySimple).getName()),
-                    Arrays.asList(_listCdSimple.get(_iCandidateSimple).getName()));
+                    Arrays.asList(_listCdSimple.get(_iPrimarySimple)
+                                               .getName()),
+                    Arrays.asList(_listCdSimple.get(_iCandidateSimple)
+                                               .getName()));
         createTable(getQualifiedComplexTable(), _listCdComplex,
-                    Arrays.asList(_listCdComplex.get(_iPrimaryComplex).getName()),
+                    Arrays.asList(_listCdComplex.get(_iPrimaryComplex)
+                                                .getName()),
                     null);
     }
 

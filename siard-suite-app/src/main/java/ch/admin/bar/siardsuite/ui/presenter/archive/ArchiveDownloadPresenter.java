@@ -119,21 +119,30 @@ public class ArchiveDownloadPresenter implements Destructible {
         this.loader.setImage(Icon.LOADING.toImage());
         loadingSpinner = new Spinner(this.loader);
 
-        title.textProperty().bind(DisplayableText.of(IN_PROGRESS_TITLE).bindable());
-        recordsLoaded.textProperty().bind(DisplayableText.of(IN_PROGRESS_MESSAGE).bindable());
-        pathTitle.textProperty().bind(DisplayableText.of(PATH_TITLE).bindable());
-        openLink.textProperty().bind(DisplayableText.of(OPEN_LINK).bindable());
+        title.textProperty()
+             .bind(DisplayableText.of(IN_PROGRESS_TITLE)
+                                  .bindable());
+        recordsLoaded.textProperty()
+                     .bind(DisplayableText.of(IN_PROGRESS_MESSAGE)
+                                          .bindable());
+        pathTitle.textProperty()
+                 .bind(DisplayableText.of(PATH_TITLE)
+                                      .bindable());
+        openLink.textProperty()
+                .bind(DisplayableText.of(OPEN_LINK)
+                                     .bindable());
 
         this.borderPane.setBottom(ButtonBox.create(
                 ButtonBox.ButtonDescriber.builder()
-                        .title(BUTTON_CANCEL)
-                        .style(ButtonBox.ButtonStyle.SECONDARY)
-                        .onAction(() -> dialogs.open(View.ARCHIVE_ABORT_DIALOG))
-                        .build()
+                                         .title(BUTTON_CANCEL)
+                                         .style(ButtonBox.ButtonStyle.SECONDARY)
+                                         .onAction(() -> dialogs.open(View.ARCHIVE_ABORT_DIALOG))
+                                         .build()
         ));
 
         this.openLink.setOnMouseClicked(event -> filesService.openInFileBrowser(userDefinedMetadata.getSaveAt()));
-        this.archivePath.setText(userDefinedMetadata.getSaveAt().getAbsolutePath());
+        this.archivePath.setText(userDefinedMetadata.getSaveAt()
+                                                    .getAbsolutePath());
         this.subtitle1.setText(userDefinedMetadata.getDbName());
 
         downloadAndArchiveDatabase();
@@ -148,24 +157,26 @@ public class ArchiveDownloadPresenter implements Destructible {
         loadingSpinner.play();
 
         dbInteractionService.execute(LoadDatabaseInstruction.builder()
-                .connectionData(connectionData)
-                .saveAt(Optional.of(userDefinedMetadata.getSaveAt()))
-                .externalLobs(userDefinedMetadata.getLobFolder())
-                .loadOnlyMetadata(false)
-                .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
-                .onSuccess(this::handleDownloadSuccess)
-                .onFailure(event -> handleDownloadFailure(event.getSource().getException()))
-                .onStepCompleted((observable, oldValue, newValue) -> {
-                    AtomicInteger pos = new AtomicInteger();
-                    newValue.forEach(p ->
-                            addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
-                    );
-                })
-                .onProgress((observable, oldValue, newValue) -> {
-                    double pos = newValue.doubleValue();
-                    progressBar.progressProperty().set(pos);
-                })
-                .build());
+                                                            .connectionData(connectionData)
+                                                            .saveAt(Optional.of(userDefinedMetadata.getSaveAt()))
+                                                            .externalLobs(userDefinedMetadata.getLobFolder())
+                                                            .loadOnlyMetadata(false)
+                                                            .viewsAsTables(userDefinedMetadata.getExportViewsAsTables())
+                                                            .onSuccess(this::handleDownloadSuccess)
+                                                            .onFailure(event -> handleDownloadFailure(event.getSource()
+                                                                                                           .getException()))
+                                                            .onStepCompleted((observable, oldValue, newValue) -> {
+                                                                AtomicInteger pos = new AtomicInteger();
+                                                                newValue.forEach(p ->
+                                                                                         addLoadingData(p.getKey(), p.getValue(), pos.getAndIncrement())
+                                                                );
+                                                            })
+                                                            .onProgress((observable, oldValue, newValue) -> {
+                                                                double pos = newValue.doubleValue();
+                                                                progressBar.progressProperty()
+                                                                           .set(pos);
+                                                            })
+                                                            .build());
     }
 
     private void handleDownloadSuccess(Archive archive) {
@@ -173,16 +184,22 @@ public class ArchiveDownloadPresenter implements Destructible {
                 .write(archive, userDefinedMetadata)
                 .save(archive, userDefinedMetadata.getSaveAt());
 
-        log.info("Downloaded archive successfully stored to {}", userDefinedMetadata.getSaveAt().getAbsolutePath());
+        log.info("Downloaded archive successfully stored to {}", userDefinedMetadata.getSaveAt()
+                                                                                    .getAbsolutePath());
 
         loadingSpinner.hide();
         title.setVisible(false);
         fileSystemBox.setVisible(true);
 
         resultTitle.setVisible(true);
-        resultTitle.getStyleClass().setAll("ok-circle-icon", "h2", "label-icon-left");
-        resultTitle.textProperty().bind(DisplayableText.of(SUCCESS_TITLE).bindable());
-        recordsLoaded.textProperty().bind(DisplayableText.of(SUCCESS_MESSAGE, total).bindable());
+        resultTitle.getStyleClass()
+                   .setAll("ok-circle-icon", "h2", "label-icon-left");
+        resultTitle.textProperty()
+                   .bind(DisplayableText.of(SUCCESS_TITLE)
+                                        .bindable());
+        recordsLoaded.textProperty()
+                     .bind(DisplayableText.of(SUCCESS_MESSAGE, total)
+                                          .bindable());
 
         progressBar.setVisible(false);
         scrollBox.setVisible(false);
@@ -190,18 +207,18 @@ public class ArchiveDownloadPresenter implements Destructible {
 
         this.borderPane.setBottom(ButtonBox.create(
                 ButtonBox.ButtonDescriber.builder()
-                        .title(BUTTON_HOME)
-                        .style(ButtonBox.ButtonStyle.PRIMARY)
-                        .onAction(() -> navigator.navigate(View.START))
-                        .build(),
+                                         .title(BUTTON_HOME)
+                                         .style(ButtonBox.ButtonStyle.PRIMARY)
+                                         .onAction(() -> navigator.navigate(View.START))
+                                         .build(),
                 ButtonBox.ButtonDescriber.builder()
-                        .title(BUTTON_VIEW_ARCHIVE)
-                        .style(ButtonBox.ButtonStyle.SECONDARY)
-                        .onAction(() -> {
-                            val openArchive = archiveHandler.open(userDefinedMetadata.getSaveAt());
-                            navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW, openArchive);
-                        })
-                        .build()
+                                         .title(BUTTON_VIEW_ARCHIVE)
+                                         .style(ButtonBox.ButtonStyle.SECONDARY)
+                                         .onAction(() -> {
+                                             val openArchive = archiveHandler.open(userDefinedMetadata.getSaveAt());
+                                             navigator.navigate(View.OPEN_SIARD_ARCHIVE_PREVIEW, openArchive);
+                                         })
+                                         .build()
         ));
     }
 
@@ -212,16 +229,21 @@ public class ArchiveDownloadPresenter implements Destructible {
         this.resultTitle.setVisible(true);
         this.subtitle1.setVisible(false);
         this.resultBox.setVisible(false);
-        resultTitle.textProperty().bind(DisplayableText.of(FAILED_TITLE).bindable());
-        recordsLoaded.textProperty().bind(DisplayableText.of(FAILED_MESSAGE).bindable());
-        resultTitle.getStyleClass().setAll("x-circle-icon", "h2", "label-icon-left");
+        resultTitle.textProperty()
+                   .bind(DisplayableText.of(FAILED_TITLE)
+                                        .bindable());
+        recordsLoaded.textProperty()
+                     .bind(DisplayableText.of(FAILED_MESSAGE)
+                                          .bindable());
+        resultTitle.getStyleClass()
+                   .setAll("x-circle-icon", "h2", "label-icon-left");
 
         this.borderPane.setBottom(ButtonBox.create(
                 ButtonBox.ButtonDescriber.builder()
-                        .title(BUTTON_HOME)
-                        .style(ButtonBox.ButtonStyle.PRIMARY)
-                        .onAction(() -> navigator.navigate(View.START))
-                        .build()
+                                         .title(BUTTON_HOME)
+                                         .style(ButtonBox.ButtonStyle.PRIMARY)
+                                         .onAction(() -> navigator.navigate(View.START))
+                                         .build()
         ));
 
         errorHandler.handle(throwable);
@@ -231,17 +253,24 @@ public class ArchiveDownloadPresenter implements Destructible {
     private void addLoadingData(String text, Long rows, Integer pos) {
         if (rows < 0) {
             // set previous to ok
-            if (scrollBox.getChildren().size() > 0) {
-                int itemPos = scrollBox.getChildren().size() - 1;
-                LabelIcon label = (LabelIcon) scrollBox.getChildren().get(itemPos);
+            if (scrollBox.getChildren()
+                         .size() > 0) {
+                int itemPos = scrollBox.getChildren()
+                                       .size() - 1;
+                LabelIcon label = (LabelIcon) scrollBox.getChildren()
+                                                       .get(itemPos);
                 label.setGraphic(new IconView(itemPos, IconView.IconType.OK));
             }
-            scrollBox.getChildren().add(
-                    new LabelIcon(text, pos, IconView.IconType.LOADING));
+            scrollBox.getChildren()
+                     .add(
+                             new LabelIcon(text, pos, IconView.IconType.LOADING));
         } else {
             LabelIcon label = new LabelIcon(text, pos, IconView.IconType.OK);
-            label.textProperty().bind(DisplayableText.of(TABLE_ROWS, text, rows).bindable());
-            scrollBox2.getChildren().add(label);
+            label.textProperty()
+                 .bind(DisplayableText.of(TABLE_ROWS, text, rows)
+                                      .bindable());
+            scrollBox2.getChildren()
+                      .add(label);
             total += rows;
         }
     }
@@ -252,16 +281,17 @@ public class ArchiveDownloadPresenter implements Destructible {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveDownloadPresenter>load("fxml/archive/archive-download.fxml");
-        loaded.getController().init(
-                data.getValue1(),
-                data.getValue2(),
-                servicesFacade.errorHandler(),
-                servicesFacade.getService(DbInteractionService.class),
-                servicesFacade.dialogs(),
-                servicesFacade.navigator(),
-                servicesFacade.getService(ArchiveHandler.class),
-                servicesFacade.getService(FilesService.class)
-        );
+        loaded.getController()
+              .init(
+                      data.getValue1(),
+                      data.getValue2(),
+                      servicesFacade.errorHandler(),
+                      servicesFacade.getService(DbInteractionService.class),
+                      servicesFacade.dialogs(),
+                      servicesFacade.navigator(),
+                      servicesFacade.getService(ArchiveHandler.class),
+                      servicesFacade.getService(FilesService.class)
+              );
 
         return loaded;
     }

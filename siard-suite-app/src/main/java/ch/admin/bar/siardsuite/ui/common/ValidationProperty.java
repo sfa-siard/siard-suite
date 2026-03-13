@@ -17,7 +17,8 @@ public class ValidationProperty {
     }
 
     public boolean validate() {
-        if (this.field.getText().isEmpty()) {
+        if (this.field.getText()
+                      .isEmpty()) {
             I18n.bind(this.validationMsgField.textProperty(), this.validationMsg);
             this.validationMsgField.setVisible(true);
             this.isValid = false;

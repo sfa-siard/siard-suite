@@ -10,8 +10,12 @@ Created    : 02.09.2019, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import java.io.*;
-import java.sql.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.sql.Clob;
+import java.sql.SQLException;
 
 /**
  * BaseClob implements a wrapped Clob and serves as a base

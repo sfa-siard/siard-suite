@@ -25,6 +25,7 @@ public class MariaDBDefaultDataTypesIT {
 
     @Test
     public void executeTest() {
-        MySqlDefaultDataTypes.executeTest(siardArchivesHandler, db.getJdbcUrl().replace("jdbc:mariadb", "jdbc:mysql"));
+        MySqlDefaultDataTypes.executeTest(siardArchivesHandler, db.getJdbcUrl()
+                                                                  .replace("jdbc:mariadb", "jdbc:mysql"));
     }
 }

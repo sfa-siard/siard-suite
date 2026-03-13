@@ -12,38 +12,39 @@ Created    : 07.06.2016, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.mssql.ddl;
 
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.ddl.*;
+import ch.enterag.sqlparser.K;
+import ch.enterag.sqlparser.SqlFactory;
+import ch.enterag.sqlparser.ddl.DropTypeStatement;
 
 /*====================================================================*/
-/** MsSqlDropTypeStatement overrides DropTableStatement of SQL parser 
+
+/** MsSqlDropTypeStatement overrides DropTableStatement of SQL parser
  * because MSSQL does not support drop behavior (CASCADE, RESTRICT) for 
  * types.
  * @author Hartwig Thomas
  */
 public class MsSqlDropTypeStatement
-  extends DropTypeStatement
-{
+        extends DropTypeStatement {
 
-  /*------------------------------------------------------------------*/
-  /** format the drop type statement for MSSQL without the drop behavior.
-   * @return the SQL string corresponding to the fields of the drop type statement.
-   */
-  @Override
-  public String format()
-  {
-    String sStatement = K.DROP.getKeyword() + sSP + K.TYPE.getKeyword() + sSP +
-      getUdtName().format(); 
-    return sStatement;
-  } /* format */
+    /*------------------------------------------------------------------*/
 
-  /*------------------------------------------------------------------*/
-  /** constructor with factory only to be called by factory.
-   * @param sf factory.
-   */
-  public MsSqlDropTypeStatement(SqlFactory sf)
-  {
-    super(sf);
-  } /* constructor */
-    
+    /** format the drop type statement for MSSQL without the drop behavior.
+     * @return the SQL string corresponding to the fields of the drop type statement.
+     */
+    @Override
+    public String format() {
+        String sStatement = K.DROP.getKeyword() + sSP + K.TYPE.getKeyword() + sSP +
+                getUdtName().format();
+        return sStatement;
+    } /* format */
+
+    /*------------------------------------------------------------------*/
+
+    /** constructor with factory only to be called by factory.
+     * @param sf factory.
+     */
+    public MsSqlDropTypeStatement(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
+
 } /* class MsSqlDropTypeStatement */

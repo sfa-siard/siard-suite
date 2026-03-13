@@ -14,6 +14,7 @@ public class SiardConnectionTest {
         val subSchema = SiardConnection.extractSubSchema("jdbc:mysql://localhost:59483/test");
 
         // then
-        Assertions.assertThat(subSchema).isEqualTo("mysql");
+        Assertions.assertThat(subSchema)
+                  .isEqualTo("mysql");
     }
 }

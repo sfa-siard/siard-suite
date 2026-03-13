@@ -11,7 +11,7 @@ public class RandomTable {
 
     RandomTable(Table table) {
         _table = table;
-    } 
+    }
 
     public int createTable() {
         int iReturn = RandomArchive.iRETURN_OK;

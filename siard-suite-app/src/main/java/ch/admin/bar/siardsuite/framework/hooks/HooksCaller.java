@@ -28,10 +28,12 @@ public class HooksCaller {
         return previouslyLoadedView.updateAndGet(previouslyLoadedView -> {
             if (previouslyLoadedView != null) {
                 CastHelper.tryCast(previouslyLoadedView.getController(), Destructible.class)
-                        .ifPresent(destructible -> {
-                            log.debug("Call destruction method on {}", previouslyLoadedView.getController().getClass().getSimpleName());
-                            destructible.destruct();
-                        });
+                          .ifPresent(destructible -> {
+                              log.debug("Call destruction method on {}", previouslyLoadedView.getController()
+                                                                                             .getClass()
+                                                                                             .getSimpleName());
+                              destructible.destruct();
+                          });
             }
 
             return loadedView;

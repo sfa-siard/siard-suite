@@ -1,34 +1,33 @@
 package ch.enterag.sqlparser.expression;
 
-import static org.junit.Assert.*;
-import org.junit.*;
-import ch.enterag.sqlparser.*;
+import ch.enterag.sqlparser.BaseSqlFactory;
+import ch.enterag.sqlparser.SqlFactory;
+import org.junit.Before;
+import org.junit.Test;
 
-public class ArrayValueExpressionTester
-{
-  private SqlFactory _sf = new BaseSqlFactory();
-  private ArrayValueExpression _ave = null;
+import static org.junit.Assert.assertEquals;
 
-  @Before
-  public void setUp()
-  {
-    _ave = _sf.newArrayValueExpression();
-  }
-  
-  @Test
-  public void testLiteral()
-  {
-    _ave.parse("t.COL");
-    // System.out.println(_ave.format());
-    assertEquals("Array value literal not recognized!","T.COL",_ave.format());
-  }
+public class ArrayValueExpressionTester {
+    private SqlFactory _sf = new BaseSqlFactory();
+    private ArrayValueExpression _ave = null;
 
-  @Test
-  public void testConcatenation()
-  {
-    _ave.parse("t.COL || \"a\"");
-    // System.out.println(_ave.format());
-    assertEquals("Array value concatenation not recognized!","T.COL || \"a\"",_ave.format());
-  }
+    @Before
+    public void setUp() {
+        _ave = _sf.newArrayValueExpression();
+    }
+
+    @Test
+    public void testLiteral() {
+        _ave.parse("t.COL");
+        // System.out.println(_ave.format());
+        assertEquals("Array value literal not recognized!", "T.COL", _ave.format());
+    }
+
+    @Test
+    public void testConcatenation() {
+        _ave.parse("t.COL || \"a\"");
+        // System.out.println(_ave.format());
+        assertEquals("Array value concatenation not recognized!", "T.COL || \"a\"", _ave.format());
+    }
 
 }

@@ -53,7 +53,7 @@ public class MetaUniqueKeyImpl
         return (ArchiveImpl) getParentMetaTable().getTable()
                                                  .getParentSchema()
                                                  .getParentArchive();
-    } 
+    }
 
     private final UniqueKeyType _ukt;
 
@@ -65,7 +65,7 @@ public class MetaUniqueKeyImpl
     public void setTemplate(UniqueKeyType uktTemplate) {
         if (!SU.isNotEmpty(getDescription()))
             setDescription(XU.fromXml(uktTemplate.getDescription()));
-    } 
+    }
 
     /**
      * constructor
@@ -76,7 +76,7 @@ public class MetaUniqueKeyImpl
     private MetaUniqueKeyImpl(MetaTable mtParent, UniqueKeyType ukt) {
         _mtParent = mtParent;
         _ukt = ukt;
-    } 
+    }
 
     /**
      * factory
@@ -87,9 +87,8 @@ public class MetaUniqueKeyImpl
      */
     public static MetaUniqueKey newInstance(MetaTable mtParent, UniqueKeyType ukt) {
         return new MetaUniqueKeyImpl(mtParent, ukt);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -131,7 +130,7 @@ public class MetaUniqueKeyImpl
             getArchive().isMetaDataDifferent(null, sColumn);
         } else
             throw new IOException("Column cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -145,9 +144,8 @@ public class MetaUniqueKeyImpl
             sbColumns.append(getColumn(iColumn));
         }
         return sbColumns.toString();
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -156,7 +154,7 @@ public class MetaUniqueKeyImpl
     public void setDescription(String sDescription) {
         if (getArchive().isMetaDataDifferent(getDescription(), sDescription))
             _ukt.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -177,7 +175,7 @@ public class MetaUniqueKeyImpl
                 getColumnsString(),
                 getDescription()
         };
-    } 
+    }
 
     /**
      * {@inheritDoc}

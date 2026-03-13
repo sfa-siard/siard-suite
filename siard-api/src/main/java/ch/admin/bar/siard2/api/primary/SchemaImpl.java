@@ -54,7 +54,7 @@ public class SchemaImpl
 
     public void registerTable(String sName, Table table) {
         _mapTables.put(sName, table);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -70,7 +70,7 @@ public class SchemaImpl
                 bEmpty = false;
         }
         return bEmpty;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -83,7 +83,7 @@ public class SchemaImpl
                 bValid = false;
         }
         return bValid;
-    } 
+    }
 
     /**
      * return full entry name of schema folder.
@@ -92,7 +92,7 @@ public class SchemaImpl
      */
     String getSchemaFolder() {
         return ArchiveImpl.getContentFolder() + getMetaSchema().getFolder() + "/";
-    } 
+    }
 
     /**
      * constructor
@@ -136,7 +136,7 @@ public class SchemaImpl
                 TableImpl.newInstance(this, tt.getName());
             }
         }
-    } 
+    }
 
     /**
      * factory
@@ -160,7 +160,7 @@ public class SchemaImpl
     @Override
     public int getTables() {
         return getMetaSchema().getMetaTables();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -172,14 +172,14 @@ public class SchemaImpl
         if (mt != null)
             table = getTable(mt.getName());
         return table;
-    } 
+    }
 
     /**
      * {@inheritDoc}
      */
     public Table getTable(String sName) {
         return _mapTables.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -217,6 +217,6 @@ public class SchemaImpl
             throw new IOException("Table cannot be created!\r\n" +
                                           "SIARD archive is not open for modification of primary data!");
         return table;
-    } 
+    }
 
 } 

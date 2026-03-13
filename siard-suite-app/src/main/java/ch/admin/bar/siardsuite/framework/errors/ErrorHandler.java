@@ -42,17 +42,17 @@ public class ErrorHandler {
     public Failure mapToFailure(Throwable throwable) {
         return tryFindMatchingWarningDefinition(throwable)
                 .map(handlingInstruction -> Failure.builder()
-                        .title(handlingInstruction.getTitle())
-                        .message(handlingInstruction.getMessage())
-                        .throwable(Optional.of(throwable))
-                        .build())
+                                                   .title(handlingInstruction.getTitle())
+                                                   .message(handlingInstruction.getMessage())
+                                                   .throwable(Optional.of(throwable))
+                                                   .build())
                 .orElseGet(() -> {
                     log.error("Unhandled exception", throwable);
                     return Failure.builder()
-                            .title(DisplayableText.of(UNEXPECTED_ERROR_TITLE))
-                            .message(DisplayableText.of(UNEXPECTED_ERROR_MESSAGE))
-                            .throwable(Optional.of(throwable))
-                            .build();
+                                  .title(DisplayableText.of(UNEXPECTED_ERROR_TITLE))
+                                  .message(DisplayableText.of(UNEXPECTED_ERROR_MESSAGE))
+                                  .throwable(Optional.of(throwable))
+                                  .build();
                 });
     }
 
@@ -68,12 +68,13 @@ public class ErrorHandler {
      */
     private Optional<HandlingInstruction> tryFindMatchingWarningDefinition(final Throwable throwable) {
         val matching = generalHandlingInstructions.stream()
-                .filter(handlingInstruction -> handlingInstruction.getMatcher().test(throwable))
-                .findFirst();
+                                                  .filter(handlingInstruction -> handlingInstruction.getMatcher()
+                                                                                                    .test(throwable))
+                                                  .findFirst();
 
         if (!matching.isPresent()) {
             return Optional.ofNullable(throwable.getCause())
-                    .flatMap(this::tryFindMatchingWarningDefinition);
+                           .flatMap(this::tryFindMatchingWarningDefinition);
         }
 
         return matching;

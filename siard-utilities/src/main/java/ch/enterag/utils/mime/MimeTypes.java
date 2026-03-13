@@ -9,7 +9,8 @@ public class MimeTypes {
 
     public static String getExtension(String mimeType) {
         try {
-            String extension = getDefaultMimeTypes().forName(mimeType).getExtension();
+            String extension = getDefaultMimeTypes().forName(mimeType)
+                                                    .getExtension();
             if (extension.startsWith(".")) {
                 return extension.substring(1);
             } else {

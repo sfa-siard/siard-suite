@@ -56,7 +56,7 @@ public class MetaViewImpl
             ((MetaColumnImpl) mc).getColumnType();
         }
         return _vt;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -71,7 +71,7 @@ public class MetaViewImpl
                 bValid = false;
         }
         return bValid;
-    } 
+    }
 
     /**
      * get archive
@@ -81,7 +81,7 @@ public class MetaViewImpl
     private ArchiveImpl getArchiveImpl() {
         return (ArchiveImpl) getParentMetaSchema().getSchema()
                                                   .getParentArchive();
-    } 
+    }
 
     private ViewType _vtTemplate = null;
 
@@ -111,7 +111,7 @@ public class MetaViewImpl
                 }
             }
         }
-    } 
+    }
 
     /**
      * constructor
@@ -135,7 +135,7 @@ public class MetaViewImpl
                 _mapMetaColumns.put(XU.fromXml(ct.getName()), mc);
             }
         }
-    } 
+    }
 
     /**
      * factory
@@ -148,9 +148,8 @@ public class MetaViewImpl
     public static MetaView newInstance(MetaSchema msParent, ViewType vt)
             throws IOException {
         return new MetaViewImpl(msParent, vt);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -160,7 +159,6 @@ public class MetaViewImpl
         return XU.fromXml(_vt.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -169,7 +167,7 @@ public class MetaViewImpl
     public void setQuery(String sQuery) {
         if (getArchiveImpl().isMetaDataDifferent(getQuery(), sQuery))
             _vt.setQuery(XU.toXml(sQuery));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -179,7 +177,6 @@ public class MetaViewImpl
         return XU.fromXml(_vt.getQuery());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -192,7 +189,7 @@ public class MetaViewImpl
                 _vt.setQueryOriginal(XU.toXml(sQueryOriginal));
         } else
             throw new IOException("Original query cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -202,7 +199,6 @@ public class MetaViewImpl
         return XU.fromXml(_vt.getQueryOriginal());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -211,7 +207,7 @@ public class MetaViewImpl
     public void setDescription(String sDescription) {
         if (getArchiveImpl().isMetaDataDifferent(getDescription(), sDescription))
             _vt.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -221,7 +217,6 @@ public class MetaViewImpl
         return XU.fromXml(_vt.getDescription());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -234,7 +229,7 @@ public class MetaViewImpl
                 _vt.setRows(BigInteger.valueOf(lRows));
         } else
             throw new IOException("Rows cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -246,9 +241,8 @@ public class MetaViewImpl
             lRows = _vt.getRows()
                        .intValue();
         return lRows;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -272,7 +266,7 @@ public class MetaViewImpl
             mc = getMetaColumn(sName);
         }
         return mc;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -280,7 +274,7 @@ public class MetaViewImpl
     @Override
     public MetaColumn getMetaColumn(String sName) {
         return _mapMetaColumns.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -325,7 +319,7 @@ public class MetaViewImpl
         } else
             throw new IOException("New columns can only be created if archive is open for modification of primary data and table is empty.");
         return mc;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -337,7 +331,7 @@ public class MetaViewImpl
         for (int iColumn = 0; iColumn < getMetaColumns(); iColumn++)
             ams[iColumn] = getMetaColumn(iColumn);
         return ams;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -353,7 +347,7 @@ public class MetaViewImpl
                         String.valueOf(getRows()),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

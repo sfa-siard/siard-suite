@@ -36,9 +36,9 @@ public class SiardArchive {
         this.name = Optional.ofNullable(name);
         metaData = new SiardArchiveMetaData(archive.getMetaData());
         this.schemas = new ArchiveFacade(archive).schemas()
-                .stream()
-                .map(DatabaseSchema::new)
-                .collect(Collectors.toList());
+                                                 .stream()
+                                                 .map(DatabaseSchema::new)
+                                                 .collect(Collectors.toList());
         MetaDataFacade metaDataFacade = new MetaDataFacade(archive.getMetaData());
         this.users = metaDataFacade.users();
         this.priviliges = metaDataFacade.priviliges();

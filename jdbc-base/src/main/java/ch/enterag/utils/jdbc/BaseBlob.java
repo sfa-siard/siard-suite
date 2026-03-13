@@ -10,8 +10,10 @@ Created    : 02.09.2019, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import java.io.*;
-import java.sql.*;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 
 /**
  * BaseBlob implements a wrapped Blob and serves as a base

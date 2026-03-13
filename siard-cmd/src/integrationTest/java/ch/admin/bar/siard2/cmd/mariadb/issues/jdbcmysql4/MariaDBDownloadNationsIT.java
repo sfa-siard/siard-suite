@@ -22,7 +22,7 @@ public class MariaDBDownloadNationsIT {
     @Rule
     public MariaDBContainer<?> downloadDb = new MariaDBContainer<>(DockerImageName.parse("mariadb:11.8.2"))
             .withCopyFileToContainer(MountableFile.forClasspathResource(SqlScripts.MySQL.JDBCMYSQL_4),
-                    "/docker-entrypoint-initdb.d/");
+                                     "/docker-entrypoint-initdb.d/");
 
 
     @Test
@@ -33,7 +33,8 @@ public class MariaDBDownloadNationsIT {
         // when
         SiardFromDb dbToSiard = new SiardFromDb(new String[]{
                 "-o",
-                "-j:" + downloadDb.getJdbcUrl().replace("jdbc:mariadb", "jdbc:mysql"),
+                "-j:" + downloadDb.getJdbcUrl()
+                                  .replace("jdbc:mariadb", "jdbc:mysql"),
                 "-u:" + "it_user",
                 "-p:" + "it_password",
                 "-s:" + actualArchive.getPathToArchiveFile()

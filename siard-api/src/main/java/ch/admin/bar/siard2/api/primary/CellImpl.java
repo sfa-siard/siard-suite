@@ -57,7 +57,7 @@ public class CellImpl
         _mc = mc;
         TableRecordImpl ri = (TableRecordImpl) tableRecord;
         initialize(ri.getRecord(), ri.getTemporaryLobFolder(), iIndex, elCell, mc);
-    } 
+    }
 
     /**
      * factory
@@ -71,7 +71,7 @@ public class CellImpl
     public static Cell newInstance(TableRecord tableRecord, int iIndex, MetaColumn mc, Element elCell)
             throws IOException {
         return new CellImpl(tableRecord, iIndex, mc, elCell);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -85,7 +85,7 @@ public class CellImpl
                 super.extendArray(iField);
         }
         return FieldImpl.newInstance(iField, this, this, mf, el);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -93,7 +93,7 @@ public class CellImpl
     @Override
     public Cell getAncestorCell() {
         return this;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -102,6 +102,6 @@ public class CellImpl
     protected String getInternalLobFolder()
             throws IOException {
         return ((MetaColumnImpl) getMetaColumn()).getFolder();
-    } 
+    }
 
 } 

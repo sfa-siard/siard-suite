@@ -5,8 +5,8 @@ Created    : 12.12.2014, Hartwig Thomas
 */
 package ch.enterag.utils.database;
 
-import java.lang.reflect.*;
-import java.sql.*;
+import java.lang.reflect.Field;
+import java.sql.Types;
 import java.util.*;
 
 /**
@@ -26,7 +26,7 @@ public abstract class SqlTypes {
     private static final Map<Integer, String> mapTypeNames = new HashMap<>();
 
     static {
-      initialize();
+        initialize();
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class SqlTypes {
      * @return Name of the type.
      */
     public static String getTypeName(int typeValue) {
-      return mapTypeNames.getOrDefault(typeValue, UNKNOWN);
+        return mapTypeNames.getOrDefault(typeValue, UNKNOWN);
     }
 
     /**

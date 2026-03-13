@@ -39,8 +39,12 @@ public class Arguments {
      * @param cliArguments command-line arguments.
      */
     public Arguments(String[] cliArguments) {
-        this.arguments = Arrays.stream(cliArguments).filter(arg -> !isOption(arg)).toArray(String[]::new);
-        Arrays.stream(cliArguments).filter(Arguments::isOption).forEach(this::parseArguments);
+        this.arguments = Arrays.stream(cliArguments)
+                               .filter(arg -> !isOption(arg))
+                               .toArray(String[]::new);
+        Arrays.stream(cliArguments)
+              .filter(Arguments::isOption)
+              .forEach(this::parseArguments);
     }
 
     /**

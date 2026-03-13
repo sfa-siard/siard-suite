@@ -10,7 +10,7 @@ public class RandomTableRecord {
 
     public RandomTableRecord(TableRecord record) {
         _tableRecord = record;
-    } 
+    }
 
     private int createValue(Value value) {
         int iReturn = RandomArchive.iRETURN_OK;
@@ -110,7 +110,7 @@ public class RandomTableRecord {
             System.err.println(RandomArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     public int createTableRecord() {
         int iReturn = RandomArchive.iRETURN_OK;
@@ -123,6 +123,6 @@ public class RandomTableRecord {
             System.err.println(RandomArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
 }

@@ -47,9 +47,9 @@ public class RandomArchive {
                 sMessage = sMessage + tException.getMessage();
         }
         return "  " + sMessage;
-    } 
+    }
 
-        /**
+    /**
      * retrieves a full error message.
      *
      * @param e error.
@@ -57,9 +57,9 @@ public class RandomArchive {
      */
     public static String getErrorMessage(Error e) {
         return getThrowableMessage(e);
-    } 
+    }
 
-        /**
+    /**
      * retrieves a full exception message.
      *
      * @param e exception.
@@ -67,7 +67,7 @@ public class RandomArchive {
      */
     public static String getExceptionMessage(Exception e) {
         return getThrowableMessage(e);
-    } 
+    }
 
 
     private int readMetaData(File fileInput) {
@@ -91,7 +91,7 @@ public class RandomArchive {
             System.err.println(getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int createMetaData(MetaData md) {
         int iReturn = iRETURN_ERROR;
@@ -148,7 +148,7 @@ public class RandomArchive {
             System.err.println(getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int createRandomFile(File fileOutput, double dFraction) {
         int iReturn = iRETURN_ERROR;
@@ -201,7 +201,7 @@ public class RandomArchive {
         System.out.println("-o:<siard file>: random SIARD file - force overwrite, if -f option is given.");
         System.out.println();
         return iRETURN_WARNING;
-    } 
+    }
 
     public RandomArchive(String[] args) {
         Arguments arguments = new Arguments(args);
@@ -237,7 +237,7 @@ public class RandomArchive {
             if (_iReturn != iRETURN_OK)
                 _iReturn = displaySyntax();
         }
-    } 
+    }
 
     public static void main(String[] args) {
         System.out.println("Random application of " + _ma.getImplementationTitle() + " " + _ma.getImplementationVersion());

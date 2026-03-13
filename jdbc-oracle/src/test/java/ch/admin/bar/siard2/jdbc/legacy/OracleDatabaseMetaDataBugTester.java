@@ -1,16 +1,21 @@
 package ch.admin.bar.siard2.jdbc.legacy;
 
-import java.math.*;
-import java.sql.*;
-import java.util.*;
-
-import static org.junit.Assert.*;
-
 import ch.admin.bar.siard2.jdbc.OracleConnection;
-import org.junit.*;
-import ch.enterag.utils.database.*;
-import ch.admin.bar.siard2.jdbcx.*;
+import ch.admin.bar.siard2.jdbcx.OracleDataSource;
+import ch.enterag.utils.database.SqlTypes;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
 import org.testcontainers.containers.OracleContainer;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.fail;
 
 public class OracleDatabaseMetaDataBugTester {
     private static final String _sDB_USER = "SYSTEM";

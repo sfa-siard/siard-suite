@@ -49,6 +49,7 @@ public class AnalyzeDatabase {
     Database getDatabase() {
         return _db;
     }
+
     public void analyzePropertyMap(PropertyMap pm) {
         System.out.println("    PropertyMap " + pm.getName() + " (" + pm.getClass()
                                                                         .getSimpleName() + ")");

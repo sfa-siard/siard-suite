@@ -4,7 +4,6 @@ package ch.admin.bar.siard2.api.export;
 import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -44,8 +43,12 @@ public class HtmlExportTest {
         String expectedHtml = Files.readString(Paths.get("src/test/resources/export/CUSTOMERS.html"), StandardCharsets.UTF_8);
 
         // Normalize line endings for cross-platform compatibility
-        String normalizedGenerated = generatedHtml.replaceAll("\\r\\n|\\r", "\\n").trim().toLowerCase();
-        String normalizedExpected = expectedHtml.replaceAll("\\r\\n|\\r", "\\n").trim().toLowerCase();
+        String normalizedGenerated = generatedHtml.replaceAll("\\r\\n|\\r", "\\n")
+                                                  .trim()
+                                                  .toLowerCase();
+        String normalizedExpected = expectedHtml.replaceAll("\\r\\n|\\r", "\\n")
+                                                .trim()
+                                                .toLowerCase();
 
         assertEquals(normalizedExpected, normalizedGenerated, "Generated HTML should match expected content");
     }

@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Singular;
@@ -15,9 +15,12 @@ import java.util.function.Supplier;
 @Builder(toBuilder = true)
 public class Step {
     int stepIndex;
-    @NonNull StepDefinition definition;
-    @NonNull StepperNavigator navigator;
-    @NonNull Supplier<LoadedView> viewSupplier;
+    @NonNull
+    StepDefinition definition;
+    @NonNull
+    StepperNavigator navigator;
+    @NonNull
+    Supplier<LoadedView> viewSupplier;
 
     @NonNull
     @Singular

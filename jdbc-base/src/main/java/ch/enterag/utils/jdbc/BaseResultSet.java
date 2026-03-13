@@ -11,13 +11,14 @@ Created    : 13.05.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import java.io.*;
-import java.math.*;
-import java.net.*;
+import javax.xml.datatype.Duration;
+import java.io.InputStream;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
-import javax.xml.datatype.*;
+import java.util.Calendar;
+import java.util.Map;
 
 /**
  * BaseResultSet implements a wrapped ResultSet and serves as a base

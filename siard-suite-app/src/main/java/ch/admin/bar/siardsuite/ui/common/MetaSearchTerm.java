@@ -14,6 +14,8 @@ public class MetaSearchTerm {
                 && value != null
                 && !term.isEmpty()
                 && !value.isEmpty()
-                && Pattern.compile(Pattern.quote(term), Pattern.CASE_INSENSITIVE).matcher(value).find();
+                && Pattern.compile(Pattern.quote(term), Pattern.CASE_INSENSITIVE)
+                          .matcher(value)
+                          .find();
     }
 }

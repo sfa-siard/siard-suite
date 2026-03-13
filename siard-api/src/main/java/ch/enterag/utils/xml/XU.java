@@ -88,7 +88,7 @@ public class XU {
             sText = sb.toString();
         }
         return sText;
-    } 
+    }
 
     /**
      * prepare text for xs:string by replacing all "critical" but
@@ -102,7 +102,7 @@ public class XU {
         if (sText != null)
             el.appendChild(el.getOwnerDocument()
                              .createTextNode(toXml(sText)));
-    } 
+    }
 
     /**
      * prepare text from xs:string by removing all "ignorable" white space.
@@ -154,7 +154,7 @@ public class XU {
             sText = sb.toString();
         }
         return sText;
-    } 
+    }
 
     /**
      * prepare text from xs:string by removing all "ignorable" white space.
@@ -169,7 +169,7 @@ public class XU {
         if (el != null)
             sText = el.getTextContent();
         return fromXml(sText);
-    } 
+    }
 
     /**
      * remove all child elements of a DOM element.
@@ -184,6 +184,6 @@ public class XU {
                           .item(iChild);
             el.removeChild(node);
         }
-    } 
+    }
 
 } 

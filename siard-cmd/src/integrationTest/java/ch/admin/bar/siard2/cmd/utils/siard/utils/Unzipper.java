@@ -31,38 +31,39 @@ public class Unzipper {
      */
     public File unzip() throws IOException {
         try (ZipFile zipFile = new ZipFile(pathToArchive)) {
-            zipFile.stream().forEach(entry -> {
-                try {
-                    File newFile = newFile(extractTo, entry);
-                    
-                    if (entry.isDirectory()) {
-                        if (!newFile.isDirectory() && !newFile.mkdirs()) {
-                            throw new IOException("Failed to create directory " + newFile);
-                        }
-                    } else {
-                        // fix for Windows-created archives
-                        final File parent = newFile.getParentFile();
-                        if (!parent.isDirectory() && !parent.mkdirs()) {
-                            throw new IOException("Failed to create directory " + parent);
-                        }
+            zipFile.stream()
+                   .forEach(entry -> {
+                       try {
+                           File newFile = newFile(extractTo, entry);
 
-                        // write file content
-                        try (InputStream is = zipFile.getInputStream(entry);
-                             FileOutputStream fos = new FileOutputStream(newFile)) {
-                            
-                            byte[] buffer = new byte[1024];
-                            int len;
-                            while ((len = is.read(buffer)) > 0) {
-                                fos.write(buffer, 0, len);
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+                           if (entry.isDirectory()) {
+                               if (!newFile.isDirectory() && !newFile.mkdirs()) {
+                                   throw new IOException("Failed to create directory " + newFile);
+                               }
+                           } else {
+                               // fix for Windows-created archives
+                               final File parent = newFile.getParentFile();
+                               if (!parent.isDirectory() && !parent.mkdirs()) {
+                                   throw new IOException("Failed to create directory " + parent);
+                               }
+
+                               // write file content
+                               try (InputStream is = zipFile.getInputStream(entry);
+                                    FileOutputStream fos = new FileOutputStream(newFile)) {
+
+                                   byte[] buffer = new byte[1024];
+                                   int len;
+                                   while ((len = is.read(buffer)) > 0) {
+                                       fos.write(buffer, 0, len);
+                                   }
+                               }
+                           }
+                       } catch (IOException e) {
+                           throw new RuntimeException(e);
+                       }
+                   });
         }
-        
+
         return extractTo;
     }
 

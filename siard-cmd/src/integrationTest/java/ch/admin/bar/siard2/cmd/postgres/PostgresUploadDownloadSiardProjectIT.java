@@ -3,8 +3,8 @@ package ch.admin.bar.siard2.cmd.postgres;
 import ch.admin.bar.siard2.cmd.SiardFromDb;
 import ch.admin.bar.siard2.cmd.SiardToDb;
 import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
-import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
+import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
 import lombok.val;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -50,9 +50,9 @@ public class PostgresUploadDownloadSiardProjectIT {
         Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         SiardArchiveAssertions.builder()
-                .actualArchive(actualArchive)
-                .expectedArchive(expectedArchive.preserveArchive())
-                .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?
-                .assertEqual();
+                              .actualArchive(actualArchive)
+                              .expectedArchive(expectedArchive.preserveArchive())
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?
+                              .assertEqual();
     }
 }

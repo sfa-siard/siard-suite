@@ -22,10 +22,10 @@ public class ResourcesResolver {
      */
     public static URL resolve(final String resource) {
         return Optional.ofNullable(ResourcesResolver.class
-                        .getClassLoader()
-                        .getResource(resource))
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Resource \"%s\" not found",
-                        resource)));
+                                           .getClassLoader()
+                                           .getResource(resource))
+                       .orElseThrow(() -> new IllegalArgumentException(String.format("Resource \"%s\" not found",
+                                                                                     resource)));
     }
 
     /**
@@ -37,8 +37,8 @@ public class ResourcesResolver {
      */
     public static InputStream loadResource(String resource) {
         Optional<InputStream> urlToResource = Optional.ofNullable(ResourcesResolver.class
-                .getClassLoader()
-                .getResourceAsStream(resource));
+                                                                          .getClassLoader()
+                                                                          .getResourceAsStream(resource));
 
         return urlToResource
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Resource \"%s\" not found", resource)));

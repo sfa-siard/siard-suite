@@ -38,55 +38,65 @@ class MetadataAssertions {
                 .isEqualTo(extractQualifiedForeignKeys(expected));
 
         Assertions.assertThat(actual)
-                .as("SIARD archives are not equal")
-                .isEqualTo(expected);
+                  .as("SIARD archives are not equal")
+                  .isEqualTo(expected);
     }
 
     private static List<Qualifier<Metadata.Column>> extractQualifiedColumns(final Metadata siardMetadata) {
-        return siardMetadata.getSchemas().stream()
-                .flatMap(schema -> schema.getTables().stream()
-                        .flatMap(table -> table.getColumns().stream()
-                                .map(column -> new Qualifier<>(
-                                        String.format("%s.%s.%s",
-                                                table.getName(),
-                                                schema.getName(),
-                                                column.getName()),
-                                        column))))
-                .sorted(Comparator.comparing(Qualifier::getQualifier))
-                .collect(Collectors.toList());
+        return siardMetadata.getSchemas()
+                            .stream()
+                            .flatMap(schema -> schema.getTables()
+                                                     .stream()
+                                                     .flatMap(table -> table.getColumns()
+                                                                            .stream()
+                                                                            .map(column -> new Qualifier<>(
+                                                                                    String.format("%s.%s.%s",
+                                                                                                  table.getName(),
+                                                                                                  schema.getName(),
+                                                                                                  column.getName()),
+                                                                                    column))))
+                            .sorted(Comparator.comparing(Qualifier::getQualifier))
+                            .collect(Collectors.toList());
     }
 
     private static List<Qualifier<Metadata.PrimaryKey>> extractQualifiedPrimaryKeys(final Metadata siardMetadata) {
-        return siardMetadata.getSchemas().stream()
-                .flatMap(schema -> schema.getTables().stream()
-                        .flatMap(table -> stream(table.getPrimaryKey())
-                                .map(primaryKey -> new Qualifier<>(
-                                        String.format("%s.%s.%s->%s",
-                                                table.getName(),
-                                                schema.getName(),
-                                                primaryKey.getName(),
-                                                primaryKey.getColumns().stream()
-                                                        .map(columnId -> columnId.getValue().getValue())
-                                                        .sorted()
-                                                        .collect(Collectors.joining(";"))),
-                                        primaryKey))))
-                .sorted(Comparator.comparing(Qualifier::getQualifier))
-                .collect(Collectors.toList());
+        return siardMetadata.getSchemas()
+                            .stream()
+                            .flatMap(schema -> schema.getTables()
+                                                     .stream()
+                                                     .flatMap(table -> stream(table.getPrimaryKey())
+                                                             .map(primaryKey -> new Qualifier<>(
+                                                                     String.format("%s.%s.%s->%s",
+                                                                                   table.getName(),
+                                                                                   schema.getName(),
+                                                                                   primaryKey.getName(),
+                                                                                   primaryKey.getColumns()
+                                                                                             .stream()
+                                                                                             .map(columnId -> columnId.getValue()
+                                                                                                                      .getValue())
+                                                                                             .sorted()
+                                                                                             .collect(Collectors.joining(";"))),
+                                                                     primaryKey))))
+                            .sorted(Comparator.comparing(Qualifier::getQualifier))
+                            .collect(Collectors.toList());
     }
 
     private static List<Qualifier<Metadata.ForeignKey>> extractQualifiedForeignKeys(final Metadata siardMetadata) {
-        return siardMetadata.getSchemas().stream()
-                .flatMap(schema -> schema.getTables().stream()
-                        .flatMap(table -> table.getForeignKeys().stream()
-                                .map(foreignKey -> new Qualifier<>(
-                                        String.format("%s.%s.%s",
-                                                table.getName(),
-                                                schema.getName(),
-                                                foreignKey.getName()),
-                                        foreignKey
-                                ))))
-                .sorted(Comparator.comparing(Qualifier::getQualifier))
-                .collect(Collectors.toList());
+        return siardMetadata.getSchemas()
+                            .stream()
+                            .flatMap(schema -> schema.getTables()
+                                                     .stream()
+                                                     .flatMap(table -> table.getForeignKeys()
+                                                                            .stream()
+                                                                            .map(foreignKey -> new Qualifier<>(
+                                                                                    String.format("%s.%s.%s",
+                                                                                                  table.getName(),
+                                                                                                  schema.getName(),
+                                                                                                  foreignKey.getName()),
+                                                                                    foreignKey
+                                                                            ))))
+                            .sorted(Comparator.comparing(Qualifier::getQualifier))
+                            .collect(Collectors.toList());
     }
 
     private static <T> Stream<T> stream(final Optional<T> optional) {

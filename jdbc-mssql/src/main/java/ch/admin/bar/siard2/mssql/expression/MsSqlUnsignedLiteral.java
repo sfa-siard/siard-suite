@@ -11,50 +11,50 @@ Created    : 23.05.2016, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.mssql.expression;
 
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.expression.*;
-import ch.admin.bar.siard2.mssql.*;
+import ch.admin.bar.siard2.mssql.MsSqlLiterals;
+import ch.enterag.sqlparser.SqlFactory;
+import ch.enterag.sqlparser.expression.UnsignedLiteral;
 
 /*====================================================================*/
-/** MsSqlUnsignedLiteral implements the value translation from ISO 
+
+/** MsSqlUnsignedLiteral implements the value translation from ISO
  * SQL:2008 to MS SQL Server.
  * @author Hartwig Thomas
  */
 public class MsSqlUnsignedLiteral
-  extends UnsignedLiteral
-{
-  /*------------------------------------------------------------------*/
-  /** format the unsigned literal
-   * @return the MSSQL string corresponding to the fields of the unsigned literal.
-   */
-  @Override
-  public String format()
-  {
-    String sFormatted = null;
-    if (getBytes() != null)
-      sFormatted = MsSqlLiterals.formatBytesLiteral(getBytes());
-    else if (getDate() != null)
-      sFormatted = MsSqlLiterals.formatDateLiteral(getDate());
-    else if (getTime() != null)
-      sFormatted = MsSqlLiterals.formatTimeLiteral(getTime());
-    else if (getTimestamp() != null)
-      sFormatted = MsSqlLiterals.formatTimestampLiteral(getTimestamp());
-    else if (getInterval() != null)
-      sFormatted = MsSqlLiterals.formatIntervalLiteral(getInterval());
-    else if (getBoolean() != null)
-      sFormatted = MsSqlLiterals.formatBooleanLiteral(getBoolean());
-    else
-      sFormatted = super.format();
-    return sFormatted;
-  } /* format */
+        extends UnsignedLiteral {
+    /*------------------------------------------------------------------*/
 
-  /*------------------------------------------------------------------*/
-  /** constructor with factory only to be called by factory.
-   * @param sf factory.
-   */
-  public MsSqlUnsignedLiteral(SqlFactory sf)
-  {
-    super(sf);
-  } /* constructor */
+    /** format the unsigned literal
+     * @return the MSSQL string corresponding to the fields of the unsigned literal.
+     */
+    @Override
+    public String format() {
+        String sFormatted = null;
+        if (getBytes() != null)
+            sFormatted = MsSqlLiterals.formatBytesLiteral(getBytes());
+        else if (getDate() != null)
+            sFormatted = MsSqlLiterals.formatDateLiteral(getDate());
+        else if (getTime() != null)
+            sFormatted = MsSqlLiterals.formatTimeLiteral(getTime());
+        else if (getTimestamp() != null)
+            sFormatted = MsSqlLiterals.formatTimestampLiteral(getTimestamp());
+        else if (getInterval() != null)
+            sFormatted = MsSqlLiterals.formatIntervalLiteral(getInterval());
+        else if (getBoolean() != null)
+            sFormatted = MsSqlLiterals.formatBooleanLiteral(getBoolean());
+        else
+            sFormatted = super.format();
+        return sFormatted;
+    } /* format */
+
+    /*------------------------------------------------------------------*/
+
+    /** constructor with factory only to be called by factory.
+     * @param sf factory.
+     */
+    public MsSqlUnsignedLiteral(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 
 } /* class MsSqlUnsignedLiteral */

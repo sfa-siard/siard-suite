@@ -20,33 +20,36 @@ import ch.enterag.sqlparser.ddl.DropTableStatement;
 import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 
 /*====================================================================*/
+
 /** OracleDropTableStatement implements the formatting of DROP
  * TABLE statements
  * @author Simon Jutz
  */
 public class OracleDropTableStatement
-	extends DropTableStatement {
+        extends DropTableStatement {
     /*------------------------------------------------------------------*/
-	/**
-	 * format the drop schema statement
-	 * @return the SQL string corresponding to a drop schema statement
-	 */
-	@Override
-	public String format() {
-	    String sStatement = null; 
 
-	    sStatement = K.DROP.getKeyword() + sSP + K.TABLE.getKeyword() + sSP + getTableName().quote();
-	    if (getDropBehavior() == DropBehavior.CASCADE)
-	      sStatement += sSP + K.CASCADE.getKeyword() + sSP + K.CONSTRAINTS.getKeyword();
-	    
-	    return sStatement;
-	} /* format */
+    /**
+     * format the drop schema statement
+     * @return the SQL string corresponding to a drop schema statement
+     */
+    @Override
+    public String format() {
+        String sStatement = null;
+
+        sStatement = K.DROP.getKeyword() + sSP + K.TABLE.getKeyword() + sSP + getTableName().quote();
+        if (getDropBehavior() == DropBehavior.CASCADE)
+            sStatement += sSP + K.CASCADE.getKeyword() + sSP + K.CONSTRAINTS.getKeyword();
+
+        return sStatement;
+    } /* format */
 
     /*------------------------------------------------------------------*/
+
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
-	public OracleDropTableStatement(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
+    public OracleDropTableStatement(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 }

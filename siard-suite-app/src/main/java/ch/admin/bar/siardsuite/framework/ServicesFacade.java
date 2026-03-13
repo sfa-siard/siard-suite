@@ -46,16 +46,17 @@ public class ServicesFacade {
 
     public <T> T getService(final Class<T> serviceType) {
         val matchingServices = registeredServices.stream()
-                .flatMap(CastHelper.tryCastInStream(serviceType))
-                .collect(Collectors.toList());
+                                                 .flatMap(CastHelper.tryCastInStream(serviceType))
+                                                 .collect(Collectors.toList());
 
         if (matchingServices.size() > 1) {
             throw new IllegalStateException(String.format(
                     "Multiple candidates for service-type %s available: %s",
                     serviceType.getCanonicalName(),
                     matchingServices.stream()
-                            .map(candidate -> candidate.getClass().getCanonicalName())
-                            .collect(Collectors.joining("\n - "))));
+                                    .map(candidate -> candidate.getClass()
+                                                               .getCanonicalName())
+                                    .collect(Collectors.joining("\n - "))));
         }
 
         if (matchingServices.isEmpty()) {

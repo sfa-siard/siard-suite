@@ -11,7 +11,7 @@ public class SampleTable extends SampleColumn {
 
     SampleTable(Table table) {
         _table = table;
-    } 
+    }
 
     public int readTrigger(MetaTrigger mt, String sTrigger) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -22,7 +22,7 @@ public class SampleTable extends SampleColumn {
         printValue(sTrigger + " triggered action", mt.getTriggeredAction());
         printValue(sTrigger + " description", mt.getDescription());
         return iReturn;
-    } 
+    }
 
     public int readCheckConstraint(MetaCheckConstraint mcc, String sCheckConstraint) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -30,7 +30,7 @@ public class SampleTable extends SampleColumn {
         printValue(sCheckConstraint + " description", mcc.getDescription());
         printValue(sCheckConstraint + " condition", mcc.getCondition());
         return iReturn;
-    } 
+    }
 
     public int readForeignKey(MetaForeignKey mfk, String sForeignKey) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -46,7 +46,7 @@ public class SampleTable extends SampleColumn {
             printValue(sForeignKey + " referenced column[" + iReference + "]", mfk.getReferenced(iReference));
         }
         return iReturn;
-    } 
+    }
 
     public int readUniqueKey(MetaUniqueKey muk, String sUniqueKey) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -55,7 +55,7 @@ public class SampleTable extends SampleColumn {
         for (int iColumn = 0; iColumn < muk.getColumns(); iColumn++)
             printValue(sUniqueKey + " column[" + iColumn + "]", muk.getColumn(iColumn));
         return iReturn;
-    } 
+    }
 
     public int readMetaTable(MetaTable mt) {
         int iReturn = SampleArchive.iRETURN_OK;
@@ -90,7 +90,7 @@ public class SampleTable extends SampleColumn {
             readTrigger(mt.getMetaTrigger(iTrigger), sTrigger);
         }
         return iReturn;
-    } 
+    }
 
     public int readTable() {
         int iReturn = readMetaTable(_table.getMetaTable());
@@ -109,7 +109,7 @@ public class SampleTable extends SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private static final String sDESCRIPTION_SIMPLE = "Sample table with all predefined SQL data types";
     private static final String sPK_SIMPLE = "PKSIMPLE";
@@ -261,7 +261,7 @@ public class SampleTable extends SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int createSimpleTable() {
         int iReturn = createSimpleMetaTable(_table.getMetaTable());
@@ -280,7 +280,7 @@ public class SampleTable extends SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private static final String sDESCRIPTION_COMPLEX = "Sample table with DISTINCT, ROW, ARRAY and UDT types and recursion";
     private static final String sPK_COMPLEX = "PKCOMPLEX";
@@ -328,7 +328,7 @@ public class SampleTable extends SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int createComplexTable() {
         int iReturn = createComplexMetaTable(_table.getMetaTable());
@@ -347,7 +347,7 @@ public class SampleTable extends SampleColumn {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     public int createTable() {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -358,6 +358,6 @@ public class SampleTable extends SampleColumn {
                                              .getName()))
             iReturn = createComplexTable();
         return iReturn;
-    } 
+    }
 
 } 

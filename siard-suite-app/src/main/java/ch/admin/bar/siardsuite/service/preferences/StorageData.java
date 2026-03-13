@@ -23,6 +23,7 @@ public class StorageData<T> {
      * Returns the storage time in epoch milliseconds as string (for compatibility reasons)
      */
     public String getStoredAtTime() {
-        return storedAt.toInstant().toEpochMilli() + "";
+        return storedAt.toInstant()
+                       .toEpochMilli() + "";
     }
 }

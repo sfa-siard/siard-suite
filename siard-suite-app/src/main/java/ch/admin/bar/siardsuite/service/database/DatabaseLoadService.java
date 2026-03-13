@@ -30,8 +30,10 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
         this.instruction = instruction;
 
         this.setOnFailed(instruction.getOnFailure());
-        this.valueProperty().addListener(instruction.getOnStepCompleted());
-        this.progressProperty().addListener(instruction.getOnProgress());
+        this.valueProperty()
+            .addListener(instruction.getOnStepCompleted());
+        this.progressProperty()
+            .addListener(instruction.getOnProgress());
     }
 
     @Override
@@ -56,11 +58,12 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
         @Override
         protected ObservableList<Pair<String, Long>> call() throws Exception {
             val connection = connectionFactory.getOrCreateConnection(instruction.getConnectionData());
-            val timeout = userPreferences.getStoredOptions().getQueryTimeout();
+            val timeout = userPreferences.getStoredOptions()
+                                         .getQueryTimeout();
 
             val archive = instruction.getSaveAt()
-                    .map(archiveHandler::init)
-                    .orElseGet(archiveHandler::init);
+                                     .map(archiveHandler::init)
+                                     .orElseGet(archiveHandler::init);
 
             val metaDataFromDb = MetaDataFromDb.newInstance(connection.getMetaData(), archive.getMetaData());
             metaDataFromDb.setQueryTimeout(timeout);
@@ -71,7 +74,7 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
             downloadMetadata(metaDataFromDb);
 
             instruction.getExternalLobs()
-                    .ifPresent(uri -> archiveHandler.setExternalLobFolder(archive, uri));
+                       .ifPresent(uri -> archiveHandler.setExternalLobFolder(archive, uri));
 
             ObservableList<Pair<String, Long>> progressData = FXCollections.observableArrayList();
             if (!instruction.getLoadOnlyMetadata()) {
@@ -85,10 +88,13 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
                 for (int i = 0; i < archive.getSchemas(); i++) {
                     Schema schema = archive.getSchema(i);
                     for (int y = 0; y < schema.getTables(); y++) {
-                        progressData.add(new Pair<>(schema.getMetaSchema().getName() + "." + schema.getTable(y)
-                                .getMetaTable()
-                                .getName(),
-                                schema.getTable(y).getMetaTable().getRows()));
+                        progressData.add(new Pair<>(schema.getMetaSchema()
+                                                          .getName() + "." + schema.getTable(y)
+                                                                                   .getMetaTable()
+                                                                                   .getName(),
+                                                    schema.getTable(y)
+                                                          .getMetaTable()
+                                                          .getRows()));
                     }
                 }
                 updateValue(progressData);
@@ -98,14 +104,17 @@ public class DatabaseLoadService extends Service<ObservableList<Pair<String, Lon
             Workaround: It seems that the default onSucceed mechanism sometimes is not very stable in java fx 8.
             For that reason, the result is returned with a callback.
              */
-            Platform.runLater(() -> instruction.getOnSuccess().accept(archive));
+            Platform.runLater(() -> instruction.getOnSuccess()
+                                               .accept(archive));
 
             return progressData;
         }
 
         private void downloadMetadata(MetaDataFromDb metaDataFromDb) throws Exception {
-            if (instruction.getConnectionData().getProperties() instanceof ServerBasedDbmsConnectionProperties) {
-                String schemaName = ((ServerBasedDbmsConnectionProperties) instruction.getConnectionData().getProperties()).getSchema();
+            if (instruction.getConnectionData()
+                           .getProperties() instanceof ServerBasedDbmsConnectionProperties) {
+                String schemaName = ((ServerBasedDbmsConnectionProperties) instruction.getConnectionData()
+                                                                                      .getProperties()).getSchema();
                 metaDataFromDb.download(
                         instruction.getViewsAsTables(),
                         false,

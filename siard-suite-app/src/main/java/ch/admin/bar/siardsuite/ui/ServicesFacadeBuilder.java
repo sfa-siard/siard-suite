@@ -2,18 +2,10 @@ package ch.admin.bar.siardsuite.ui;
 
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.framework.errors.Failure;
-import ch.admin.bar.siardsuite.framework.errors.FailureDisplay;
-import ch.admin.bar.siardsuite.framework.errors.HandlingInstruction;
-import ch.admin.bar.siardsuite.framework.errors.TypeAndMessageMatcher;
-import ch.admin.bar.siardsuite.framework.errors.TypeMatcher;
+import ch.admin.bar.siardsuite.framework.errors.*;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.service.ArchiveHandler;
-import ch.admin.bar.siardsuite.service.DbInteractionService;
-import ch.admin.bar.siardsuite.service.FilesService;
-import ch.admin.bar.siardsuite.service.InstallationService;
-import ch.admin.bar.siardsuite.service.LogService;
+import ch.admin.bar.siardsuite.service.*;
 import ch.admin.bar.siardsuite.service.database.DatabaseConnectionFactory;
 import ch.admin.bar.siardsuite.service.database.DbmsRegistry;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
@@ -38,71 +30,71 @@ public class ServicesFacadeBuilder {
     private static final I18nKey CORRUPTED_SIARD_ARCHIVE_MESSAGE = I18nKey.of("errors.corruptedSiardFile.message");
 
     private static final HandlingInstruction ACCESS_DENIED = HandlingInstruction.builder()
-            .matcher(TypeAndMessageMatcher.builder()
-                    .expectedExceptionType(java.sql.SQLException.class)
-                    .expectedTextFragment("Access denied for user")
-                    .build())
-            .title(DisplayableText.of(ACCESS_DENIED_TITLE))
-            .message(DisplayableText.of(ACCESS_DENIED_MESSAGE))
-            .build();
+                                                                                .matcher(TypeAndMessageMatcher.builder()
+                                                                                                              .expectedExceptionType(java.sql.SQLException.class)
+                                                                                                              .expectedTextFragment("Access denied for user")
+                                                                                                              .build())
+                                                                                .title(DisplayableText.of(ACCESS_DENIED_TITLE))
+                                                                                .message(DisplayableText.of(ACCESS_DENIED_MESSAGE))
+                                                                                .build();
 
     private static final HandlingInstruction UNKNOWN_HOST = HandlingInstruction.builder()
-            .matcher(TypeMatcher.builder()
-                    .expectedExceptionType(java.net.UnknownHostException.class)
-                    .build())
-            .title(DisplayableText.of(UNKNOWN_HOST_TITLE))
-            .message(DisplayableText.of(UNKNOWN_HOST_MESSAGE))
-            .build();
+                                                                               .matcher(TypeMatcher.builder()
+                                                                                                   .expectedExceptionType(java.net.UnknownHostException.class)
+                                                                                                   .build())
+                                                                               .title(DisplayableText.of(UNKNOWN_HOST_TITLE))
+                                                                               .message(DisplayableText.of(UNKNOWN_HOST_MESSAGE))
+                                                                               .build();
 
     private static final HandlingInstruction CONNECTION_REFUSED = HandlingInstruction.builder()
-            .matcher(TypeMatcher.builder()
-                    .expectedExceptionType(java.net.ConnectException.class)
-                    .build())
-            .title(DisplayableText.of(CONNECTION_REFUSED_TITLE))
-            .message(DisplayableText.of(CONNECTION_REFUSED_MESSAGE))
-            .build();
+                                                                                     .matcher(TypeMatcher.builder()
+                                                                                                         .expectedExceptionType(java.net.ConnectException.class)
+                                                                                                         .build())
+                                                                                     .title(DisplayableText.of(CONNECTION_REFUSED_TITLE))
+                                                                                     .message(DisplayableText.of(CONNECTION_REFUSED_MESSAGE))
+                                                                                     .build();
 
     private static final HandlingInstruction CORRUPTED_SIARD_ARCHIVE = HandlingInstruction.builder()
-            .matcher(TypeAndMessageMatcher.builder()
-                    .expectedExceptionType(IOException.class)
-                    .expectedTextFragment("Invalid SIARD file")
-                    .build())
-            .title(DisplayableText.of(CORRUPTED_SIARD_ARCHIVE_TITLE))
-            .message(DisplayableText.of(CORRUPTED_SIARD_ARCHIVE_MESSAGE))
-            .build();
+                                                                                          .matcher(TypeAndMessageMatcher.builder()
+                                                                                                                        .expectedExceptionType(IOException.class)
+                                                                                                                        .expectedTextFragment("Invalid SIARD file")
+                                                                                                                        .build())
+                                                                                          .title(DisplayableText.of(CORRUPTED_SIARD_ARCHIVE_TITLE))
+                                                                                          .message(DisplayableText.of(CORRUPTED_SIARD_ARCHIVE_MESSAGE))
+                                                                                          .build();
 
     private static final I18nKey NO_SCHEMA_TITLE = I18nKey.of("errors.noSchema.title");
     private static final I18nKey NO_SCHEMA_MESSAGE = I18nKey.of("errors.noSchema.message");
     private static final HandlingInstruction NO_SCHEMA = HandlingInstruction.builder()
-            .matcher(TypeAndMessageMatcher.builder()
-                    .expectedExceptionType(org.xml.sax.SAXParseException.class)
-                    .expectedTextFragment("The content of element 'schemas' is not complete")
-                    .build())
-            .title(DisplayableText.of(NO_SCHEMA_TITLE))
-            .message(DisplayableText.of(NO_SCHEMA_MESSAGE))
-            .build();
+                                                                            .matcher(TypeAndMessageMatcher.builder()
+                                                                                                          .expectedExceptionType(org.xml.sax.SAXParseException.class)
+                                                                                                          .expectedTextFragment("The content of element 'schemas' is not complete")
+                                                                                                          .build())
+                                                                            .title(DisplayableText.of(NO_SCHEMA_TITLE))
+                                                                            .message(DisplayableText.of(NO_SCHEMA_MESSAGE))
+                                                                            .build();
 
     private static final I18nKey NO_COLUMNS_TITLE = I18nKey.of("errors.noColumns.title");
     private static final I18nKey NO_COLUMNS_MESSAGE = I18nKey.of("errors.noColumns.message");
     private static final HandlingInstruction NO_COLUMNS_AVAILABLE = HandlingInstruction.builder()
-            .matcher(TypeAndMessageMatcher.builder()
-                    .expectedExceptionType(org.xml.sax.SAXParseException.class)
-                    .expectedTextFragment("The content of element 'columns' is not complete")
-                    .build())
-            .title(DisplayableText.of(NO_COLUMNS_TITLE))
-            .message(DisplayableText.of(NO_COLUMNS_MESSAGE))
-            .build();
+                                                                                       .matcher(TypeAndMessageMatcher.builder()
+                                                                                                                     .expectedExceptionType(org.xml.sax.SAXParseException.class)
+                                                                                                                     .expectedTextFragment("The content of element 'columns' is not complete")
+                                                                                                                     .build())
+                                                                                       .title(DisplayableText.of(NO_COLUMNS_TITLE))
+                                                                                       .message(DisplayableText.of(NO_COLUMNS_MESSAGE))
+                                                                                       .build();
 
     private static final I18nKey NO_USER_TITLE = I18nKey.of("errors.noUser.title");
     private static final I18nKey NO_USER_MESSAGE = I18nKey.of("errors.noUser.message");
     private static final HandlingInstruction NO_USER = HandlingInstruction.builder()
-            .matcher(TypeAndMessageMatcher.builder()
-                    .expectedExceptionType(org.xml.sax.SAXParseException.class)
-                    .expectedTextFragment("The content of element 'users' is not complete")
-                    .build())
-            .title(DisplayableText.of(NO_USER_TITLE))
-            .message(DisplayableText.of(NO_USER_MESSAGE))
-            .build();
+                                                                          .matcher(TypeAndMessageMatcher.builder()
+                                                                                                        .expectedExceptionType(org.xml.sax.SAXParseException.class)
+                                                                                                        .expectedTextFragment("The content of element 'users' is not complete")
+                                                                                                        .build())
+                                                                          .title(DisplayableText.of(NO_USER_TITLE))
+                                                                          .message(DisplayableText.of(NO_USER_MESSAGE))
+                                                                          .build();
 
     public ServicesFacade build(final RootStage stage) {
         val archiveHandler = new ArchiveHandler();
@@ -118,27 +110,27 @@ public class ServicesFacadeBuilder {
         val failureDisplay = new ShowDialogFailureDisplay();
 
         val services = ServicesFacade.builder()
-                .viewDisplay(stage)
-                .dialogDisplay(stage)
-                .failureDisplay(failureDisplay)
+                                     .viewDisplay(stage)
+                                     .dialogDisplay(stage)
+                                     .failureDisplay(failureDisplay)
 
-                .service(archiveHandler)
-                .service(dbmsRegistry)
-                .service(installationService)
-                .service(userPreferences)
-                .service(filesService)
-                .service(dbInteractionService)
-                .service(logService)
+                                     .service(archiveHandler)
+                                     .service(dbmsRegistry)
+                                     .service(installationService)
+                                     .service(userPreferences)
+                                     .service(filesService)
+                                     .service(dbInteractionService)
+                                     .service(logService)
 
-                .errorHandler(ACCESS_DENIED)
-                .errorHandler(UNKNOWN_HOST)
-                .errorHandler(CONNECTION_REFUSED)
-                .errorHandler(CORRUPTED_SIARD_ARCHIVE)
-                .errorHandler(NO_SCHEMA)
-                .errorHandler(NO_USER)
-                .errorHandler(NO_COLUMNS_AVAILABLE)
+                                     .errorHandler(ACCESS_DENIED)
+                                     .errorHandler(UNKNOWN_HOST)
+                                     .errorHandler(CONNECTION_REFUSED)
+                                     .errorHandler(CORRUPTED_SIARD_ARCHIVE)
+                                     .errorHandler(NO_SCHEMA)
+                                     .errorHandler(NO_USER)
+                                     .errorHandler(NO_COLUMNS_AVAILABLE)
 
-                .build();
+                                     .build();
 
         failureDisplay.setDialogs(services.dialogs());
 

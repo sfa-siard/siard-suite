@@ -59,7 +59,7 @@ public abstract class MetaSearchImpl
     public int getFoundElement()
             throws IOException {
         return _iFoundElement;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -68,7 +68,7 @@ public abstract class MetaSearchImpl
     public String getFoundString(DU du)
             throws IOException {
         return getSearchElements(du)[_iFoundElement];
-    } 
+    }
 
     /**
      * offset in element at position where string was found if _mdFind == this
@@ -131,7 +131,7 @@ public abstract class MetaSearchImpl
                 amsSubMeta[iSubMeta].find(_sFindString, _bMatchCase);
         }
         _il.exit();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -147,7 +147,7 @@ public abstract class MetaSearchImpl
             _il.event("Find string: " + _sFindString);
             /* skip previous find */
             _iFoundOffset++;
-            
+
             String[] asElement = getSearchElements(du);
             while ((msFind == null) && (_iFoundElement < asElement.length)) {
                 int iPos = -1;
@@ -188,7 +188,7 @@ public abstract class MetaSearchImpl
         }
         _il.exit(String.valueOf(msFind));
         return msFind;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -196,6 +196,6 @@ public abstract class MetaSearchImpl
     @Override
     public boolean canFindNext() {
         return (_sFindString != null);
-    } 
+    }
 
 } 

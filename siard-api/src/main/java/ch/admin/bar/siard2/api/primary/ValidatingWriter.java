@@ -23,47 +23,47 @@ public class ValidatingWriter
             } catch (UnsupportedEncodingException usee) {
             }
         }
-    } 
+    }
 
     @Override
     public void write(int iChar)
             throws IOException {
         _wr.write(iChar);
         _lWritten++;
-    } 
+    }
 
     @Override
     public void write(char[] cbuf)
             throws IOException {
         _wr.write(cbuf);
         _lWritten = _lWritten + cbuf.length;
-    } 
+    }
 
     @Override
     public void write(char[] cbuf, int iOffset, int iLength)
             throws IOException {
         _wr.write(cbuf, iOffset, iLength);
         _lWritten = _lWritten + iLength;
-    } 
+    }
 
     @Override
     public void write(String s)
             throws IOException {
         _wr.write(s);
         _lWritten = _lWritten + s.length();
-    } 
+    }
 
     @Override
     public void write(String s, int iOffset, int iLength)
             throws IOException {
         _wr.write(s, iOffset, iLength);
         _lWritten = _lWritten + iLength;
-    } 
+    }
 
     @Override
     public void flush() throws IOException {
         _wr.flush();
-    } 
+    }
 
     @Override
     public void close() throws IOException {
@@ -73,6 +73,6 @@ public class ValidatingWriter
             XU.toXml(swr.toString(), _el);
         }
         _el.setAttribute(ArchiveImpl._sATTR_LENGTH, String.valueOf(_lWritten));
-    } 
+    }
 
 } 

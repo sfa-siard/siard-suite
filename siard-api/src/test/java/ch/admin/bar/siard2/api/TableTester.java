@@ -11,9 +11,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
@@ -282,33 +279,33 @@ public class TableTester {
             TableRecordRetainer rr = _tabNew.createTableRecords();
             TableRecord tableRecord = rr.create();
             tableRecord.getCell(0)
-                  .setInt(5);
+                       .setInt(5);
             tableRecord.getCell(1)
-                  .setString("aber");
+                       .setString("aber");
             rr.put(tableRecord);
             tableRecord = rr.create();
             tableRecord.getCell(0)
-                  .setInt(1);
+                       .setInt(1);
             tableRecord.getCell(1)
-                  .setString("ähh");
+                       .setString("ähh");
             rr.put(tableRecord);
             tableRecord = rr.create();
             tableRecord.getCell(0)
-                  .setInt(3);
+                       .setInt(3);
             tableRecord.getCell(1)
-                  .setString("ober");
+                       .setString("ober");
             rr.put(tableRecord);
             tableRecord = rr.create();
             tableRecord.getCell(0)
-                  .setInt(1);
+                       .setInt(1);
             tableRecord.getCell(1)
-                  .setString("über");
+                       .setString("über");
             rr.put(tableRecord);
             tableRecord = rr.create();
             tableRecord.getCell(0)
-                  .setInt(4);
+                       .setInt(4);
             tableRecord.getCell(1)
-                  .setString("uber");
+                       .setString("uber");
             rr.put(tableRecord);
             rr.close();
             setMandatoryMetaData(_tabNew.getParentSchema());
@@ -325,8 +322,8 @@ public class TableTester {
                                                    .getRows(); iRecord++) {
                 tableRecord = rd.get();
                 System.out.println(tableRecord.getCell(0)
-                                         .getInt() + ", " + tableRecord.getCell(1)
-                                                                                  .getString());
+                                              .getInt() + ", " + tableRecord.getCell(1)
+                                                                            .getString());
             }
             rd.close();
             System.out.println("Sorted by string:");
@@ -336,8 +333,8 @@ public class TableTester {
                                                    .getRows(); iRecord++) {
                 tableRecord = rd.get();
                 System.out.println(tableRecord.getCell(0)
-                                         .getInt() + ", " + tableRecord.getCell(1)
-                                                                                  .getString());
+                                              .getInt() + ", " + tableRecord.getCell(1)
+                                                                            .getString());
             }
             rd.close();
             System.out.println("And then decending by integer:");
@@ -347,8 +344,8 @@ public class TableTester {
                                                    .getRows(); iRecord++) {
                 tableRecord = rd.get();
                 System.out.println(tableRecord.getCell(0)
-                                         .getInt() + ", " + tableRecord.getCell(1)
-                                                                                  .getString());
+                                              .getInt() + ", " + tableRecord.getCell(1)
+                                                                            .getString());
             }
             rd.close();
         } catch (IOException ie) {

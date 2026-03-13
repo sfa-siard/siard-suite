@@ -1,22 +1,39 @@
 package ch.admin.bar.siard2.oracle.legacy;
 
-import java.io.*;
-import java.math.*;
-import java.sql.*;
-import java.sql.Date;
-import java.text.*;
-import java.util.*;
-
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.datatype.*;
+import ch.enterag.sqlparser.BaseSqlFactory;
+import ch.enterag.sqlparser.Interval;
+import ch.enterag.sqlparser.SqlFactory;
+import ch.enterag.sqlparser.datatype.DataType;
+import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.ddl.*;
-import ch.enterag.sqlparser.ddl.enums.*;
-import ch.enterag.sqlparser.dml.*;
+import ch.enterag.sqlparser.ddl.enums.ColumnConstraintType;
+import ch.enterag.sqlparser.ddl.enums.DropBehavior;
+import ch.enterag.sqlparser.ddl.enums.ReferentialAction;
+import ch.enterag.sqlparser.ddl.enums.TableConstraintType;
+import ch.enterag.sqlparser.dml.AssignedRow;
+import ch.enterag.sqlparser.dml.DeleteStatement;
+import ch.enterag.sqlparser.dml.InsertStatement;
+import ch.enterag.sqlparser.dml.UpdateSource;
 import ch.enterag.sqlparser.expression.*;
-import ch.enterag.sqlparser.expression.enums.*;
+import ch.enterag.sqlparser.expression.enums.BooleanLiteral;
+import ch.enterag.sqlparser.expression.enums.GeneralValue;
+import ch.enterag.sqlparser.expression.enums.Sign;
 import ch.enterag.sqlparser.identifier.*;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.base.TestUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.*;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestSqlDatabase {
     public static final String _sTEST_SCHEMA = "TESTSQLUSER";
@@ -331,7 +348,7 @@ public class TestSqlDatabase {
         IdList ilPrimary = new IdList();
         for (String s : listPrimary)
             ilPrimary.get()
-                    .add(s);
+                     .add(s);
         TableConstraintDefinition tcd = _sf.newTableConstraintDefinition();
         tcd.initPrimaryKey(new QualifiedId(null, null, sPkName), ilPrimary);
         TableElement te = _sf.newTableElement();
@@ -343,11 +360,11 @@ public class TestSqlDatabase {
         IdList ilForeign = new IdList();
         for (String s : listForeign)
             ilForeign.get()
-                    .add(s);
+                     .add(s);
         IdList ilReferenced = new IdList();
         for (String s : listReferenced)
             ilReferenced.get()
-                    .add(s);
+                        .add(s);
         TableConstraintDefinition tcd = _sf.newTableConstraintDefinition();
         tcd.initialize(new QualifiedId(null, null, sFkName), TableConstraintType.FOREIGN_KEY, ilForeign, qiTableReferenced, ilReferenced, null, ReferentialAction.CASCADE, null, null, null, null);
         TableElement te = _sf.newTableElement();
@@ -371,7 +388,7 @@ public class TestSqlDatabase {
         IdList ilColumnNames = new IdList();
         for (TestColumnDefinition tcd : listCd) {
             ilColumnNames.get()
-                    .add(tcd.getName());
+                         .add(tcd.getName());
         }
         CreateViewStatement cvs = _sf.newCreateViewStatement();
         cvs.initialize(false, qiView, ilColumnNames, new QualifiedId(), new ArrayList<>(), new QualifiedId(), qe, false, null);
@@ -394,9 +411,9 @@ public class TestSqlDatabase {
         List<TestColumnDefinition> listLobs = new ArrayList<>();
         for (TestColumnDefinition tcd : listCd) {
             ilColumns.get()
-                    .add(tcd.getName());
+                     .add(tcd.getName());
             ar.getUpdateSources()
-                    .add(getUpdateSource(tcd, listLobs));
+              .add(getUpdateSource(tcd, listLobs));
         }
         InsertStatement is = _sf.newInsertStatement();
         is.initialize(qiTable, ilColumns, listValues, null, null, false);
@@ -438,7 +455,7 @@ public class TestSqlDatabase {
         gvs.initialize(new ColonId(), new ColonId(), new IdChain(), GeneralValue.QUESTION_MARK);
         CommonValueExpression cve = getCommonValueExpression();
         cve.getValueExpressionPrimary()
-                .setGeneralValueSpecification(gvs);
+           .setGeneralValueSpecification(gvs);
         return cve;
     }
 
@@ -466,8 +483,8 @@ public class TestSqlDatabase {
         if (o instanceof String) {
             String s = (String) o;
             if (s.length() < 256) cve.getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initCharacterString(s);
+                                     .getUnsignedLit()
+                                     .initCharacterString(s);
             else {
                 cve = getCommonValueExpressionDynamic();
                 listLobs.add(tcd);
@@ -475,8 +492,8 @@ public class TestSqlDatabase {
         } else if (o instanceof byte[]) {
             byte[] buf = (byte[]) o;
             if (buf.length < 256) cve.getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initBytes(buf);
+                                     .getUnsignedLit()
+                                     .initBytes(buf);
             else {
                 cve = getCommonValueExpressionDynamic();
                 listLobs.add(tcd);
@@ -484,82 +501,82 @@ public class TestSqlDatabase {
         } else if (o instanceof BigDecimal) {
             BigDecimal bd = (BigDecimal) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initBigDecimal(bd.abs());
+               .getValueExpressionPrimary()
+               .getUnsignedLit()
+               .initBigDecimal(bd.abs());
             if (bd.signum() < 0) cve.getNumericValueExpression()
-                    .setSign(Sign.MINUS_SIGN);
+                                    .setSign(Sign.MINUS_SIGN);
         } else if (o instanceof BigInteger) {
             BigInteger bi = (BigInteger) o;
             BigDecimal bd = new BigDecimal(bi);
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initBigDecimal(bd.abs());
+               .getValueExpressionPrimary()
+               .getUnsignedLit()
+               .initBigDecimal(bd.abs());
             if (bd.signum() < 0) cve.getNumericValueExpression()
-                    .setSign(Sign.MINUS_SIGN);
+                                    .setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Short) {
             short sh = (Short) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initInteger(Math.abs(sh));
+               .getValueExpressionPrimary()
+               .getUnsignedLit()
+               .initInteger(Math.abs(sh));
             if (sh < 0) cve.getNumericValueExpression()
-                    .setSign(Sign.MINUS_SIGN);
+                           .setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Integer) {
             int i = (Integer) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initInteger(Math.abs(i));
+               .getValueExpressionPrimary()
+               .getUnsignedLit()
+               .initInteger(Math.abs(i));
             if (i < 0) cve.getNumericValueExpression()
-                    .setSign(Sign.MINUS_SIGN);
+                          .setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Long) {
             long l = (Long) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initLong(Math.abs(l));
+               .getValueExpressionPrimary()
+               .getUnsignedLit()
+               .initLong(Math.abs(l));
             if (l < 0) cve.getNumericValueExpression()
-                    .setSign(Sign.MINUS_SIGN);
+                          .setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Float) {
             double d = ((Float) o).doubleValue();
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initDouble(Math.abs(d));
+               .getValueExpressionPrimary()
+               .getUnsignedLit()
+               .initDouble(Math.abs(d));
             if (d < 0) cve.getNumericValueExpression()
-                    .setSign(Sign.MINUS_SIGN);
+                          .setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Double) {
             double d = (Double) o;
             cve.getNumericValueExpression()
-                    .getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initDouble(Math.abs(d));
+               .getValueExpressionPrimary()
+               .getUnsignedLit()
+               .initDouble(Math.abs(d));
             if (d < 0) cve.getNumericValueExpression()
-                    .setSign(Sign.MINUS_SIGN);
+                          .setSign(Sign.MINUS_SIGN);
         } else if (o instanceof Boolean) {
             boolean b = (Boolean) o;
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initBoolean(b ? BooleanLiteral.TRUE : BooleanLiteral.FALSE);
+               .getUnsignedLit()
+               .initBoolean(b ? BooleanLiteral.TRUE : BooleanLiteral.FALSE);
         } else if (o instanceof Date) {
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initDate((Date) o);
+               .getUnsignedLit()
+               .initDate((Date) o);
         } else if (o instanceof Time) {
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initTime((Time) o);
+               .getUnsignedLit()
+               .initTime((Time) o);
         } else if (o instanceof Timestamp) {
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initTimestamp((Timestamp) o);
+               .getUnsignedLit()
+               .initTimestamp((Timestamp) o);
         } else if (o instanceof Interval) {
             Interval iv = (Interval) o;
             cve.getValueExpressionPrimary()
-                    .getUnsignedLit()
-                    .initInterval(iv);
+               .getUnsignedLit()
+               .initInterval(iv);
         } else if (o instanceof List<?>) {
             try {
                 QualifiedId qiType = new QualifiedId(tcd.getType());
@@ -569,12 +586,12 @@ public class TestSqlDatabase {
                     listAttributeValues.add(getAttributeValue(tcdAttribute, listLobs));
                 }
                 cve.getValueExpressionPrimary()
-                        .initUdtValueConstructor(qiType, listAttributeValues);
+                   .initUdtValueConstructor(qiType, listAttributeValues);
             } catch (ParseException pe) {
                 throw new SQLException("Type name " + tcd.getType() + " could not be parsed!", pe);
             }
         } else throw new SQLException("Unexpected value type " + o.getClass()
-                .getName() + "!");
+                                                                  .getName() + "!");
         ve.initialize(cve, null, null);
         return ve;
     }

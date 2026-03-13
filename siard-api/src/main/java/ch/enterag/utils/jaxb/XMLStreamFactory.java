@@ -54,7 +54,7 @@ public abstract class XMLStreamFactory {
         XMLStreamReader2 xsr = (XMLStreamReader2) xif.createXMLStreamReader(isXml);
         _il.exit(xsr);
         return xsr;
-    } 
+    }
 
     /**
      * returns a validating customized XMLStreamReader.
@@ -82,7 +82,7 @@ public abstract class XMLStreamFactory {
         }
         _il.exit(xsr);
         return xsr;
-    } 
+    }
 
     /**
      * returns a validating customized XMLStreamReader.
@@ -109,7 +109,7 @@ public abstract class XMLStreamFactory {
         }
         _il.exit(xsr);
         return xsr;
-    } 
+    }
 
     /**
      * returns a customized XMLStreamWriter.
@@ -126,6 +126,6 @@ public abstract class XMLStreamFactory {
         XMLStreamWriter xsw = xof.createXMLStreamWriter(osXml, SU.sUTF8_CHARSET_NAME);
         _il.exit(xsw);
         return xsw;
-    } 
+    }
 
 } 

@@ -20,7 +20,8 @@ public class RenderableForm<T> {
 
     @NonNull
     @Builder.Default
-    AfterSaveChangesAction<T> afterSaveAction = edited -> {};
+    AfterSaveChangesAction<T> afterSaveAction = edited -> {
+    };
 
     @Builder.Default
     boolean readOnlyForm = false;

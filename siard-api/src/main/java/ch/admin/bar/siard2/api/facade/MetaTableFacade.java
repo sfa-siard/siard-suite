@@ -5,7 +5,6 @@ import ch.admin.bar.siard2.api.MetaTable;
 
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 // provides a simplified API to MetaTable
 public class MetaTableFacade {
@@ -18,6 +17,8 @@ public class MetaTableFacade {
 
     public List<MetaColumn> getMetaColums() {
         int numberOfColumns = metaTable.getMetaColumns();
-        return IntStream.range(0, numberOfColumns).mapToObj(metaTable::getMetaColumn).toList();
+        return IntStream.range(0, numberOfColumns)
+                        .mapToObj(metaTable::getMetaColumn)
+                        .toList();
     }
 }

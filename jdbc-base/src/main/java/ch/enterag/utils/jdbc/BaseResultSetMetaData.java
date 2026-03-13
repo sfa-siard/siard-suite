@@ -11,7 +11,8 @@ Created    : 11.05.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import java.sql.*;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 /**
  * BaseResultSetMetaData implements wrapped ResultSetMetaData and serves

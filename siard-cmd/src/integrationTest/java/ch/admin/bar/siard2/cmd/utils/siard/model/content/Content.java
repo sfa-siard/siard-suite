@@ -7,13 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.Singular;
-import lombok.Value;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
-import lombok.val;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +16,8 @@ import java.util.stream.Collectors;
 @Value
 public class Content implements Updatable<Content> {
 
-    @NonNull List<Table> tables;
+    @NonNull
+    List<Table> tables;
 
     @Override
     public Content applyUpdates(Updater updater) {
@@ -29,15 +25,17 @@ public class Content implements Updatable<Content> {
 
         return new Content(
                 updatedThis.tables.stream()
-                        .map(table -> table.applyUpdates(updater))
-                        .collect(Collectors.toList()));
+                                  .map(table -> table.applyUpdates(updater))
+                                  .collect(Collectors.toList()));
     }
 
     public Table findTable(final FolderId schemaFolder, final FolderId tableFolder) {
         return tables.stream()
-                .filter(table -> table.getSchemaFolder().equals(schemaFolder) && table.getTableFolder().equals(tableFolder))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(String.format("No table in folders %s.%s found", schemaFolder.getValue(), tableFolder.getValue())));
+                     .filter(table -> table.getSchemaFolder()
+                                           .equals(schemaFolder) && table.getTableFolder()
+                                                                         .equals(tableFolder))
+                     .findAny()
+                     .orElseThrow(() -> new IllegalArgumentException(String.format("No table in folders %s.%s found", schemaFolder.getValue(), tableFolder.getValue())));
     }
 
     @Value
@@ -76,8 +74,8 @@ public class Content implements Updatable<Content> {
             val updatedThis = updater.applyUpdate(this);
 
             return new TableContent(updatedThis.rows.stream()
-                    .map(tableRow -> tableRow.applyUpdates(updater))
-                    .collect(Collectors.toList()));
+                                                    .map(tableRow -> tableRow.applyUpdates(updater))
+                                                    .collect(Collectors.toList()));
         }
     }
 
@@ -96,8 +94,8 @@ public class Content implements Updatable<Content> {
 
             return new TableRow(
                     updatedThis.cells.stream()
-                            .map(tableCell -> tableCell.applyUpdates(updater))
-                            .collect(Collectors.toList()));
+                                     .map(tableCell -> tableCell.applyUpdates(updater))
+                                     .collect(Collectors.toList()));
         }
     }
 

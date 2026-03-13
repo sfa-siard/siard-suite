@@ -46,7 +46,7 @@ public class MetaPrivilegeImpl
      */
     private ArchiveImpl getArchive() {
         return (ArchiveImpl) getParentMetaData().getArchive();
-    } 
+    }
 
     /**
      * set template meta data.
@@ -56,7 +56,7 @@ public class MetaPrivilegeImpl
     public void setTemplate(PrivilegeType ptTemplate) {
         if (!SU.isNotEmpty(getDescription()))
             setDescription(XU.fromXml(ptTemplate.getDescription()));
-    } 
+    }
 
     /**
      * constructor
@@ -67,7 +67,7 @@ public class MetaPrivilegeImpl
     private MetaPrivilegeImpl(MetaData mdParent, PrivilegeType pt) {
         _mdParent = mdParent;
         _pt = pt;
-    } 
+    }
 
     /**
      * factory
@@ -78,9 +78,8 @@ public class MetaPrivilegeImpl
      */
     public static MetaPrivilege newInstance(MetaData mdParent, PrivilegeType pt) {
         return new MetaPrivilegeImpl(mdParent, pt);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -90,7 +89,6 @@ public class MetaPrivilegeImpl
         return XU.fromXml(_pt.getType());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -100,7 +98,6 @@ public class MetaPrivilegeImpl
         return XU.fromXml(_pt.getObject());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -110,7 +107,6 @@ public class MetaPrivilegeImpl
         return XU.fromXml(_pt.getGrantor());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -120,7 +116,6 @@ public class MetaPrivilegeImpl
         return XU.fromXml(_pt.getGrantee());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -138,7 +133,7 @@ public class MetaPrivilegeImpl
                 throw new IOException("Invalid privilege option value!");
         } else
             throw new IOException("Privilege option value cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -150,9 +145,8 @@ public class MetaPrivilegeImpl
             sOption = _pt.getOption()
                          .value();
         return sOption;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -161,7 +155,7 @@ public class MetaPrivilegeImpl
     public void setDescription(String sDescription) {
         if (getArchive().isMetaDataDifferent(getDescription(), sDescription))
             _pt.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -186,7 +180,7 @@ public class MetaPrivilegeImpl
                         getOption(),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -215,6 +209,6 @@ public class MetaPrivilegeImpl
             sb.append(getObject());
         }
         return sb.toString();
-    } 
+    }
 
 } 

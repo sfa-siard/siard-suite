@@ -18,24 +18,26 @@ import ch.enterag.sqlparser.ddl.MethodSpecification;
 
 /*====================================================================*/
 public class OracleMethodSpecification
-	extends MethodSpecification {
+        extends MethodSpecification {
 
     /*------------------------------------------------------------------*/
-	/**
-	 * format the method specification
-	 * @return the SQL string corresponding to a method specification
-	 */
-	@Override
-	public String format() {
-		String sDefinition = "";
-		return sDefinition;
-	} /* format */
+
+    /**
+     * format the method specification
+     * @return the SQL string corresponding to a method specification
+     */
+    @Override
+    public String format() {
+        String sDefinition = "";
+        return sDefinition;
+    } /* format */
 
     /*------------------------------------------------------------------*/
+
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
-	public OracleMethodSpecification(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
+    public OracleMethodSpecification(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 }

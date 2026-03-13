@@ -44,23 +44,26 @@ public class SchemaNameUnderscoreIT {
         val metadataExplorer = siardArchive.exploreMetadata();
 
         val testTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("employee_data"))
-                .tableId(Id.of("test_table"))
-                .build());
-        Assertions.assertThat(testTable.getName()).isEqualTo(Id.of("test_table"));
+                                                                       .schemaId(Id.of("employee_data"))
+                                                                       .tableId(Id.of("test_table"))
+                                                                       .build());
+        Assertions.assertThat(testTable.getName())
+                  .isEqualTo(Id.of("test_table"));
 
         val jobHistoryTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("employee_data"))
-                .tableId(Id.of("job_history"))
-                .build());
-        Assertions.assertThat(jobHistoryTable.getName()).isEqualTo(Id.of("job_history"));
+                                                                             .schemaId(Id.of("employee_data"))
+                                                                             .tableId(Id.of("job_history"))
+                                                                             .build());
+        Assertions.assertThat(jobHistoryTable.getName())
+                  .isEqualTo(Id.of("job_history"));
 
 
         val employeesTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("employee_data"))
-                .tableId(Id.of("employees"))
-                .build());
-        Assertions.assertThat(employeesTable.getName()).isEqualTo(Id.of("employees"));
+                                                                            .schemaId(Id.of("employee_data"))
+                                                                            .tableId(Id.of("employees"))
+                                                                            .build());
+        Assertions.assertThat(employeesTable.getName())
+                  .isEqualTo(Id.of("employees"));
     }
 
     //The issue had reported an error when uploading back to db

@@ -96,11 +96,13 @@ class OracleDatabaseMetaData_typeOriginalPrecision {
         }
 
         public long sizeOf(String column) {
-            return this.pick(column).getSize();
+            return this.pick(column)
+                       .getSize();
         }
 
         public String typeOf(String column) {
-            return this.pick(column).getType();
+            return this.pick(column)
+                       .getType();
         }
     }
 }

@@ -11,12 +11,14 @@ Created    : 08.03.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbcx;
 
-import java.io.*;
-import java.sql.*;
-import java.util.logging.*;
-import javax.sql.*;
+import ch.enterag.utils.logging.IndentLogger;
 
-import ch.enterag.utils.logging.*;
+import javax.sql.DataSource;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
 
 /**
  * BaseDataSource implements a wrapped DataSource and serves as a base

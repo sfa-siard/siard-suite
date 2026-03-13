@@ -23,10 +23,13 @@ public class Dialogs implements DialogCloser {
      * Opens the specified view as a dialog.
      */
     public void open(SimpleShowDialogTarget target) {
-        val loaded = target.getViewSupplier().apply(servicesFacade);
+        val loaded = target.getViewSupplier()
+                           .apply(servicesFacade);
 
         log.info("Show dialog {} without data",
-                loaded.getController().getClass().getSimpleName());
+                 loaded.getController()
+                       .getClass()
+                       .getSimpleName());
 
         open(loaded);
     }
@@ -35,17 +38,21 @@ public class Dialogs implements DialogCloser {
      * Opens the specified view as a dialog.
      */
     public <T> void open(final ShowDialogTarget<T> target, final T data) {
-        val loaded = target.getViewSupplier().apply(data, servicesFacade);
+        val loaded = target.getViewSupplier()
+                           .apply(data, servicesFacade);
 
         log.info("Show dialog {} with data {}",
-                loaded.getController().getClass().getSimpleName(),
-                data);
+                 loaded.getController()
+                       .getClass()
+                       .getSimpleName(),
+                 data);
 
         open(loaded);
     }
 
     private void open(LoadedView loadedView) {
-        dialogDisplay.displayDialog(hooksCaller.nextView(loadedView).getNode());
+        dialogDisplay.displayDialog(hooksCaller.nextView(loadedView)
+                                               .getNode());
     }
 
     @Override

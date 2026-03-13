@@ -23,13 +23,13 @@ public class DbmsRegistryTest {
     private static final String MS_ACCESS = "MS Access";
 
     private static final ServerBasedDbmsConnectionProperties EXAMPLE_PROPERTIES = ServerBasedDbmsConnectionProperties.builder()
-            .host("db.host.org")
-            .port("1234")
-            .dbName("test")
-            .options(Optional.of("option=value"))
-            .user("")
-            .password("")
-            .build();
+                                                                                                                     .host("db.host.org")
+                                                                                                                     .port("1234")
+                                                                                                                     .dbName("test")
+                                                                                                                     .options(Optional.of("option=value"))
+                                                                                                                     .user("")
+                                                                                                                     .password("")
+                                                                                                                     .build();
 
     private static final String EXPECTED_JDBC_URL_FOR_POSTGRESQL = "jdbc:postgresql://db.host.org:1234/test?option=value";
     private static final String EXPECTED_JDBC_URL_FOR_ORACLE = "jdbc:oracle:thin:@db.host.org:1234/test?option=value";
@@ -49,11 +49,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(POSTGRES);
 
         // when
-        val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_POSTGRESQL);
+        val properties = dbms.getJdbcConnectionStringDecoder()
+                             .apply(EXPECTED_JDBC_URL_FOR_POSTGRESQL);
 
         // then
         Assertions.assertThat(properties)
-                .isEqualTo(EXAMPLE_PROPERTIES);
+                  .isEqualTo(EXAMPLE_PROPERTIES);
     }
 
     @Test
@@ -62,10 +63,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(POSTGRES);
 
         // when
-        val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
+        val url = dbms.getJdbcConnectionStringEncoder()
+                      .apply(EXAMPLE_PROPERTIES);
 
         // then
-        Assertions.assertThat(url).isEqualTo(EXPECTED_JDBC_URL_FOR_POSTGRESQL);
+        Assertions.assertThat(url)
+                  .isEqualTo(EXPECTED_JDBC_URL_FOR_POSTGRESQL);
     }
 
     @Test
@@ -74,11 +77,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(ORACLE);
 
         // when
-        val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_ORACLE);
+        val properties = dbms.getJdbcConnectionStringDecoder()
+                             .apply(EXPECTED_JDBC_URL_FOR_ORACLE);
 
         // then
         Assertions.assertThat(properties)
-                .isEqualTo(EXAMPLE_PROPERTIES);
+                  .isEqualTo(EXAMPLE_PROPERTIES);
     }
 
     @Test
@@ -87,10 +91,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(ORACLE);
 
         // when
-        val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
+        val url = dbms.getJdbcConnectionStringEncoder()
+                      .apply(EXAMPLE_PROPERTIES);
 
         // then
-        Assertions.assertThat(url).isEqualTo(EXPECTED_JDBC_URL_FOR_ORACLE);
+        Assertions.assertThat(url)
+                  .isEqualTo(EXPECTED_JDBC_URL_FOR_ORACLE);
     }
 
     @Test
@@ -99,11 +105,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(MY_SQL);
 
         // when
-        val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_MYSQL);
+        val properties = dbms.getJdbcConnectionStringDecoder()
+                             .apply(EXPECTED_JDBC_URL_FOR_MYSQL);
 
         // then
         Assertions.assertThat(properties)
-                .isEqualTo(EXAMPLE_PROPERTIES);
+                  .isEqualTo(EXAMPLE_PROPERTIES);
     }
 
     @Test
@@ -112,10 +119,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(MY_SQL);
 
         // when
-        val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
+        val url = dbms.getJdbcConnectionStringEncoder()
+                      .apply(EXAMPLE_PROPERTIES);
 
         // then
-        Assertions.assertThat(url).isEqualTo(EXPECTED_JDBC_URL_FOR_MYSQL);
+        Assertions.assertThat(url)
+                  .isEqualTo(EXPECTED_JDBC_URL_FOR_MYSQL);
     }
 
     @Test
@@ -124,11 +133,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(MS_SQL);
 
         // when
-        val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_MSSQL);
+        val properties = dbms.getJdbcConnectionStringDecoder()
+                             .apply(EXPECTED_JDBC_URL_FOR_MSSQL);
 
         // then
         Assertions.assertThat(properties)
-                .isEqualTo(EXAMPLE_PROPERTIES);
+                  .isEqualTo(EXAMPLE_PROPERTIES);
     }
 
     @Test
@@ -137,10 +147,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(MS_SQL);
 
         // when
-        val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
+        val url = dbms.getJdbcConnectionStringEncoder()
+                      .apply(EXAMPLE_PROPERTIES);
 
         // then
-        Assertions.assertThat(url).isEqualTo(EXPECTED_JDBC_URL_FOR_MSSQL);
+        Assertions.assertThat(url)
+                  .isEqualTo(EXPECTED_JDBC_URL_FOR_MSSQL);
     }
 
     @Test
@@ -149,11 +161,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(DB_2);
 
         // when
-        val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_DB2);
+        val properties = dbms.getJdbcConnectionStringDecoder()
+                             .apply(EXPECTED_JDBC_URL_FOR_DB2);
 
         // then
         Assertions.assertThat(properties)
-                .isEqualTo(EXAMPLE_PROPERTIES);
+                  .isEqualTo(EXAMPLE_PROPERTIES);
     }
 
     @Test
@@ -162,10 +175,12 @@ public class DbmsRegistryTest {
         final ServerBasedDbms dbms = (ServerBasedDbms) DbmsRegistry.findDbmsByName(DB_2);
 
         // when
-        val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_PROPERTIES);
+        val url = dbms.getJdbcConnectionStringEncoder()
+                      .apply(EXAMPLE_PROPERTIES);
 
         // then
-        Assertions.assertThat(url).isEqualTo(EXPECTED_JDBC_URL_FOR_DB2);
+        Assertions.assertThat(url)
+                  .isEqualTo(EXPECTED_JDBC_URL_FOR_DB2);
     }
 
     @Test
@@ -174,11 +189,12 @@ public class DbmsRegistryTest {
         val dbms = (FileBasedDbms) DbmsRegistry.findDbmsByName(MS_ACCESS);
 
         // when
-        val properties = dbms.getJdbcConnectionStringDecoder().apply(EXPECTED_JDBC_URL_FOR_MSACCESS);
+        val properties = dbms.getJdbcConnectionStringDecoder()
+                             .apply(EXPECTED_JDBC_URL_FOR_MSACCESS);
 
         // then
         Assertions.assertThat(properties)
-                .isEqualTo(EXAMPLE_FILE_BASEDPROPERTIES);
+                  .isEqualTo(EXAMPLE_FILE_BASEDPROPERTIES);
     }
 
     @Test
@@ -187,11 +203,12 @@ public class DbmsRegistryTest {
         val dbms = (FileBasedDbms) DbmsRegistry.findDbmsByName(MS_ACCESS);
 
         // when
-        val url = dbms.getJdbcConnectionStringEncoder().apply(EXAMPLE_FILE_BASEDPROPERTIES);
+        val url = dbms.getJdbcConnectionStringEncoder()
+                      .apply(EXAMPLE_FILE_BASEDPROPERTIES);
 
         // then
         Assertions.assertThat(FileTestHelper.removeDriveLetterIfNecessary(url)) // absolut path -> contains "C:"-prefix on windows-systems
-                .isEqualTo(EXPECTED_JDBC_URL_FOR_MSACCESS);
+                  .isEqualTo(EXPECTED_JDBC_URL_FOR_MSACCESS);
     }
 
     @Test
@@ -203,7 +220,8 @@ public class DbmsRegistryTest {
         val result = validator.test(EXPECTED_JDBC_URL_FOR_POSTGRESQL);
 
         // then
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertThat(result)
+                  .isTrue();
     }
 
     @Test
@@ -215,7 +233,8 @@ public class DbmsRegistryTest {
         val result = validator.test(EXPECTED_JDBC_URL_FOR_ORACLE);
 
         // then
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertThat(result)
+                  .isTrue();
     }
 
     @Test
@@ -227,7 +246,8 @@ public class DbmsRegistryTest {
         val result = validator.test(EXPECTED_JDBC_URL_FOR_MYSQL);
 
         // then
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertThat(result)
+                  .isTrue();
     }
 
     @Test
@@ -239,7 +259,8 @@ public class DbmsRegistryTest {
         val result = validator.test(EXPECTED_JDBC_URL_FOR_MSSQL);
 
         // then
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertThat(result)
+                  .isTrue();
     }
 
     @Test
@@ -251,7 +272,8 @@ public class DbmsRegistryTest {
         val result = validator.test(EXPECTED_JDBC_URL_FOR_DB2);
 
         // then
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertThat(result)
+                  .isTrue();
     }
 
     @Test
@@ -263,6 +285,7 @@ public class DbmsRegistryTest {
         val result = validator.test(EXPECTED_JDBC_URL_FOR_MSACCESS);
 
         // then
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertThat(result)
+                  .isTrue();
     }
 }

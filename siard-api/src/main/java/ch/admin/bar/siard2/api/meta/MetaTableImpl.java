@@ -45,7 +45,7 @@ public class MetaTableImpl
     public MetaSchema getParentMetaSchema() {
         return getTable().getParentSchema()
                          .getMetaSchema();
-    } 
+    }
 
     private final Table _table;
 
@@ -56,7 +56,6 @@ public class MetaTableImpl
     public Table getTable() {
         return _table;
     }
-
 
 
     /**
@@ -88,7 +87,7 @@ public class MetaTableImpl
                 bValid = false;
         }
         return bValid;
-    } 
+    }
 
     private TableType _tt = null;
 
@@ -99,7 +98,7 @@ public class MetaTableImpl
             ((MetaColumnImpl) mc).getColumnType();
         }
         return _tt;
-    } 
+    }
 
     /**
      * get archive
@@ -109,7 +108,7 @@ public class MetaTableImpl
     private ArchiveImpl getArchiveImpl() {
         return (ArchiveImpl) getTable().getParentSchema()
                                        .getParentArchive();
-    } 
+    }
 
     private TableType _ttTemplate = null;
 
@@ -201,7 +200,7 @@ public class MetaTableImpl
                 }
             }
         }
-    } 
+    }
 
     /**
      * create an empty TableType instance.
@@ -217,7 +216,7 @@ public class MetaTableImpl
         tt.setColumns(_of.createColumnsType());
         tt.setRows(BigInteger.ZERO);
         return tt;
-    } 
+    }
 
     /**
      * constructor
@@ -287,7 +286,7 @@ public class MetaTableImpl
                 _mapMetaTriggers.put(XU.fromXml(trt.getName()), mt);
             }
         }
-    } 
+    }
 
     /**
      * factory
@@ -300,9 +299,8 @@ public class MetaTableImpl
     public static MetaTable newInstance(Table table, TableType tt)
             throws IOException {
         return new MetaTableImpl(table, tt);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -312,7 +310,6 @@ public class MetaTableImpl
         return XU.fromXml(_tt.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -322,7 +319,6 @@ public class MetaTableImpl
         return XU.fromXml(_tt.getFolder());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -341,7 +337,6 @@ public class MetaTableImpl
         return XU.fromXml(_tt.getDescription());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -354,7 +349,7 @@ public class MetaTableImpl
                 _tt.setRows(BigInteger.valueOf(lRows));
         } else
             throw new IOException("Rows cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -365,7 +360,6 @@ public class MetaTableImpl
                   .longValue();
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -389,7 +383,7 @@ public class MetaTableImpl
             mc = getMetaColumn(sName);
         }
         return mc;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -397,7 +391,7 @@ public class MetaTableImpl
     @Override
     public MetaColumn getMetaColumn(String sName) {
         return _mapMetaColumns.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -442,9 +436,8 @@ public class MetaTableImpl
         } else
             throw new IOException("New columns can only be created if archive is open for modification of primary data and table is empty.");
         return mc;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -452,7 +445,7 @@ public class MetaTableImpl
     @Override
     public MetaUniqueKey getMetaPrimaryKey() {
         return this._mukPrimaryKey;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -467,9 +460,8 @@ public class MetaTableImpl
             getArchiveImpl().isMetaDataDifferent(null, _mukPrimaryKey);
         }
         return _mukPrimaryKey;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -493,7 +485,7 @@ public class MetaTableImpl
             mfk = getMetaForeignKey(sName);
         }
         return mfk;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -501,7 +493,7 @@ public class MetaTableImpl
     @Override
     public MetaForeignKey getMetaForeignKey(String sName) {
         return _mapMetaForeignKeys.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -546,9 +538,8 @@ public class MetaTableImpl
         } else
             throw new IOException("New foreign keys can only be created if archive is open for modification of primary data.");
         return mfk;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -572,7 +563,7 @@ public class MetaTableImpl
             muk = getMetaCandidateKey(sName);
         }
         return muk;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -580,7 +571,7 @@ public class MetaTableImpl
     @Override
     public MetaUniqueKey getMetaCandidateKey(String sName) {
         return _mapMetaCandidateKeys.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -625,9 +616,8 @@ public class MetaTableImpl
         } else
             throw new IOException("New candidaten keys can only be created if archive is open for modification of primary data.");
         return muk;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -651,7 +641,7 @@ public class MetaTableImpl
             mcc = getMetaCheckConstraint(sName);
         }
         return mcc;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -659,7 +649,7 @@ public class MetaTableImpl
     @Override
     public MetaCheckConstraint getMetaCheckConstraint(String sName) {
         return _mapMetaCheckConstraints.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -704,9 +694,8 @@ public class MetaTableImpl
         } else
             throw new IOException("New check constraints can only be created if archive is open for modification of primary data.");
         return mcc;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -730,7 +719,7 @@ public class MetaTableImpl
             mt = getMetaTrigger(sName);
         }
         return mt;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -738,7 +727,7 @@ public class MetaTableImpl
     @Override
     public MetaTrigger getMetaTrigger(String sName) {
         return _mapMetaTriggers.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -783,7 +772,7 @@ public class MetaTableImpl
         } else
             throw new IOException("New triggers can only be created if archive is open for modification of primary data.");
         return mt;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -798,7 +787,7 @@ public class MetaTableImpl
             llNames.addAll(mc.getNames(bSupportsArrays, bSupportsUdts));
         }
         return llNames;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -843,7 +832,7 @@ public class MetaTableImpl
             ams[getMetaColumns() + iPrimaryKeys + getMetaCandidateKeys() + getMetaForeignKeys() + getMetaCheckConstraints() + iTrigger] =
                     getMetaTrigger(iTrigger);
         return ams;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -857,7 +846,7 @@ public class MetaTableImpl
                         String.valueOf(getRows()),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

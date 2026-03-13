@@ -36,7 +36,7 @@ public class ValidatingReader
                     throw new IOException("Unexpected length " + _lRead + " instead of " + _lLength + " detected!");
             }
         }
-    } 
+    }
 
     @Override
     public int read()
@@ -47,7 +47,7 @@ public class ValidatingReader
         else
             validateAtEof();
         return iRead;
-    } 
+    }
 
     @Override
     public int read(char[] cbuf)
@@ -58,7 +58,7 @@ public class ValidatingReader
         else
             validateAtEof();
         return iRead;
-    } 
+    }
 
     @Override
     public int read(char[] cbuf, int iOffset, int iLength)
@@ -72,7 +72,7 @@ public class ValidatingReader
                 validateAtEof();
         }
         return iRead;
-    } 
+    }
 
     @Override
     public long skip(long lSkip)
@@ -80,7 +80,7 @@ public class ValidatingReader
         long lSkipped = _rdr.skip(lSkip);
         _lRead = _lRead + lSkipped;
         return lSkipped;
-    } 
+    }
 
     @Override
     public void close() throws IOException {
@@ -91,6 +91,6 @@ public class ValidatingReader
                 read();
         }
         _rdr.close();
-    } 
+    }
 
 } 

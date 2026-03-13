@@ -26,7 +26,7 @@ public class MultipleExtendedPropertiesOnTableTest {
     @Before
     public void setUp() throws Exception {
         MsSqlDataSource dataSource = new MsSqlDataSource(mssqlserver.getJdbcUrl(), mssqlserver.getUsername(), mssqlserver.getPassword());
-        MsSqlConnection connection = (MsSqlConnection)dataSource.getConnection();
+        MsSqlConnection connection = (MsSqlConnection) dataSource.getConnection();
 
         metaData = (MsSqlDatabaseMetaData) connection.getMetaData();
     }

@@ -21,23 +21,20 @@ import ch.enterag.sqlparser.ddl.enums.DropBehavior;
  * does not support drop behaviors such as CASCADE or RESTRICT
  * @author Simon Jutz
  */
-public class MySqlDropSchemaStatement extends DropSchemaStatement 
-{
+public class MySqlDropSchemaStatement extends DropSchemaStatement {
 
-	/* ------------------------------------------------------------------------ */
-	public MySqlDropSchemaStatement(SqlFactory sf) 
-	{
-		super(sf);
-	} /* constructor */
+    /* ------------------------------------------------------------------------ */
+    public MySqlDropSchemaStatement(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 
-	/* ------------------------------------------------------------------------ */
-	@Override
-	public String format() 
-	{
-		if (getDropBehavior() == DropBehavior.CASCADE)
-			throw new IllegalArgumentException("Schema drop behavior CASCADE not supported by MSSQL!");
-		String sStatement = K.DROP.getKeyword() + sSP + K.SCHEMA.getKeyword() + sSP + getSchemaName().format(); 
-		return sStatement;
-	} /* format */
-	
+    /* ------------------------------------------------------------------------ */
+    @Override
+    public String format() {
+        if (getDropBehavior() == DropBehavior.CASCADE)
+            throw new IllegalArgumentException("Schema drop behavior CASCADE not supported by MSSQL!");
+        String sStatement = K.DROP.getKeyword() + sSP + K.SCHEMA.getKeyword() + sSP + getSchemaName().format();
+        return sStatement;
+    } /* format */
+
 } /* class MySqlDropSchemaStatement */

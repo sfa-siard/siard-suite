@@ -7,11 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -73,7 +69,7 @@ public class StepsChainBuilder {
                     val casted = (TOutPrevious) data;
 
                     return hooksCaller.nextView(step.getViewLoader()
-                            .load(casted, navigator, servicesFacade));
+                                                    .load(casted, navigator, servicesFacade));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     throw ex;
@@ -81,12 +77,12 @@ public class StepsChainBuilder {
             };
 
             preparedSteps.add(Step.builder()
-                    .definition(step)
-                    .title(step.getTitle())
-                    .navigator(navigator)
-                    .stepIndex(stepIndex)
-                    .viewSupplier(viewLoader)
-                    .build());
+                                  .definition(step)
+                                  .title(step.getTitle())
+                                  .navigator(navigator)
+                                  .stepIndex(stepIndex)
+                                  .viewSupplier(viewLoader)
+                                  .build());
 
             return (StepRegisterer<TOut>) this;
         }
@@ -103,8 +99,8 @@ public class StepsChainBuilder {
             val lastRegisteredStep = preparedSteps.get(indexLastRegisteredStep);
 
             preparedSteps.set(indexLastRegisteredStep, lastRegisteredStep.toBuilder()
-                    .followingTransformer(transformer)
-                    .build());
+                                                                         .followingTransformer(transformer)
+                                                                         .build());
 
             return (StepRegisterer<TOut>) this;
         }

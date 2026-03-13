@@ -1,21 +1,25 @@
 package ch.admin.bar.siard2.jdbc.legacy;
 
-import java.sql.*;
-import java.util.*;
-
-import static org.junit.Assert.*;
-
 import ch.admin.bar.siard2.jdbc.OracleConnection;
 import ch.admin.bar.siard2.jdbc.OracleResultSetMetaData;
+import ch.admin.bar.siard2.jdbcx.OracleDataSource;
 import ch.admin.bar.siard2.oracle.legacy.TestOracleDatabase;
 import ch.admin.bar.siard2.oracle.legacy.TestSqlDatabase;
-import org.junit.*;
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.utils.jdbc.*;
-import ch.enterag.sqlparser.identifier.*;
-import ch.admin.bar.siard2.jdbcx.*;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.jdbc.BaseResultSetMetaDataTester;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
 import org.testcontainers.containers.OracleContainer;
+
+import java.sql.*;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
 

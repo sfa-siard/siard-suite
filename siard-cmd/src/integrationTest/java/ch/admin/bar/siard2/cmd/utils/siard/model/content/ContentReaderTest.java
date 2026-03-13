@@ -29,12 +29,20 @@ public class ContentReaderTest {
         val result = contentReader.read();
 
         // then
-        Assertions.assertThat(result).isNotNull();
-        Assertions.assertThat(result.getTables()).isNotEmpty();
+        Assertions.assertThat(result)
+                  .isNotNull();
+        Assertions.assertThat(result.getTables())
+                  .isNotEmpty();
 
-        result.getTables().forEach(table -> {
-            Assertions.assertThat(table.getTableContent().getRows()).isNotEmpty();
-            table.getTableContent().getRows().forEach(tableRow -> Assertions.assertThat(tableRow.getCells()).isNotEmpty());
-        });
+        result.getTables()
+              .forEach(table -> {
+                  Assertions.assertThat(table.getTableContent()
+                                             .getRows())
+                            .isNotEmpty();
+                  table.getTableContent()
+                       .getRows()
+                       .forEach(tableRow -> Assertions.assertThat(tableRow.getCells())
+                                                      .isNotEmpty());
+              });
     }
 }

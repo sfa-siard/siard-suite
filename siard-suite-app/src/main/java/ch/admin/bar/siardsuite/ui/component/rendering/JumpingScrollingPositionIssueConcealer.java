@@ -56,13 +56,13 @@ public class JumpingScrollingPositionIssueConcealer {
 
     private boolean isScrollBarInIllegalState() {
         return Optional.ofNullable((ScrollBar) tableView.lookup(".scroll-bar:vertical"))
-                .map(scrollBar -> {
-                    val value = scrollBar.getValue();
-                    val max = scrollBar.getMax();
+                       .map(scrollBar -> {
+                           val value = scrollBar.getValue();
+                           val max = scrollBar.getMax();
 
-                    return value == max && !loadingBatchManager.loadedAll();
-                })
-                .orElse(false);
+                           return value == max && !loadingBatchManager.loadedAll();
+                       })
+                       .orElse(false);
     }
 
     private void fixScrollPosition() {

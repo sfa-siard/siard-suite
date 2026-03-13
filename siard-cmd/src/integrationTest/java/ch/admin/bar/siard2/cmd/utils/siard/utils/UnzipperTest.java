@@ -25,8 +25,10 @@ public class UnzipperTest {
         val unzippedSiardArchive = unzipper.unzip();
 
         // then
-        Assertions.assertThat(unzippedSiardArchive).exists();
-        Assertions.assertThat(unzippedSiardArchive.listFiles()).hasSize(2); // header & content folders
+        Assertions.assertThat(unzippedSiardArchive)
+                  .exists();
+        Assertions.assertThat(unzippedSiardArchive.listFiles())
+                  .hasSize(2); // header & content folders
     }
 
 }

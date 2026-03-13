@@ -60,9 +60,9 @@ public class ValidatingJAXBContext extends JAXBContext {
                 bContinue = true;
             m_il.exit(String.valueOf(bContinue));
             return bContinue;
-        } 
+        }
 
-    } 
+    }
     /*==================================================================*/
 
     /**
@@ -74,7 +74,7 @@ public class ValidatingJAXBContext extends JAXBContext {
     private ValidatingJAXBContext(JAXBContext jc, URL urlSchema) {
         m_jc = jc;
         m_urlSchema = urlSchema;
-    } 
+    }
 
     /**
      * factory
@@ -88,7 +88,7 @@ public class ValidatingJAXBContext extends JAXBContext {
         JAXBContext jc = JAXBContext.newInstance(classesToBeBound);
         ValidatingJAXBContext vjc = new ValidatingJAXBContext(jc, urlSchema);
         return vjc;
-    } 
+    }
 
     /**
      * factory
@@ -102,7 +102,7 @@ public class ValidatingJAXBContext extends JAXBContext {
         JAXBContext jc = JAXBContext.newInstance(sPackage);
         ValidatingJAXBContext vjc = new ValidatingJAXBContext(jc, urlSchema);
         return vjc;
-    } 
+    }
 
     /**
      * create a validating unmarshaller.
@@ -132,7 +132,7 @@ public class ValidatingJAXBContext extends JAXBContext {
         u.setEventHandler(new ContextValidationEventHandler());
         m_il.exit(u);
         return u;
-    } 
+    }
 
     /**
      * create a validating and formatting marshaller.
@@ -163,7 +163,7 @@ public class ValidatingJAXBContext extends JAXBContext {
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         m_il.exit(m);
         return m;
-    } 
+    }
 
     /**
      * create a validator.
@@ -174,6 +174,6 @@ public class ValidatingJAXBContext extends JAXBContext {
     @Override
     public javax.xml.bind.Validator createValidator() throws JAXBException {
         throw new RuntimeException("createValidator is deprecated!");
-    } 
+    }
 
 } 

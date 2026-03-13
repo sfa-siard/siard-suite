@@ -1,13 +1,9 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
 import ch.admin.bar.siardsuite.model.database.DatabaseType;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.*;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.Converter;
 import lombok.NonNull;
 
@@ -26,50 +22,50 @@ public class TypeDetailsForm {
 
     public static RenderableForm create(@NonNull final DatabaseType type) {
         return RenderableForm.<DatabaseType>builder()
-                .dataSupplier(() -> type)
-                .afterSaveAction(DatabaseType::write)
-                .group(RenderableFormGroup.<DatabaseType>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                NAME,
-                                DatabaseType::getName
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                CATEGORY,
-                                DatabaseType::getCategory
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                IS_INSTANTIABLE,
-                                Converter.booleanToString(DatabaseType::isInstantiable)
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                IS_FINAL,
-                                Converter.booleanToString(DatabaseType::isFinal)
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                BASE_CATEGORY,
-                                DatabaseType::getCategory
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                DESCRIPTION,
-                                DatabaseType::getDescription,
-                                DatabaseType::setDescription
-                        ))
-                        .property(RenderableTable.<DatabaseType, DatabaseAttribute>builder()
-                                .dataExtractor(DatabaseType::getDatabaseAttributes)
-                                .property(new ReadOnlyStringProperty<>(
-                                        ATTRIBUTE_NAME,
-                                        DatabaseAttribute::getName
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        ATTRIBUTE_TYPE,
-                                        DatabaseAttribute::getType
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        ATTRIBUTE_CARDINALITY,
-                                        Converter.cardinalityToString(DatabaseAttribute::getCardinality)
-                                ))
-                                .build())
-                        .build())
-                .build();
+                             .dataSupplier(() -> type)
+                             .afterSaveAction(DatabaseType::write)
+                             .group(RenderableFormGroup.<DatabaseType>builder()
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               NAME,
+                                                               DatabaseType::getName
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               CATEGORY,
+                                                               DatabaseType::getCategory
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               IS_INSTANTIABLE,
+                                                               Converter.booleanToString(DatabaseType::isInstantiable)
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               IS_FINAL,
+                                                               Converter.booleanToString(DatabaseType::isFinal)
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               BASE_CATEGORY,
+                                                               DatabaseType::getCategory
+                                                       ))
+                                                       .property(new ReadWriteStringProperty<>(
+                                                               DESCRIPTION,
+                                                               DatabaseType::getDescription,
+                                                               DatabaseType::setDescription
+                                                       ))
+                                                       .property(RenderableTable.<DatabaseType, DatabaseAttribute>builder()
+                                                                                .dataExtractor(DatabaseType::getDatabaseAttributes)
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        ATTRIBUTE_NAME,
+                                                                                        DatabaseAttribute::getName
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        ATTRIBUTE_TYPE,
+                                                                                        DatabaseAttribute::getType
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        ATTRIBUTE_CARDINALITY,
+                                                                                        Converter.cardinalityToString(DatabaseAttribute::getCardinality)
+                                                                                ))
+                                                                                .build())
+                                                       .build())
+                             .build();
     }
 }

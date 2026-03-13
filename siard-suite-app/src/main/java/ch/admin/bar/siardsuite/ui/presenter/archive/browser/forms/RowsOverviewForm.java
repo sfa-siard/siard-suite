@@ -34,29 +34,30 @@ public class RowsOverviewForm {
     private static final I18nKey LABEL_NUMBER_OF_ROWS = I18nKey.of("tableContainer.labelNumberOfRows");
 
     public static RenderableForm<DatabaseTable> create(@NonNull final DatabaseTable table) {
-        val tableProperties = table.getColumns().stream()
-                .map(column -> new TableColumnProperty<>(
-                        DisplayableText.of(column.getName()),
-                        row -> row.findCellValue(column.getName()),
-                        createCellClickListener(column)))
-                .collect(Collectors.toList());
+        val tableProperties = table.getColumns()
+                                   .stream()
+                                   .map(column -> new TableColumnProperty<>(
+                                           DisplayableText.of(column.getName()),
+                                           row -> row.findCellValue(column.getName()),
+                                           createCellClickListener(column)))
+                                   .collect(Collectors.toList());
 
 
         return RenderableForm.<DatabaseTable>builder()
-                .dataSupplier(() -> table)
-                .group(RenderableFormGroup.<DatabaseTable>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                LABEL_TABLE,
-                                DatabaseTable::getName))
-                        .property(new ReadOnlyStringProperty<>(
-                                LABEL_NUMBER_OF_ROWS,
-                                Converter.longToString(DatabaseTable::getNumberOfRows)))
-                        .property(RenderableLazyLoadingTable.<DatabaseTable, TableRecordWrapper>builder()
-                                .dataExtractor(databaseTable -> new TableRecordDataSource(table.getTable()))
-                                .properties(tableProperties)
-                                .build())
-                        .build())
-                .build();
+                             .dataSupplier(() -> table)
+                             .group(RenderableFormGroup.<DatabaseTable>builder()
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               LABEL_TABLE,
+                                                               DatabaseTable::getName))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               LABEL_NUMBER_OF_ROWS,
+                                                               Converter.longToString(DatabaseTable::getNumberOfRows)))
+                                                       .property(RenderableLazyLoadingTable.<DatabaseTable, TableRecordWrapper>builder()
+                                                                                           .dataExtractor(databaseTable -> new TableRecordDataSource(table.getTable()))
+                                                                                           .properties(tableProperties)
+                                                                                           .build())
+                                                       .build())
+                             .build();
     }
 
     public static class TableRecordWrapper {
@@ -73,13 +74,14 @@ public class RowsOverviewForm {
             ).assemble();
 
             this.cellsByName = cells.stream()
-                    .collect(Collectors.toMap(cell -> cell.getMetaColumn().getName(), cell -> cell));
+                                    .collect(Collectors.toMap(cell -> cell.getMetaColumn()
+                                                                          .getName(), cell -> cell));
         }
 
         public Cell findCell(final String name) {
             return Optional.ofNullable(cellsByName.get(name))
-                    .orElseThrow(() -> new IllegalArgumentException(
-                            String.format("No cell with name %s found", name)));
+                           .orElseThrow(() -> new IllegalArgumentException(
+                                   String.format("No cell with name %s found", name)));
         }
 
         private String findCellValue(final String name) {
@@ -92,7 +94,8 @@ public class RowsOverviewForm {
                 return "";
             }
             try {
-                switch (cell.getMetaValue().getPreType()) {
+                switch (cell.getMetaValue()
+                            .getPreType()) {
                     case Types.BINARY:
                     case Types.VARBINARY:
                     case Types.BLOB:
@@ -106,7 +109,8 @@ public class RowsOverviewForm {
                             return "0x" + BU.toHex(cell.getBytes());
                         }
 
-                        return "0x" + BU.toHex(cell.getBytes()).substring(0, 16) + "...";
+                        return "0x" + BU.toHex(cell.getBytes())
+                                        .substring(0, 16) + "...";
 
                     default:
                         return cell.getString();
@@ -143,18 +147,21 @@ public class RowsOverviewForm {
 
         @Override
         public long findIndexOf(TableRecordWrapper item) {
-            return item.getTableRecord().getRecord();
+            return item.getTableRecord()
+                       .getRecord();
         }
 
         @Override
         public long getNumberOfItems() {
-            return table.getMetaTable().getRows();
+            return table.getMetaTable()
+                        .getRows();
         }
     }
 
     private static Optional<TableColumnProperty.CellClickedListener<TableRecordWrapper>> createCellClickListener(final DatabaseColumn column) {
         try {
-            val type = column.getColumn().getPreType();
+            val type = column.getColumn()
+                             .getPreType();
             val clickListenerSupported = type == Types.BINARY || type == Types.VARBINARY || type == Types.BLOB;
 
             if (!clickListenerSupported) {
@@ -166,7 +173,8 @@ public class RowsOverviewForm {
         }
 
         return Optional.of((property, value) -> {
-            val absoluteLobFolder = column.getColumn().getAbsoluteLobFolder();
+            val absoluteLobFolder = column.getColumn()
+                                          .getAbsoluteLobFolder();
             val cell = value.findCell(column.getName());
 
             if (absoluteLobFolder == null) {

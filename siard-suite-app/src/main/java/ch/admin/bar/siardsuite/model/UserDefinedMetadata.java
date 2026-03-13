@@ -11,14 +11,23 @@ import java.util.Optional;
 @Value
 @Builder
 public class UserDefinedMetadata {
-    @NonNull String dbName;
-    @NonNull Optional<String> description;
-    @NonNull String owner;
-    @NonNull String dataOriginTimespan;
-    @NonNull Optional<String> archiverName;
-    @NonNull Optional<String> archiverContact;
-    @NonNull Optional<URI> lobFolder;
+    @NonNull
+    String dbName;
+    @NonNull
+    Optional<String> description;
+    @NonNull
+    String owner;
+    @NonNull
+    String dataOriginTimespan;
+    @NonNull
+    Optional<String> archiverName;
+    @NonNull
+    Optional<String> archiverContact;
+    @NonNull
+    Optional<URI> lobFolder;
 
-    @NonNull File saveAt;
-    @NonNull Boolean exportViewsAsTables;
+    @NonNull
+    File saveAt;
+    @NonNull
+    Boolean exportViewsAsTables;
 }

@@ -51,12 +51,12 @@ public class Db2UploadDownloadSiardProjectIT {
         Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         SiardArchiveAssertions.builder()
-                .expectedArchive(expectedArchive)
-                .actualArchive(actualArchive)
-                .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?
-                .assertionModifier(SiardArchiveAssertions.IGNORE_PRIMARY_KEY_NAME) // Probably a DB-restriction (primary key names are generated)
-                .assertionModifier(SiardArchiveAssertions.IGNORE_FOREIGN_KEY_UPDATE_ACTION) // FIXME ?
-                .assertionModifier(SiardArchiveAssertions.IGNORE_FOREIGN_KEY_DELETE_ACTION) // FIXME ?
-                .assertEqual();
+                              .expectedArchive(expectedArchive)
+                              .actualArchive(actualArchive)
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_PRIMARY_KEY_NAME) // Probably a DB-restriction (primary key names are generated)
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_FOREIGN_KEY_UPDATE_ACTION) // FIXME ?
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_FOREIGN_KEY_DELETE_ACTION) // FIXME ?
+                              .assertEqual();
     }
 }

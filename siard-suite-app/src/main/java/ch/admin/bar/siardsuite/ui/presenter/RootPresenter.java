@@ -16,16 +16,10 @@ import ch.admin.bar.siardsuite.util.OS;
 import ch.enterag.utils.ProgramInfo;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import lombok.val;
 
-import java.io.IOException;
 import java.util.Locale;
 
 public class RootPresenter {
@@ -79,7 +73,10 @@ public class RootPresenter {
         this.logService = logService;
         this.appCloser = appCloser;
 
-        applicationLabel.textProperty().bind(DisplayableText.of(WINDOW_TITLE, ProgramInfo.getProgramInfo().getVersion()).bindable());
+        applicationLabel.textProperty()
+                        .bind(DisplayableText.of(WINDOW_TITLE, ProgramInfo.getProgramInfo()
+                                                                          .getVersion())
+                                             .bindable());
 
         initMenu();
     }
@@ -87,27 +84,41 @@ public class RootPresenter {
     private void initMenu() {
         this.menuBar.setOnMouseClicked(event -> this.menuContainer.show());
 
-        menuItemLanguage.textProperty().bind(DisplayableText.of(LANGUAGE).bindable());
-        menuItemOptions.textProperty().bind(DisplayableText.of(OPTIONS).bindable());
-        menuItemInfo.textProperty().bind(DisplayableText.of(INFO).bindable());
-        menuItemShowLogFile.textProperty().bind(DisplayableText.of(SHOW_LOG_FILE).bindable());
-        menuItemInstall.textProperty().bind(DisplayableText.of(INSTALL).bindable());
+        menuItemLanguage.textProperty()
+                        .bind(DisplayableText.of(LANGUAGE)
+                                             .bindable());
+        menuItemOptions.textProperty()
+                       .bind(DisplayableText.of(OPTIONS)
+                                            .bindable());
+        menuItemInfo.textProperty()
+                    .bind(DisplayableText.of(INFO)
+                                         .bindable());
+        menuItemShowLogFile.textProperty()
+                           .bind(DisplayableText.of(SHOW_LOG_FILE)
+                                                .bindable());
+        menuItemInstall.textProperty()
+                       .bind(DisplayableText.of(INSTALL)
+                                            .bindable());
         menuItemInstall.setVisible(OS.IS_WINDOWS);
-        menuItemClose.textProperty().bind(DisplayableText.of(CLOSE).bindable());
+        menuItemClose.textProperty()
+                     .bind(DisplayableText.of(CLOSE)
+                                          .bindable());
 
         // Language
         ToggleGroup items = new ToggleGroup();
-        I18n.getSupportedLocales().forEach((locale) -> {
-            RadioMenuItem item = new RadioMenuItem();
-            item.setId(locale.toString());
-            I18n.bind(item.textProperty(), locale.toString());
-            this.menuItemLanguage.getItems().add(item);
-            item.setOnAction(event -> {
-                RadioMenuItem cmi = (RadioMenuItem) event.getSource();
-                I18n.setLocale(new Locale(cmi.getId()));
+        I18n.getSupportedLocales()
+            .forEach((locale) -> {
+                RadioMenuItem item = new RadioMenuItem();
+                item.setId(locale.toString());
+                I18n.bind(item.textProperty(), locale.toString());
+                this.menuItemLanguage.getItems()
+                                     .add(item);
+                item.setOnAction(event -> {
+                    RadioMenuItem cmi = (RadioMenuItem) event.getSource();
+                    I18n.setLocale(new Locale(cmi.getId()));
+                });
+                item.setToggleGroup(items);
             });
-            item.setToggleGroup(items);
-        });
 
         this.menuItemClose.setOnAction(event -> appCloser.run());
         this.menuItemInfo.setOnAction(event -> this.dialogs.open(View.INFO_DIALOG));
@@ -129,14 +140,15 @@ public class RootPresenter {
             final Runnable appCloser
     ) {
         val loaded = FXMLLoadHelper.<RootPresenter>load("fxml/root.fxml");
-        loaded.getController().init(
-                dialogs,
-                installationService,
-                filesService,
-                logService,
-                errorHandler,
-                appCloser
-        );
+        loaded.getController()
+              .init(
+                      dialogs,
+                      installationService,
+                      filesService,
+                      logService,
+                      errorHandler,
+                      appCloser
+              );
 
         return loaded;
     }

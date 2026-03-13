@@ -16,6 +16,7 @@ public class ValidationProperties {
                                                          .collect(Collectors.toList());
         // do not inline validation results - the stream will stop at the first invalid property and the other
         // props won't be processed.
-        return validationResults.stream().allMatch(valid -> valid);
+        return validationResults.stream()
+                                .allMatch(valid -> valid);
     }
 }

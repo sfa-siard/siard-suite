@@ -8,15 +8,18 @@ import lombok.Value;
 @Value
 @Builder
 public class QualifiedForeignKeyId {
-    @NonNull Id<Metadata.Schema> schemaId;
-    @NonNull Id<Metadata.Table> tableId;
-    @NonNull Id<Metadata.ForeignKey> foreignKeyId;
+    @NonNull
+    Id<Metadata.Schema> schemaId;
+    @NonNull
+    Id<Metadata.Table> tableId;
+    @NonNull
+    Id<Metadata.ForeignKey> foreignKeyId;
 
     public QualifiedTableId getQualifiedTableId() {
         return QualifiedTableId.builder()
-                .schemaId(schemaId)
-                .tableId(tableId)
-                .build();
+                               .schemaId(schemaId)
+                               .tableId(tableId)
+                               .build();
     }
 
     public static class QualifiedForeignKeyIdBuilder {

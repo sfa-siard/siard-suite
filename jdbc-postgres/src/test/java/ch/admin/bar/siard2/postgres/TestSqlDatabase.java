@@ -330,13 +330,17 @@ public class TestSqlDatabase {
     private void createTables()
             throws SQLException {
         createTable(getQualifiedSimpleTable(), _listCdSimple,
-                    Arrays.asList(_listCdSimple.get(_iPrimarySimple).getName()),
+                    Arrays.asList(_listCdSimple.get(_iPrimarySimple)
+                                               .getName()),
                     null, null, null);
         createTable(getQualifiedComplexTable(), _listCdComplex,
-                    Arrays.asList(_listCdComplex.get(_iPrimaryComplex).getName()),
-                    Arrays.asList(_listCdComplex.get(_iPrimaryComplex).getName()),
+                    Arrays.asList(_listCdComplex.get(_iPrimaryComplex)
+                                                .getName()),
+                    Arrays.asList(_listCdComplex.get(_iPrimaryComplex)
+                                                .getName()),
                     getQualifiedSimpleTable(),
-                    Arrays.asList(_listCdSimple.get(_iPrimarySimple).getName()));
+                    Arrays.asList(_listCdSimple.get(_iPrimarySimple)
+                                               .getName()));
         createView(getQualifiedSimpleView(), _listCdSimple, getQualifiedSimpleTable());
     } /* createTables */
 

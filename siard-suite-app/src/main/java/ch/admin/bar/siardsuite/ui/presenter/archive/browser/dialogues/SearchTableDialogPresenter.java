@@ -1,12 +1,12 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.dialogues;
 
-import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -48,25 +48,34 @@ public class SearchTableDialogPresenter {
         });
 
         val searchButton = new MFXButton();
-        searchButton.getStyleClass().add("primary");
-        searchButton.textProperty().bind(DisplayableText.of(SEARCH).bindable());
+        searchButton.getStyleClass()
+                    .add("primary");
+        searchButton.textProperty()
+                    .bind(DisplayableText.of(SEARCH)
+                                         .bindable());
         searchButton.setOnAction(event -> {
             dialogCloser.closeDialog();
             resultConsumer.accept(Optional.ofNullable(searchField.getText()));
         });
 
-        buttonBox.getChildren().setAll(closeButton, searchButton);
+        buttonBox.getChildren()
+                 .setAll(closeButton, searchButton);
 
-        title.textProperty().bind(DisplayableText.of(TITLE).bindable());
-        text.textProperty().bind(DisplayableText.of(TEXT).bindable());
+        title.textProperty()
+             .bind(DisplayableText.of(TITLE)
+                                  .bindable());
+        text.textProperty()
+            .bind(DisplayableText.of(TEXT)
+                                 .bindable());
     }
 
     public static LoadedView<SearchTableDialogPresenter> load(
             final Consumer<Optional<String>> resultConsumer,
             final ServicesFacade servicesFacade
-            ) {
+    ) {
         val loaded = FXMLLoadHelper.<SearchTableDialogPresenter>load("fxml/search/search-table-dialog.fxml");
-        loaded.getController().init(servicesFacade.dialogs(), resultConsumer);
+        loaded.getController()
+              .init(servicesFacade.dialogs(), resultConsumer);
 
         return loaded;
     }

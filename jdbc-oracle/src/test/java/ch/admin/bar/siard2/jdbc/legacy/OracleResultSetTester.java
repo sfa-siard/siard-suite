@@ -1,28 +1,32 @@
 package ch.admin.bar.siard2.jdbc.legacy;
 
-import java.io.*;
-import java.math.*;
-import java.net.MalformedURLException;
-import java.text.*;
-import java.sql.*;
-import java.sql.Date;
-import java.util.*;
-import javax.xml.datatype.*;
-
-import static org.junit.Assert.*;
-
 import ch.admin.bar.siard2.jdbc.OracleConnection;
 import ch.admin.bar.siard2.jdbc.OracleResultSet;
+import ch.admin.bar.siard2.jdbcx.OracleDataSource;
 import ch.admin.bar.siard2.oracle.legacy.TestOracleDatabase;
 import ch.admin.bar.siard2.oracle.legacy.TestSqlDatabase;
+import ch.enterag.sqlparser.Interval;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.base.TestUtils;
+import ch.enterag.utils.jdbc.BaseResultSet;
+import ch.enterag.utils.jdbc.BaseResultSetTester;
 import org.junit.*;
-import ch.admin.bar.siard2.jdbcx.*;
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.utils.jdbc.*;
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.identifier.*;
 import org.testcontainers.containers.OracleContainer;
+
+import javax.xml.datatype.Duration;
+import java.io.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.net.MalformedURLException;
+import java.sql.*;
+import java.sql.Date;
+import java.text.ParseException;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class OracleResultSetTester extends BaseResultSetTester {
 

@@ -23,8 +23,10 @@ public class DatabaseUploadService extends Service<String> {
 
         this.setOnSucceeded(instruction.getOnSuccess());
         this.setOnFailed(instruction.getOnFailure());
-        this.valueProperty().addListener(instruction.getOnStepCompleted());
-        this.progressProperty().addListener(instruction.getOnProgress());
+        this.valueProperty()
+            .addListener(instruction.getOnStepCompleted());
+        this.progressProperty()
+            .addListener(instruction.getOnProgress());
     }
 
     @Override
@@ -47,7 +49,8 @@ public class DatabaseUploadService extends Service<String> {
         @Override
         protected String call() throws Exception {
             val connection = connectionFactory.getOrCreateConnection(instruction.getConnectionData());
-            val timeout = userPreferences.getStoredOptions().getQueryTimeout();
+            val timeout = userPreferences.getStoredOptions()
+                                         .getQueryTimeout();
 
             // TODO overwrite and metadataonly?
             boolean isOverwrite = true;
@@ -55,7 +58,8 @@ public class DatabaseUploadService extends Service<String> {
 
             val metaDataToDb = MetaDataToDb.newInstance(
                     connection.getMetaData(),
-                    instruction.getArchive().getMetaData(),
+                    instruction.getArchive()
+                               .getMetaData(),
                     instruction.getSchemaNameMappings());
             metaDataToDb.setQueryTimeout(timeout);
 

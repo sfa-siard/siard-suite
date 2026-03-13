@@ -14,7 +14,7 @@ public class FileTestHelper {
     }
 
     public static String removeDriveLetterIfNecessary(final String orig) {
-        val driveLetterPattern = Pattern.compile( "\\b[a-zA-Z]:\\\\");
+        val driveLetterPattern = Pattern.compile("\\b[a-zA-Z]:\\\\");
         val matcher = driveLetterPattern.matcher(orig);
 
         return matcher.replaceAll(Matcher.quoteReplacement(File.separator));

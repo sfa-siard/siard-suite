@@ -8,14 +8,20 @@ Created    : 09.05.2012, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.configuration;
 
-import java.io.*;
-import java.net.*;
-import java.text.*;
-import java.util.*;
-import java.util.jar.*;
+import ch.enterag.utils.io.SpecialFolder;
+import ch.enterag.utils.logging.IndentLogger;
 
-import ch.enterag.utils.io.*;
-import ch.enterag.utils.logging.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.jar.Manifest;
 
 /**
  * ManifestAttributes extends Manifest for easy access to attributes.
@@ -171,14 +177,19 @@ public class ManifestAttributes extends Manifest {
             if (fileJar != null) {
                 /* if we are in a jar, search for the one pointing to the jar file */
                 if (fileJar.isFile()) {
-                    URL urlJarFile = fileJar.toURI().toURL(); // file: URL
+                    URL urlJarFile = fileJar.toURI()
+                                            .toURL(); // file: URL
                     _il.event("JAR file URL: " + urlJarFile);
                     String sJarUrl = "jar:" + urlJarFile + "!" + sMANIFEST_RESOURCE; // jar:file:<...>!/META-INF/MANIFEST.MF
                     urlManifest = new URL(sJarUrl);
                     _il.event("Manifest in JAR: " + urlManifest);
                 } else /* otherwise get it from the file system */ {
-                    File fileManifest = new File(fileJar.getParentFile().getParentFile().getParentFile().getAbsolutePath() + "/tmp/jar/MANIFEST.MF"); // <...>/tmp/jar/MANIFEST.MF for gradle setup
-                    urlManifest = fileManifest.toURI().toURL();
+                    File fileManifest = new File(fileJar.getParentFile()
+                                                        .getParentFile()
+                                                        .getParentFile()
+                                                        .getAbsolutePath() + "/tmp/jar/MANIFEST.MF"); // <...>/tmp/jar/MANIFEST.MF for gradle setup
+                    urlManifest = fileManifest.toURI()
+                                              .toURL();
                     System.out.println(urlManifest);
                 }
             }

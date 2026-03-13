@@ -8,8 +8,10 @@ import java.util.function.Supplier;
 
 @Value
 public class LoadedView<C> {
-    @NonNull Supplier<Node> nodeSupplier;
-    @NonNull C controller;
+    @NonNull
+    Supplier<Node> nodeSupplier;
+    @NonNull
+    C controller;
 
     public LoadedView(@NonNull Node node, @NonNull C controller) {
         this.nodeSupplier = () -> node;
@@ -22,6 +24,6 @@ public class LoadedView<C> {
     }
 
     public <N extends Node> N getNode() {
-        return (N)nodeSupplier.get();
+        return (N) nodeSupplier.get();
     }
 }

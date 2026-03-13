@@ -27,6 +27,7 @@ public class MariaDBKeysUploadIT {
 
     @Test
     public void executeTest() {
-        MySqlKeysUpload.executeTest(siardArchivesHandler, db.getJdbcUrl().replace("jdbc:mariadb", "jdbc:mysql"), SIARD_ARCHIVE_MYSQL_5);
+        MySqlKeysUpload.executeTest(siardArchivesHandler, db.getJdbcUrl()
+                                                            .replace("jdbc:mariadb", "jdbc:mysql"), SIARD_ARCHIVE_MYSQL_5);
     }
 }

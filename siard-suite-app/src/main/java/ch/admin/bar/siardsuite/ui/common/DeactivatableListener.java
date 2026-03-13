@@ -36,8 +36,11 @@ public class DeactivatableListener<T> implements ChangeListener<T> {
 
     @Value
     public static class Change<T> {
-        @NonNull T newValue;
-        @NonNull Optional<T> oldValue;
-        @NonNull DeactivatableListener<T> deactivatableListener;
+        @NonNull
+        T newValue;
+        @NonNull
+        Optional<T> oldValue;
+        @NonNull
+        DeactivatableListener<T> deactivatableListener;
     }
 }

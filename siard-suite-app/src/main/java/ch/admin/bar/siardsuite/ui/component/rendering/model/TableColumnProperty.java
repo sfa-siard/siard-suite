@@ -9,9 +9,12 @@ import java.util.function.Function;
 
 @Value
 public class TableColumnProperty<T> implements RenderableProperty<T> {
-    @NonNull DisplayableText title;
-    @NonNull Function<T, String> valueExtractor;
-    @NonNull Optional<CellClickedListener<T>> onCellClickedListener;
+    @NonNull
+    DisplayableText title;
+    @NonNull
+    Function<T, String> valueExtractor;
+    @NonNull
+    Optional<CellClickedListener<T>> onCellClickedListener;
 
     public interface CellClickedListener<T> {
         void onClick(TableColumnProperty<T> property, T value) throws Exception;

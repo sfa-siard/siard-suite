@@ -9,13 +9,8 @@ import ch.admin.bar.siard2.cmd.utils.siard.utils.Unzipper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.TemporaryFolder;
@@ -100,12 +95,12 @@ public class SiardArchivesHandler extends ExternalResource {
 
     private SiardArchiveExplorer createExplorer(final File pathToArchive, final File pathToExtracted) {
         return SiardArchiveExplorer.builder()
-                .xmlMapper(xmlMapper)
-                .pathToArchiveFile(pathToArchive)
-                .pathToExtractingDirectory(pathToExtracted)
-                .testClassName(testClassName)
-                .testName(testName)
-                .build();
+                                   .xmlMapper(xmlMapper)
+                                   .pathToArchiveFile(pathToArchive)
+                                   .pathToExtractingDirectory(pathToExtracted)
+                                   .testClassName(testClassName)
+                                   .testName(testName)
+                                   .build();
     }
 
     /**
@@ -175,11 +170,12 @@ public class SiardArchivesHandler extends ExternalResource {
             val filename = pathToArchiveFile.getName();
 
             val outputFile = new File(String.format("build/test-outputs/%s/%s/%s",
-                    testClassName,
-                    testName,
-                    filename));
+                                                    testClassName,
+                                                    testName,
+                                                    filename));
 
-            Files.createDirectories(outputFile.getParentFile().toPath());
+            Files.createDirectories(outputFile.getParentFile()
+                                              .toPath());
 
             if (outputFile.exists()) {
                 outputFile.delete();

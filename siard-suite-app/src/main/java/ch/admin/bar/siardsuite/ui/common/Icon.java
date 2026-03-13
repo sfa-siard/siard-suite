@@ -48,7 +48,7 @@ public enum Icon {
         val origHeight = image.getHeight();
         val origWidth = image.getWidth();
 
-        val ratio = (float)origHeight / (float)height;
+        val ratio = (float) origHeight / (float) height;
 
         return new Image(this.url.toString(), origWidth * ratio, height, true, false);
     }

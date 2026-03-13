@@ -6,11 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.io.File;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -45,8 +41,10 @@ public class UserPreferences {
 
         preferences.put(KeyIndex.FILE.name(), recentDbConnection.getFile());
 
-        preferences.put(KeyIndex.STORAGE_DATE.name(), I18n.getLocaleDate(LocalDate.now().toString()));
-        preferences.put(KeyIndex.TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
+        preferences.put(KeyIndex.STORAGE_DATE.name(), I18n.getLocaleDate(LocalDate.now()
+                                                                                  .toString()));
+        preferences.put(KeyIndex.TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone()
+                                                                       .millis()));
 
         cropToMaxElements(NodePath.DATABASE_CONNECTION, 3);
     }
@@ -54,8 +52,10 @@ public class UserPreferences {
     public void push(final RecentFile recentFile) {
         val node = node(NodePath.RECENT_FILES).node(String.valueOf(recentFile.hashCode()));
 
-        node.put(KeyIndex.ABSOLUTE_PATH.name(), recentFile.getValue().getAbsolutePath());
-        node.put(KeyIndex.TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone().millis()));
+        node.put(KeyIndex.ABSOLUTE_PATH.name(), recentFile.getValue()
+                                                          .getAbsolutePath());
+        node.put(KeyIndex.TIMESTAMP.name(), String.valueOf(Clock.systemDefaultZone()
+                                                                .millis()));
 
         cropToMaxElements(NodePath.RECENT_FILES, 3);
     }
@@ -65,17 +65,17 @@ public class UserPreferences {
 
         try {
             return childrenNodeNamesNewestToOldest(NodePath.RECENT_FILES).stream()
-                    .map(name -> {
-                        val node = recentFiles.node(name);
+                                                                         .map(name -> {
+                                                                             val node = recentFiles.node(name);
 
-                        val file = new File(node.get(KeyIndex.ABSOLUTE_PATH.name(), ""));
+                                                                             val file = new File(node.get(KeyIndex.ABSOLUTE_PATH.name(), ""));
 
-                        return StorageData.<RecentFile>builder()
-                                .storedAt(readTimestampFromNode(node))
-                                .storedData(new RecentFile(file))
-                                .build();
-                    })
-                    .collect(Collectors.toList());
+                                                                             return StorageData.<RecentFile>builder()
+                                                                                               .storedAt(readTimestampFromNode(node))
+                                                                                               .storedData(new RecentFile(file))
+                                                                                               .build();
+                                                                         })
+                                                                         .collect(Collectors.toList());
 
         } catch (BackingStoreException e) {
             throw new RuntimeException("Exception while reading stored connections in user preferences", e);
@@ -87,24 +87,24 @@ public class UserPreferences {
 
         try {
             return childrenNodeNamesNewestToOldest(NodePath.DATABASE_CONNECTION).stream()
-                    .map(name -> {
-                        val node = connectionNode.node(name);
+                                                                                .map(name -> {
+                                                                                    val node = connectionNode.node(name);
 
-                        return StorageData.<RecentDbConnection>builder()
-                                .storedAt(readTimestampFromNode(node))
-                                .storedData(RecentDbConnection.builder()
-                                        .name(name)
-                                        .dbmsProduct(node.get(KeyIndex.DATABASE_SYSTEM.name(), ""))
-                                        .connectionOptions(node.get(KeyIndex.CONNECTION_OPTIONS.name(), ""))
-                                        .host(node.get(KeyIndex.DATABASE_SERVER.name(), ""))
-                                        .port(node.get(KeyIndex.PORT_NUMBER.name(), ""))
-                                        .dbName(node.get(KeyIndex.DATABASE_NAME.name(), ""))
-                                        .user(node.get(KeyIndex.USER_NAME.name(), ""))
-                                        .file(node.get(KeyIndex.FILE.name(), ""))
-                                        .build())
-                                .build();
-                    })
-                    .collect(Collectors.toList());
+                                                                                    return StorageData.<RecentDbConnection>builder()
+                                                                                                      .storedAt(readTimestampFromNode(node))
+                                                                                                      .storedData(RecentDbConnection.builder()
+                                                                                                                                    .name(name)
+                                                                                                                                    .dbmsProduct(node.get(KeyIndex.DATABASE_SYSTEM.name(), ""))
+                                                                                                                                    .connectionOptions(node.get(KeyIndex.CONNECTION_OPTIONS.name(), ""))
+                                                                                                                                    .host(node.get(KeyIndex.DATABASE_SERVER.name(), ""))
+                                                                                                                                    .port(node.get(KeyIndex.PORT_NUMBER.name(), ""))
+                                                                                                                                    .dbName(node.get(KeyIndex.DATABASE_NAME.name(), ""))
+                                                                                                                                    .user(node.get(KeyIndex.USER_NAME.name(), ""))
+                                                                                                                                    .file(node.get(KeyIndex.FILE.name(), ""))
+                                                                                                                                    .build())
+                                                                                                      .build();
+                                                                                })
+                                                                                .collect(Collectors.toList());
 
         } catch (BackingStoreException e) {
             throw new RuntimeException("Exception while reading stored connections in user preferences", e);
@@ -115,9 +115,9 @@ public class UserPreferences {
         val optionsNode = node(NodePath.OPTIONS);
 
         return Options.builder()
-                .queryTimeout(Integer.parseInt(optionsNode.get(KeyIndex.QUERY_TIMEOUT.name(), "0")))
-                .loginTimeout(Integer.parseInt(optionsNode.get(KeyIndex.LOGIN_TIMEOUT.name(), "0")))
-                .build();
+                      .queryTimeout(Integer.parseInt(optionsNode.get(KeyIndex.QUERY_TIMEOUT.name(), "0")))
+                      .loginTimeout(Integer.parseInt(optionsNode.get(KeyIndex.LOGIN_TIMEOUT.name(), "0")))
+                      .build();
     }
 
     public void push(final Options options) {
@@ -127,7 +127,8 @@ public class UserPreferences {
     }
 
     private Preferences node(NodePath nodePath) {
-        return preferencesWrapper.root().node(nodePath.name());
+        return preferencesWrapper.root()
+                                 .node(nodePath.name());
     }
 
     private void cropToMaxElements(final NodePath nodePath, final int maxNr) {
@@ -154,21 +155,23 @@ public class UserPreferences {
     private List<String> childrenNodeNamesOldestToNewest(NodePath nodePath) throws BackingStoreException {
         val parentNode = node(nodePath);
         return Arrays.stream(parentNode.childrenNames())
-                .sorted(Comparator.comparing(
-                        name -> Long.parseLong(parentNode.node(name).get(KeyIndex.TIMESTAMP.name(), "0")),
-                        Comparator.naturalOrder()
-                ))
-                .collect(Collectors.toList());
+                     .sorted(Comparator.comparing(
+                             name -> Long.parseLong(parentNode.node(name)
+                                                              .get(KeyIndex.TIMESTAMP.name(), "0")),
+                             Comparator.naturalOrder()
+                     ))
+                     .collect(Collectors.toList());
     }
 
     private List<String> childrenNodeNamesNewestToOldest(NodePath nodePath) throws BackingStoreException {
         val parentNode = node(nodePath);
         return Arrays.stream(parentNode.childrenNames())
-                .sorted(Comparator.comparing(
-                        name -> Long.parseLong(parentNode.node(name).get(KeyIndex.TIMESTAMP.name(), "0")),
-                        Comparator.reverseOrder()
-                ))
-                .collect(Collectors.toList());
+                     .sorted(Comparator.comparing(
+                             name -> Long.parseLong(parentNode.node(name)
+                                                              .get(KeyIndex.TIMESTAMP.name(), "0")),
+                             Comparator.reverseOrder()
+                     ))
+                     .collect(Collectors.toList());
     }
 
     private ZonedDateTime readTimestampFromNode(Preferences node) {

@@ -7,6 +7,8 @@ import lombok.Value;
 @Value
 @Builder
 public class Options {
-    @NonNull Integer loginTimeout;
-    @NonNull Integer queryTimeout;
+    @NonNull
+    Integer loginTimeout;
+    @NonNull
+    Integer queryTimeout;
 }

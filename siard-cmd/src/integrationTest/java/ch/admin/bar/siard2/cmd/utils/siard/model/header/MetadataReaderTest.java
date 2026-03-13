@@ -29,13 +29,20 @@ public class MetadataReaderTest {
         val result = metadataReader.read();
 
         // then
-        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result)
+                  .isNotNull();
 
-        Assertions.assertThat(result.getSchemas()).isNotEmpty();
-        result.getSchemas().forEach(schema -> {
-            Assertions.assertThat(schema.getTypes()).isNotEmpty();
-            Assertions.assertThat(schema.getTables()).isNotEmpty();
-            schema.getTables().forEach(table -> Assertions.assertThat(table.getColumns()).isNotEmpty());
-        });
+        Assertions.assertThat(result.getSchemas())
+                  .isNotEmpty();
+        result.getSchemas()
+              .forEach(schema -> {
+                  Assertions.assertThat(schema.getTypes())
+                            .isNotEmpty();
+                  Assertions.assertThat(schema.getTables())
+                            .isNotEmpty();
+                  schema.getTables()
+                        .forEach(table -> Assertions.assertThat(table.getColumns())
+                                                    .isNotEmpty());
+              });
     }
 }

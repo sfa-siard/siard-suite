@@ -10,8 +10,10 @@ import java.util.Optional;
 @Value
 @Builder
 public class Failure {
-    @NonNull DisplayableText title;
-    @NonNull DisplayableText message;
+    @NonNull
+    DisplayableText title;
+    @NonNull
+    DisplayableText message;
 
     @NonNull
     @Builder.Default

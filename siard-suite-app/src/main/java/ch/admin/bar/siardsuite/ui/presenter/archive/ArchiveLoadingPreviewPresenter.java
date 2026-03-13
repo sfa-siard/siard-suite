@@ -66,8 +66,12 @@ public class ArchiveLoadingPreviewPresenter {
             final Dialogs dialogs,
             final ErrorHandler errorHandler
     ) {
-        this.title.textProperty().bind(DisplayableText.of(TITLE).bindable());
-        this.text.textProperty().bind(DisplayableText.of(TEXT).bindable());
+        this.title.textProperty()
+                  .bind(DisplayableText.of(TITLE)
+                                       .bindable());
+        this.text.textProperty()
+                 .bind(DisplayableText.of(TEXT)
+                                      .bindable());
 
         this.loader.setImage(loading);
         new Spinner(this.loader).play();
@@ -75,35 +79,40 @@ public class ArchiveLoadingPreviewPresenter {
         ButtonBox buttonsBox = new ButtonBox().make(CANCEL);
         this.borderPane.setBottom(buttonsBox);
 
-        buttonsBox.previous().setOnAction(event -> {
-            navigator.previous();
-            dbInteractionService.cancelRunning();
-        });
-        buttonsBox.cancel().setOnAction(event -> dialogs
-                .open(View.ARCHIVE_ABORT_DIALOG));
+        buttonsBox.previous()
+                  .setOnAction(event -> {
+                      navigator.previous();
+                      dbInteractionService.cancelRunning();
+                  });
+        buttonsBox.cancel()
+                  .setOnAction(event -> dialogs
+                          .open(View.ARCHIVE_ABORT_DIALOG));
 
         dbInteractionService.execute(LoadDatabaseInstruction.builder()
-                .connectionData(dbmsConnectionData)
-                .loadOnlyMetadata(true)
-                .onSuccess(downloadedArchive -> {
-                    downloadedArchive.getMetaData().setDbName(dbmsConnectionData.getDbName());
+                                                            .connectionData(dbmsConnectionData)
+                                                            .loadOnlyMetadata(true)
+                                                            .onSuccess(downloadedArchive -> {
+                                                                downloadedArchive.getMetaData()
+                                                                                 .setDbName(dbmsConnectionData.getDbName());
 
-                    navigator.next(new Tuple<>(
-                            downloadedArchive,
-                            dbmsConnectionData
-                    ));
-                })
-                .onFailure(event -> {
-                    navigator.previous();
-                    errorHandler.handle(event.getSource().getException());
-                })
-                .onProgress((o, oldValue, newValue) -> {
-                    progressBar.progressProperty().set(newValue.doubleValue());
-                })
-                .onStepCompleted((o1, oldValue, newValue) -> {
-                    newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
-                })
-                .build());
+                                                                navigator.next(new Tuple<>(
+                                                                        downloadedArchive,
+                                                                        dbmsConnectionData
+                                                                ));
+                                                            })
+                                                            .onFailure(event -> {
+                                                                navigator.previous();
+                                                                errorHandler.handle(event.getSource()
+                                                                                         .getException());
+                                                            })
+                                                            .onProgress((o, oldValue, newValue) -> {
+                                                                progressBar.progressProperty()
+                                                                           .set(newValue.doubleValue());
+                                                            })
+                                                            .onStepCompleted((o1, oldValue, newValue) -> {
+                                                                newValue.forEach(p -> addLoadingItem(p.getKey(), new AtomicInteger().getAndIncrement()));
+                                                            })
+                                                            .build());
     }
 
     private void addLoadingItem(String text, Integer pos) {
@@ -127,13 +136,14 @@ public class ArchiveLoadingPreviewPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveLoadingPreviewPresenter>load("fxml/archive/archive-loading-preview.fxml");
-        loaded.getController().init(
-                dbmsConnectionData,
-                navigator,
-                servicesFacade.getService(DbInteractionService.class),
-                servicesFacade.dialogs(),
-                servicesFacade.errorHandler()
-        );
+        loaded.getController()
+              .init(
+                      dbmsConnectionData,
+                      navigator,
+                      servicesFacade.getService(DbInteractionService.class),
+                      servicesFacade.dialogs(),
+                      servicesFacade.errorHandler()
+              );
 
         return loaded;
     }

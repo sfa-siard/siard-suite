@@ -17,7 +17,8 @@ class FileHelperTest {
         val filename = FileHelper.extractFilenameWithoutExtension(file);
 
         // then
-        Assertions.assertThat(filename).isEqualTo("file_with");
+        Assertions.assertThat(filename)
+                  .isEqualTo("file_with");
     }
 
     @Test
@@ -29,7 +30,8 @@ class FileHelperTest {
         val filename = FileHelper.extractFilenameWithoutExtension(file);
 
         // then
-        Assertions.assertThat(filename).isEqualTo("file_without_extension");
+        Assertions.assertThat(filename)
+                  .isEqualTo("file_without_extension");
     }
 
 }

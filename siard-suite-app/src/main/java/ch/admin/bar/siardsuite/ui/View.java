@@ -1,15 +1,16 @@
 package ch.admin.bar.siardsuite.ui;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.Tuple;
-import ch.admin.bar.siardsuite.ui.common.Workflow;
-import ch.admin.bar.siardsuite.ui.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.framework.dialogs.ShowDialogTarget;
 import ch.admin.bar.siardsuite.framework.dialogs.SimpleShowDialogTarget;
+import ch.admin.bar.siardsuite.framework.errors.Failure;
 import ch.admin.bar.siardsuite.framework.navigation.NavigationTarget;
 import ch.admin.bar.siardsuite.framework.navigation.SimpleNavigationTarget;
-import ch.admin.bar.siardsuite.framework.errors.Failure;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.model.Tuple;
+import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
+import ch.admin.bar.siardsuite.ui.common.Workflow;
+import ch.admin.bar.siardsuite.ui.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.ui.presenter.ErrorDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.StartPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.archive.ArchiveStepperPresenter;
@@ -17,15 +18,14 @@ import ch.admin.bar.siardsuite.ui.presenter.archive.browser.OpenArchiveBrowser;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.dialogues.SearchMetadataDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.dialogues.SearchTableDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.dialogues.UnsavedChangesDialogPresenter;
+import ch.admin.bar.siardsuite.ui.presenter.common.AbortDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.common.RecentConnectionsDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.export.ExportSelectTablesDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.export.ExportSuccessDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.info.InfoDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.open.OpenSiardArchiveDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.option.OptionDialogPresenter;
-import ch.admin.bar.siardsuite.ui.presenter.common.AbortDialogPresenter;
 import ch.admin.bar.siardsuite.ui.presenter.upload.UploadStepperPresenter;
-import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import javafx.scene.control.TreeItem;
 
 import java.io.File;

@@ -9,7 +9,7 @@ import java.io.IOException;
  * Implementations handle specific value types (LOBs, UDTs, arrays, primitives).
  */
 interface ValueRenderer {
-    
+
     /**
      * Check if this renderer can handle the given value type.
      *
@@ -17,7 +17,7 @@ interface ValueRenderer {
      * @return true if this renderer can handle the value
      */
     boolean canRender(Value value);
-    
+
     /**
      * Render the value to HTML string.
      *
@@ -27,7 +27,7 @@ interface ValueRenderer {
      * @throws IOException if an I/O error occurs during rendering
      */
     String render(Value value, ValueRenderingContext context);
-    
+
     /**
      * Get the priority of this renderer. Higher priority renderers are checked first.
      * This allows for more specific renderers to override general ones.

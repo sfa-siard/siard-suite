@@ -132,17 +132,22 @@ public class ArchiveMetaDataEditorPresenter {
 
         this.buttonsBox = new ButtonBox().make(DEFAULT);
         this.borderPane.setBottom(buttonsBox);
-        this.buttonsBox.previous().setOnAction(event -> navigator.previous());
-        this.buttonsBox.cancel().setOnAction((event) -> dialogs
-                .open(View.ARCHIVE_ABORT_DIALOG));
-        this.buttonsBox.next().setOnAction((event) -> {
-            tryReadValidUserDefinedMetadata()
-                    .ifPresent(userDefinedMetadata ->
-                            navigator.next(new Tuple<>(userDefinedMetadata, connectionData)));
-        });
+        this.buttonsBox.previous()
+                       .setOnAction(event -> navigator.previous());
+        this.buttonsBox.cancel()
+                       .setOnAction((event) -> dialogs
+                               .open(View.ARCHIVE_ABORT_DIALOG));
+        this.buttonsBox.next()
+                       .setOnAction((event) -> {
+                           tryReadValidUserDefinedMetadata()
+                                   .ifPresent(userDefinedMetadata ->
+                                                      navigator.next(new Tuple<>(userDefinedMetadata, connectionData)));
+                       });
 
         val saveArchiveButton = new MFXButton();
-        saveArchiveButton.textProperty().bind(DisplayableText.of(SAVE_ARCHIVE).bindable());
+        saveArchiveButton.textProperty()
+                         .bind(DisplayableText.of(SAVE_ARCHIVE)
+                                              .bindable());
         saveArchiveButton.setOnAction(event -> this.saveOnlyMetaData());
 
         this.buttonsBox.append(saveArchiveButton);
@@ -152,18 +157,42 @@ public class ArchiveMetaDataEditorPresenter {
     }
 
     private void bindTexts() {
-        this.titleText.textProperty().bind(DisplayableText.of(TITLE).bindable());
-        this.descriptionText.textProperty().bind(DisplayableText.of(DESCRIPTION).bindable());
-        this.titleWhat.textProperty().bind(DisplayableText.of(WHAT).bindable());
-        this.titleWho.textProperty().bind(DisplayableText.of(WHO).bindable());
-        this.nameLabel.textProperty().bind(DisplayableText.of(DATABASE_NAME).bindable());
-        this.descriptionLabel.textProperty().bind(DisplayableText.of(DATABASE_DESCRIPTION).bindable());
-        this.ownerLabel.textProperty().bind(DisplayableText.of(DELIVERING_OFFICE).bindable());
-        this.dataOriginTimespanLabel.textProperty().bind(DisplayableText.of(DATABASE_CREATION_DATE).bindable());
-        this.archiverLabel.textProperty().bind(DisplayableText.of(ARCHIVER_NAME).bindable());
-        this.archiverContactLabel.textProperty().bind(DisplayableText.of(ARCHIVER_CONTACT).bindable());
-        this.lobExportLabel.textProperty().bind(DisplayableText.of(EXPORT_LOCATION_LOB).bindable());
-        this.exportViewsAsTables.textProperty().bind(DisplayableText.of(EXPORT_VIEWS_AS_TABLES).bindable());
+        this.titleText.textProperty()
+                      .bind(DisplayableText.of(TITLE)
+                                           .bindable());
+        this.descriptionText.textProperty()
+                            .bind(DisplayableText.of(DESCRIPTION)
+                                                 .bindable());
+        this.titleWhat.textProperty()
+                      .bind(DisplayableText.of(WHAT)
+                                           .bindable());
+        this.titleWho.textProperty()
+                     .bind(DisplayableText.of(WHO)
+                                          .bindable());
+        this.nameLabel.textProperty()
+                      .bind(DisplayableText.of(DATABASE_NAME)
+                                           .bindable());
+        this.descriptionLabel.textProperty()
+                             .bind(DisplayableText.of(DATABASE_DESCRIPTION)
+                                                  .bindable());
+        this.ownerLabel.textProperty()
+                       .bind(DisplayableText.of(DELIVERING_OFFICE)
+                                            .bindable());
+        this.dataOriginTimespanLabel.textProperty()
+                                    .bind(DisplayableText.of(DATABASE_CREATION_DATE)
+                                                         .bindable());
+        this.archiverLabel.textProperty()
+                          .bind(DisplayableText.of(ARCHIVER_NAME)
+                                               .bindable());
+        this.archiverContactLabel.textProperty()
+                                 .bind(DisplayableText.of(ARCHIVER_CONTACT)
+                                                      .bindable());
+        this.lobExportLabel.textProperty()
+                           .bind(DisplayableText.of(EXPORT_LOCATION_LOB)
+                                                .bindable());
+        this.exportViewsAsTables.textProperty()
+                                .bind(DisplayableText.of(EXPORT_VIEWS_AS_TABLES)
+                                                     .bindable());
     }
 
     private File showFileChooserToSelectTargetArchive(String databaseName) { // TODO Move to dialogs
@@ -171,8 +200,10 @@ public class ArchiveMetaDataEditorPresenter {
         fileChooser.setTitle(I18n.get("export.choose-location.text"));
         fileChooser.setInitialFileName(databaseName + ".siard");
         final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
-        fileChooser.getExtensionFilters().add(extensionFilter);
-        return fileChooser.showSaveDialog(titleText.getScene().getWindow());
+        fileChooser.getExtensionFilters()
+                   .add(extensionFilter);
+        return fileChooser.showSaveDialog(titleText.getScene()
+                                                   .getWindow());
     }
 
     private void saveOnlyMetaData() {
@@ -190,28 +221,31 @@ public class ArchiveMetaDataEditorPresenter {
             File targetArchive = this.showFileChooserToSelectTargetArchive(this.name.getText());
 
             val lobFolder = Optional.ofNullable(lobExportLocation.getText())
-                    .filter(text -> !text.isEmpty())
-                    .map(text -> text.replace("\\", "/")) // replace backslashes with slashes that work on all platforms
-                    .map(text -> {
-                        try {
-                            return new URI(text);
-                        } catch (URISyntaxException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+                                    .filter(text -> !text.isEmpty())
+                                    .map(text -> text.replace("\\", "/")) // replace backslashes with slashes that work on all platforms
+                                    .map(text -> {
+                                        try {
+                                            return new URI(text);
+                                        } catch (URISyntaxException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    });
 
             if (targetArchive != null) {
                 return Optional.of(UserDefinedMetadata.builder()
-                        .dbName(this.name.getText())
-                        .description(Optional.ofNullable(this.description.getText()).filter(text -> !text.isEmpty()))
-                        .owner(this.owner.getText())
-                        .dataOriginTimespan(this.dataOriginTimespan.getText())
-                        .archiverName(Optional.ofNullable(this.archiverName.getText()).filter(text -> !text.isEmpty()))
-                        .archiverContact(Optional.ofNullable(this.archiverContact.getText()).filter(text -> !text.isEmpty()))
-                        .lobFolder(lobFolder)
-                        .saveAt(targetArchive)
-                        .exportViewsAsTables(exportViewsAsTables.isSelected())
-                        .build());
+                                                      .dbName(this.name.getText())
+                                                      .description(Optional.ofNullable(this.description.getText())
+                                                                           .filter(text -> !text.isEmpty()))
+                                                      .owner(this.owner.getText())
+                                                      .dataOriginTimespan(this.dataOriginTimespan.getText())
+                                                      .archiverName(Optional.ofNullable(this.archiverName.getText())
+                                                                            .filter(text -> !text.isEmpty()))
+                                                      .archiverContact(Optional.ofNullable(this.archiverContact.getText())
+                                                                               .filter(text -> !text.isEmpty()))
+                                                      .lobFolder(lobFolder)
+                                                      .saveAt(targetArchive)
+                                                      .exportViewsAsTables(exportViewsAsTables.isSelected())
+                                                      .build());
             }
         }
 
@@ -237,11 +271,11 @@ public class ArchiveMetaDataEditorPresenter {
 
     private boolean validateProperties() {
         List<ValidationProperty> validationProperties = Arrays.asList(new ValidationProperty(owner,
-                        ownerValidationMsg,
-                        "archiveMetaData.owner.missing"),
-                new ValidationProperty(dataOriginTimespan,
-                        dataOriginTimespanValidationMsg,
-                        "archiveMetaData.timespan.missing"));
+                                                                                             ownerValidationMsg,
+                                                                                             "archiveMetaData.owner.missing"),
+                                                                      new ValidationProperty(dataOriginTimespan,
+                                                                                             dataOriginTimespanValidationMsg,
+                                                                                             "archiveMetaData.timespan.missing"));
 
         return new ValidationProperties(validationProperties).validate();
     }
@@ -252,14 +286,15 @@ public class ArchiveMetaDataEditorPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveMetaDataEditorPresenter>load("fxml/archive/archive-metadata-editor.fxml");
-        loaded.getController().init(
-                data.getValue1(),
-                data.getValue2(),
-                navigator,
-                servicesFacade.errorHandler(),
-                servicesFacade.dialogs(),
-                servicesFacade.getService(ArchiveHandler.class)
-        );
+        loaded.getController()
+              .init(
+                      data.getValue1(),
+                      data.getValue2(),
+                      navigator,
+                      servicesFacade.errorHandler(),
+                      servicesFacade.dialogs(),
+                      servicesFacade.getService(ArchiveHandler.class)
+              );
 
         return loaded;
     }

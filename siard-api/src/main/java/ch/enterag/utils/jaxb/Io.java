@@ -55,7 +55,7 @@ public abstract class Io {
         jo = u.unmarshal(ss, classType)
               .getValue();
         return jo;
-    } 
+    }
 
 
     /*--------------------------------------------------------------------*/
@@ -79,7 +79,7 @@ public abstract class Io {
         jo = readJaxbObject(classType, fis, urlXsd);
         fis.close();
         return jo;
-    } 
+    }
 
     /*--------------------------------------------------------------------*/
 
@@ -118,7 +118,7 @@ public abstract class Io {
             m.marshal(jbe, os);
         } else
             m.marshal(jo, os);
-    } 
+    }
 
     /*--------------------------------------------------------------------*/
 
@@ -135,7 +135,7 @@ public abstract class Io {
     public static void writeJaxbObject(SiardArchive jo, OutputStream os, QName qname, String sNoNamespaceSchemaLocation, boolean bFormat)
             throws JAXBException {
         writeJaxbObject(jo, os, qname, sNoNamespaceSchemaLocation, null, bFormat, null);
-    } 
+    }
 
 
 
@@ -155,5 +155,5 @@ public abstract class Io {
     public static void writeJaxbObject(SiardArchive jo, OutputStream os, String sSchemaLocation, boolean bFormat, URL urlXsd)
             throws JAXBException {
         writeJaxbObject(jo, os, null, null, sSchemaLocation, bFormat, urlXsd);
-    } 
+    }
 } 

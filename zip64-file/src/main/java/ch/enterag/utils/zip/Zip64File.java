@@ -12,13 +12,17 @@ Created    : 25.02.2008, Hartwig Thomas
 
 package ch.enterag.utils.zip;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-
 import ch.enterag.utils.BU;
 import ch.enterag.utils.SU;
-import ch.enterag.utils.io.*;
+import ch.enterag.utils.io.DiskFile;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
+import java.util.zip.CRC32;
+import java.util.zip.Deflater;
+import java.util.zip.ZipException;
 
 /**
  * Zip64File implements an updateable ZIP file.

@@ -3,7 +3,6 @@ package ch.admin.bar.siard2.api.convertableSiardArchive.Siard22;
 import ch.admin.bar.siard2.api.generated.ParameterType;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.*;

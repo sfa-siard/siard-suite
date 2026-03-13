@@ -1,16 +1,15 @@
 package ch.admin.bar.siard2.jdbcx.legacy;
 
-import static org.junit.Assert.*;
+import ch.admin.bar.siard2.jdbcx.OracleDataSource;
+import org.junit.*;
+import org.testcontainers.containers.OracleContainer;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
-import ch.admin.bar.siard2.jdbcx.OracleDataSource;
-import org.junit.*;
-
-import org.testcontainers.containers.OracleContainer;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 public class OracleDataSourceTester {
 
