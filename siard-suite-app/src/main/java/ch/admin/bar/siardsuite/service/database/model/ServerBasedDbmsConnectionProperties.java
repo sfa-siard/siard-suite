@@ -10,11 +10,17 @@ import java.util.Optional;
 @Value
 @Builder(toBuilder = true)
 public class ServerBasedDbmsConnectionProperties implements DbmsConnectionProperties<ServerBasedDbmsConnectionProperties> {
-    @NonNull String host;
-    @NonNull String port;
-    @NonNull String dbName;
-    @NonNull String user;
-    @NonNull @Builder.Default String schema = "%";
+    @NonNull
+    String host;
+    @NonNull
+    String port;
+    @NonNull
+    String dbName;
+    @NonNull
+    String user;
+    @NonNull
+    @Builder.Default
+    String schema = "%";
 
     @NonNull
     @ToString.Exclude

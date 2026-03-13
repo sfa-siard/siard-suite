@@ -18,10 +18,12 @@ public class UpdateInstruction<T> {
     /**
      * The class representing the type of objects that this update instruction can update.
      */
-    @NonNull Class<T> clazz;
+    @NonNull
+    Class<T> clazz;
 
     /**
      * The function that applies updates to instances of the specified type.
      */
-    @NonNull Function<T, T> updater;
+    @NonNull
+    Function<T, T> updater;
 }

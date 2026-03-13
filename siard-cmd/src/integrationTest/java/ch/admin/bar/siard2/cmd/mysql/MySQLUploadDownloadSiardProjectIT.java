@@ -55,10 +55,10 @@ public class MySQLUploadDownloadSiardProjectIT {
         Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         SiardArchiveAssertions.builder()
-                .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?
-                .actualArchive(actualArchive)
-                .expectedArchive(expectedArchive.preserveArchive())
-                .assertEqual();
+                              .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?
+                              .actualArchive(actualArchive)
+                              .expectedArchive(expectedArchive.preserveArchive())
+                              .assertEqual();
     }
 
 }

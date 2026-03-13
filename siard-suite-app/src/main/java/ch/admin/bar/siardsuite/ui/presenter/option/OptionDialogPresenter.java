@@ -1,14 +1,14 @@
 package ch.admin.bar.siardsuite.ui.presenter.option;
 
-import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.ui.component.DialogButton;
-import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.service.preferences.Options;
-import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.util.I18n;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.service.preferences.Options;
+import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
+import ch.admin.bar.siardsuite.ui.component.DialogButton;
+import ch.admin.bar.siardsuite.util.I18n;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -47,13 +47,14 @@ public class OptionDialogPresenter {
 
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
         MFXButton save = new DialogButton(true, "button.save");
-        buttonBox.getChildren().addAll(new CloseDialogButton(dialogCloser),
-                save);
+        buttonBox.getChildren()
+                 .addAll(new CloseDialogButton(dialogCloser),
+                         save);
         save.setOnAction(event -> {
             userPreferences.push(Options.builder()
-                    .queryTimeout(Integer.parseInt(queryTimeoutText.getText())) // FIXME input validation needed
-                    .loginTimeout(Integer.parseInt(loginTimeoutText.getText())) // FIXME input validation needed
-                    .build());
+                                        .queryTimeout(Integer.parseInt(queryTimeoutText.getText())) // FIXME input validation needed
+                                        .loginTimeout(Integer.parseInt(loginTimeoutText.getText())) // FIXME input validation needed
+                                        .build());
             dialogCloser.closeDialog();
         });
 
@@ -64,10 +65,11 @@ public class OptionDialogPresenter {
 
     public static LoadedView<OptionDialogPresenter> load(final ServicesFacade servicesFacade) {
         val loaded = FXMLLoadHelper.<OptionDialogPresenter>load("fxml/option/option-dialog.fxml");
-        loaded.getController().init(
-                servicesFacade.getService(UserPreferences.class),
-                servicesFacade.dialogs()
-        );
+        loaded.getController()
+              .init(
+                      servicesFacade.getService(UserPreferences.class),
+                      servicesFacade.dialogs()
+              );
 
         return loaded;
     }

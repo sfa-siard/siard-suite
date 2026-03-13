@@ -1,11 +1,11 @@
 package ch.admin.bar.siardsuite.ui.component.stepper;
 
 import ch.admin.bar.siardsuite.framework.hooks.Destructible;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.steps.Step;
+import ch.admin.bar.siardsuite.ui.component.stepper.skins.CustomStepperSkin;
 import ch.admin.bar.siardsuite.ui.component.stepper.skins.CustomStepperToggleSkin;
 import ch.admin.bar.siardsuite.util.I18n;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.ui.component.stepper.skins.CustomStepperSkin;
 import io.github.palexdev.materialfx.controls.MFXStepper;
 import io.github.palexdev.materialfx.controls.MFXStepperToggle;
 import io.github.palexdev.materialfx.enums.StepperToggleState;
@@ -35,13 +35,13 @@ public class DrilledMFXStepper extends MFXStepper implements Destructible {
     public void init(List<Step> steps) {
         val stepNumber = new AtomicInteger(1);
         val toggles = steps.stream()
-                .map(step -> {
-                    if (step.isVisible()) {
-                        return createToggle(step, stepNumber.getAndIncrement() + "");
-                    }
-                    return createToggle(step, "");
-                })
-                .collect(Collectors.toList());
+                           .map(step -> {
+                               if (step.isVisible()) {
+                                   return createToggle(step, stepNumber.getAndIncrement() + "");
+                               }
+                               return createToggle(step, "");
+                           })
+                           .collect(Collectors.toList());
 
         getStepperToggles().addAll(toggles);
 
@@ -50,13 +50,13 @@ public class DrilledMFXStepper extends MFXStepper implements Destructible {
         setSkin(skin);
 
 
-
         // bootstrap first step
         display(steps.get(0));
     }
 
     public void display(final Step step) {
-        val viewSupplier = step.getViewSupplier().get();
+        val viewSupplier = step.getViewSupplier()
+                               .get();
         display(step.getStepIndex(), viewSupplier.getNode());
     }
 
@@ -86,14 +86,15 @@ public class DrilledMFXStepper extends MFXStepper implements Destructible {
 
     private MFXStepperToggle createToggle(final Step step, final String stepNumber) {
         Button btn = new Button();
-        btn.getStyleClass().setAll("stepper-btn", "number-btn");
+        btn.getStyleClass()
+           .setAll("stepper-btn", "number-btn");
         btn.setText(stepNumber);
 
         val toggle = new MFXStepperToggle(
                 // passing the key is kind of a hack to bind it in the CustomStepperToggleSkin
                 step.getTitle()
-                        .map(I18nKey::getValue)
-                        .orElse(""),
+                    .map(I18nKey::getValue)
+                    .orElse(""),
                 btn);
 
         val skin = new CustomStepperToggleSkin(toggle, step.isVisible());

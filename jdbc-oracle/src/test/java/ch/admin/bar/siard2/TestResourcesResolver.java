@@ -22,11 +22,11 @@ public class TestResourcesResolver {
      */
     public static File resolve(final String resource) {
         final Optional<URL> urlToResource = Optional.ofNullable(TestResourcesResolver.class
-                .getClassLoader()
-                .getResource(resource));
+                                                                        .getClassLoader()
+                                                                        .getResource(resource));
 
         return urlToResource.map(url -> new File(url.getFile()))
-                .filter(File::exists)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Resource \"%s\" not found", resource)));
+                            .filter(File::exists)
+                            .orElseThrow(() -> new IllegalArgumentException(String.format("Resource \"%s\" not found", resource)));
     }
 }

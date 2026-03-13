@@ -11,22 +11,27 @@ package ch.enterag.utils;
 
 import java.util.TimeZone;
 
-public abstract class TZ
-{
-  /** local default time zone at the time of loading this class */
-  private static final TimeZone m_tzLocal = TimeZone.getDefault();
-  public static void setLocalTimeZone() { TimeZone.setDefault(m_tzLocal); }
-  public static void setUtcTimeZone() { TimeZone.setDefault(getUtcTimeZone()); }
-  
-  /*------------------------------------------------------------------*/
-  /** returns UTC TimeZone.
-   @return UTC TimeZone.
-   */
-  public static TimeZone getUtcTimeZone()
-  {
-    TimeZone tz = TimeZone.getTimeZone("GMT");
-    tz.setRawOffset(0);
-    return tz;
-  } /* getUtcTimeZone */
+public abstract class TZ {
+    /** local default time zone at the time of loading this class */
+    private static final TimeZone m_tzLocal = TimeZone.getDefault();
+
+    public static void setLocalTimeZone() {
+        TimeZone.setDefault(m_tzLocal);
+    }
+
+    public static void setUtcTimeZone() {
+        TimeZone.setDefault(getUtcTimeZone());
+    }
+
+    /*------------------------------------------------------------------*/
+
+    /** returns UTC TimeZone.
+     @return UTC TimeZone.
+     */
+    public static TimeZone getUtcTimeZone() {
+        TimeZone tz = TimeZone.getTimeZone("GMT");
+        tz.setRawOffset(0);
+        return tz;
+    } /* getUtcTimeZone */
 
 } /* TZ */

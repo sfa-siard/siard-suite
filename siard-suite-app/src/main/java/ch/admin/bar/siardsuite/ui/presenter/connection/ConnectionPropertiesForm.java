@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.ui.presenter.connection;
 
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.ui.presenter.connection.fields.FormField;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import javafx.scene.layout.VBox;
 import lombok.val;
 
@@ -21,8 +21,8 @@ public abstract class ConnectionPropertiesForm extends VBox {
 
     public boolean isValid() {
         val invalidFields = formFields.stream()
-                .filter(FormField::hasInvalidValueAndIfSoShowValidationMessage)
-                .collect(Collectors.toList());
+                                      .filter(FormField::hasInvalidValueAndIfSoShowValidationMessage)
+                                      .collect(Collectors.toList());
 
         return invalidFields.isEmpty();
     }

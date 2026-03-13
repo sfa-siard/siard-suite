@@ -75,7 +75,7 @@ public class MetaDataXml {
             sType = pt.format();
         }
         return sType;
-    } 
+    }
 
     private static ColumnType convertColumn(ch.admin.bar.siard2.api.generated.old10.ColumnType ctOld)
             throws JAXBException {
@@ -91,7 +91,7 @@ public class MetaDataXml {
             ct.setDescription(ctOld.getDescription());
         }
         return ct;
-    } 
+    }
 
     private static ColumnsType convertColumns(ch.admin.bar.siard2.api.generated.old10.ColumnsType ctsOld)
             throws JAXBException {
@@ -107,7 +107,7 @@ public class MetaDataXml {
             }
         }
         return cts;
-    } 
+    }
 
     private static UniqueKeyType convertPrimaryKey(ch.admin.bar.siard2.api.generated.old10.PrimaryKeyType pktOld) {
         UniqueKeyType ukt = null;
@@ -122,7 +122,7 @@ public class MetaDataXml {
                               .get(i));
         }
         return ukt;
-    } 
+    }
 
     private static ReferenceType convertReference(ch.admin.bar.siard2.api.generated.old10.ReferenceType rtOld) {
         ReferenceType rt = null;
@@ -132,7 +132,7 @@ public class MetaDataXml {
             rt.setReferenced(rtOld.getReferenced());
         }
         return rt;
-    } 
+    }
 
     private static ForeignKeyType convertForeignKey(ch.admin.bar.siard2.api.generated.old10.ForeignKeyType fktOld) {
         ForeignKeyType fkt = null;
@@ -160,7 +160,7 @@ public class MetaDataXml {
             fkt.setDescription(fktOld.getDescription());
         }
         return fkt;
-    } 
+    }
 
     private static ForeignKeysType convertForeignKeys(ch.admin.bar.siard2.api.generated.old10.ForeignKeysType fktsOld) {
         ForeignKeysType fkts = null;
@@ -175,7 +175,7 @@ public class MetaDataXml {
             }
         }
         return fkts;
-    } 
+    }
 
     private static UniqueKeyType convertCandidateKey(ch.admin.bar.siard2.api.generated.old10.CandidateKeyType cktOld) {
         UniqueKeyType ukt = null;
@@ -190,7 +190,7 @@ public class MetaDataXml {
                               .get(i));
         }
         return ukt;
-    } 
+    }
 
     private static CandidateKeysType convertCandidateKeys(ch.admin.bar.siard2.api.generated.old10.CandidateKeysType cktsOld) {
         CandidateKeysType ckts = null;
@@ -205,7 +205,7 @@ public class MetaDataXml {
             }
         }
         return ckts;
-    } 
+    }
 
     private static CheckConstraintType convertCheckConstraint(ch.admin.bar.siard2.api.generated.old10.CheckConstraintType cctOld) {
         CheckConstraintType cct = null;
@@ -216,7 +216,7 @@ public class MetaDataXml {
             cct.setDescription(cctOld.getDescription());
         }
         return cct;
-    } 
+    }
 
     private static CheckConstraintsType convertCheckConstraints(ch.admin.bar.siard2.api.generated.old10.CheckConstraintsType cctsOld) {
         CheckConstraintsType ccts = null;
@@ -231,7 +231,7 @@ public class MetaDataXml {
             }
         }
         return ccts;
-    } 
+    }
 
     private static ActionTimeType convertActionTime(ch.admin.bar.siard2.api.generated.old10.ActionTimeType attOld) {
         ActionTimeType att = null;
@@ -246,7 +246,7 @@ public class MetaDataXml {
             }
         }
         return att;
-    } 
+    }
 
     private static TriggerType convertTrigger(ch.admin.bar.siard2.api.generated.old10.TriggerType ttOld) {
         TriggerType tt = null;
@@ -260,7 +260,7 @@ public class MetaDataXml {
             tt.setDescription(ttOld.getDescription());
         }
         return tt;
-    } 
+    }
 
     private static TriggersType convertTriggers(ch.admin.bar.siard2.api.generated.old10.TriggersType ttsOld) {
         TriggersType tts = null;
@@ -275,7 +275,7 @@ public class MetaDataXml {
             }
         }
         return tts;
-    } 
+    }
 
     private static TableType convertTable(ch.admin.bar.siard2.api.generated.old10.TableType ttOld)
             throws JAXBException {
@@ -294,7 +294,7 @@ public class MetaDataXml {
             tt.setRows(ttOld.getRows());
         }
         return tt;
-    } 
+    }
 
     private static TablesType convertTables(ch.admin.bar.siard2.api.generated.old10.TablesType ttsOld)
             throws JAXBException {
@@ -310,7 +310,7 @@ public class MetaDataXml {
             }
         }
         return tts;
-    } 
+    }
 
     private static ViewType convertView(ch.admin.bar.siard2.api.generated.old10.ViewType vtOld)
             throws JAXBException {
@@ -324,7 +324,7 @@ public class MetaDataXml {
             vt.setColumns(convertColumns(vtOld.getColumns()));
         }
         return vt;
-    } 
+    }
 
     private static ViewsType convertViews(ch.admin.bar.siard2.api.generated.old10.ViewsType vtsOld)
             throws JAXBException {

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.quality.Strictness;
 import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import javax.xml.datatype.Duration;
 import java.io.IOException;
@@ -21,7 +21,8 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)

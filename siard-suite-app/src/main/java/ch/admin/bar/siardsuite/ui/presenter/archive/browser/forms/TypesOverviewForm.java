@@ -1,13 +1,9 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableTable;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
 import ch.admin.bar.siardsuite.model.database.DatabaseType;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.*;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.Converter;
 import lombok.NonNull;
 
@@ -26,45 +22,45 @@ public class TypesOverviewForm {
     public static RenderableForm<DatabaseSchema> create(@NonNull final DatabaseSchema schema) {
 
         return RenderableForm.<DatabaseSchema>builder()
-                .dataSupplier(() -> schema)
-                .afterSaveAction(DatabaseSchema::write)
-                .group(RenderableFormGroup.<DatabaseSchema>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                LABEL_SCHEMA,
-                                DatabaseSchema::getName))
-                        .property(new ReadWriteStringProperty<>(
-                                LABEL_DESC_SCHEMA,
-                                DatabaseSchema::getDescription,
-                                DatabaseSchema::setDescription
-                        ))
-                        .property(RenderableTable.<DatabaseSchema, DatabaseType>builder()
-                                .dataExtractor(DatabaseSchema::getTypes)
-                                .property(new ReadOnlyStringProperty<>(
-                                        NAME,
-                                        DatabaseType::getName
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        CATEGORY,
-                                        DatabaseType::getCategory
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        IS_INSTANTIABLE,
-                                        Converter.booleanToString(DatabaseType::isInstantiable)
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        IS_FINAL,
-                                        Converter.booleanToString(DatabaseType::isFinal)
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        BASE,
-                                        DatabaseType::getBase
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        DESCRIPTION,
-                                        DatabaseType::getDescription
-                                ))
-                                .build())
-                        .build())
-                .build();
+                             .dataSupplier(() -> schema)
+                             .afterSaveAction(DatabaseSchema::write)
+                             .group(RenderableFormGroup.<DatabaseSchema>builder()
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               LABEL_SCHEMA,
+                                                               DatabaseSchema::getName))
+                                                       .property(new ReadWriteStringProperty<>(
+                                                               LABEL_DESC_SCHEMA,
+                                                               DatabaseSchema::getDescription,
+                                                               DatabaseSchema::setDescription
+                                                       ))
+                                                       .property(RenderableTable.<DatabaseSchema, DatabaseType>builder()
+                                                                                .dataExtractor(DatabaseSchema::getTypes)
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        NAME,
+                                                                                        DatabaseType::getName
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        CATEGORY,
+                                                                                        DatabaseType::getCategory
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        IS_INSTANTIABLE,
+                                                                                        Converter.booleanToString(DatabaseType::isInstantiable)
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        IS_FINAL,
+                                                                                        Converter.booleanToString(DatabaseType::isFinal)
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        BASE,
+                                                                                        DatabaseType::getBase
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        DESCRIPTION,
+                                                                                        DatabaseType::getDescription
+                                                                                ))
+                                                                                .build())
+                                                       .build())
+                             .build();
     }
 }

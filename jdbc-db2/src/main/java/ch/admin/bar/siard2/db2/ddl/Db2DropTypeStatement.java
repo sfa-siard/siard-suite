@@ -12,42 +12,43 @@ Created    : 01.06.2016, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.db2.ddl;
 
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.ddl.*;
-import ch.enterag.sqlparser.ddl.enums.*;
+import ch.enterag.sqlparser.K;
+import ch.enterag.sqlparser.SqlFactory;
+import ch.enterag.sqlparser.ddl.DropTypeStatement;
+import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 
 /*====================================================================*/
-/** Db2DropTypeStatement overrides DropTypeStatement of SQL parser 
+
+/** Db2DropTypeStatement overrides DropTypeStatement of SQL parser
  * because DB/2 does not support drop behavior (CASCADE, RESTRICT) for 
  * types. (RESTRICT is the implicit default.)
  * @author Hartwig Thomas
  */
 public class Db2DropTypeStatement
-  extends DropTypeStatement
-{
+        extends DropTypeStatement {
 
-  /*------------------------------------------------------------------*/
-  /** format the drop type statement for DB/2 without the drop behavior.
-   * @return the SQL string corresponding to the fields of the drop 
-   *         table statement.
-   */
-  @Override
-  public String format()
-  {
-    if (getDropBehavior() == DropBehavior.CASCADE)
-      throw new IllegalArgumentException("Type drop behavior CASCADE not supported by DB/2!");
-    String sStatement = K.DROP.getKeyword() + sSP + K.TYPE.getKeyword() + sSP + 
-      getUdtName().format() + sSP + getDropBehavior().getKeywords();
-    return sStatement;
-  } /* format */
+    /*------------------------------------------------------------------*/
 
-  /*------------------------------------------------------------------*/
-  /** constructor with factory only to be called by factory.
-   * @param sf factory.
-   */
-  public Db2DropTypeStatement(SqlFactory sf)
-  {
-    super(sf);
-  } /* constructor */
-    
+    /** format the drop type statement for DB/2 without the drop behavior.
+     * @return the SQL string corresponding to the fields of the drop
+     *         table statement.
+     */
+    @Override
+    public String format() {
+        if (getDropBehavior() == DropBehavior.CASCADE)
+            throw new IllegalArgumentException("Type drop behavior CASCADE not supported by DB/2!");
+        String sStatement = K.DROP.getKeyword() + sSP + K.TYPE.getKeyword() + sSP +
+                getUdtName().format() + sSP + getDropBehavior().getKeywords();
+        return sStatement;
+    } /* format */
+
+    /*------------------------------------------------------------------*/
+
+    /** constructor with factory only to be called by factory.
+     * @param sf factory.
+     */
+    public Db2DropTypeStatement(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
+
 } /* Db2DropTypeStatement */

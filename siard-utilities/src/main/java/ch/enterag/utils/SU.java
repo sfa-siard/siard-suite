@@ -125,7 +125,8 @@ public abstract class SU {
             Charset charset = Charset.forName(encoding);
             return new String(buf, charset);
         } catch (UnsupportedCharsetException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.err.println(e.getClass()
+                                .getName() + ": " + e.getMessage());
             return "Unsupported encoding";
         }
     }
@@ -178,8 +179,8 @@ public abstract class SU {
      */
     public static String toHtml(String text) {
         return text.replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;");
+                   .replace("<", "&lt;")
+                   .replace(">", "&gt;")
+                   .replace("\"", "&quot;");
     }
 }

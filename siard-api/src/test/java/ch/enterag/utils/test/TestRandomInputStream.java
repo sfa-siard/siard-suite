@@ -15,7 +15,7 @@ public class TestRandomInputStream
 
     public TestRandomInputStream(long lSize) {
         _lSize = (long) (lSize * _random.nextDouble());
-    } 
+    }
 
     @Override
     public int read() throws IOException {
@@ -32,7 +32,7 @@ public class TestRandomInputStream
             _lPosition++;
         }
         return iByte;
-    } 
+    }
 
     @Override
     public int read(byte[] bufRead, int iOffset, int iLength)
@@ -53,13 +53,13 @@ public class TestRandomInputStream
             _iOffset = i;
         }
         return iRead;
-    } 
+    }
 
     @Override
     public int read(byte[] bufRead)
             throws IOException {
         int iRead = read(bufRead, 0, bufRead.length);
         return iRead;
-    } 
+    }
 
 } 

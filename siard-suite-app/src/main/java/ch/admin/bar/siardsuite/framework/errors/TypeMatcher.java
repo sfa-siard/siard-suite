@@ -9,7 +9,8 @@ import java.util.function.Predicate;
 @Value
 @Builder
 public class TypeMatcher implements Predicate<Throwable> {
-    @NonNull Class expectedExceptionType;
+    @NonNull
+    Class expectedExceptionType;
 
     @Override
     public boolean test(Throwable throwable) {

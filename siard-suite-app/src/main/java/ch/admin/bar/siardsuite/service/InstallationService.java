@@ -41,13 +41,13 @@ public class InstallationService {
 
         try (InputStream inputStream = ResourcesResolver.loadResource("ch/admin/bar/siardsuite/icons/archive_red.ico")) {
             Files.copy(inputStream,
-                    Paths.get(applicationFolder + File.separator + "archive_red.ico"),
-                    StandardCopyOption.REPLACE_EXISTING);
+                       Paths.get(applicationFolder + File.separator + "archive_red.ico"),
+                       StandardCopyOption.REPLACE_EXISTING);
         }
 
         val shellLink = ShellLink.createLink(javaExecutable.getAbsolutePath());
         shellLink.setCMDArgs(String.join(" ",
-                arguments));
+                                         arguments));
         shellLink.setWorkingDir(applicationFolder);
         shellLink.setIconLocation(applicationFolder + File.separator + "archive_red.ico");
         shellLink.setName("SIARD Suite: view and modify archived data from relational databases");
@@ -58,9 +58,9 @@ public class InstallationService {
 
     private static File findAppFile() {
         val appFile = new File(SiardApplication.class.getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .getPath());
+                                                     .getCodeSource()
+                                                     .getLocation()
+                                                     .getPath());
 
         log.info("Location of application: {}", appFile.getAbsolutePath());
 
@@ -72,8 +72,8 @@ public class InstallationService {
         props.load(ResourcesResolver.loadResource("ch/admin/bar/siardsuite/version.properties"));
 
         val version = Optional.ofNullable(props.get("version"))
-                .map(Object::toString)
-                .orElseThrow(() -> new IllegalStateException("Failed to read version from version.properties"));
+                              .map(Object::toString)
+                              .orElseThrow(() -> new IllegalStateException("Failed to read version from version.properties"));
 
         log.info("Got an application version: {}", version);
 
@@ -84,11 +84,11 @@ public class InstallationService {
         val java = OS.IS_WINDOWS ? "javaw.exe" : "java";
 
         return Optional.ofNullable(System.getProperty("java.home"))
-                .map(javaHome -> {
-                    val javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
-                    log.info("Java executable found at {}", javaExecutable.getAbsolutePath());
-                    return javaExecutable;
-                })
-                .orElseThrow(() -> new IllegalStateException("Can not find java executable"));
+                       .map(javaHome -> {
+                           val javaExecutable = new File(javaHome + File.separator + "bin" + File.separator + java);
+                           log.info("Java executable found at {}", javaExecutable.getAbsolutePath());
+                           return javaExecutable;
+                       })
+                       .orElseThrow(() -> new IllegalStateException("Can not find java executable"));
     }
 }

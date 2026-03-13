@@ -134,7 +134,7 @@ public class XmlStreamingTester {
         if (!(xsr.isStartElement() || xsr.isEndElement()))
             xsr.nextTag();
         return rt;
-    } 
+    }
 
     private void readTable(File fileXsd, File fileXml) {
         try {
@@ -285,7 +285,7 @@ public class XmlStreamingTester {
                 xsw.writeCharacters(node.getTextContent());
         }
         xsw.writeEndElement();
-    } 
+    }
 
     private void putRecordType(RecordType rt, XMLStreamWriter xsw)
             throws XMLStreamException {

@@ -27,9 +27,9 @@ public class CaseSensitiveColumnNamesInMySqlT {
             .withPassword("public")
             .withDatabaseName("public")
             .waitingFor(new LogMessageWaitStrategy()
-                    .withRegEx(".*Ready for connections.*\\s")
-                    .withTimes(2)
-                    .withStartupTimeout(Duration.of(60, SECONDS)))
+                                .withRegEx(".*Ready for connections.*\\s")
+                                .withTimes(2)
+                                .withStartupTimeout(Duration.of(60, SECONDS)))
             .withInitScript(SqlScripts.MySQL.SIARDCMD_31);
 
     @Test

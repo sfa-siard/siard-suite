@@ -1,12 +1,14 @@
 package ch.admin.bar.siard2.jdbcx;
 
-import java.sql.*;
-import javax.sql.*;
-
-import static org.junit.Assert.*;
-
 import org.junit.*;
 import org.testcontainers.containers.Db2Container;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 public class Db2DataSourceTester {
 

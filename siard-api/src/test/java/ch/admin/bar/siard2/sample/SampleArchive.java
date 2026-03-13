@@ -38,9 +38,9 @@ public class SampleArchive {
                 sMessage = sMessage + tException.getMessage();
         }
         return "  " + sMessage;
-    } 
+    }
 
-        /**
+    /**
      * retrieves a full error message.
      *
      * @param e error.
@@ -48,9 +48,9 @@ public class SampleArchive {
      */
     public static String getErrorMessage(Error e) {
         return getThrowableMessage(e);
-    } 
+    }
 
-        /**
+    /**
      * retrieves a full exception message.
      *
      * @param e exception.
@@ -58,11 +58,11 @@ public class SampleArchive {
      */
     public static String getExceptionMessage(Exception e) {
         return getThrowableMessage(e);
-    } 
+    }
 
     public static void printValue(String sLabel, String sValue) {
         System.out.println(sLabel + ": " + sValue);
-    } 
+    }
 
     private int readMetaData(MetaData md) {
         int iReturn = iRETURN_ERROR;
@@ -107,7 +107,7 @@ public class SampleArchive {
         }
         iReturn = iRETURN_OK;
         return iReturn;
-    } 
+    }
 
     private int readSiardFile(File fileSiard) {
         int iReturn = iRETURN_ERROR;
@@ -127,7 +127,7 @@ public class SampleArchive {
             System.err.println(getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private static final String sDB_NAME = "Sample Database";
     private static final String sDESCRIPTION = "SIARD File generated using the SIARD API";
@@ -174,7 +174,7 @@ public class SampleArchive {
             System.err.println(getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int createSiardFile(File fileSiard) {
         int iReturn = iRETURN_ERROR;
@@ -193,7 +193,7 @@ public class SampleArchive {
             System.err.println(getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int displaySyntax() {
         System.out.println();
@@ -205,7 +205,7 @@ public class SampleArchive {
         System.out.println("-o:<siard file>: write a full sample SIARD file - force overwrite, if -f option is given.");
         System.out.println();
         return iRETURN_WARNING;
-    } 
+    }
 
     public SampleArchive(String[] args) {
         Arguments arguments = new Arguments(args);
@@ -232,7 +232,7 @@ public class SampleArchive {
             } else
                 _iReturn = displaySyntax();
         }
-    } 
+    }
 
     /**
      * @param args
@@ -263,6 +263,6 @@ public class SampleArchive {
                 System.out.println("with fatal errors!");
         }
         System.exit(iReturn);
-    } 
+    }
 
 } 

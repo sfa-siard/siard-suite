@@ -19,8 +19,8 @@ public class ResourcesLoader {
      */
     public static InputStream loadResource(final String resource) {
         final Optional<InputStream> urlToResource = Optional.ofNullable(ResourcesLoader.class
-                .getClassLoader()
-                .getResourceAsStream(resource));
+                                                                                .getClassLoader()
+                                                                                .getResourceAsStream(resource));
 
         return urlToResource
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Resource \"%s\" not found", resource)));

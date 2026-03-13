@@ -19,38 +19,42 @@ public class Validator<T> {
     private static final I18nKey NEED_TO_EXIST = I18nKey.of("valueValidation.needsToBeExistingFile");
 
     public static final Validator<String> IS_NOT_EMPTY_STRING_VALIDATOR = Validator.<String>builder()
-            .message(DisplayableText.of(CAN_NOT_BE_EMPTY))
-            .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
-                    .filter(value -> !value.isEmpty() && !value.trim().isEmpty())
-                    .isPresent())
-            .titleSuffix("*")
-            .build();
+                                                                                   .message(DisplayableText.of(CAN_NOT_BE_EMPTY))
+                                                                                   .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
+                                                                                                                          .filter(value -> !value.isEmpty() && !value.trim()
+                                                                                                                                                                     .isEmpty())
+                                                                                                                          .isPresent())
+                                                                                   .titleSuffix("*")
+                                                                                   .build();
 
     public static final Validator<String> DOES_NOT_INCLUDE_COLONS_VALIDATOR = Validator.<String>builder()
-            .message(DisplayableText.of(COLONS_NOT_ALLOWED))
-            .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
-                    .filter(value -> !value.contains(":"))
-                    .isPresent())
-            .build();
+                                                                                       .message(DisplayableText.of(COLONS_NOT_ALLOWED))
+                                                                                       .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
+                                                                                                                              .filter(value -> !value.contains(":"))
+                                                                                                                              .isPresent())
+                                                                                       .build();
 
-public static final Validator<String> SLASH_NOT_ALLOWED_VALIDATOR = Validator.<String>builder()
-            .message(DisplayableText.of(SLASH_NOT_ALLOWED))
-            .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
-                    .filter(value -> !value.contains("/"))
-                    .isPresent())
-            .build();
+    public static final Validator<String> SLASH_NOT_ALLOWED_VALIDATOR = Validator.<String>builder()
+                                                                                 .message(DisplayableText.of(SLASH_NOT_ALLOWED))
+                                                                                 .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
+                                                                                                                        .filter(value -> !value.contains("/"))
+                                                                                                                        .isPresent())
+                                                                                 .build();
 
     public static final Validator<File> IS_EXISTING_FILE_VALIDATOR = Validator.<File>builder()
-            .message(DisplayableText.of(NEED_TO_EXIST))
-            .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
-                    .filter(value -> value.isFile() && value.exists())
-                    .isPresent())
-            .build();
+                                                                              .message(DisplayableText.of(NEED_TO_EXIST))
+                                                                              .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
+                                                                                                                     .filter(value -> value.isFile() && value.exists())
+                                                                                                                     .isPresent())
+                                                                              .build();
 
 
-    @NonNull DisplayableText message;
-    @NonNull Predicate<T> isValidCheck;
-    @NonNull Optional<String> titleSuffix;
+    @NonNull
+    DisplayableText message;
+    @NonNull
+    Predicate<T> isValidCheck;
+    @NonNull
+    Optional<String> titleSuffix;
 
     @Builder
     public Validator(

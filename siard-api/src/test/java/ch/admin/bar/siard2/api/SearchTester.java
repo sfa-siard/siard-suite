@@ -58,7 +58,7 @@ public class SearchTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } 
+    }
 
     @Test
     public void testAw() {
@@ -104,6 +104,6 @@ public class SearchTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } 
+    }
 
 } 

@@ -1,17 +1,17 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.dialogues;
 
-import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.ui.component.SearchButton;
-import ch.admin.bar.siardsuite.ui.component.rendering.TreeItemsExplorer;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.ui.common.MetaSearchTerm;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
+import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
+import ch.admin.bar.siardsuite.ui.component.SearchButton;
+import ch.admin.bar.siardsuite.ui.component.rendering.TreeItemsExplorer;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -64,12 +64,16 @@ public class SearchMetadataDialogPresenter {
         this.onSelected = onSelected;
         this.treeItemsExplorer = treeItemsExplorer;
 
-        title.setText(DisplayableText.of(TITLE).getText());
-        text.setText((DisplayableText.of(TEXT).getText()));
+        title.setText(DisplayableText.of(TITLE)
+                                     .getText());
+        text.setText((DisplayableText.of(TEXT)
+                                     .getText()));
 
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
-        buttonBox.getChildren().add(new CloseDialogButton(dialogCloser));
-        buttonBox.getChildren().add(new SearchButton(event -> search(new MetaSearchTerm(searchField.getText()))));
+        buttonBox.getChildren()
+                 .add(new CloseDialogButton(dialogCloser));
+        buttonBox.getChildren()
+                 .add(new SearchButton(event -> search(new MetaSearchTerm(searchField.getText()))));
     }
 
     private void search(final MetaSearchTerm searchTerm) {
@@ -77,24 +81,29 @@ public class SearchMetadataDialogPresenter {
 
         if (!results.isEmpty()) {
             val grouped = results.stream()
-                    .collect(Collectors.groupingBy(result -> new ResultTarget(
-                            joinPath(result.getPathToTreeItem()),
-                            result.getTreeItem())));
+                                 .collect(Collectors.groupingBy(result -> new ResultTarget(
+                                         joinPath(result.getPathToTreeItem()),
+                                         result.getTreeItem())));
 
-            val boxes = grouped.entrySet().stream()
-                    .map(entry -> createSearchHitBox(
-                            entry.getKey(),
-                            entry.getValue().size()))
-                    .collect(Collectors.toList());
+            val boxes = grouped.entrySet()
+                               .stream()
+                               .map(entry -> createSearchHitBox(
+                                       entry.getKey(),
+                                       entry.getValue()
+                                            .size()))
+                               .collect(Collectors.toList());
 
-            searchHitsBox.getChildren().setAll(boxes);
+            searchHitsBox.getChildren()
+                         .setAll(boxes);
         } else {
-            searchHitsBox.getChildren().setAll(createNoSearchHitsLabel());
+            searchHitsBox.getChildren()
+                         .setAll(createNoSearchHitsLabel());
         }
     }
 
     private Label createNoSearchHitsLabel() {
-        final Label label = new Label(DisplayableText.of(NO_DATA).getText());
+        final Label label = new Label(DisplayableText.of(NO_DATA)
+                                                     .getText());
         label.setStyle("-fx-text-fill: #2a2a2a82");
 
         return label;
@@ -107,14 +116,18 @@ public class SearchMetadataDialogPresenter {
         final HBox searchHitBox = new HBox();
 
         final Label nameLabel = new Label(resultTarget.getPath());
-        nameLabel.getStyleClass().add("name-label");
+        nameLabel.getStyleClass()
+                 .add("name-label");
         HBox.setHgrow(nameLabel, Priority.ALWAYS); // FIXME ?
 
         final Label numberLabel = new Label(String.valueOf(nrOfMatches));
-        numberLabel.getStyleClass().add("number-label");
+        numberLabel.getStyleClass()
+                   .add("number-label");
 
-        searchHitBox.getChildren().addAll(numberLabel, nameLabel);
-        searchHitBox.getStyleClass().add("search-hit-hbox");
+        searchHitBox.getChildren()
+                    .addAll(numberLabel, nameLabel);
+        searchHitBox.getStyleClass()
+                    .add("search-hit-hbox");
         VBox.setMargin(searchHitBox, new Insets(5, 0, 5, 0));
 
         searchHitBox.setOnMouseClicked(event -> {
@@ -157,7 +170,8 @@ public class SearchMetadataDialogPresenter {
             final Consumer<TreeItem<TreeAttributeWrapper>> onSelected
     ) {
         val loaded = FXMLLoadHelper.<SearchMetadataDialogPresenter>load("fxml/search/search-metadata-dialog.fxml");
-        loaded.getController().init(dialogCloser, treeItemsExplorer, onSelected);
+        loaded.getController()
+              .init(dialogCloser, treeItemsExplorer, onSelected);
 
         return loaded;
     }
@@ -167,11 +181,12 @@ public class SearchMetadataDialogPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<SearchMetadataDialogPresenter>load("fxml/search/search-metadata-dialog.fxml");
-        loaded.getController().init(
-                servicesFacade.dialogs(),
-                data.getValue1(),
-                data.getValue2()
-        );
+        loaded.getController()
+              .init(
+                      servicesFacade.dialogs(),
+                      data.getValue1(),
+                      data.getValue2()
+              );
 
         return loaded;
     }

@@ -9,5 +9,6 @@ import java.util.function.Function;
 
 @Value
 public class SimpleNavigationTarget {
-    @NonNull Function<ServicesFacade, LoadedView> viewSupplier;
+    @NonNull
+    Function<ServicesFacade, LoadedView> viewSupplier;
 }

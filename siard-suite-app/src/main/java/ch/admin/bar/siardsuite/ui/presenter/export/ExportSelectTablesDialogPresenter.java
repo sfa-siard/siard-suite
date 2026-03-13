@@ -1,24 +1,19 @@
 package ch.admin.bar.siardsuite.ui.presenter.export;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.framework.errors.ErrorHandler;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
 import ch.admin.bar.siardsuite.framework.dialogs.Dialogs;
-import ch.admin.bar.siardsuite.ui.View;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
-import ch.admin.bar.siardsuite.service.TableExporterService;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
 import ch.admin.bar.siardsuite.framework.view.LoadedView;
+import ch.admin.bar.siardsuite.service.TableExporterService;
+import ch.admin.bar.siardsuite.ui.View;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.ListAssembler;
+import ch.admin.bar.siardsuite.util.I18n;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -65,17 +60,21 @@ public class ExportSelectTablesDialogPresenter {
         this.archive = archive;
         this.dialogs = dialogs;
 
-        this.title.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.title"));
-        this.text.textProperty().bind(I18n.createStringBinding("export.select-tables.dialog.text"));
+        this.title.textProperty()
+                  .bind(I18n.createStringBinding("export.select-tables.dialog.title"));
+        this.text.textProperty()
+                 .bind(I18n.createStringBinding("export.select-tables.dialog.text"));
 
         EventHandler<ActionEvent> closeEvent = event -> dialogs.closeDialog();
         this.closeButton.setOnAction(closeEvent);
 
         this.cancelButton.setOnAction(closeEvent);
-        this.cancelButton.textProperty().bind(I18n.createStringBinding("button.cancel"));
+        this.cancelButton.textProperty()
+                         .bind(I18n.createStringBinding("button.cancel"));
 
         this.saveButton.setOnAction(this::handleSaveClicked);
-        this.saveButton.textProperty().bind(I18n.createStringBinding("export.choose-location.text"));
+        this.saveButton.textProperty()
+                       .bind(I18n.createStringBinding("export.choose-location.text"));
         this.tableSelector.setRoot(createTree());
         this.tableSelector.setShowRoot(false);
         tableSelector.setCellFactory((Callback<TreeView<String>, TreeCell<String>>) param -> new CheckBoxTreeCell<>());
@@ -84,19 +83,21 @@ public class ExportSelectTablesDialogPresenter {
     private void handleSaveClicked(ActionEvent actionEvent) {
         final DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(I18n.get("export.choose-location.text"));
-        File file = directoryChooser.showDialog(title.getScene().getWindow());
+        File file = directoryChooser.showDialog(title.getScene()
+                                                     .getWindow());
         if (Objects.nonNull(file)) {
             val namesOfSelectedTables = findCheckedItems().stream()
-                    .map(TreeItem::getValue)
-                    .collect(Collectors.toSet());
+                                                          .map(TreeItem::getValue)
+                                                          .collect(Collectors.toSet());
 
             TableExporterService.builder()
-                    .exportDir(file)
-                    .schemas(ListAssembler.assemble(archive.getSchemas(), archive::getSchema))
-                    .shouldBeExportedFilter(table -> namesOfSelectedTables.contains(
-                            table.getMetaTable().getName()))
-                    .build()
-                    .export();
+                                .exportDir(file)
+                                .schemas(ListAssembler.assemble(archive.getSchemas(), archive::getSchema))
+                                .shouldBeExportedFilter(table -> namesOfSelectedTables.contains(
+                                        table.getMetaTable()
+                                             .getName()))
+                                .build()
+                                .export();
 
             this.dialogs.open(View.EXPORT_SUCCESS);
         }
@@ -106,21 +107,27 @@ public class ExportSelectTablesDialogPresenter {
         val root = new CheckBoxTreeItem<>("root");
         root.setExpanded(true);
 
-        val items = ListAssembler.assemble(archive.getSchemas(), archive::getSchema).stream()
-                .map(schema -> {
-                    val schemaItem = new CheckBoxTreeItem<>(schema.getMetaSchema().getName());
-                    schemaItem.setExpanded(true);
+        val items = ListAssembler.assemble(archive.getSchemas(), archive::getSchema)
+                                 .stream()
+                                 .map(schema -> {
+                                     val schemaItem = new CheckBoxTreeItem<>(schema.getMetaSchema()
+                                                                                   .getName());
+                                     schemaItem.setExpanded(true);
 
-                    val tableItems = ListAssembler.assemble(schema.getTables(), schema::getTable).stream()
-                            .map(table -> new CheckBoxTreeItem<>(table.getMetaTable().getName()))
-                            .collect(Collectors.toList());
+                                     val tableItems = ListAssembler.assemble(schema.getTables(), schema::getTable)
+                                                                   .stream()
+                                                                   .map(table -> new CheckBoxTreeItem<>(table.getMetaTable()
+                                                                                                             .getName()))
+                                                                   .collect(Collectors.toList());
 
-                    schemaItem.getChildren().setAll(tableItems);
+                                     schemaItem.getChildren()
+                                               .setAll(tableItems);
 
-                    return schemaItem;
-                })
-                .collect(Collectors.toList());
-        root.getChildren().setAll(items);
+                                     return schemaItem;
+                                 })
+                                 .collect(Collectors.toList());
+        root.getChildren()
+            .setAll(items);
 
         return root;
     }
@@ -132,11 +139,12 @@ public class ExportSelectTablesDialogPresenter {
 
     private Stream<CheckBoxTreeItem<String>> findCheckedItems(CheckBoxTreeItem<String> item) {
         val checkedItem = Stream.of(item)
-                .filter(CheckBoxTreeItem::isSelected);
+                                .filter(CheckBoxTreeItem::isSelected);
 
-        val checkedChildItems = item.getChildren().stream()
-                .map(child -> (CheckBoxTreeItem<String>) child)
-                .flatMap(this::findCheckedItems);
+        val checkedChildItems = item.getChildren()
+                                    .stream()
+                                    .map(child -> (CheckBoxTreeItem<String>) child)
+                                    .flatMap(this::findCheckedItems);
 
         return Stream.concat(
                 checkedItem,
@@ -149,10 +157,11 @@ public class ExportSelectTablesDialogPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ExportSelectTablesDialogPresenter>load("fxml/export/export-select-tables-dialog.fxml");
-        loaded.getController().init(
-                data,
-                servicesFacade.dialogs()
-        );
+        loaded.getController()
+              .init(
+                      data,
+                      servicesFacade.dialogs()
+              );
 
         return loaded;
     }

@@ -24,12 +24,12 @@ public class OptionalHelper {
      */
     public static <T> IsPresent<T> when(final Optional<T> optional) {
         return consumer ->
-            runnable ->
-                ifPresentOrElse(
-                        optional,
-                        consumer,
-                        runnable
-                );
+                runnable ->
+                        ifPresentOrElse(
+                                optional,
+                                consumer,
+                                runnable
+                        );
     }
 
     public interface IsPresent<T> {

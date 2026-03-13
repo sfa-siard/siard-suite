@@ -60,7 +60,7 @@ public class MetaDataImpl
                 ((MetaSchemaImpl) ms).getSchemaType();
         }
         return _sa;
-    } 
+    }
 
     private SiardArchive _saTemplate = null;
 
@@ -76,7 +76,7 @@ public class MetaDataImpl
             throws IOException {
         if (md != null)
             setTemplate(((MetaDataImpl) md).getSiardArchive());
-    } 
+    }
 
     /**
      * set template meta data from which descriptions for matching database
@@ -161,7 +161,7 @@ public class MetaDataImpl
                 }
             }
         }
-    } 
+    }
 
     /**
      * create an empty SiardArchive instance.
@@ -177,7 +177,7 @@ public class MetaDataImpl
         sa.setSchemas(_of.createSchemasType());
         sa.setUsers(_of.createUsersType());
         return sa;
-    } 
+    }
 
     /**
      * constructor
@@ -224,7 +224,7 @@ public class MetaDataImpl
                 _listMetaPrivileges.add(mp);
             }
         }
-    } 
+    }
 
     /**
      * factory
@@ -237,7 +237,7 @@ public class MetaDataImpl
     public static MetaData newInstance(Archive archive, SiardArchive sa)
             throws IOException {
         return new MetaDataImpl(archive, sa);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -245,9 +245,8 @@ public class MetaDataImpl
     @Override
     public String getVersion() {
         return ((ArchiveImpl) getArchive()).getPreviousMetaDataVersion();
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -266,7 +265,6 @@ public class MetaDataImpl
         return XU.fromXml(_sa.getDbname());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -275,7 +273,7 @@ public class MetaDataImpl
     public void setDescription(String sDescription) {
         if (getArchiveImpl().isMetaDataDifferent(getDescription(), sDescription))
             _sa.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -285,7 +283,6 @@ public class MetaDataImpl
         return XU.fromXml(_sa.getDescription());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -294,7 +291,7 @@ public class MetaDataImpl
     public void setArchiver(String sArchiver) {
         if (getArchiveImpl().isMetaDataDifferent(getArchiver(), sArchiver))
             _sa.setArchiver(XU.toXml(sArchiver));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -304,7 +301,6 @@ public class MetaDataImpl
         return XU.fromXml(_sa.getArchiver());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -313,7 +309,7 @@ public class MetaDataImpl
     public void setArchiverContact(String sArchiverContact) {
         if (getArchiveImpl().isMetaDataDifferent(getArchiverContact(), sArchiverContact))
             _sa.setArchiverContact(XU.toXml(sArchiverContact));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -323,7 +319,6 @@ public class MetaDataImpl
         return XU.fromXml(_sa.getArchiverContact());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -332,7 +327,7 @@ public class MetaDataImpl
     public void setDataOwner(String sDataOwner) {
         if (getArchiveImpl().isMetaDataDifferent(getDataOwner(), sDataOwner))
             _sa.setDataOwner(XU.toXml(sDataOwner));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -342,7 +337,6 @@ public class MetaDataImpl
         return XU.fromXml(_sa.getDataOwner());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -351,7 +345,7 @@ public class MetaDataImpl
     public void setDataOriginTimespan(String sDataOriginTimespan) {
         if (getArchiveImpl().isMetaDataDifferent(getDataOriginTimespan(), sDataOriginTimespan))
             _sa.setDataOriginTimespan(XU.toXml(sDataOriginTimespan));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -400,7 +394,7 @@ public class MetaDataImpl
             }
         } else
             throw new IOException("LOB folder value cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -416,7 +410,7 @@ public class MetaDataImpl
             }
         }
         return uriLobFolder;
-    } 
+    }
 
     /**
      * resolve the given LOB folder URI against the current folder where
@@ -448,7 +442,7 @@ public class MetaDataImpl
         } else
             uriAbsolute = uriLobFolder;
         return uriAbsolute;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -460,7 +454,7 @@ public class MetaDataImpl
         if (uriLobFolder != null)
             uriAbsolute = getAbsoluteUri(uriLobFolder);
         return uriAbsolute;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -473,7 +467,7 @@ public class MetaDataImpl
                 _sa.setProducerApplication(XU.toXml(sProducerApplication));
         } else
             throw new IOException("Producer application value cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -505,7 +499,7 @@ public class MetaDataImpl
            .clear();
         _sa.getMessageDigest()
            .add(md);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -518,7 +512,7 @@ public class MetaDataImpl
                 _sa.setClientMachine(XU.toXml(sClientMachine));
         } else
             throw new IOException("Client machine name cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -539,7 +533,7 @@ public class MetaDataImpl
                 _sa.setDatabaseProduct(XU.toXml(sDatabaseProduct));
         } else
             throw new IOException("Database product name cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -560,7 +554,7 @@ public class MetaDataImpl
                 _sa.setConnection(XU.toXml(sConnection));
         } else
             throw new IOException("Connection string cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -580,7 +574,7 @@ public class MetaDataImpl
                 _sa.setDatabaseUser(XU.toXml(sDatabaseUser));
         } else
             throw new IOException("Database user name cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -599,7 +593,7 @@ public class MetaDataImpl
         int iMetaSchemas = sts.getSchema()
                               .size();
         return iMetaSchemas;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -611,7 +605,7 @@ public class MetaDataImpl
                                      .get(iSchema)
                                      .getName());
         return getMetaSchema(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -623,7 +617,7 @@ public class MetaDataImpl
         if (schema != null)
             ms = schema.getMetaSchema();
         return ms;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -631,7 +625,7 @@ public class MetaDataImpl
     @Override
     public int getMetaUsers() {
         return _mapMetaUsers.size();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -647,7 +641,7 @@ public class MetaDataImpl
             mu = getMetaUser(sName);
         }
         return mu;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -655,7 +649,7 @@ public class MetaDataImpl
     @Override
     public MetaUser getMetaUser(String sName) {
         return _mapMetaUsers.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -700,7 +694,7 @@ public class MetaDataImpl
         } else
             throw new IOException("Users can only be created if archive is open for modification of primary data.");
         return mu;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -708,7 +702,7 @@ public class MetaDataImpl
     @Override
     public int getMetaRoles() {
         return _mapMetaRoles.size();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -724,7 +718,7 @@ public class MetaDataImpl
             mr = getMetaRole(sName);
         }
         return mr;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -732,7 +726,7 @@ public class MetaDataImpl
     @Override
     public MetaRole getMetaRole(String sName) {
         return _mapMetaRoles.get(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -778,7 +772,7 @@ public class MetaDataImpl
         } else
             throw new IOException("Roles can only be created if archive is open for modification of primary data.");
         return mr;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -786,7 +780,7 @@ public class MetaDataImpl
     @Override
     public int getMetaPrivileges() {
         return _listMetaPrivileges.size();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -794,7 +788,7 @@ public class MetaDataImpl
     @Override
     public MetaPrivilege getMetaPrivilege(int iIndex) {
         return _listMetaPrivileges.get(iIndex);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -811,7 +805,7 @@ public class MetaDataImpl
                 mp = mpTry;
         }
         return mp;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -862,7 +856,7 @@ public class MetaDataImpl
         } else
             throw new IOException("Privileges can only be created if archive is open for modification of primary data.");
         return mp;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -907,7 +901,7 @@ public class MetaDataImpl
                 bValid = false;
         }
         return bValid;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -925,7 +919,7 @@ public class MetaDataImpl
         for (int iPrivilege = 0; iPrivilege < getMetaPrivileges(); iPrivilege++)
             ams[getMetaSchemas() + getMetaUsers() + getMetaRoles() + iPrivilege] = getMetaPrivilege(iPrivilege);
         return ams;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -949,7 +943,7 @@ public class MetaDataImpl
                 getConnection(),
                 getDatabaseUser()
         };
-    } 
+    }
 
     /**
      * {@inheritDoc}

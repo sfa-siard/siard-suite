@@ -29,29 +29,33 @@ public class DatabaseConnectionFactory {
 
     public Connection getOrCreateConnection(final DbmsConnectionData connectionData) {
         return connectionCache.updateAndGet(establishedConnection -> {
-            try {
-                if (establishedConnection != null) {
-                    if (!establishedConnection.getConnection().isClosed() &&
-                            establishedConnection.getDbmsConnectionData().equals(connectionData)) {
-                        // connection can be re-used
-                        log.info("Re-use previously established connection (Properties: {})", connectionData);
-                        return establishedConnection;
-                    } else {
-                        establishedConnection.close();
-                    }
-                }
+                                  try {
+                                      if (establishedConnection != null) {
+                                          if (!establishedConnection.getConnection()
+                                                                    .isClosed() &&
+                                                  establishedConnection.getDbmsConnectionData()
+                                                                       .equals(connectionData)) {
+                                              // connection can be re-used
+                                              log.info("Re-use previously established connection (Properties: {})", connectionData);
+                                              return establishedConnection;
+                                          } else {
+                                              establishedConnection.close();
+                                          }
+                                      }
 
-                return new EstablishedConnection(createConnection(connectionData), connectionData);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }).getConnection();
+                                      return new EstablishedConnection(createConnection(connectionData), connectionData);
+                                  } catch (SQLException e) {
+                                      throw new RuntimeException(e);
+                                  }
+                              })
+                              .getConnection();
     }
 
     private static Connection createConnection(final DbmsConnectionData connectionData) throws SQLException {
         log.info("Create new connection (Properties: {})", connectionData);
 
-        loadDriver(connectionData.getDbms().getDriverClassName());
+        loadDriver(connectionData.getDbms()
+                                 .getDriverClassName());
 
         val options = UserPreferences.INSTANCE.getStoredOptions();
         DriverManager.setLoginTimeout(options.getLoginTimeout());
@@ -75,8 +79,10 @@ public class DatabaseConnectionFactory {
 
     @Value
     private static class EstablishedConnection {
-        @NonNull Connection connection;
-        @NonNull DbmsConnectionData dbmsConnectionData;
+        @NonNull
+        Connection connection;
+        @NonNull
+        DbmsConnectionData dbmsConnectionData;
 
         public void close() {
             try {
@@ -84,8 +90,8 @@ public class DatabaseConnectionFactory {
                 connection.close();
             } catch (SQLException e) {
                 log.error("Can not close established connection for properties {} cause '{}'",
-                        dbmsConnectionData,
-                        e.getMessage());
+                          dbmsConnectionData,
+                          e.getMessage());
             }
         }
     }

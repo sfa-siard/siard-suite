@@ -62,27 +62,30 @@ public class UploadingPresenter {
 
         cancel.setOnAction(event -> dialogs.open(UPLOAD_ABORT_DIALOG)); // TODO: how to cancel the upload task
 
-        scrollBox.getChildren().clear();
+        scrollBox.getChildren()
+                 .clear();
 
         try {
             dbInteractionService.execute(UploadDatabaseInstruction.builder()
-                    .connectionData(dbmsConnectionData)
-                    .archive(archive)
-                    .schemaNameMappings(schemaNameMappings)
-                    .onSuccess(event -> navigator.next(null))
-                    .onFailure(event -> {
-                        navigator.previous();
-                        errorHandler.handle(event.getSource().getException());
-                    })
-                    .onProgress((observable, oldValue, newValue) -> {
-                        double pos = newValue.doubleValue();
-                        progressBar.progressProperty().set(pos);
-                    })
-                    .onStepCompleted((observable, oldValue, newValue) -> {
-                        AtomicInteger pos1 = new AtomicInteger();
-                        addLoadingData(newValue, pos1.getAndIncrement());
-                    })
-                    .build());
+                                                                  .connectionData(dbmsConnectionData)
+                                                                  .archive(archive)
+                                                                  .schemaNameMappings(schemaNameMappings)
+                                                                  .onSuccess(event -> navigator.next(null))
+                                                                  .onFailure(event -> {
+                                                                      navigator.previous();
+                                                                      errorHandler.handle(event.getSource()
+                                                                                               .getException());
+                                                                  })
+                                                                  .onProgress((observable, oldValue, newValue) -> {
+                                                                      double pos = newValue.doubleValue();
+                                                                      progressBar.progressProperty()
+                                                                                 .set(pos);
+                                                                  })
+                                                                  .onStepCompleted((observable, oldValue, newValue) -> {
+                                                                      AtomicInteger pos1 = new AtomicInteger();
+                                                                      addLoadingData(newValue, pos1.getAndIncrement());
+                                                                  })
+                                                                  .build());
         } catch (Exception e) {
             errorHandler.handle(e);
         }
@@ -90,13 +93,17 @@ public class UploadingPresenter {
 
     private void addLoadingData(String text, Integer pos) {
         // set previous to ok
-        if (scrollBox.getChildren().size() > 0) {
-            int itemPos = scrollBox.getChildren().size() - 1;
-            LabelIcon label = (LabelIcon) scrollBox.getChildren().get(itemPos);
+        if (scrollBox.getChildren()
+                     .size() > 0) {
+            int itemPos = scrollBox.getChildren()
+                                   .size() - 1;
+            LabelIcon label = (LabelIcon) scrollBox.getChildren()
+                                                   .get(itemPos);
             label.setGraphic(new IconView(itemPos, IconView.IconType.OK));
         }
-        scrollBox.getChildren().add(
-                new LabelIcon(text, pos, IconView.IconType.LOADING));
+        scrollBox.getChildren()
+                 .add(
+                         new LabelIcon(text, pos, IconView.IconType.LOADING));
     }
 
     public static LoadedView<UploadingPresenter> load(
@@ -105,14 +112,17 @@ public class UploadingPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<UploadingPresenter>load("fxml/upload/upload-uploading.fxml");
-        loaded.getController().init(
-                data.getData().getConnectionData(),
-                data.getArchive(),
-                data.getData().getSchemaNameMappings(),
-                navigator,
-                servicesFacade.errorHandler(),
-                servicesFacade.getService(DbInteractionService.class),
-                servicesFacade.dialogs());
+        loaded.getController()
+              .init(
+                      data.getData()
+                          .getConnectionData(),
+                      data.getArchive(),
+                      data.getData()
+                          .getSchemaNameMappings(),
+                      navigator,
+                      servicesFacade.errorHandler(),
+                      servicesFacade.getService(DbInteractionService.class),
+                      servicesFacade.dialogs());
 
         return loaded;
     }

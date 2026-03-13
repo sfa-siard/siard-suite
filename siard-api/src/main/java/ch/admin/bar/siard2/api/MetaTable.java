@@ -42,7 +42,7 @@ public interface MetaTable
   /*====================================================================
   table properties
   ====================================================================*/
-    
+
 
     /**
      * get table name.
@@ -51,7 +51,6 @@ public interface MetaTable
      */
     String getName();
 
-    
 
     /**
      * get table folder.
@@ -60,7 +59,6 @@ public interface MetaTable
      */
     String getFolder();
 
-    
 
     /**
      * set description of the table.
@@ -76,7 +74,6 @@ public interface MetaTable
      */
     String getDescription();
 
-    
 
     /**
      * set number of rows of the table.

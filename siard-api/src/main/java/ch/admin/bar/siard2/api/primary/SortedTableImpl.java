@@ -44,7 +44,7 @@ public class SortedTableImpl
             int iPercent = (int) ((100 * _lWritten) / _lWrites);
             _progress.notifyProgress(iPercent);
         }
-    } 
+    }
 
     /**
      * check if cancel was requested.
@@ -56,7 +56,7 @@ public class SortedTableImpl
         if (_progress != null)
             bCancelRequested = _progress.cancelRequested();
         return bCancelRequested;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -83,7 +83,7 @@ public class SortedTableImpl
     public InputStream open()
             throws IOException {
         return new FileInputStream(_fileSorted);
-    } 
+    }
 
     /*-------------------------------------------------------------------*/
 
@@ -99,7 +99,7 @@ public class SortedTableImpl
     private int compareStrings(String sLeft, String sRight) {
         return Collator.getInstance()
                        .compare(sLeft, sRight);
-    } 
+    }
 
     /*-------------------------------------------------------------------*/
 
@@ -134,7 +134,7 @@ public class SortedTableImpl
                 iCompare = 1;
         }
         return iCompare;
-    } 
+    }
 
     /*-------------------------------------------------------------------*/
 
@@ -166,7 +166,7 @@ public class SortedTableImpl
         isLeft.close();
         isRight.close();
         return iCompare;
-    } 
+    }
 
     /*-------------------------------------------------------------------*/
 
@@ -199,7 +199,7 @@ public class SortedTableImpl
         rdrLeft.close();
         rdrRight.close();
         return iCompare;
-    } 
+    }
 
     /*-------------------------------------------------------------------*/
 
@@ -299,7 +299,7 @@ public class SortedTableImpl
                 iCompare = -1;
         }
         return iCompare;
-    } 
+    }
 
     /*-------------------------------------------------------------------*/
 
@@ -323,7 +323,7 @@ public class SortedTableImpl
         else
             bLessEqual = (iCompare >= 0);
         return bLessEqual;
-    } 
+    }
 
     /*-------------------------------------------------------------------*/
 
@@ -377,7 +377,7 @@ public class SortedTableImpl
             else
                 tableRecordRight = null;
         }
-    } 
+    }
 
     /**
      * sort the given number of records in the input XML stream and write
@@ -425,7 +425,7 @@ public class SortedTableImpl
             TableRecordRetainerImpl.writeTableRecord(_rdi.readTableRecord(xsr), xsw);
             incWritten();
         }
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -488,6 +488,6 @@ public class SortedTableImpl
                 throw new IllegalArgumentException("Cannot sort 0 records!");
         }
         _progress = null;
-    } 
+    }
 
 } 

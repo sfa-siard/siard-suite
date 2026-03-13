@@ -11,9 +11,12 @@ import java.util.function.Function;
 @Value
 @Builder
 public class ServerBasedDbms implements Dbms<ServerBasedDbmsConnectionProperties> {
-    @NonNull String name;
-    @NonNull String id;
-    @NonNull String driverClassName;
+    @NonNull
+    String name;
+    @NonNull
+    String id;
+    @NonNull
+    String driverClassName;
 
     @NonNull
     @ToString.Exclude
@@ -23,7 +26,10 @@ public class ServerBasedDbms implements Dbms<ServerBasedDbmsConnectionProperties
     @ToString.Exclude
     ThrowingFunction<String, ServerBasedDbmsConnectionProperties> jdbcConnectionStringDecoder;
 
-    @NonNull String exampleHost;
-    @NonNull String examplePort;
-    @NonNull String exampleDbName;
+    @NonNull
+    String exampleHost;
+    @NonNull
+    String examplePort;
+    @NonNull
+    String exampleDbName;
 }

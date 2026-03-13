@@ -39,11 +39,12 @@ public class LogService {
     private static FileAppender findFileAppender() {
         val context = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-        return context.getLoggerList().stream()
-                .flatMap(logger -> toStream(logger.iteratorForAppenders()))
-                .flatMap(CastHelper.tryCastInStream(FileAppender.class))
-                .findAny()
-                .orElseThrow(() -> new IllegalStateException("No file-appender available"));
+        return context.getLoggerList()
+                      .stream()
+                      .flatMap(logger -> toStream(logger.iteratorForAppenders()))
+                      .flatMap(CastHelper.tryCastInStream(FileAppender.class))
+                      .findAny()
+                      .orElseThrow(() -> new IllegalStateException("No file-appender available"));
     }
 
     private static <T> Stream<T> toStream(final Iterator<T> iterator) {

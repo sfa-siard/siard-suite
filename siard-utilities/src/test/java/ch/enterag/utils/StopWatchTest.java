@@ -57,6 +57,7 @@ class StopWatchTest {
         Thread.sleep(10);
         sw.stop();
         //then
-        assertTrue(sw.formatRate(1000).contains("."));
+        assertTrue(sw.formatRate(1000)
+                     .contains("."));
     }
 }

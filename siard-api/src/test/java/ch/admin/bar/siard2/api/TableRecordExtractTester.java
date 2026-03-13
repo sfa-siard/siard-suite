@@ -60,7 +60,7 @@ public class TableRecordExtractTester {
         mc2.setType(_sTEST_TYPE2_NAME);
 
         return tab;
-    } 
+    }
 
     private void populateCell(Cell cell, int iCell, long lRecord)
             throws IOException {
@@ -82,7 +82,7 @@ public class TableRecordExtractTester {
             rr.put(tableRecord);
         }
         rr.close();
-    } 
+    }
 
     @Before
     public void setUp() {
@@ -113,7 +113,7 @@ public class TableRecordExtractTester {
             String sIndent = "  ";
             for (int iRecordSet = 0; iRecordSet < rs.getTableRecordExtracts(); iRecordSet++) {
                 TableRecord tableRecord = rs.getTableRecordExtract(iRecordSet)
-                                  .getTableRecord();
+                                            .getTableRecord();
 //        System.out.println(sIndent + String.valueOf(tableRecord.getCell(0).getLong())+", "+tableRecord.getCell(1).getString());
             }
             archive.close();
@@ -134,8 +134,8 @@ public class TableRecordExtractTester {
         }
         if (tableRecord != null)
             System.out.println(tableRecord.getCell(0)
-                                     .getLong() + ", " + tableRecord.getCell(1)
-                                                                               .getString());
+                                          .getLong() + ", " + tableRecord.getCell(1)
+                                                                         .getString());
         else
             System.out.println();
         if (sLabel != null) {

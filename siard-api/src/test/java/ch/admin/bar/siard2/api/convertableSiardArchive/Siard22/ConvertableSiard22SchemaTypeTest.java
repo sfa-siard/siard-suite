@@ -6,7 +6,6 @@ import ch.admin.bar.siard2.api.generated.TypeType;
 import ch.admin.bar.siard2.api.generated.ViewType;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.*;

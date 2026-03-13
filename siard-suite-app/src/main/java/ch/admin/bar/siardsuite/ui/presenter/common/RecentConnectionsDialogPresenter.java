@@ -1,15 +1,15 @@
 package ch.admin.bar.siardsuite.ui.presenter.common;
 
-import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
-import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.dialogs.DialogCloser;
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
 import ch.admin.bar.siardsuite.service.preferences.StorageData;
 import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.ui.component.CloseDialogButton;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -62,44 +62,59 @@ public class RecentConnectionsDialogPresenter {
             final DisplayableText titleText,
             final DisplayableText descriptionText
     ) {
-        title.textProperty().bind(titleText.bindable());
-        text.textProperty().bind(descriptionText.bindable());
+        title.textProperty()
+             .bind(titleText.bindable());
+        text.textProperty()
+            .bind(descriptionText.bindable());
 
-        newConnectionButton.textProperty().bind(DisplayableText.of(NEW_CONNECTION).bindable());
-        recentConnectionsHeaderName.textProperty().bind(DisplayableText.of(RECENT_CONNECTIONS_HEADER_NAME).bindable());
-        recentConnectionsHeaderDate.textProperty().bind(DisplayableText.of(RECENT_CONNECTIONS_HEADER_DATE).bindable());
+        newConnectionButton.textProperty()
+                           .bind(DisplayableText.of(NEW_CONNECTION)
+                                                .bindable());
+        recentConnectionsHeaderName.textProperty()
+                                   .bind(DisplayableText.of(RECENT_CONNECTIONS_HEADER_NAME)
+                                                        .bindable());
+        recentConnectionsHeaderDate.textProperty()
+                                   .bind(DisplayableText.of(RECENT_CONNECTIONS_HEADER_DATE)
+                                                        .bindable());
 
         newConnectionButton.setOnAction(event -> {
             dialogCloser.closeDialog();
             onNewConnection.run();
         });
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
-        buttonBox.getChildren().add(new CloseDialogButton(dialogCloser));
+        buttonBox.getChildren()
+                 .add(new CloseDialogButton(dialogCloser));
 
-        val boxes = UserPreferences.INSTANCE.getStoredConnections().stream()
-                .map(dbConnectionStorageData -> createConnectionsBox(
-                        dbConnectionStorageData,
-                        () -> {
-                            dialogCloser.closeDialog();
-                            onRecentConnectionSelected.accept(dbConnectionStorageData.getStoredData());
-                        }
-                ))
-                .limit(3)
-                .collect(Collectors.toList());
+        val boxes = UserPreferences.INSTANCE.getStoredConnections()
+                                            .stream()
+                                            .map(dbConnectionStorageData -> createConnectionsBox(
+                                                    dbConnectionStorageData,
+                                                    () -> {
+                                                        dialogCloser.closeDialog();
+                                                        onRecentConnectionSelected.accept(dbConnectionStorageData.getStoredData());
+                                                    }
+                                            ))
+                                            .limit(3)
+                                            .collect(Collectors.toList());
 
         if (boxes.isEmpty()) {
             showNoRecentConnections();
         } else {
-            recentConnectionsBox.getChildren().addAll(boxes);
+            recentConnectionsBox.getChildren()
+                                .addAll(boxes);
         }
     }
 
     private void showNoRecentConnections() {
-        recentConnectionsBox.getChildren().clear();
+        recentConnectionsBox.getChildren()
+                            .clear();
         recentConnectionsBox.setStyle("-fx-background-color: #f8f6f69e; -fx-alignment: center");
         final Label label = new Label();
-        label.textProperty().bind(DisplayableText.of(NO_DATA).bindable());
-        recentConnectionsBox.getChildren().add(label);
+        label.textProperty()
+             .bind(DisplayableText.of(NO_DATA)
+                                  .bindable());
+        recentConnectionsBox.getChildren()
+                            .add(label);
         label.setStyle("-fx-text-fill: #2a2a2a82");
     }
 
@@ -108,16 +123,21 @@ public class RecentConnectionsDialogPresenter {
             final Runnable onAction
     ) {
         val imageLabel = new Label();
-        imageLabel.getStyleClass().add("link-icon");
+        imageLabel.getStyleClass()
+                  .add("link-icon");
 
-        val nameLabel = new Label(storedConnection.getStoredData().getName());
-        nameLabel.getStyleClass().add("name-label");
+        val nameLabel = new Label(storedConnection.getStoredData()
+                                                  .getName());
+        nameLabel.getStyleClass()
+                 .add("name-label");
 
         val dateLabel = new Label(storedConnection.getStoredAtDate());
-        dateLabel.getStyleClass().add("date-label");
+        dateLabel.getStyleClass()
+                 .add("date-label");
 
         val recentConnectionsBox = new HBox(imageLabel, nameLabel, dateLabel);
-        recentConnectionsBox.getStyleClass().add("connections-hbox");
+        recentConnectionsBox.getStyleClass()
+                            .add("connections-hbox");
         recentConnectionsBox.setOnMouseClicked(event -> onAction.run());
 
         VBox.setMargin(recentConnectionsBox, new Insets(5, 0, 5, 0));
@@ -131,12 +151,13 @@ public class RecentConnectionsDialogPresenter {
     ) {
         val loaded = FXMLLoadHelper.<RecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
 
-        loaded.getController().init(
-                servicesFacade.dialogs(),
-                () -> onRecentConnectionSelected.accept(Optional.empty()),
-                recentDbConnection -> onRecentConnectionSelected.accept(Optional.of(recentDbConnection)),
-                DisplayableText.of(UPLOAD_TITLE),
-                DisplayableText.of(UPLOAD_TEXT));
+        loaded.getController()
+              .init(
+                      servicesFacade.dialogs(),
+                      () -> onRecentConnectionSelected.accept(Optional.empty()),
+                      recentDbConnection -> onRecentConnectionSelected.accept(Optional.of(recentDbConnection)),
+                      DisplayableText.of(UPLOAD_TITLE),
+                      DisplayableText.of(UPLOAD_TEXT));
 
         return loaded;
     }
@@ -147,12 +168,13 @@ public class RecentConnectionsDialogPresenter {
     ) {
         val loaded = FXMLLoadHelper.<RecentConnectionsDialogPresenter>load("fxml/archive/archive-db-dialog.fxml");
 
-        loaded.getController().init(
-                servicesFacade.dialogs(),
-                () -> onRecentConnectionSelected.accept(Optional.empty()),
-                recentDbConnection -> onRecentConnectionSelected.accept(Optional.of(recentDbConnection)),
-                DisplayableText.of(ARCHIVE_TITLE),
-                DisplayableText.of(ARCHIVE_TEXT));
+        loaded.getController()
+              .init(
+                      servicesFacade.dialogs(),
+                      () -> onRecentConnectionSelected.accept(Optional.empty()),
+                      recentDbConnection -> onRecentConnectionSelected.accept(Optional.of(recentDbConnection)),
+                      DisplayableText.of(ARCHIVE_TITLE),
+                      DisplayableText.of(ARCHIVE_TEXT));
 
         return loaded;
     }

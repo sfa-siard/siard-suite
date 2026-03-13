@@ -9,8 +9,8 @@ Created    : 05.07.2016, Hartwig Thomas, Enter AG, Rüti ZH
 package ch.admin.bar.siard2.api.primary;
 
 import ch.admin.bar.siard2.api.Cell;
-import ch.admin.bar.siard2.api.TableRecord;
 import ch.admin.bar.siard2.api.Table;
+import ch.admin.bar.siard2.api.TableRecord;
 import ch.admin.bar.siard2.api.Value;
 import ch.admin.bar.siard2.api.generated.table.ObjectFactory;
 import ch.admin.bar.siard2.api.generated.table.RecordType;
@@ -42,7 +42,7 @@ public class TableRecordImpl
             _doc = db.newDocument();
         }
         return _doc;
-    } 
+    }
 
     private URI _uriTemporaryLobFolder = null;
 
@@ -105,7 +105,7 @@ public class TableRecordImpl
             getCellMap().put(sTag, cell);
         }
         _rt = rt;
-    } 
+    }
 
     RecordType getRecordType()
             throws IOException {
@@ -122,7 +122,7 @@ public class TableRecordImpl
             }
         }
         return _rt;
-    } 
+    }
 
     /**
      * constructor for writing a record.
@@ -137,7 +137,7 @@ public class TableRecordImpl
         _lRecord = lRecord;
         _uriTemporaryLobFolder = uriTemporaryLobFolder;
         setRecordType(_of.createRecordType());
-    } 
+    }
 
     /**
      * factory for writing a record.
@@ -149,7 +149,7 @@ public class TableRecordImpl
     public static TableRecord newInstance(Table tableParent, long lRecord, URI uriTemporaryLobFolder)
             throws IOException {
         return new TableRecordImpl(tableParent, lRecord, uriTemporaryLobFolder);
-    } 
+    }
 
     /**
      * constructor for reading a record.
@@ -170,7 +170,7 @@ public class TableRecordImpl
                 _doc = el.getOwnerDocument();
         }
         setRecordType(rt);
-    } 
+    }
 
     /**
      * factory for reading a record.
@@ -182,7 +182,7 @@ public class TableRecordImpl
     public static TableRecord newInstance(Table tableParent, long lRecord, RecordType rt)
             throws IOException {
         return new TableRecordImpl(tableParent, lRecord, rt);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -191,7 +191,7 @@ public class TableRecordImpl
     public int getCells()
             throws IOException {
         return getCellMap().size();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -202,7 +202,7 @@ public class TableRecordImpl
         String sTag = CellImpl.getColumnTag(iCell);
         Cell cell = getCellMap().get(sTag);
         return cell;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -214,6 +214,6 @@ public class TableRecordImpl
         for (int iCell = 0; iCell < getCells(); iCell++)
             listValues.addAll(getCell(iCell).getValues(bSupportsArrays, bSupportsUdts));
         return listValues;
-    } 
+    }
 
 } 

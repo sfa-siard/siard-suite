@@ -1,17 +1,13 @@
 package ch.admin.bar.siardsuite.ui.component.rendering;
 
+import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.ui.common.MetaSearchTerm;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.ui.common.MetaSearchTerm;
-import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import javafx.scene.control.TreeItem;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,13 +27,14 @@ public class TreeItemsExplorer {
 
     public Collection<Result> find(final MetaSearchTerm searchTerm) {
         return formFields.stream()
-                .filter(formField -> searchTerm.matches(formField.getValueSupplier().get()))
-                .map(formField2TreeItemRelation -> Result.builder()
-                        .pathToTreeItem(formField2TreeItemRelation.getPathToTreeItem())
-                        .propertyName(formField2TreeItemRelation.getPropertyTitle())
-                        .treeItem(formField2TreeItemRelation.getTreeItem())
-                        .build())
-                .collect(Collectors.toList());
+                         .filter(formField -> searchTerm.matches(formField.getValueSupplier()
+                                                                          .get()))
+                         .map(formField2TreeItemRelation -> Result.builder()
+                                                                  .pathToTreeItem(formField2TreeItemRelation.getPathToTreeItem())
+                                                                  .propertyName(formField2TreeItemRelation.getPropertyTitle())
+                                                                  .treeItem(formField2TreeItemRelation.getTreeItem())
+                                                                  .build())
+                         .collect(Collectors.toList());
     }
 
     public static TreeItemsExplorer from(final TreeItem<TreeAttributeWrapper> rootItem) {
@@ -53,72 +50,86 @@ public class TreeItemsExplorer {
     ) {
         val updatedPathToTreeItem = copyAndAddElement(
                 pathToTreeItem,
-                treeItem.getValue().getName().getText());
+                treeItem.getValue()
+                        .getName()
+                        .getText());
 
-        val formFields = findFormFields(treeItem.getValue().getRenderableForm());
+        val formFields = findFormFields(treeItem.getValue()
+                                                .getRenderableForm());
 
         val itemForm = formFields.stream()
-                .map(field -> FormField2TreeItemRelation.builder()
-                        .treeItem(treeItem)
-                        .pathToTreeItem(updatedPathToTreeItem)
-                        .propertyTitle(field.getTitle())
-                        .valueSupplier(field.getValueSupplier())
-                        .build());
+                                 .map(field -> FormField2TreeItemRelation.builder()
+                                                                         .treeItem(treeItem)
+                                                                         .pathToTreeItem(updatedPathToTreeItem)
+                                                                         .propertyTitle(field.getTitle())
+                                                                         .valueSupplier(field.getValueSupplier())
+                                                                         .build());
 
-        val childForms = treeItem.getChildren().stream()
-                .flatMap(childItem -> extractForms(
-                        childItem,
-                        updatedPathToTreeItem));
+        val childForms = treeItem.getChildren()
+                                 .stream()
+                                 .flatMap(childItem -> extractForms(
+                                         childItem,
+                                         updatedPathToTreeItem));
 
         return Stream.concat(itemForm, childForms);
     }
 
     private static <T> List<T> copyAndAddElement(List<T> origList, T additionalElement) {
         return Stream.concat(
-                        origList.stream(),
-                        Stream.of(additionalElement))
-                .collect(Collectors.toList());
+                             origList.stream(),
+                             Stream.of(additionalElement))
+                     .collect(Collectors.toList());
     }
 
     private static <T> List<FormField> findFormFields(
             final RenderableForm<T> form
     ) {
-        val data = form.getDataSupplier().get();
+        val data = form.getDataSupplier()
+                       .get();
 
         return Stream.concat(
-                        findReadOnlyStringProperties(form).stream()
-                                .map(property -> new FormField(
-                                        property.getTitle(),
-                                        () -> property.getValueExtractor().apply(data))),
-                        findReadWriteStringProperties(form).stream()
-                                .map(property -> new FormField(
-                                        property.getTitle(),
-                                        () -> property.getValueExtractor().apply(data))))
-                .collect(Collectors.toList());
+                             findReadOnlyStringProperties(form).stream()
+                                                               .map(property -> new FormField(
+                                                                       property.getTitle(),
+                                                                       () -> property.getValueExtractor()
+                                                                                     .apply(data))),
+                             findReadWriteStringProperties(form).stream()
+                                                                .map(property -> new FormField(
+                                                                        property.getTitle(),
+                                                                        () -> property.getValueExtractor()
+                                                                                      .apply(data))))
+                     .collect(Collectors.toList());
     }
 
     private static <T> List<ReadOnlyStringProperty<T>> findReadOnlyStringProperties(RenderableForm<T> form) {
-        return form.getGroups().stream()
-                .flatMap(group -> group.getProperties().stream())
-                .filter(renderableProperty -> renderableProperty instanceof ReadOnlyStringProperty)
-                .map(renderableProperty -> (ReadOnlyStringProperty<T>) renderableProperty)
-                .collect(Collectors.toList());
+        return form.getGroups()
+                   .stream()
+                   .flatMap(group -> group.getProperties()
+                                          .stream())
+                   .filter(renderableProperty -> renderableProperty instanceof ReadOnlyStringProperty)
+                   .map(renderableProperty -> (ReadOnlyStringProperty<T>) renderableProperty)
+                   .collect(Collectors.toList());
     }
 
     private static <T> List<ReadWriteStringProperty<T>> findReadWriteStringProperties(RenderableForm<T> form) {
-        return form.getGroups().stream()
-                .flatMap(group -> group.getProperties().stream())
-                .filter(renderableProperty -> renderableProperty instanceof ReadWriteStringProperty)
-                .map(renderableProperty -> (ReadWriteStringProperty<T>) renderableProperty)
-                .collect(Collectors.toList());
+        return form.getGroups()
+                   .stream()
+                   .flatMap(group -> group.getProperties()
+                                          .stream())
+                   .filter(renderableProperty -> renderableProperty instanceof ReadWriteStringProperty)
+                   .map(renderableProperty -> (ReadWriteStringProperty<T>) renderableProperty)
+                   .collect(Collectors.toList());
     }
 
     @Value
     @Builder
     public static class Result {
-        @NonNull TreeItem<TreeAttributeWrapper> treeItem;
-        @NonNull List<String> pathToTreeItem;
-        @NonNull DisplayableText propertyName;
+        @NonNull
+        TreeItem<TreeAttributeWrapper> treeItem;
+        @NonNull
+        List<String> pathToTreeItem;
+        @NonNull
+        DisplayableText propertyName;
     }
 
     @Value

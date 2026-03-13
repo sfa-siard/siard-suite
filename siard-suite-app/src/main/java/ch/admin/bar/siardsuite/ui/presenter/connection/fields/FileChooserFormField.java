@@ -1,9 +1,9 @@
 package ch.admin.bar.siardsuite.ui.presenter.connection.fields;
 
-import ch.admin.bar.siardsuite.ui.common.Icon;
-import ch.admin.bar.siardsuite.ui.component.IconButton;
-import ch.admin.bar.siardsuite.ui.common.Validator;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
+import ch.admin.bar.siardsuite.ui.common.Icon;
+import ch.admin.bar.siardsuite.ui.common.Validator;
+import ch.admin.bar.siardsuite.ui.component.IconButton;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
@@ -45,20 +45,25 @@ public class FileChooserFormField extends FormField<File> {
         super(title, hint, validators, deactivable);
 
         this.fileChooserTitle = fileChooserTitle;
-        this.fileChooserExtensionFilters = Optional.ofNullable(fileChooserExtensionFilters).orElse(new ArrayList<>());
+        this.fileChooserExtensionFilters = Optional.ofNullable(fileChooserExtensionFilters)
+                                                   .orElse(new ArrayList<>());
 
         pathField = new TextField();
-        pathField.getStyleClass().addAll(FIELD_STYLE_CLASS, TRANSPARENT_STYLE_CLASS);
-        Optional.ofNullable(prompt).ifPresent(displayableText -> pathField.setPromptText(displayableText.getText()));
-        Optional.ofNullable(initialValue).ifPresent(file -> pathField.setText(file.getAbsolutePath()));
+        pathField.getStyleClass()
+                 .addAll(FIELD_STYLE_CLASS, TRANSPARENT_STYLE_CLASS);
+        Optional.ofNullable(prompt)
+                .ifPresent(displayableText -> pathField.setPromptText(displayableText.getText()));
+        Optional.ofNullable(initialValue)
+                .ifPresent(file -> pathField.setText(file.getAbsolutePath()));
 
         Optional.ofNullable(onNewUserInput)
-                .ifPresent(stringConsumer -> this.pathField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                            if (!newValue && oldValue && !hasInvalidValueAndIfSoShowValidationMessage()) {
-                                stringConsumer.accept(getValue());
-                            }
-                        }
-                ));
+                .ifPresent(stringConsumer -> this.pathField.focusedProperty()
+                                                           .addListener((observable, oldValue, newValue) -> {
+                                                                            if (!newValue && oldValue && !hasInvalidValueAndIfSoShowValidationMessage()) {
+                                                                                stringConsumer.accept(getValue());
+                                                                            }
+                                                                        }
+                                                           ));
 
         val searchFileButton = new IconButton(Icon.SELECT_FILE);
         searchFileButton.setOnAction(() -> showFileChooser()
@@ -67,22 +72,26 @@ public class FileChooserFormField extends FormField<File> {
 
                     Optional.ofNullable(onNewUserInput)
                             .ifPresent(stringConsumer -> {
-                                        if (!hasInvalidValueAndIfSoShowValidationMessage()) {
-                                            stringConsumer.accept(getValue());
-                                        }
-                                    }
+                                           if (!hasInvalidValueAndIfSoShowValidationMessage()) {
+                                               stringConsumer.accept(getValue());
+                                           }
+                                       }
                             );
                 }));
 
         content = new HBox();
         content.setAlignment(Pos.CENTER_LEFT);
-        content.getStyleClass().add(FIELD_STYLE_CLASS);
+        content.getStyleClass()
+               .add(FIELD_STYLE_CLASS);
 
         HBox.setHgrow(pathField, Priority.ALWAYS);
-        content.getChildren().addAll(searchFileButton, pathField);
-        Optional.ofNullable(prefWidth).ifPresent(content::setPrefWidth);
+        content.getChildren()
+               .addAll(searchFileButton, pathField);
+        Optional.ofNullable(prefWidth)
+                .ifPresent(content::setPrefWidth);
 
-        this.getChildren().setAll(this.title, content, validationMsg);
+        this.getChildren()
+            .setAll(this.title, content, validationMsg);
     }
 
     public File getValue() {
@@ -100,7 +109,8 @@ public class FileChooserFormField extends FormField<File> {
     }
 
     private Optional<File> showFileChooser() {
-        @NonNull val stage = title.getScene().getWindow();
+        @NonNull val stage = title.getScene()
+                                  .getWindow();
 
         val fileChooser = new FileChooser();
         fileChooser.setTitle(fileChooserTitle.getText());
@@ -113,7 +123,8 @@ public class FileChooserFormField extends FormField<File> {
                     fileChooser.setInitialDirectory(file.getParentFile());
                 });
 
-        fileChooser.getExtensionFilters().addAll(fileChooserExtensionFilters);
+        fileChooser.getExtensionFilters()
+                   .addAll(fileChooserExtensionFilters);
 
         return Optional.ofNullable(fileChooser.showOpenDialog(stage));
     }

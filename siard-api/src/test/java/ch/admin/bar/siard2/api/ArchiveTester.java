@@ -405,7 +405,7 @@ public class ArchiveTester {
         mc2.setType(_sTEST_TYPE2_NAME);
 
         return tab;
-    } 
+    }
 
     @Test
     public void testIsValidMetaDataOnly() {
@@ -602,5 +602,5 @@ public class ArchiveTester {
             }
         }
         return bEqual;
-    } 
+    }
 }

@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.jdbcoracle6;
 
 import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.utils.ConsoleLogConsumer;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -24,13 +23,15 @@ public class PackagesIT {
     @Rule
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.PACKAGE).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.PACKAGE)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/00_create_package.sql");
 
     @Rule
     public final OracleContainer emptyDb = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/00_create_user.sql");
 
     @Test

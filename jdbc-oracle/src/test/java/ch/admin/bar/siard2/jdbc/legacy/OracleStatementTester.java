@@ -1,20 +1,21 @@
 package ch.admin.bar.siard2.jdbc.legacy;
 
-import java.sql.*;
-
-import static org.junit.Assert.*;
-
 import ch.admin.bar.siard2.jdbc.OracleConnection;
 import ch.admin.bar.siard2.jdbc.OracleStatement;
+import ch.admin.bar.siard2.jdbcx.OracleDataSource;
 import ch.admin.bar.siard2.oracle.legacy.TestOracleDatabase;
 import ch.admin.bar.siard2.oracle.legacy.TestSqlDatabase;
-import org.junit.*;
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.utils.jdbc.*;
 import ch.enterag.sqlparser.SqlLiterals;
-import ch.admin.bar.siard2.jdbcx.*;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.jdbc.BaseStatementTester;
+import org.junit.*;
 import org.testcontainers.containers.OracleContainer;
+
+import java.sql.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class OracleStatementTester extends BaseStatementTester {
 

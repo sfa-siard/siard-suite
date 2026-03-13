@@ -1,11 +1,11 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 
 import ch.admin.bar.siard2.api.MetaParameter;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadWriteStringProperty;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
 import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.Converter;
 import lombok.NonNull;
 
@@ -23,46 +23,46 @@ public class ParameterOverviewForm {
 
     public static RenderableForm create(@NonNull final MetaParameter metaParameter) {
         return RenderableForm.<MetaParameter>builder()
-                .dataSupplier(() -> metaParameter)
-                .group(RenderableFormGroup.<MetaParameter>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                NAME,
-                                MetaParameter::getName
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                POSITION,
-                                Converter.intToString(MetaParameter::getPosition)
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                MODE,
-                                MetaParameter::getMode
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                TYPE,
-                                MetaParameter::getType
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                TYPE_SCHEMA,
-                                MetaParameter::getTypeSchema
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                TYPE_NAME,
-                                MetaParameter::getTypeName
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                TYPE_ORIGINAL,
-                                MetaParameter::getTypeOriginal
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                CARDINALITY,
-                                Converter.intToString(MetaParameter::getCardinality)
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                DESCRIPTION,
-                                MetaParameter::getDescription,
-                                MetaParameter::setDescription
-                        ))
-                        .build())
-                .build();
+                             .dataSupplier(() -> metaParameter)
+                             .group(RenderableFormGroup.<MetaParameter>builder()
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               NAME,
+                                                               MetaParameter::getName
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               POSITION,
+                                                               Converter.intToString(MetaParameter::getPosition)
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               MODE,
+                                                               MetaParameter::getMode
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               TYPE,
+                                                               MetaParameter::getType
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               TYPE_SCHEMA,
+                                                               MetaParameter::getTypeSchema
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               TYPE_NAME,
+                                                               MetaParameter::getTypeName
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               TYPE_ORIGINAL,
+                                                               MetaParameter::getTypeOriginal
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               CARDINALITY,
+                                                               Converter.intToString(MetaParameter::getCardinality)
+                                                       ))
+                                                       .property(new ReadWriteStringProperty<>(
+                                                               DESCRIPTION,
+                                                               MetaParameter::getDescription,
+                                                               MetaParameter::setDescription
+                                                       ))
+                                                       .build())
+                             .build();
     }
 }

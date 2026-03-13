@@ -26,23 +26,24 @@ class I18nAvailableTranslationsTest {
 
         // when
         val unsupportedKeys = keys.stream()
-                .flatMap(key -> {
-                    val bundlesWhichNotContainingKey = findBundlesWhichNotContainingKey(key);
+                                  .flatMap(key -> {
+                                      val bundlesWhichNotContainingKey = findBundlesWhichNotContainingKey(key);
 
-                    if (bundlesWhichNotContainingKey.isEmpty()) {
-                        return Stream.empty();
-                    }
+                                      if (bundlesWhichNotContainingKey.isEmpty()) {
+                                          return Stream.empty();
+                                      }
 
-                    return Stream.of(new UnsupportedKey(
-                            key,
-                            bundlesWhichNotContainingKey.stream()
-                                    .map(ResourceBundle::getLocale)
-                                    .collect(Collectors.toSet())));
-                })
-                .collect(Collectors.toSet());
+                                      return Stream.of(new UnsupportedKey(
+                                              key,
+                                              bundlesWhichNotContainingKey.stream()
+                                                                          .map(ResourceBundle::getLocale)
+                                                                          .collect(Collectors.toSet())));
+                                  })
+                                  .collect(Collectors.toSet());
 
         // then
-        Assertions.assertThat(keys).isNotEmpty();
+        Assertions.assertThat(keys)
+                  .isNotEmpty();
         if (!unsupportedKeys.isEmpty()) {
             System.out.println("========= Properties-template for unsupported keys =========");
             System.out.println(createPropertiesTemplate(unsupportedKeys));
@@ -51,40 +52,44 @@ class I18nAvailableTranslationsTest {
             Assertions.fail(String.format(
                     "Unsupported i18n-keys found:\n%s",
                     unsupportedKeys.stream()
-                            .map(UnsupportedKey::toFailureMessage)
-                            .collect(Collectors.joining("\n"))
+                                   .map(UnsupportedKey::toFailureMessage)
+                                   .collect(Collectors.joining("\n"))
             ));
         }
 
-        Assertions.assertThat(unsupportedKeys).isEmpty();
+        Assertions.assertThat(unsupportedKeys)
+                  .isEmpty();
     }
 
     private String createPropertiesTemplate(Set<UnsupportedKey> unsupportedKeys) {
         return unsupportedKeys.stream()
-                .map(unsupportedKey -> unsupportedKey.getKey().getValue())
-                .sorted()
-                .map(keyValue -> keyValue + "=xxx")
-                .collect(Collectors.joining("\n"));
+                              .map(unsupportedKey -> unsupportedKey.getKey()
+                                                                   .getValue())
+                              .sorted()
+                              .map(keyValue -> keyValue + "=xxx")
+                              .collect(Collectors.joining("\n"));
     }
 
     private List<ResourceBundle> findBundlesWhichNotContainingKey(Key key) {
         return BUNDLES.stream()
-                .filter(resourceBundle -> !resourceBundle.containsKey(key.getValue()))
-                .collect(Collectors.toList());
+                      .filter(resourceBundle -> !resourceBundle.containsKey(key.getValue()))
+                      .collect(Collectors.toList());
     }
 
     @Value
     private static class UnsupportedKey {
-        @NonNull Key key;
-        @NonNull Set<Locale> unsupportedLanguages;
+        @NonNull
+        Key key;
+        @NonNull
+        Set<Locale> unsupportedLanguages;
 
         public String toFailureMessage() {
             return String.format(
                     "Key '%-50s' is not supported by the following translations: '%s'",
                     key.getValue(),
                     unsupportedLanguages.stream()
-                            .map(Locale::getLanguage)
-                            .collect(Collectors.joining(", ")));
+                                        .map(Locale::getLanguage)
+                                        .collect(Collectors.joining(", ")));
         }
     }
 }

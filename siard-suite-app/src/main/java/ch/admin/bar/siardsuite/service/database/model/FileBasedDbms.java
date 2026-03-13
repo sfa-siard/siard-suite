@@ -11,11 +11,17 @@ import java.util.function.Function;
 @Value
 @Builder
 public class FileBasedDbms implements Dbms<FileBasedDbmsConnectionProperties> {
-    @NonNull String name;
-    @NonNull String id;
-    @NonNull String driverClassName;
-    @NonNull Function<FileBasedDbmsConnectionProperties, String> jdbcConnectionStringEncoder;
-    @NonNull ThrowingFunction<String, FileBasedDbmsConnectionProperties> jdbcConnectionStringDecoder;
+    @NonNull
+    String name;
+    @NonNull
+    String id;
+    @NonNull
+    String driverClassName;
+    @NonNull
+    Function<FileBasedDbmsConnectionProperties, String> jdbcConnectionStringEncoder;
+    @NonNull
+    ThrowingFunction<String, FileBasedDbmsConnectionProperties> jdbcConnectionStringDecoder;
 
-    @NonNull File exampleFile;
+    @NonNull
+    File exampleFile;
 }

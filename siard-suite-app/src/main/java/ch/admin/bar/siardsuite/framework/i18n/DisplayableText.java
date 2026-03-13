@@ -1,9 +1,9 @@
 package ch.admin.bar.siardsuite.framework.i18n;
 
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArgArg;
+import ch.admin.bar.siardsuite.util.I18n;
 import javafx.beans.value.ObservableValue;
 
 public interface DisplayableText {

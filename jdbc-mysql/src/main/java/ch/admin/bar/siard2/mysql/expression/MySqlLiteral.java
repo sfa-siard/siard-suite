@@ -16,36 +16,38 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.Literal;
 
 /* =============================================================================== */
+
 /**
  * MySqlLiteral implements the value translation from ISO SQL:2008 to My Sql Server
  * @author Simon Jutz
  */
 public class MySqlLiteral extends Literal {
-	
-	/* ------------------------------------------------------------------------ */
-	/**
-	 * Constructor with factory only to be called by factory
-	 * @param sf factory
-	 */
-	public MySqlLiteral(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
-	
-	/* ------------------------------------------------------------------------ */
-	/**
-	 * format the literal
-	 * @return the MySql string corresponding to the fields of the literal
-	 */
-	@Override
-	public String format() 
-	{
-		String sFormatted = "";
-		
-		if (getBytes() != null) {
-			sFormatted = MySqlLiterals.formatBytesLiteral(getBytes());
-		}
-		
-		return sFormatted;
-	}  /* format */
+
+    /* ------------------------------------------------------------------------ */
+
+    /**
+     * Constructor with factory only to be called by factory
+     * @param sf factory
+     */
+    public MySqlLiteral(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
+
+    /* ------------------------------------------------------------------------ */
+
+    /**
+     * format the literal
+     * @return the MySql string corresponding to the fields of the literal
+     */
+    @Override
+    public String format() {
+        String sFormatted = "";
+
+        if (getBytes() != null) {
+            sFormatted = MySqlLiterals.formatBytesLiteral(getBytes());
+        }
+
+        return sFormatted;
+    }  /* format */
 
 } /* class MySqlLiteral */

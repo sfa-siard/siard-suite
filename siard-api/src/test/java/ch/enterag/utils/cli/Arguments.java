@@ -81,7 +81,7 @@ public class Arguments {
         return m_sError;
     }
 
-        /**
+    /**
      * constructor parses the command-line arguments
      *
      * @param args command-line arguments.
@@ -118,6 +118,6 @@ public class Arguments {
             iArgument++;
         }
         m_asArgument = listArgument.toArray(new String[]{});
-    } 
+    }
 
 } 

@@ -36,9 +36,17 @@ public class UploadDatabaseInstruction {
         this.schemaNameMappings = schemaNameMappings;
         this.connectionData = connectionData;
 
-        this.onSuccess = Optional.ofNullable(onSuccess).orElse(event -> {});
-        this.onFailure = Optional.ofNullable(onFailure).orElse(event -> {});
-        this.onProgress = Optional.ofNullable(onProgress).orElse((observable, oldValue, newValue) -> {});
-        this.onStepCompleted = Optional.ofNullable(onStepCompleted).orElse((observable, oldValue, newValue) -> {});
+        this.onSuccess = Optional.ofNullable(onSuccess)
+                                 .orElse(event -> {
+                                 });
+        this.onFailure = Optional.ofNullable(onFailure)
+                                 .orElse(event -> {
+                                 });
+        this.onProgress = Optional.ofNullable(onProgress)
+                                  .orElse((observable, oldValue, newValue) -> {
+                                  });
+        this.onStepCompleted = Optional.ofNullable(onStepCompleted)
+                                       .orElse((observable, oldValue, newValue) -> {
+                                       });
     }
 }

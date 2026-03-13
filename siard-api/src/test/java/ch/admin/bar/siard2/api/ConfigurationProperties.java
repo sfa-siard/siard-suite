@@ -17,7 +17,7 @@ public class ConfigurationProperties extends Properties {
             rdr.close();
         } catch (IOException ie) {
             fail(ie.getClass()
-                    .getName() + ": " + ie.getMessage());
+                   .getName() + ": " + ie.getMessage());
         }
     }
 

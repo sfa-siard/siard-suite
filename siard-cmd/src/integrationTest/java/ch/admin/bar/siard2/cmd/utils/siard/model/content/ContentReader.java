@@ -15,11 +15,7 @@ import lombok.val;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -44,44 +40,45 @@ public class ContentReader {
         val tableXmlFiles = findTableXmlFiles();
 
         val tables = tableXmlFiles.stream()
-                .map(file -> {
-                    try {
-                        val tableContent = xmlMapper.readValue(file.getFile(), Content.TableContent.class);
-                        return Content.Table.builder()
-                                .schemaFolder(file.getSchemaFolder())
-                                .tableFolder(file.getTableFolder())
-                                .tableContent(tableContent)
-                                .build();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to deserialize " + file);
-                    }
-                })
-                .collect(Collectors.toList());
+                                  .map(file -> {
+                                      try {
+                                          val tableContent = xmlMapper.readValue(file.getFile(), Content.TableContent.class);
+                                          return Content.Table.builder()
+                                                              .schemaFolder(file.getSchemaFolder())
+                                                              .tableFolder(file.getTableFolder())
+                                                              .tableContent(tableContent)
+                                                              .build();
+                                      } catch (IOException e) {
+                                          throw new RuntimeException("Failed to deserialize " + file);
+                                      }
+                                  })
+                                  .collect(Collectors.toList());
 
         return new Content(tables);
     }
 
     private List<TableXmlFile> findTableXmlFiles() {
         val files = Arrays.stream(new File(pathToExtractedArchive + "/content").listFiles())
-                .filter(File::isDirectory)
-                .flatMap(schemaDir -> Arrays.stream(schemaDir.listFiles()))
-                .filter(File::isDirectory)
-                .flatMap(tableDir -> Arrays.stream(tableDir.listFiles()))
-                .filter(file -> file.getName().endsWith(".xml"))
-                .collect(Collectors.toList());
+                          .filter(File::isDirectory)
+                          .flatMap(schemaDir -> Arrays.stream(schemaDir.listFiles()))
+                          .filter(File::isDirectory)
+                          .flatMap(tableDir -> Arrays.stream(tableDir.listFiles()))
+                          .filter(file -> file.getName()
+                                              .endsWith(".xml"))
+                          .collect(Collectors.toList());
 
         return files.stream()
-                .map(file -> {
-                    val tableDir = file.getParentFile();
-                    val schemaDir = tableDir.getParentFile();
+                    .map(file -> {
+                        val tableDir = file.getParentFile();
+                        val schemaDir = tableDir.getParentFile();
 
-                    return TableXmlFile.builder()
-                            .schemaFolder(FolderId.of(schemaDir.getName()))
-                            .tableFolder(FolderId.of(tableDir.getName()))
-                            .file(file)
-                            .build();
-                })
-                .collect(Collectors.toList());
+                        return TableXmlFile.builder()
+                                           .schemaFolder(FolderId.of(schemaDir.getName()))
+                                           .tableFolder(FolderId.of(tableDir.getName()))
+                                           .file(file)
+                                           .build();
+                    })
+                    .collect(Collectors.toList());
     }
 
     public static class Deserializer extends StdDeserializer<Content.TableRow> {
@@ -92,12 +89,14 @@ public class ContentReader {
 
         @Override
         public Content.TableRow deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-            final JsonNode node = jp.getCodec().readTree(jp);
+            final JsonNode node = jp.getCodec()
+                                    .readTree(jp);
 
             val cells = stream(node.fieldNames())
                     .map(fieldName -> {
                         val number = Integer.parseInt(fieldName.substring(1));
-                        val value = node.get(fieldName).asText();
+                        val value = node.get(fieldName)
+                                        .asText();
 
                         return new Content.TableCell(number, value);
                     })
@@ -116,8 +115,11 @@ public class ContentReader {
     @Value
     @Builder
     private static class TableXmlFile {
-        @NonNull FolderId schemaFolder;
-        @NonNull FolderId tableFolder;
-        @NonNull File file;
+        @NonNull
+        FolderId schemaFolder;
+        @NonNull
+        FolderId tableFolder;
+        @NonNull
+        File file;
     }
 }

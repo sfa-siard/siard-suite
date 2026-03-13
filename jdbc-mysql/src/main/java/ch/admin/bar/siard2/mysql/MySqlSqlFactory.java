@@ -10,73 +10,85 @@ Created    : 26.10.2016, Simon Jutz
 ======================================================================*/
 package ch.admin.bar.siard2.mysql;
 
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.datatype.*;
-import ch.enterag.sqlparser.ddl.*;
-import ch.enterag.sqlparser.expression.*;
-import ch.admin.bar.siard2.mysql.datatype.*;
-import ch.admin.bar.siard2.mysql.ddl.*;
-import ch.admin.bar.siard2.mysql.expression.*;
+import ch.admin.bar.siard2.mysql.datatype.MySqlPredefinedType;
+import ch.admin.bar.siard2.mysql.ddl.MySqlDropSchemaStatement;
+import ch.admin.bar.siard2.mysql.ddl.MySqlDropTableStatement;
+import ch.admin.bar.siard2.mysql.expression.MySqlLiteral;
+import ch.admin.bar.siard2.mysql.expression.MySqlUnsignedLiteral;
+import ch.admin.bar.siard2.mysql.expression.MySqlValueExpressionPrimary;
+import ch.enterag.sqlparser.BaseSqlFactory;
+import ch.enterag.sqlparser.SqlFactory;
+import ch.enterag.sqlparser.datatype.PredefinedType;
+import ch.enterag.sqlparser.ddl.DropSchemaStatement;
+import ch.enterag.sqlparser.ddl.DropTableStatement;
+import ch.enterag.sqlparser.expression.Literal;
+import ch.enterag.sqlparser.expression.UnsignedLiteral;
+import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 
 /* =============================================================================== */
+
 /**
  * MySqlSqlFactory implements a wrapped MySql SqlFactory
  * @author Simon Jutz
  */
-public class MySqlSqlFactory extends BaseSqlFactory implements SqlFactory 
-{
-  
-	/* ------------------------------------------------------------------------ */
-	/**
-	 * Returns a new wrapped predefined type
-	 */
-	@Override
-	public PredefinedType newPredefinedType() {
-		return new MySqlPredefinedType(this);
-	} /* newPredefinedType */
+public class MySqlSqlFactory extends BaseSqlFactory implements SqlFactory {
 
-	/* ------------------------------------------------------------------------ */
-	/**
-	 * Returns a new wrapped literal
-	 */
-	@Override
-	public Literal newLiteral() {
-		return new MySqlLiteral(this);
-	} /* newLiteral */
+    /* ------------------------------------------------------------------------ */
 
-	/* ------------------------------------------------------------------------ */
-	/**
-	 * Creates a new wrapped unsigned literal
-	 */
-	@Override
-	public UnsignedLiteral newUnsignedLiteral() {
-		return new MySqlUnsignedLiteral(this);
-	} /* newUnsignedLiteral */
+    /**
+     * Returns a new wrapped predefined type
+     */
+    @Override
+    public PredefinedType newPredefinedType() {
+        return new MySqlPredefinedType(this);
+    } /* newPredefinedType */
 
-	/* ------------------------------------------------------------------------ */
-	/**
-	 * Creates a new wrapped value expression primary
-	 */
-	@Override
-	public ValueExpressionPrimary newValueExpressionPrimary() {
-		return new MySqlValueExpressionPrimary(this);
-	} /* newValueExpressionPrimary */
+    /* ------------------------------------------------------------------------ */
 
-	/* ------------------------------------------------------------------------ */
-	/**
-	 * Creates a new DROP SCHEMA statement 
-	 */
-	@Override
-	public DropSchemaStatement newDropSchemaStatement() {
-		return new MySqlDropSchemaStatement(this);
-	} /* newDropSchemaStatement */
+    /**
+     * Returns a new wrapped literal
+     */
+    @Override
+    public Literal newLiteral() {
+        return new MySqlLiteral(this);
+    } /* newLiteral */
 
-  /* ------------------------------------------------------------------------ */
-  /** Creates a new DROP TABLE statement */
-  @Override
-  public DropTableStatement newDropTableStatement() 
-  {
-    return new MySqlDropTableStatement(this);
-  } /* newDropTableStatement */
-	
+    /* ------------------------------------------------------------------------ */
+
+    /**
+     * Creates a new wrapped unsigned literal
+     */
+    @Override
+    public UnsignedLiteral newUnsignedLiteral() {
+        return new MySqlUnsignedLiteral(this);
+    } /* newUnsignedLiteral */
+
+    /* ------------------------------------------------------------------------ */
+
+    /**
+     * Creates a new wrapped value expression primary
+     */
+    @Override
+    public ValueExpressionPrimary newValueExpressionPrimary() {
+        return new MySqlValueExpressionPrimary(this);
+    } /* newValueExpressionPrimary */
+
+    /* ------------------------------------------------------------------------ */
+
+    /**
+     * Creates a new DROP SCHEMA statement
+     */
+    @Override
+    public DropSchemaStatement newDropSchemaStatement() {
+        return new MySqlDropSchemaStatement(this);
+    } /* newDropSchemaStatement */
+
+    /* ------------------------------------------------------------------------ */
+
+    /** Creates a new DROP TABLE statement */
+    @Override
+    public DropTableStatement newDropTableStatement() {
+        return new MySqlDropTableStatement(this);
+    } /* newDropTableStatement */
+
 } /* class MySqlSqlFactory */

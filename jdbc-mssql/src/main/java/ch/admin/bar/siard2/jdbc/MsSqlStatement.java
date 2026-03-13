@@ -10,175 +10,179 @@ Created    : 01.06.2016, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.jdbc;
 
-import java.sql.*;
-import ch.enterag.utils.jdbc.*;
-import ch.enterag.sqlparser.identifier.*;
+import ch.enterag.sqlparser.identifier.Identifier;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
+import ch.enterag.utils.jdbc.BaseStatement;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /*====================================================================*/
+
 /** MsSqlStatement implements a wrapped MSSQL Statement.
  * @author Hartwig Thomas
  */
 public class MsSqlStatement
-  extends BaseStatement
-  implements Statement
-{
-  private MsSqlConnection _conn = null;
-  private long _lParse = -1;
-  private long _lExecute = -1;
-  
-  /*------------------------------------------------------------------*/
-  /** constructor
-   * @param stmtWrapped statement to be wrapped.
-   */
-  public MsSqlStatement(Statement stmtWrapped, MsSqlConnection conn)
-    throws SQLException
-  {
-    super(stmtWrapped);
-    _conn = conn;
-  } /* constructor */
+        extends BaseStatement
+        implements Statement {
+    private MsSqlConnection _conn = null;
+    private long _lParse = -1;
+    private long _lExecute = -1;
 
-  /*------------------------------------------------------------------*/
-  /** {@inheritDoc} */
-  @Override
-  public Connection getConnection() throws SQLException
-  {
-    return _conn;
-  } /* getConnection */
+    /*------------------------------------------------------------------*/
 
-  /*------------------------------------------------------------------*/
-  /** {@inheritDoc}
-   * Return MsSqlResultSet. 
-   * Convert JdbcSQLException from MSSQL into SQLFeatureNotSupportedError.
-   */
-  @Override
-  public ResultSet executeQuery(String sql) throws SQLException
-  {
-    ResultSet rs = null;
-    _lParse = System.currentTimeMillis();
-    String sNative = getConnection().nativeSQL(sql);
-    _lExecute = System.currentTimeMillis();
-    _lParse = _lExecute - _lParse;
-    rs = new MsSqlResultSet(super.executeQuery(sNative),_conn);
-    _lExecute = System.currentTimeMillis() - _lExecute;
-    // System.out.println(String.valueOf(_lParse)+","+String.valueOf(_lExecute));
-    return rs;
-  } /* executeQuery */
+    /** constructor
+     * @param stmtWrapped statement to be wrapped.
+     */
+    public MsSqlStatement(Statement stmtWrapped, MsSqlConnection conn)
+            throws SQLException {
+        super(stmtWrapped);
+        _conn = conn;
+    } /* constructor */
 
-  /*------------------------------------------------------------------*/
-  /** dropReferencingKeys drops referencing foreign keys in preparation 
-   * for a DROP TABLE CASCADE statement.
-   * @param qiTable table referenced by foreign keys to be dropped.
-   * @throws SQLException
-   */
-  private void dropReferencingKeys(QualifiedId qiTable)
-    throws SQLException
-  {
-    if (qiTable != null)
-    {
-      BaseDatabaseMetaData bdmd = (BaseDatabaseMetaData)getConnection().getMetaData();
-      ResultSet rs = null;
-      try
-      {
-        rs = bdmd.getExportedKeys(
-          qiTable.getCatalog(), 
-          qiTable.getSchema(), 
-          qiTable.getName() 
-          );
-        while (rs.next())
-        {
-          QualifiedId qiFkTable = new QualifiedId(
-            rs.getString("FKTABLE_CAT"),
-            rs.getString("FKTABLE_SCHEM"),
-            rs.getString("FKTABLE_NAME"));
-          Identifier idFkName = new Identifier(rs.getString("FK_NAME"));
-          Statement stmt = null;
-          try
-          {
-            stmt = _conn.createStatement();
-            String sSql = "ALTER TABLE "+qiFkTable.format()+" DROP CONSTRAINT "+idFkName.format();
-            stmt.execute(sSql);
-          }
-          finally { if (stmt != null) stmt.close(); }
+    /*------------------------------------------------------------------*/
+
+    /** {@inheritDoc} */
+    @Override
+    public Connection getConnection() throws SQLException {
+        return _conn;
+    } /* getConnection */
+
+    /*------------------------------------------------------------------*/
+
+    /** {@inheritDoc}
+     * Return MsSqlResultSet.
+     * Convert JdbcSQLException from MSSQL into SQLFeatureNotSupportedError.
+     */
+    @Override
+    public ResultSet executeQuery(String sql) throws SQLException {
+        ResultSet rs = null;
+        _lParse = System.currentTimeMillis();
+        String sNative = getConnection().nativeSQL(sql);
+        _lExecute = System.currentTimeMillis();
+        _lParse = _lExecute - _lParse;
+        rs = new MsSqlResultSet(super.executeQuery(sNative), _conn);
+        _lExecute = System.currentTimeMillis() - _lExecute;
+        // System.out.println(String.valueOf(_lParse)+","+String.valueOf(_lExecute));
+        return rs;
+    } /* executeQuery */
+
+    /*------------------------------------------------------------------*/
+
+    /** dropReferencingKeys drops referencing foreign keys in preparation
+     * for a DROP TABLE CASCADE statement.
+     * @param qiTable table referenced by foreign keys to be dropped.
+     * @throws SQLException
+     */
+    private void dropReferencingKeys(QualifiedId qiTable)
+            throws SQLException {
+        if (qiTable != null) {
+            BaseDatabaseMetaData bdmd = (BaseDatabaseMetaData) getConnection().getMetaData();
+            ResultSet rs = null;
+            try {
+                rs = bdmd.getExportedKeys(
+                        qiTable.getCatalog(),
+                        qiTable.getSchema(),
+                        qiTable.getName()
+                );
+                while (rs.next()) {
+                    QualifiedId qiFkTable = new QualifiedId(
+                            rs.getString("FKTABLE_CAT"),
+                            rs.getString("FKTABLE_SCHEM"),
+                            rs.getString("FKTABLE_NAME"));
+                    Identifier idFkName = new Identifier(rs.getString("FK_NAME"));
+                    Statement stmt = null;
+                    try {
+                        stmt = _conn.createStatement();
+                        String sSql = "ALTER TABLE " + qiFkTable.format() + " DROP CONSTRAINT " + idFkName.format();
+                        stmt.execute(sSql);
+                    } finally {
+                        if (stmt != null) stmt.close();
+                    }
+                }
+            } finally {
+                rs.close();
+            }
         }
-      }
-      finally { rs.close(); }
-    }
-  } /* dropReferencingKeys */
-  
-  /*------------------------------------------------------------------*/
-  /** {@inheritDoc} 
-   */
-  @Override
-  public int executeUpdate(String sql) throws SQLException
-  {
-    int iResult = -1;
-    String sNative = getConnection().nativeSQL(sql);
-    dropReferencingKeys(_conn.getTableDropCascade());
-    iResult = super.executeUpdate(sNative);
-    _conn.resetTableDropCascade();
-    if (iResult == -1)
-      iResult = 0; // MSSQL does not conform to JDBC specification
-    return iResult;
-  } /* executeUpdate */
+    } /* dropReferencingKeys */
 
-  /*------------------------------------------------------------------*/
-  /** {@inheritDoc}
-   */
-  @Override
-  public int executeUpdate(String sql, int autoGeneratedKeys)
-      throws SQLException
-  {
-    int iResult = -1;
-    String sNative = getConnection().nativeSQL(sql);
-    dropReferencingKeys(_conn.getTableDropCascade());
-    iResult = super.executeUpdate(sNative, autoGeneratedKeys); 
-    _conn.resetTableDropCascade();
-    return iResult;
-  } /* executeUpdate */
+    /*------------------------------------------------------------------*/
 
-  /*------------------------------------------------------------------*/
-  /** {@inheritDoc} 
-   * Convert JdbcSQLException from MSSQL into SQLFeatureNotSupportedError.
-   */
-  @Override
-  public int executeUpdate(String sql, int[] columnIndexes)
-      throws SQLException
-  {
-    int iResult = -1;
-    String sNative = getConnection().nativeSQL(sql);
-    dropReferencingKeys(_conn.getTableDropCascade());
-    iResult = super.executeUpdate(sNative, columnIndexes); 
-    _conn.resetTableDropCascade();
-    return iResult;
-  } /* executeUpdate */
+    /** {@inheritDoc}
+     */
+    @Override
+    public int executeUpdate(String sql) throws SQLException {
+        int iResult = -1;
+        String sNative = getConnection().nativeSQL(sql);
+        dropReferencingKeys(_conn.getTableDropCascade());
+        iResult = super.executeUpdate(sNative);
+        _conn.resetTableDropCascade();
+        if (iResult == -1)
+            iResult = 0; // MSSQL does not conform to JDBC specification
+        return iResult;
+    } /* executeUpdate */
 
-  /*------------------------------------------------------------------*/
-  /** {@inheritDoc} 
-   * Convert JdbcSQLException from MSSQL into SQLFeatureNotSupportedError.
-   */
-  @Override
-  public int executeUpdate(String sql, String[] columnNames)
-      throws SQLException
-  {
-    int iResult = -1;
-    String sNative = getConnection().nativeSQL(sql);
-    dropReferencingKeys(_conn.getTableDropCascade());
-    iResult = super.executeUpdate(sNative, columnNames); 
-    _conn.resetTableDropCascade();
-    return iResult;
-  } /* executeUpdate */
+    /*------------------------------------------------------------------*/
 
-  /*------------------------------------------------------------------*/
-  /** {@inheritDoc}
-   * Return MsSqlResultSet. 
-   * Convert JdbcSQLException from MSSQL into SQLFeatureNotSupportedError.
-   */
-  @Override
-  public ResultSet getResultSet() throws SQLException
-  {
-    ResultSet rs = null;
-    rs = new MsSqlResultSet(super.getResultSet(),_conn);
-    return rs;
-  } /* getResultSet */
+    /** {@inheritDoc}
+     */
+    @Override
+    public int executeUpdate(String sql, int autoGeneratedKeys)
+            throws SQLException {
+        int iResult = -1;
+        String sNative = getConnection().nativeSQL(sql);
+        dropReferencingKeys(_conn.getTableDropCascade());
+        iResult = super.executeUpdate(sNative, autoGeneratedKeys);
+        _conn.resetTableDropCascade();
+        return iResult;
+    } /* executeUpdate */
+
+    /*------------------------------------------------------------------*/
+
+    /** {@inheritDoc}
+     * Convert JdbcSQLException from MSSQL into SQLFeatureNotSupportedError.
+     */
+    @Override
+    public int executeUpdate(String sql, int[] columnIndexes)
+            throws SQLException {
+        int iResult = -1;
+        String sNative = getConnection().nativeSQL(sql);
+        dropReferencingKeys(_conn.getTableDropCascade());
+        iResult = super.executeUpdate(sNative, columnIndexes);
+        _conn.resetTableDropCascade();
+        return iResult;
+    } /* executeUpdate */
+
+    /*------------------------------------------------------------------*/
+
+    /** {@inheritDoc}
+     * Convert JdbcSQLException from MSSQL into SQLFeatureNotSupportedError.
+     */
+    @Override
+    public int executeUpdate(String sql, String[] columnNames)
+            throws SQLException {
+        int iResult = -1;
+        String sNative = getConnection().nativeSQL(sql);
+        dropReferencingKeys(_conn.getTableDropCascade());
+        iResult = super.executeUpdate(sNative, columnNames);
+        _conn.resetTableDropCascade();
+        return iResult;
+    } /* executeUpdate */
+
+    /*------------------------------------------------------------------*/
+
+    /** {@inheritDoc}
+     * Return MsSqlResultSet.
+     * Convert JdbcSQLException from MSSQL into SQLFeatureNotSupportedError.
+     */
+    @Override
+    public ResultSet getResultSet() throws SQLException {
+        ResultSet rs = null;
+        rs = new MsSqlResultSet(super.getResultSet(), _conn);
+        return rs;
+    } /* getResultSet */
 
 } /* class MsSqlStatement */

@@ -12,9 +12,9 @@ import java.util.List;
  * Renderers are checked in priority order until one that can handle the value is found.
  */
 public class ValueRendererRegistry {
-    
+
     private final List<ValueRenderer> renderers;
-    
+
     /**
      * Create a new registry with the given renderers.
      *
@@ -23,9 +23,10 @@ public class ValueRendererRegistry {
     public ValueRendererRegistry(List<ValueRenderer> renderers) {
         // Sort by priority (highest first)
         this.renderers = new ArrayList<>(renderers);
-        this.renderers.sort(Comparator.comparingInt(ValueRenderer::getPriority).reversed());
+        this.renderers.sort(Comparator.comparingInt(ValueRenderer::getPriority)
+                                      .reversed());
     }
-    
+
     /**
      * Create a registry with default renderers for HTML export.
      *
@@ -33,14 +34,14 @@ public class ValueRendererRegistry {
      */
     static ValueRendererRegistry createDefault() {
         List<ValueRenderer> defaultRenderers = List.of(
-            new LobValueRenderer(),
-            new UdtValueRenderer(),
-            new ArrayValueRenderer(),
-            new PrimitiveValueRenderer()
+                new LobValueRenderer(),
+                new UdtValueRenderer(),
+                new ArrayValueRenderer(),
+                new PrimitiveValueRenderer()
         );
         return new ValueRendererRegistry(defaultRenderers);
     }
-    
+
     /**
      * Render a value using the appropriate renderer.
      *
@@ -56,8 +57,9 @@ public class ValueRendererRegistry {
                 return renderer.render(value, context);
             }
         }
-        
+
         // Fallback - should not happen with proper default renderers
-        throw new IllegalArgumentException("No renderer found for value type: " + value.getClass().getSimpleName());
+        throw new IllegalArgumentException("No renderer found for value type: " + value.getClass()
+                                                                                       .getSimpleName());
     }
 }

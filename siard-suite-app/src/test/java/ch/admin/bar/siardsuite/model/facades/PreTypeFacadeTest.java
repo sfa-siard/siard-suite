@@ -13,16 +13,17 @@ class PreTypeFacadeTest {
     @Test
     void isBlob_false() {
         // given
-        Arrays.stream(PreType.values()).forEach(preType -> {
-                                                    if (PreType.BLOB.equals(preType) ||
-                                                            PreType.CLOB.equals(preType) ||
-                                                            PreType.NCLOB.equals(preType) ||
-                                                            PreType.VARBINARY.equals(preType) ||
-                                                            PreType.BINARY.equals(preType)) return;
-                                                    assertFalse(new PreTypeFacade(preType.getSqlType()).isBlob());
-                                                }
+        Arrays.stream(PreType.values())
+              .forEach(preType -> {
+                           if (PreType.BLOB.equals(preType) ||
+                                   PreType.CLOB.equals(preType) ||
+                                   PreType.NCLOB.equals(preType) ||
+                                   PreType.VARBINARY.equals(preType) ||
+                                   PreType.BINARY.equals(preType)) return;
+                           assertFalse(new PreTypeFacade(preType.getSqlType()).isBlob());
+                       }
 
-        );
+              );
     }
 
     @Test

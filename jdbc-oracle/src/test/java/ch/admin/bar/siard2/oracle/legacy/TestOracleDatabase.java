@@ -1,19 +1,24 @@
 package ch.admin.bar.siard2.oracle.legacy;
 
-import static org.junit.Assert.*;
+import ch.admin.bar.siard2.jdbc.OracleConnection;
+import ch.admin.bar.siard2.oracle.OracleLiterals;
+import ch.enterag.sqlparser.Interval;
+import ch.enterag.sqlparser.SqlLiterals;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.base.TestUtils;
 
-import java.io.*;
-import java.math.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-import ch.admin.bar.siard2.jdbc.*;
-import ch.admin.bar.siard2.oracle.OracleLiterals;
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.identifier.*;
+import static org.junit.Assert.assertSame;
 
 public class TestOracleDatabase {
     private static final OracleConnectionProperties _ocp = new OracleConnectionProperties();

@@ -9,8 +9,10 @@ import java.util.function.Function;
 
 @Value
 public class ReadOnlyStringProperty<T> implements RenderableProperty<T> {
-    @NonNull DisplayableText title;
-    @NonNull Function<T, String> valueExtractor;
+    @NonNull
+    DisplayableText title;
+    @NonNull
+    Function<T, String> valueExtractor;
 
     public ReadOnlyStringProperty(
             @NonNull DisplayableText title,

@@ -51,38 +51,43 @@ public class ErrorDialogPresenter {
             final Optional<Throwable> optionalThrowable,
             final DialogCloser dialogCloser
     ) {
-        detailsLabel.setText(DisplayableText.of(SHOW_DETAILS).getText());
+        detailsLabel.setText(DisplayableText.of(SHOW_DETAILS)
+                                            .getText());
         iconImageView.setImage(icon.toImage());
 
 
-        title.textProperty().bind(titleText.bindable());
-        message.textProperty().bind(messageText.bindable());
+        title.textProperty()
+             .bind(titleText.bindable());
+        message.textProperty()
+               .bind(messageText.bindable());
 
         OptionalHelper.when(optionalThrowable.map(throwable -> {
-                    val stringWriter = new StringWriter();
-                    throwable.printStackTrace(new PrintWriter(stringWriter));
-                    return stringWriter.toString();
-                }))
-                .isPresent(stacktrace -> {
-                    detailsLabel.setVisible(true);
-                    detailsLabel.setManaged(true);
+                          val stringWriter = new StringWriter();
+                          throwable.printStackTrace(new PrintWriter(stringWriter));
+                          return stringWriter.toString();
+                      }))
+                      .isPresent(stacktrace -> {
+                          detailsLabel.setVisible(true);
+                          detailsLabel.setManaged(true);
 
-                    stacktraceTextArea.setText(stacktrace);
-                })
-                .orElse(() -> {
-                    detailsLabel.setVisible(false);
-                    detailsLabel.setManaged(false);
-                });
+                          stacktraceTextArea.setText(stacktrace);
+                      })
+                      .orElse(() -> {
+                          detailsLabel.setVisible(false);
+                          detailsLabel.setManaged(false);
+                      });
 
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
 
         detailsLabel.setOnMouseClicked(event -> {
             if (stacktraceTextArea.isVisible()) {
-                detailsLabel.setText(DisplayableText.of(SHOW_DETAILS).getText());
+                detailsLabel.setText(DisplayableText.of(SHOW_DETAILS)
+                                                    .getText());
                 stacktraceTextArea.setVisible(false);
                 stacktraceTextArea.setManaged(false);
             } else {
-                detailsLabel.setText(DisplayableText.of(HIDE_DETAILS).getText());
+                detailsLabel.setText(DisplayableText.of(HIDE_DETAILS)
+                                                    .getText());
                 stacktraceTextArea.setVisible(true);
                 stacktraceTextArea.setManaged(true);
             }
@@ -94,13 +99,14 @@ public class ErrorDialogPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ErrorDialogPresenter>load("fxml/error-dialog.fxml");
-        loaded.getController().init(
-                data.getTitle(),
-                data.getMessage(),
-                getIcon(data.getType()),
-                data.getThrowable(),
-                servicesFacade.dialogs()
-        );
+        loaded.getController()
+              .init(
+                      data.getTitle(),
+                      data.getMessage(),
+                      getIcon(data.getType()),
+                      data.getThrowable(),
+                      servicesFacade.dialogs()
+              );
 
         return loaded;
     }

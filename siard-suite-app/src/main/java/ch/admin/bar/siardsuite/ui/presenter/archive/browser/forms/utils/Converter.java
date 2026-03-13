@@ -38,8 +38,8 @@ public class Converter {
 
     public static <T> Function<T, String> uriToString(Function<T, URI> getter) {
         return t -> Optional.ofNullable(getter.apply(t))
-                .map(URI::getPath)
-                .orElse("");
+                            .map(URI::getPath)
+                            .orElse("");
     }
 
     public static <T> Function<T, LocalDate> calendarToLocalDate(Function<T, Calendar> getter) {

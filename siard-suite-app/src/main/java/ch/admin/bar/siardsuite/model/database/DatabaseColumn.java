@@ -20,7 +20,8 @@ public class DatabaseColumn {
     protected DatabaseColumn(MetaColumn column) {
         this.column = column;
 
-        lobFolder = column.getLobFolder() != null ? column.getLobFolder().toString() : "";
+        lobFolder = column.getLobFolder() != null ? column.getLobFolder()
+                                                          .toString() : "";
         mimeType = column.getMimeType();
         description = column.getDescription();
     }

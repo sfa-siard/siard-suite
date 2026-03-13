@@ -1,38 +1,14 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser;
 
 import ch.admin.bar.siard2.api.MetaParameter;
-import ch.admin.bar.siardsuite.ui.common.Icon;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.AttributeDetailsForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.ColumnDetailsForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.MetadataDetailsForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.ParameterOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.PrivilegesOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.RoutineOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.RoutinesOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.RowsOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.SchemaOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.TableOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.TypeDetailsForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.TypesOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.UsersOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.ViewOverviewForm;
-import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.ViewsOverviewForm;
-import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
-import ch.admin.bar.siardsuite.model.database.DatabaseAttribute;
-import ch.admin.bar.siardsuite.model.database.DatabaseColumn;
-import ch.admin.bar.siardsuite.model.database.DatabaseSchema;
-import ch.admin.bar.siardsuite.model.database.DatabaseTable;
-import ch.admin.bar.siardsuite.model.database.DatabaseType;
-import ch.admin.bar.siardsuite.model.database.DatabaseView;
-import ch.admin.bar.siardsuite.model.database.Privilige;
-import ch.admin.bar.siardsuite.model.database.Routine;
-import ch.admin.bar.siardsuite.model.database.SiardArchive;
-import ch.admin.bar.siardsuite.model.database.User;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
+import ch.admin.bar.siardsuite.model.TreeAttributeWrapper;
+import ch.admin.bar.siardsuite.model.database.*;
+import ch.admin.bar.siardsuite.ui.common.Icon;
+import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.*;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -89,24 +65,30 @@ public class TreeBuilder {
     public TreeItem<TreeAttributeWrapper> createRootItem() {
         val rootItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
-                        .name(DisplayableText.of(this.siardArchive.getName().orElse("")))
-                        .viewTitle(DisplayableText.of(ROOT_ELEMENT_NAME))
-                        .renderableForm(MetadataDetailsForm.create(siardArchive)
-                                .toBuilder()
-                                .readOnlyForm(readonly)
-                                .build())
-                        .build(),
+                                    .name(DisplayableText.of(this.siardArchive.getName()
+                                                                              .orElse("")))
+                                    .viewTitle(DisplayableText.of(ROOT_ELEMENT_NAME))
+                                    .renderableForm(MetadataDetailsForm.create(siardArchive)
+                                                                       .toBuilder()
+                                                                       .readOnlyForm(readonly)
+                                                                       .build())
+                                    .build(),
                 new ImageView(Icon.DB.toResizedImageOfHeight(16)));
 
         rootItem.setExpanded(true);
-        rootItem.getChildren().add(createItemForSchemas());
+        rootItem.getChildren()
+                .add(createItemForSchemas());
 
-        if (!siardArchive.users().isEmpty()) {
-            rootItem.getChildren().add(createItemForUsers(siardArchive.users()));
+        if (!siardArchive.users()
+                         .isEmpty()) {
+            rootItem.getChildren()
+                    .add(createItemForUsers(siardArchive.users()));
         }
 
-        if (!siardArchive.priviliges().isEmpty()) {
-            rootItem.getChildren().add(createItemForPrivileges(siardArchive.priviliges()));
+        if (!siardArchive.priviliges()
+                         .isEmpty()) {
+            rootItem.getChildren()
+                    .add(createItemForPrivileges(siardArchive.priviliges()));
         }
 
         return rootItem;
@@ -114,22 +96,24 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemForPrivileges(List<Privilige> priviliges) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(PRIVILEGES_ELEMENT_NAME, priviliges.size()))
-                .viewTitle(DisplayableText.of(PRIVILEGES_VIEW_TITLE))
-                .renderableForm(PrivilegesOverviewForm.create(siardArchive).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                  .name(DisplayableText.of(PRIVILEGES_ELEMENT_NAME, priviliges.size()))
+                                                  .viewTitle(DisplayableText.of(PRIVILEGES_VIEW_TITLE))
+                                                  .renderableForm(PrivilegesOverviewForm.create(siardArchive)
+                                                                                        .toBuilder()
+                                                                                        .readOnlyForm(readonly)
+                                                                                        .build())
+                                                  .build());
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForUsers(final List<User> users) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(USERS_ELEMENT_NAME, users.size()))
-                .viewTitle(DisplayableText.of(USERS_VIEW_TITLE))
-                .renderableForm(UsersOverviewForm.create(siardArchive).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                  .name(DisplayableText.of(USERS_ELEMENT_NAME, users.size()))
+                                                  .viewTitle(DisplayableText.of(USERS_VIEW_TITLE))
+                                                  .renderableForm(UsersOverviewForm.create(siardArchive)
+                                                                                   .toBuilder()
+                                                                                   .readOnlyForm(readonly)
+                                                                                   .build())
+                                                  .build());
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForSchemas() {
@@ -137,17 +121,19 @@ public class TreeBuilder {
 
         val schemasItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
-                        .name(DisplayableText.of(SCHEMAS_ELEMENT_NAME, schemas.size()))
-                        .viewTitle(DisplayableText.of(SCHEMAS_VIEW_TITLE))
-                        .renderableForm(MetadataDetailsForm.create(siardArchive).toBuilder()
-                                .readOnlyForm(readonly)
-                                .build())
-                        .build());
+                                    .name(DisplayableText.of(SCHEMAS_ELEMENT_NAME, schemas.size()))
+                                    .viewTitle(DisplayableText.of(SCHEMAS_VIEW_TITLE))
+                                    .renderableForm(MetadataDetailsForm.create(siardArchive)
+                                                                       .toBuilder()
+                                                                       .readOnlyForm(readonly)
+                                                                       .build())
+                                    .build());
 
         val schemaItems = schemas.stream()
-                .map(this::createItemsForSchema)
-                .collect(Collectors.toList());
-        schemasItem.getChildren().setAll(schemaItems);
+                                 .map(this::createItemsForSchema)
+                                 .collect(Collectors.toList());
+        schemasItem.getChildren()
+                   .setAll(schemaItems);
 
         return schemasItem;
     }
@@ -155,29 +141,38 @@ public class TreeBuilder {
     private TreeItem<TreeAttributeWrapper> createItemsForSchema(DatabaseSchema schema) {
         val schemaItem = new TreeItem<>(
                 TreeAttributeWrapper.builder()
-                        .name(DisplayableText.of(schema.getName()))
-                        .viewTitle(DisplayableText.of(SCHEMA_VIEW_TITLE))
-                        .renderableForm(SchemaOverviewForm.create(schema).toBuilder()
-                                .readOnlyForm(readonly)
-                                .build())
-                        .build());
+                                    .name(DisplayableText.of(schema.getName()))
+                                    .viewTitle(DisplayableText.of(SCHEMA_VIEW_TITLE))
+                                    .renderableForm(SchemaOverviewForm.create(schema)
+                                                                      .toBuilder()
+                                                                      .readOnlyForm(readonly)
+                                                                      .build())
+                                    .build());
 
         schemaItem.setExpanded(true);
 
-        if (!schema.getTypes().isEmpty()) {
-            schemaItem.getChildren().add(createItemForTypes(schema));
+        if (!schema.getTypes()
+                   .isEmpty()) {
+            schemaItem.getChildren()
+                      .add(createItemForTypes(schema));
         }
 
-        if (!schema.getTables().isEmpty()) {
-            schemaItem.getChildren().add(createItemForTables(schema));
+        if (!schema.getTables()
+                   .isEmpty()) {
+            schemaItem.getChildren()
+                      .add(createItemForTables(schema));
         }
 
-        if (!schema.getRoutines().isEmpty()) {
-            schemaItem.getChildren().add(createItemForRoutines(schema));
+        if (!schema.getRoutines()
+                   .isEmpty()) {
+            schemaItem.getChildren()
+                      .add(createItemForRoutines(schema));
         }
 
-        if (!schema.getViews().isEmpty()) {
-            schemaItem.getChildren().add(createItemForViews(schema));
+        if (!schema.getViews()
+                   .isEmpty()) {
+            schemaItem.getChildren()
+                      .add(createItemForViews(schema));
         }
 
         return schemaItem;
@@ -187,80 +182,90 @@ public class TreeBuilder {
         val types = schema.getTypes();
 
         val typesItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(TYPES_ELEMENT_NAME, types.size()))
-                .viewTitle(DisplayableText.of(TYPES_VIEW_TITLE))
-                .renderableForm(TypesOverviewForm.create(schema).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                           .name(DisplayableText.of(TYPES_ELEMENT_NAME, types.size()))
+                                                           .viewTitle(DisplayableText.of(TYPES_VIEW_TITLE))
+                                                           .renderableForm(TypesOverviewForm.create(schema)
+                                                                                            .toBuilder()
+                                                                                            .readOnlyForm(readonly)
+                                                                                            .build())
+                                                           .build());
 
         val typeItems = types.stream()
-                .map(this::createItemsForType)
-                .collect(Collectors.toList());
+                             .map(this::createItemsForType)
+                             .collect(Collectors.toList());
 
-        typesItem.getChildren().addAll(typeItems);
+        typesItem.getChildren()
+                 .addAll(typeItems);
 
         return typesItem;
     }
 
     private TreeItem<TreeAttributeWrapper> createItemsForType(final DatabaseType type) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(type.getName()))
-                .viewTitle(DisplayableText.of(TYPE_VIEW_TITLE))
-                .renderableForm(TypeDetailsForm.create(type).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                      .name(DisplayableText.of(type.getName()))
+                                                      .viewTitle(DisplayableText.of(TYPE_VIEW_TITLE))
+                                                      .renderableForm(TypeDetailsForm.create(type)
+                                                                                     .toBuilder()
+                                                                                     .readOnlyForm(readonly)
+                                                                                     .build())
+                                                      .build());
 
-        val attributeItems = type.getDatabaseAttributes().stream()
-                .map(this::createItemsForAttribute)
-                .collect(Collectors.toList());
+        val attributeItems = type.getDatabaseAttributes()
+                                 .stream()
+                                 .map(this::createItemsForAttribute)
+                                 .collect(Collectors.toList());
 
-        item.getChildren().addAll(attributeItems);
+        item.getChildren()
+            .addAll(attributeItems);
 
         return item;
     }
 
     private TreeItem<TreeAttributeWrapper> createItemsForAttribute(final DatabaseAttribute attribute) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(attribute.getName()))
-                .viewTitle(DisplayableText.of(ATTRIBUTE_VIEW_TITLE))
-                .renderableForm(AttributeDetailsForm.create(attribute).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                  .name(DisplayableText.of(attribute.getName()))
+                                                  .viewTitle(DisplayableText.of(ATTRIBUTE_VIEW_TITLE))
+                                                  .renderableForm(AttributeDetailsForm.create(attribute)
+                                                                                      .toBuilder()
+                                                                                      .readOnlyForm(readonly)
+                                                                                      .build())
+                                                  .build());
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForRoutines(DatabaseSchema schema) {
         val routines = schema.getRoutines();
 
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(ROUTINES_ELEMENT_NAME, routines.size()))
-                .viewTitle(DisplayableText.of(ROUTINES_VIEW_TITLE))
-                .renderableForm(RoutinesOverviewForm.create(schema).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                      .name(DisplayableText.of(ROUTINES_ELEMENT_NAME, routines.size()))
+                                                      .viewTitle(DisplayableText.of(ROUTINES_VIEW_TITLE))
+                                                      .renderableForm(RoutinesOverviewForm.create(schema)
+                                                                                          .toBuilder()
+                                                                                          .readOnlyForm(readonly)
+                                                                                          .build())
+                                                      .build());
 
         val routineItems = routines.stream()
-                .map(this::createItemsForRoutine)
-                .collect(Collectors.toList());
+                                   .map(this::createItemsForRoutine)
+                                   .collect(Collectors.toList());
 
-        item.getChildren().addAll(routineItems);
+        item.getChildren()
+            .addAll(routineItems);
 
         return item;
     }
 
     private TreeItem<TreeAttributeWrapper> createItemsForRoutine(final Routine routine) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(routine.getName()))
-                .viewTitle(DisplayableText.of(ROUTINE_VIEW_TITLE))
-                .renderableForm(RoutineOverviewForm.create(routine).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                      .name(DisplayableText.of(routine.getName()))
+                                                      .viewTitle(DisplayableText.of(ROUTINE_VIEW_TITLE))
+                                                      .renderableForm(RoutineOverviewForm.create(routine)
+                                                                                         .toBuilder()
+                                                                                         .readOnlyForm(readonly)
+                                                                                         .build())
+                                                      .build());
 
-        item.getChildren().add(createItemForParameters(routine));
+        item.getChildren()
+            .add(createItemForParameters(routine));
 
         return item;
     }
@@ -268,114 +273,127 @@ public class TreeBuilder {
     private TreeItem<TreeAttributeWrapper> createItemForParameters(final Routine routine) {
         val parameters = routine.getParameters();
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(PARAMETERS_ELEMENT_NAME, parameters.size()))
-                .viewTitle(DisplayableText.of(ROUTINE_VIEW_TITLE))
-                .renderableForm(RoutineOverviewForm.create(routine).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                      .name(DisplayableText.of(PARAMETERS_ELEMENT_NAME, parameters.size()))
+                                                      .viewTitle(DisplayableText.of(ROUTINE_VIEW_TITLE))
+                                                      .renderableForm(RoutineOverviewForm.create(routine)
+                                                                                         .toBuilder()
+                                                                                         .readOnlyForm(readonly)
+                                                                                         .build())
+                                                      .build());
 
         val parameterItems = parameters.stream()
-                .map(this::createItemsForParameter)
-                .collect(Collectors.toList());
+                                       .map(this::createItemsForParameter)
+                                       .collect(Collectors.toList());
 
-        item.getChildren().addAll(parameterItems);
+        item.getChildren()
+            .addAll(parameterItems);
 
         return item;
     }
 
     private TreeItem<TreeAttributeWrapper> createItemsForParameter(final MetaParameter parameter) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(parameter.getName()))
-                .viewTitle(DisplayableText.of(PARAMETER_VIEW_TITLE))
-                .renderableForm(ParameterOverviewForm.create(parameter).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                  .name(DisplayableText.of(parameter.getName()))
+                                                  .viewTitle(DisplayableText.of(PARAMETER_VIEW_TITLE))
+                                                  .renderableForm(ParameterOverviewForm.create(parameter)
+                                                                                       .toBuilder()
+                                                                                       .readOnlyForm(readonly)
+                                                                                       .build())
+                                                  .build());
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForViews(DatabaseSchema schema) {
         val views = schema.getViews();
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(VIEWS_ELEMENT_NAME, views.size()))
-                .viewTitle(DisplayableText.of(VIEWS_VIEW_TITLE))
-                .renderableForm(ViewsOverviewForm.create(schema).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                      .name(DisplayableText.of(VIEWS_ELEMENT_NAME, views.size()))
+                                                      .viewTitle(DisplayableText.of(VIEWS_VIEW_TITLE))
+                                                      .renderableForm(ViewsOverviewForm.create(schema)
+                                                                                       .toBuilder()
+                                                                                       .readOnlyForm(readonly)
+                                                                                       .build())
+                                                      .build());
 
         val viewItems = views.stream()
-                .map(this::createItemForView)
-                .collect(Collectors.toList());
+                             .map(this::createItemForView)
+                             .collect(Collectors.toList());
 
-        item.getChildren().addAll(viewItems);
+        item.getChildren()
+            .addAll(viewItems);
 
         return item;
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForView(DatabaseView view) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(view.name()))
-                .viewTitle(DisplayableText.of(VIEW_VIEW_TITLE))
-                .renderableForm(ViewOverviewForm.create(view.getMetaView()).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                      .name(DisplayableText.of(view.name()))
+                                                      .viewTitle(DisplayableText.of(VIEW_VIEW_TITLE))
+                                                      .renderableForm(ViewOverviewForm.create(view.getMetaView())
+                                                                                      .toBuilder()
+                                                                                      .readOnlyForm(readonly)
+                                                                                      .build())
+                                                      .build());
 
-        item.getChildren().add(createItemForColumns(view));
+        item.getChildren()
+            .add(createItemForColumns(view));
 
         return item;
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForColumns(DatabaseView view) {
         val item = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, view.columns().size()))
-                .viewTitle(DisplayableText.of(COLUMNS_VIEW_TITLE))
-                .renderableForm(ViewOverviewForm.create(view.getMetaView()).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                      .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, view.columns()
+                                                                                                         .size()))
+                                                      .viewTitle(DisplayableText.of(COLUMNS_VIEW_TITLE))
+                                                      .renderableForm(ViewOverviewForm.create(view.getMetaView())
+                                                                                      .toBuilder()
+                                                                                      .readOnlyForm(readonly)
+                                                                                      .build())
+                                                      .build());
 
-        val columnItems = view.columns().stream()
-                .map(this::createColumnItem)
-                .collect(Collectors.toList());
+        val columnItems = view.columns()
+                              .stream()
+                              .map(this::createColumnItem)
+                              .collect(Collectors.toList());
 
-        item.getChildren().addAll(columnItems);
+        item.getChildren()
+            .addAll(columnItems);
 
         return item;
     }
 
     private TreeItem<TreeAttributeWrapper> createColumnItem(DatabaseColumn column) {
         return new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(column.getName()))
-                .viewTitle(DisplayableText.of(COLUMN_VIEW_TITLE))
-                /*
-                Caution: Mockups are showing different style for column details forms.
-                For achieving that, a separate value renderer needs to be developed.
+                                                  .name(DisplayableText.of(column.getName()))
+                                                  .viewTitle(DisplayableText.of(COLUMN_VIEW_TITLE))
+                                                  /*
+                                                  Caution: Mockups are showing different style for column details forms.
+                                                  For achieving that, a separate value renderer needs to be developed.
 
-                TODO: Clarify requirements
-                 */
-                .renderableForm(ColumnDetailsForm.create(column).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                  TODO: Clarify requirements
+                                                   */
+                                                  .renderableForm(ColumnDetailsForm.create(column)
+                                                                                   .toBuilder()
+                                                                                   .readOnlyForm(readonly)
+                                                                                   .build())
+                                                  .build());
     }
 
     private TreeItem<TreeAttributeWrapper> createItemForTables(DatabaseSchema schema) {
         val tables = schema.getTables();
 
         val tablesItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(TABLES_ELEMENT_NAME, tables.size()))
-                .viewTitle(DisplayableText.of(TABLES_VIEW_TITLE))
-                .renderableForm(SchemaOverviewForm.create(schema).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                            .name(DisplayableText.of(TABLES_ELEMENT_NAME, tables.size()))
+                                                            .viewTitle(DisplayableText.of(TABLES_VIEW_TITLE))
+                                                            .renderableForm(SchemaOverviewForm.create(schema)
+                                                                                              .toBuilder()
+                                                                                              .readOnlyForm(readonly)
+                                                                                              .build())
+                                                            .build());
 
         tablesItem.getChildren()
-                .addAll(tables.stream()
-                        .map(this::createItemForTable)
-                        .collect(Collectors.toList()));
+                  .addAll(tables.stream()
+                                .map(this::createItemForTable)
+                                .collect(Collectors.toList()));
 
         tablesItem.setExpanded(true);
 
@@ -384,27 +402,32 @@ public class TreeBuilder {
 
     private TreeItem<TreeAttributeWrapper> createItemForTable(DatabaseTable table) {
         val tableItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(table.getName()))
-                .viewTitle(DisplayableText.of(TABLE_VIEW_TITLE))
-                .renderableForm(TableOverviewForm.create(table).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                           .name(DisplayableText.of(table.getName()))
+                                                           .viewTitle(DisplayableText.of(TABLE_VIEW_TITLE))
+                                                           .renderableForm(TableOverviewForm.create(table)
+                                                                                            .toBuilder()
+                                                                                            .readOnlyForm(readonly)
+                                                                                            .build())
+                                                           .build());
 
         if (!siardArchive.onlyMetaData()) {
             val rowsItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                    .name(DisplayableText.of(ROWS_ELEMENT_NAME, table.getTable().getMetaTable().getRows()))
-                    .viewTitle(DisplayableText.of(ROWS_VIEW_TITLE))
-                    .renderableForm(RowsOverviewForm.create(table)
-                            .toBuilder()
-                            .readOnlyForm(readonly)
-                            .build())
-                    .build());
+                                                              .name(DisplayableText.of(ROWS_ELEMENT_NAME, table.getTable()
+                                                                                                               .getMetaTable()
+                                                                                                               .getRows()))
+                                                              .viewTitle(DisplayableText.of(ROWS_VIEW_TITLE))
+                                                              .renderableForm(RowsOverviewForm.create(table)
+                                                                                              .toBuilder()
+                                                                                              .readOnlyForm(readonly)
+                                                                                              .build())
+                                                              .build());
 
-            tableItem.getChildren().add(rowsItem);
+            tableItem.getChildren()
+                     .add(rowsItem);
         }
 
-        tableItem.getChildren().add(createColumnItem(table));
+        tableItem.getChildren()
+                 .add(createColumnItem(table));
 
         return tableItem;
     }
@@ -413,17 +436,19 @@ public class TreeBuilder {
         List<DatabaseColumn> columns = table.getColumns();
 
         val columnsItem = new TreeItem<>(TreeAttributeWrapper.builder()
-                .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, columns.size()))
-                .viewTitle(DisplayableText.of(COLUMNS_VIEW_TITLE))
-                .renderableForm(TableOverviewForm.create(table).toBuilder()
-                        .readOnlyForm(readonly)
-                        .build())
-                .build());
+                                                             .name(DisplayableText.of(COLUMNS_ELEMENT_NAME, columns.size()))
+                                                             .viewTitle(DisplayableText.of(COLUMNS_VIEW_TITLE))
+                                                             .renderableForm(TableOverviewForm.create(table)
+                                                                                              .toBuilder()
+                                                                                              .readOnlyForm(readonly)
+                                                                                              .build())
+                                                             .build());
 
         val columnItems = columns.stream()
-                .map(this::createColumnItem)
-                .collect(Collectors.toList());
-        columnsItem.getChildren().addAll(columnItems);
+                                 .map(this::createColumnItem)
+                                 .collect(Collectors.toList());
+        columnsItem.getChildren()
+                   .addAll(columnItems);
 
         return columnsItem;
     }

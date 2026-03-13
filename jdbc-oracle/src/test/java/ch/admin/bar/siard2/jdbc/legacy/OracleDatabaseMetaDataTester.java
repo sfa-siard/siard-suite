@@ -1,23 +1,29 @@
 package ch.admin.bar.siard2.jdbc.legacy;
 
-import java.sql.*;
-import java.text.*;
-import java.util.*;
-import java.util.regex.*;
-
-import static org.junit.Assert.*;
-
 import ch.admin.bar.siard2.jdbc.OracleConnection;
 import ch.admin.bar.siard2.jdbc.OracleDatabaseMetaData;
+import ch.admin.bar.siard2.jdbcx.OracleDataSource;
 import ch.admin.bar.siard2.oracle.legacy.TestOracleDatabase;
 import ch.admin.bar.siard2.oracle.legacy.TestSqlDatabase;
+import ch.enterag.sqlparser.identifier.QualifiedId;
+import ch.enterag.utils.EU;
+import ch.enterag.utils.base.TestColumnDefinition;
+import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
 import org.junit.*;
-import ch.enterag.utils.*;
-import ch.enterag.utils.base.*;
-import ch.enterag.utils.jdbc.*;
-import ch.enterag.sqlparser.identifier.*;
-import ch.admin.bar.siard2.jdbcx.*;
 import org.testcontainers.containers.OracleContainer;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.sql.Types;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.*;
 
 public class OracleDatabaseMetaDataTester
         extends BaseDatabaseMetaDataTester {

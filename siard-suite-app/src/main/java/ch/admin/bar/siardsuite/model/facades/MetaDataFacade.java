@@ -42,14 +42,22 @@ public class MetaDataFacade {
     }
 
     public void setLobFolder(URI lobFolder) throws IOException {
-        if (lobFolder.toString().isEmpty()) return;
+        if (lobFolder.toString()
+                     .isEmpty()) return;
         this.metaData.setLobFolder(lobFolder);
         withSchemas(this.metaData).forEach(metaSchema -> withTables(metaSchema)
                 .forEach(metaTable -> withColumns(metaTable).forEach(metaColumn -> {
-                    String root = lobFolder.toString().toLowerCase();
-                    String schemaName = metaColumn.getParentMetaTable().getParentMetaSchema().getName().toLowerCase();
-                    String tableName = metaColumn.getParentMetaTable().getName().toLowerCase();
-                    String columnName = metaColumn.getName().toLowerCase();
+                    String root = lobFolder.toString()
+                                           .toLowerCase();
+                    String schemaName = metaColumn.getParentMetaTable()
+                                                  .getParentMetaSchema()
+                                                  .getName()
+                                                  .toLowerCase();
+                    String tableName = metaColumn.getParentMetaTable()
+                                                 .getName()
+                                                 .toLowerCase();
+                    String columnName = metaColumn.getName()
+                                                  .toLowerCase();
                     try {
                         if (!new PreTypeFacade(metaColumn.getPreType()).isBlob()) return;
                         metaColumn.setLobFolder(new URI(root + "/" + schemaName + "/" + tableName + "/" + columnName + "/")); // do not use File.separator - does not work on windows!
@@ -73,6 +81,7 @@ public class MetaDataFacade {
 
     private List<MetaSchema> withSchemas(MetaData metaData) {
         return IntStream.range(0, this.metaData.getMetaSchemas())
-                        .mapToObj(this.metaData::getMetaSchema).collect(Collectors.toList());
+                        .mapToObj(this.metaData::getMetaSchema)
+                        .collect(Collectors.toList());
     }
 }

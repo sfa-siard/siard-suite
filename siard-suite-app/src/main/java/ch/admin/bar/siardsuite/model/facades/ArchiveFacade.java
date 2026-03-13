@@ -16,6 +16,8 @@ public class ArchiveFacade {
     }
 
     public List<Schema> schemas() {
-        return IntStream.range(0, this.archive.getSchemas()).mapToObj(archive::getSchema).collect(Collectors.toList());
+        return IntStream.range(0, this.archive.getSchemas())
+                        .mapToObj(archive::getSchema)
+                        .collect(Collectors.toList());
     }
 }

@@ -1,26 +1,26 @@
 package ch.enterag.sqlparser.expression;
 
-import static org.junit.Assert.*;
-import org.junit.*;
-import ch.enterag.sqlparser.*;
+import ch.enterag.sqlparser.BaseSqlFactory;
+import ch.enterag.sqlparser.SqlFactory;
+import org.junit.Before;
+import org.junit.Test;
 
-public class QueryExpressionTester
-{
-  private SqlFactory _sf = new BaseSqlFactory();
-  private QueryExpression _qe = null;
+import static org.junit.Assert.assertEquals;
 
-  @Before
-  public void setUp()
-  {
-    _qe = _sf.newQueryExpression();
-  }
+public class QueryExpressionTester {
+    private SqlFactory _sf = new BaseSqlFactory();
+    private QueryExpression _qe = null;
 
-  @Test
-  public void testCountQuery()
-  {
-    _qe.parse("SELECT COUNT(*) FROM C1.S1.T1");
-    // System.out.println(_qe.format());
-    assertEquals("Count query not recognized!","SELECT\r\n  COUNT(*)\r\nFROM C1.S1.T1",_qe.format());
-  }
-  
+    @Before
+    public void setUp() {
+        _qe = _sf.newQueryExpression();
+    }
+
+    @Test
+    public void testCountQuery() {
+        _qe.parse("SELECT COUNT(*) FROM C1.S1.T1");
+        // System.out.println(_qe.format());
+        assertEquals("Count query not recognized!", "SELECT\r\n  COUNT(*)\r\nFROM C1.S1.T1", _qe.format());
+    }
+
 }

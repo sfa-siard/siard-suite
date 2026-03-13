@@ -82,38 +82,58 @@ public class OpenSiardArchiveDialogPresenter {
         this.archiveHandler = archiveHandler;
         this.onArchiveSelected = onArchiveSelected;
 
-        title.textProperty().bind(DisplayableText.of(TITLE).bindable());
-        text.textProperty().bind(DisplayableText.of(TEXT).bindable());
-        recentFilesHeaderName.textProperty().bind(DisplayableText.of(HEADER_NAME).bindable());
-        recentFilesHeaderDate.textProperty().bind(DisplayableText.of(HEADER_DATE).bindable());
-        dropFileTextTop.textProperty().bind(DisplayableText.of(DROP_FILE_TEXT_TOP).bindable());
-        dropFileTextMiddle.textProperty().bind(DisplayableText.of(DROP_FILE_TEXT_MIDDLE).bindable());
-        chooseFileButton.textProperty().bind(DisplayableText.of(CHOOSE_FILE_BUTTON).bindable());
+        title.textProperty()
+             .bind(DisplayableText.of(TITLE)
+                                  .bindable());
+        text.textProperty()
+            .bind(DisplayableText.of(TEXT)
+                                 .bindable());
+        recentFilesHeaderName.textProperty()
+                             .bind(DisplayableText.of(HEADER_NAME)
+                                                  .bindable());
+        recentFilesHeaderDate.textProperty()
+                             .bind(DisplayableText.of(HEADER_DATE)
+                                                  .bindable());
+        dropFileTextTop.textProperty()
+                       .bind(DisplayableText.of(DROP_FILE_TEXT_TOP)
+                                            .bindable());
+        dropFileTextMiddle.textProperty()
+                          .bind(DisplayableText.of(DROP_FILE_TEXT_MIDDLE)
+                                               .bindable());
+        chooseFileButton.textProperty()
+                        .bind(DisplayableText.of(CHOOSE_FILE_BUTTON)
+                                             .bindable());
 
         UserPreferences.INSTANCE.getRecentFiles()
-                .forEach(recentFileStorageData -> recentFilesBox.getChildren()
-                        .add(getRecentFileBox(recentFileStorageData)));
+                                .forEach(recentFileStorageData -> recentFilesBox.getChildren()
+                                                                                .add(getRecentFileBox(recentFileStorageData)));
 
-        if (recentFilesBox.getChildren().size() == 0) {
+        if (recentFilesBox.getChildren()
+                          .size() == 0) {
             showNoRecentFiles();
         } else {
-            recentFilesBox.getChildren().removeIf(child -> recentFilesBox.getChildren().indexOf(child) > 2);
+            recentFilesBox.getChildren()
+                          .removeIf(child -> recentFilesBox.getChildren()
+                                                           .indexOf(child) > 2);
         }
 
         dropFileBox.setOnDragOver(this::handleDragOver);
         dropFileBox.setOnDragDropped(this::handleDragDropped);
 
-        chooseFileButton.getStyleClass().setAll("button", "secondary");
+        chooseFileButton.getStyleClass()
+                        .setAll("button", "secondary");
 
         chooseFileButton.setOnAction(this::handleChooseFile);
 
         closeButton.setOnAction(event -> dialogCloser.closeDialog());
 
-        buttonBox.getChildren().add(new CloseDialogButton(dialogCloser));
+        buttonBox.getChildren()
+                 .add(new CloseDialogButton(dialogCloser));
     }
 
     private void handleDragOver(DragEvent event) {
-        if (event.getDragboard().hasFiles()) {
+        if (event.getDragboard()
+                 .hasFiles()) {
             event.acceptTransferModes(TransferMode.COPY);
         } else {
             event.consume();
@@ -122,10 +142,15 @@ public class OpenSiardArchiveDialogPresenter {
 
     private void handleDragDropped(DragEvent event) {
         boolean completed = false;
-        if (event.getDragboard().hasFiles()) {
+        if (event.getDragboard()
+                 .hasFiles()) {
             completed = true;
-            if (event.getDragboard().getFiles().size() == 1) {
-                final File file = event.getDragboard().getFiles().get(0);
+            if (event.getDragboard()
+                     .getFiles()
+                     .size() == 1) {
+                final File file = event.getDragboard()
+                                       .getFiles()
+                                       .get(0);
                 readArchive(file);
             }
         }
@@ -135,17 +160,22 @@ public class OpenSiardArchiveDialogPresenter {
 
     private void handleChooseFile(ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(DisplayableText.of(FILE_CHOOSER_TITLE).getText());
+        fileChooser.setTitle(DisplayableText.of(FILE_CHOOSER_TITLE)
+                                            .getText());
         final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("SIARD files", "*.siard");
-        fileChooser.getExtensionFilters().add(extensionFilter);
-        final File file = fileChooser.showOpenDialog(title.getScene().getWindow());
+        fileChooser.getExtensionFilters()
+                   .add(extensionFilter);
+        final File file = fileChooser.showOpenDialog(title.getScene()
+                                                          .getWindow());
         readArchive(file);
     }
 
     private void showNoRecentFiles() {
         recentFilesBox.setStyle("-fx-background-color: #f8f6f69e; -fx-alignment: center");
-        final Label label = new Label(DisplayableText.of(NO_DATA).getText());
-        recentFilesBox.getChildren().add(label);
+        final Label label = new Label(DisplayableText.of(NO_DATA)
+                                                     .getText());
+        recentFilesBox.getChildren()
+                      .add(label);
         label.setStyle("-fx-text-fill: #2a2a2a82");
     }
 
@@ -153,18 +183,26 @@ public class OpenSiardArchiveDialogPresenter {
         final HBox recentFileBox = new HBox();
 
         final Label imageLabel = new Label();
-        imageLabel.getStyleClass().add("icon-label");
-        final Label nameLabel = new Label(recentFileStorageData.getStoredData().getValue().getName());
-        nameLabel.getStyleClass().add("name-label");
+        imageLabel.getStyleClass()
+                  .add("icon-label");
+        final Label nameLabel = new Label(recentFileStorageData.getStoredData()
+                                                               .getValue()
+                                                               .getName());
+        nameLabel.getStyleClass()
+                 .add("name-label");
 
         final Label dateLabel = new Label(recentFileStorageData.getStoredAtDate());
-        dateLabel.getStyleClass().add("date-label");
+        dateLabel.getStyleClass()
+                 .add("date-label");
 
-        recentFileBox.getChildren().addAll(imageLabel, nameLabel, dateLabel);
-        recentFileBox.getStyleClass().add("file-hbox");
+        recentFileBox.getChildren()
+                     .addAll(imageLabel, nameLabel, dateLabel);
+        recentFileBox.getStyleClass()
+                     .add("file-hbox");
         VBox.setMargin(recentFileBox, new Insets(5, 0, 5, 0));
 
-        recentFileBox.setOnMouseClicked(event -> readArchive(recentFileStorageData.getStoredData().getValue()));
+        recentFileBox.setOnMouseClicked(event -> readArchive(recentFileStorageData.getStoredData()
+                                                                                  .getValue()));
 
         return recentFileBox;
     }
@@ -172,7 +210,8 @@ public class OpenSiardArchiveDialogPresenter {
     private boolean isSiardArchive(File file) {
         final String filePath = file.getAbsolutePath();
         final int dotIndex = filePath.lastIndexOf(".");
-        return dotIndex > -1 && filePath.substring(dotIndex + 1).equalsIgnoreCase("siard");
+        return dotIndex > -1 && filePath.substring(dotIndex + 1)
+                                        .equalsIgnoreCase("siard");
     }
 
     private void readArchive(File file) {
@@ -189,11 +228,12 @@ public class OpenSiardArchiveDialogPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<OpenSiardArchiveDialogPresenter>load("fxml/open/open-siard-archive-dialog.fxml");
-        loaded.getController().init(
-                servicesFacade.dialogs(),
-                servicesFacade.getService(UserPreferences.class),
-                servicesFacade.getService(ArchiveHandler.class),
-                onArchiveSelected);
+        loaded.getController()
+              .init(
+                      servicesFacade.dialogs(),
+                      servicesFacade.getService(UserPreferences.class),
+                      servicesFacade.getService(ArchiveHandler.class),
+                      onArchiveSelected);
 
         return loaded;
     }

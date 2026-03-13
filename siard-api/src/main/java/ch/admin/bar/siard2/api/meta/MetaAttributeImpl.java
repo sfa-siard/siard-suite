@@ -76,14 +76,14 @@ public class MetaAttributeImpl
         return (ArchiveImpl) mt.getParentMetaSchema()
                                .getSchema()
                                .getParentArchive();
-    } 
+    }
 
     private AttributeType _at = null;
 
     public AttributeType getAttributeType()
             throws IOException {
         return _at;
-    } 
+    }
 
     private AttributeType _atTemplate = null;
 
@@ -97,7 +97,7 @@ public class MetaAttributeImpl
         _atTemplate = atTemplate;
         if (!SU.isNotEmpty(getDescription()))
             setDescription(XU.fromXml(_atTemplate.getDescription()));
-    } 
+    }
 
     /**
      * constructor
@@ -112,7 +112,7 @@ public class MetaAttributeImpl
         _mtParent = mtParent;
         _at = at;
         _iPosition = iPosition;
-    } 
+    }
 
     /**
      * factory
@@ -126,9 +126,8 @@ public class MetaAttributeImpl
     public static MetaAttribute newInstance(MetaType mtParent, AttributeType at, int iPosition)
             throws IOException {
         return new MetaAttributeImpl(mtParent, at, iPosition);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -138,7 +137,6 @@ public class MetaAttributeImpl
         return XU.fromXml(_at.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -160,7 +158,7 @@ public class MetaAttributeImpl
                 _at.setType(XU.toXml(sType));
         } else
             throw new IOException("Type cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -173,7 +171,7 @@ public class MetaAttributeImpl
         prt.initialize(iDataType, lPrecision, iScale);
         String sType = prt.format();
         setType(sType);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -202,7 +200,7 @@ public class MetaAttributeImpl
         } else if (cat == CategoryType.DISTINCT)
             iDataType = mt.getBasePreType();
         return iDataType;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -239,7 +237,7 @@ public class MetaAttributeImpl
         } else if (cat == CategoryType.DISTINCT)
             lLength = mt.getBaseLength();
         return lLength;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -259,9 +257,8 @@ public class MetaAttributeImpl
         } else if (cat == CategoryType.DISTINCT)
             iScale = mt.getBaseScale();
         return iScale;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -275,7 +272,7 @@ public class MetaAttributeImpl
                 _at.setTypeOriginal(XU.toXml(sTypeOriginal));
         } else
             throw new IOException("Original type cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -285,7 +282,6 @@ public class MetaAttributeImpl
         return XU.fromXml(_at.getTypeOriginal());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -301,7 +297,7 @@ public class MetaAttributeImpl
                 _at.setTypeSchema(XU.toXml(sTypeSchema));
         } else
             throw new IOException("Type schema cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -311,7 +307,6 @@ public class MetaAttributeImpl
         return XU.fromXml(_at.getTypeSchema());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -331,7 +326,7 @@ public class MetaAttributeImpl
             }
         } else
             throw new IOException("Type name cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -355,9 +350,8 @@ public class MetaAttributeImpl
                        .getMetaType(getTypeName());
         }
         return mt;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -371,7 +365,7 @@ public class MetaAttributeImpl
                 _at.setNullable(bNullable);
         } else
             throw new IOException("Nullability cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -383,9 +377,8 @@ public class MetaAttributeImpl
             bNullable = _at.isNullable()
                            .booleanValue();
         return bNullable;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -399,7 +392,7 @@ public class MetaAttributeImpl
                 _at.setDefaultValue(XU.toXml(sDefaultValue));
         } else
             throw new IOException("Default value cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -409,7 +402,6 @@ public class MetaAttributeImpl
         return XU.fromXml(_at.getDefaultValue());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -423,7 +415,7 @@ public class MetaAttributeImpl
                 _at.setCardinality(BigInteger.valueOf(iCardinality));
         } else
             throw new IOException("Cardinality cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -435,9 +427,8 @@ public class MetaAttributeImpl
         if (bi != null)
             iCardinality = bi.intValue();
         return iCardinality;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -447,7 +438,7 @@ public class MetaAttributeImpl
         ArchiveImpl ai = getArchiveImpl();
         if (ai.isMetaDataDifferent(getDescription(), sDescription))
             _at.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -476,7 +467,7 @@ public class MetaAttributeImpl
                         (getCardinality() <= 0) ? "" : String.valueOf(getCardinality()),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

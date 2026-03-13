@@ -18,30 +18,33 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.DropTypeStatement;
 
 /*====================================================================*/
+
 /** OracleDropTypeStatement implements the formatting of DROP
  * Type statements
  * @author Simon Jutz
  */
 public class OracleDropTypeStatement
-	extends DropTypeStatement {
+        extends DropTypeStatement {
     /*------------------------------------------------------------------*/
-	/**
-	 * format the drop type statement
-	 * @return the SQL string corresponding to a drop type statement
-	 */
-	@Override
-	public String format() {
-		String sStatement = K.DROP.getKeyword() + sSP + K.TYPE.getKeyword() + sSP + 
-			      getUdtName().quote();
-	    
-	    return sStatement;
-	} /* format */
+
+    /**
+     * format the drop type statement
+     * @return the SQL string corresponding to a drop type statement
+     */
+    @Override
+    public String format() {
+        String sStatement = K.DROP.getKeyword() + sSP + K.TYPE.getKeyword() + sSP +
+                getUdtName().quote();
+
+        return sStatement;
+    } /* format */
 
     /*------------------------------------------------------------------*/
+
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
-	public OracleDropTypeStatement(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
+    public OracleDropTypeStatement(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 }

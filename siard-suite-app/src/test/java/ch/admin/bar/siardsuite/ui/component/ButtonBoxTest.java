@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 
-import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.*;
+import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.CANCEL;
+import static ch.admin.bar.siardsuite.ui.component.ButtonBox.Type.DEFAULT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,10 +30,14 @@ public class ButtonBoxTest {
 
         // then
         assertNotNull(buttonBox);
-        assertThat(buttonBox.getChildren().size(), is(3));
-        assertTrue(buttonBox.getChildren().contains(buttonBox.cancelButton));
-        assertTrue(buttonBox.getChildren().contains(buttonBox.nextButton));
-        assertTrue(buttonBox.getChildren().contains(buttonBox.previousButton));
+        assertThat(buttonBox.getChildren()
+                            .size(), is(3));
+        assertTrue(buttonBox.getChildren()
+                            .contains(buttonBox.cancelButton));
+        assertTrue(buttonBox.getChildren()
+                            .contains(buttonBox.nextButton));
+        assertTrue(buttonBox.getChildren()
+                            .contains(buttonBox.previousButton));
         assertThat(buttonBox.cancelButton.getText(), is("Cancel"));
         assertThat(buttonBox.nextButton.getText(), is("Next"));
         assertThat(buttonBox.previousButton.getText(), is("Back"));
@@ -47,8 +52,10 @@ public class ButtonBoxTest {
 
         // then
         assertNotNull(buttonBox);
-        assertThat(buttonBox.getChildren().size(), is(1));
-        assertThat(buttonBox.getChildren().get(0), is(buttonBox.cancelButton));
+        assertThat(buttonBox.getChildren()
+                            .size(), is(1));
+        assertThat(buttonBox.getChildren()
+                            .get(0), is(buttonBox.cancelButton));
         assertThat(buttonBox.cancelButton.getText(), is("Cancel"));
     }
 }

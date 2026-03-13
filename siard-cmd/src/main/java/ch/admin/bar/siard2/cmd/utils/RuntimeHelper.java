@@ -10,15 +10,24 @@ public class RuntimeHelper {
         Runtime rt = Runtime.getRuntime();
 
         val stringBuilder = new StringBuilder()
-                .append("free memory: ").append(rt.freeMemory()).append("\n")
-                .append("total memory: ").append(rt.totalMemory()).append("\n")
-                .append("maximum memory: ").append(rt.maxMemory()).append("\n")
-                .append("System properties: ").append(rt.maxMemory()).append("\n");
+                .append("free memory: ")
+                .append(rt.freeMemory())
+                .append("\n")
+                .append("total memory: ")
+                .append(rt.totalMemory())
+                .append("\n")
+                .append("maximum memory: ")
+                .append(rt.maxMemory())
+                .append("\n")
+                .append("System properties: ")
+                .append(rt.maxMemory())
+                .append("\n");
 
         val systemProperties = System.getProperties();
         val systemPropertiesEnumeration = systemProperties.propertyNames();
-        while(systemPropertiesEnumeration.hasMoreElements()) {
-            val key = systemPropertiesEnumeration.nextElement().toString();
+        while (systemPropertiesEnumeration.hasMoreElements()) {
+            val key = systemPropertiesEnumeration.nextElement()
+                                                 .toString();
             stringBuilder
                     .append("  ")
                     .append(key)

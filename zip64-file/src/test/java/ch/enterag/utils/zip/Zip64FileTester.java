@@ -10,17 +10,21 @@ Created    : 07.03.2008, Hartwig Thomas
 
 package ch.enterag.utils.zip;
 
+import ch.enterag.utils.EU;
+import ch.enterag.utils.StopWatch;
+import ch.enterag.utils.lang.Execute;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.zip.*;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.zip.ZipException;
 
-import ch.enterag.utils.*;
-import ch.enterag.utils.lang.*;
-
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests Zip64File.
@@ -99,11 +103,14 @@ public class Zip64FileTester {
             fis.close();
             eos.close();
         } catch (ZipException ze) {
-            System.out.println(ze.getClass().getName() + ": " + ze.getMessage());
+            System.out.println(ze.getClass()
+                                 .getName() + ": " + ze.getMessage());
         } catch (FileNotFoundException fnfe) {
-            System.out.println(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            System.out.println(fnfe.getClass()
+                                   .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            System.out.println(ie.getClass().getName() + ": " + ie.getMessage());
+            System.out.println(ie.getClass()
+                                 .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -118,11 +125,14 @@ public class Zip64FileTester {
             EntryOutputStream eos = zf.openEntryOutputStream(sDirectory, FileEntry.iMETHOD_STORED, null);
             eos.close();
         } catch (ZipException ze) {
-            System.out.println(ze.getClass().getName() + ": " + ze.getMessage());
+            System.out.println(ze.getClass()
+                                 .getName() + ": " + ze.getMessage());
         } catch (FileNotFoundException fnfe) {
-            System.out.println(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            System.out.println(fnfe.getClass()
+                                   .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            System.out.println(ie.getClass().getName() + ": " + ie.getMessage());
+            System.out.println(ie.getClass()
+                                 .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -173,7 +183,8 @@ public class Zip64FileTester {
             sw.stop();
             System.out.println("Closed " + m_sTestZipFile + " after " + sw.formatMs() + " ms");
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -363,10 +374,12 @@ public class Zip64FileTester {
             fis2.close();
         } catch (FileNotFoundException fnfe) {
             bEqual = false;
-            System.out.println(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            System.out.println(fnfe.getClass()
+                                   .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             bEqual = false;
-            System.out.println(ie.getClass().getName() + ": " + ie.getMessage());
+            System.out.println(ie.getClass()
+                                 .getName() + ": " + ie.getMessage());
         }
         return bEqual;
     }
@@ -403,10 +416,12 @@ public class Zip64FileTester {
                     raf2.close();
                 } catch (FileNotFoundException fnfe) {
                     bEqual = false;
-                    System.out.println(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+                    System.out.println(fnfe.getClass()
+                                           .getName() + ": " + fnfe.getMessage());
                 } catch (IOException ie) {
                     bEqual = false;
-                    System.out.println(ie.getClass().getName() + ": " + ie.getMessage());
+                    System.out.println(ie.getClass()
+                                         .getName() + ": " + ie.getMessage());
                 }
             }
 
@@ -608,9 +623,11 @@ public class Zip64FileTester {
             Zip64File zf = new Zip64File(m_sExtZipFile, true);
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -629,9 +646,11 @@ public class Zip64FileTester {
             zf.close();
             fail("Opening non-existent file read-only should not succeed!");
         } catch (FileNotFoundException fnfe) {
-            System.out.println(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            System.out.println(fnfe.getClass()
+                                   .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -649,9 +668,11 @@ public class Zip64FileTester {
             Zip64File zf = new Zip64File(m_sTestZipFile);
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -667,9 +688,11 @@ public class Zip64FileTester {
             Zip64File zf = new Zip64File(fileZip);
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -687,9 +710,11 @@ public class Zip64FileTester {
             Zip64File zf = new Zip64File(m_sTestZipFile);
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -708,9 +733,11 @@ public class Zip64FileTester {
                 fail("Invalid ZIP comment found: " + sComment + "!");
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -733,9 +760,11 @@ public class Zip64FileTester {
                 fail("ZIP comment could not be set!");
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -754,9 +783,11 @@ public class Zip64FileTester {
                 fail("Invalid number of file entries found: " + String.valueOf(iFileEntries) + "!");
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -780,9 +811,11 @@ public class Zip64FileTester {
                 fail("file entry medium.txt not found!");
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -802,9 +835,11 @@ public class Zip64FileTester {
             }
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -839,9 +874,11 @@ public class Zip64FileTester {
             }
             zf.close();
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -923,9 +960,11 @@ public class Zip64FileTester {
                 }
             }
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 
@@ -1033,7 +1072,8 @@ public class Zip64FileTester {
         /* moderate zip file */
         try {
             File fileTemp = new File(sTEMP_DIRECTORY);
-            File fileZip = new File(fileTemp.getParentFile().getAbsolutePath() + File.separator + "moderate.zip");
+            File fileZip = new File(fileTemp.getParentFile()
+                                            .getAbsolutePath() + File.separator + "moderate.zip");
 
             Zip64File zf = new Zip64File(fileZip);
             byte[] buf = new byte[4096];
@@ -1100,9 +1140,11 @@ public class Zip64FileTester {
             if (nonExistentDel != null)
                 fail("deleting a non-existent file should return null!");
         } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass().getName() + ": " + fnfe.getMessage());
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
-            fail(ie.getClass().getName() + ": " + ie.getMessage());
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
         }
     }
 }

@@ -45,7 +45,7 @@ public class MetaRoleImpl
      */
     private ArchiveImpl getArchiveImpl() {
         return (ArchiveImpl) getParentMetaData().getArchive();
-    } 
+    }
 
     /**
      * set template meta data.
@@ -55,7 +55,7 @@ public class MetaRoleImpl
     public void setTemplate(RoleType rtTemplate) {
         if (!SU.isNotEmpty(getDescription()))
             setDescription(XU.fromXml(rtTemplate.getDescription()));
-    } 
+    }
 
     /**
      * constructor
@@ -66,7 +66,7 @@ public class MetaRoleImpl
     private MetaRoleImpl(MetaData mdParent, RoleType rt) {
         _mdParent = mdParent;
         _rt = rt;
-    } 
+    }
 
     /**
      * factory
@@ -77,9 +77,8 @@ public class MetaRoleImpl
      */
     public static MetaRole newInstance(MetaData mdParent, RoleType rt) {
         return new MetaRoleImpl(mdParent, rt);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -89,7 +88,6 @@ public class MetaRoleImpl
         return XU.fromXml(_rt.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -102,7 +100,7 @@ public class MetaRoleImpl
                 _rt.setAdmin(XU.toXml(sAdmin));
         } else
             throw new IOException("Admin name cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -112,7 +110,6 @@ public class MetaRoleImpl
         return XU.fromXml(_rt.getAdmin());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -143,7 +140,7 @@ public class MetaRoleImpl
                         getAdmin(),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

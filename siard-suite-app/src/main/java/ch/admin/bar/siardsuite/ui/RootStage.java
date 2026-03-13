@@ -1,9 +1,9 @@
 package ch.admin.bar.siardsuite.ui;
 
 import ch.admin.bar.siardsuite.framework.dialogs.DialogDisplay;
-import ch.admin.bar.siardsuite.framework.view.ViewDisplay;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKeyArg;
+import ch.admin.bar.siardsuite.framework.view.ViewDisplay;
 import ch.admin.bar.siardsuite.service.FilesService;
 import ch.admin.bar.siardsuite.service.InstallationService;
 import ch.admin.bar.siardsuite.service.LogService;
@@ -36,41 +36,47 @@ public class RootStage extends Stage implements ViewDisplay, DialogDisplay {
             Platform.exit();
             System.exit(0);
         });
-        titleProperty().bind(DisplayableText.of(WINDOW_TITLE, ProgramInfo.getProgramInfo().getVersion()).bindable());
+        titleProperty().bind(DisplayableText.of(WINDOW_TITLE, ProgramInfo.getProgramInfo()
+                                                                         .getVersion())
+                                            .bindable());
 
         val servicesFacade = new ServicesFacadeBuilder().build(this);
 
-        Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> servicesFacade.errorHandler().handle(ex));
+        Thread.setDefaultUncaughtExceptionHandler((thread, ex) -> servicesFacade.errorHandler()
+                                                                                .handle(ex));
 
         rootPane = RootPresenter.load(
-                        servicesFacade.dialogs(),
-                        servicesFacade.getService(InstallationService.class),
-                        servicesFacade.getService(FilesService.class),
-                        servicesFacade.getService(LogService.class),
-                        servicesFacade.errorHandler(),
-                        () -> fireEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSE_REQUEST))
-                )
-                .getNode();
+                                        servicesFacade.dialogs(),
+                                        servicesFacade.getService(InstallationService.class),
+                                        servicesFacade.getService(FilesService.class),
+                                        servicesFacade.getService(LogService.class),
+                                        servicesFacade.errorHandler(),
+                                        () -> fireEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSE_REQUEST))
+                                )
+                                .getNode();
 
         dialogPane = DialogPresenter.load()
-                .getNode();
+                                    .getNode();
 
         dialogPane.setVisible(false);
 
         // load start view
         servicesFacade.navigator()
-                .navigate(View.START);
+                      .navigate(View.START);
 
         // set overall stack pane
         StackPane stackPane = new StackPane(rootPane, dialogPane);
 
         Scene scene = new Scene(stackPane);
-        scene.getRoot().getStyleClass().add("root");
+        scene.getRoot()
+             .getStyleClass()
+             .add("root");
         scene.setFill(null);
 
         this.setMaximized(true);
         this.initStyle(StageStyle.DECORATED);
-        this.getIcons().add(Icon.ARCHIVE_RED.toImage());
+        this.getIcons()
+            .add(Icon.ARCHIVE_RED.toImage());
         this.setScene(scene);
         this.show();
     }

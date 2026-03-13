@@ -10,7 +10,8 @@ Created    : 04.10.2019, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import java.sql.*;
+import java.sql.SQLException;
+import java.sql.Struct;
 import java.util.Map;
 
 /**

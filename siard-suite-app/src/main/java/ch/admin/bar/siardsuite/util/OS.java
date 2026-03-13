@@ -5,7 +5,8 @@ import java.io.IOException;
 
 // understands the operating system it is running on...
 public class OS {
-    private static final String OS = System.getProperty("os.name").toLowerCase();
+    private static final String OS = System.getProperty("os.name")
+                                           .toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
     public static final boolean IS_MAC = (OS.contains("mac"));
     public static final boolean IS_UNIX = (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0);
@@ -13,7 +14,8 @@ public class OS {
 
 
     public static void openFile(String uri) throws IOException {
-        Runtime.getRuntime().exec(getCommand(uri));
+        Runtime.getRuntime()
+               .exec(getCommand(uri));
     }
 
     private static String getCommand(String uri) {

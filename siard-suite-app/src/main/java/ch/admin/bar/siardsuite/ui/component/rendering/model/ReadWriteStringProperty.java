@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.ui.component.rendering.model;
 
-import ch.admin.bar.siardsuite.ui.common.Validator;
 import ch.admin.bar.siardsuite.framework.i18n.DisplayableText;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.ui.common.Validator;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -18,18 +18,23 @@ public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
     private static final I18nKey CAN_NOT_BE_EMPTY = I18nKey.of("valueValidation.canNotBeEmpty");
 
     public static final Validator<String> IS_NOT_EMPTY_VALIDATOR = Validator.<String>builder()
-            .message(DisplayableText.of(CAN_NOT_BE_EMPTY))
-            .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
-                    .filter(value -> !value.isEmpty() && !value.trim().isEmpty())
-                    .isPresent())
-            .titleSuffix("*")
-            .build();
+                                                                            .message(DisplayableText.of(CAN_NOT_BE_EMPTY))
+                                                                            .isValidCheck(nullableValue -> Optional.ofNullable(nullableValue)
+                                                                                                                   .filter(value -> !value.isEmpty() && !value.trim()
+                                                                                                                                                              .isEmpty())
+                                                                                                                   .isPresent())
+                                                                            .titleSuffix("*")
+                                                                            .build();
 
-    @NonNull DisplayableText title;
-    @NonNull Function<T, String> valueExtractor;
-    @NonNull Persistor<T> valuePersistor;
+    @NonNull
+    DisplayableText title;
+    @NonNull
+    Function<T, String> valueExtractor;
+    @NonNull
+    Persistor<T> valuePersistor;
 
-    @NonNull Set<Validator<String>> valueValidators;
+    @NonNull
+    Set<Validator<String>> valueValidators;
 
     public ReadWriteStringProperty(
             @NonNull DisplayableText title,
@@ -40,7 +45,7 @@ public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
         this.valueExtractor = valueExtractor;
         this.valuePersistor = valuePersistor;
         this.valueValidators = Arrays.stream(valueValidators)
-                .collect(Collectors.toSet());
+                                     .collect(Collectors.toSet());
     }
 
     public ReadWriteStringProperty(
@@ -52,7 +57,7 @@ public class ReadWriteStringProperty<T> implements RenderableProperty<T> {
         this.valueExtractor = valueExtractor;
         this.valuePersistor = valuePersistor;
         this.valueValidators = Arrays.stream(valueValidators)
-                .collect(Collectors.toSet());
+                                     .collect(Collectors.toSet());
     }
 
 

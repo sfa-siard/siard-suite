@@ -20,10 +20,7 @@ import lombok.val;
 
 import java.util.Optional;
 
-import static ch.admin.bar.siardsuite.ui.common.Workflow.ARCHIVE;
-import static ch.admin.bar.siardsuite.ui.common.Workflow.EXPORT;
-import static ch.admin.bar.siardsuite.ui.common.Workflow.OPEN;
-import static ch.admin.bar.siardsuite.ui.common.Workflow.UPLOAD;
+import static ch.admin.bar.siardsuite.ui.common.Workflow.*;
 import static ch.admin.bar.siardsuite.util.I18n.bind;
 
 public class StartPresenter {
@@ -169,14 +166,14 @@ public class StartPresenter {
                         (file, archive) -> dialogs.open(
                                 View.RECENT_CONNECTIONS_FOR_UPLOAD,
                                 optionalRecentDbConnection -> OptionalHelper.when(optionalRecentDbConnection)
-                                        .isPresent(recentDbConnection -> navigator.navigate(
-                                                View.UPLOAD_STEPPER_WITH_RECENT_CONNECTION,
-                                                new Tuple<>(archive, recentDbConnection)
-                                        ))
-                                        .orElse(() -> navigator.navigate(
-                                                View.UPLOAD_STEPPER,
-                                                archive
-                                        ))
+                                                                            .isPresent(recentDbConnection -> navigator.navigate(
+                                                                                    View.UPLOAD_STEPPER_WITH_RECENT_CONNECTION,
+                                                                                    new Tuple<>(archive, recentDbConnection)
+                                                                            ))
+                                                                            .orElse(() -> navigator.navigate(
+                                                                                    View.UPLOAD_STEPPER,
+                                                                                    archive
+                                                                            ))
                         ));
                 break;
         }
@@ -184,10 +181,11 @@ public class StartPresenter {
 
     public static LoadedView<StartPresenter> load(final ServicesFacade servicesFacade) {
         val loaded = FXMLLoadHelper.<StartPresenter>load("fxml/start.fxml");
-        loaded.getController().init(
-                Optional.empty(),
-                servicesFacade.dialogs(),
-                servicesFacade.navigator());
+        loaded.getController()
+              .init(
+                      Optional.empty(),
+                      servicesFacade.dialogs(),
+                      servicesFacade.navigator());
 
         return loaded;
     }
@@ -197,10 +195,11 @@ public class StartPresenter {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<StartPresenter>load("fxml/start.fxml");
-        loaded.getController().init(
-                Optional.of(initWorkflow),
-                servicesFacade.dialogs(),
-                servicesFacade.navigator());
+        loaded.getController()
+              .init(
+                      Optional.of(initWorkflow),
+                      servicesFacade.dialogs(),
+                      servicesFacade.navigator());
 
         return loaded;
     }

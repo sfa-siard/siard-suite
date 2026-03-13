@@ -10,8 +10,11 @@ import java.util.function.Predicate;
 @Value
 @Builder
 public class HandlingInstruction {
-    @NonNull Predicate<Throwable> matcher;
+    @NonNull
+    Predicate<Throwable> matcher;
 
-    @NonNull DisplayableText title;
-    @NonNull DisplayableText message;
+    @NonNull
+    DisplayableText title;
+    @NonNull
+    DisplayableText message;
 }

@@ -30,9 +30,10 @@ public class Updater {
 
     private <T> Function<T, T> findUpdaterForType(final Class<T> type) {
         final Optional<Function<T, T>> overriderOptional = instructions.stream()
-                .filter(instruction -> instruction.getClazz().equals(type))
-                .map(instruction -> (Function<T, T>) instruction.getUpdater())
-                .reduce(Function::andThen);
+                                                                       .filter(instruction -> instruction.getClazz()
+                                                                                                         .equals(type))
+                                                                       .map(instruction -> (Function<T, T>) instruction.getUpdater())
+                                                                       .reduce(Function::andThen);
 
         final Function<T, T> overrideNothing = t -> t;
 

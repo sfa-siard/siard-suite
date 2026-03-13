@@ -12,8 +12,9 @@ Created    : 09.03.2016, Hartwig Thomas
 package ch.enterag.utils.jdbc;
 
 import java.sql.*;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.Executor;
 
 /**
  * BaseConnection implements a wrapped Connection and serves as a base
@@ -331,7 +332,7 @@ public abstract class BaseConnection
                                      int resultSetConcurrency, int resultSetHoldability)
             throws SQLException {
         return _connWrapped.createStatement(resultSetType, resultSetConcurrency,
-                resultSetHoldability);
+                                            resultSetHoldability);
     }
 
     /**
@@ -343,7 +344,7 @@ public abstract class BaseConnection
                                               int resultSetHoldability)
             throws SQLException {
         return _connWrapped.prepareStatement(sql, resultSetType,
-                resultSetConcurrency, resultSetHoldability);
+                                             resultSetConcurrency, resultSetHoldability);
     }
 
     /**
@@ -354,7 +355,7 @@ public abstract class BaseConnection
                                          int resultSetConcurrency, int resultSetHoldability)
             throws SQLException {
         return _connWrapped.prepareCall(sql, resultSetType,
-                resultSetConcurrency, resultSetHoldability);
+                                        resultSetConcurrency, resultSetHoldability);
     }
 
     /**

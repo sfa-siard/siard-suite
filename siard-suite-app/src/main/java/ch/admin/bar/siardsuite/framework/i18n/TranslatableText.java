@@ -1,7 +1,7 @@
 package ch.admin.bar.siardsuite.framework.i18n;
 
-import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.framework.i18n.keys.Key;
+import ch.admin.bar.siardsuite.util.I18n;
 import lombok.Value;
 
 @Value

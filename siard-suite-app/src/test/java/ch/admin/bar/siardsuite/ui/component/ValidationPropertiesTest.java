@@ -49,8 +49,10 @@ class ValidationPropertiesTest {
         boolean valid = validationProperties.validate();
 
         assertFalse(valid);
-        assertEquals(msg1.textProperty().get(), "test.validationmsg1");
-        assertEquals(msg2.textProperty().get(), "test.validationmsg2");
+        assertEquals(msg1.textProperty()
+                         .get(), "test.validationmsg1");
+        assertEquals(msg2.textProperty()
+                         .get(), "test.validationmsg2");
     }
 
     @Test
@@ -61,8 +63,10 @@ class ValidationPropertiesTest {
         boolean valid = validationProperties.validate();
 
         assertTrue(valid);
-        assertEquals(msg1.textProperty().get(), "");
-        assertEquals(msg2.textProperty().get(), "");
+        assertEquals(msg1.textProperty()
+                         .get(), "");
+        assertEquals(msg2.textProperty()
+                         .get(), "");
     }
 
     @Test
@@ -72,7 +76,9 @@ class ValidationPropertiesTest {
         boolean valid = validationProperties.validate();
 
         assertFalse(valid);
-        assertEquals(msg1.textProperty().get(), "");
-        assertEquals(msg2.textProperty().get(), "test.validationmsg2");
+        assertEquals(msg1.textProperty()
+                         .get(), "");
+        assertEquals(msg2.textProperty()
+                         .get(), "test.validationmsg2");
     }
 }

@@ -111,7 +111,7 @@ public class ArchiveImpl
         } else
             throw new IOException("ZIP file entries must not end with \"/\"!");
         return bExists;
-    } 
+    }
 
     /**
      * check whether a folder entry exists.
@@ -129,7 +129,7 @@ public class ArchiveImpl
         } else
             throw new IOException("ZIP folder entries must end with \"/\"!");
         return bExists;
-    } 
+    }
 
     /**
      * create a new folder entry.
@@ -154,7 +154,7 @@ public class ArchiveImpl
                 throw new IOException("Folder " + sEntryName + " exists already!");
         } else
             throw new IOException("Folder names must end with \"/\"!");
-    } 
+    }
 
     private void removeFolderEntry(String folder) throws IOException {
         getZipFile().delete(folder);
@@ -170,7 +170,7 @@ public class ArchiveImpl
     public InputStream openFileEntry(String sEntryName)
             throws IOException {
         return getZipFile().openEntryInputStream(sEntryName);
-    } 
+    }
 
     /**
      * create a new file entry.
@@ -182,7 +182,7 @@ public class ArchiveImpl
     public OutputStream createFileEntry(String sEntryName)
             throws IOException {
         return getZipFile().openEntryOutputStream(sEntryName, FileEntry.iMETHOD_DEFLATED, new Date());
-    } 
+    }
 
     /**
      * private constructor for inaccessibility from the outside.
@@ -197,7 +197,7 @@ public class ArchiveImpl
      */
     public static Archive newInstance() {
         return new ArchiveImpl();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -206,7 +206,7 @@ public class ArchiveImpl
     public File getFile() {
         return new File(getZipFile().getDiskFile()
                                     .getFileName());
-    } 
+    }
 
     private String _sPreviousMetaDataVersion = Archive.sMETA_DATA_VERSION;
 
@@ -230,7 +230,7 @@ public class ArchiveImpl
         if (bDifferent)
             _bMetaDataModified = true;
         return bDifferent;
-    } 
+    }
 
     private int _iMaxInlineSize = Archive.iDEFAULT_MAX_INLINE_SIZE;
 
@@ -244,7 +244,7 @@ public class ArchiveImpl
             _iMaxInlineSize = iMaxInlineSize;
         else
             throw new IOException("Maximum inline size can only be set for SIARD archives that are empty!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -297,7 +297,7 @@ public class ArchiveImpl
             os.close();
         } else
             throw new IOException("Resource " + sResource + " not in JAR!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -306,7 +306,7 @@ public class ArchiveImpl
     public void exportMetaDataSchema(OutputStream osXsd)
             throws IOException {
         exportResource(Archive.sSIARD2_META_DATA_XSD_RESOURCE, osXsd);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -314,7 +314,7 @@ public class ArchiveImpl
     public void exportGenericTableSchema(OutputStream osXsd)
             throws IOException {
         exportResource(Archive.sSIARD2_GENERIC_TABLE_XSD_RESOURCE, osXsd);
-    } 
+    }
 
     /**
      * export metadata.xml to an output stream.
@@ -334,7 +334,7 @@ public class ArchiveImpl
         } catch (JAXBException je) {
             throw new IOException("Error exporting metadata!", je);
         }
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -343,7 +343,7 @@ public class ArchiveImpl
     public void exportMetaData(OutputStream osXml)
             throws IOException {
         exportMetaData(osXml, false);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -374,13 +374,13 @@ public class ArchiveImpl
             mdi.setTemplate(saTemplate);
         } else
             throw new IOException("Error importing metadata!");
-    } 
+    }
 
     private final Map<String, Schema> _mapSchemas = new HashMap<String, Schema>();
 
     public void registerSchema(String sName, Schema schema) {
         _mapSchemas.put(sName, schema);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -418,7 +418,7 @@ public class ArchiveImpl
             _md = MetaDataImpl.newInstance(this, sa);
         } else
             throw new IOException("Invalid SIARD file (missing metadata.xml)!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -444,7 +444,7 @@ public class ArchiveImpl
             validate();
         } else
             throw new IOException("SIARD file " + file.getAbsolutePath() + " does not exist!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -461,7 +461,7 @@ public class ArchiveImpl
             _md = MetaDataImpl.newInstance(this, MetaDataImpl.createSiardArchive());
         } else
             throw new FileAlreadyExistsException("File " + file.getAbsolutePath() + " exists already!");
-    } 
+    }
 
     /**
      * computes the message digest of the primary data of the Db instance.

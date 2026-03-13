@@ -22,9 +22,9 @@ public class FileHelper {
 
     private static String extractFileExtension(String filename) {
         return Optional.ofNullable(filename)
-                .filter(f -> f.contains("."))
-                .map(f -> f.substring(filename.lastIndexOf(".") + 1))
-                .orElse("bin");
+                       .filter(f -> f.contains("."))
+                       .map(f -> f.substring(filename.lastIndexOf(".") + 1))
+                       .orElse("bin");
     }
 
     public static String extractFilenameWithoutExtension(final File file) {

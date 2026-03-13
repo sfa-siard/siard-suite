@@ -30,10 +30,10 @@ public class StepChain implements Destructible {
      */
     public <TOut> StepperNavigator<TOut> getNavigatorOfStep(final StepDefinition stepDefinition) {
         return steps.stream()
-                .filter(step -> step.getDefinition() == stepDefinition)
-                .findAny()
-                .map(step -> (StepperNavigator<TOut>) step.getNavigator())
-                .orElseThrow(() -> new IllegalArgumentException("Searched step not found"));
+                    .filter(step -> step.getDefinition() == stepDefinition)
+                    .findAny()
+                    .map(step -> (StepperNavigator<TOut>) step.getNavigator())
+                    .orElseThrow(() -> new IllegalArgumentException("Searched step not found"));
     }
 
     @Override

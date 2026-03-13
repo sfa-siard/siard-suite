@@ -245,7 +245,7 @@ public class TableImpl
                     sTagField = CellImpl.getElementTag(iField);
                 else {
                     CategoryType cat = mv.getMetaType()
-                            .getCategoryType();
+                                         .getCategoryType();
                     if (cat == CategoryType.UDT)
                         sTagField = CellImpl.getAttributeTag(iField);
                 }
@@ -275,7 +275,7 @@ public class TableImpl
                 Document doc = getDocumentBuilder().parse(isXsdTable);
 
                 Element elAny = (Element) doc.getElementsByTagNameNS("http://www.w3.org/2001/XMLSchema", "any")
-                        .item(0);
+                                             .item(0);
                 Element elSequence = (Element) elAny.getParentNode();
                 XU.clearElement(elSequence);
                 for (int iColumn = 0; iColumn < getMetaTable().getMetaColumns(); iColumn++) {
@@ -305,7 +305,7 @@ public class TableImpl
         boolean bEmpty = true;
         ArchiveImpl ai = getArchiveImpl();
         if (ai.getZipFile()
-                .getFileEntry(getTableXml()) != null)
+              .getFileEntry(getTableXml()) != null)
             bEmpty = false;
         return bEmpty;
     }
@@ -351,29 +351,29 @@ public class TableImpl
         _schemaParent = schemaParent;
         MetaSchemaImpl msi = (MetaSchemaImpl) getParentSchema().getMetaSchema();
         TablesType tts = msi.getSchemaType()
-                .getTables();
+                            .getTables();
         if (tts == null) {
             tts = _OF.createTablesType();
             msi.getSchemaType()
-                    .setTables(tts);
+               .setTables(tts);
         }
         TableType tt = null;
         for (int iTable = 0; (tt == null) && (iTable < tts.getTable()
-                .size()); iTable++) {
+                                                          .size()); iTable++) {
             TableType ttTry = tts.getTable()
-                    .get(iTable);
+                                 .get(iTable);
             if (sName.equals(ttTry.getName()))
                 tt = ttTry;
         }
         SchemaImpl si = ((SchemaImpl) getParentSchema());
         if (tt == null) {
             String sFolder = _sTABLE_FOLDER_PREFIX + tts.getTable()
-                    .size();
+                                                        .size();
             ArchiveImpl ai = getArchiveImpl();
             ai.createFolderEntry(si.getSchemaFolder() + sFolder + "/");
             tt = MetaTableImpl.createTableType(sName, sFolder);
             tts.getTable()
-                    .add(tt);
+               .add(tt);
         }
         _mt = MetaTableImpl.newInstance(this, tt);
         si.registerTable(sName, this);

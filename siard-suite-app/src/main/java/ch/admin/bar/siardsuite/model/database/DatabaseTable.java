@@ -25,20 +25,23 @@ public class DatabaseTable {
 
         description = metatable.getDescription();
         this.columns = new ListAssembler<>(metatable::getMetaColumns, metatable::getMetaColumn).assemble()
-                .stream()
-                .map(DatabaseColumn::new)
-                .collect(Collectors.toList());
+                                                                                               .stream()
+                                                                                               .map(DatabaseColumn::new)
+                                                                                               .collect(Collectors.toList());
     }
 
     public String getName() {
-        return table.getMetaTable().getName();
+        return table.getMetaTable()
+                    .getName();
     }
 
     public long getNumberOfRows() {
-        return table.getMetaTable().getRows();
+        return table.getMetaTable()
+                    .getRows();
     }
 
     public void write() {
-        table.getMetaTable().setDescription(description);
+        table.getMetaTable()
+             .setDescription(description);
     }
 }

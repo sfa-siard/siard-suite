@@ -25,6 +25,7 @@ public class MariaDBSpatialDataTypesIT {
 
     @Test
     public void executeTest() {
-        MySqlSpatialDataTypes.executeTest(siardArchivesHandler, db.getJdbcUrl().replace("jdbc:mariadb", "jdbc:mysql"));
+        MySqlSpatialDataTypes.executeTest(siardArchivesHandler, db.getJdbcUrl()
+                                                                  .replace("jdbc:mariadb", "jdbc:mysql"));
     }
 }

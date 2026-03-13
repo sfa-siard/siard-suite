@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.jdbcbase7;
 
 import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.utils.ConsoleLogConsumer;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -24,7 +23,8 @@ public class OracleEscapeCharacterIT {
     @Rule
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.JDBCBASE_7).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.JDBCBASE_7)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/jdbcbase7.sql");
 
     @Test

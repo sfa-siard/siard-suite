@@ -33,12 +33,12 @@ public class SampleTableRecord {
 
     public static void printValue(String sLabel, String sValue) {
         SampleColumn.printValue("  " + sLabel, sValue);
-    } 
+    }
 
     public SampleTableRecord(TableRecord tableRecord, int iRecord) {
         _tableRecord = tableRecord;
         _iRecord = iRecord;
-    } 
+    }
 
     private String getValue(Value value, int iPreType)
             throws IOException {
@@ -56,9 +56,9 @@ public class SampleTableRecord {
             case Types.SQLXML:
                 long lCharLength = value.getCharLength();
                 if (lCharLength < _tableRecord.getParentTable()
-                                         .getParentSchema()
-                                         .getParentArchive()
-                                         .getMaxInlineSize())
+                                              .getParentSchema()
+                                              .getParentArchive()
+                                              .getMaxInlineSize())
                     sValue = value.getString();
                 else
                     sValue = "[length " + lCharLength + "]";
@@ -70,9 +70,9 @@ public class SampleTableRecord {
             case Types.BLOB:
                 long lByteLength = value.getByteLength();
                 if (lByteLength < _tableRecord.getParentTable()
-                                         .getParentSchema()
-                                         .getParentArchive()
-                                         .getMaxInlineSize() / 2)
+                                              .getParentSchema()
+                                              .getParentArchive()
+                                              .getMaxInlineSize() / 2)
                     sValue = value.getString();
                 else
                     sValue = "[length " + lByteLength + "]";
@@ -121,7 +121,7 @@ public class SampleTableRecord {
                 break;
         }
         return sValue;
-    } 
+    }
 
     private int readSubFields(Value value, int iCardinality, MetaType mt)
             throws IOException {
@@ -145,7 +145,7 @@ public class SampleTableRecord {
         }
         System.out.print(")");
         return iReturn;
-    } 
+    }
 
     private int readField(Field field, int iField) {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -167,7 +167,7 @@ public class SampleTableRecord {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int readCell(Cell cell, int iCell) {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -189,7 +189,7 @@ public class SampleTableRecord {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     public int readTableRecord() {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -207,7 +207,7 @@ public class SampleTableRecord {
         }
         System.out.println();
         return iReturn;
-    } 
+    }
 
     private int createSimpleCell(Cell cell, int iCell) {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -253,7 +253,7 @@ public class SampleTableRecord {
                         case 1:
                             cell.setString(TestUtils.getString(2345));
                             break;
-                        case 2: 
+                        case 2:
                             break;
                         case 3:
                             cell.setReader(new TestReader(234567));
@@ -286,7 +286,7 @@ public class SampleTableRecord {
                         case 0:
                             cell.setReader(new TestNReader(1000000));
                             break;
-                        case 1: 
+                        case 1:
                             break;
                         case 2:
                             cell.setString(TestUtils.getNString(1234));
@@ -307,7 +307,7 @@ public class SampleTableRecord {
                         case 2:
                             cell.setReader(new TestXmlReader(10000));
                             break;
-                        case 3: 
+                        case 3:
                             break;
                     }
                     break;
@@ -381,7 +381,7 @@ public class SampleTableRecord {
                         case 0:
                             cell.setBoolean(true);
                             break;
-                        case 1: 
+                        case 1:
                             break;
                         case 2:
                             cell.setBoolean(false);
@@ -425,7 +425,7 @@ public class SampleTableRecord {
                         case 0:
                             duration23 = df.newDurationYearMonth(true, 7, 3);
                             break;
-                        case 1: 
+                        case 1:
                             break;
                         case 2:
                             duration23 = df.newDurationYearMonth(true, 17, 1);
@@ -482,7 +482,7 @@ public class SampleTableRecord {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int createComplexCell(Cell cell, int iCell) {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -606,7 +606,7 @@ public class SampleTableRecord {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int createSimpleRecord() {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -619,7 +619,7 @@ public class SampleTableRecord {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     private int createComplexRecord() {
         int iReturn = SampleArchive.iRETURN_ERROR;
@@ -632,19 +632,19 @@ public class SampleTableRecord {
             System.err.println(SampleArchive.getExceptionMessage(ie));
         }
         return iReturn;
-    } 
+    }
 
     public int createRecord() {
         int iReturn = SampleArchive.iRETURN_ERROR;
         if (SampleTable.sTABLE_SIMPLE.equals(_tableRecord.getParentTable()
-                                                    .getMetaTable()
-                                                    .getName()))
+                                                         .getMetaTable()
+                                                         .getName()))
             iReturn = createSimpleRecord();
         else if (SampleTable.sTABLE_COMPLEX.equals(_tableRecord.getParentTable()
-                                                          .getMetaTable()
-                                                          .getName()))
+                                                               .getMetaTable()
+                                                               .getName()))
             iReturn = createComplexRecord();
         return iReturn;
-    } 
+    }
 
 } 

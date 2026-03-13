@@ -1,13 +1,13 @@
 package ch.admin.bar.siard2.jdbcx;
 
-import java.sql.*;
-import javax.sql.*;
-
-import static org.junit.Assert.*;
-
 import lombok.SneakyThrows;
 import org.junit.*;
 import org.testcontainers.containers.MSSQLServerContainer;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+
+import static org.junit.Assert.assertSame;
 
 public class MSSQLDatasourceTests {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";

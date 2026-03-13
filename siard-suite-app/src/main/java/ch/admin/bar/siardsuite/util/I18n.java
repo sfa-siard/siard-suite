@@ -107,8 +107,10 @@ public class I18n {
     }
 
     public static void bind(TextFlow textFlow, String prefix, String orientation) {
-        for (int i = 0; i < textFlow.getChildren().size(); i++) {
-            Text text = (Text) textFlow.getChildren().get(i);
+        for (int i = 0; i < textFlow.getChildren()
+                                    .size(); i++) {
+            Text text = (Text) textFlow.getChildren()
+                                       .get(i);
             bind(text.textProperty(), prefix + orientation + ".text" + i);
         }
     }

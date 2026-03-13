@@ -42,7 +42,7 @@ public abstract class MetaValueImpl
 
     public MetaValueImpl(int iPosition) {
         _iPosition = iPosition;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -75,7 +75,7 @@ public abstract class MetaValueImpl
             }
         }
         return llNames;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -107,7 +107,7 @@ public abstract class MetaValueImpl
             sType = mf.getType(listNames.subList(1, listNames.size()));
         }
         return sType;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -125,7 +125,7 @@ public abstract class MetaValueImpl
                 l = Long.MAX_VALUE;
         }
         return l;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -137,6 +137,6 @@ public abstract class MetaValueImpl
         for (int iField = 0; iField < getMetaFields(); iField++)
             ams[iField] = getMetaField(iField);
         return ams;
-    } 
+    }
 
 } 

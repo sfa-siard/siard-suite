@@ -9,5 +9,6 @@ import java.util.function.BiFunction;
 
 @Value
 public class NavigationTarget<T> {
-    @NonNull BiFunction<T, ServicesFacade, LoadedView> viewSupplier;
+    @NonNull
+    BiFunction<T, ServicesFacade, LoadedView> viewSupplier;
 }

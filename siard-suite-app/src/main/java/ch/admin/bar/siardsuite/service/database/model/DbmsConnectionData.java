@@ -40,7 +40,8 @@ public class DbmsConnectionData {
         this.dbms = dbms;
         this.properties = properties;
 
-        jdbsConnectionStringSupplier = () -> dbms.getJdbcConnectionStringEncoder().apply(properties);
+        jdbsConnectionStringSupplier = () -> dbms.getJdbcConnectionStringEncoder()
+                                                 .apply(properties);
         userSupplier = properties::getUser;
         passwordSupplier = properties::getPassword;
         dbNameSupplier = properties::getDbName;
@@ -53,7 +54,8 @@ public class DbmsConnectionData {
         this.dbms = dbms;
         this.properties = properties;
 
-        jdbsConnectionStringSupplier = () -> dbms.getJdbcConnectionStringEncoder().apply(properties);
+        jdbsConnectionStringSupplier = () -> dbms.getJdbcConnectionStringEncoder()
+                                                 .apply(properties);
         userSupplier = () -> null;
         passwordSupplier = () -> null;
         dbNameSupplier = () -> FileHelper.extractFilenameWithoutExtension(properties.getFile());

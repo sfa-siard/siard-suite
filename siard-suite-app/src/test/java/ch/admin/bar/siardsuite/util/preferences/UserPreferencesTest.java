@@ -1,10 +1,6 @@
 package ch.admin.bar.siardsuite.util.preferences;
 
-import ch.admin.bar.siardsuite.service.preferences.Options;
-import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
-import ch.admin.bar.siardsuite.service.preferences.RecentFile;
-import ch.admin.bar.siardsuite.service.preferences.StorageData;
-import ch.admin.bar.siardsuite.service.preferences.UserPreferences;
+import ch.admin.bar.siardsuite.service.preferences.*;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.Test;
@@ -22,9 +18,9 @@ import java.util.stream.Collectors;
 class UserPreferencesTest {
 
     private static final Options OPTIONS = Options.builder()
-            .loginTimeout(1234)
-            .queryTimeout(4321)
-            .build();
+                                                  .loginTimeout(1234)
+                                                  .queryTimeout(4321)
+                                                  .build();
 
     private static final RecentFile RECENT_FILE_1 = new RecentFile(new File("/i/am/file1"));
     private static final RecentFile RECENT_FILE_2 = new RecentFile(new File("/i/am/file2"));
@@ -32,48 +28,48 @@ class UserPreferencesTest {
     private static final RecentFile RECENT_FILE_4 = new RecentFile(new File("/i/am/file4"));
 
     private static final RecentDbConnection RECENT_CONNECTION_1 = RecentDbConnection.builder()
-            .name("RECENT_CONNECTION_1")
-            .dbmsProduct("dbmsid_1")
-            .connectionOptions("options_1")
-            .host("host_1")
-            .port("port_1")
-            .dbName("dbname_1")
-            .user("user_1")
-            .file("file_1")
-            .build();
+                                                                                    .name("RECENT_CONNECTION_1")
+                                                                                    .dbmsProduct("dbmsid_1")
+                                                                                    .connectionOptions("options_1")
+                                                                                    .host("host_1")
+                                                                                    .port("port_1")
+                                                                                    .dbName("dbname_1")
+                                                                                    .user("user_1")
+                                                                                    .file("file_1")
+                                                                                    .build();
 
     private static final RecentDbConnection RECENT_CONNECTION_2 = RecentDbConnection.builder()
-            .name("RECENT_CONNECTION_2")
-            .dbmsProduct("dbmsid_2")
-            .connectionOptions("options_2")
-            .host("host_2")
-            .port("port_2")
-            .dbName("dbname_2")
-            .user("user_2")
-            .file("file_2")
-            .build();
+                                                                                    .name("RECENT_CONNECTION_2")
+                                                                                    .dbmsProduct("dbmsid_2")
+                                                                                    .connectionOptions("options_2")
+                                                                                    .host("host_2")
+                                                                                    .port("port_2")
+                                                                                    .dbName("dbname_2")
+                                                                                    .user("user_2")
+                                                                                    .file("file_2")
+                                                                                    .build();
 
     private static final RecentDbConnection RECENT_CONNECTION_3 = RecentDbConnection.builder()
-            .name("RECENT_CONNECTION_3")
-            .dbmsProduct("dbmsid_3")
-            .connectionOptions("options_3")
-            .host("host_3")
-            .port("port_3")
-            .dbName("dbname_3")
-            .user("user_3")
-            .file("file_3")
-            .build();
+                                                                                    .name("RECENT_CONNECTION_3")
+                                                                                    .dbmsProduct("dbmsid_3")
+                                                                                    .connectionOptions("options_3")
+                                                                                    .host("host_3")
+                                                                                    .port("port_3")
+                                                                                    .dbName("dbname_3")
+                                                                                    .user("user_3")
+                                                                                    .file("file_3")
+                                                                                    .build();
 
     private static final RecentDbConnection RECENT_CONNECTION_4 = RecentDbConnection.builder()
-            .name("RECENT_CONNECTION_4")
-            .dbmsProduct("dbmsid_4")
-            .connectionOptions("options_4")
-            .host("host_4")
-            .port("port_4")
-            .dbName("dbname_4")
-            .user("user_4")
-            .file("file_4")
-            .build();
+                                                                                    .name("RECENT_CONNECTION_4")
+                                                                                    .dbmsProduct("dbmsid_4")
+                                                                                    .connectionOptions("options_4")
+                                                                                    .host("host_4")
+                                                                                    .port("port_4")
+                                                                                    .dbName("dbname_4")
+                                                                                    .user("user_4")
+                                                                                    .file("file_4")
+                                                                                    .build();
 
     private final Preferences preferencesMock = new PreferencesMockBuilder().build();
     private final UserPreferences userPreferences = new UserPreferences(() -> preferencesMock);
@@ -87,7 +83,8 @@ class UserPreferencesTest {
         val options = userPreferences.getStoredOptions();
 
         // then
-        Assertions.assertThat(options).isEqualTo(OPTIONS);
+        Assertions.assertThat(options)
+                  .isEqualTo(OPTIONS);
     }
 
     @Test
@@ -98,10 +95,11 @@ class UserPreferencesTest {
         val options = userPreferences.getStoredOptions();
 
         // then
-        Assertions.assertThat(options).isEqualTo(Options.builder()
-                .loginTimeout(0)
-                .queryTimeout(0)
-                .build());
+        Assertions.assertThat(options)
+                  .isEqualTo(Options.builder()
+                                    .loginTimeout(0)
+                                    .queryTimeout(0)
+                                    .build());
     }
 
     @Test
@@ -112,7 +110,8 @@ class UserPreferencesTest {
         val files = userPreferences.getRecentFiles();
 
         // then
-        Assertions.assertThat(files).isEmpty();
+        Assertions.assertThat(files)
+                  .isEmpty();
     }
 
     @Test
@@ -129,17 +128,18 @@ class UserPreferencesTest {
 
         // then
         Assertions.assertThat(files.stream()
-                        .map(recentFileStorageData -> {
-                            // Test needs to run on windows and on unix-os
-                            val osIndependentFile = FileTestHelper.removeDriveLetterIfNecessary(recentFileStorageData.getStoredData().getValue());
-                            return new RecentFile(osIndependentFile);
-                        })
-                        .collect(Collectors.toList()))
-                .containsExactly(
-                        RECENT_FILE_4,
-                        RECENT_FILE_2,
-                        RECENT_FILE_3
-                );
+                                   .map(recentFileStorageData -> {
+                                       // Test needs to run on windows and on unix-os
+                                       val osIndependentFile = FileTestHelper.removeDriveLetterIfNecessary(recentFileStorageData.getStoredData()
+                                                                                                                                .getValue());
+                                       return new RecentFile(osIndependentFile);
+                                   })
+                                   .collect(Collectors.toList()))
+                  .containsExactly(
+                          RECENT_FILE_4,
+                          RECENT_FILE_2,
+                          RECENT_FILE_3
+                  );
     }
 
     @Test
@@ -150,7 +150,8 @@ class UserPreferencesTest {
         val connections = userPreferences.getStoredConnections();
 
         // then
-        Assertions.assertThat(connections).isEmpty();
+        Assertions.assertThat(connections)
+                  .isEmpty();
     }
 
     @Test
@@ -167,13 +168,13 @@ class UserPreferencesTest {
 
         // then
         Assertions.assertThat(connections.stream()
-                        .map(StorageData::getStoredData)
-                        .collect(Collectors.toList()))
-                .containsExactly(
-                        RECENT_CONNECTION_4,
-                        RECENT_CONNECTION_2,
-                        RECENT_CONNECTION_3
-                );
+                                         .map(StorageData::getStoredData)
+                                         .collect(Collectors.toList()))
+                  .containsExactly(
+                          RECENT_CONNECTION_4,
+                          RECENT_CONNECTION_2,
+                          RECENT_CONNECTION_3
+                  );
     }
 
     private static class PreferencesMockBuilder {
@@ -188,52 +189,63 @@ class UserPreferencesTest {
             val nodeMock = Mockito.mock(Preferences.class);
 
             // get sub node
-            Mockito.when(nodeMock.node(Mockito.anyString())).then(getSubNodeCall -> {
-                val subNodeName = getSubNodeCall.getArgument(0);
-                return getSubNodeMock(qualifiedNodeName + "." + subNodeName);
-            });
+            Mockito.when(nodeMock.node(Mockito.anyString()))
+                   .then(getSubNodeCall -> {
+                       val subNodeName = getSubNodeCall.getArgument(0);
+                       return getSubNodeMock(qualifiedNodeName + "." + subNodeName);
+                   });
 
             // get value
-            Mockito.when(nodeMock.get(Mockito.anyString(), Mockito.anyString())).then(getValueCall -> {
-                val propertyName = getValueCall.getArgument(0);
+            Mockito.when(nodeMock.get(Mockito.anyString(), Mockito.anyString()))
+                   .then(getValueCall -> {
+                       val propertyName = getValueCall.getArgument(0);
 
-                return Optional.ofNullable(valuesByQualifiedKey.get(qualifiedNodeName + "." + propertyName))
-                        .orElse(getValueCall.getArgument(1));
-            });
+                       return Optional.ofNullable(valuesByQualifiedKey.get(qualifiedNodeName + "." + propertyName))
+                                      .orElse(getValueCall.getArgument(1));
+                   });
 
             // get children names childrenNames
-            Mockito.when(nodeMock.childrenNames()).then(getValueCall -> {
-                val childNames = valuesByQualifiedKey.entrySet().stream()
-                        .filter(entry -> entry.getKey().startsWith(qualifiedNodeName))
-                        .map(entry -> entry.getKey().replace(qualifiedNodeName + ".", ""))
-                        .map(key -> key.split("\\."))
-                        .filter(split -> split.length > 1) // if length == 1, then it's not a child but a stored value
-                        .map(split -> split[0])
-                        .collect(Collectors.toSet());
+            Mockito.when(nodeMock.childrenNames())
+                   .then(getValueCall -> {
+                       val childNames = valuesByQualifiedKey.entrySet()
+                                                            .stream()
+                                                            .filter(entry -> entry.getKey()
+                                                                                  .startsWith(qualifiedNodeName))
+                                                            .map(entry -> entry.getKey()
+                                                                               .replace(qualifiedNodeName + ".", ""))
+                                                            .map(key -> key.split("\\."))
+                                                            .filter(split -> split.length > 1) // if length == 1, then it's not a child but a stored value
+                                                            .map(split -> split[0])
+                                                            .collect(Collectors.toSet());
 
-                return childNames.toArray(new String[0]);
-            });
+                       return childNames.toArray(new String[0]);
+                   });
 
             // put value
             Mockito.doAnswer(putValueCall -> {
-                String valueName = putValueCall.getArgument(0);
-                String value = putValueCall.getArgument(1);
+                       String valueName = putValueCall.getArgument(0);
+                       String value = putValueCall.getArgument(1);
 
-                valuesByQualifiedKey.put(qualifiedNodeName + "." + valueName, value);
+                       valuesByQualifiedKey.put(qualifiedNodeName + "." + valueName, value);
 
-                return null;
-            }).when(nodeMock).put(Mockito.anyString(), Mockito.anyString());
+                       return null;
+                   })
+                   .when(nodeMock)
+                   .put(Mockito.anyString(), Mockito.anyString());
 
             // remove node removeNode
             Mockito.doAnswer(removeNodeCall -> {
-                val keysToRemove = valuesByQualifiedKey.keySet().stream()
-                        .filter(key -> key.startsWith(qualifiedNodeName))
-                        .collect(Collectors.toSet());
+                       val keysToRemove = valuesByQualifiedKey.keySet()
+                                                              .stream()
+                                                              .filter(key -> key.startsWith(qualifiedNodeName))
+                                                              .collect(Collectors.toSet());
 
-                keysToRemove.forEach(valuesByQualifiedKey::remove);
+                       keysToRemove.forEach(valuesByQualifiedKey::remove);
 
-                return null;
-            }).when(nodeMock).removeNode();
+                       return null;
+                   })
+                   .when(nodeMock)
+                   .removeNode();
 
             return nodeMock;
         }

@@ -11,12 +11,12 @@ Created    : 13.04.2017, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import java.io.*;
-import java.math.*;
-import java.net.*;
+import java.io.InputStream;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
+import java.util.Calendar;
 
 /**
  * BaseConnection implements a wrapped Connection and serves as a base

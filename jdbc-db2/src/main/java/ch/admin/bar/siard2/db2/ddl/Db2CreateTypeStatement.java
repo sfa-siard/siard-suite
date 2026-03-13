@@ -10,39 +10,39 @@ Created    : 29.11.2016, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.db2.ddl;
 
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.ddl.*;
+import ch.enterag.sqlparser.SqlFactory;
+import ch.enterag.sqlparser.ddl.CreateTypeStatement;
 
 /*====================================================================*/
-/** Db2CreateTypeStatement overrides CreateTypeStatement of SQL parser 
+
+/** Db2CreateTypeStatement overrides CreateTypeStatement of SQL parser
  * because DB/2 requires MODE DB2SQL.
  * @author Hartwig Thomas
  */
 public class Db2CreateTypeStatement
-  extends CreateTypeStatement
-{
+        extends CreateTypeStatement {
 
-  /*------------------------------------------------------------------*/
-  /** format the create type statement.
-   * @return the SQL string corresponding to the fields of the create 
-   *   type statement.
-   */
-  @Override
-  public String format()
-  {
-    String sStatement = super.format();
-    if (getDistinctBaseType() == null)
-      sStatement = sStatement + sSP + "MODE" + sSP + "DB2SQL";
-    return sStatement;
-  } /* format */
-  
-  /*------------------------------------------------------------------*/
-  /** constructor with factory only to be called by factory.
-   * @param sf factory.
-   */
-  public Db2CreateTypeStatement(SqlFactory sf)
-  {
-    super(sf);
-  } /* constructor */
-  
+    /*------------------------------------------------------------------*/
+
+    /** format the create type statement.
+     * @return the SQL string corresponding to the fields of the create
+     *   type statement.
+     */
+    @Override
+    public String format() {
+        String sStatement = super.format();
+        if (getDistinctBaseType() == null)
+            sStatement = sStatement + sSP + "MODE" + sSP + "DB2SQL";
+        return sStatement;
+    } /* format */
+
+    /*------------------------------------------------------------------*/
+
+    /** constructor with factory only to be called by factory.
+     * @param sf factory.
+     */
+    public Db2CreateTypeStatement(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
+
 } /* Db2CreateTypeStatement */

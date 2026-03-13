@@ -2,7 +2,6 @@ package ch.admin.bar.siard2.cmd.oracle.issues.siardcmd15;
 
 import ch.admin.bar.siard2.cmd.SiardFromDb;
 import ch.admin.bar.siard2.cmd.SiardToDb;
-import ch.admin.bar.siard2.cmd.utils.ConsoleLogConsumer;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -24,13 +23,15 @@ public class OracleGetBigDecimalIT {
     @Rule
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDCMD_15).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDCMD_15)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/siardcmd15.sql");
 
     @Rule
     public final OracleContainer uploadDb = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDCMD_15).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDCMD_15)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/siardcmd15.sql");
 
     @Test

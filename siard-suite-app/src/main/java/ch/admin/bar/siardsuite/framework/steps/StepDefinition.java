@@ -1,8 +1,8 @@
 package ch.admin.bar.siardsuite.framework.steps;
 
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import lombok.NonNull;
 import lombok.Value;
 import org.jetbrains.annotations.Nullable;

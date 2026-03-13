@@ -11,5 +11,6 @@ import java.io.File;
 @Builder
 @RequiredArgsConstructor
 public class FileBasedDbmsConnectionProperties implements DbmsConnectionProperties<FileBasedDbmsConnectionProperties> {
-    @NonNull File file;
+    @NonNull
+    File file;
 }

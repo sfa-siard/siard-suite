@@ -1,21 +1,21 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive;
 
 import ch.admin.bar.siard2.api.Archive;
-import ch.admin.bar.siardsuite.ui.component.stepper.DrilledMFXStepper;
-import ch.admin.bar.siardsuite.framework.hooks.Destructible;
 import ch.admin.bar.siardsuite.framework.ServicesFacade;
+import ch.admin.bar.siardsuite.framework.hooks.Destructible;
+import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
 import ch.admin.bar.siardsuite.framework.steps.StepChain;
 import ch.admin.bar.siardsuite.framework.steps.StepDefinition;
 import ch.admin.bar.siardsuite.framework.steps.StepsChainBuilder;
+import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
+import ch.admin.bar.siardsuite.framework.view.LoadedView;
 import ch.admin.bar.siardsuite.model.Tuple;
 import ch.admin.bar.siardsuite.model.UserDefinedMetadata;
-import ch.admin.bar.siardsuite.ui.presenter.archive.model.DbmsWithInitialValue;
 import ch.admin.bar.siardsuite.service.DbInteractionService;
 import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.service.preferences.RecentDbConnection;
-import ch.admin.bar.siardsuite.framework.view.FXMLLoadHelper;
-import ch.admin.bar.siardsuite.framework.view.LoadedView;
-import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.ui.component.stepper.DrilledMFXStepper;
+import ch.admin.bar.siardsuite.ui.presenter.archive.model.DbmsWithInitialValue;
 import javafx.fxml.FXML;
 import lombok.val;
 
@@ -64,9 +64,11 @@ public class ArchiveStepperPresenter implements Destructible {
                 servicesFacade,
                 nextDisplayedStep -> stepper.display(nextDisplayedStep),
                 nextDisplayedStep -> {
-                    if (nextDisplayedStep.getDefinition().equals(DOWNLOAD_METADATA)) {
+                    if (nextDisplayedStep.getDefinition()
+                                         .equals(DOWNLOAD_METADATA)) {
                         // skip without displaying it
-                        nextDisplayedStep.getNavigator().previous();
+                        nextDisplayedStep.getNavigator()
+                                         .previous();
                     } else {
                         stepper.display(nextDisplayedStep);
                     }
@@ -84,10 +86,11 @@ public class ArchiveStepperPresenter implements Destructible {
         recentDbConnection.ifPresent(recentConnection -> {
             // skip select dbms step
             chain.getNavigatorOfStep(SELECT_DBMS)
-                    .next(DbmsWithInitialValue.builder()
-                            .dbms(recentConnection.mapToDbmsConnectionData().getDbms())
-                            .initialValue(Optional.of(recentConnection))
-                            .build());
+                 .next(DbmsWithInitialValue.builder()
+                                           .dbms(recentConnection.mapToDbmsConnectionData()
+                                                                 .getDbms())
+                                           .initialValue(Optional.of(recentConnection))
+                                           .build());
         });
     }
 
@@ -96,11 +99,12 @@ public class ArchiveStepperPresenter implements Destructible {
             final ServicesFacade servicesFacade
     ) {
         val loaded = FXMLLoadHelper.<ArchiveStepperPresenter>load("fxml/archive/archive-stepper.fxml");
-        loaded.getController().init(
-                data,
-                servicesFacade.getService(DbInteractionService.class),
-                servicesFacade
-        );
+        loaded.getController()
+              .init(
+                      data,
+                      servicesFacade.getService(DbInteractionService.class),
+                      servicesFacade
+              );
 
         return loaded;
     }

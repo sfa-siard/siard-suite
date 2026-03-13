@@ -1,26 +1,26 @@
 package ch.enterag.sqlparser.expression;
 
-import static org.junit.Assert.*;
-import org.junit.*;
-import ch.enterag.sqlparser.*;
+import ch.enterag.sqlparser.BaseSqlFactory;
+import ch.enterag.sqlparser.SqlFactory;
+import org.junit.Before;
+import org.junit.Test;
 
-public class WindowSpecificationTester
-{
-  private SqlFactory _sf = new BaseSqlFactory();
-  private WindowSpecification _ws = null;
+import static org.junit.Assert.assertEquals;
 
-  @Before
-  public void setUp()
-  {
-    _ws = _sf.newWindowSpecification();
-  }
+public class WindowSpecificationTester {
+    private SqlFactory _sf = new BaseSqlFactory();
+    private WindowSpecification _ws = null;
 
-  @Test
-  public void testBetween()
-  {
-    _ws.parse("WN ROWS BETWEEN UNBOUNDED PRECEDING AND 5 FOLLOWING");
-    System.out.println(_ws.format());
-    assertEquals("Window BETWEEN specification not recognized!","WN ROWS BETWEEN UNBOUNDED PRECEDING AND 5 FOLLOWING",_ws.format());
-  }
+    @Before
+    public void setUp() {
+        _ws = _sf.newWindowSpecification();
+    }
+
+    @Test
+    public void testBetween() {
+        _ws.parse("WN ROWS BETWEEN UNBOUNDED PRECEDING AND 5 FOLLOWING");
+        System.out.println(_ws.format());
+        assertEquals("Window BETWEEN specification not recognized!", "WN ROWS BETWEEN UNBOUNDED PRECEDING AND 5 FOLLOWING", _ws.format());
+    }
 
 }

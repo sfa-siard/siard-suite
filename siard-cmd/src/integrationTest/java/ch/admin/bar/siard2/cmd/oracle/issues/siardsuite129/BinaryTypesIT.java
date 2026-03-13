@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.siardsuite129;
 
 import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.utils.ConsoleLogConsumer;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -26,10 +25,12 @@ public class BinaryTypesIT {
     @Rule
     public OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/00_create_user.sql")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDSUITE_129_BINARY).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDSUITE_129_BINARY)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/01_binary_types.sql");
 
     @Test
@@ -49,51 +50,63 @@ public class BinaryTypesIT {
         val metadataExplorer = siardArchive.exploreMetadata();
 
         val columnId = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("IT_USER"))
-                .tableId(Id.of("ORACLE_BINARY_TEST"))
-                .columnId(Id.of("ID"))
-                .build());
-        Assertions.assertThat(columnId.getType()).contains(Id.of("FLOAT(38)"));
-        Assertions.assertThat(columnId.getTypeOriginal()).contains(Id.of("NUMBER"));
+                                                                        .schemaId(Id.of("IT_USER"))
+                                                                        .tableId(Id.of("ORACLE_BINARY_TEST"))
+                                                                        .columnId(Id.of("ID"))
+                                                                        .build());
+        Assertions.assertThat(columnId.getType())
+                  .contains(Id.of("FLOAT(38)"));
+        Assertions.assertThat(columnId.getTypeOriginal())
+                  .contains(Id.of("NUMBER"));
 
         val columnBitEquivalent = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("IT_USER"))
-                .tableId(Id.of("ORACLE_BINARY_TEST"))
-                .columnId(Id.of("BIT_EQUIVALENT"))
-                .build());
-        Assertions.assertThat(columnBitEquivalent.getType()).contains(Id.of("SMALLINT"));
-        Assertions.assertThat(columnBitEquivalent.getTypeOriginal()).contains(Id.of("NUMBER(1,0)"));
+                                                                                   .schemaId(Id.of("IT_USER"))
+                                                                                   .tableId(Id.of("ORACLE_BINARY_TEST"))
+                                                                                   .columnId(Id.of("BIT_EQUIVALENT"))
+                                                                                   .build());
+        Assertions.assertThat(columnBitEquivalent.getType())
+                  .contains(Id.of("SMALLINT"));
+        Assertions.assertThat(columnBitEquivalent.getTypeOriginal())
+                  .contains(Id.of("NUMBER(1,0)"));
 
         val columnRawSmall = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("IT_USER"))
-                .tableId(Id.of("ORACLE_BINARY_TEST"))
-                .columnId(Id.of("RAW_SMALL"))
-                .build());
-        Assertions.assertThat(columnRawSmall.getType()).contains(Id.of("VARBINARY(1)"));
-        Assertions.assertThat(columnRawSmall.getTypeOriginal()).contains(Id.of("RAW(1)"));
+                                                                              .schemaId(Id.of("IT_USER"))
+                                                                              .tableId(Id.of("ORACLE_BINARY_TEST"))
+                                                                              .columnId(Id.of("RAW_SMALL"))
+                                                                              .build());
+        Assertions.assertThat(columnRawSmall.getType())
+                  .contains(Id.of("VARBINARY(1)"));
+        Assertions.assertThat(columnRawSmall.getTypeOriginal())
+                  .contains(Id.of("RAW(1)"));
 
         val columnRawMedium = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("IT_USER"))
-                .tableId(Id.of("ORACLE_BINARY_TEST"))
-                .columnId(Id.of("RAW_MEDIUM"))
-                .build());
-        Assertions.assertThat(columnRawMedium.getType()).contains(Id.of("VARBINARY(8)"));
-        Assertions.assertThat(columnRawMedium.getTypeOriginal()).contains(Id.of("RAW(8)"));
+                                                                               .schemaId(Id.of("IT_USER"))
+                                                                               .tableId(Id.of("ORACLE_BINARY_TEST"))
+                                                                               .columnId(Id.of("RAW_MEDIUM"))
+                                                                               .build());
+        Assertions.assertThat(columnRawMedium.getType())
+                  .contains(Id.of("VARBINARY(8)"));
+        Assertions.assertThat(columnRawMedium.getTypeOriginal())
+                  .contains(Id.of("RAW(8)"));
 
         val columnRawLarge = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("IT_USER"))
-                .tableId(Id.of("ORACLE_BINARY_TEST"))
-                .columnId(Id.of("RAW_LARGE"))
-                .build());
-        Assertions.assertThat(columnRawLarge.getType()).contains(Id.of("VARBINARY(2000)"));
-        Assertions.assertThat(columnRawLarge.getTypeOriginal()).contains(Id.of("RAW(2000)"));
+                                                                              .schemaId(Id.of("IT_USER"))
+                                                                              .tableId(Id.of("ORACLE_BINARY_TEST"))
+                                                                              .columnId(Id.of("RAW_LARGE"))
+                                                                              .build());
+        Assertions.assertThat(columnRawLarge.getType())
+                  .contains(Id.of("VARBINARY(2000)"));
+        Assertions.assertThat(columnRawLarge.getTypeOriginal())
+                  .contains(Id.of("RAW(2000)"));
 
         val columnBlobData = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
-                .schemaId(Id.of("IT_USER"))
-                .tableId(Id.of("ORACLE_BINARY_TEST"))
-                .columnId(Id.of("BLOB_DATA"))
-                .build());
-        Assertions.assertThat(columnBlobData.getType()).contains(Id.of("BLOB"));
-        Assertions.assertThat(columnBlobData.getTypeOriginal()).contains(Id.of("BLOB"));
+                                                                              .schemaId(Id.of("IT_USER"))
+                                                                              .tableId(Id.of("ORACLE_BINARY_TEST"))
+                                                                              .columnId(Id.of("BLOB_DATA"))
+                                                                              .build());
+        Assertions.assertThat(columnBlobData.getType())
+                  .contains(Id.of("BLOB"));
+        Assertions.assertThat(columnBlobData.getTypeOriginal())
+                  .contains(Id.of("BLOB"));
     }
 }

@@ -10,12 +10,12 @@ Created    : 17.06.2016, Simon Jutz
 ======================================================================*/
 package ch.admin.bar.siard2.jdbc;
 
+import ch.enterag.sqlparser.SqlLiterals;
+import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
+import ch.enterag.utils.logging.IndentLogger;
+
 import java.sql.*;
 import java.util.*;
-
-import ch.enterag.utils.jdbc.*;
-import ch.enterag.utils.logging.*;
-import ch.enterag.sqlparser.*;
 
 /**
  * OracleDatabaseMetaData implements wrapped Oracle DatabaseMetaData.
@@ -524,7 +524,8 @@ public class OracleDatabaseMetaData
         ResultSet rsColumns;
         Connection conn = getConnection();
         _il.event("Unwrapped prepared query: " + sSql);
-        PreparedStatement pstmt = conn.unwrap(Connection.class).prepareStatement(sSql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+        PreparedStatement pstmt = conn.unwrap(Connection.class)
+                                      .prepareStatement(sSql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
         rsColumns = new OracleMetaColumns(pstmt.executeQuery(), conn, pstmt, 1, 2, 5, 6, 7, 7, 9);
         _il.exit(rsColumns);
         return rsColumns;
@@ -578,7 +579,8 @@ public class OracleDatabaseMetaData
 
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sSql);
-        rsUdts = stmt.unwrap(Statement.class).executeQuery(sSql);
+        rsUdts = stmt.unwrap(Statement.class)
+                     .executeQuery(sSql);
         _il.exit(rsUdts);
         return rsUdts;
     }
@@ -636,7 +638,8 @@ public class OracleDatabaseMetaData
 
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sSql);
-        rsAttributes = stmt.unwrap(Statement.class).executeQuery(sSql);
+        rsAttributes = stmt.unwrap(Statement.class)
+                           .executeQuery(sSql);
         _il.exit(rsAttributes);
         return new OracleMetaColumns(rsAttributes, getConnection(), stmt, 1, 2, 5, 6, 7, 7, 8);
     }
@@ -691,7 +694,8 @@ public class OracleDatabaseMetaData
 
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sSql);
-        rsSuperTypes = stmt.unwrap(Statement.class).executeQuery(sSql);
+        rsSuperTypes = stmt.unwrap(Statement.class)
+                           .executeQuery(sSql);
         _il.exit(rsSuperTypes);
         return rsSuperTypes;
     }
@@ -755,7 +759,8 @@ public class OracleDatabaseMetaData
 
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sbSql);
-        rsIndexInfo = stmt.unwrap(Statement.class).executeQuery(sbSql.toString());
+        rsIndexInfo = stmt.unwrap(Statement.class)
+                          .executeQuery(sbSql.toString());
         _il.exit(rsIndexInfo);
         return rsIndexInfo;
     }
@@ -856,7 +861,8 @@ public class OracleDatabaseMetaData
         ResultSet rsProcedureColumns;
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sbSql);
-        rsProcedureColumns = stmt.unwrap(Statement.class).executeQuery(sbSql.toString());
+        rsProcedureColumns = stmt.unwrap(Statement.class)
+                                 .executeQuery(sbSql.toString());
         _il.exit(rsProcedureColumns);
         return new OracleMetaColumns(rsProcedureColumns, getConnection(), stmt, 1, 2, 6, 7, 8, 9, 10);
     }
@@ -922,7 +928,8 @@ public class OracleDatabaseMetaData
         ResultSet rsProcedures;
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sbSql);
-        rsProcedures = stmt.unwrap(Statement.class).executeQuery(sbSql.toString());
+        rsProcedures = stmt.unwrap(Statement.class)
+                           .executeQuery(sbSql.toString());
         _il.exit(rsProcedures);
         return rsProcedures;
     }
@@ -950,8 +957,10 @@ public class OracleDatabaseMetaData
         }
         if (types != null) {
             Set<String> setObjectTypes = toObjectTypes(types);
-            boolean bSystem = Arrays.asList(types).contains(sSYSTEM_TABLE);
-            boolean bTemporary = Arrays.asList(types).contains(sGLOBAL_TEMPORARY);
+            boolean bSystem = Arrays.asList(types)
+                                    .contains(sSYSTEM_TABLE);
+            boolean bTemporary = Arrays.asList(types)
+                                       .contains(sGLOBAL_TEMPORARY);
 
             if (!setObjectTypes.isEmpty()) {
                 sbCondition.append(" AND (\r\n");
@@ -1070,7 +1079,8 @@ public class OracleDatabaseMetaData
         ResultSet rsTables;
         Connection conn = getConnection();
         _il.event("Unwrapped prepared query: " + sbSql);
-        PreparedStatement pstmt = conn.unwrap(Connection.class).prepareStatement(sbSql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+        PreparedStatement pstmt = conn.unwrap(Connection.class)
+                                      .prepareStatement(sbSql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
         rsTables = pstmt.executeQuery();
         rsTables = new OracleResultSet(rsTables, conn, pstmt);
         _il.exit(rsTables);
@@ -1096,7 +1106,8 @@ public class OracleDatabaseMetaData
         sbSql.append(")");
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sbSql);
-        rsTableTypes = stmt.unwrap(Statement.class).executeQuery(sbSql.toString());
+        rsTableTypes = stmt.unwrap(Statement.class)
+                           .executeQuery(sbSql.toString());
         _il.exit(rsTableTypes);
         return rsTableTypes;
     }
@@ -1117,7 +1128,8 @@ public class OracleDatabaseMetaData
         sbSql.append(getOracleMaintainedCondition(false));
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sbSql);
-        rsSchemas = stmt.unwrap(Statement.class).executeQuery(sbSql.toString());
+        rsSchemas = stmt.unwrap(Statement.class)
+                        .executeQuery(sbSql.toString());
         _il.exit(rsSchemas);
         return rsSchemas;
     }
@@ -1148,7 +1160,8 @@ public class OracleDatabaseMetaData
         }
         Statement stmt = getConnection().createStatement();
         _il.event("Unwrapped query: " + sbSql);
-        rsSchemas = stmt.unwrap(Statement.class).executeQuery(sbSql.toString());
+        rsSchemas = stmt.unwrap(Statement.class)
+                        .executeQuery(sbSql.toString());
         _il.exit(rsSchemas);
         return rsSchemas;
     }

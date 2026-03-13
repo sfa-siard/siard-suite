@@ -8,10 +8,10 @@ Created    : 01.10.2016, Hartwig Thomas, Enter AG, Rüti ZH
 ======================================================================*/
 package ch.admin.bar.siard2.api.primary;
 
+import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.TableRecord;
 import ch.admin.bar.siard2.api.TableRecordDispenser;
 import ch.admin.bar.siard2.api.TableRecordExtract;
-import ch.admin.bar.siard2.api.Table;
 
 import java.io.IOException;
 
@@ -98,7 +98,7 @@ public class TableRecordExtractImpl
                                                   .getRows(); lDelta = lDelta * _iMAX_RECORDS)
             _lDelta = lDelta;
         _lOffset = 0;
-    } 
+    }
 
     /**
      * construct a record set in a record set.
@@ -113,7 +113,7 @@ public class TableRecordExtractImpl
         _table = rsParent.getTable();
         _lOffset = rsParent.getOffset() + iRecordSet * rsParent.getDelta();
         _lDelta = rsParent.getDelta() / _iMAX_RECORDS;
-    } 
+    }
 
     /**
      * factory for a root record set in a table.
@@ -122,7 +122,7 @@ public class TableRecordExtractImpl
      */
     public static TableRecordExtract newInstance(Table table) {
         return new TableRecordExtractImpl(table);
-    } 
+    }
 
     /**
      * factory for a record set in a record set.
@@ -132,7 +132,7 @@ public class TableRecordExtractImpl
      */
     public static TableRecordExtract newInstance(TableRecordExtract rsParent, int iRecordSet, TableRecord tableRecordOffset) {
         return new TableRecordExtractImpl(rsParent, iRecordSet, tableRecordOffset);
-    } 
+    }
 
     /**
      * get the full number of records in and under this record set.
@@ -146,7 +146,7 @@ public class TableRecordExtractImpl
         if (_lOffset + lRecords > lRows)
             lRecords = lRows - _lOffset;
         return lRecords;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -167,7 +167,7 @@ public class TableRecordExtractImpl
             sLabel = sLabel + " (" + getRecords() + ")";
         }
         return sLabel;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -186,7 +186,7 @@ public class TableRecordExtractImpl
         } else
             iRecordExtracts = _ars.length;
         return iRecordExtracts;
-    } 
+    }
 
     /**
      * load the records of this record set.
@@ -204,7 +204,7 @@ public class TableRecordExtractImpl
             _ars[iRecordSet] = TableRecordExtractImpl.newInstance(this, iRecordSet, rd.get());
         }
         rd.close();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -215,7 +215,7 @@ public class TableRecordExtractImpl
         if (_ars == null)
             loadTableRecordExtract();
         return _ars[iRecordExtract];
-    } 
+    }
 
     /**
      * {@inheritDoc}

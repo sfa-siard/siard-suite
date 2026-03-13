@@ -19,20 +19,21 @@ import ch.enterag.sqlparser.ddl.AttributeDefinition;
 
 /*====================================================================*/
 public class OracleAttributeDefinition
-	extends AttributeDefinition {
+        extends AttributeDefinition {
 
     /*------------------------------------------------------------------*/
-	/**
-	 * format the attribute definition
-	 * @return the SQL string corresponding to a attribute definition
-	 */
-	@Override
-	public String format() {
-		String sDefinition = getAttributeName().quote() + sSP + getDataType().format();
-		return sDefinition;
-	}
 
-	public OracleAttributeDefinition(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
+    /**
+     * format the attribute definition
+     * @return the SQL string corresponding to a attribute definition
+     */
+    @Override
+    public String format() {
+        String sDefinition = getAttributeName().quote() + sSP + getDataType().format();
+        return sDefinition;
+    }
+
+    public OracleAttributeDefinition(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 }

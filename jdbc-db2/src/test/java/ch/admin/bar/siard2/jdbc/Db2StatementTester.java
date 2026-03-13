@@ -5,7 +5,6 @@ import ch.admin.bar.siard2.db2.TestSqlDatabase;
 import ch.admin.bar.siard2.jdbcx.Db2DataSource;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.EU;
-import ch.enterag.utils.base.ConnectionProperties;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 import ch.enterag.utils.jdbc.BaseStatementTester;

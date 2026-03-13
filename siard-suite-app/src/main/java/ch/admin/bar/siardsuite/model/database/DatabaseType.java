@@ -21,9 +21,9 @@ public class DatabaseType {
         this.metaType = metaType;
 
         databaseAttributes = ListAssembler.assemble(metaType.getMetaAttributes(), metaType::getMetaAttribute)
-                .stream()
-                .map(DatabaseAttribute::new)
-                .collect(Collectors.toList());
+                                          .stream()
+                                          .map(DatabaseAttribute::new)
+                                          .collect(Collectors.toList());
 
         description = metaType.getDescription();
     }

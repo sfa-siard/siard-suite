@@ -10,6 +10,8 @@ import java.util.Map;
 @Value
 @Builder
 public class UploadArchiveData {
-    @NonNull DbmsConnectionData connectionData;
-    @NonNull Map<String, String> schemaNameMappings;
+    @NonNull
+    DbmsConnectionData connectionData;
+    @NonNull
+    Map<String, String> schemaNameMappings;
 }

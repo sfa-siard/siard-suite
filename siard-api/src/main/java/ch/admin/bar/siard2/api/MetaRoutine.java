@@ -34,7 +34,7 @@ public interface MetaRoutine
   /*====================================================================
   routine properties
   ====================================================================*/
-    
+
 
     /**
      * get specific routine name which is unique within its schema.
@@ -43,7 +43,6 @@ public interface MetaRoutine
      */
     String getSpecificName();
 
-    
 
     /**
      * set the routine name to a value possibly different from the
@@ -60,7 +59,6 @@ public interface MetaRoutine
      */
     String getName();
 
-    
 
     /**
      * set the SQL:2008 (ISO 9075) routine body.
@@ -76,7 +74,6 @@ public interface MetaRoutine
      */
     String getBody();
 
-    
 
     /**
      * set the original source code (VBA, PL/SQL, ...) defining the routine
@@ -96,7 +93,6 @@ public interface MetaRoutine
      */
     String getSource();
 
-    
 
     /**
      * set description of the routine.
@@ -112,7 +108,6 @@ public interface MetaRoutine
      */
     String getDescription();
 
-    
 
     /**
      * set the routine characteristic.
@@ -132,7 +127,6 @@ public interface MetaRoutine
      */
     String getCharacteristic();
 
-    
 
     /**
      * set the SQL:2008 data type of the return value (for functions)

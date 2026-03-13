@@ -30,9 +30,9 @@ public class MySqlSpatialDataTypes {
     public final static String INIT_SCRIPT = "mysql/usecases/types/download/spatialtypes/use-all-spatial-data-types_mysql.sql";
 
     private static final QualifiedTableId TABLE = QualifiedTableId.builder()
-            .schemaId(Id.of("Schema1"))
-            .tableId(Id.of("SpatialDataTable"))
-            .build();
+                                                                  .schemaId(Id.of("Schema1"))
+                                                                  .tableId(Id.of("SpatialDataTable"))
+                                                                  .build();
 
     public final static QualifiedColumnId COLUMN_ID = TABLE.createQualifiedColumnId(Id.of("id"));
     public final static QualifiedColumnId COLUMN_POINT = TABLE.createQualifiedColumnId(Id.of("point_column"));
@@ -65,15 +65,24 @@ public class MySqlSpatialDataTypes {
 
         val metadataExplorer = actualArchive.exploreMetadata();
 
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_ID)).isPresent();
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_POINT)).isPresent();
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_LINESTRING)).isPresent();
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_POLYGON)).isPresent();
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_MULTIPOINT)).isPresent();
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_MULTILINESTRING)).isPresent();
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_MULTIPOLYGON)).isPresent();
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_GEOMETRY)).isPresent();
-        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_GEOMETRYCOLLECTION)).isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_ID))
+                  .isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_POINT))
+                  .isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_LINESTRING))
+                  .isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_POLYGON))
+                  .isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_MULTIPOINT))
+                  .isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_MULTILINESTRING))
+                  .isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_MULTIPOLYGON))
+                  .isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_GEOMETRY))
+                  .isPresent();
+        Assertions.assertThat(metadataExplorer.tryFindByColumnId(COLUMN_GEOMETRYCOLLECTION))
+                  .isPresent();
 
         // TODO: Test content
     }

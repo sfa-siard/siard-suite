@@ -1,13 +1,9 @@
 package ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms;
 
 import ch.admin.bar.siard2.api.MetaParameter;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadOnlyStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.ReadWriteStringProperty;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableForm;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableFormGroup;
-import ch.admin.bar.siardsuite.ui.component.rendering.model.RenderableTable;
-import ch.admin.bar.siardsuite.model.database.Routine;
 import ch.admin.bar.siardsuite.framework.i18n.keys.I18nKey;
+import ch.admin.bar.siardsuite.model.database.Routine;
+import ch.admin.bar.siardsuite.ui.component.rendering.model.*;
 import ch.admin.bar.siardsuite.ui.presenter.archive.browser.forms.utils.Converter;
 import lombok.NonNull;
 
@@ -29,64 +25,64 @@ public class RoutineOverviewForm {
 
     public static RenderableForm create(@NonNull final Routine routine) {
         return RenderableForm.<Routine>builder()
-                .dataSupplier(() -> routine)
-                .afterSaveAction(Routine::write)
-                .group(RenderableFormGroup.<Routine>builder()
-                        .property(new ReadOnlyStringProperty<>(
-                                NAME,
-                                Routine::getName
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                SPECIFIC_NAME,
-                                Routine::getSpecificName
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                SOURCE,
-                                Routine::getSource,
-                                Routine::setSource
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                BODY,
-                                Routine::getBody,
-                                Routine::setBody
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                CHARACTERISTICS,
-                                Routine::getCharacteristics
-                        ))
-                        .property(new ReadOnlyStringProperty<>(
-                                RETURN_TYPE,
-                                Routine::getReturnType
-                        ))
-                        .property(new ReadWriteStringProperty<>(
-                                DESCRIPTION,
-                                Routine::getDescription,
-                                Routine::setDescription
-                        ))
-                        .property(RenderableTable.<Routine, MetaParameter>builder()
-                                .dataExtractor(Routine::getParameters)
-                                .property(new ReadOnlyStringProperty<>(
-                                        POSITION,
-                                        Converter.intToString(MetaParameter::getPosition)
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        PARAMETER_NAME,
-                                        MetaParameter::getName
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        PARAMETER_MODE,
-                                        MetaParameter::getMode
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        PARAMETER_TYPE,
-                                        MetaParameter::getType
-                                ))
-                                .property(new ReadOnlyStringProperty<>(
-                                        CARDINALITY,
-                                        Converter.cardinalityToString(MetaParameter::getCardinality)
-                                ))
-                                .build())
-                        .build())
-                .build();
+                             .dataSupplier(() -> routine)
+                             .afterSaveAction(Routine::write)
+                             .group(RenderableFormGroup.<Routine>builder()
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               NAME,
+                                                               Routine::getName
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               SPECIFIC_NAME,
+                                                               Routine::getSpecificName
+                                                       ))
+                                                       .property(new ReadWriteStringProperty<>(
+                                                               SOURCE,
+                                                               Routine::getSource,
+                                                               Routine::setSource
+                                                       ))
+                                                       .property(new ReadWriteStringProperty<>(
+                                                               BODY,
+                                                               Routine::getBody,
+                                                               Routine::setBody
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               CHARACTERISTICS,
+                                                               Routine::getCharacteristics
+                                                       ))
+                                                       .property(new ReadOnlyStringProperty<>(
+                                                               RETURN_TYPE,
+                                                               Routine::getReturnType
+                                                       ))
+                                                       .property(new ReadWriteStringProperty<>(
+                                                               DESCRIPTION,
+                                                               Routine::getDescription,
+                                                               Routine::setDescription
+                                                       ))
+                                                       .property(RenderableTable.<Routine, MetaParameter>builder()
+                                                                                .dataExtractor(Routine::getParameters)
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        POSITION,
+                                                                                        Converter.intToString(MetaParameter::getPosition)
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        PARAMETER_NAME,
+                                                                                        MetaParameter::getName
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        PARAMETER_MODE,
+                                                                                        MetaParameter::getMode
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        PARAMETER_TYPE,
+                                                                                        MetaParameter::getType
+                                                                                ))
+                                                                                .property(new ReadOnlyStringProperty<>(
+                                                                                        CARDINALITY,
+                                                                                        Converter.cardinalityToString(MetaParameter::getCardinality)
+                                                                                ))
+                                                                                .build())
+                                                       .build())
+                             .build();
     }
 }

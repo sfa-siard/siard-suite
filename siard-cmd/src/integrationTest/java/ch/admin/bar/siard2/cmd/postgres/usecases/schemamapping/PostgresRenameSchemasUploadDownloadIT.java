@@ -64,28 +64,28 @@ public class PostgresRenameSchemasUploadDownloadIT {
         val metadataExplorer = actualArchive.exploreMetadata();
 
         Assertions.assertThat(metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("editedSchema1"))
-                        .tableId(Id.of("table1"))
-                        .build()))
-                .isPresent();
+                                                                                .schemaId(Id.of("editedSchema1"))
+                                                                                .tableId(Id.of("table1"))
+                                                                                .build()))
+                  .isPresent();
 
         Assertions.assertThat(metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("editedSchema1"))
-                        .tableId(Id.of("table2"))
-                        .build()))
-                .isPresent();
+                                                                                .schemaId(Id.of("editedSchema1"))
+                                                                                .tableId(Id.of("table2"))
+                                                                                .build()))
+                  .isPresent();
 
         Assertions.assertThat(metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("editedSchema2"))
-                        .tableId(Id.of("table3"))
-                        .build()))
-                .isPresent();
+                                                                                .schemaId(Id.of("editedSchema2"))
+                                                                                .tableId(Id.of("table3"))
+                                                                                .build()))
+                  .isPresent();
 
         Assertions.assertThat(metadataExplorer.tryFindByTableId(QualifiedTableId.builder()
-                        .schemaId(Id.of("editedSchema2"))
-                        .tableId(Id.of("table4"))
-                        .build()))
-                .isPresent();
+                                                                                .schemaId(Id.of("editedSchema2"))
+                                                                                .tableId(Id.of("table4"))
+                                                                                .build()))
+                  .isPresent();
 
         // TODO: Extend for types...
     }

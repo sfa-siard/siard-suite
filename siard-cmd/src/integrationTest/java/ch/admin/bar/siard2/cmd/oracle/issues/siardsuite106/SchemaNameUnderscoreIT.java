@@ -2,7 +2,6 @@ package ch.admin.bar.siard2.cmd.oracle.issues.siardsuite106;
 
 import ch.admin.bar.siard2.cmd.SiardFromDb;
 import ch.admin.bar.siard2.cmd.SiardToDb;
-import ch.admin.bar.siard2.cmd.utils.ConsoleLogConsumer;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -27,10 +26,12 @@ public class SchemaNameUnderscoreIT {
     @Rule
     public OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/00_create_user.sql")
             .withCopyFileToContainer(
-                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDSUITE_106_SCHEMA_NAME).toPath()),
+                    MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDSUITE_106_SCHEMA_NAME)
+                                                                   .toPath()),
                     "/container-entrypoint-initdb.d/schema-with-underscore.sql");
 
     @Test
@@ -50,23 +51,26 @@ public class SchemaNameUnderscoreIT {
         val metadataExplorer = siardArchive.exploreMetadata();
 
         val testTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("EMPLOYEE_DATA"))
-                .tableId(Id.of("TEST_TABLE"))
-                .build());
-        Assertions.assertThat(testTable.getName()).isEqualTo(Id.of("TEST_TABLE"));
+                                                                       .schemaId(Id.of("EMPLOYEE_DATA"))
+                                                                       .tableId(Id.of("TEST_TABLE"))
+                                                                       .build());
+        Assertions.assertThat(testTable.getName())
+                  .isEqualTo(Id.of("TEST_TABLE"));
 
         val jobHistoryTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("EMPLOYEE_DATA"))
-                .tableId(Id.of("JOB_HISTORY"))
-                .build());
-        Assertions.assertThat(jobHistoryTable.getName()).isEqualTo(Id.of("JOB_HISTORY"));
+                                                                             .schemaId(Id.of("EMPLOYEE_DATA"))
+                                                                             .tableId(Id.of("JOB_HISTORY"))
+                                                                             .build());
+        Assertions.assertThat(jobHistoryTable.getName())
+                  .isEqualTo(Id.of("JOB_HISTORY"));
 
 
         val employeesTable = metadataExplorer.findByTableId(QualifiedTableId.builder()
-                .schemaId(Id.of("EMPLOYEE_DATA"))
-                .tableId(Id.of("EMPLOYEES"))
-                .build());
-        Assertions.assertThat(employeesTable.getName()).isEqualTo(Id.of("EMPLOYEES"));
+                                                                            .schemaId(Id.of("EMPLOYEE_DATA"))
+                                                                            .tableId(Id.of("EMPLOYEES"))
+                                                                            .build());
+        Assertions.assertThat(employeesTable.getName())
+                  .isEqualTo(Id.of("EMPLOYEES"));
     }
 
     //The issue had reported an error when uploading back to db

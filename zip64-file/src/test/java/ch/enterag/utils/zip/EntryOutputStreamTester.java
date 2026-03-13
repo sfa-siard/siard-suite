@@ -25,80 +25,84 @@ it is possible to negotiate a different license with the copyright holder.
 ======================================================================*/
 package ch.enterag.utils.zip;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.*;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*====================================================================*/
+
 /** Tests EntryOutputStream.
  @author Hartwig Thomas
  */
-public class EntryOutputStreamTester
-{
-  /** buffer size for I/O */
-  private final static int iBUFFER_SIZE = 8192;
-  /** zip file */
-  private String m_sZipFile = null;
-  /** test files directory */
-  private final static String sTESTFILES_DIRECTORY = "src/test/resources";
-  /** temp directory */
-  private final static String sTEMP_DIRECTORY = "tmp";
+public class EntryOutputStreamTester {
+    /** buffer size for I/O */
+    private final static int iBUFFER_SIZE = 8192;
+    /** zip file */
+    private String m_sZipFile = null;
+    /** test files directory */
+    private final static String sTESTFILES_DIRECTORY = "src/test/resources";
+    /** temp directory */
+    private final static String sTEMP_DIRECTORY = "tmp";
 
-  /*------------------------------------------------------------------*/
+    /*------------------------------------------------------------------*/
   /* (non-Javadoc)
    @see junit.framework.TestCase#setUp()
    */
-  @BeforeEach
-  public void setUp() throws Exception
-  {
-    /* create a file of moderate length in Temp and zip it */
-    /* temp directory */
-    File fileTemp = new File(sTEMP_DIRECTORY);
-    File fileZip = new File(fileTemp.getAbsolutePath()+File.separator+"moderate.zip");
-    if (fileZip.exists())
-      fileZip.delete();
-    m_sZipFile = fileZip.getAbsolutePath();
-  } /* setUp */
+    @BeforeEach
+    public void setUp() throws Exception {
+        /* create a file of moderate length in Temp and zip it */
+        /* temp directory */
+        File fileTemp = new File(sTEMP_DIRECTORY);
+        File fileZip = new File(fileTemp.getAbsolutePath() + File.separator + "moderate.zip");
+        if (fileZip.exists())
+            fileZip.delete();
+        m_sZipFile = fileZip.getAbsolutePath();
+    } /* setUp */
 
-  /*------------------------------------------------------------------*/
+    /*------------------------------------------------------------------*/
   /* (non-Javadoc)
    @see junit.framework.TestCase#tearDown()
    */
-  @AfterEach
-  public void tearDown() throws Exception
-  {
-  } /* tearDown */
-  
-  @Test
-  public void testWriteRead()
-  {
-    System.out.println("testWriteRead");
-    try
-    {
-      Zip64File zf = new Zip64File(m_sZipFile,false);
-      byte[] buf = new byte[iBUFFER_SIZE];
-      
-      /* write moderate file to ZIP */
-      String sModerateFile = sTESTFILES_DIRECTORY+File.separator+"moderate.txt";
-      FileInputStream fis = new FileInputStream(sModerateFile);
-      EntryOutputStream eos = zf.openEntryOutputStream("moderate.txt",FileEntry.iMETHOD_DEFLATED,null);
-      for (int iRead = fis.read(buf); iRead != -1; iRead = fis.read(buf))
-        eos.write(buf,0,iRead);
-      eos.close();
-      fis.close();
-      
-      /* read moderate file from ZIP */
-      EntryInputStream eis = zf.openEntryInputStream("moderate.txt");
-      FileOutputStream fos = new FileOutputStream(sTEMP_DIRECTORY+File.separator+"moderate.txt");
-      for (int iRead = eis.read(buf); iRead != -1; iRead = eis.read(buf))
-        fos.write(buf,0,iRead);
-      fos.close();
-      eis.close();
-      
-      zf.close();
-    }
-    catch(FileNotFoundException fnfe) { fail(fnfe.getClass().getName()+": "+fnfe.getMessage()); }
-    catch(IOException ie) { fail(ie.getClass().getName()+": "+ie.getMessage()); }
-  } /* testEntryInputStream */
+    @AfterEach
+    public void tearDown() throws Exception {
+    } /* tearDown */
+
+    @Test
+    public void testWriteRead() {
+        System.out.println("testWriteRead");
+        try {
+            Zip64File zf = new Zip64File(m_sZipFile, false);
+            byte[] buf = new byte[iBUFFER_SIZE];
+
+            /* write moderate file to ZIP */
+            String sModerateFile = sTESTFILES_DIRECTORY + File.separator + "moderate.txt";
+            FileInputStream fis = new FileInputStream(sModerateFile);
+            EntryOutputStream eos = zf.openEntryOutputStream("moderate.txt", FileEntry.iMETHOD_DEFLATED, null);
+            for (int iRead = fis.read(buf); iRead != -1; iRead = fis.read(buf))
+                eos.write(buf, 0, iRead);
+            eos.close();
+            fis.close();
+
+            /* read moderate file from ZIP */
+            EntryInputStream eis = zf.openEntryInputStream("moderate.txt");
+            FileOutputStream fos = new FileOutputStream(sTEMP_DIRECTORY + File.separator + "moderate.txt");
+            for (int iRead = eis.read(buf); iRead != -1; iRead = eis.read(buf))
+                fos.write(buf, 0, iRead);
+            fos.close();
+            eis.close();
+
+            zf.close();
+        } catch (FileNotFoundException fnfe) {
+            fail(fnfe.getClass()
+                     .getName() + ": " + fnfe.getMessage());
+        } catch (IOException ie) {
+            fail(ie.getClass()
+                   .getName() + ": " + ie.getMessage());
+        }
+    } /* testEntryInputStream */
 
 } /* class EntryOutputStreamTester */

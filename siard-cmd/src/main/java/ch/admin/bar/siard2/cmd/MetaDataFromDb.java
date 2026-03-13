@@ -171,7 +171,8 @@ public class MetaDataFromDb extends MetaDataBase {
         boolean bMetaDataOk = true;
         System.out.println("  Check Meta Schema " + ms.getName());
         try {
-            if (ms.getSchema().getTables() == ms.getMetaTables()) {
+            if (ms.getSchema()
+                  .getTables() == ms.getMetaTables()) {
                 for (int iTable = 0; bMetaDataOk && (iTable < ms.getMetaTables()); iTable++)
                     bMetaDataOk = checkMetaTable(ms.getMetaTable(iTable));
             } else {
@@ -196,7 +197,8 @@ public class MetaDataFromDb extends MetaDataBase {
         boolean bMetaDataOk = true;
         System.out.println("Check Meta Data");
         try {
-            if (_md.getArchive().getSchemas() == _md.getMetaSchemas()) {
+            if (_md.getArchive()
+                   .getSchemas() == _md.getMetaSchemas()) {
                 for (int iSchema = 0; bMetaDataOk && (iSchema < _md.getMetaSchemas()); iSchema++)
                     bMetaDataOk = checkMetaSchema(_md.getMetaSchema(iSchema));
                 ((MetaDataImpl) _md).getSiardArchive();
@@ -274,13 +276,15 @@ public class MetaDataFromDb extends MetaDataBase {
         int iPosition = 0;
         CategoryType cat = mt.getCategoryType();
         ResultSet rs = _dmd.getAttributes(null,
-                                          ((BaseDatabaseMetaData) _dmd).toPattern(mt.getParentMetaSchema().getName()),
+                                          ((BaseDatabaseMetaData) _dmd).toPattern(mt.getParentMetaSchema()
+                                                                                    .getName()),
                                           ((BaseDatabaseMetaData) _dmd).toPattern(mt.getName()),
                                           "%");
         while (rs.next()) {
             iPosition++;
             String sTypeSchema = rs.getString("TYPE_SCHEM");
-            if (!sTypeSchema.equals(mt.getParentMetaSchema().getName()))
+            if (!sTypeSchema.equals(mt.getParentMetaSchema()
+                                      .getName()))
                 throw new IOException("Attribute with unexpected type schema found!");
             String sTypeName = rs.getString("TYPE_NAME");
             if (!sTypeName.equals(mt.getName())) throw new IOException("Attribute with unexpected type name found");
@@ -291,7 +295,8 @@ public class MetaDataFromDb extends MetaDataBase {
             int iDecimalDigits = rs.getInt("DECIMAL_DIGITS");
             MetaType mtAttr = null;
             if ((iDataType == Types.DISTINCT) || (iDataType == Types.STRUCT))
-                mtAttr = createType(sAttrTypeName, mt.getParentMetaSchema().getName(), iAttrSize, iDecimalDigits);
+                mtAttr = createType(sAttrTypeName, mt.getParentMetaSchema()
+                                                     .getName(), iAttrSize, iDecimalDigits);
             if (cat == CategoryType.DISTINCT) {
                 mt.setBase(sTypeName);
                 if ((iDataType != Types.DISTINCT) && (iDataType != Types.ARRAY) && (iDataType != Types.STRUCT))
@@ -314,7 +319,8 @@ public class MetaDataFromDb extends MetaDataBase {
                         else {
                             MetaType mtyBase = createType(sBaseType, sTypeSchema, -1, -1);
                             QualifiedId qiTypeBase = new QualifiedId(null,
-                                                                     mtyBase.getParentMetaSchema().getName(),
+                                                                     mtyBase.getParentMetaSchema()
+                                                                            .getName(),
                                                                      mtyBase.getName());
                             ma.setTypeName(qiTypeBase.getName());
                             ma.setTypeSchema(qiTypeBase.getSchema());
@@ -324,7 +330,8 @@ public class MetaDataFromDb extends MetaDataBase {
                         throw new SQLException("Invalid ARRAY constructor for attribute " + ma.getName() + " of type " + mt.getName() + "!");
                 } else {
                     ma.setTypeName(mtAttr.getName());
-                    ma.setTypeSchema(mtAttr.getParentMetaSchema().getName());
+                    ma.setTypeSchema(mtAttr.getParentMetaSchema()
+                                           .getName());
                 }
                 int iNullable = rs.getInt("NULLABLE");
                 if (iNullable == DatabaseMetaData.attributeNoNulls) ma.setNullable(false);
@@ -359,8 +366,10 @@ public class MetaDataFromDb extends MetaDataBase {
                 qiType.setSchema(sTypeSchema);
                 qiType.parseName(sTypeName);
             }
-            Schema schema = _md.getArchive().getSchema(qiType.getSchema());
-            if (schema == null) schema = _md.getArchive().createSchema(qiType.getSchema());
+            Schema schema = _md.getArchive()
+                               .getSchema(qiType.getSchema());
+            if (schema == null) schema = _md.getArchive()
+                                            .createSchema(qiType.getSchema());
             MetaSchema ms = schema.getMetaSchema();
             mt = ms.getMetaType(qiType.getName());
             if (mt == null) {
@@ -377,8 +386,9 @@ public class MetaDataFromDb extends MetaDataBase {
                     mt.setCategory(CategoryType.DISTINCT.value());
                     pt.initialize(Types.BOOLEAN, 0, 0);
                     mt.setBase(pt.format());
-                } else if (hasNext && qiType.getName().equals(rs.getString("TYPE_NAME")) && qiType.getSchema()
-                                                                                 .equals(rs.getString("TYPE_SCHEM"))) {
+                } else if (hasNext && qiType.getName()
+                                            .equals(rs.getString("TYPE_NAME")) && qiType.getSchema()
+                                                                                        .equals(rs.getString("TYPE_SCHEM"))) {
                     String sRemarks = rs.getString("REMARKS");
                     if (sRemarks != null) mt.setDescription(sRemarks);
                     BaseSqlFactory bsf = new BaseSqlFactory();
@@ -410,12 +420,14 @@ public class MetaDataFromDb extends MetaDataBase {
      */
     private void getColumns(MetaView mv) throws IOException, SQLException {
         ResultSet rs = _dmd.getColumns(null,
-                                       ((BaseDatabaseMetaData) _dmd).toPattern(mv.getParentMetaSchema().getName()),
+                                       ((BaseDatabaseMetaData) _dmd).toPattern(mv.getParentMetaSchema()
+                                                                                 .getName()),
                                        ((BaseDatabaseMetaData) _dmd).toPattern(mv.getName()),
                                        "%");
         while (rs.next()) {
             String sTableSchema = rs.getString("TABLE_SCHEM");
-            if (!sTableSchema.equals(mv.getParentMetaSchema().getName()))
+            if (!sTableSchema.equals(mv.getParentMetaSchema()
+                                       .getName()))
                 throw new IOException("Invalid view schema for column found!");
             String sTableName = rs.getString("TABLE_NAME");
             if (!sTableName.equals(mv.getName())) throw new IOException("Invalid view name for column found!");
@@ -441,7 +453,8 @@ public class MetaDataFromDb extends MetaDataBase {
                                                 "%");
         while (rs.next()) {
             String sProcedureSchema = rs.getString("PROCEDURE_SCHEM");
-            if (!sProcedureSchema.equals(mr.getParentMetaSchema().getName()))
+            if (!sProcedureSchema.equals(mr.getParentMetaSchema()
+                                           .getName()))
                 throw new IOException("Invalid procedure parameter schema encountered!");
             String sProcedureName = rs.getString("PROCEDURE_NAME");
             if (!sProcedureName.equals(mr.getName()))
@@ -454,7 +467,8 @@ public class MetaDataFromDb extends MetaDataBase {
             long lPrecision = rs.getLong("PRECISION");
             int iScale = rs.getInt("SCALE");
             if ((iDataType == Types.DISTINCT) || (iDataType == Types.STRUCT)) {
-                mt = createType(sTypeName, mr.getParentMetaSchema().getName(), (int) lPrecision, iScale);
+                mt = createType(sTypeName, mr.getParentMetaSchema()
+                                             .getName(), (int) lPrecision, iScale);
             }
             String sRemarks = rs.getString("REMARKS");
             int iOrdinalPosition = rs.getInt("ORDINAL_POSITION");
@@ -499,7 +513,8 @@ public class MetaDataFromDb extends MetaDataBase {
                             else {
                                 MetaType mtyBase = createType(sBaseType, sProcedureSchema, -1, -1);
                                 QualifiedId qiTypeBase = new QualifiedId(null,
-                                                                         mtyBase.getParentMetaSchema().getName(),
+                                                                         mtyBase.getParentMetaSchema()
+                                                                                .getName(),
                                                                          mtyBase.getName());
                                 mp.setTypeName(qiTypeBase.getName());
                                 mp.setTypeSchema(qiTypeBase.getSchema());
@@ -509,7 +524,8 @@ public class MetaDataFromDb extends MetaDataBase {
                             throw new SQLException("Invalid ARRAY constructor for parameter " + mp.getName() + " of routine " + mr.getName() + "!");
                     } else {
                         mp.setTypeName(mt.getName());
-                        mp.setTypeSchema(mt.getParentMetaSchema().getName());
+                        mp.setTypeSchema(mt.getParentMetaSchema()
+                                           .getName());
                     }
                     if (sRemarks != null) mp.setDescription(sRemarks);
                 }
@@ -534,10 +550,13 @@ public class MetaDataFromDb extends MetaDataBase {
                                                "%");
         while (rs.next()) {
             String sFunctionSchema = rs.getString("FUNCTION_SCHEM");
-            if (!mr.getParentMetaSchema().getName().equals(sFunctionSchema))
+            if (!mr.getParentMetaSchema()
+                   .getName()
+                   .equals(sFunctionSchema))
                 throw new IOException("Invalid function parameter schema encountered!");
             String sFunctionName = rs.getString("FUNCTION_NAME");
-            if (!mr.getName().equals(sFunctionName))
+            if (!mr.getName()
+                   .equals(sFunctionName))
                 throw new IOException("Invalid function parameter name encountered!");
             String sParameterName = rs.getString("COLUMN_NAME");
             int iColumnType = rs.getInt("COLUMN_TYPE");
@@ -547,7 +566,8 @@ public class MetaDataFromDb extends MetaDataBase {
             int iScale = rs.getInt("SCALE");
             MetaType mt = null;
             if ((iDataType == Types.DISTINCT) || (iDataType == Types.STRUCT))
-                mt = createType(sTypeName, mr.getParentMetaSchema().getName(), (int) lPrecision, iScale);
+                mt = createType(sTypeName, mr.getParentMetaSchema()
+                                             .getName(), (int) lPrecision, iScale);
             String sRemarks = rs.getString("REMARKS");
             int iOrdinalPosition = rs.getInt("ORDINAL_POSITION");
             String sSpecificName = rs.getString("SPECIFIC_NAME");
@@ -595,7 +615,8 @@ public class MetaDataFromDb extends MetaDataBase {
                             else {
                                 MetaType mtyBase = createType(sBaseType, sFunctionSchema, -1, -1);
                                 QualifiedId qiTypeBase = new QualifiedId(null,
-                                                                         mtyBase.getParentMetaSchema().getName(),
+                                                                         mtyBase.getParentMetaSchema()
+                                                                                .getName(),
                                                                          mtyBase.getName());
                                 mp.setTypeName(qiTypeBase.getName());
                                 mp.setTypeSchema(qiTypeBase.getSchema());
@@ -605,7 +626,8 @@ public class MetaDataFromDb extends MetaDataBase {
                             throw new SQLException("Invalid ARRAY constructor for parameter " + mp.getName() + " of routine " + mr.getName() + "!");
                     } else {
                         mp.setTypeName(mt.getName());
-                        mp.setTypeSchema(mt.getParentMetaSchema().getName());
+                        mp.setTypeSchema(mt.getParentMetaSchema()
+                                           .getName());
                     }
                     if (sRemarks != null) mp.setDescription(sRemarks);
                 }
@@ -701,7 +723,8 @@ public class MetaDataFromDb extends MetaDataBase {
                 else {
                     MetaType mtyBase = createType(sBaseType, ms.getName(), -1, -1);
                     QualifiedId qiTypeBase = new QualifiedId(null,
-                                                             mtyBase.getParentMetaSchema().getName(),
+                                                             mtyBase.getParentMetaSchema()
+                                                                    .getName(),
                                                              mtyBase.getName());
                     mc.setTypeName(qiTypeBase.getName());
                     mc.setTypeSchema(qiTypeBase.getSchema());
@@ -712,7 +735,8 @@ public class MetaDataFromDb extends MetaDataBase {
                 throw new SQLException("Invalid ARRAY constructor for column " + mc.getName() + " of table " + qiParent.format() + "!");
         } else {
             mc.setTypeName(mty.getName());
-            mc.setTypeSchema(mty.getParentMetaSchema().getName());
+            mc.setTypeSchema(mty.getParentMetaSchema()
+                                .getName());
         }
         int iNullable = rs.getInt("NULLABLE");
         if (mc.getParentMetaTable() != null) {
@@ -922,7 +946,8 @@ public class MetaDataFromDb extends MetaDataBase {
                 if ((mc.getCardinality() < 0) && ((iPreType == Types.CLOB) || (iPreType == Types.NCLOB) || (iPreType == Types.BLOB)
                         //        ||  (iPreType == Types.SQLXML) || // DB/2 stores XML as a hierarchical object tree ...
                 )) {
-                    if (!mc.getTypeOriginal().equals("\"LONG\"")) // Oracle idiocy
+                    if (!mc.getTypeOriginal()
+                           .equals("\"LONG\"")) // Oracle idiocy
                     {
                         sQuery = sQuery + ",\r\n SUM(OCTET_LENGTH(" + SqlLiterals.formatId(mc.getName()) + "))" + " AS " + SqlLiterals.formatId(
                                 mc.getName() + "_SIZE");
@@ -931,9 +956,11 @@ public class MetaDataFromDb extends MetaDataBase {
                 }
             }
         }
-        QualifiedId qiTable = new QualifiedId(null, mt.getParentMetaSchema().getName(), mt.getName());
+        QualifiedId qiTable = new QualifiedId(null, mt.getParentMetaSchema()
+                                                      .getName(), mt.getName());
         sQuery = sQuery + "\r\nFROM " + qiTable.format();
-        Statement stmtSizes = _dmd.getConnection().createStatement();
+        Statement stmtSizes = _dmd.getConnection()
+                                  .createStatement();
         stmtSizes.setQueryTimeout(_iQueryTimeoutSeconds);
         ResultSet rsSizes = stmtSizes.executeQuery(sQuery);
         ResultSetMetaData rsmd = rsSizes.getMetaData();
@@ -953,8 +980,8 @@ public class MetaDataFromDb extends MetaDataBase {
         } else throw new IOException("Size of table " + mt.getName() + " could not be determined!");
 
         LOG.debug("Size of table '{}.{}' successfully determined",
-                qiTable.getSchema(),
-                qiTable.getName());
+                  qiTable.getSchema(),
+                  qiTable.getName());
 
         rsSizes.close();
         stmtSizes.close();
@@ -970,10 +997,12 @@ public class MetaDataFromDb extends MetaDataBase {
     private void getUniqueKeys(MetaTable mt) throws IOException, SQLException {
         String sUniqueKeyName = null;
         Map<Integer, String> mapUniqueColumns = new HashMap<>();
-        ResultSet rs = _dmd.getIndexInfo(null, ((BaseDatabaseMetaData) _dmd).toPattern(mt.getParentMetaSchema().getName()), ((BaseDatabaseMetaData) _dmd).toPattern(mt.getName()), true, false);
+        ResultSet rs = _dmd.getIndexInfo(null, ((BaseDatabaseMetaData) _dmd).toPattern(mt.getParentMetaSchema()
+                                                                                         .getName()), ((BaseDatabaseMetaData) _dmd).toPattern(mt.getName()), true, false);
         while (rs.next()) {
             String sTableSchema = rs.getString("TABLE_SCHEM");
-            if (!sTableSchema.equals(mt.getParentMetaSchema().getName()))
+            if (!sTableSchema.equals(mt.getParentMetaSchema()
+                                       .getName()))
                 throw new IOException("Invalid unique key table schema found!");
             String sTableName = rs.getString("TABLE_NAME");
             if (!sTableName.equals(mt.getName())) throw new IOException("Invalid unique key table name found!");
@@ -982,7 +1011,9 @@ public class MetaDataFromDb extends MetaDataBase {
             String sIndexName = rs.getString("INDEX_NAME");
             int iIndexType = rs.getInt("TYPE");
             /* do not list primary key among the candidate keys */
-            boolean bPrimary = (mt.getMetaPrimaryKey() != null) && (mt.getMetaPrimaryKey().getName().equals(sIndexName));
+            boolean bPrimary = (mt.getMetaPrimaryKey() != null) && (mt.getMetaPrimaryKey()
+                                                                      .getName()
+                                                                      .equals(sIndexName));
             if ((iIndexType != DatabaseMetaData.tableIndexStatistic) && (iIndexType != DatabaseMetaData.tableIndexOther) && (!bPrimary)) {
                 MetaUniqueKey muk = mt.getMetaCandidateKey(sIndexName);
                 if (muk == null) {
@@ -996,9 +1027,9 @@ public class MetaDataFromDb extends MetaDataBase {
             }
 
             LOG.debug("Metadata for unique key '{}' (table '{}.{}') loaded",
-                    sUniqueKeyName,
-                    sTableSchema,
-                    sTableName);
+                      sUniqueKeyName,
+                      sTableSchema,
+                      sTableName);
         }
         rs.close();
         addColumns(mt, sUniqueKeyName, mapUniqueColumns);
@@ -1015,13 +1046,15 @@ public class MetaDataFromDb extends MetaDataBase {
         String sForeignKeyName = null;
         Map<Integer, String> mapFkColumns = new HashMap<>();
         Map<String, String> mapPkColumns = new HashMap<>();
-        ResultSet rs = _dmd.getImportedKeys(null, mt.getParentMetaSchema().getName(), mt.getName());
+        ResultSet rs = _dmd.getImportedKeys(null, mt.getParentMetaSchema()
+                                                    .getName(), mt.getName());
         while (rs.next()) {
             String sPkTableSchema = rs.getString("PKTABLE_SCHEM");
             String sPkTableName = rs.getString("PKTABLE_NAME");
             String sPkColumnName = rs.getString("PKCOLUMN_NAME");
             String sFkTableSchema = rs.getString("FKTABLE_SCHEM");
-            if (!sFkTableSchema.equals(mt.getParentMetaSchema().getName()))
+            if (!sFkTableSchema.equals(mt.getParentMetaSchema()
+                                         .getName()))
                 throw new IOException("Invalid foreign key table schema found!");
             String sFkTableName = rs.getString("FKTABLE_NAME");
             if (!sFkTableName.equals(mt.getName())) throw new IOException("Invalid foreign key table name found!");
@@ -1048,9 +1081,9 @@ public class MetaDataFromDb extends MetaDataBase {
             mfk.setUpdateAction(getReferentialAction(iUpdateRule));
 
             LOG.debug("Metadata for foreign key '{}' (table '{}.{}') loaded",
-                    sForeignKeyName,
-                    sPkTableSchema,
-                    sPkTableName);
+                      sForeignKeyName,
+                      sPkTableSchema,
+                      sPkTableName);
         }
         rs.close();
         /* add references to last foreign key */
@@ -1067,13 +1100,16 @@ public class MetaDataFromDb extends MetaDataBase {
     private void getPrimaryKey(MetaTable mt) throws IOException, SQLException {
         String sPkName = "PK_" + mt.getName();
         Map<Integer, String> mapPkColumns = new HashMap<>();
-        ResultSet rs = _dmd.getPrimaryKeys(null, mt.getParentMetaSchema().getName(), mt.getName());
+        ResultSet rs = _dmd.getPrimaryKeys(null, mt.getParentMetaSchema()
+                                                   .getName(), mt.getName());
         while (rs.next()) {
             String sTableSchema = rs.getString("TABLE_SCHEM");
-            if (!sTableSchema.equals(mt.getParentMetaSchema().getName()))
+            if (!sTableSchema.equals(mt.getParentMetaSchema()
+                                       .getName()))
                 throw new IOException("Invalid table schema for primary key found!");
             String sTableName = rs.getString("TABLE_NAME");
-            if (!mt.getName().equals(sTableName)) throw new IOException("Invalid table name for primary key found!");
+            if (!mt.getName()
+                   .equals(sTableName)) throw new IOException("Invalid table name for primary key found!");
             String sColumnName = rs.getString("COLUMN_NAME");
             int iKeySeq = rs.getInt("KEY_SEQ");
             mapPkColumns.put(iKeySeq, sColumnName);
@@ -1082,17 +1118,17 @@ public class MetaDataFromDb extends MetaDataBase {
                 sPkName = s;
             } else {
                 LOG.info("No name for primary key of column '{}.{}.{}' available. Used '{}' instead.",
-                        sTableSchema,
-                        sTableName,
-                        sColumnName,
-                        sPkName);
+                         sTableSchema,
+                         sTableName,
+                         sColumnName,
+                         sPkName);
             }
 
             LOG.debug("Metadata for primary key '{}' (column '{}.{}.{}') loaded",
-                    sPkName,
-                    sTableSchema,
-                    sTableName,
-                    sColumnName);
+                      sPkName,
+                      sTableSchema,
+                      sTableName,
+                      sColumnName);
         }
         rs.close();
         if (mapPkColumns.size() > 0) {
@@ -1113,12 +1149,14 @@ public class MetaDataFromDb extends MetaDataBase {
      */
     private void getColumns(MetaTable mt) throws IOException, SQLException {
         ResultSet rs = _dmd.getColumns(null,
-                                       ((BaseDatabaseMetaData) _dmd).toPattern(mt.getParentMetaSchema().getName()),
+                                       ((BaseDatabaseMetaData) _dmd).toPattern(mt.getParentMetaSchema()
+                                                                                 .getName()),
                                        ((BaseDatabaseMetaData) _dmd).toPattern(mt.getName()),
                                        "%");
         while (rs.next()) {
             String sTableSchema = rs.getString("TABLE_SCHEM");
-            if (!sTableSchema.equals(mt.getParentMetaSchema().getName()))
+            if (!sTableSchema.equals(mt.getParentMetaSchema()
+                                       .getName()))
                 throw new IOException("Invalid table schema for column found!");
             String sTableName = rs.getString("TABLE_NAME");
             if (!sTableName.equals(mt.getName())) throw new IOException("Invalid table name for column found!");
@@ -1185,10 +1223,13 @@ public class MetaDataFromDb extends MetaDataBase {
             String sTableSchema = rs.getString("TABLE_SCHEM");
             String sTableName = rs.getString("TABLE_NAME");
             String sTableType = rs.getString("TABLE_TYPE");
-            if (!Arrays.asList(asTypes).contains(sTableType)) throw new IOException("Invalid table type found!");
+            if (!Arrays.asList(asTypes)
+                       .contains(sTableType)) throw new IOException("Invalid table type found!");
             String sRemarks = rs.getString("REMARKS");
-            Schema schema = _md.getArchive().getSchema(sTableSchema);
-            if (schema == null) schema = _md.getArchive().createSchema(sTableSchema);
+            Schema schema = _md.getArchive()
+                               .getSchema(sTableSchema);
+            if (schema == null) schema = _md.getArchive()
+                                            .createSchema(sTableSchema);
             Table table = schema.getTable(sTableName);
             if (table == null) table = schema.createTable(sTableName);
             MetaTable mt = table.getMetaTable();
@@ -1252,10 +1293,12 @@ public class MetaDataFromDb extends MetaDataBase {
             Progress progress
     ) throws IOException, SQLException {
         LOG.info("Start meta data download to archive {} (view-as-tables: {}, max-lob-needed: {}, schema: {})",
-                this._md.getArchive().getFile().getAbsoluteFile(),
-                bViewsAsTables,
-                bMaxLobNeeded,
-                schema);
+                 this._md.getArchive()
+                         .getFile()
+                         .getAbsoluteFile(),
+                 bViewsAsTables,
+                 bMaxLobNeeded,
+                 schema);
 
         System.out.println("Meta Data");
         _progress = progress;

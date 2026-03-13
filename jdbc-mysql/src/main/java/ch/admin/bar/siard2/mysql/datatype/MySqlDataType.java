@@ -17,93 +17,111 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.datatype.PredefinedType;
 
 /*====================================================================*/
+
 /** MySqlDataType implements the type translation from ISO SQL to MySQL
  * for complex types.
  * @author Simon Jutz
  */
 public class MySqlDataType extends DataType {
 
-	/*------------------------------------------------------------------*/
-	/** constructor with factory only to be called by factory.
-	 * @param sf factory.
-	 */
-	public MySqlDataType(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
+    /*------------------------------------------------------------------*/
 
-	/*------------------------------------------------------------------*/
-	/**
-	 * format the STRUCT type for MySql (serialized as a BLOB)
-	 */
-	@Override
-	public String formatStructType() {
-	    PredefinedType pt = getSqlFactory().newPredefinedType();
-	    pt.initBlobType(PredefinedType.iUNDEFINED, null);
-	    return pt.format();
-	} /* formatStructType */
+    /** constructor with factory only to be called by factory.
+     * @param sf factory.
+     */
+    public MySqlDataType(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
 
-	/*------------------------------------------------------------------*/
-	/**
-	 * format the ROW type for MySql (serialized as a BLOB)
-	 */
-	@Override
-	public String formatRowType() {
-	    PredefinedType pt = getSqlFactory().newPredefinedType();
-	    pt.initBlobType(PredefinedType.iUNDEFINED, null);
-	    return pt.format();
-	} /* formatStructType */
+    /*------------------------------------------------------------------*/
 
-	/*------------------------------------------------------------------*/
-	/**
-	 * format the REF type for MySql (serialized as a BLOB)
-	 */
-	@Override
-	public String formatRefType() {
-	    PredefinedType pt = getSqlFactory().newPredefinedType();
-	    pt.initBlobType(PredefinedType.iUNDEFINED, null);
-	    return pt.format();
-	} /* formatStructType */
+    /**
+     * format the STRUCT type for MySql (serialized as a BLOB)
+     */
+    @Override
+    public String formatStructType() {
+        PredefinedType pt = getSqlFactory().newPredefinedType();
+        pt.initBlobType(PredefinedType.iUNDEFINED, null);
+        return pt.format();
+    } /* formatStructType */
 
-	/*------------------------------------------------------------------*/
-	/**
-	 * format the ARRAY type for MySql (serialized as a BLOB)
-	 */
-	@Override
-	public String formatArrayType() {
-	    PredefinedType pt = getSqlFactory().newPredefinedType();
-	    pt.initBlobType(PredefinedType.iUNDEFINED, null);
-	    return pt.format();
-	} /* formatStructType */
+    /*------------------------------------------------------------------*/
 
-	/*------------------------------------------------------------------*/
-	/**
-	 * format the MULTISET type for MySql (serialized as a BLOB)
-	 */
-	@Override
-	public String formatMultisetType() {
-	    PredefinedType pt = getSqlFactory().newPredefinedType();
-	    pt.initBlobType(PredefinedType.iUNDEFINED, null);
-	    return pt.format();
-	} /* formatStructType */
+    /**
+     * format the ROW type for MySql (serialized as a BLOB)
+     */
+    @Override
+    public String formatRowType() {
+        PredefinedType pt = getSqlFactory().newPredefinedType();
+        pt.initBlobType(PredefinedType.iUNDEFINED, null);
+        return pt.format();
+    } /* formatStructType */
 
-	/*------------------------------------------------------------------*/
-	/** format the data type for MySql.
-	 * @return the SQL string corresponding to the fields of the data type.
-	 */
-	@Override
-	public String format()
-	{
-		String sDataType = null;
-		switch (getType())
-		{
-		case PRE: sDataType = getPredefinedType().format(); break;
-		case STRUCT: sDataType = formatStructType(); break;
-		case ROW: sDataType = formatRowType(); break;
-		case REF: sDataType = formatRefType(); break;
-		case ARRAY: sDataType = formatArrayType(); break;
-		case MULTISET: sDataType = formatMultisetType(); break;
-		}
-		return sDataType;
-	} /* format */
+    /*------------------------------------------------------------------*/
+
+    /**
+     * format the REF type for MySql (serialized as a BLOB)
+     */
+    @Override
+    public String formatRefType() {
+        PredefinedType pt = getSqlFactory().newPredefinedType();
+        pt.initBlobType(PredefinedType.iUNDEFINED, null);
+        return pt.format();
+    } /* formatStructType */
+
+    /*------------------------------------------------------------------*/
+
+    /**
+     * format the ARRAY type for MySql (serialized as a BLOB)
+     */
+    @Override
+    public String formatArrayType() {
+        PredefinedType pt = getSqlFactory().newPredefinedType();
+        pt.initBlobType(PredefinedType.iUNDEFINED, null);
+        return pt.format();
+    } /* formatStructType */
+
+    /*------------------------------------------------------------------*/
+
+    /**
+     * format the MULTISET type for MySql (serialized as a BLOB)
+     */
+    @Override
+    public String formatMultisetType() {
+        PredefinedType pt = getSqlFactory().newPredefinedType();
+        pt.initBlobType(PredefinedType.iUNDEFINED, null);
+        return pt.format();
+    } /* formatStructType */
+
+    /*------------------------------------------------------------------*/
+
+    /** format the data type for MySql.
+     * @return the SQL string corresponding to the fields of the data type.
+     */
+    @Override
+    public String format() {
+        String sDataType = null;
+        switch (getType()) {
+            case PRE:
+                sDataType = getPredefinedType().format();
+                break;
+            case STRUCT:
+                sDataType = formatStructType();
+                break;
+            case ROW:
+                sDataType = formatRowType();
+                break;
+            case REF:
+                sDataType = formatRefType();
+                break;
+            case ARRAY:
+                sDataType = formatArrayType();
+                break;
+            case MULTISET:
+                sDataType = formatMultisetType();
+                break;
+        }
+        return sDataType;
+    } /* format */
 
 } /* class MySqlDataType */

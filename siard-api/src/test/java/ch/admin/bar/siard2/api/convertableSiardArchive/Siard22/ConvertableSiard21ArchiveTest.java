@@ -59,7 +59,7 @@ public class ConvertableSiard21ArchiveTest {
         archive.setProducerApplication(PRODUCER_APPLICATION);
         archive.setArchivalDate(ARCHIVAL_DATE);
         archive.getMessageDigest()
-                .add(createMessageDigests());
+               .add(createMessageDigests());
         archive.setClientMachine(CLIENT_MACHINE);
         archive.setDatabaseProduct(DATABASE_PRODUCT);
         archive.setConnection(CONNECTION);
@@ -103,7 +103,7 @@ public class ConvertableSiard21ArchiveTest {
     private void assertPriviliges(ch.admin.bar.siard2.api.generated.PrivilegesType privileges) {
         assertNotNull(privileges);
         ch.admin.bar.siard2.api.generated.PrivilegeType privilige = privileges.getPrivilege()
-                .get(0);
+                                                                              .get(0);
         assertEquals(PRIVILIGE_TYPE, privilige.getType());
         assertEquals(PRIVILIGE_DESCRIPTION, privilige.getDescription());
         assertEquals(PRIVILIGE_GRANTEE, privilige.getGrantee());
@@ -123,7 +123,7 @@ public class ConvertableSiard21ArchiveTest {
         privilige.setOption(PRIVILIGE_OPTION);
 
         privilegesType.getPrivilege()
-                .add(privilige);
+                      .add(privilige);
         return privilegesType;
     }
 
@@ -131,9 +131,9 @@ public class ConvertableSiard21ArchiveTest {
     private void assertUsers(ch.admin.bar.siard2.api.generated.UsersType users) {
         assertNotNull(users);
         assertEquals(1, users.getUser()
-                .size());
+                             .size());
         ch.admin.bar.siard2.api.generated.UserType user = users.getUser()
-                .get(0);
+                                                               .get(0);
         assertEquals(USER_NAME, user.getName());
         assertEquals(USER_DESCRIPTION, user.getDescription());
     }
@@ -144,7 +144,7 @@ public class ConvertableSiard21ArchiveTest {
         user.setName(USER_NAME);
         user.setDescription(USER_DESCRIPTION);
         usersType.getUser()
-                .add(user);
+                 .add(user);
         return usersType;
     }
 
@@ -155,14 +155,14 @@ public class ConvertableSiard21ArchiveTest {
         role.setDescription(ROLE_DESCRIPTION);
         role.setAdmin(ROLE_ADMIN);
         roles.getRole()
-                .add(role);
+             .add(role);
         return roles;
     }
 
     private void assertRoles(ch.admin.bar.siard2.api.generated.RolesType roles) {
         assertNotNull(roles);
         ch.admin.bar.siard2.api.generated.RoleType role = roles.getRole()
-                .get(0);
+                                                               .get(0);
         assertEquals(ROLE_NAME, role.getName());
         assertEquals(ROLE_DESCRIPTION, role.getDescription());
         assertEquals(ROLE_ADMIN, role.getAdmin());
@@ -171,7 +171,7 @@ public class ConvertableSiard21ArchiveTest {
 
     private void assertMessageDigests(SiardArchive result) {
         ch.admin.bar.siard2.api.generated.MessageDigestType actualMessageDigest = result.getMessageDigest()
-                .get(0);
+                                                                                        .get(0);
         assertEquals(MESSAGE_DIGEST, actualMessageDigest.getDigest());
         assertEquals(ch.admin.bar.siard2.api.generated.DigestTypeType.SHA_256, actualMessageDigest.getDigestType());
     }
@@ -186,9 +186,9 @@ public class ConvertableSiard21ArchiveTest {
     private void assertSchemas(ch.admin.bar.siard2.api.generated.SchemasType schemas) {
         assertNotNull(schemas);
         assertEquals(schemas.getSchema()
-                .size(), 1);
+                            .size(), 1);
         ch.admin.bar.siard2.api.generated.SchemaType schema = schemas.getSchema()
-                .get(0);
+                                                                     .get(0);
         assertNotNull(schema);
         assertEquals(schema.getName(), SCHEMA_NAME);
         assertEquals(schema.getDescription(), SCHEMA_DESCRIPTION);
@@ -210,16 +210,16 @@ public class ConvertableSiard21ArchiveTest {
         schema.setViews(createViews());
         schema.setTables(createTables());
         schemas.getSchema()
-                .add(schema);
+               .add(schema);
         return schemas;
     }
 
     private void assertViews(ch.admin.bar.siard2.api.generated.ViewsType views) {
         assertNotNull(views);
         assertEquals(1, views.getView()
-                .size());
+                             .size());
         ch.admin.bar.siard2.api.generated.ViewType view = views.getView()
-                .get(0);
+                                                               .get(0);
 
         assertEquals(VIEW_NAME, view.getName());
         assertEquals(VIEW_DESCRIPTION, view.getDescription());
@@ -241,16 +241,16 @@ public class ConvertableSiard21ArchiveTest {
 
         view.setColumns(createColumns());
         views.getView()
-                .add(view);
+             .add(view);
         return views;
     }
 
     private void assertViewColumns(ch.admin.bar.siard2.api.generated.ColumnsType columns) {
         assertNotNull(columns);
         assertEquals(1, columns.getColumn()
-                .size());
+                               .size());
         ch.admin.bar.siard2.api.generated.ColumnType column = columns.getColumn()
-                .get(0);
+                                                                     .get(0);
         assertEquals(COLUMN_NAME, column.getName());
         assertEquals(COLUMN_DESCRIPTION, column.getDescription());
         assertEquals(COLUMN_DEFAULT_VALUE, column.getDefaultValue());
@@ -282,16 +282,16 @@ public class ConvertableSiard21ArchiveTest {
         column.setNullable(COLUMN_IS_NULLABLE);
         column.setFields(createFields());
         columns.getColumn()
-                .add(column);
+               .add(column);
         return columns;
     }
 
     private void assertFields(ch.admin.bar.siard2.api.generated.FieldsType fields) {
         assertNotNull(fields);
         assertEquals(1, fields.getField()
-                .size());
+                              .size());
         ch.admin.bar.siard2.api.generated.FieldType field = fields.getField()
-                .get(0);
+                                                                  .get(0);
         assertEquals(FIELD_NAME, field.getName());
         assertEquals(FIELD_DESCRIPTION, field.getDescription());
         assertEquals(FIELD_LOB_FOLDER, field.getLobFolder());
@@ -310,16 +310,16 @@ public class ConvertableSiard21ArchiveTest {
         field.setMimeType(FIELD_MIME_TYPE);
         field.setFields(createSubFields());
         fields.getField()
-                .add(field);
+              .add(field);
         return fields;
     }
 
     private void assertSubFields(ch.admin.bar.siard2.api.generated.FieldsType fields) {
         assertNotNull(fields);
         assertEquals(1, fields.getField()
-                .size());
+                              .size());
         ch.admin.bar.siard2.api.generated.FieldType field = fields.getField()
-                .get(0);
+                                                                  .get(0);
         assertEquals(SUB_FIELD_NAME, field.getName());
         assertEquals(SUB_FIELD_DESCRIPTION, field.getDescription());
         assertEquals(SUB_FIELD_LOB_FOLDER, field.getLobFolder());
@@ -337,16 +337,16 @@ public class ConvertableSiard21ArchiveTest {
         subField.setLobFolder(SUB_FIELD_LOB_FOLDER);
         subField.setFields(null); // stop nesting of fields at this point - the schema allows further nesting, but two levels should be ok for this test
         subFields.getField()
-                .add(subField);
+                 .add(subField);
         return subFields;
     }
 
     private void assertTables(ch.admin.bar.siard2.api.generated.TablesType tables) {
         assertNotNull(tables);
         assertEquals(1, tables.getTable()
-                .size());
+                              .size());
         ch.admin.bar.siard2.api.generated.TableType table = tables.getTable()
-                .get(0);
+                                                                  .get(0);
         assertEquals(TABLE_NAME, table.getName());
         assertEquals(TABLE_DESCRIPTION, table.getDescription());
         assertEquals(TABLE_FOLDER, table.getFolder());
@@ -362,9 +362,9 @@ public class ConvertableSiard21ArchiveTest {
     private void assertTableColumns(ch.admin.bar.siard2.api.generated.ColumnsType columns) {
         assertNotNull(columns);
         assertEquals(1, columns.getColumn()
-                .size());
+                               .size());
         ch.admin.bar.siard2.api.generated.ColumnType column = columns.getColumn()
-                .get(0);
+                                                                     .get(0);
         assertEquals(TABLE_COLUMN_NAME, column.getName());
         assertEquals(TABLE_COLUMN_DESCRIPTION, column.getDescription());
         assertEquals(TABLE_COLUMN_DEFAULT_VALUE, column.getDefaultValue());
@@ -395,7 +395,7 @@ public class ConvertableSiard21ArchiveTest {
         column.setNullable(TABLE_COLUMN_IS_NULLABLE);
         column.setFields(new FieldsType());
         columnsType.getColumn()
-                .add(column);
+                   .add(column);
         return columnsType;
     }
 
@@ -416,14 +416,14 @@ public class ConvertableSiard21ArchiveTest {
         table.setForeignKeys(createForeignKeysType());
         table.setTriggers(createTriggers());
         tables.getTable()
-                .add(table);
+              .add(table);
         return tables;
     }
 
     private void assertTriggers(ch.admin.bar.siard2.api.generated.TriggersType triggers) {
         assertNotNull(triggers);
         ch.admin.bar.siard2.api.generated.TriggerType trigger = triggers.getTrigger()
-                .get(0);
+                                                                        .get(0);
 
         assertEquals(TRIGGER_NAME, trigger.getName());
         assertEquals(TRIGGER_DESCRIPTION, trigger.getDescription());
@@ -450,9 +450,9 @@ public class ConvertableSiard21ArchiveTest {
     private void assertForeignKeys(ch.admin.bar.siard2.api.generated.ForeignKeysType foreignKeys) {
         assertNotNull(foreignKeys);
         assertEquals(1, foreignKeys.getForeignKey()
-                .size());
+                                   .size());
         ch.admin.bar.siard2.api.generated.ForeignKeyType foreignKey = foreignKeys.getForeignKey()
-                .get(0);
+                                                                                 .get(0);
 
         assertEquals(FOREIGN_KEY_NAME, foreignKey.getName());
         assertEquals(FOREIGN_KEY_DESCRIPTION, foreignKey.getDescription());
@@ -475,9 +475,9 @@ public class ConvertableSiard21ArchiveTest {
         foreignKey.setReferencedTable(FOREIGN_KEY_REFERENCED_TABLE);
         foreignKey.setReferencedSchema(FOREIGN_KEY_REFERENCED_SCHEMA);
         foreignKey.getReference()
-                .add(createReference());
+                  .add(createReference());
         foreignKeys.getForeignKey()
-                .add(foreignKey);
+                   .add(foreignKey);
         return foreignKeys;
     }
 
@@ -499,9 +499,9 @@ public class ConvertableSiard21ArchiveTest {
     private void assertCheckConstraints(ch.admin.bar.siard2.api.generated.CheckConstraintsType checkConstraints) {
         assertNotNull(checkConstraints);
         assertEquals(1, checkConstraints.getCheckConstraint()
-                .size());
+                                        .size());
         ch.admin.bar.siard2.api.generated.CheckConstraintType checkConstraint = checkConstraints.getCheckConstraint()
-                .get(0);
+                                                                                                .get(0);
 
         assertEquals(CHECK_CONSTRAINT_NAME, checkConstraint.getName());
         assertEquals(CHECK_CONSTRAINT_DESCRIPTION, checkConstraint.getDescription());
@@ -516,16 +516,16 @@ public class ConvertableSiard21ArchiveTest {
         checkConstraint.setDescription(CHECK_CONSTRAINT_DESCRIPTION);
         checkConstraint.setCondition(CHECK_CONSTRAINT_CONDITION);
         checkConstraintsType.getCheckConstraint()
-                .add(checkConstraint);
+                            .add(checkConstraint);
         return checkConstraintsType;
     }
 
     private void assertCandidateKeys(ch.admin.bar.siard2.api.generated.CandidateKeysType candidateKeys) {
         assertNotNull(candidateKeys);
         assertEquals(1, candidateKeys.getCandidateKey()
-                .size());
+                                     .size());
         ch.admin.bar.siard2.api.generated.UniqueKeyType candidateKey = candidateKeys.getCandidateKey()
-                .get(0);
+                                                                                    .get(0);
         assertEquals(CANDIDATE_KEY_NAME, candidateKey.getName());
         assertEquals(CANDIDATE_KEY_DESCRIPTION, candidateKey.getDescription());
         assertThat(candidateKey.getColumn(), hasItems(CANDIDATE_KEY_COLUMN_1, CANDIDATE_KEY_COLUMN_2));
@@ -538,9 +538,9 @@ public class ConvertableSiard21ArchiveTest {
         candidateKey.setName(CANDIDATE_KEY_NAME);
         candidateKey.setDescription(CANDIDATE_KEY_DESCRIPTION);
         candidateKey.getColumn()
-                .addAll(Arrays.asList(CANDIDATE_KEY_COLUMN_1, CANDIDATE_KEY_COLUMN_2));
+                    .addAll(Arrays.asList(CANDIDATE_KEY_COLUMN_1, CANDIDATE_KEY_COLUMN_2));
         candidateKeysType.getCandidateKey()
-                .add(candidateKey);
+                         .add(candidateKey);
         return candidateKeysType;
     }
 
@@ -548,9 +548,9 @@ public class ConvertableSiard21ArchiveTest {
     private void assertRoutines(ch.admin.bar.siard2.api.generated.RoutinesType routines) {
         assertNotNull(routines);
         assertEquals(1, routines.getRoutine()
-                .size());
+                                .size());
         ch.admin.bar.siard2.api.generated.RoutineType routine = routines.getRoutine()
-                .get(0);
+                                                                        .get(0);
         assertEquals(ROUTINE_NAME, routine.getName());
         assertEquals(ROUTINE_DESCRIPTION, routine.getDescription());
         assertEquals(ROUTINE_RETURN_TYPE, routine.getReturnType());
@@ -580,9 +580,9 @@ public class ConvertableSiard21ArchiveTest {
     private void assertParameters(ch.admin.bar.siard2.api.generated.ParametersType parameters) {
         assertNotNull(parameters);
         assertEquals(1, parameters.getParameter()
-                .size());
+                                  .size());
         ch.admin.bar.siard2.api.generated.ParameterType parameter = parameters.getParameter()
-                .get(0);
+                                                                              .get(0);
         assertEquals(PARAMETER_NAME, parameter.getName());
         assertEquals(PARAMETER_DESCRIPTION, parameter.getDescription());
         assertEquals(PARAMETER_CARDINALITY, parameter.getCardinality());
@@ -603,7 +603,7 @@ public class ConvertableSiard21ArchiveTest {
         parameter.setTypeOriginal(PARAMETER_ORIGINAL);
         parameter.setTypeSchema(PARAMETER_SCHEMA);
         parameters.getParameter()
-                .add(parameter);
+                  .add(parameter);
         return parameters;
     }
 
@@ -611,9 +611,9 @@ public class ConvertableSiard21ArchiveTest {
         assertNotNull(types);
         assertNotNull(types.getType());
         assertEquals(1, types.getType()
-                .size());
+                             .size());
         ch.admin.bar.siard2.api.generated.TypeType type = types.getType()
-                .get(0);
+                                                               .get(0);
         assertEquals(TYPE_NAME, type.getName());
         assertEquals(TYPE_DESCRIPTION, type.getDescription());
         assertEquals(TYPE_BASE, type.getBase());
@@ -638,16 +638,16 @@ public class ConvertableSiard21ArchiveTest {
         type.setCategory(TYPE_CATEGORY);
         type.setAttributes(createAttributes());
         types.getType()
-                .add(type);
+             .add(type);
         return types;
     }
 
     private void assertAttributes(ch.admin.bar.siard2.api.generated.AttributesType attributes) {
         assertNotNull(attributes);
         assertEquals(1, attributes.getAttribute()
-                .size());
+                                  .size());
         ch.admin.bar.siard2.api.generated.AttributeType attribute = attributes.getAttribute()
-                .get(0);
+                                                                              .get(0);
         assertEquals(ATTRIBUTE_NAME, attribute.getName());
         assertEquals(ATTRIBUTE_DESCRIPTION, attribute.getDescription());
         assertEquals(ATTRIBUTE_TYPE, attribute.getType());
@@ -672,13 +672,14 @@ public class ConvertableSiard21ArchiveTest {
         attribute.setNullable(ATTRIBUTE_IS_NULLABLE);
         attribute.setTypeOriginal(ATTRIBUTE_TYPE_ORIGINAL);
         attributes.getAttribute()
-                .add(attribute);
+                  .add(attribute);
         return attributes;
     }
 
     private static XMLGregorianCalendar xmlCalendar() {
         try {
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar("2020-03-16");
+            return DatatypeFactory.newInstance()
+                                  .newXMLGregorianCalendar("2020-03-16");
         } catch (DatatypeConfigurationException e) {
             throw new ExceptionInInitializerError(e);
         }

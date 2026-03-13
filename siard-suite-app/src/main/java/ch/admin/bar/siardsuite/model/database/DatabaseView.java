@@ -17,9 +17,9 @@ public class DatabaseView {
         this.metaView = metaView;
 
         this.columns = new ListAssembler<>(metaView::getMetaColumns, metaView::getMetaColumn).assemble()
-                .stream()
-                .map(DatabaseColumn::new)
-                .collect(Collectors.toList());
+                                                                                             .stream()
+                                                                                             .map(DatabaseColumn::new)
+                                                                                             .collect(Collectors.toList());
     }
 
     public String name() {

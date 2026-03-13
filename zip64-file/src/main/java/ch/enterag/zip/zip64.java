@@ -10,14 +10,20 @@ Created    : 14.04.2010, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.zip;
 
+import ch.enterag.utils.SU;
+import ch.enterag.utils.cli.Arguments;
+import ch.enterag.utils.logging.IndentLogger;
+import ch.enterag.utils.zip.EntryInputStream;
+import ch.enterag.utils.zip.EntryOutputStream;
+import ch.enterag.utils.zip.FileEntry;
+import ch.enterag.utils.zip.Zip64File;
+
 import java.io.*;
 import java.text.*;
-import java.util.*;
-
-import ch.enterag.utils.*;
-import ch.enterag.utils.cli.*;
-import ch.enterag.utils.zip.*;
-import ch.enterag.utils.logging.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * zip64 implements the command-line utility.
@@ -171,7 +177,8 @@ public class zip64 {
      * @param e exception.
      */
     private void handleException(Exception e) {
-        String sMessage = e.getClass().getName() + ": " + e.getMessage();
+        String sMessage = e.getClass()
+                           .getName() + ": " + e.getMessage();
         System.err.println(sMessage);
         m_il.warning(sMessage);
     }
@@ -364,8 +371,12 @@ public class zip64 {
         String[] asEntry = fileFolder.list();
         if (asEntry != null) {
             for (String s : asEntry) {
-                File fileEntry = new File(fileFolder.getAbsolutePath().substring(0, fileFolder.getAbsolutePath().length() - 1) + s);
-                String sRelative = fileEntry.getAbsolutePath().substring(fileRoot.getAbsolutePath().length() - 1);
+                File fileEntry = new File(fileFolder.getAbsolutePath()
+                                                    .substring(0, fileFolder.getAbsolutePath()
+                                                                            .length() - 1) + s);
+                String sRelative = fileEntry.getAbsolutePath()
+                                            .substring(fileRoot.getAbsolutePath()
+                                                               .length() - 1);
                 if (File.separatorChar != '/')
                     sRelative = sRelative.replace(File.separatorChar, '/');
                 if (fileEntry.isDirectory()) {
@@ -421,7 +432,9 @@ public class zip64 {
         if (sFolderEntry.endsWith("/")) {
             FileEntry feFolder = zf.getFileEntry(sFolderEntry);
             if (feFolder == null) {
-                String sFolderName = m_fileZipRoot.getAbsolutePath().substring(0, m_fileZipRoot.getAbsolutePath().length() - 1) + sFolderEntry.replace('/', File.separatorChar);
+                String sFolderName = m_fileZipRoot.getAbsolutePath()
+                                                  .substring(0, m_fileZipRoot.getAbsolutePath()
+                                                                             .length() - 1) + sFolderEntry.replace('/', File.separatorChar);
                 File fileFolder = new File(sFolderName);
                 if (fileFolder.isDirectory()) {
                     EntryOutputStream eos = zf.openEntryOutputStream(sFolderEntry, FileEntry.iMETHOD_STORED, new Date(fileFolder.lastModified()));
@@ -451,7 +464,9 @@ public class zip64 {
         if (!sFileEntry.endsWith("/")) {
             FileEntry feFile = zf.getFileEntry(sFileEntry);
             if (feFile == null) {
-                String sFileName = m_fileZipRoot.getAbsolutePath().substring(0, m_fileZipRoot.getAbsolutePath().length() - 1) + sFileEntry.replace('/', File.separatorChar);
+                String sFileName = m_fileZipRoot.getAbsolutePath()
+                                                .substring(0, m_fileZipRoot.getAbsolutePath()
+                                                                           .length() - 1) + sFileEntry.replace('/', File.separatorChar);
                 File fileInput = new File(sFileName);
                 if (fileInput.isFile()) {
                     FileInputStream fis = null;
@@ -488,7 +503,8 @@ public class zip64 {
      */
     private void createParentFolders(Zip64File zf, String sEntryName)
             throws FileNotFoundException, IOException {
-        int iParent = sEntryName.substring(0, sEntryName.length() - 1).lastIndexOf('/');
+        int iParent = sEntryName.substring(0, sEntryName.length() - 1)
+                                .lastIndexOf('/');
         if (iParent >= 0) {
             String sEntryParent = sEntryName.substring(0, iParent + 1);
             FileEntry feParent = zf.getFileEntry(sEntryParent);
@@ -572,10 +588,12 @@ public class zip64 {
             sFileName = sFileName.substring(0, sFileName.length() - 1);
         if (sFileName.endsWith(File.separator))
             sFileName = sFileName.substring(0, sFileName.length() - 1);
-        sFileName = sFileName + File.separator + fe.getName().replace('/', File.separatorChar);
+        sFileName = sFileName + File.separator + fe.getName()
+                                                   .replace('/', File.separatorChar);
         File fileOutput = new File(sFileName);
         /* create all missing folders */
-        fileOutput.getParentFile().mkdirs();
+        fileOutput.getParentFile()
+                  .mkdirs();
         if (fe.isDirectory())
             bExtracted = fileOutput.mkdir();
         else {
@@ -612,7 +630,8 @@ public class zip64 {
             sFileName = sFileName.substring(0, sFileName.length() - 1);
         if (sFileName.endsWith(File.separator))
             sFileName = sFileName.substring(0, sFileName.length() - 1);
-        sFileName = sFileName + File.separator + fe.getName().replace('/', File.separatorChar);
+        sFileName = sFileName + File.separator + fe.getName()
+                                                   .replace('/', File.separatorChar);
         File fileOutput = new File(sFileName);
         Date dateFe = fe.getTimestamp();
         bStamped = fileOutput.setLastModified(dateFe.getTime());

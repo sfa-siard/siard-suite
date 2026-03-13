@@ -13,46 +13,56 @@ Created    : 20.06.2016, Simon Jutz
 ======================================================================*/
 package ch.admin.bar.siard2.oracle.ddl;
 
-import ch.enterag.sqlparser.*;
-import ch.enterag.sqlparser.ddl.*;
+import ch.enterag.sqlparser.K;
+import ch.enterag.sqlparser.SqlFactory;
+import ch.enterag.sqlparser.SqlLiterals;
+import ch.enterag.sqlparser.ddl.CreateSchemaStatement;
 
 /*====================================================================*/
+
 /** OracleCreateSchemaStatement implements the formatting of CREATE
  * SCHEMA statements
  * @author Simon Jutz
  */
 public class OracleCreateSchemaStatement
-	extends CreateSchemaStatement {
+        extends CreateSchemaStatement {
 
-  private static final String _sSCHEMA_PASSWORD = "SCHEMAPWD";
-  public static String getSchemaPassword() { return _sSCHEMA_PASSWORD; };
-  private static final String _sDEFAULT_PERMANENT_TABLESPACE = "USERS";
-  
-  /*------------------------------------------------------------------*/
-	/** * format the create schema statement as a create user statement
-	 * not granting anything to the user and using the standard password
-	 * SCHEMAPWD. 
-	 * Default tablespace USERS appears to be fairly safe:
-	 * select * from database_properties where property_name like 'DEFAULT%TABLESPACE';
-	 * @return the SQL string corresponding to a create schema statement
-	 */
-  @Override
-  public String format() {
-    String sStatement = null; 
-    sStatement = K.CREATE.getKeyword() + sSP + K.USER.getKeyword() + 
-    		sSP + SqlLiterals.quoteId(getSchemaName().getSchema()) + 
-    		sSP + "IDENTIFIED" + sSP + K.BY.getKeyword() + sSP + _sSCHEMA_PASSWORD +
-    		sSP + "QUOTA" + sSP + "UNLIMITED" + 
-    		sSP + K.ON.getKeyword() + sSP + _sDEFAULT_PERMANENT_TABLESPACE;
-    return sStatement;
-  } /* format */
+    private static final String _sSCHEMA_PASSWORD = "SCHEMAPWD";
 
-  /*------------------------------------------------------------------*/
-  /** constructor with factory only to be called by factory.
-   * @param sf factory.
-   */
-	public OracleCreateSchemaStatement(SqlFactory sf) {
-		super(sf);
-	} /* constructor */
-	
+    public static String getSchemaPassword() {
+        return _sSCHEMA_PASSWORD;
+    }
+
+    ;
+    private static final String _sDEFAULT_PERMANENT_TABLESPACE = "USERS";
+
+    /*------------------------------------------------------------------*/
+
+    /** * format the create schema statement as a create user statement
+     * not granting anything to the user and using the standard password
+     * SCHEMAPWD.
+     * Default tablespace USERS appears to be fairly safe:
+     * select * from database_properties where property_name like 'DEFAULT%TABLESPACE';
+     * @return the SQL string corresponding to a create schema statement
+     */
+    @Override
+    public String format() {
+        String sStatement = null;
+        sStatement = K.CREATE.getKeyword() + sSP + K.USER.getKeyword() +
+                sSP + SqlLiterals.quoteId(getSchemaName().getSchema()) +
+                sSP + "IDENTIFIED" + sSP + K.BY.getKeyword() + sSP + _sSCHEMA_PASSWORD +
+                sSP + "QUOTA" + sSP + "UNLIMITED" +
+                sSP + K.ON.getKeyword() + sSP + _sDEFAULT_PERMANENT_TABLESPACE;
+        return sStatement;
+    } /* format */
+
+    /*------------------------------------------------------------------*/
+
+    /** constructor with factory only to be called by factory.
+     * @param sf factory.
+     */
+    public OracleCreateSchemaStatement(SqlFactory sf) {
+        super(sf);
+    } /* constructor */
+
 } /* class OracleCreateStatement */

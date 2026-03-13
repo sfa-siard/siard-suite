@@ -2,11 +2,7 @@ package ch.admin.bar.siard2.cmd.utils.siard.utils;
 
 import ch.admin.bar.siard2.cmd.utils.siard.model.SiardArchive;
 import ch.admin.bar.siard2.cmd.utils.siard.model.header.Metadata;
-import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
-import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
-import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedForeignKeyId;
-import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedTableId;
-import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedTypeId;
+import ch.admin.bar.siard2.cmd.utils.siard.model.utils.*;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -17,9 +13,12 @@ public class MetadataExplorer {
     private final SiardArchive siardArchive;
 
     public Optional<Metadata.Schema> tryFindBySchemaId(final Id<Metadata.Schema> id) {
-        return siardArchive.getSiardMetadata().getSchemas().stream()
-                .filter(schema -> schema.getName().equals(id))
-                .findAny();
+        return siardArchive.getSiardMetadata()
+                           .getSchemas()
+                           .stream()
+                           .filter(schema -> schema.getName()
+                                                   .equals(id))
+                           .findAny();
     }
 
     public Metadata.Table findByTableId(final QualifiedTableId qualifiedTableId) {
@@ -29,9 +28,11 @@ public class MetadataExplorer {
 
     public Optional<Metadata.Table> tryFindByTableId(final QualifiedTableId qualifiedId) {
         return tryFindBySchemaId(qualifiedId.getSchemaId())
-                .flatMap(schema -> schema.getTables().stream()
-                        .filter(table -> table.getName().equals(qualifiedId.getTableId()))
-                        .findAny());
+                .flatMap(schema -> schema.getTables()
+                                         .stream()
+                                         .filter(table -> table.getName()
+                                                               .equals(qualifiedId.getTableId()))
+                                         .findAny());
     }
 
     public Metadata.Column findByColumnId(final QualifiedColumnId qualifiedColumnId) {
@@ -41,9 +42,11 @@ public class MetadataExplorer {
 
     public Optional<Metadata.Column> tryFindByColumnId(final QualifiedColumnId qualifiedColumnId) {
         return tryFindByTableId(qualifiedColumnId.getQualifiedTableId())
-                .flatMap(table -> table.getColumns().stream()
-                        .filter(column -> column.getName().equals(qualifiedColumnId.getColumnId()))
-                        .findAny());
+                .flatMap(table -> table.getColumns()
+                                       .stream()
+                                       .filter(column -> column.getName()
+                                                               .equals(qualifiedColumnId.getColumnId()))
+                                       .findAny());
     }
 
     public Metadata.Type findByTypeId(final QualifiedTypeId qualifiedId) {
@@ -53,9 +56,11 @@ public class MetadataExplorer {
 
     public Optional<Metadata.Type> tryFindByTypeId(final QualifiedTypeId qualifiedId) {
         return tryFindBySchemaId(qualifiedId.getSchemaId())
-                .flatMap(schema -> schema.getTypes().stream()
-                        .filter(type -> type.getName().equals(qualifiedId.getTypeId()))
-                        .findAny());
+                .flatMap(schema -> schema.getTypes()
+                                         .stream()
+                                         .filter(type -> type.getName()
+                                                             .equals(qualifiedId.getTypeId()))
+                                         .findAny());
     }
 
     public Optional<Metadata.PrimaryKey> tryFindPrimaryKey(final QualifiedTableId tableId) {
@@ -70,8 +75,10 @@ public class MetadataExplorer {
 
     public Optional<Metadata.ForeignKey> tryFindForeignKey(final QualifiedForeignKeyId foreignKeyId) {
         return tryFindByTableId(foreignKeyId.getQualifiedTableId())
-                .flatMap(table -> table.getForeignKeys().stream()
-                        .filter(foreignKey -> foreignKey.getName().equals(foreignKeyId.getForeignKeyId()))
-                        .findAny());
+                .flatMap(table -> table.getForeignKeys()
+                                       .stream()
+                                       .filter(foreignKey -> foreignKey.getName()
+                                                                       .equals(foreignKeyId.getForeignKeyId()))
+                                       .findAny());
     }
 }

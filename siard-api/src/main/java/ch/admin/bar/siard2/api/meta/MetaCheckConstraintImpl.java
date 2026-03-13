@@ -53,7 +53,7 @@ public class MetaCheckConstraintImpl
         return (ArchiveImpl) getParentMetaTable().getTable()
                                                  .getParentSchema()
                                                  .getParentArchive();
-    } 
+    }
 
     private final CheckConstraintType _cct;
 
@@ -65,7 +65,7 @@ public class MetaCheckConstraintImpl
     public void setTemplate(CheckConstraintType cctTemplate) {
         if (!SU.isNotEmpty(getDescription()))
             setDescription(XU.fromXml(cctTemplate.getDescription()));
-    } 
+    }
 
     /**
      * constructor
@@ -76,7 +76,7 @@ public class MetaCheckConstraintImpl
     private MetaCheckConstraintImpl(MetaTable mtParent, CheckConstraintType cct) {
         _mtParent = mtParent;
         _cct = cct;
-    } 
+    }
 
     /**
      * factory
@@ -87,9 +87,8 @@ public class MetaCheckConstraintImpl
      */
     public static MetaCheckConstraint newInstance(MetaTable mtParent, CheckConstraintType cct) {
         return new MetaCheckConstraintImpl(mtParent, cct);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -99,7 +98,6 @@ public class MetaCheckConstraintImpl
         return XU.fromXml(_cct.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -112,7 +110,7 @@ public class MetaCheckConstraintImpl
                 _cct.setCondition(XU.toXml(sCondition));
         } else
             throw new IOException("Condition cannot be set!");
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -122,7 +120,6 @@ public class MetaCheckConstraintImpl
         return XU.fromXml(_cct.getCondition());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -131,7 +128,7 @@ public class MetaCheckConstraintImpl
     public void setDescription(String sDescription) {
         if (getArchiveImpl().isMetaDataDifferent(getDescription(), sDescription))
             _cct.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -153,7 +150,7 @@ public class MetaCheckConstraintImpl
                         getCondition(),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

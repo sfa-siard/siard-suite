@@ -122,7 +122,7 @@ public class MsSqlDatabaseMetaDataTests extends BaseDatabaseMetaDataTester {
                 int iParenIndex = typeName.indexOf('(');
                 if (iParenIndex > 0) {
                     baseTypeName = typeName.substring(0, iParenIndex)
-                                             .trim();
+                                           .trim();
                 }
                 switch (baseTypeName) {
                     case "CHAR":
@@ -595,7 +595,8 @@ public class MsSqlDatabaseMetaDataTests extends BaseDatabaseMetaDataTester {
 
             MetadataResultSetWrapper wrapper = MetadataResultSetWrapper.forType(rs);
             QualifiedId actual = wrapper.toQualifiedId();
-            assertEquals("Unexpected catalog", DB_CATALOG.toLowerCase(), actual.getCatalog().toLowerCase());
+            assertEquals("Unexpected catalog", DB_CATALOG.toLowerCase(), actual.getCatalog()
+                                                                               .toLowerCase());
             assertEquals("Unexpected schema", qualifiedId.getSchema(), actual.getSchema());
             assertEquals("Unexpected type", qualifiedId.getName(), actual.getName());
 

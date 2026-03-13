@@ -26,10 +26,10 @@ public class CaseSensitiveColumnNamesInPostgresIT {
     @Rule
     public PostgreSQLContainer<?> db = new PostgreSQLContainer<>(loadDockerfile())
             .waitingFor(new LogMessageWaitStrategy()
-                    // oops
-                    .withRegEx(".*Datenbanksystem ist bereit, um Verbindungen anzunehmen.*\\s")
-                    .withTimes(2)
-                    .withStartupTimeout(Duration.of(60, SECONDS)))
+                                // oops
+                                .withRegEx(".*Datenbanksystem ist bereit, um Verbindungen anzunehmen.*\\s")
+                                .withTimes(2)
+                                .withStartupTimeout(Duration.of(60, SECONDS)))
             .withEnv("LANG", "de_DE.utf8")
             .withInitScript(SqlScripts.Postgres.SIARDCMD_31);
 
@@ -54,8 +54,9 @@ public class CaseSensitiveColumnNamesInPostgresIT {
 
     private static DockerImageName loadDockerfile() {
         ImageFromDockerfile image = new ImageFromDockerfile()
-                .withDockerfile(TestResourcesResolver.resolve("postgres/issues/siardcmd31/Dockerfile").toPath());
+                .withDockerfile(TestResourcesResolver.resolve("postgres/issues/siardcmd31/Dockerfile")
+                                                     .toPath());
         return DockerImageName.parse(image.get())
-                .asCompatibleSubstituteFor(PostgreSQLContainer.IMAGE);
+                              .asCompatibleSubstituteFor(PostgreSQLContainer.IMAGE);
     }
 }

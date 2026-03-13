@@ -6,16 +6,15 @@ import ch.admin.bar.siard2.api.facade.MetaTableFacade;
 import ch.admin.bar.siard2.api.facade.TableRecordFacade;
 import ch.admin.bar.siard2.api.primary.TableRecordDispenserImpl;
 import lombok.SneakyThrows;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Entities;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.stream.Collectors;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Entities;
 
 public class HtmlExport {
 
@@ -65,7 +64,8 @@ public class HtmlExport {
         sb.append(getRows(context));
         sb.append(HtmlTemplate.documentEnd());
         Document doc = Jsoup.parse(sb.toString());
-        doc.outputSettings().escapeMode(Entities.EscapeMode.xhtml);
+        doc.outputSettings()
+           .escapeMode(Entities.EscapeMode.xhtml);
         oswr.write(doc.toString());
         oswr.flush();
     }
@@ -94,8 +94,8 @@ public class HtmlExport {
 
         new TableRecordFacade(this.dispenser.get()).getCells()
                                                    .forEach(cell -> {
-                                                           sb.append(HtmlTemplate.tableCell(context.rendererRegistry()
-                                                                                                   .render(cell, context)));
+                                                       sb.append(HtmlTemplate.tableCell(context.rendererRegistry()
+                                                                                               .render(cell, context)));
                                                    });
 
         return sb.toString();

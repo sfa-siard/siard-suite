@@ -41,7 +41,7 @@ public class MetaSchemaImpl
      */
     private ArchiveImpl getArchiveImpl() {
         return (ArchiveImpl) getSchema().getParentArchive();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -86,7 +86,7 @@ public class MetaSchemaImpl
                 bValid = false;
         }
         return bValid;
-    } 
+    }
 
     private SchemaType _st = null;
 
@@ -110,7 +110,7 @@ public class MetaSchemaImpl
                 ((MetaTableImpl) mt).getTableType();
         }
         return _st;
-    } 
+    }
 
     private SchemaType _stTemplate = null;
 
@@ -184,7 +184,7 @@ public class MetaSchemaImpl
                 }
             }
         }
-    } 
+    }
 
     /**
      * create an empty SchemaType instance.
@@ -198,7 +198,7 @@ public class MetaSchemaImpl
         st.setName(XU.toXml(sName));
         st.setFolder(XU.toXml(sFolder));
         return st;
-    } 
+    }
 
     /**
      * constructor
@@ -247,7 +247,7 @@ public class MetaSchemaImpl
                 _mapMetaRoutines.put(XU.fromXml(rt.getSpecificName()), mr);
             }
         }
-    } 
+    }
 
     /**
      * factory
@@ -260,9 +260,8 @@ public class MetaSchemaImpl
     public static MetaSchema newInstance(Schema schema, SchemaType st)
             throws IOException {
         return new MetaSchemaImpl(schema, st);
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -272,7 +271,6 @@ public class MetaSchemaImpl
         return XU.fromXml(_st.getName());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -282,7 +280,6 @@ public class MetaSchemaImpl
         return XU.fromXml(_st.getFolder());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -291,7 +288,7 @@ public class MetaSchemaImpl
     public void setDescription(String sDescription) {
         if (getArchiveImpl().isMetaDataDifferent(getDescription(), sDescription))
             _st.setDescription(XU.toXml(sDescription));
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -301,7 +298,6 @@ public class MetaSchemaImpl
         return XU.fromXml(_st.getDescription());
     }
 
-    
 
     /**
      * {@inheritDoc}
@@ -314,7 +310,7 @@ public class MetaSchemaImpl
             iTables = tts.getTable()
                          .size();
         return iTables;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -326,7 +322,7 @@ public class MetaSchemaImpl
                           .get(iTable)
                           .getName();
         return getMetaTable(sName);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -337,9 +333,8 @@ public class MetaSchemaImpl
         if (table != null)
             mt = table.getMetaTable();
         return mt;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -347,7 +342,7 @@ public class MetaSchemaImpl
     @Override
     public int getMetaViews() {
         return _mapMetaViews.size();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -418,7 +413,7 @@ public class MetaSchemaImpl
         } else
             throw new IOException("Views can only be created if archive is open for modification of primary data.");
         return mv;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -445,9 +440,8 @@ public class MetaSchemaImpl
         } else
             throw new IOException("Views can only be removed if archive is open for modification of primary data.");
         return bRemoved;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -455,7 +449,7 @@ public class MetaSchemaImpl
     @Override
     public int getMetaRoutines() {
         return _mapMetaRoutines.size();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -525,9 +519,8 @@ public class MetaSchemaImpl
         } else
             throw new IOException("Views can only be created if archive is open for modification of primary data.");
         return mr;
-    } 
+    }
 
-    
 
     /**
      * {@inheritDoc}
@@ -535,7 +528,7 @@ public class MetaSchemaImpl
     @Override
     public int getMetaTypes() {
         return _mapMetaTypes.size();
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -608,7 +601,7 @@ public class MetaSchemaImpl
         } else
             throw new IOException("Types can only be created if archive is open for modification of primary data.");
         return mt;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -626,7 +619,7 @@ public class MetaSchemaImpl
         for (int iRoutine = 0; iRoutine < getMetaRoutines(); iRoutine++)
             ams[getMetaTypes() + getMetaTables() + getMetaViews() + iRoutine] = getMetaRoutine(iRoutine);
         return ams;
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -639,7 +632,7 @@ public class MetaSchemaImpl
                         getName(),
                         getDescription()
                 };
-    } 
+    }
 
     /**
      * {@inheritDoc}

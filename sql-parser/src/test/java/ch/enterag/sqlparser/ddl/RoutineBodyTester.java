@@ -1,34 +1,33 @@
 package ch.enterag.sqlparser.ddl;
 
-import static org.junit.Assert.*;
-import org.junit.*;
-import ch.enterag.sqlparser.*;
+import ch.enterag.sqlparser.BaseSqlFactory;
+import ch.enterag.sqlparser.SqlFactory;
+import org.junit.Before;
+import org.junit.Test;
 
-public class RoutineBodyTester
-{
-  private SqlFactory _sf = new BaseSqlFactory();
-  private RoutineBody _rb = null;
+import static org.junit.Assert.assertEquals;
 
-  @Before
-  public void setUp()
-  {
-    _rb = _sf.newRoutineBody();
-  }
-  
-  @Test
-  public void testSimple()
-  {
-    _rb.parse("delete from tab where id = idDel");
-    System.out.println(_rb.format());
-    assertEquals("Routine body not recognized!","DELETE FROM TAB WHERE ID = IDDEL",_rb.format());
-  }
+public class RoutineBodyTester {
+    private SqlFactory _sf = new BaseSqlFactory();
+    private RoutineBody _rb = null;
 
-  @Test
-  public void testComplex()
-  {
-    _rb.parse("delete from \"tab\" where id = idDel and v = 'abc'");
-    // System.out.println(_rb.format());
-    assertEquals("Routine body not recognized!","DELETE FROM \"tab\" WHERE ID = IDDEL AND V = 'abc'",_rb.format());
-  }
+    @Before
+    public void setUp() {
+        _rb = _sf.newRoutineBody();
+    }
+
+    @Test
+    public void testSimple() {
+        _rb.parse("delete from tab where id = idDel");
+        System.out.println(_rb.format());
+        assertEquals("Routine body not recognized!", "DELETE FROM TAB WHERE ID = IDDEL", _rb.format());
+    }
+
+    @Test
+    public void testComplex() {
+        _rb.parse("delete from \"tab\" where id = idDel and v = 'abc'");
+        // System.out.println(_rb.format());
+        assertEquals("Routine body not recognized!", "DELETE FROM \"tab\" WHERE ID = IDDEL AND V = 'abc'", _rb.format());
+    }
 
 }
