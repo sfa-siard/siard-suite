@@ -15,7 +15,6 @@ import ch.admin.bar.siard2.oracle.OracleLiterals;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.Literal;
 
-/*====================================================================*/
 
 /** OracleLiteral implements the value translation from ISO SQL:2008
  * to Oracle
@@ -37,10 +36,10 @@ public class OracleLiteral
             sFormatted = super.format();
         }
         return sFormatted;
-    } /* format */
+    }
 
     public OracleLiteral(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class OracleLiteral */
+}

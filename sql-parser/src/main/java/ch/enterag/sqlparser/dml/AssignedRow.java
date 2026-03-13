@@ -15,7 +15,6 @@ public class AssignedRow
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(AssignedRow.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -45,7 +44,6 @@ public class AssignedRow
             return AssignedRow.this;
         }
     }
-    /*==================================================================*/
 
     private ArVisitor _visitor = new ArVisitor();
 
@@ -83,7 +81,6 @@ public class AssignedRow
         _us = us;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the assigned row.
      * @return the SQL string corresponding to the fields of the assigned
@@ -107,9 +104,8 @@ public class AssignedRow
             s = s + sRIGHT_PAREN;
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the assigned row from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -118,9 +114,8 @@ public class AssignedRow
     public void parse(SqlParser.AssignedRowContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the assigned row from SQL.
      * @param sSql SQL.
@@ -129,9 +124,8 @@ public class AssignedRow
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().assignedRow());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an assigned row from update source.
      * @param us update source.
@@ -141,9 +135,8 @@ public class AssignedRow
         _il.enter();
         setUpdateSource(us);
         _il.exit();
-    } /* initUpdateSource */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an assigned row.
      * @param listUpdateSources list of update sources.
@@ -159,15 +152,14 @@ public class AssignedRow
         setRowExpression(bRowExpression);
         setUpdateSource(us);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public AssignedRow(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class AssignedRow */
+}

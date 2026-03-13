@@ -21,7 +21,6 @@ import ch.enterag.utils.database.SqlTypes;
 
 import java.sql.*;
 
-/*====================================================================*/
 
 /** Db2PredefinedType implements the type translation from ISO SQL to
  * DB/2.
@@ -36,7 +35,6 @@ public class Db2PredefinedType
     private static final long lMEGA = lKILO * lKILO;
     private static final long lGIGA = lMEGA * lKILO;
 
-    /*------------------------------------------------------------------*/
 
     /** LOB length (possibly qualified by K, M, or G) in parentheses.
      * @return lob length in parentheses.
@@ -66,9 +64,8 @@ public class Db2PredefinedType
         }
         sLength = sLEFT_PAREN + String.valueOf(lLength) + sRIGHT_PAREN;
         return sLength;
-    } /* formatLobLength */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the predefined data type for DB/2.
      * In DB/2 SMALLINT is a short, INTEGER is an int and BIGINT is a long.
@@ -160,15 +157,14 @@ public class Db2PredefinedType
             }
         }
         return sType;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public Db2PredefinedType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlPredefinedType */
+}

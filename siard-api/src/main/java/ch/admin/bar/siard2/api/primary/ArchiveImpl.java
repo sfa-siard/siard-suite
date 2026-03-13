@@ -486,7 +486,7 @@ public class ArchiveImpl
         md.setDigestType(dtt);
         md.setDigest(BU.toHex(bufDigest));
         return md;
-    } /* getMessageDigest */
+    }
 
     /**
      * resets internal state to initial state.
@@ -502,7 +502,7 @@ public class ArchiveImpl
         _iMaxInlineSize = Archive.iDEFAULT_MAX_INLINE_SIZE;
         _iMaxLobsPerFolder = -1; // negative = unlimited
         _md = null;
-    } /* reset */
+    }
 
     /**
      * {@inheritDoc}
@@ -545,7 +545,7 @@ public class ArchiveImpl
             exportMetaData(eos, true);
             _bMetaDataModified = false;
         }
-    } /* saveMetaData */
+    }
 
     /**
      * {@inheritDoc}
@@ -576,7 +576,7 @@ public class ArchiveImpl
             reset();
         } else
             throw new IOException("Archive was not open!");
-    } /* close */
+    }
 
     /**
      * {@inheritDoc}
@@ -599,7 +599,7 @@ public class ArchiveImpl
             schema = getSchema(sName);
         }
         return schema;
-    } /* getSchema */
+    }
 
     /**
      * {@inheritDoc}
@@ -647,7 +647,7 @@ public class ArchiveImpl
             throw new IOException("Schema cannot be created!\r\n" +
                                           "SIARD archive is not open for modification of primary data!");
         return schema;
-    } /* createSchema */
+    }
 
     /**
      * {@inheritDoc}
@@ -663,7 +663,7 @@ public class ArchiveImpl
                 bEmpty = false;
         }
         return bEmpty;
-    } /* isEmpty */
+    }
 
     /**
      * check validity of archive.
@@ -681,7 +681,7 @@ public class ArchiveImpl
                 _bValid = false;
         }
         _swValid.stop();
-    } /* validate */
+    }
 
     /**
      * {@inheritDoc}
@@ -691,7 +691,7 @@ public class ArchiveImpl
         if (canModifyPrimaryData())
             validate();
         return _bValid;
-    } /* isValid */
+    }
 
     /**
      * {@inheritDoc}
@@ -708,13 +708,13 @@ public class ArchiveImpl
                            .equals(getMessageDigest(md.getDigestType()).getDigest());
         }
         return bUnchanged;
-    } /* isPrimaryDataUnchanged */
+    }
 
     /**
      * {@inheritDoc}
      */
     public boolean isMetaDataUnchanged() {
         return !_bMetaDataModified;
-    } /* isMetaDataUnchanged */
+    }
 
-} /* ArchiveImpl */
+}

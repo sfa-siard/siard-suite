@@ -24,7 +24,6 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.*;
 
-/*====================================================================*/
 
 /** MsSqlConnection implements a wrapped MSSQL Connection.
  * @author Hartwig Thomas
@@ -44,7 +43,6 @@ public class MsSqlConnection
         _qiTableDropCascade = null;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an MSSQL SQLServerException into an SQLFeatureNotSupportedException.
      * @param sse
@@ -53,9 +51,8 @@ public class MsSqlConnection
     private void throwNotSupportedException(SQLServerException sse)
             throws SQLFeatureNotSupportedException {
         throw new SQLFeatureNotSupportedException("MSSQL Exception!", sse);
-    } /* throwFeatureNotSupportedSqlException */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param connWrapped connection to be wrapped.
@@ -69,9 +66,8 @@ public class MsSqlConnection
             stmt.executeUpdate("SET ANSI_DEFAULTS ON");
             stmt.close();
         }
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * wraps statement.
@@ -81,9 +77,8 @@ public class MsSqlConnection
             throws SQLException {
         Statement stmt = new MsSqlStatement(super.createStatement(), this);
         return stmt;
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -92,9 +87,8 @@ public class MsSqlConnection
         String sNative = nativeSQL(sql);
         PreparedStatement ps = super.prepareStatement(sNative);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -102,9 +96,8 @@ public class MsSqlConnection
             throws SQLException {
         CallableStatement cs = super.prepareCall(nativeSQL(sql));
         return cs;
-    } /* prepareCall */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -143,9 +136,8 @@ public class MsSqlConnection
         sql = ss.format();
         _il.exit(sql);
         return sql;
-    } /* nativeSQL */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * wraps database meta data.
@@ -155,9 +147,8 @@ public class MsSqlConnection
             throws SQLException {
         DatabaseMetaData dmd = new MsSqlDatabaseMetaData(super.getMetaData(), this);
         return dmd;
-    } /* getMetadata */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * wraps statement.
@@ -167,9 +158,8 @@ public class MsSqlConnection
             throws SQLException {
         Statement stmt = new MsSqlStatement(super.createStatement(resultSetType, resultSetConcurrency), this);
         return stmt;
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -178,9 +168,8 @@ public class MsSqlConnection
             throws SQLException {
         PreparedStatement ps = super.prepareStatement(nativeSQL(sql), resultSetType, resultSetConcurrency);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -189,9 +178,8 @@ public class MsSqlConnection
             throws SQLException {
         CallableStatement cs = super.prepareCall(nativeSQL(sql), resultSetType, resultSetConcurrency);
         return cs;
-    } /* prepareCall */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -202,9 +190,8 @@ public class MsSqlConnection
         } catch (SQLServerException sse) {
             throwNotSupportedException(sse);
         }
-    } /* releaseSavePoint */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * wraps statement.
@@ -221,9 +208,8 @@ public class MsSqlConnection
             throwNotSupportedException(sse);
         }
         return stmt;
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -239,9 +225,8 @@ public class MsSqlConnection
             throwNotSupportedException(sse);
         }
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -256,9 +241,8 @@ public class MsSqlConnection
             throwNotSupportedException(sse);
         }
         return cs;
-    } /* prepareCall */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -266,9 +250,8 @@ public class MsSqlConnection
             throws SQLException {
         PreparedStatement ps = super.prepareStatement(nativeSQL(sql), autoGeneratedKeys);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -276,9 +259,8 @@ public class MsSqlConnection
             throws SQLException {
         PreparedStatement ps = super.prepareStatement(nativeSQL(sql), columnIndexes);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -286,11 +268,11 @@ public class MsSqlConnection
             throws SQLException {
         PreparedStatement ps = super.prepareStatement(nativeSQL(sql), columnNames);
         return ps;
-    } /* prepareStatement */
+    }
 
     @Override
     public Blob createDatalinkObject() throws SQLException {
         return createBlob();
     }
 
-} /* class MsSqlConnection */
+}

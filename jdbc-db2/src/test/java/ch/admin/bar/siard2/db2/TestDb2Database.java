@@ -60,7 +60,7 @@ public class TestDb2Database {
         public ColumnDefinition(String sName, String sType, Object oValue) {
             super(sName, sType, oValue);
         }
-    } /* ColumnDefinition */
+    }
 
     public static final String _sTEST_SCHEMA = "TESTDB2SCHEMA";
     private static final String _sTEST_TABLE_SIMPLE = "TDB2SIMPLE";
@@ -156,12 +156,12 @@ public class TestDb2Database {
         dropTables();
         dropTypes();
         dropSchema();
-    } /* drop */
+    }
 
     private void dropTypes() {
         dropType(getQualifiedDistinctType());
         dropType(getQualifiedStructType());
-    } /* dropTypes */
+    }
 
     private void dropType(QualifiedId qiType) {
         String sSql = "DROP TYPE " + qiType.format();
@@ -173,7 +173,7 @@ public class TestDb2Database {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* dropType */
+    }
 
     private void create()
             throws SQLException {
@@ -181,12 +181,12 @@ public class TestDb2Database {
         createTypes();
         createTables();
         insertTables();
-    } /* create */
+    }
 
     private void dropTables() {
         dropTable(getQualifiedSimpleTable());
         dropTable(getQualifiedComplexTable());
-    } /* dropTables */
+    }
 
     private void dropTable(QualifiedId qiTable) {
         String sSql = "DROP TABLE " + qiTable.format();
@@ -198,7 +198,7 @@ public class TestDb2Database {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* dropTable */
+    }
 
     private void dropSchema() {
         String sSql = "DROP SCHEMA " + SqlLiterals.formatId(_sTEST_SCHEMA) + " RESTRICT";
@@ -210,7 +210,7 @@ public class TestDb2Database {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* dropSchema */
+    }
 
     private void createSchema()
             throws SQLException {
@@ -219,13 +219,13 @@ public class TestDb2Database {
         stmt.executeUpdate(sSql);
         stmt.close();
         _conn.commit();
-    } /* createSchema */
+    }
 
     private void createTypes()
             throws SQLException {
         createDistinctType();
         createStructType();
-    } /* createTypes */
+    }
 
     private void createDistinctType()
             throws SQLException {
@@ -234,7 +234,7 @@ public class TestDb2Database {
         stmt.executeUpdate(sSql);
         stmt.close();
         _conn.commit();
-    } /* createDistinctType */
+    }
 
     private void createStructType()
             throws SQLException {
@@ -254,13 +254,13 @@ public class TestDb2Database {
         stmt.executeUpdate(sbSql.toString());
         stmt.close();
         _conn.commit();
-    } /* createStructType */
+    }
 
     private void createTables()
             throws SQLException {
         createSimpleTable();
         createComplexTable();
-    } /* createTables */
+    }
 
     private void createSimpleTable()
             throws SQLException {
@@ -282,7 +282,7 @@ public class TestDb2Database {
         stmt.executeUpdate(sSql);
         stmt.close();
         _conn.commit();
-    } /* createSimpleTable */
+    }
 
     private void createComplexTable()
             throws SQLException {
@@ -304,13 +304,13 @@ public class TestDb2Database {
         stmt.executeUpdate(sSql);
         stmt.close();
         _conn.commit();
-    } /* createComplexTable */
+    }
 
     private void insertTables()
             throws SQLException {
         insertSimpleTable();
         insertComplexTable();
-    } /* insertTables */
+    }
 
     private void insertSimpleTable()
             throws SQLException {
@@ -352,7 +352,7 @@ public class TestDb2Database {
         pstmt.executeUpdate();
         pstmt.close();
         _conn.commit();
-    } /* insertSimpleTable */
+    }
 
     private void insertComplexTable()
             throws SQLException {
@@ -388,6 +388,6 @@ public class TestDb2Database {
         pstmt.executeUpdate();
         pstmt.close();
         _conn.commit();
-    } /* insertComplexTable */
+    }
 
-} /* TestDb2Database */
+}

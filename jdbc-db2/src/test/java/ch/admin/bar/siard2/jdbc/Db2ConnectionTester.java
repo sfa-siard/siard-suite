@@ -49,12 +49,12 @@ public class Db2ConnectionTester extends BaseConnectionTester {
         Db2Connection connDb2 = (Db2Connection) dsDb2.getConnection();
         connDb2.setAutoCommit(false);
         setConnection(connDb2);
-    } /* setUp */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong connection class!", Db2Connection.class, getConnection().getClass());
-    } /* testClass */
+    }
 
     @Test
     public void testValid() {
@@ -67,6 +67,6 @@ public class Db2ConnectionTester extends BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testValid */
+    }
 
 }

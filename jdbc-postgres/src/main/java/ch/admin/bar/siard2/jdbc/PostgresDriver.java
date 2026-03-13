@@ -18,7 +18,6 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/*====================================================================*/
 
 /** PostgresDriver implements a wrapped Postgres Driver.
  * @author Hartwig Thomas
@@ -42,7 +41,7 @@ public class PostgresDriver
         if (!sUrl.startsWith(sPOSTGRES_URL_PREFIX))
             sUrl = sPOSTGRES_URL_PREFIX + "//" + sDatabaseName;
         return sUrl;
-    } /* getUrl */
+    }
 
     /** register this driver, replacing original Postgres driver
      */
@@ -59,7 +58,6 @@ public class PostgresDriver
         register();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}*/
     @Override
@@ -68,9 +66,8 @@ public class PostgresDriver
         boolean bAccepts = url.startsWith(sPOSTGRES_URL_PREFIX);
         _il.exit(bAccepts);
         return bAccepts;
-    } /* acceptsUrl */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * returns the appropriately wrapped Postgres Connection.
@@ -87,6 +84,6 @@ public class PostgresDriver
         }
         _il.exit(conn);
         return conn;
-    } /* connect */
+    }
 
-} /* class PostgresDriver */
+}

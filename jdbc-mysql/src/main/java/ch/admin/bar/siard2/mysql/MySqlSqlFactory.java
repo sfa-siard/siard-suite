@@ -25,7 +25,6 @@ import ch.enterag.sqlparser.expression.Literal;
 import ch.enterag.sqlparser.expression.UnsignedLiteral;
 import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 
-/* =============================================================================== */
 
 /**
  * MySqlSqlFactory implements a wrapped MySql SqlFactory
@@ -33,7 +32,6 @@ import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
  */
 public class MySqlSqlFactory extends BaseSqlFactory implements SqlFactory {
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Returns a new wrapped predefined type
@@ -41,9 +39,8 @@ public class MySqlSqlFactory extends BaseSqlFactory implements SqlFactory {
     @Override
     public PredefinedType newPredefinedType() {
         return new MySqlPredefinedType(this);
-    } /* newPredefinedType */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Returns a new wrapped literal
@@ -51,9 +48,8 @@ public class MySqlSqlFactory extends BaseSqlFactory implements SqlFactory {
     @Override
     public Literal newLiteral() {
         return new MySqlLiteral(this);
-    } /* newLiteral */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Creates a new wrapped unsigned literal
@@ -61,9 +57,8 @@ public class MySqlSqlFactory extends BaseSqlFactory implements SqlFactory {
     @Override
     public UnsignedLiteral newUnsignedLiteral() {
         return new MySqlUnsignedLiteral(this);
-    } /* newUnsignedLiteral */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Creates a new wrapped value expression primary
@@ -71,9 +66,8 @@ public class MySqlSqlFactory extends BaseSqlFactory implements SqlFactory {
     @Override
     public ValueExpressionPrimary newValueExpressionPrimary() {
         return new MySqlValueExpressionPrimary(this);
-    } /* newValueExpressionPrimary */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Creates a new DROP SCHEMA statement
@@ -81,14 +75,13 @@ public class MySqlSqlFactory extends BaseSqlFactory implements SqlFactory {
     @Override
     public DropSchemaStatement newDropSchemaStatement() {
         return new MySqlDropSchemaStatement(this);
-    } /* newDropSchemaStatement */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** Creates a new DROP TABLE statement */
     @Override
     public DropTableStatement newDropTableStatement() {
         return new MySqlDropTableStatement(this);
-    } /* newDropTableStatement */
+    }
 
-} /* class MySqlSqlFactory */
+}

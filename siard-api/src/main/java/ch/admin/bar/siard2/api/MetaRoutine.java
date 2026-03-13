@@ -31,10 +31,6 @@ public interface MetaRoutine
      */
     boolean isValid();
   
-  /*====================================================================
-  routine properties
-  ====================================================================*/
-
 
     /**
      * get specific routine name which is unique within its schema.
@@ -187,9 +183,6 @@ public interface MetaRoutine
      */
     String getReturnType();
   
-  /*====================================================================
-  list properties
-  ====================================================================*/
 
     /**
      * get number of parameter meta data entries.

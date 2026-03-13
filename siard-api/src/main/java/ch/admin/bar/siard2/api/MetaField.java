@@ -40,7 +40,4 @@ public interface MetaField
     MetaAttribute getMetaAttribute()
             throws IOException;
   
-  /*====================================================================
-  field properties
-  ====================================================================*/
 } 

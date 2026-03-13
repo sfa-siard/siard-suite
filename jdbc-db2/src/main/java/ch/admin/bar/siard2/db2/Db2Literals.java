@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 
 public class Db2Literals extends SqlLiterals {
     private static final String sBYTE_LITERAL_PREFIX = "BINARY";
-    /*------------------------------------------------------------------*/
 
     /** format byte buffer value.
      * @param bufValue byte buffer value to be formatted.
@@ -25,9 +24,8 @@ public class Db2Literals extends SqlLiterals {
             sFormatted = sBYTE_LITERAL_PREFIX +
                     sLEFT_PAREN + SqlLiterals.formatBytesLiteral(bufValue) + sRIGHT_PAREN;
         return sFormatted;
-    } /* formatBytesLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a boolean literal value.
      * in DB/2 the BOOLEAN data type is realized as a SMALLINT data type.
@@ -48,9 +46,8 @@ public class Db2Literals extends SqlLiterals {
                 break;
         }
         return sFormatted;
-    } /* formatBooleanLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a date value
      * MSSQL does not like date/time prefixes.
@@ -63,9 +60,8 @@ public class Db2Literals extends SqlLiterals {
             sFormatted = SqlLiterals.formatDateLiteral(dateValue)
                                     .substring(sDATE_LITERAL_PREFIX.length());
         return sFormatted;
-    } /* formatDateLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a time value
      * MSSQL does not like date/time prefixes.
@@ -81,9 +77,8 @@ public class Db2Literals extends SqlLiterals {
                                     .substring(sTIME_LITERAL_PREFIX.length());
         }
         return sFormatted;
-    } /* formatTimeLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a timestamp value.
      * MSSQL does not like date/time prefixes.
@@ -96,9 +91,8 @@ public class Db2Literals extends SqlLiterals {
             sFormatted = SqlLiterals.formatTimestampLiteral(tsValue)
                                     .substring(sTIMESTAMP_LITERAL_PREFIX.length());
         return sFormatted;
-    } /* formatTimestampLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format an interval value
      * In DB/2 a year-month interval is represented by a BIGINT and
@@ -121,6 +115,6 @@ public class Db2Literals extends SqlLiterals {
             sFormatted = bd.toPlainString();
         }
         return sFormatted;
-    } /* formatIntervalLiteral */
+    }
 
-} /* Db2Literals */
+}

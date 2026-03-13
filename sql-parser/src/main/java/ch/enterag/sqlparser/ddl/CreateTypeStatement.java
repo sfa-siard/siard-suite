@@ -20,7 +20,6 @@ public class CreateTypeStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CreateTypeStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -119,7 +118,6 @@ public class CreateTypeStatement
             return CreateTypeStatement.this;
         }
     }
-    /*==================================================================*/
 
     private CtsVisitor _visitor = new CtsVisitor();
 
@@ -267,7 +265,6 @@ public class CreateTypeStatement
         _listMethodSpecifications = listMethodSpecifications;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the attribute definitions list.
      * @return formatted list.
@@ -282,9 +279,8 @@ public class CreateTypeStatement
         }
         sDefinitions = sDefinitions + sNEW_LINE + sRIGHT_PAREN;
         return sDefinitions;
-    } /* formatAttributeDefinitions */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the method specifications list.
      * @return formatted list.
@@ -300,7 +296,6 @@ public class CreateTypeStatement
         return sSpecification;
     } /* formatMethodSpecifications **
   
-  /*------------------------------------------------------------------*/
 
     /** format the create type statement.
      * @return the SQL string corresponding to the fields of the create
@@ -348,9 +343,8 @@ public class CreateTypeStatement
         if (getMethodSpecifications().size() > 0)
             sStatement = sStatement + formatMethodSpecifications();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create type statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -359,9 +353,8 @@ public class CreateTypeStatement
     public void parse(SqlParser.CreateTypeStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create type statement from SQL.
      * @param sSql SQL.
@@ -377,9 +370,8 @@ public class CreateTypeStatement
             ctx = getParser().createTypeStatement();
         }
         parse(ctx);
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create type statement.
      * @param qTypeName name of type to be created (not null!).
@@ -432,9 +424,8 @@ public class CreateTypeStatement
         setCastToSource(idCastToSource);
         setMethodSpecifications(listMethodSpecifications);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create type statement for distinct types.
      * @param qTypeName name of type to be created (not null!).
@@ -448,9 +439,8 @@ public class CreateTypeStatement
         setTypeName(qTypeName);
         setDistinctBaseType(pdtDistinctBaseType);
         _il.exit();
-    } /* initDistinct */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create type statement from attribute definitions.
      * @param qTypeName name of type to be created (not null!).
@@ -463,15 +453,14 @@ public class CreateTypeStatement
         setTypeName(qTypeName);
         setAttributeDefinitions(listAttributeDefinitions);
         _il.exit();
-    } /* initAttributes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CreateTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CreateTypeStatement */
+}

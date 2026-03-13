@@ -28,7 +28,6 @@ import ch.enterag.sqlparser.expression.QuerySpecification;
 import ch.enterag.sqlparser.expression.UnsignedLiteral;
 import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 
-/*====================================================================*/
 
 /** MsSqlSqlFactory overrides the BaseSqlFactory for the MSSQL-specific
  * SQL parser classes. 
@@ -50,51 +49,51 @@ public class Db2SqlFactory
     @Override
     public CreateTypeStatement newCreateTypeStatement() {
         return new Db2CreateTypeStatement(this);
-    } /* newCreateTypeStatement */
+    }
 
     @Override
     public DropSchemaStatement newDropSchemaStatement() {
         return new Db2DropSchemaStatement(this);
-    } /* newDropSchemaStatement */
+    }
 
     @Override
     public DropTypeStatement newDropTypeStatement() {
         return new Db2DropTypeStatement(this);
-    } /* newDropTypeStatement */
+    }
 
     @Override
     public DropTableStatement newDropTableStatement() {
         return new Db2DropTableStatement(this);
-    } /* newDropTableStatement */
+    }
 
     @Override
     public DropViewStatement newDropViewStatement() {
         return new Db2DropViewStatement(this);
-    } /* newDropViewStatement */
+    }
 
     @Override
     public QuerySpecification newQuerySpecification() {
         return new Db2QuerySpecification(this);
-    } /* newQuerySpecification */
+    }
 
     @Override
     public PredefinedType newPredefinedType() {
         return new Db2PredefinedType(this);
-    } /* newPredefinedType */
+    }
 
     @Override
     public UnsignedLiteral newUnsignedLiteral() {
         return new Db2UnsignedLiteral(this);
-    } /* newUnsignedLiteral */
+    }
 
     @Override
     public ValueExpressionPrimary newValueExpressionPrimary() {
         return new Db2ValueExpressionPrimary(this);
-    } /* newValueExpressionPrimary */
+    }
 
     @Override
     public NumericValueFunction newNumericValueFunction() {
         return new Db2NumericValueFunction(this);
-    } /* newNumericValueFunction */
+    }
 
-} /* Db2SqlFactory */
+}

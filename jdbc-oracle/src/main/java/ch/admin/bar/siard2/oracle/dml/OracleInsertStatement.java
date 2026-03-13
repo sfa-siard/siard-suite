@@ -43,10 +43,10 @@ public class OracleInsertStatement
     public String format() {
         getArrayTypes();
         return super.format();
-    } /* format */
+    }
 
     public OracleInsertStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
 }

@@ -41,7 +41,7 @@ public class PostgresDataSourceTester {
     @Before
     public void setUp() {
         _dsPostgres = new PostgresDataSource();
-    } /* setUp */
+    }
 
     @After
     public void tearDown() {
@@ -52,7 +52,7 @@ public class PostgresDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testWrapper() {
@@ -64,7 +64,7 @@ public class PostgresDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testWrapper */
+    }
 
     @Test
     public void testGetConnection() {
@@ -79,6 +79,6 @@ public class PostgresDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testConnection */
+    }
 
 }

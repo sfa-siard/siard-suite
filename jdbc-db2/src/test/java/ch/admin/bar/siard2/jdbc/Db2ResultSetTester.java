@@ -44,7 +44,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         sbSql.append("\r\nFROM ");
         sbSql.append(qiTable.format());
         return sbSql.toString();
-    } /* getTableQuery */
+    }
 
     private static String _sNativeQuerySimple = getTableQuery(TestDb2Database.getQualifiedSimpleTable(), TestDb2Database._listCdSimple);
     private static String _sNativeQueryComplex = getTableQuery(TestDb2Database.getQualifiedComplexTable(), TestDb2Database._listCdComplex);
@@ -130,7 +130,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     private Connection _conn = null;
 
@@ -146,7 +146,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         }
         if (!_conn.isClosed()) _conn.commit();
         return _conn;
-    } /* closeResultSet */
+    }
 
     private void openResultSet(String sQuery, int iType, int iConcurrency) throws SQLException {
         closeResultSet();
@@ -154,7 +154,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         ResultSet rs = stmt.executeQuery(sQuery);
         setResultSet(rs);
         rs.next();
-    } /* openResultSet */
+    }
 
     @Before
     public void setUp() {
@@ -169,7 +169,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUp */
+    }
 
     @After
     @Override
@@ -183,7 +183,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
     private TestColumnDefinition findColumnDefinition(List<TestColumnDefinition> listCd, String sName) {
         TestColumnDefinition tcd = null;
@@ -192,7 +192,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
             if (sName.equals(tcdTry.getName())) tcd = tcdTry;
         }
         return tcd;
-    } /* findColumnDefinition */
+    }
 
     @SuppressWarnings("unused")
     private void printState() throws SQLException {
@@ -242,7 +242,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
                 break;
         }
         System.out.println("FetchDirection: " + sFetchDirection);
-    } /* printState */
+    }
 
     @Test
     public void testClass() {
@@ -254,7 +254,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testClass */
+    }
 
     @Override
     @Test
@@ -268,7 +268,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testIsBeforeFirst */
+    }
 
     @Override
     @Test
@@ -282,7 +282,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testIsAfterLast */
+    }
 
     @Override
     @Test
@@ -296,7 +296,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testIsFirst */
+    }
 
     @Override
     @Test
@@ -310,7 +310,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testIsLast */
+    }
 
     @Override
     @Test
@@ -324,7 +324,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testBeforeFirst */
+    }
 
     @Override
     @Test
@@ -338,7 +338,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testAfterLast */
+    }
 
     @Override
     @Test
@@ -352,7 +352,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testAbsolute */
+    }
 
     @Override
     @Test
@@ -366,7 +366,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testRelative */
+    }
 
     @Override
     @Test
@@ -381,7 +381,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testPrevious */
+    }
 
     @Override
     @Test
@@ -395,7 +395,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrevious */
+    }
 
 
     @Override
@@ -410,7 +410,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testFirst */
+    }
 
     @Override
     @Test
@@ -424,7 +424,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testLast */
+    }
 
     @Override
     @Test
@@ -438,7 +438,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testMoveToInsertRow */
+    }
 
     @Override
     @Test
@@ -452,7 +452,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testMoveToCurrentRow */
+    }
 
     @Override
     @Test
@@ -466,7 +466,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetFetchSize */
+    }
 
     @Override
     @Test
@@ -480,7 +480,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetFetchSize */
+    }
 
 
     @Override
@@ -495,7 +495,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetFetchDirection */
+    }
 
     @Override
     @Test
@@ -509,7 +509,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testSetFetchDirection */
+    }
 
     @Override
     @Test
@@ -522,7 +522,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetString */
+    }
 
     @Override
     @Test
@@ -535,7 +535,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetNString */
+    }
 
     @Override
     @Test
@@ -549,7 +549,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetClob */
+    }
 
     @Override
     @Test
@@ -563,7 +563,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetNClob */
+    }
 
     @Override
     @Test
@@ -577,7 +577,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetSqlXml */
+    }
 
     @Override
     @Test
@@ -590,7 +590,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBytes */
+    }
 
     @Override
     @Test
@@ -604,7 +604,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBlob */
+    }
 
     @Override
     @Test
@@ -617,7 +617,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBigDecimal */
+    }
 
     @Override
     @Test
@@ -631,7 +631,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBigDecimal_String_Int */
+    }
 
     @Override
     @Test
@@ -644,7 +644,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetByte */
+    }
 
     @Override
     @Test
@@ -657,7 +657,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetShort */
+    }
 
     @Override
     @Test
@@ -670,7 +670,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetInt */
+    }
 
     @Override
     @Test
@@ -683,7 +683,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetLong */
+    }
 
     @Override
     @Test
@@ -696,7 +696,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetFloat */
+    }
 
     @Override
     @Test
@@ -709,7 +709,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetDouble */
+    }
 
     @Override
     @Test
@@ -722,7 +722,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBoolean */
+    }
 
     @Override
     @Test
@@ -735,7 +735,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetDate */
+    }
 
     @Override
     @Test
@@ -749,7 +749,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetDate_Calendar */
+    }
 
     @Override
     @Test
@@ -762,7 +762,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTime */
+    }
 
     @Override
     @Test
@@ -776,7 +776,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTime_Calendar */
+    }
 
     @Override
     @Test
@@ -789,7 +789,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTimestamp */
+    }
 
     @Override
     @Test
@@ -803,7 +803,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTimestamp_Calendar */
+    }
 
     @Test
     public void testGetDuration() {
@@ -838,7 +838,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetAsciiStream */
+    }
 
     @Override
     @Test
@@ -859,7 +859,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetUnicodeStream */
+    }
 
     @Override
     @Test
@@ -879,7 +879,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetCharacterStream */
+    }
 
     @Override
     @Test
@@ -899,7 +899,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetNCharacterStream */
+    }
 
     @Override
     @Test
@@ -918,23 +918,23 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetBinaryStream */
+    }
 
     @Override
     @Test
     public void testGetArray() {
         // no arrays in DB/2 tables
-    } /* testGetArray */
+    }
 
     @Override
     @Test
     public void testGetRef() {
-    } /* testGetRef */
+    }
 
     @Override
     @Test
     public void testGetRowId() {
-    } /* testGetRowId */
+    }
 
     @Override
     @Test
@@ -980,7 +980,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObject */
+    }
 
     @Override
     @Test
@@ -994,7 +994,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObject_Class */
+    }
 
     @Override
     @Test
@@ -1012,7 +1012,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObject_Map */
+    }
 
     @Test
     public void testGetObjectSqlSimple() throws SQLException {
@@ -1290,7 +1290,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObjectNativeSimple */
+    }
 
     private boolean equalsStructValue(Struct struct, List<TestColumnDefinition> listAd) throws SQLException, ParseException {
         boolean bEqual = false;
@@ -1336,7 +1336,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
             }
         }
         return bEqual;
-    } /* equalsStructValue */
+    }
 
     @Test
     public void testGetObjectSqlComplex() {
@@ -1375,7 +1375,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (ParseException pe) {
             fail(EU.getExceptionMessage(pe));
         }
-    } /* testGetObjectNativeComplex */
+    }
 
     @Test
     public void testGetObjectNativeComplex() {
@@ -1414,7 +1414,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (ParseException pe) {
             fail(EU.getExceptionMessage(pe));
         }
-    } /* testGetObjectNativeComplex */
+    }
 
     @Override
     @Test
@@ -1426,7 +1426,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateString */
+    }
 
     @Override
     @Test
@@ -1438,7 +1438,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNString */
+    }
 
     @Override
     @Test
@@ -1454,7 +1454,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateClob */
+    }
 
     @Override
     @Test
@@ -1467,7 +1467,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateClob_Reader */
+    }
 
     @Override
     @Test
@@ -1480,7 +1480,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateClob_Reader_Long */
+    }
 
     @Override
     @Test
@@ -1496,7 +1496,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNClob */
+    }
 
     @Override
     @Test
@@ -1509,7 +1509,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNClob_Reader */
+    }
 
     @Override
     @Test
@@ -1522,7 +1522,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNClob_Reader_Long */
+    }
 
 
     @Override
@@ -1539,7 +1539,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateSqlXml */
+    }
 
     @Override
     @Test
@@ -1551,7 +1551,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBytes */
+    }
 
     @Override
     @Test
@@ -1567,7 +1567,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBlob */
+    }
 
     @Override
     @Test
@@ -1580,7 +1580,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBlob_InputStream */
+    }
 
     @Override
     @Test
@@ -1593,7 +1593,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBlob_String_InputStream_Long */
+    }
 
     @Override
     @Test
@@ -1605,7 +1605,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBigDecimal */
+    }
 
     @Override
     @Test
@@ -1617,7 +1617,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateByte */
+    }
 
     @Override
     @Test
@@ -1629,7 +1629,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateShort */
+    }
 
     @Override
     @Test
@@ -1641,7 +1641,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateInt */
+    }
 
     @Override
     @Test
@@ -1653,7 +1653,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateLong */
+    }
 
     @Override
     @Test
@@ -1665,7 +1665,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateFloat */
+    }
 
     @Override
     @Test
@@ -1677,7 +1677,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateDouble */
+    }
 
     @Override
     @Test
@@ -1689,7 +1689,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBoolean */
+    }
 
     @Override
     @Test
@@ -1701,7 +1701,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateDate */
+    }
 
     @Override
     @Test
@@ -1713,7 +1713,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTime */
+    }
 
     @Override
     @Test
@@ -1725,7 +1725,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateTimestamp */
+    }
 
     @Test
     public void testUpdateDuration() {
@@ -1738,7 +1738,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateDuration */
+    }
 
     @Override
     @Test
@@ -1751,7 +1751,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateAsciiStream */
+    }
 
     @Override
     @Test
@@ -1764,7 +1764,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateAsciiStream_Int */
+    }
 
     @Override
     @Test
@@ -1777,7 +1777,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateAsciiStream_Long */
+    }
 
     @Override
     @Test
@@ -1790,7 +1790,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateCharacterStream */
+    }
 
     @Override
     @Test
@@ -1803,7 +1803,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateCharacterStream_Int */
+    }
 
     @Override
     @Test
@@ -1816,7 +1816,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateCharacterStream_Long */
+    }
 
     @Override
     @Test
@@ -1829,7 +1829,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNCharacterStream */
+    }
 
     @Override
     @Test
@@ -1842,7 +1842,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNCharacterStream_String_Int */
+    }
 
     @Override
     @Test
@@ -1855,7 +1855,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNCharacterStream_String_Long */
+    }
 
     @Override
     @Test
@@ -1868,7 +1868,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBinaryStream */
+    }
 
     @Override
     @Test
@@ -1881,7 +1881,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBinaryStream_Int */
+    }
 
     @Override
     @Test
@@ -1894,24 +1894,24 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBinaryStream_Long */
+    }
 
     @Override
     @Test
     public void testUpdateArray() {
         // no arrays in DB/2 tables
-    } /* testUpdateArray */
+    }
 
     @Override
     @Test
     public void testUpdateRef() {
         // no REFs in DB/2 tables
-    } /* testUpdateRef */
+    }
 
     @Override
     @Test
     public void testUpdateRowId() {
-    } /* testUpdateRowId */
+    }
 
     @Override
     @Test
@@ -1923,7 +1923,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateObject */
+    }
 
     @Override
     @Test
@@ -1935,7 +1935,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateObject_Int */
+    }
 
     @Override
     @Test
@@ -1947,7 +1947,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* refreshRow */
+    }
 
     @Override
     @Test
@@ -1963,7 +1963,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (Exception e) {
             fail(EU.getExceptionMessage(e));
         }
-    } /* testDeleteRow */
+    }
 
     @Override
     @Test
@@ -1977,7 +1977,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testRowInserted */
+    }
 
     @Override
     @Test
@@ -1991,7 +1991,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testRowDeleted */
+    }
 
 
     @Override
@@ -2004,7 +2004,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLFeatureNotSupportedException sfnse) {
             System.out.println(EU.getExceptionMessage(sfnse));
         }
-    } /* testCancelRowUpdates */
+    }
 
     @Override
     @Test
@@ -2026,7 +2026,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (Exception e) {
             fail(EU.getExceptionMessage(e));
         }
-    } /* testUpdateRow */
+    }
 
     @Override
     @Test
@@ -2040,7 +2040,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testRowUpdated */
+    }
 
 
     @Override
@@ -2059,7 +2059,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testInsertRow */
+    }
 
     @Test
     public void testInsertRowSimple() throws SQLException {
@@ -2200,7 +2200,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testInsertRow */
+    }
 
     @SuppressWarnings("unchecked")
     private Struct getStructValue(String sType, List<TestColumnDefinition> listAd) throws SQLException, ParseException {
@@ -2215,7 +2215,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
             struct.getAttributes()[iAttribute] = o;
         }
         return struct;
-    } /* getStructValue */
+    }
 
     @SuppressWarnings("unchecked")
     @Test
@@ -2260,7 +2260,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (ParseException pe) {
             fail(EU.getExceptionMessage(pe));
         }
-    } /* testInsertRowComplex */
+    }
 
     @Override
     @Test
@@ -2280,7 +2280,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testClose */
+    }
 
     @Override
     @Test
@@ -2294,7 +2294,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testIsClosed */
+    }
 
 
     @Override
@@ -2309,7 +2309,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testFindColumn */
+    }
 
     @Override
     @Test
@@ -2323,7 +2323,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetStatement */
+    }
 
     @Override
     @Test
@@ -2337,7 +2337,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetWarnings */
+    }
 
     @Override
     @Test
@@ -2351,7 +2351,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testClearWarnings */
+    }
 
     @Override
     @Test
@@ -2365,7 +2365,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetCursorName */
+    }
 
     @Override
     @Test
@@ -2379,7 +2379,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNull */
+    }
 
     @Override
     @Test
@@ -2393,7 +2393,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetHoldability */
+    }
 
     @Override
     @Test
@@ -2407,7 +2407,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetType */
+    }
 
     @Override
     @Test
@@ -2421,7 +2421,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetConcurrency */
+    }
 
     @Override
     @Test
@@ -2436,7 +2436,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testWasNull */
+    }
 
     @Override
     @Test
@@ -2450,7 +2450,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetMetaData */
+    }
 
     @Override
     @Test
@@ -2464,7 +2464,7 @@ public class Db2ResultSetTester extends BaseResultSetTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetRow */
+    }
 
 
-} /* Db2ResultSetTester */
+}

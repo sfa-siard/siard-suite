@@ -15,7 +15,6 @@ public class CreateProcedureStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CreateProcedureStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -48,7 +47,6 @@ public class CreateProcedureStatement
             return CreateProcedureStatement.this;
         }
     }
-    /*==================================================================*/
 
     private CpsVisitor _visitor = new CpsVisitor();
 
@@ -106,9 +104,8 @@ public class CreateProcedureStatement
         }
         s = s + sNEW_LINE + sRIGHT_PAREN;
         return s;
-    } /* formatParameters */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the create procedure statement.
      * @return the SQL string corresponding to the fields of the create
@@ -123,9 +120,8 @@ public class CreateProcedureStatement
         if (getRoutineBody() != null)
             sStatement = sStatement + sNEW_LINE + getRoutineBody().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create procedure statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -134,9 +130,8 @@ public class CreateProcedureStatement
     public void parse(SqlParser.CreateProcedureStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create procedure statement from SQL.
      * @param sSql SQL.
@@ -145,9 +140,8 @@ public class CreateProcedureStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().createProcedureStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create procedure statement.
      * @param qiProcedureName name of procedure.
@@ -166,15 +160,14 @@ public class CreateProcedureStatement
         setRoutineCharacteristics(rc);
         setRoutineBody(rb);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CreateProcedureStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CreateProcedureStatement */
+}

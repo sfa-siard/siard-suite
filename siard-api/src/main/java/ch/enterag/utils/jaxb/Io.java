@@ -32,7 +32,6 @@ public abstract class Io {
         System.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
     }
 
-    /*--------------------------------------------------------------------*/
 
     /**
      * read and unmarshal a JAXB object from an XML file, validating it
@@ -58,8 +57,6 @@ public abstract class Io {
     }
 
 
-    /*--------------------------------------------------------------------*/
-
     /**
      * read and unmarshal a JAXB object from an XML file, validating it
      * with an XSD.
@@ -81,7 +78,6 @@ public abstract class Io {
         return jo;
     }
 
-    /*--------------------------------------------------------------------*/
 
     /**
      * marshal and write a JAXB object to an output stream, validating it
@@ -120,7 +116,6 @@ public abstract class Io {
             m.marshal(jo, os);
     }
 
-    /*--------------------------------------------------------------------*/
 
     /**
      * marshal and write a JAXB object to an output stream.
@@ -137,9 +132,6 @@ public abstract class Io {
         writeJaxbObject(jo, os, qname, sNoNamespaceSchemaLocation, null, bFormat, null);
     }
 
-
-
-    /*--------------------------------------------------------------------*/
 
     /**
      * marshal and write a JAXB object to an output stream, validating it

@@ -525,7 +525,7 @@ public enum K {
     private K(String sKeyword, boolean bReserved) {
         _sKeyword = sKeyword;
         _bReserved = bReserved;
-    } /* constructor K */
+    }
 
     @SuppressWarnings("static-access") // Eclipse bug ...
     public static K getByKeyword(String sKeyword) {
@@ -537,6 +537,6 @@ public enum K {
                 keyword = k;
         }
         return keyword;
-    } /* getByKeyword */
+    }
 
-} /* class K */
+}

@@ -22,7 +22,6 @@ public class WhenOperand
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(WhenOperand.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -201,7 +200,6 @@ public class WhenOperand
             return WhenOperand.this;
         }
     }
-    /*==================================================================*/
 
     private WoVisitor _visitor = new WoVisitor();
 
@@ -399,7 +397,6 @@ public class WhenOperand
         _listExclusives = listExclusives;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the when operand.
      * @return the SQL string corresponding to the fields of the when operand.
@@ -502,9 +499,8 @@ public class WhenOperand
                 s = getRowValuePredicand().format();
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get data type of this when operand from the context
      * of a query.
@@ -518,9 +514,8 @@ public class WhenOperand
         ptType.initBooleanType();
         dt.initPredefinedDataType(ptType);
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate this case expression against the context of a query.
      * @param ss sql statement.
@@ -532,9 +527,8 @@ public class WhenOperand
         throw new IllegalArgumentException("Evaluation of WhenOperand is not yet implemented!");
         //Object oValue = null;
         //return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the when operand from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -543,9 +537,8 @@ public class WhenOperand
     public void parse(SqlParser.WhenOperandContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the when operand from SQL.
      * @param sSql SQL.
@@ -554,9 +547,8 @@ public class WhenOperand
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().whenOperand());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a when operand.
      * @param co comparison operator.
@@ -623,15 +615,14 @@ public class WhenOperand
         setUdtNames(listUdtNames);
         setExclusives(listExclusives);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public WhenOperand(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class WhenOperand */
+}

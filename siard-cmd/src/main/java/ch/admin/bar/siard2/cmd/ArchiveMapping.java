@@ -31,7 +31,7 @@ public class ArchiveMapping {
                             SchemaMapping.newInstance(bSupportsArrays, bSupportsUdts,
                                                       sMappedSchemaName, ms, iMaxTableNameLength, iMaxColumnNameLength));
         }
-    } /* constructor */
+    }
 
     public static ArchiveMapping newInstance(boolean bSupportsArrays, boolean bSupportsUdts,
                                              Map<String, String> mapSchemas,
@@ -39,5 +39,5 @@ public class ArchiveMapping {
             throws IOException {
         return new ArchiveMapping(bSupportsArrays, bSupportsUdts,
                                   mapSchemas, md, iMaxTableNameLength, iMaxColumnNameLength);
-    } /* newInstance */
-} /* class ArchiveMapping */
+    }
+}

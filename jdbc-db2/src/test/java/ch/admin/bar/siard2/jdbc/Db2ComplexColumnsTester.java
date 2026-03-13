@@ -42,7 +42,7 @@ public class Db2ComplexColumnsTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     @Before
     public void setUp() {
@@ -58,7 +58,7 @@ public class Db2ComplexColumnsTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUp */
+    }
 
     @Test
     public void testGetProcedures() {

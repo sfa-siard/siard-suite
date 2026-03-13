@@ -9,7 +9,6 @@ public class PostgresStruct
     private String _sType = null;
     private Object[] _ao = null;
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param sType type (qualified)
@@ -19,22 +18,20 @@ public class PostgresStruct
         super(null);
         _sType = sType;
         _ao = ao;
-    } /* constructor PostgresStruct */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public String getSQLTypeName() throws SQLException {
         return _sType;
-    } /* getSQLTypeName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Object[] getAttributes() throws SQLException {
         return _ao;
-    } /* getAttributes */
+    }
 
-} /* class PostgresStruct */
+}

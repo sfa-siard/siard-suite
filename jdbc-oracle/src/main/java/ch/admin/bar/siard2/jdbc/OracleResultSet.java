@@ -27,7 +27,6 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** OracleResultSet implements a wrapped Oracle ResultSet.
  * @author Simon Jutz
@@ -45,7 +44,6 @@ public class OracleResultSet
     private Object _oLongValue = null;
     private boolean _bLongWasNull = false;
 
-    /*------------------------------------------------------------------*/
 
     /** convert an OracleSQLException into an SQLFeatureNotSupportedException.
      * @param sse OracleSQLException
@@ -54,9 +52,8 @@ public class OracleResultSet
     private void throwNotSupportedException(SQLException se)
             throws SQLFeatureNotSupportedException {
         throw new SQLFeatureNotSupportedException("SQLException!", se);
-    } /* throwFeatureNotSupportedSqlException */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** map Oracle object to appropriate java type.
      * @param o object.
@@ -138,9 +135,8 @@ public class OracleResultSet
             o = new OracleArray(oarray);
         }
         return o;
-    } /* mapObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** map Oracle object to appropriate java type.
      * @param o original object.
@@ -163,9 +159,8 @@ public class OracleResultSet
             oMapped = type.cast(mapObject(o, iType));
         /* then convert */
         return oMapped;
-    } /* mapObject */
+    }
 
-    /*------------------------------------------------------------------*/
     private Object mapJava(Object o) {
         if (o instanceof Duration) {
             Duration duration = (Duration) o;
@@ -217,9 +212,8 @@ public class OracleResultSet
             }
         }
         return o;
-    } /* mapJava */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped result set to be wrapped.
@@ -239,9 +233,8 @@ public class OracleResultSet
             if (sTypeName.startsWith("LONG"))
                 _iLongColumnIndex = iColumn;
         }
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** LONG values can only be read as the very first value in a record
      * which was obtained from a PreparedStatement.
@@ -260,17 +253,15 @@ public class OracleResultSet
             } else
                 throw new SQLException("LONG values can only be read, if the result set concurrency is read-only!");
         }
-    } /* getLongValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Statement getStatement() throws SQLException {
         return _stmt;
-    } /* getStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -278,9 +269,8 @@ public class OracleResultSet
         ResultSetMetaData rsmd = super.getMetaData();
         rsmd = new OracleResultSetMetaData(rsmd, _conn);
         return rsmd;
-    } /* getMetaData */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** an extension of the ResultSet API supporting predefined type
      * INTERVAL.
@@ -290,9 +280,8 @@ public class OracleResultSet
      */
     public Interval getInterval(int columnIndex) throws SQLException {
         return SqlLiterals.deserialize(super.getBytes(columnIndex), Interval.class);
-    } /* getInterval */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** an extension of the ResultSet API supporting predefined type
      * INTERVAL.
@@ -302,9 +291,8 @@ public class OracleResultSet
      */
     public Interval getInterval(String columnLabel) throws SQLException {
         return getInterval(findColumn(columnLabel));
-    } /* getInterval */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -316,9 +304,8 @@ public class OracleResultSet
             throwNotSupportedException(se);
         }
         return sCursorName;
-    } /* getCursorName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -331,9 +318,8 @@ public class OracleResultSet
             _bWasNull = _bLongWasNull;
         }
         return s;
-    } /* getString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -344,9 +330,8 @@ public class OracleResultSet
         if (bd != null)
             bd = bd.setScale(scale, RoundingMode.DOWN);
         return bd;
-    } /* getBigDecimal */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -354,9 +339,8 @@ public class OracleResultSet
             throws SQLException {
         Duration duration = (Duration) getObject(columnIndex);
         return duration;
-    } /* getDuration */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -375,9 +359,8 @@ public class OracleResultSet
             _bWasNull = _bLongWasNull;
         }
         return mapObject(o, iType);
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -395,9 +378,8 @@ public class OracleResultSet
         }
         oMapped = mapObject(o, iType, type);
         return oMapped;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -415,9 +397,8 @@ public class OracleResultSet
             throw new SQLFeatureNotSupportedException("getObject(,map) not supported!", se);
         }
         return o;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -431,9 +412,8 @@ public class OracleResultSet
         else
             blob = super.getBlob(columnIndex);
         return blob;
-    } /* getBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -447,17 +427,15 @@ public class OracleResultSet
         else
             clob = super.getClob(columnIndex);
         return clob;
-    } /* getClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Array getArray(int columnIndex) throws SQLException {
         return getObject(columnIndex, Array.class);
-    } /* getArray */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -488,9 +466,8 @@ public class OracleResultSet
             throwNotSupportedException(sse);
         }
         return url;
-    } /* getURL */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -503,17 +480,15 @@ public class OracleResultSet
             ;
         }
         return ri;
-    } /* getRowId */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public String getNString(int columnIndex) throws SQLException {
         return super.getNString(columnIndex);
-    } /* getNString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -534,9 +509,8 @@ public class OracleResultSet
             throw new SQLException(o.getClass()
                                     .getName() + " cannot be accessed as a character stream!");
         return rdr;
-    } /* getNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -556,9 +530,8 @@ public class OracleResultSet
             throw new SQLException("Error copying Clob to NClob!", ie);
         }
         return nclob;
-    } /* getNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -568,42 +541,37 @@ public class OracleResultSet
         } catch (SQLException se) {
             throwNotSupportedException(se);
         }
-    } /* updateRowId */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNString(int columnIndex, String nString)
             throws SQLException {
         super.updateString(columnIndex, nString);
-    } /* updateNString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNCharacterStream(int columnIndex, Reader x,
                                        long length) throws SQLException {
         super.updateCharacterStream(columnIndex, x, length);
-    } /* updateNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNCharacterStream(int columnIndex, Reader x)
             throws SQLException {
         super.updateCharacterStream(columnIndex, x);
-    } /* updateNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
     public void updateDuration(int columnIndex, Duration x)
             throws SQLException {
         updateObject(columnIndex, x);
-    } /* updateDuration */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -617,18 +585,16 @@ public class OracleResultSet
             updateArray(columnIndex, (Array) x);
         else
             super.updateObject(columnIndex, mapJava(x));
-    } /* updateObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateObject(int columnIndex, Object x, int scaleOrLength)
             throws SQLException {
         super.updateObject(columnIndex, mapJava(x), scaleOrLength);
-    } /* updateObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -642,9 +608,8 @@ public class OracleResultSet
         } catch (OracleSQLException sse) {
             throwNotSupportedException(sse);
         }
-    } /* updateArray */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -652,9 +617,8 @@ public class OracleResultSet
         boolean bPositioned = super.absolute(row);
         getLongValue(bPositioned);
         return bPositioned;
-    } /* absolute */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -662,9 +626,8 @@ public class OracleResultSet
         boolean bPositioned = super.relative(row);
         getLongValue(bPositioned);
         return bPositioned;
-    } /* relative */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -672,9 +635,8 @@ public class OracleResultSet
         boolean bPositioned = super.first();
         getLongValue(bPositioned);
         return bPositioned;
-    } /* first */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -682,9 +644,8 @@ public class OracleResultSet
         boolean bPositioned = super.last();
         getLongValue(bPositioned);
         return bPositioned;
-    } /* last */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -692,9 +653,8 @@ public class OracleResultSet
         boolean bPositioned = super.next();
         getLongValue(bPositioned);
         return bPositioned;
-    } /* next */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -702,9 +662,8 @@ public class OracleResultSet
         boolean bPositioned = super.previous();
         getLongValue(bPositioned);
         return bPositioned;
-    } /* previous */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -715,7 +674,7 @@ public class OracleResultSet
         } finally {
             if ((stmt != null) && (!stmt.isClosed())) stmt.close();
         }
-    } /* close */
+    }
 
 
-} /* class OracleResultSet */
+}

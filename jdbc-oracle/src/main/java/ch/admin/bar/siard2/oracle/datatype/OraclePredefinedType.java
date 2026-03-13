@@ -21,7 +21,6 @@ import ch.enterag.sqlparser.datatype.enums.PreType;
 import java.util.HashMap;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** OraclePredefinedType implements the type translation from ISO SQL to
  * Oracle SQL.
@@ -63,7 +62,6 @@ public class OraclePredefinedType
         mapISO_TO_ORACLE.put(PreType.DATALINK, "BLOB");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the predefined data type for Oracle
      * In Oracle both character and national character strings have limits.
@@ -137,14 +135,12 @@ public class OraclePredefinedType
     }
 
 
-    /*------------------------------------------------------------------*/
-
     /**
      * constructor with factory only to be called by factory
      * @param sf factory.
      */
     public OraclePredefinedType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class OraclePredefinedType */
+}

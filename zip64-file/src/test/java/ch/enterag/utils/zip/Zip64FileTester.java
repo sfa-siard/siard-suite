@@ -536,7 +536,7 @@ public class Zip64FileTester {
             buffer[i] = (byte) (32 + (int) Math.floor(96 * Math.random()));
         fos.write(buffer);
         fos.close();
-    } /* createLarge */
+    }
 
     @BeforeAll
     public static void setupClass() {
@@ -1001,7 +1001,6 @@ public class Zip64FileTester {
         File fileLargeOriginal = new File(fileTemp.getAbsolutePath() + File.separator + "large.txt");
         /* original of small file */
         File fileSmallOriginal = new File(fileTemp.getAbsolutePath() + File.separator + "many" + File.separator + "small12345.txt");
-        /*--- uncompressed ---------------------------------------------------------------*/
         zipTest(FileEntry.iMETHOD_STORED);
         /* extract the moderate file */
         if (!extractFile("moderate.txt"))
@@ -1031,7 +1030,6 @@ public class Zip64FileTester {
         if (!equalTest(fileSmall, fileSmallOriginal))
             fail("extracted compressed small file is not equal to its original!");
         fileSmall.delete();
-        /*--- compressed ---------------------------------------------------------------*/
         fileTest.delete();
         /* zip everything to new non-existent file */
         zipTest(FileEntry.iMETHOD_DEFLATED);

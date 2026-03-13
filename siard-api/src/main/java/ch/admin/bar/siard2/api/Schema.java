@@ -45,9 +45,6 @@ public interface Schema {
      */
     boolean isEmpty();
   
-  /*====================================================================
-  methods
-  ====================================================================*/
 
     /**
      * get number of table entries in the schema.

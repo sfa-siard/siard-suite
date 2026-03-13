@@ -883,7 +883,7 @@ public class Zip64File {
      */
     public DiskFile getDiskFile() {
         return m_df;
-    } /* getDiskFile */
+    }
 
     /**
      * returns the number of file entries.
@@ -892,7 +892,7 @@ public class Zip64File {
      */
     public int getFileEntries() {
         return m_iFileEntries;
-    } /* getFileEntries */
+    }
 
     /**
      * returns a named file entry.
@@ -902,7 +902,7 @@ public class Zip64File {
      */
     public FileEntry getFileEntry(String sEntryName) {
         return m_mapFileEntries.get(sEntryName);
-    } /* getFileEntry */
+    }
 
     /**
      * returns the list of file entries.
@@ -911,7 +911,7 @@ public class Zip64File {
      */
     public List<FileEntry> getListFileEntries() {
         return m_listFileEntries;
-    } /* getListFileEntries */
+    }
 
     /**
      * returns ZIP file comment (header).

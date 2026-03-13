@@ -48,9 +48,6 @@ public interface Archive {
      */
     int iDEFAULT_MAX_INLINE_SIZE = 4000;
   
-  /*====================================================================
-  properties
-  ====================================================================*/
 
     /**
      * gets file name.
@@ -157,9 +154,6 @@ public interface Archive {
     void importMetaDataTemplate(InputStream isMetaDataTemplate)
             throws IOException;
   
-  /*====================================================================
-  methods
-  ====================================================================*/
 
     /**
      * open an existing SIARD file for reading and modification of

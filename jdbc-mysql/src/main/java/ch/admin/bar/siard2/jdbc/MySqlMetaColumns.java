@@ -19,7 +19,6 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-/* =============================================================================== */
 
 /**
  * Implements the type translation between MySql and ISO SQL
@@ -88,7 +87,6 @@ public class MySqlMetaColumns extends MySqlResultSet {
     private int _iLength = -1;
     private ResultSet _rsUnwrapped = null;
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Constructor
@@ -102,7 +100,7 @@ public class MySqlMetaColumns extends MySqlResultSet {
         _iPrecision = iPrecision;
         _iLength = iLength;
         _rsUnwrapped = unwrap(ResultSet.class);
-    } /* constructor */
+    }
 
 
     /** Implements the type translation between MySql and ISO SQL
@@ -135,7 +133,6 @@ public class MySqlMetaColumns extends MySqlResultSet {
         return pt.getSqlType();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** implements length translation.
      * @param lColumnSize unwrapped length
@@ -152,9 +149,8 @@ public class MySqlMetaColumns extends MySqlResultSet {
                 lColumnSize = iMAX_VARCHAR_LENGTH;
         }
         return lColumnSize;
-    } /* getColumnSize */
+    }
 
-    /* ------------------------------------------------------------------------ */
     @Override
     public int getInt(int columnIndex) throws SQLException {
         int iResult = -1;
@@ -171,9 +167,8 @@ public class MySqlMetaColumns extends MySqlResultSet {
         } else
             iResult = super.getInt(columnIndex);
         return iResult;
-    } /* getInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -196,9 +191,8 @@ public class MySqlMetaColumns extends MySqlResultSet {
         else
             lResult = _rsUnwrapped.getLong(columnIndex);
         return lResult;
-    } /* getLong */
+    }
 
-    /* ------------------------------------------------------------------------ */
     @Override
     public Object getObject(int columnIndex) throws SQLException {
         Object oResult = _rsUnwrapped.getObject(columnIndex);
@@ -215,14 +209,13 @@ public class MySqlMetaColumns extends MySqlResultSet {
             oResult = Long.valueOf(getLong(columnIndex));
 
         return oResult;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public boolean next() throws SQLException {
         return _rsUnwrapped.next();
-    } /* next */
+    }
 
-} /* class MySqlMetaColumns */
+}

@@ -15,7 +15,6 @@ import ch.admin.bar.siard2.mysql.MySqlLiterals;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.Literal;
 
-/* =============================================================================== */
 
 /**
  * MySqlLiteral implements the value translation from ISO SQL:2008 to My Sql Server
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.expression.Literal;
  */
 public class MySqlLiteral extends Literal {
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Constructor with factory only to be called by factory
@@ -31,9 +29,8 @@ public class MySqlLiteral extends Literal {
      */
     public MySqlLiteral(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * format the literal
@@ -48,6 +45,6 @@ public class MySqlLiteral extends Literal {
         }
 
         return sFormatted;
-    }  /* format */
+    }
 
-} /* class MySqlLiteral */
+}

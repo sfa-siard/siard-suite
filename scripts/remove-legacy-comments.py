@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Remove legacy section-separator comments, file header blocks, and method-end comments from Java files.
+"""Remove legacy section-separator comments and method-end comments from Java files.
+
+NOTE: File/class header blocks (containing copyright notices) are intentionally preserved.
 
 Patterns removed:
-1. Multi-line file header blocks: /*== ClassName.java ===...\n...\n======*/
-2. Multi-line file header blocks: /*======...\n...\n======*/
-3. 3-line section separators: /*====...\n text \n ====*/  and  /*====...\n text \n /*===*/
-4. 3-line section separators: /*----...\n text \n ----*/
-5. Standalone separator lines: /*====...====*/  and  /*----...----*/
-6. Standalone separator lines with spaces: /* ====...==== */
-7. Inline dash separators: /*--- text ---*/
-8. Method-end comments on same line as }: } /* methodName */
+1. 3-line section separators: /*====...\n text \n ====*/  and  /*====...\n text \n /*===*/
+2. 3-line section separators: /*----...\n text \n ----*/
+3. Standalone separator lines: /*====...====*/  and  /*----...----*/
+4. Standalone separator lines with spaces: /* ====...==== */
+5. Inline dash separators: /*--- text ---*/
+6. Method-end comments on same line as }: } /* methodName */
 
 Usage:
     python3 scripts/remove-legacy-comments.py [directory]
@@ -32,34 +32,21 @@ def process_file(filepath):
         line = lines[i]
         stripped = line.strip()
 
-        # Pattern 1+2: Multi-line file/section header block starting with /*== or /*====
-        # Looks like: /*== Name.java ===...  or  /*======...
-        # Ends with:  ======*/  or  /*===*/  (closing */ on a line with === or ---)
-        if re.match(r'/\*={2,}', stripped):
-            if not re.search(r'\*/', stripped):
-                # Multi-line block - scan ahead for closing line
-                j = i + 1
-                found_end = False
-                while j < len(lines) and j < i + 20:
-                    end_stripped = lines[j].strip()
-                    # Closing line: ======*/  or  /*===...===*/
-                    if re.match(r'={3,}\*/', end_stripped) or re.match(r'/\*[=\-]{3,}\*/$', end_stripped):
-                        i = j + 1
-                        found_end = True
-                        break
-                    j += 1
-                if found_end:
-                    continue
-                else:
-                    # Malformed opening without close - remove just this line
-                    i += 1
-                    continue
-            else:
-                # Single-line: /*====...====*/ - standalone separator
-                i += 1
+        # 3-line section separators with equals: /*====...\n text \n ====*/ or /*====...\n text \n /*===*/
+        if re.match(r'/\*={3,}', stripped) and not re.search(r'\*/', stripped):
+            j = i + 1
+            found_end = False
+            while j < len(lines) and j < i + 5:
+                end_stripped = lines[j].strip()
+                if re.match(r'={3,}\*/', end_stripped) or re.match(r'/\*[=]{3,}\*/$', end_stripped):
+                    i = j + 1
+                    found_end = True
+                    break
+                j += 1
+            if found_end:
                 continue
 
-        # Pattern 3+4: 3-line section separator with dashes
+        # 3-line section separators with dashes
         if re.match(r'/\*-{3,}', stripped) and not re.search(r'\*/', stripped):
             j = i + 1
             found_end = False

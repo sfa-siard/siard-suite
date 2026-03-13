@@ -13,7 +13,6 @@ public class ValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(ValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -39,7 +38,6 @@ public class ValueExpression
             return ValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private VeVisitor _visitor = new VeVisitor();
 
@@ -77,7 +75,6 @@ public class ValueExpression
         _rve = rve;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the value expression.
      * @return the SQL string corresponding to the fields of the value expression.
@@ -92,9 +89,8 @@ public class ValueExpression
         else if (getRowValueExpression() != null)
             sExpression = getRowValueExpression().format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get data type of a value expression from the context of a query.
      * @param ss sql statement.
@@ -109,9 +105,8 @@ public class ValueExpression
         else if (getRowValueExpression() != null)
             dt = getRowValueExpression().getDataType(ss);
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a value expression from its components.
      * @return value.
@@ -125,9 +120,8 @@ public class ValueExpression
         else if (getRowValueExpression() != null)
             oValue = oRowValue;
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a value expression against the context of a query.
      * @param ss sql statement.
@@ -147,9 +141,8 @@ public class ValueExpression
             oRowValue = getRowValueExpression().evaluate(ss, bAggregated);
         Object oValue = evaluate(oCommonValue, bBooleanValue, oRowValue);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a value expression to their initial value.
      * @param ss sql statement.
@@ -167,9 +160,8 @@ public class ValueExpression
             oRowValue = getRowValueExpression().resetAggregates(ss);
         Object oValue = evaluate(oCommonValue, bBooleanValue, oRowValue);
         return oValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -178,9 +170,8 @@ public class ValueExpression
     public void parse(SqlParser.ValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the value expression from SQL.
      * @param sSql SQL.
@@ -189,9 +180,8 @@ public class ValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().valueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a value expression.
      * @param cve common value expression.
@@ -207,15 +197,14 @@ public class ValueExpression
         setBooleanValueExpression(bve);
         setRowValueExpression(rve);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public ValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class ValueExpression */
+}

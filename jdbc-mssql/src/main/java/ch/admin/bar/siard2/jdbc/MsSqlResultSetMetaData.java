@@ -16,7 +16,6 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** MsSqlResultSetMetaData implements wrapped MSSQL ResultSetMetaData.
  * @author Hartwig Thomas
@@ -44,7 +43,6 @@ public class MsSqlResultSetMetaData
 
     private Connection _conn = null;
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped result set to be wrapped.
@@ -52,9 +50,8 @@ public class MsSqlResultSetMetaData
     public MsSqlResultSetMetaData(ResultSetMetaData rsmdWrapped, Connection conn) {
         super(rsmdWrapped);
         _conn = conn;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * fix invalid original class name.
@@ -74,9 +71,8 @@ public class MsSqlResultSetMetaData
         else if (sTypeName.equals("image"))
             cls = Blob.class;
         return cls.getName();
-    } /* getColumnClassName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * map java.sql.Types type.
@@ -89,9 +85,8 @@ public class MsSqlResultSetMetaData
                 _conn,
                 super.getCatalogName(column),
                 super.getSchemaName(column));
-    } /* getColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * map java.sql.Types type.
@@ -105,9 +100,8 @@ public class MsSqlResultSetMetaData
                 _conn,
                 super.getCatalogName(column),
                 super.getSchemaName(column));
-    } /* getPrecision */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * map type name.
@@ -121,6 +115,6 @@ public class MsSqlResultSetMetaData
                 _conn,
                 super.getCatalogName(column),
                 super.getSchemaName(column));
-    } /* getColumnTypeName */
+    }
 
-} /* class MsSqlResultSetMetaData */
+}

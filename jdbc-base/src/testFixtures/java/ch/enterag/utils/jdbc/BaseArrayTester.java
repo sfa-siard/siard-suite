@@ -16,7 +16,7 @@ public abstract class BaseArrayTester {
     protected static void printExceptionMessage(Exception e) {
         System.err.println("  " + EU.getExceptionMessage(e));
         System.err.flush();
-    } /* printExceptionMessage */
+    }
 
     protected static final void print(ResultSet rs)
             throws SQLException {
@@ -56,17 +56,17 @@ public abstract class BaseArrayTester {
                                           .getStackTrace();
         sCallingMethod = asSte[iDepth].getMethodName();
         return sCallingMethod;
-    } /* getCallingMethod */
+    }
 
     protected void enter() {
         System.out.println(getCallingMethod(3));
         System.out.flush();
-    } /* enter */
+    }
 
     /* setUp must create the array instance and call this method */
     protected void setArray(Array array) {
         _array = (BaseArray) array;
-    } /* setArray */
+    }
 
     @After
     public void tearDown() {
@@ -76,11 +76,8 @@ public abstract class BaseArrayTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
-    /*--------------------------------------------------------------------
-    Base tests for all arrays extending BaseArray.
-    --------------------------------------------------------------------*/
     @Test
     public void testGetBaseTypeName() {
         enter();
@@ -91,7 +88,7 @@ public abstract class BaseArrayTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBaseTypeName */
+    }
 
     @Test
     public void testGetBaseType() {
@@ -103,7 +100,7 @@ public abstract class BaseArrayTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBaseType */
+    }
 
     @Test
     public void testGetArray() {
@@ -115,7 +112,7 @@ public abstract class BaseArrayTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetArray */
+    }
 
     @Test
     public void testGetArray_Long_Int() {
@@ -127,7 +124,7 @@ public abstract class BaseArrayTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetArray_Long_Int */
+    }
 
     @Test
     public void testGetResultSet() {
@@ -139,7 +136,7 @@ public abstract class BaseArrayTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetResultSet */
+    }
 
     @Test
     public void testGetResultSet_Long_Int() {
@@ -151,6 +148,6 @@ public abstract class BaseArrayTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetResultSet_Long_int */
+    }
 
-} /* BaseArrayTester */
+}

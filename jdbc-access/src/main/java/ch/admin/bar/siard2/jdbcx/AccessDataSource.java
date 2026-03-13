@@ -102,9 +102,6 @@ public class AccessDataSource
         _sUser = sUser;
     }
   
-  /*====================================================================
-  Wrapper 
-  ====================================================================*/
 
     /** @return true, if database is to be opened read-only. */
     public boolean getReadOnly() {
@@ -116,9 +113,6 @@ public class AccessDataSource
         _bReadOnly = bReadOnly;
     }
 
-  /*====================================================================
-  Interface properties 
-  ====================================================================*/
 
     /** {@link ResultSetMetaData} */
     @Override
@@ -162,9 +156,6 @@ public class AccessDataSource
         _pwLogWriter = pwLogWriter;
     }
   
-  /*======================================================================
-  Interface methods 
-  ======================================================================*/
 
     /** {@link DataSource} for JDK 1.7
      @Override public Logger getParentLogger()

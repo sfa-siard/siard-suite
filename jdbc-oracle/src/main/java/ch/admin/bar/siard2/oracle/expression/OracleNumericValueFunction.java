@@ -6,7 +6,6 @@ import ch.enterag.sqlparser.expression.enums.NumericFunction;
 
 public class OracleNumericValueFunction
         extends NumericValueFunction {
-    /*------------------------------------------------------------------*/
 
     /** format the numeric value function.
      * Oracle uses LENGTH or DBMS_LOB.GETLENGTH for OCTET_LENGTH.
@@ -24,15 +23,14 @@ public class OracleNumericValueFunction
                     sLEFT_PAREN + getStringValueExpression().format() + sRIGHT_PAREN;
         }
         return sFunction;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleNumericValueFunction(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* OracleNumericValueFunction */
+}

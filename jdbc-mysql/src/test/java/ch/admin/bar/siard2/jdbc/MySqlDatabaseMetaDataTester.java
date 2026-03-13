@@ -73,7 +73,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     @AfterClass
     public static void tearDownClass() {
@@ -93,7 +93,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } finally {
             _mysql.stop();
         }
-    } /* tearDownClass */
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -109,12 +109,12 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUp */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong result set meta class!", MySqlDatabaseMetaData.class, _dmdMySql.getClass());
-    } /* testClass */
+    }
 
     @Test
     @Override
@@ -125,7 +125,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* getTypeInfo */
+    }
 
     private void testColumns(QualifiedId qiTable, List<TestColumnDefinition> listCd) {
         try {
@@ -343,31 +343,31 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testColumns */
+    }
 
     @Test
     public void testColumnsMySqlSimple() {
         enter();
         testColumns(TestMySqlDatabase.getQualifiedSimpleTable(), TestMySqlDatabase._listCdSimple);
-    } /* testColumnsMySqlSimple */
+    }
 
     @Test
     public void testColumnsMySqlComplex() {
         enter();
         testColumns(TestMySqlDatabase.getQualifiedComplexTable(), TestMySqlDatabase._listCdComplex);
-    } /* testColumnsMySqlComplex */
+    }
 
     @Test
     public void testColumnsSqlSimple() {
         enter();
         testColumns(TestSqlDatabase.getQualifiedSimpleTable(), TestSqlDatabase._listCdSimple);
-    } /* testColumnsSqlSimple */
+    }
 
     @Test
     public void testColumnsSqlComplex() {
         enter();
         testColumns(TestSqlDatabase.getQualifiedComplexTable(), TestSqlDatabase._listCdComplex);
-    } /* testColumnsSqlSimple */
+    }
 
     @Test
     @Override
@@ -566,4 +566,4 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
      }
      ***/
-} /* class MySqlDatabaseMetaData */
+}

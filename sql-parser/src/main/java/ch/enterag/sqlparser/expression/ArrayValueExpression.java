@@ -11,7 +11,6 @@ public class ArrayValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(ArrayValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -32,7 +31,6 @@ public class ArrayValueExpression
             return ArrayValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private AveVisitor _visitor = new AveVisitor();
 
@@ -80,7 +78,6 @@ public class ArrayValueExpression
         _vep = vep;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the array value expression.
      * @return the SQL string corresponding to the fields of the array
@@ -94,9 +91,8 @@ public class ArrayValueExpression
         else if (getValueExpressionPrimary() != null)
             sExpression = getValueExpressionPrimary().format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the array value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -105,9 +101,8 @@ public class ArrayValueExpression
     public void parse(SqlParser.ArrayValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the array value expression from SQL.
      * @param sSql SQL.
@@ -116,9 +111,8 @@ public class ArrayValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().arrayValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an array value expression.
      * @param bConcatenation true, if concatentation expression.
@@ -137,15 +131,14 @@ public class ArrayValueExpression
         setSecondOperand(ave2);
         setValueExpressionPrimary(vep);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public ArrayValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class ArrayValueExpression */
+}

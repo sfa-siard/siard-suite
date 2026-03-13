@@ -22,7 +22,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/*====================================================================*/
 
 /** PostgresDropTypeStatement overrides DropTypeStatement of
  * SQL parser because Postgres does not support DISTINCT types but uses 
@@ -31,7 +30,6 @@ import java.sql.SQLException;
  */
 public class PostgresDropTypeStatement
         extends DropTypeStatement {
-    /*------------------------------------------------------------------*/
 
     /** format the drop type statement for Postgres dropping the domain,
      * if the type name designates a domain.
@@ -66,15 +64,14 @@ public class PostgresDropTypeStatement
             sStatement = K.DROP.getKeyword() + sSP + K.TYPE.getKeyword() + sSP +
                     getUdtName().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public PostgresDropTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class PostgresDropTypeStatement */
+}

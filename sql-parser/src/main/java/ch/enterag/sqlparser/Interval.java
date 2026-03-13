@@ -24,7 +24,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/*====================================================================*/
 
 /** Implements a date-time interval in integer years, months, days and
  * with a resolution of nanoseconds.
@@ -51,10 +50,9 @@ public class Interval
             _iSign = iSign;
         else
             throw new IllegalArgumentException("Sign must be 1 or -1!");
-    } /* setSign */
+    }
 
     private int _iYears = 0;
-    /*------------------------------------------------------------------*/
 
     /** get the number of years in the interval.
      * @return years in the interval.
@@ -62,7 +60,6 @@ public class Interval
     public int getYears() {
         return _iYears;
     }
-    /*------------------------------------------------------------------*/
 
     /** set the number of years in the interval.
      * The number of years must be non-negative. (Use setSign() to change the
@@ -79,10 +76,9 @@ public class Interval
             _lNanoSeconds = 0;
         } else
             throw new IllegalArgumentException("Years value must be non-negative. Use setSign() to change the sign of the interval.");
-    } /* setYears */
+    }
 
     private int _iMonths = 0;
-    /*------------------------------------------------------------------*/
 
     /** get the number of months in the interval.
      * @return months in the interval.
@@ -90,7 +86,6 @@ public class Interval
     public int getMonths() {
         return _iMonths;
     }
-    /*------------------------------------------------------------------*/
 
     /** set the number of months in the interval.
      * The number of months must be non-negative. (Use setSign() to change the
@@ -107,10 +102,9 @@ public class Interval
             _lNanoSeconds = 0;
         } else
             throw new IllegalArgumentException("Months value must be non-negative and less than 12. Use setSign() to change the sign of the interval.");
-    } /* setMonths */
+    }
 
     private int _iDays = 0;
-    /*------------------------------------------------------------------*/
 
     /** get the number of days in the interval.
      * @return days in the interval.
@@ -118,7 +112,6 @@ public class Interval
     public int getDays() {
         return _iDays;
     }
-    /*------------------------------------------------------------------*/
 
     /** set the number of days in the interval.
      * The number of days must be non-negative. (Use setSign() to change the sign
@@ -133,10 +126,9 @@ public class Interval
             _iMonths = 0;
         } else
             throw new IllegalArgumentException("Days value must be non-negative. Use setSign() to change the sign of the interval.");
-    } /* setDays */
+    }
 
     private int _iHours = 0;
-    /*------------------------------------------------------------------*/
 
     /** get the number of hours in the interval.
      * @return hours in the interval.
@@ -144,7 +136,6 @@ public class Interval
     public int getHours() {
         return _iHours;
     }
-    /*------------------------------------------------------------------*/
 
     /** set the number of hours in the interval.
      * The number of hours must be non-negative. (Use setSign() to change the
@@ -159,10 +150,9 @@ public class Interval
             _iMonths = 0;
         } else
             throw new IllegalArgumentException("Hours value must be non-negative and less than 24. Use setSign() to change the sign of the interval.");
-    } /* setHours */
+    }
 
     private int _iMinutes = 0;
-    /*------------------------------------------------------------------*/
 
     /** get the number of minutes in the interval.
      * @return minutes in the interval.
@@ -170,7 +160,6 @@ public class Interval
     public int getMinutes() {
         return _iMinutes;
     }
-    /*------------------------------------------------------------------*/
 
     /** set the number of minutes in the interval.
      * The number of minutes must be non-negative. (Use setSign() to change the
@@ -185,10 +174,9 @@ public class Interval
             _iMonths = 0;
         } else
             throw new IllegalArgumentException("Minutes value must be non-negative and less than 60. Use setSign() to change the sign of the interval.");
-    } /* setMinutes */
+    }
 
     private int _iSeconds = 0;
-    /*------------------------------------------------------------------*/
 
     /** get the number of seconds in the interval.
      * @return seconds in the interval.
@@ -196,7 +184,6 @@ public class Interval
     public int getSeconds() {
         return _iSeconds;
     }
-    /*------------------------------------------------------------------*/
 
     /** set the number of seconds in the interval.
      * The number of seconds must be non-negative. (Use setSign() to change the
@@ -211,10 +198,9 @@ public class Interval
             _iMonths = 0;
         } else
             throw new IllegalArgumentException("Seconds value must be non-negative and less than 61. Use setSign() to change the sign of the interval.");
-    } /* setSeconds */
+    }
 
     private long _lNanoSeconds = 0;
-    /*------------------------------------------------------------------*/
 
     /** get the number of nano seconds in the interval.
      * @return nano seconds in the interval.
@@ -222,7 +208,6 @@ public class Interval
     public long getNanoSeconds() {
         return _lNanoSeconds;
     }
-    /*------------------------------------------------------------------*/
 
     /** set the number of nano seconds in the interval.
      * The number of nano seconds must be non-negative. (Use setSign() to change the
@@ -235,8 +220,7 @@ public class Interval
             _lNanoSeconds = lNanoSeconds;
         else
             throw new IllegalArgumentException("Nano seconds must be non-negative and between 0 and 1'000'000'000!");
-    } /* setNanoSeconds */
-    /*------------------------------------------------------------------*/
+    }
 
     /** get the number of milliseconds (rounded down from nanoseconds) in the interval.
      * @return milliseconds in the interval.
@@ -244,7 +228,6 @@ public class Interval
     public int getMilliSeconds() {
         return (int) (getNanoSeconds() / 1000000l);
     }
-    /*------------------------------------------------------------------*/
 
     /** set the number of nanoseconds in the interval given by milliseconds.
      * @param iMilliseconds milliseconds.
@@ -254,7 +237,6 @@ public class Interval
         setNanoSeconds(lNanoSeconds);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -281,17 +263,15 @@ public class Interval
                 bEquals = false;
         }
         return bEquals;
-    } /* equals */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
         return SqlLiterals.formatIntervalLiteral(this);
-    } /* toString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** construct a YEAR TO MONTH interval.
      * @param iSign sign (-1 or 1)
@@ -302,9 +282,8 @@ public class Interval
         setSign(iSign);
         setYears(iYears);
         setMonths(iMonths);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** construct a DAY time interval.
      * @param iSign sign (-1 or 1)
@@ -321,9 +300,8 @@ public class Interval
         setMinutes(iMinutes);
         setSeconds(iSeconds);
         setNanoSeconds(lNanoSeconds);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** create an interval between two calendar dates.
      * @param cal1 first calendar date.
@@ -389,9 +367,8 @@ public class Interval
             interval.setMilliseconds(iMillis);
         }
         return interval;
-    } /* between */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** add this interval to the given calendar date.
      * @param cal calendar date.
@@ -408,9 +385,8 @@ public class Interval
         calResult.add(Calendar.SECOND, getSign() * getSeconds());
         calResult.add(Calendar.MILLISECOND, getSign() * getMilliSeconds());
         return calResult;
-    } /* addTo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert this interval to a Duration instance.
      * @return duration corresponding to this interval.
@@ -436,9 +412,8 @@ public class Interval
         } catch (DatatypeConfigurationException dcfe) {
         }
         return duration;
-    } /* toDuration */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** create a new Interval instance from a Duration instance.
      * @param duration duration
@@ -472,6 +447,6 @@ public class Interval
             iv = new Interval(iSign, iDays, iHours, iMinutes, iSeconds, lNanoSeconds);
         }
         return iv;
-    } /* fromDuration */
+    }
 
-} /* Interval */
+}

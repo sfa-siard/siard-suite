@@ -16,7 +16,6 @@ public class TableConstraintDefinition
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(TableConstraintDefinition.class.getName());
 
-    /*==================================================================*/
     private class TcdVisitor extends EnhancedSqlBaseVisitor<TableConstraintDefinition> {
         @Override
         public TableConstraintDefinition visitConstraintName(SqlParser.ConstraintNameContext ctx) {
@@ -82,7 +81,6 @@ public class TableConstraintDefinition
             return TableConstraintDefinition.this;
         }
     }
-    /*==================================================================*/
 
     private TcdVisitor _visitor = new TcdVisitor();
 
@@ -200,7 +198,6 @@ public class TableConstraintDefinition
         _cct = cct;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the table constraint definition.
      * @return the SQL string corresponding to the fields of the table
@@ -237,9 +234,8 @@ public class TableConstraintDefinition
         if (getConstraintCheckTime() != null)
             sDefinition = sDefinition + sSP + getConstraintCheckTime().getKeywords();
         return sDefinition;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table constraint definition from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -248,9 +244,8 @@ public class TableConstraintDefinition
     public void parse(SqlParser.TableConstraintDefinitionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table constraint definition from SQL.
      * @param sSql SQL.
@@ -259,9 +254,8 @@ public class TableConstraintDefinition
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().tableConstraintDefinition());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a table constraint definition.
      * @param qConstraint constraint name (not null!).
@@ -300,9 +294,8 @@ public class TableConstraintDefinition
         setDeferrability(def);
         setConstraintCheckTime(cct);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a PRIMARY KEY table constraint definition.
      * @param qConstraint constraint name (not null!).
@@ -317,15 +310,14 @@ public class TableConstraintDefinition
         setType(TableConstraintType.PRIMARY_KEY);
         setColumns(idlColumns);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public TableConstraintDefinition(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class TableConstraintDefinition */
+}

@@ -17,7 +17,6 @@ public class CaseExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CaseExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -84,7 +83,6 @@ public class CaseExpression
             return CaseExpression.this;
         }
     }
-    /*==================================================================*/
 
     private CeVisitor _visitor = new CeVisitor();
 
@@ -202,7 +200,6 @@ public class CaseExpression
         _veElseResult = veElseResult;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the case expression.
      * @return the SQL string corresponding to the fields of the case expression.
@@ -250,9 +247,8 @@ public class CaseExpression
             sExpression = sExpression + sNEW_LINE + K.END.getKeyword();
         }
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get data type of this case expression from the context
      * of a query.
@@ -278,9 +274,8 @@ public class CaseExpression
         }
         dt = listTypes.get(0); // we should probably return the "widest" data type
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate this case expression against the context of a query.
      * @param ss sql statement.
@@ -325,9 +320,8 @@ public class CaseExpression
                 oValue = getElseResult().evaluate(ss, bAggregated);
         }
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the case expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -336,9 +330,8 @@ public class CaseExpression
     public void parse(SqlParser.CaseExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the case expression from SQL.
      * @param sSql SQL.
@@ -347,9 +340,8 @@ public class CaseExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().caseExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a case expression.
      * @param bNullIf true, if NULLIF expression.
@@ -392,15 +384,14 @@ public class CaseExpression
         setWhenResults(listWhenResults);
         setElseResult(veElseResult);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CaseExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CaseExpression */
+}

@@ -41,7 +41,6 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-/*====================================================================*/
 
 /** Tests zip64.
  @author Hartwig Thomas
@@ -104,7 +103,7 @@ public class zip64Tester {
             fail(EU.getExceptionMessage(ie));
         }
         return bDeleted;
-    } /* deleteAll */
+    }
 
     /** compare the files in two folders.
      * @param file1 first folder.
@@ -201,7 +200,7 @@ public class zip64Tester {
         } else
             fail("directory entries are not both files or both folders!");
         return bEqual;
-    } /* compareAll */
+    }
 
     private void zipPkZip(File fileFolderUnzip, File fileFileZip) {
         /* use pkzipc to create zip file in zip directory */
@@ -228,7 +227,7 @@ public class zip64Tester {
         } catch (InterruptedException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* zipPkZip */
+    }
 
     private void zipInfoZip(File fileFolderUnzip, File fileFileZip) {
         /* use Info-ZIP zip.exe to create zip file in zip directory */
@@ -351,7 +350,7 @@ public class zip64Tester {
         } else
             fail("Cannot make directories for " + fileFolderUnzip.getAbsolutePath());
 
-    } /* setUp */
+    }
 
     @AfterEach
     public void tearDown()
@@ -362,7 +361,7 @@ public class zip64Tester {
          File fileFolderZip = new File(sFOLDER_ZIP);
          deleteAll(fileFolderZip);
          ***/
-    } /* tearDown */
+    }
 
     /**
      * Test method for help.
@@ -387,7 +386,7 @@ public class zip64Tester {
         if (!exec.getStdOut()
                  .startsWith("Usage:"))
             fail("Invalid output: " + exec.getStdOut());
-    } /* testHelp */
+    }
 
     /**
      * Test method for list.
@@ -497,7 +496,7 @@ public class zip64Tester {
         String sSize = SIZE_FORMAT.format(iEntries);
         if (!sOutput.startsWith(sSize))
             fail("Invalid number of entries!");
-    } /* testList */
+    }
 
     /**
      * Test method for basic injection case.
@@ -529,7 +528,7 @@ public class zip64Tester {
             fail("Invalid error: " + exec.getStdErr());
         /* clean up */
         deleteAll(fileFolderTest);
-    } /* testInject */
+    }
 
     /**
      * Test method for basic injection case without replacement.
@@ -553,7 +552,7 @@ public class zip64Tester {
         if (exec.getStdErr()
                 .length() <= 0)
             fail("Error must list unreplaced entries!");
-    } /* testInjectNoReplace */
+    }
 
     /**
      * Test method for basic injection case with replacement.
@@ -582,7 +581,7 @@ public class zip64Tester {
         if (exec.getStdErr()
                 .length() > 0)
             fail("Invalid error: " + exec.getStdErr());
-    } /* testInjectReplace */
+    }
 
     /**
      * Test method for injection of a single empty file.
@@ -615,7 +614,7 @@ public class zip64Tester {
             fail("Invalid error: " + exec.getStdErr());
         /* clean up */
         deleteAll(fileFolderTest);
-    } /* testInjectFile */
+    }
 
     /**
      * Test method for injection of a single full folder.
@@ -651,7 +650,7 @@ public class zip64Tester {
             fail("Not 3 matching file entries injected!");
         /* clean up */
         deleteAll(fileFolderTest);
-    } /* testInjectFolder */
+    }
 
     /**
      * Test method for injection of a folder and a file.
@@ -688,7 +687,7 @@ public class zip64Tester {
             fail("Not 2 matching file entries injected!");
         /* clean up */
         deleteAll(fileFolderTest);
-    } /* testInjectSet */
+    }
 
     /**
      * Test method for injection of two files specified in a file list.
@@ -735,7 +734,7 @@ public class zip64Tester {
         /* clean up */
         deleteAll(fileFolderTest);
         fileList.delete();
-    } /* testInjectList */
+    }
 
     /**
      * Test method for basic extraction case.
@@ -771,7 +770,7 @@ public class zip64Tester {
             fail("Folder " + fileFolderUnzip.getAbsolutePath() + " is not equal to folder " + fileFolderTest.getAbsolutePath() + "!");
         /* clean up */
         deleteAll(fileFolderTest);
-    } /* testExtract */
+    }
 
     /**
      * Test method for basic extraction case without replacement.
@@ -799,7 +798,7 @@ public class zip64Tester {
         if (exec.getStdOut()
                 .indexOf("0 matching file entries extracted") < 0)
             fail("Not 0 matching file entries extracted!");
-    } /* testExtractNoReplace */
+    }
 
     /**
      * Test method for basic extraction case with replacement.
@@ -828,7 +827,7 @@ public class zip64Tester {
         if (exec.getStdOut()
                 .indexOf("2 matching file entries extracted") < 0)
             fail("Not 2 matching file entries extracted!");
-    } /* testExtractReplace */
+    }
 
     /**
      * Test method for extracting single (empty) file.
@@ -869,7 +868,7 @@ public class zip64Tester {
             fail("Folder " + fileFolderUnzip.getAbsolutePath() + " is not equal to folder " + fileFolderTest.getAbsolutePath() + "!");
         /* clean up */
         deleteAll(fileFolderTest);
-    } /* testExtractFile */
+    }
 
     /**
      * Test method for extracting single (empty) file.
@@ -908,7 +907,7 @@ public class zip64Tester {
             fail("Folder " + fileFolderUnzip.getAbsolutePath() + " is not equal to folder " + fileFolderTest.getAbsolutePath() + "!");
         /* clean up */
         deleteAll(fileFolderTest);
-    } /* testExtractFolder */
+    }
 
     /**
      * Test method for extracting of a folder and a file.
@@ -948,7 +947,7 @@ public class zip64Tester {
             fail("Folder " + fileFolderUnzip.getAbsolutePath() + " is not equal to folder " + fileFolderTest.getAbsolutePath() + "!");
         /* clean up */
         deleteAll(fileFolderTest);
-    } /* testExtractSet */
+    }
 
     /**
      * Test method for extracting of two files specified in a file list.
@@ -998,6 +997,6 @@ public class zip64Tester {
         /* clean up */
         deleteAll(fileFolderTest);
         fileList.delete();
-    } /* testExtractList */
+    }
 
-} /* class zip64Tester */
+}

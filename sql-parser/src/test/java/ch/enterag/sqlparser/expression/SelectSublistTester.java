@@ -82,6 +82,6 @@ public class SelectSublistTester {
             Object o = _ss.resetAggregates(ss);
             System.out.println(String.valueOf(o));
         }
-    } /* testResetAggregates */
+    }
 
 }

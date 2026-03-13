@@ -58,7 +58,7 @@ public class PostgresObject {
             _iDataType = iDataType;
             _sTypeName = sTypeName;
         }
-    } /* class AttributeDescription */
+    }
 
     public static String stripQuotes(String s)
             throws ParseException {
@@ -80,7 +80,7 @@ public class PostgresObject {
             }
         }
         return s;
-    } /* stripQuotes */
+    }
 
     public static String addQuotes(String s) {
         String sQuote = "\"";
@@ -97,7 +97,7 @@ public class PostgresObject {
             s = sQuote + s + sQuote;
         }
         return s;
-    } /* addQuotes */
+    }
 
     private String getBaseType(String sTypeName) {
         int iArray = sTypeName.lastIndexOf("ARRAY");
@@ -124,7 +124,7 @@ public class PostgresObject {
             _sBaseType = getBaseType(sTypeName);
         _pconn = pconn;
         _o = fromString(sValue, iDataType);
-    } /* constructor */
+    }
 
     public PostgresObject(Object o, int iDataType, String sTypeName, PostgresConnection pconn, String sIndent)
             throws ParseException, SQLException {
@@ -167,7 +167,7 @@ public class PostgresObject {
         }
         rsAttributes.close();
         return listAttributeDescription;
-    } /* getAttributeDescriptions */
+    }
 
     private TypeDescription getBaseTypeDescription()
             throws SQLException {
@@ -210,7 +210,7 @@ public class PostgresObject {
         sb.insert(0, "(");
         sb.append(")");
         return sb.toString();
-    } /* formatStruct */
+    }
 
     private String formatArray(Array array)
             throws SQLException, ParseException {
@@ -448,7 +448,7 @@ public class PostgresObject {
         } else
             throw new ParseException("STRUCT must be in parentheses!", 0);
         return struct;
-    } /* parseStruct */
+    }
 
     private Object fromString(String sValue, int iDataType)
             throws SQLException, ParseException {
@@ -537,6 +537,6 @@ public class PostgresObject {
                 throw new SQLException("Invalid data type found: " + String.valueOf(iDataType) + " (" + SqlTypes.getTypeName(iDataType) + ")!");
         }
         return o;
-    } /* fromString */
+    }
 
-} /* class PostgresObject */
+}

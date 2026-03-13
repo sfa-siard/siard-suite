@@ -20,7 +20,6 @@ public class ValueExpressionPrimary
     /** logger */
     protected static IndentLogger _il = IndentLogger.getIndentLogger(ValueExpressionPrimary.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -294,7 +293,6 @@ public class ValueExpressionPrimary
             return ValueExpressionPrimary.this;
         }
     }
-    /*==================================================================*/
 
     private VepVisitor _visitor = new VepVisitor();
 
@@ -682,7 +680,7 @@ public class ValueExpressionPrimary
         }
         s = s + sRIGHT_PAREN;
         return s;
-    } /* formatSqlArguments */
+    }
 
     protected String formatCollectionValueComponents() {
         String s = "";
@@ -697,9 +695,8 @@ public class ValueExpressionPrimary
             s = s + sRIGHT_BRACKET;
         }
         return s;
-    } /* formatCollectionValueComponents */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the value expression primary.
      * @return the SQL string corresponding to the fields of the value
@@ -826,9 +823,8 @@ public class ValueExpressionPrimary
         else if (getValueExpressionPrimary() != null)
             sExpression = sLEFT_PAREN + getValueExpressionPrimary().format() + sRIGHT_PAREN;
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get data type of this value expression primary from the context
      * of a query.
@@ -848,9 +844,8 @@ public class ValueExpressionPrimary
         else
             throw new IllegalArgumentException("Type of ValueExpressionPrimary not supported for evaluation!");
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate this value expression primary against the context of a query.
      * @param ss sql statement.
@@ -879,9 +874,8 @@ public class ValueExpressionPrimary
         } else
             throw new IllegalArgumentException("Type of ValueExpressionPrimary not supported for evaluation!");
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in this value expression to their initial
      * value.
@@ -895,9 +889,8 @@ public class ValueExpressionPrimary
         else
             oValue = evaluate(ss, true);
         return oValue;
-    } /* reset */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the value expression primary from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -906,9 +899,8 @@ public class ValueExpressionPrimary
     public void parse(SqlParser.ValueExpressionPrimaryContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the value expression primary from SQL.
      * @param sSql SQL.
@@ -924,9 +916,8 @@ public class ValueExpressionPrimary
             ctx = getParser().valueExpressionPrimary();
         }
         parse(ctx);
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
     /* initialize a value expression primary.
      */
     public void initialize(
@@ -999,9 +990,8 @@ public class ValueExpressionPrimary
         setSequenceName(qiSequenceName);
         setValueExpressionPrimary(vep);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a value expression primary.
      * @param ul unsigned literal.
@@ -1012,9 +1002,8 @@ public class ValueExpressionPrimary
         _il.enter();
         setUnsignedLit(ul);
         _il.exit();
-    } /* initUnsignedLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a value expression primary.
      * @param listArrayValueComponents list of array value components.
@@ -1026,9 +1015,8 @@ public class ValueExpressionPrimary
         setArrayValueConstructor(true);
         setCollectionValueComponents(listArrayValueComponents);
         _il.exit();
-    } /* initArrayValueConstructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a value expression primary.
      * @param qiUdt name of UDT type to be instantiated with NEW.
@@ -1043,9 +1031,8 @@ public class ValueExpressionPrimary
         setRoutineName(qiUdt);
         setSqlArguments(listAttributeValues);
         _il.exit();
-    } /* initUdtValueConstructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a value expression primary.
      * @param gvs general value specification.
@@ -1056,15 +1043,14 @@ public class ValueExpressionPrimary
         _il.enter();
         setGeneralValueSpecification(gvs);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public ValueExpressionPrimary(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class ValueExpressionPrimary */
+}

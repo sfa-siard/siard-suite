@@ -24,7 +24,6 @@ public class AggregateFunction
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(AggregateFunction.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -123,7 +122,6 @@ public class AggregateFunction
             return AggregateFunction.this;
         }
     }
-    /*==================================================================*/
 
     private AfVisitor _visitor = new AfVisitor();
 
@@ -285,7 +283,6 @@ public class AggregateFunction
         _iCount = iCount;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the aggregate function.
      * @return the SQL string corresponding to the fields of the aggregate function.
@@ -335,9 +332,8 @@ public class AggregateFunction
             sExpression = sExpression + sSP + K.FILTER.getKeyword() +
                     sLEFT_PAREN + K.WHERE.getKeyword() + sSP + getFilter().format() + sRIGHT_PAREN;
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get data type of this value expression primary from the context
      * of a query.
@@ -378,7 +374,7 @@ public class AggregateFunction
             }
         }
         return dt;
-    } /* getDataType */
+    }
 
     private int compare(Object o1, Object o2) {
         int iCompare = 0;
@@ -428,7 +424,7 @@ public class AggregateFunction
         } else
             throw new IllegalArgumentException("Values cannot be compared!");
         return iCompare;
-    } /* compare */
+    }
 
     private Object evaluateSum(Object o1, Object o2) {
         Object oValue = null;
@@ -453,7 +449,7 @@ public class AggregateFunction
         } else
             oValue = Double.valueOf(d1.doubleValue() + d2.doubleValue());
         return oValue;
-    } /* evaluateSum */
+    }
 
     private Object evaluateAverage(Object o1, Object o2, int iCount) {
         Object oValue = null;
@@ -480,9 +476,8 @@ public class AggregateFunction
         } else
             oValue = Double.valueOf((d1.doubleValue() * (iCount - 1) + d2.doubleValue()) / iCount);
         return oValue;
-    } /* evaluateAverage */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate this aggregate value.
      * @param ss sql statement.
@@ -519,9 +514,8 @@ public class AggregateFunction
             throw new IllegalArgumentException("Cannot evaluate complex aggregate function " + format() + "!");
         setValue(oValue);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset this aggregate value to its initial value.
      * @return previous (final) value.
@@ -531,9 +525,8 @@ public class AggregateFunction
         setValue(null);
         setCount(0);
         return oValue;
-    } /* reset */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the aggregate function from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -543,9 +536,8 @@ public class AggregateFunction
         getSqlFactory().setAggregates(true);
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the aggregate function from SQL.
      * @param sSql SQL.
@@ -554,9 +546,8 @@ public class AggregateFunction
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().aggregateFunction());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an aggregate function
      * @param bCountFunction true for COUNT(*).
@@ -599,15 +590,14 @@ public class AggregateFunction
         setNumericValueExpression(nve);
         setWithinGroupSortSpecifications(listWithinGroupSortSpecifications);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public AggregateFunction(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class AggregateFunction */
+}

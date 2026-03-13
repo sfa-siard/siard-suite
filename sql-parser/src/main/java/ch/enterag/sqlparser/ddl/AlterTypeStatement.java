@@ -13,7 +13,6 @@ public class AlterTypeStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(AlterTypeStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -51,7 +50,6 @@ public class AlterTypeStatement
             return AlterTypeStatement.this;
         }
     }
-    /*==================================================================*/
 
     private AtsVisitor _visitor = new AtsVisitor();
 
@@ -114,7 +112,6 @@ public class AlterTypeStatement
         _md = md;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the alter type statement.
      * @return the SQL string corresponding to the fields of the alter
@@ -134,9 +131,8 @@ public class AlterTypeStatement
         else if (getMethodDesignator() != null)
             sStatement = sStatement + sSP + K.DROP.getKeyword() + getMethodDesignator().format() + sSP + K.RESTRICT;
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the alter type statement  from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -145,9 +141,8 @@ public class AlterTypeStatement
     public void parse(SqlParser.AlterTypeStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the alter type statement from SQL.
      * @param sSql SQL.
@@ -156,9 +151,8 @@ public class AlterTypeStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().alterTypeStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an alter type statement.
      * @param qTypeName name of type to be altered (not null!).
@@ -180,15 +174,14 @@ public class AlterTypeStatement
         setMethodSpecification(ms);
         setMethodDesignator(md);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public AlterTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class AlterTypeStatement */
+}

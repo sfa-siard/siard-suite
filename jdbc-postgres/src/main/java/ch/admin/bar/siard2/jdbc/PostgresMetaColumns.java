@@ -20,7 +20,6 @@ import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 import java.sql.*;
 import java.text.ParseException;
 
-/*====================================================================*/
 
 /** PostgresMetaColumns implements data type mapping from Postgres to ISO SQL.
  * @author Hartwig Thomas
@@ -60,7 +59,7 @@ public class PostgresMetaColumns
         }
         sTypeName = pqiType.format();
         return pqiType;
-    } /* parse type name */
+    }
 
     private static String formatTypeName(PostgresQualifiedId pqiType) {
         String sTypeName = pqiType.format();
@@ -106,7 +105,7 @@ public class PostgresMetaColumns
             iAttTypMod = rs.getInt(1);
         rs.close();
         return iAttTypMod;
-    } /* getAttTypMod */
+    }
 
 
     public static String getIntervalTypeName(Connection conn, ColumnIdentifier columnIdentifier, String sTypeName)
@@ -156,9 +155,8 @@ public class PostgresMetaColumns
                 sTypeName = sTypeName + "(" + String.valueOf(iDecimals) + ")";
         }
         return sTypeName;
-    } /* getIntervalTypeName */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getTypeName(String sTypeName, int iType)
             throws SQLException {
         if (iType == Types.ARRAY) {
@@ -201,7 +199,7 @@ public class PostgresMetaColumns
             }
         }
         return sTypeName;
-    } /* getTypeName */
+    }
 
     private String addTypeLengthAndPrecision(String typeName, int type, int typePrecision) {
         if (typePrecision < 0) return typeName;
@@ -231,7 +229,6 @@ public class PostgresMetaColumns
         return new int[]{precision, scale};
     }
 
-    /*------------------------------------------------------------------*/
     private int getDataType(int iType, String sTypeName)
             throws SQLException {
         PostgresQualifiedId pqiType = null;
@@ -279,9 +276,8 @@ public class PostgresMetaColumns
             }
         }
         return iType;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
     private int getPrecision(int iPrecision, int iType, String sTypeName)
             throws SQLException {
         PostgresQualifiedId pqiType = null;
@@ -414,9 +410,8 @@ public class PostgresMetaColumns
         else if (iType == Types.ARRAY)
             iPrecision = 0; // Integer.MAX_VALUE;
         return iPrecision;
-    } /* getPrecision */
+    }
 
-    /*------------------------------------------------------------------*/
     private int getScale(int iScale, int iType, String sTypeName) {
         PostgresType pgt = PostgresType.getByKeyword(sTypeName);
         if (pgt != null) {
@@ -425,15 +420,12 @@ public class PostgresMetaColumns
         } else if ((iType == Types.ARRAY) || (iType == Types.STRUCT) || (iType == Types.DISTINCT))
             iScale = 0;
         return iScale;
-    } /* getScale */
+    }
 
-    /*------------------------------------------------------------------*/
     private int getNumPrecRadix(int iNumPrecRadix, int iType, String sTypeName) {
         return iNumPrecRadix;
-    } /* getNumPrecRadix */
+    }
 
-
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped DatabaseMetaData.getColumns() result set to be wrapped.
@@ -460,9 +452,8 @@ public class PostgresMetaColumns
         _iScale = iScale;
         _iNumPrecRadix = iNumPrecRadix;
         _iSourceDataType = iSourceDataType;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Type name (mapped to ISO SQL) is returned in TYPE_NAME.
@@ -480,9 +471,8 @@ public class PostgresMetaColumns
                     super.getInt(_iDataType));
         }
         return sResult;
-    } /* getString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -518,9 +508,8 @@ public class PostgresMetaColumns
                     super.getString(_iTypeName));
         }
         return iResult;
-    } /* getLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -530,9 +519,8 @@ public class PostgresMetaColumns
     public int getInt(int columnIndex) throws SQLException {
         int iResult = (int) getLong(columnIndex);
         return iResult;
-    } /* getInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -579,6 +567,6 @@ public class PostgresMetaColumns
                     super.getInt(_iDataType));
         }
         return oResult;
-    } /* getObject */
+    }
 
-} /* PostgresMetaColumns */
+}

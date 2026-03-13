@@ -219,7 +219,7 @@ public class TestMySqlDatabase {
 
     private void deleteTable(QualifiedId qiTable) {
         executeDrop("DELETE FROM " + qiTable.format());
-    } /* deleteTable */
+    }
 
     private void dropTables() {
         dropTable(getQualifiedSimpleTable());

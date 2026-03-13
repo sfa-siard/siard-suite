@@ -15,7 +15,6 @@ public class FieldDefinition
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(FieldDefinition.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -44,8 +43,7 @@ public class FieldDefinition
             setDeleteAction(getReferentialAction(ctx));
             return FieldDefinition.this;
         }
-    } /* class FdVisitor */
-    /*==================================================================*/
+    }
 
     protected FdVisitor _visitor = new FdVisitor();
 
@@ -93,7 +91,6 @@ public class FieldDefinition
         _raDelete = raDelete;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the field definition.
      * @return the SQL string corresponding to the fields of the field definition.
@@ -106,9 +103,8 @@ public class FieldDefinition
         if (getDeleteAction() != null)
             sDefinition = sDefinition + sSP + K.ON + sSP + K.DELETE + sSP + getDeleteAction().getKeywords();
         return sDefinition;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the field definition from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -117,9 +113,8 @@ public class FieldDefinition
     public void parse(SqlParser.FieldDefinitionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the field definition from SQL.
      * @param sSql SQL.
@@ -128,9 +123,8 @@ public class FieldDefinition
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().fieldDefinition());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor for building a field definition.
      * @param idFieldName field name.
@@ -145,15 +139,14 @@ public class FieldDefinition
         setReferenceScopeCheck(rc);
         setDeleteAction(raDelete);
         _il.exit();
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public FieldDefinition(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class FieldDefinition */
+}

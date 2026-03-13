@@ -39,7 +39,6 @@ public class ValidatingJAXBContext extends JAXBContext {
         System.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
     }
 
-    /*==================================================================*/
 
     /**
      * ContextValidationEventHandler is used for more explicit logging.
@@ -63,7 +62,6 @@ public class ValidatingJAXBContext extends JAXBContext {
         }
 
     }
-    /*==================================================================*/
 
     /**
      * constructor

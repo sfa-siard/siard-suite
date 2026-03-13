@@ -17,7 +17,6 @@ public class RoutineBody
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(RoutineBody.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -44,7 +43,6 @@ public class RoutineBody
             return RoutineBody.this;
         }
     }
-    /*==================================================================*/
 
     private RbVisitor _visitor = new RbVisitor();
 
@@ -62,7 +60,6 @@ public class RoutineBody
         _listTokens = listTokens;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the routine body.
      * @return the SQL string corresponding to the fields of the routine body.
@@ -76,9 +73,8 @@ public class RoutineBody
             s = s + getTokens().get(i);
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the routine body from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -87,9 +83,8 @@ public class RoutineBody
     public void parse(SqlParser.RoutineBodyContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the routine body from SQL.
      * @param sSql SQL.
@@ -98,9 +93,8 @@ public class RoutineBody
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().routineBody());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a routine body.
      * @param listTokens tokenized routine body.
@@ -109,15 +103,14 @@ public class RoutineBody
         _il.enter();
         setTokens(listTokens);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public RoutineBody(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class RoutineBody */
+}

@@ -340,7 +340,7 @@ public class MetaDataXml {
             }
         }
         return vts;
-    } /* convertViews */
+    }
 
     private static ParameterType convertParameter(ch.admin.bar.siard2.api.generated.old10.ParameterType ptOld) {
         ParameterType pt = null;
@@ -368,7 +368,7 @@ public class MetaDataXml {
             }
         }
         return pts;
-    } /* convertParameters */
+    }
 
     private static RoutineType convertRoutine(ch.admin.bar.siard2.api.generated.old10.RoutineType rtOld) {
         RoutineType rt = null;
@@ -383,7 +383,7 @@ public class MetaDataXml {
             rt.setParameters(convertParameters(rtOld.getParameters()));
         }
         return rt;
-    } /* convertRoutine */
+    }
 
     private static RoutinesType convertRoutines(ch.admin.bar.siard2.api.generated.old10.RoutinesType rtsOld) {
         RoutinesType rts = null;
@@ -398,7 +398,7 @@ public class MetaDataXml {
             }
         }
         return rts;
-    } /* convertRoutines */
+    }
 
     private static SchemaType convertSchema(ch.admin.bar.siard2.api.generated.old10.SchemaType stOld)
             throws JAXBException {
@@ -413,7 +413,7 @@ public class MetaDataXml {
             st.setRoutines(convertRoutines(stOld.getRoutines()));
         }
         return st;
-    } /* convertSchema */
+    }
 
     private static SchemasType convertSchemas(ch.admin.bar.siard2.api.generated.old10.SchemasType stsOld)
             throws JAXBException {
@@ -429,7 +429,7 @@ public class MetaDataXml {
             }
         }
         return sts;
-    } /* convertSchemas */
+    }
 
     private static UserType convertUser(ch.admin.bar.siard2.api.generated.old10.UserType utOld) {
         UserType ut = null;
@@ -439,7 +439,7 @@ public class MetaDataXml {
             ut.setDescription(utOld.getDescription());
         }
         return ut;
-    } /* convertUser */
+    }
 
     private static UsersType convertUsers(ch.admin.bar.siard2.api.generated.old10.UsersType utsOld) {
         UsersType uts = null;
@@ -454,7 +454,7 @@ public class MetaDataXml {
             }
         }
         return uts;
-    } /* convertUsers */
+    }
 
     private static RoleType convertRole(ch.admin.bar.siard2.api.generated.old10.RoleType rtOld) {
         RoleType rt = null;
@@ -465,7 +465,7 @@ public class MetaDataXml {
             rt.setDescription(rtOld.getDescription());
         }
         return rt;
-    } /* convertRole */
+    }
 
     private static RolesType convertRoles(ch.admin.bar.siard2.api.generated.old10.RolesType rtsOld) {
         RolesType rts = null;
@@ -480,7 +480,7 @@ public class MetaDataXml {
             }
         }
         return rts;
-    } /* convertRoles */
+    }
 
     private static PrivOptionType convertPrivOption(ch.admin.bar.siard2.api.generated.old10.PrivOptionType potOld) {
         PrivOptionType pot = null;
@@ -495,7 +495,7 @@ public class MetaDataXml {
             }
         }
         return pot;
-    } /* convertPrivOption */
+    }
 
     private static PrivilegeType convertPrivilege(ch.admin.bar.siard2.api.generated.old10.PrivilegeType ptOld) {
         PrivilegeType pt = null;
@@ -509,7 +509,7 @@ public class MetaDataXml {
             pt.setDescription(ptOld.getDescription());
         }
         return pt;
-    } /* convertPrivilege */
+    }
 
     private static PrivilegesType convertPrivileges(ch.admin.bar.siard2.api.generated.old10.PrivilegesType ptsOld) {
         PrivilegesType pts = null;
@@ -524,7 +524,7 @@ public class MetaDataXml {
             }
         }
         return pts;
-    } /* convertPrivileges */
+    }
 
     private static MessageDigestType convertMessageDigest(String sMessageDigest) {
         MessageDigestType md = null;
@@ -537,7 +537,7 @@ public class MetaDataXml {
             md.setDigest(sDigest);
         }
         return md;
-    } /* convertMessageDigest */
+    }
 
     private static SiardArchive convertArchive(ch.admin.bar.siard2.api.generated.old10.SiardArchive saOld)
             throws JAXBException {
@@ -565,7 +565,7 @@ public class MetaDataXml {
         sa.setRoles(convertRoles(saOld.getRoles()));
         sa.setPrivileges(convertPrivileges(saOld.getPrivileges()));
         return sa;
-    } /* convertArchive */
+    }
 
     /**
      * read meta data XML stream using the current SIARD Format version 2.2
@@ -584,7 +584,7 @@ public class MetaDataXml {
             System.err.println(EU.getExceptionMessage(je));
         }
         return sa;
-    } /* readXml */
+    }
 
     public static SiardArchive readSiard21Xml(InputStream fileInputStream) {
         ch.admin.bar.siard2.api.generated.old21.SiardArchive sa = null;
@@ -622,7 +622,7 @@ public class MetaDataXml {
             System.err.println(EU.getExceptionMessage(je));
         }
         return sa;
-    } /* readXmlOld10 */
+    }
 
     /**
      * write a meta data XML file in the current SIARD Format 2.1
@@ -644,7 +644,7 @@ public class MetaDataXml {
             Io.writeJaxbObject(sa, osXml, sSchemaLocation, true, urlXsd);
         } else
             Io.writeJaxbObject(sa, osXml, null, null, true);
-    } /* writeXml */
+    }
 
 
-} /* class MetaDataXml */
+}

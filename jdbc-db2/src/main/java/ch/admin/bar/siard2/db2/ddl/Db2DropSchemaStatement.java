@@ -17,7 +17,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.DropSchemaStatement;
 import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 
-/*====================================================================*/
 
 /** Db2DropSchemaStatement overrides DropSchemaStatement of SQL parser
  * because DB/2 does not support drop behavior (CASCADE, RESTRICT) for 
@@ -27,7 +26,6 @@ import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 public class Db2DropSchemaStatement
         extends DropSchemaStatement {
 
-    /*------------------------------------------------------------------*/
 
     /** format the schema table statement for DB/2 without the drop behavior.
      * @return the SQL string corresponding to the fields of the drop
@@ -40,15 +38,14 @@ public class Db2DropSchemaStatement
         String sStatement = K.DROP.getKeyword() + sSP + K.SCHEMA.getKeyword() + sSP +
                 getSchemaName().format() + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public Db2DropSchemaStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* Db2DropSchemaStatement */
+}

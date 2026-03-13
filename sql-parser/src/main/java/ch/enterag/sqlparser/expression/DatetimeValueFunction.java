@@ -20,7 +20,6 @@ public class DatetimeValueFunction
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DatetimeValueFunction.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -38,7 +37,6 @@ public class DatetimeValueFunction
         }
     }
 
-    /*==================================================================*/
     public static final int iUNDEFINED = -1;
     public static final int iTIME_PRECISION_DEFAULT = 0;
     public static final int iTIMESTAMP_PRECISION_DEFAULT = 6;
@@ -69,7 +67,6 @@ public class DatetimeValueFunction
         _iSecondsDecimals = iSecondsDecimals;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** decimals of seconds in parentheses.
      * @param iDefaultDecimals default decimals.
@@ -82,9 +79,8 @@ public class DatetimeValueFunction
                 sSecondsDecimals = sSecondsDecimals + sLEFT_PAREN + String.valueOf(getSecondsDecimals()) + sRIGHT_PAREN;
         }
         return sSecondsDecimals;
-    } /* formatSecondsPrecision */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the datetime value function.
      * @return the SQL string corresponding to the fields of the datetime
@@ -102,9 +98,8 @@ public class DatetimeValueFunction
                 sFunction = sFunction + formatSecondsDecimals(iTIMESTAMP_PRECISION_DEFAULT);
         }
         return sFunction;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return data type of a date/time value function fromt the context
      * of a query.
@@ -129,9 +124,8 @@ public class DatetimeValueFunction
                 break;
         }
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a date/time value expression against the context of a query.
      * @param ss sql statement.
@@ -155,9 +149,8 @@ public class DatetimeValueFunction
                 break;
         }
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the datetime value function from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -166,9 +159,8 @@ public class DatetimeValueFunction
     public void parse(SqlParser.DatetimeValueFunctionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the datetime value function from SQL.
      * @param sSql SQL.
@@ -177,9 +169,8 @@ public class DatetimeValueFunction
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().datetimeValueFunction());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a datetime value function.
      * @param df datetime function.
@@ -192,15 +183,14 @@ public class DatetimeValueFunction
         setDatetimeFunction(df);
         setSecondsDecimals(iSecondsDecimals);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DatetimeValueFunction(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DatetimeValueFunction */
+}

@@ -14,7 +14,6 @@ package ch.admin.bar.siard2.mssql.expression;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 
-/*====================================================================*/
 
 /** MsSqlValueExpressionPrimary implements the array value translation from
  * ISO SQL to MSSQL by turning into a CLOB.
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 public class MsSqlValueExpressionPrimary
         extends ValueExpressionPrimary {
 
-    /*------------------------------------------------------------------*/
 
     /** format the value expression primary.
      * @return the SQL string corresponding to the fields of the value
@@ -46,15 +44,14 @@ public class MsSqlValueExpressionPrimary
         else
             sExpression = super.format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlValueExpressionPrimary(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlValueExpressionPrimary */
+}

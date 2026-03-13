@@ -490,7 +490,7 @@ public class TestPostgresDatabase {
 
     private void deleteTable(QualifiedId qiTable) {
         executeDrop("DELETE FROM " + qiTable.format());
-    } /* deleteTable */
+    }
 
     private void dropTables() {
         dropTable(getQualifiedSimpleTable());
@@ -499,7 +499,7 @@ public class TestPostgresDatabase {
 
     private void dropTable(QualifiedId qiTable) {
         executeDrop("DROP TABLE " + qiTable.format());
-    } /* dropTable */
+    }
 
     private void dropTypes() {
         dropType(getQualifiedYearType());
@@ -519,7 +519,7 @@ public class TestPostgresDatabase {
 
     private void dropSchema() {
         executeDrop("DROP SCHEMA " + SqlLiterals.formatId(_sTEST_SCHEMA));
-    } /* dropSchema */
+    }
 
     private void create()
             throws SQLException, IOException {

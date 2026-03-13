@@ -29,7 +29,6 @@ public class OracleDatabaseMetaDataBugTester {
     private OracleConnection _connOracle = null;
 
 
-    /*------------------------------------------------------------------*/
     private static int executeCreate(Connection connNative, String sSql)
             throws SQLException {
         Statement stmtNative = connNative.createStatement();
@@ -39,7 +38,6 @@ public class OracleDatabaseMetaDataBugTester {
         return iResult;
     }
 
-    /*------------------------------------------------------------------*/
     private static void createTable(Connection connNative)
             throws SQLException {
         String sSql = "CREATE TABLE " + _sTABLE_BUG +

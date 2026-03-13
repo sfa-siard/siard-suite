@@ -15,15 +15,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/*====================================================================*/
 
 /** Execute implements execution of an external command.
  @author Hartwig Thomas
  */
 public class Execute {
-  /*====================================================================
-  (private) data members
-  ====================================================================*/
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(Execute.class.getName());
     /** stdOut result of last execute */
@@ -50,7 +46,6 @@ public class Execute {
         return _iResult;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** split a version string into parts separated by non-alphanumeric
      * characters.
@@ -73,9 +68,8 @@ public class Execute {
         if (sPart.length() > 0)
             listVersion.add(sPart);
         return listVersion;
-    } /* splitVersion */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** leVersion returns true, if sVersion1 is less than sVersion2.
      * The version parts are compared as integers, if they are integers and
@@ -111,9 +105,8 @@ public class Execute {
         }
         _il.exit(Boolean.valueOf(bLess));
         return bLess;
-    } /* ltVersion */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** compares the current run-time JAVA version with the given version.
      * N.B.: The leading "1." was dropped with JAVA 9!
@@ -127,9 +120,8 @@ public class Execute {
         if (sVersion.startsWith("1."))
             sVersion = sVersion.substring(2);
         return ltVersion(sJavaVersion, sVersion);
-    } /* isJavaVersionLessThan */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return true, if the OS is Windows.
      */
@@ -139,9 +131,8 @@ public class Execute {
         if (sOsName != null)
             bIsOsWindows = sOsName.startsWith("Windows");
         return bIsOsWindows;
-    } /* isOsWindows */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return true, if the OS is LINUX.
      */
@@ -151,9 +142,8 @@ public class Execute {
         if (sOsName != null)
             bIsOsLinux = sOsName.startsWith("Linux");
         return bIsOsLinux;
-    } /* isOsLinux */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** capture the output from the given input stream and return it as
      * as string.
@@ -169,9 +159,8 @@ public class Execute {
             swOut.write(i);
         swOut.close();
         return swOut.toString();
-    } /* captureOutput */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** redirect the characters from the given reader to the given
      * output stream.
@@ -186,9 +175,8 @@ public class Execute {
         for (int i = rdr.read(); i != -1; i = rdr.read())
             oswr.write(i);
         oswr.close();
-    } /* redirectInput */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command line.
      @param sCommand external command line to be executed.
@@ -212,9 +200,8 @@ public class Execute {
         }
         _il.exit(String.valueOf(iReturn));
         return iReturn;
-    } /* run */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command line.
      @param sCommand external command line to be executed.
@@ -224,9 +211,8 @@ public class Execute {
         Execute ex = new Execute();
         ex._iResult = ex.run(sCommand);
         return ex;
-    } /* execute */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command line.
      @param sCommand external command line to be executed.
@@ -252,9 +238,8 @@ public class Execute {
         }
         _il.exit(String.valueOf(iReturn));
         return iReturn;
-    } /* run */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command line.
      @param sCommand external command line to be executed.
@@ -265,9 +250,8 @@ public class Execute {
         Execute ex = new Execute();
         ex._iResult = ex.run(sCommand, rdrInput);
         return ex;
-    } /* execute */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command with arguments.
      @param asCommand external command and arguments to be executed.
@@ -291,9 +275,8 @@ public class Execute {
         }
         _il.exit(String.valueOf(iReturn));
         return iReturn;
-    } /* run */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command line.
      @param asCommand external command and arguments to be executed.
@@ -303,9 +286,8 @@ public class Execute {
         Execute ex = new Execute();
         ex._iResult = ex.run(asCommand);
         return ex;
-    } /* execute */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command with arguments.
      @param asCommand external command and arguments to be executed.
@@ -330,9 +312,8 @@ public class Execute {
         }
         _il.exit(String.valueOf(iReturn));
         return iReturn;
-    } /* run */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command line.
      @param asCommand external command and arguments to be executed.
@@ -343,9 +324,8 @@ public class Execute {
         Execute ex = new Execute();
         ex._iResult = ex.run(asCommand, fileWorkingDirectory);
         return ex;
-    } /* execute */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command with arguments.
      @param asCommand external command and arguments to be executed.
@@ -372,9 +352,8 @@ public class Execute {
         }
         _il.exit(String.valueOf(iReturn));
         return iReturn;
-    } /* run */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command line.
      @param asCommand external command and arguments to be executed.
@@ -386,9 +365,8 @@ public class Execute {
         Execute ex = new Execute();
         ex._iResult = ex.run(asCommand, fileWorkingDirectory, rdrInput);
         return ex;
-    } /* execute */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command with arguments.
      @param asCommand external command and arguments to be executed.
@@ -414,9 +392,8 @@ public class Execute {
         }
         _il.exit(String.valueOf(iReturn));
         return iReturn;
-    } /* run */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** executes an external command line with redirected input from
      * a reader.
@@ -428,6 +405,6 @@ public class Execute {
         Execute ex = new Execute();
         ex._iResult = ex.run(asCommand, rdrInput);
         return ex;
-    } /* execute */
+    }
 
-} /* Execute */
+}

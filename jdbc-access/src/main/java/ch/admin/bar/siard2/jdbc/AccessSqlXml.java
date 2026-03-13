@@ -16,14 +16,12 @@ public class AccessSqlXml implements SQLXML {
     public OutputStream setBinaryStream() throws SQLException {
         return new AsciiOutputStream(_sContent);
     }
-    /*==================================================================*/
 
     /** {@link SQLXML} */
     @Override
     public Writer setCharacterStream() throws SQLException {
         return new SqlXmlWriter(_sContent);
     }
-    /*==================================================================*/
 
 
     /** {@link SQLXML} */
@@ -77,7 +75,6 @@ public class AccessSqlXml implements SQLXML {
     }
 
 
-    /*==================================================================*/
     private class SqlXmlWriter extends StringWriter {
 
         public SqlXmlWriter(String sInitialContent) {

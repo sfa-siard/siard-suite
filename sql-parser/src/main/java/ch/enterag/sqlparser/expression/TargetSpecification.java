@@ -14,7 +14,6 @@ public class TargetSpecification
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(TargetSpecification.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -60,7 +59,6 @@ public class TargetSpecification
             return TargetSpecification.this;
         }
     }
-    /*==================================================================*/
 
     private TsVisitor _visitor = new TsVisitor();
 
@@ -128,7 +126,6 @@ public class TargetSpecification
         _bQuestionMark = bQuestionMark;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the target specification.
      * @return the SQL string corresponding to the fields of the target specification.
@@ -151,9 +148,8 @@ public class TargetSpecification
         } else if (isQuestionMark())
             sSpecification = sQUESTION_MARK;
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the target specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -162,9 +158,8 @@ public class TargetSpecification
     public void parse(SqlParser.TargetSpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the target specification from SQL.
      * @param sSql SQL.
@@ -173,9 +168,8 @@ public class TargetSpecification
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().targetSpecification());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a target specification.
      * @param ciVariableName variable name (not null).
@@ -202,15 +196,14 @@ public class TargetSpecification
         setSimpleValueSpecification(svs);
         setQuestionMark(bQuestionMark);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public TargetSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class TargetSpecification */
+}

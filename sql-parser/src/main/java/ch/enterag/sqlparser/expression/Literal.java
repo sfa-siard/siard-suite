@@ -20,7 +20,6 @@ public class Literal
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(Literal.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -87,7 +86,6 @@ public class Literal
             return Literal.this;
         }
     }
-    /*==================================================================*/
 
     private LitVisitor _visitor = new LitVisitor();
 
@@ -205,7 +203,6 @@ public class Literal
         _bl = bl;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the literal
      * @return the SQL string corresponding to the fields of the literal.
@@ -238,9 +235,8 @@ public class Literal
         else if (getBoolean() != null)
             sFormatted = SqlLiterals.formatBooleanLiteral(getBoolean());
         return sFormatted;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the literal from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -249,9 +245,8 @@ public class Literal
     public void parse(SqlParser.LiteralContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the literal from SQL.
      * @param sSql SQL.
@@ -260,9 +255,8 @@ public class Literal
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().literal());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a literal.
      * Only one parameter must be not null.
@@ -305,15 +299,14 @@ public class Literal
         setTimestamp(ts);
         setBooleanLiteral(bl);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public Literal(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class Literal */
+}

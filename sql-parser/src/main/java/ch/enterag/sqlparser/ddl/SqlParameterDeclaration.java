@@ -14,7 +14,6 @@ public class SqlParameterDeclaration
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SqlParameterDeclaration.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -51,7 +50,6 @@ public class SqlParameterDeclaration
             return visitChildren(ctx);
         }
     }
-    /*==================================================================*/
 
     private SpdVisitor _visitor = new SpdVisitor();
 
@@ -99,7 +97,6 @@ public class SqlParameterDeclaration
         _bResult = bResult;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the SQL parameter declaration.
      * @return the SQL string corresponding to the fields of the SQL parameter declaration.
@@ -118,9 +115,8 @@ public class SqlParameterDeclaration
         if (getResult())
             sDeclaration = sDeclaration + sSP + K.RESULT.getKeyword();
         return sDeclaration;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the SQL parameter declaration from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -129,9 +125,8 @@ public class SqlParameterDeclaration
     public void parse(SqlParser.SqlParameterDeclarationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the SQL parameter declaration from SQL.
      * @param sSql SQL.
@@ -140,9 +135,8 @@ public class SqlParameterDeclaration
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().sqlParameterDeclaration());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an SQL parameter declaration.
      * @param pm paramter mode (or null).
@@ -155,15 +149,14 @@ public class SqlParameterDeclaration
         setParameterMode(pm);
         setParameterName(idParameterName);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SqlParameterDeclaration(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SqlParameterDeclaration */
+}

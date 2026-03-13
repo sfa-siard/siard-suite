@@ -106,7 +106,7 @@ public class TestOracleDatabase {
         public ColumnDefinition(String sName, String sType, Object oValue) {
             super(sName, sType, oValue);
         }
-    } /* ColumnDefinition */
+    }
 
     /* column definitions */
     public static int _iPrimarySimple = -1;
@@ -198,7 +198,6 @@ public class TestOracleDatabase {
 
     private Connection _conn = null;
 
-    /*------------------------------------------------------------------*/
     public static void createUser(Connection conn, String sTestUser, String sTestPassword) throws SQLException {
         String sSql = "CREATE USER " + sTestUser + " IDENTIFIED BY " + sTestPassword + " QUOTA UNLIMITED ON USERS";
         Statement stmt = conn.createStatement();
@@ -209,9 +208,8 @@ public class TestOracleDatabase {
         assertSame("User grant failed!", 0, iResult);
         stmt.close();
         if (!conn.getAutoCommit()) conn.commit();
-    } /* createUser */
+    }
 
-    /*------------------------------------------------------------------*/
     public static void dropUser(Connection conn, String sTestUser) throws SQLException {
         Statement stmt = conn.createStatement()
                              .unwrap(Statement.class);
@@ -220,9 +218,8 @@ public class TestOracleDatabase {
         assertSame("User drop failed!", 0, iResult);
         stmt.close();
         if (!conn.getAutoCommit()) conn.commit();
-    } /* dropUser */
+    }
 
-    /*------------------------------------------------------------------*/
     public static void grantSchema(Connection conn, String sSchema, String sTestUser) throws SQLException {
         Statement stmt = conn.createStatement()
                              .unwrap(Statement.class);
@@ -260,9 +257,8 @@ public class TestOracleDatabase {
         }
         stmt.close();
         if (!conn.getAutoCommit()) conn.commit();
-    } /* grantSchema */
+    }
 
-    /*------------------------------------------------------------------*/
     public static void grantReadSchema(Connection conn, String sSchema, String sTestUser) throws SQLException {
         Statement stmt = conn.createStatement()
                              .unwrap(Statement.class);
@@ -299,9 +295,8 @@ public class TestOracleDatabase {
         }
         stmt.close();
         if (!conn.getAutoCommit()) conn.commit();
-    } /* grantReadSchema */
+    }
 
-    /*------------------------------------------------------------------*/
     public static void grantReadViews(Connection conn, String sSchema, String sTestUser) throws SQLException {
         Statement stmt = conn.createStatement()
                              .unwrap(Statement.class);
@@ -337,9 +332,8 @@ public class TestOracleDatabase {
         }
         stmt.close();
         if (!conn.getAutoCommit()) conn.commit();
-    } /* grantReadSchema */
+    }
 
-    /*------------------------------------------------------------------*/
     public TestOracleDatabase(OracleConnection connOracle) throws SQLException {
         _conn = connOracle.unwrap(Connection.class);
         try {
@@ -349,9 +343,8 @@ public class TestOracleDatabase {
         }
         drop();
         create();
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
     private void rollback(String sMessage, SQLException se) {
         System.out.println(sMessage + ": " + EU.getExceptionMessage(se));
         try {
@@ -359,67 +352,57 @@ public class TestOracleDatabase {
         } catch (SQLException seRollback) {
             System.err.println("Rollback failed: " + EU.getExceptionMessage(seRollback));
         }
-    } /* rollback */
+    }
 
-    /*------------------------------------------------------------------*/
     private void drop() throws SQLException {
         deleteTables();
         dropTables();
         dropTypes();
         dropSchema();
         if (_sBFILE_DIRECTORY != null) dropDirectory();
-    } /* drop */
+    }
 
-    /*------------------------------------------------------------------*/
     private void deleteTables() throws SQLException {
         deleteTable(getQualifiedComplexTable());
         deleteTable(getQualifiedSimpleTable());
-    } /* deleteTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropTables() throws SQLException {
         dropTable(getQualifiedComplexTable());
         dropTable(getQualifiedSimpleTable());
-    } /* dropTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropTypes() throws SQLException {
         dropType(getQualifiedComplexType());
         dropType(getQualifiedObjectType());
         dropType(getQualifiedArrayType());
-    } /* dropTypes */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropSchema() {
         String sSql = "DROP USER " + _sTEST_SCHEMA + " CASCADE";
         executeDrop(sSql);
-    } /* dropSchema */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropDirectory() throws SQLException {
         String sSql = "DROP DIRECTORY " + OracleLiterals.formatId(_sDIRECTORY);
         executeDrop(sSql);
-    } /* dropDirectory */
+    }
 
-    /*------------------------------------------------------------------*/
     private void deleteTable(QualifiedId qiTable) {
         String sSql = "DELETE FROM " + qiTable.format();
         executeDrop(sSql);
-    } /* deleteTable */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropTable(QualifiedId qiTable) {
         String sSql = "DROP TABLE " + qiTable.format() + " CASCADE CONSTRAINTS";
         executeDrop(sSql);
-    } /* dropTable */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropType(QualifiedId qiType) {
         String sSql = "DROP TYPE " + qiType.format();
         executeDrop(sSql);
-    } /* dropType */
+    }
 
-    /*------------------------------------------------------------------*/
     private void executeDrop(String sSql) {
         try {
             Statement stmt = _conn.createStatement();
@@ -429,49 +412,42 @@ public class TestOracleDatabase {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* executeDrop */
+    }
 
-    /*------------------------------------------------------------------*/
     private void create() throws SQLException {
         if (_sBFILE_DIRECTORY != null) createDirectory();
         createSchema();
         createTypes();
         createTables();
         insertTables();
-    } /* create */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createDirectory() throws SQLException {
         String sSql = "CREATE DIRECTORY " + OracleLiterals.formatId(_sDIRECTORY) + " AS " + OracleLiterals.formatStringLiteral(_sBFILE_DIRECTORY);
         executeCreate(sSql);
-    } /* createDirectory */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createSchema() throws SQLException {
         String sSql = "CREATE USER " + _sTEST_SCHEMA + " IDENTIFIED BY " + _sTEST_SCHEMA + " QUOTA UNLIMITED ON USERS";
         executeCreate(sSql);
-    } /* createSchema */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createTypes() throws SQLException {
         createType(getQualifiedArrayType(), _listCdArray);
         createType(getQualifiedObjectType(), _listAdObject);
         createType(getQualifiedComplexType(), _listAdComplex);
-    } /* createTypes */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createTables() throws SQLException {
         createTable(getQualifiedSimpleTable(), _listCdSimple, Arrays.asList(new String[]{_listCdSimple.get(_iPrimarySimple).getName()}), Arrays.asList(new String[]{_listCdSimple.get(_iCandidateSimple).getName()}));
         createTable(getQualifiedComplexTable(), _listCdComplex, Arrays.asList(new String[]{_listCdComplex.get(_iPrimaryComplex).getName()}), null);
-    } /* createTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private void insertTables() throws SQLException {
         insertTable(getQualifiedSimpleTable(), _listCdSimple);
         insertTable(getQualifiedComplexTable(), _listCdComplex);
-    } /* insertTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createType(QualifiedId qiType, List<TestColumnDefinition> listAttributes) throws SQLException {
         StringBuilder sbSql = new StringBuilder("CREATE TYPE ");
         sbSql.append(qiType.format());
@@ -495,9 +471,8 @@ public class TestOracleDatabase {
             sbSql.append("\r\n)");
         }
         executeCreate(sbSql.toString());
-    } /* createType */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createTable(QualifiedId qiTable, List<TestColumnDefinition> listCd, List<String> listPrimary, List<String> listUnique) throws SQLException {
         StringBuilder sbSql = new StringBuilder("CREATE TABLE ");
         sbSql.append(qiTable.format());
@@ -532,9 +507,8 @@ public class TestOracleDatabase {
         }
         sbSql.append("\r\n)");
         executeCreate(sbSql.toString());
-    } /* createTable */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getLiteralValue(TestColumnDefinition tcd, List<TestColumnDefinition> listLobs) {
         StringBuilder sbValue = new StringBuilder();
         if (!(tcd.getValue() instanceof List<?>)) {
@@ -556,9 +530,8 @@ public class TestOracleDatabase {
             sbValue.append(")");
         }
         return sbValue.toString();
-    } /* getLiteralValue */
+    }
 
-    /*------------------------------------------------------------------*/
     private void insertTable(QualifiedId qiTable, List<TestColumnDefinition> listCd) throws SQLException {
         StringBuilder sbSql = new StringBuilder("INSERT INTO ");
         sbSql.append(qiTable.format());
@@ -593,17 +566,16 @@ public class TestOracleDatabase {
         if (iResult != 1) throw new SQLException("Insert into table " + qiTable.format() + " failed!");
         pstmt.close();
         _conn.commit();
-    } /* insertTable */
+    }
 
     ;
 
-    /*------------------------------------------------------------------*/
     private void executeCreate(String sSql) throws SQLException {
         Statement stmt = _conn.createStatement();
         int iResult = stmt.executeUpdate(sSql);
         if (iResult != 0) throw new SQLException(sSql + " failed!");
         stmt.close();
         _conn.commit();
-    } /* executeCreate */
+    }
 
-} /* class TestOracleDatabase */
+}

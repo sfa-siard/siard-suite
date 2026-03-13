@@ -21,9 +21,6 @@ import java.io.IOException;
  */
 public abstract class MetaSearchImpl
         implements MetaSearch {
-  /*====================================================================
-  (private) data members
-  ====================================================================*/
     /**
      * logger
      */
@@ -83,9 +80,6 @@ public abstract class MetaSearchImpl
         return _iFoundOffset;
     }
 
-  /*====================================================================
-  abstract methods
-  ====================================================================*/
 
     /**
      * get searchable elements
@@ -106,9 +100,6 @@ public abstract class MetaSearchImpl
         return new MetaSearch[]{};
     } 
   
-  /*====================================================================
-  interface methods
-  ====================================================================*/
 
     /**
      * {@inheritDoc}

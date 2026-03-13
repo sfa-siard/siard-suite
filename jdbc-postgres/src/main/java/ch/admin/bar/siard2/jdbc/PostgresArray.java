@@ -46,7 +46,7 @@ public class PostgresArray
             throw new SQLException("Could not parse array element " + String.valueOf(oElement) + " (" + EU.getExceptionMessage(pe) + ")!");
         }
         return oElement;
-    } /* getElement */
+    }
 
     private void addElements(Object[] ao, List<Object> list)
             throws SQLException {
@@ -60,7 +60,7 @@ public class PostgresArray
                 addElements(aoElement, list);
             }
         }
-    } /* addElements */
+    }
 
     public PostgresArray(PgArray array)
             throws SQLException {
@@ -74,7 +74,7 @@ public class PostgresArray
         for (int iElement = 0; iElement < _ao.length; iElement++)
             ao[iElement] = getElement(_ao[iElement]);
         _ao = ao;
-    } /* constructor */
+    }
 
     public PostgresArray(Object[] ao, int iFinalBaseType, String sFinalBaseTypeName)
             throws SQLException {
@@ -88,23 +88,20 @@ public class PostgresArray
             _ao[iElement] = getElement(_ao[iElement]);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public String getBaseTypeName() throws SQLException {
         return _sFinalBaseTypeName;
-    } /* getBaseTypeName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public int getBaseType() throws SQLException {
         return _iFinalBaseType;
-    } /* getBaseType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -114,7 +111,7 @@ public class PostgresArray
         addElements(_ao, list);
         Object[] ao = list.toArray();
         return ao;
-    } /* getArray */
+    }
 
     public String getFieldString(PostgresConnection conn)
             throws SQLException {

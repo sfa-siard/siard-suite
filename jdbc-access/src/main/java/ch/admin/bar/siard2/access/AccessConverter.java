@@ -17,9 +17,6 @@ package ch.admin.bar.siard2.access;
  * @author Hartwig Thomas
  */
 abstract public class AccessConverter {
-  /*====================================================================
-  SQL 
-  ====================================================================*/
 
     /** convert native SQL to standard SQL
      * replacing all bracketed identifiers by quoted identifiers,

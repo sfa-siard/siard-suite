@@ -19,7 +19,6 @@ public class InsertStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(InsertStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -63,7 +62,6 @@ public class InsertStatement
             return InsertStatement.this;
         }
     }
-    /*==================================================================*/
 
     private IsVisitor _visitor = new IsVisitor();
 
@@ -131,7 +129,6 @@ public class InsertStatement
         _bFromDefault = bFromDefault;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the values
      * @return SQL string representing the values.
@@ -145,9 +142,8 @@ public class InsertStatement
                                                                  .format();
         }
         return sValues;
-    } /* formatValues */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the insert statement.
      * @return the SQL string corresponding to the fields of the insert
@@ -168,9 +164,8 @@ public class InsertStatement
         } else
             sStatement = sStatement + sSP + K.DEFAULT.getKeyword() + sSP + K.VALUES.getKeyword();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the insert statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -179,9 +174,8 @@ public class InsertStatement
     public void parse(SqlParser.InsertStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the insert statement from SQL.
      * @param sSql SQL.
@@ -190,9 +184,8 @@ public class InsertStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().insertStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an insert statement.
      * @param qiTableName name of table for INSERT.
@@ -217,15 +210,14 @@ public class InsertStatement
         setOverrideClause(oc);
         setFromDefault(bFromDefault);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public InsertStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class InsertStatement */
+}

@@ -18,7 +18,6 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/* =============================================================================== */
 
 /**
  * MySqlDriver implements a wrapped MySql Driver
@@ -42,7 +41,7 @@ public class MySqlDriver extends BaseDriver implements Driver {
         if (bNoSsl)
             sUrl = sUrl + "?verifyServerCertificate=false&useSSL=false&requireSSL=false&allowPublicKeyRetrieval=true";
         return sUrl;
-    } /* getUrl */
+    }
 
     /** register this driver, replacing original MySql driver
      */
@@ -60,7 +59,6 @@ public class MySqlDriver extends BaseDriver implements Driver {
         register();
     }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -84,9 +82,8 @@ public class MySqlDriver extends BaseDriver implements Driver {
             conn = new MySqlConnection(conn);
         _il.exit(conn);
         return conn;
-    } /* connect */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -97,6 +94,6 @@ public class MySqlDriver extends BaseDriver implements Driver {
         boolean bAccepts = url.startsWith("jdbc:mysql:");
         _il.exit(bAccepts);
         return bAccepts;
-    } /* acceptsURL */
+    }
 
-} /* class MySqlDriver */
+}

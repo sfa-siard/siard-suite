@@ -31,9 +31,6 @@ public interface TableRecord {
      */
     long getRecord();
   
-  /*====================================================================
-  methods
-  ====================================================================*/
 
     /**
      * get the number of cells of the record.

@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.expression.SelectSublist;
 public class MsSqlSelectSublist
         extends SelectSublist {
 
-    /*------------------------------------------------------------------*/
 
     /** format the select sublist.
      * @return the SQL string corresponding to the fields of the select sublist.
@@ -19,15 +18,14 @@ public class MsSqlSelectSublist
         if (s.endsWith(sSuffix))
             s = s + " AS " + SqlLiterals.formatId(s.substring(0, s.length() - sSuffix.length()));
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlSelectSublist(MsSqlSqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
 }

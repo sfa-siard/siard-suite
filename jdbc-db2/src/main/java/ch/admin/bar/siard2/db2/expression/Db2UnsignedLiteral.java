@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.expression.UnsignedLiteral;
 public class Db2UnsignedLiteral
         extends UnsignedLiteral {
 
-    /*------------------------------------------------------------------*/
 
     /** format the unsigned literal
      * @return the MSSQL string corresponding to the fields of the unsigned literal.
@@ -30,15 +29,14 @@ public class Db2UnsignedLiteral
         else
             sFormatted = super.format();
         return sFormatted;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public Db2UnsignedLiteral(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* Db2UnsignedLiteral */
+}

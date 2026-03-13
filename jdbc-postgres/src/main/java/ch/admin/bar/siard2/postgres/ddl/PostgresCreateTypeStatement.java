@@ -16,7 +16,6 @@ import ch.enterag.sqlparser.K;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.CreateTypeStatement;
 
-/*====================================================================*/
 
 /** PostgresCreateTypeStatement overrides CreateTypeStatement of
  * SQL parser because Postgres does not support DISTINCT types but uses 
@@ -25,7 +24,6 @@ import ch.enterag.sqlparser.ddl.CreateTypeStatement;
  */
 public class PostgresCreateTypeStatement
         extends CreateTypeStatement {
-    /*------------------------------------------------------------------*/
 
     /** format the create type statement.
      * @return the SQL string corresponding to the fields of the create
@@ -44,15 +42,14 @@ public class PostgresCreateTypeStatement
             sStatement = super.format();
         }
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public PostgresCreateTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class PostgresCreateTypeStatement */
+}

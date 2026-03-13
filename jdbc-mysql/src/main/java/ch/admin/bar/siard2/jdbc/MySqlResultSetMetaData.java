@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-/* =============================================================================== */
 
 /**
  * MySqlResultSetMetaData implements a wrapped MySql ResultSetMetaData.
@@ -47,7 +46,6 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
         mapCLASS_MYSQL_TO_ISO.put(LocalDateTime.class.getName(), Timestamp.class);
     }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Constructor
@@ -56,9 +54,8 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
     public MySqlResultSetMetaData(ResultSetMetaData rsmdWrapped, String sPrimaryColumn) {
         super(rsmdWrapped);
         _sPrimaryColumn = sPrimaryColumn;
-    } /* constructor */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
@@ -67,9 +64,8 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
         if (_sPrimaryColumn != null)
             iColumnCount--;
         return iColumnCount;
-    } /* getColumnCount */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -78,9 +74,8 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
     public int getColumnType(int column) throws SQLException {
         return MySqlMetaColumns.getDataType(super.getColumnTypeName(column)
                                                  .toLowerCase());
-    } /* getColumnType */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -110,7 +105,7 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
         }
 
         return cls.getName();
-    } /* getColumnClassName */
+    }
 
     @Override
     public boolean isCaseSensitive(int column) throws SQLException {
@@ -120,4 +115,4 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
          ***/
         return super.isCaseSensitive(column);
     }
-} /* class MySqlResultSetMetaData */
+}

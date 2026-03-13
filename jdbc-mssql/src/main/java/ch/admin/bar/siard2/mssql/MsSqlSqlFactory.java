@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** MsSqlSqlFactory overrides the BaseSqlFactory for the MSSQL-specific
  * SQL parser classes. 
@@ -44,7 +43,6 @@ public class MsSqlSqlFactory
         implements SqlFactory {
     private Map<String, Map<QualifiedId, Integer>> _mapColumnType = new HashMap<String, Map<QualifiedId, Integer>>();
 
-    /*------------------------------------------------------------------*/
 
     /** Should be called by executeQuery of Statement and PreparedStatement.
      * Establishes the data types of the columns involved in the query.
@@ -111,9 +109,8 @@ public class MsSqlSqlFactory
             }
             rsColumns.close();
         }
-    } /* startQuery */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** This is called by MsSqlGeneralValueSpecification to decide, whether
      * ".ToString()" needs to be appended to the column name.
@@ -166,62 +163,62 @@ public class MsSqlSqlFactory
         } else
             throw new IllegalArgumentException("Column identifier must not be empty!");
         return iDataType;
-    } /* getDataType */
+    }
 
     @Override
     public CreateTypeStatement newCreateTypeStatement() {
         return new MsSqlCreateTypeStatement(this);
-    } /* newDropSchemaStatement */
+    }
 
     @Override
     public DropSchemaStatement newDropSchemaStatement() {
         return new MsSqlDropSchemaStatement(this);
-    } /* newDropSchemaStatement */
+    }
 
     @Override
     public DropTableStatement newDropTableStatement() {
         return new MsSqlDropTableStatement(this);
-    } /* newDropTableStatement */
+    }
 
     @Override
     public DropViewStatement newDropViewStatement() {
         return new MsSqlDropViewStatement(this);
-    } /* newDropViewStatement */
+    }
 
     @Override
     public DropTypeStatement newDropTypeStatement() {
         return new MsSqlDropTypeStatement(this);
-    } /* newDropTypeStatement */
+    }
 
     @Override
     public DropProcedureStatement newDropProcedureStatement() {
         return new MsSqlDropProcedureStatement(this);
-    } /* newDropTypeStatement */
+    }
 
     @Override
     public DataType newDataType() {
         return new MsSqlDataType(this);
-    } /* newDataType */
+    }
 
     @Override
     public PredefinedType newPredefinedType() {
         return new MsSqlPredefinedType(this);
-    } /* newPredefinedType */
+    }
 
     @Override
     public Literal newLiteral() {
         return new MsSqlLiteral(this);
-    } /* newLiteral */
+    }
 
     @Override
     public ValueExpressionPrimary newValueExpressionPrimary() {
         return new MsSqlValueExpressionPrimary(this);
-    } /* newValueExpressionPrimary */
+    }
 
     @Override
     public UnsignedLiteral newUnsignedLiteral() {
         return new MsSqlUnsignedLiteral(this);
-    } /* newUnsignedLiteral */
+    }
 
     @Override
     public NumericValueFunction newNumericValueFunction() {
@@ -238,4 +235,4 @@ public class MsSqlSqlFactory
         return new MsSqlSelectSublist(this);
     }
 
-} /* MsSqlSqlFactory */
+}

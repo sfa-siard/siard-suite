@@ -12,7 +12,6 @@ public class RowValuePredicand
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(RowValuePredicand.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -31,7 +30,6 @@ public class RowValuePredicand
             return RowValuePredicand.this;
         }
     }
-    /*==================================================================*/
 
     private RvpVisitor _visitor = new RvpVisitor();
 
@@ -59,7 +57,6 @@ public class RowValuePredicand
         _cve = cve;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the row value predicand.
      * @return the SQL string corresponding to the fields of the row value predicand.
@@ -72,9 +69,8 @@ public class RowValuePredicand
         else if (getCommonValueExpression() != null)
             sPredicand = getCommonValueExpression().format();
         return sPredicand;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a row value predicand from its components.
      * @return value.
@@ -86,9 +82,8 @@ public class RowValuePredicand
         else if (getCommonValueExpression() != null)
             oValue = oCommonValue;
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the row value predicand against the context of a query.
      * @param ss sql statement.
@@ -102,9 +97,8 @@ public class RowValuePredicand
             oCommonValue = getCommonValueExpression().evaluate(ss, bAggregated);
         Object oValue = evaluate(oCommonValue);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a row value predicand to
      * their initial value.
@@ -117,9 +111,8 @@ public class RowValuePredicand
             oCommonValue = getCommonValueExpression().resetAggregates(ss);
         Object oValue = evaluate(oCommonValue);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the row value predicand from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -128,9 +121,8 @@ public class RowValuePredicand
     public void parse(SqlParser.RowValuePredicandContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the row value predicand from SQL.
      * @param sSql SQL.
@@ -139,9 +131,8 @@ public class RowValuePredicand
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().rowValuePredicand());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a row value predicand.
      * @param rve row value expression.
@@ -154,15 +145,14 @@ public class RowValuePredicand
         setRowValueExpression(rve);
         setCommonValueExpression(cve);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public RowValuePredicand(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class RowValuePredicand */
+}

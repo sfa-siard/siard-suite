@@ -47,7 +47,7 @@ public class OracleDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @After
     public void tearDown() {
@@ -61,18 +61,18 @@ public class OracleDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testWrapping() {
         assertSame("Registration of driver wrapper failed!", OracleDriver.class, _driver.getClass());
         assertSame("Choice of connection wrapper failed!", OracleConnection.class, _conn.getClass());
-    } /* testWrapping */
+    }
 
     @Test
     public void testCompliant() {
         assertSame("Oracle driver not JDBC compliant!", true, _driver.jdbcCompliant());
-    } /* testCompliant */
+    }
 
     @Test
     public void testAcceptsURL() {
@@ -83,7 +83,7 @@ public class OracleDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testAcceptsURL */
+    }
 
     @Test
     public void testVersion() {
@@ -91,7 +91,7 @@ public class OracleDriverTester {
         int iMinorVersion = _driver.getMinorVersion();
         String sVersion = String.valueOf(iMajorVersion) + "." + String.valueOf(iMinorVersion);
         assertEquals("Wrong Oracle version " + sVersion + " found!", "12.1", sVersion);
-    } /* testVersion */
+    }
 
     @Test
     public void testDriverProperties() {
@@ -102,5 +102,5 @@ public class OracleDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testDriverProperties */
+    }
 }

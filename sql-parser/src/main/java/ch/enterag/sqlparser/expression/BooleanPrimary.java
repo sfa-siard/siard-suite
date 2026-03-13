@@ -20,7 +20,6 @@ public class BooleanPrimary
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(BooleanPrimary.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -229,7 +228,6 @@ public class BooleanPrimary
             return BooleanPrimary.this;
         }
     }
-    /*==================================================================*/
 
     private BpVisitor _visitor = new BpVisitor();
 
@@ -447,7 +445,6 @@ public class BooleanPrimary
         _vep = vep;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the boolean primary.
      * @return the SQL string corresponding to the fields of the boolean primary.
@@ -559,9 +556,8 @@ public class BooleanPrimary
                 s = getValueExpressionPrimary().format();
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a LIKE condition
      * @param sValue value.
@@ -618,9 +614,8 @@ public class BooleanPrimary
             }
         }
         return bValue;
-    } /* evaluateLike */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the comparison of two values.
      * @param co comparison operator.
@@ -657,9 +652,8 @@ public class BooleanPrimary
             }
         }
         return bValue;
-    } /* evaluateComparison */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the given NULL condition for the given value.
      * @param nc NULL condition.
@@ -679,9 +673,8 @@ public class BooleanPrimary
             }
         }
         return bValue;
-    } /* evaluateNullCondition */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a boolean primary from its components.
      * @return Boolean.TRUE, Boolean.FALSE oder null for the value.
@@ -714,9 +707,8 @@ public class BooleanPrimary
                 bValue = (Boolean) oValuePrimary;
         }
         return bValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the boolean primary against the context of a query.
      * @param ss sql statement.
@@ -743,9 +735,8 @@ public class BooleanPrimary
         Boolean bValue = evaluate(oRowValuePredicand, oSecondRowValuePredicand,
                                   oStringValue, bBooleanValue, oValuePrimary);
         return bValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a boolean primary expression to
      * their initial value.
@@ -771,9 +762,8 @@ public class BooleanPrimary
         Boolean bValue = evaluate(oRowValuePredicand, oSecondRowValuePredicand,
                                   oStringValue, bBooleanValue, oValuePrimary);
         return bValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the boolean primary from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -782,9 +772,8 @@ public class BooleanPrimary
     public void parse(SqlParser.BooleanPrimaryContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the boolean primary from SQL.
      * @param sSql SQL.
@@ -793,9 +782,8 @@ public class BooleanPrimary
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().booleanPrimary());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a boolean primary.
      * @param co comparison operator.
@@ -868,15 +856,14 @@ public class BooleanPrimary
         setBooleanValueExpression(bve);
         setValueExpressionPrimary(vep);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public BooleanPrimary(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class BooleanPrimary */
+}

@@ -13,7 +13,6 @@ public class AlterColumnAction
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(AlterColumnAction.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -46,7 +45,6 @@ public class AlterColumnAction
             return AlterColumnAction.this;
         }
     }
-    /*==================================================================*/
 
     private AcaVisitor _visitor = new AcaVisitor();
 
@@ -98,7 +96,6 @@ public class AlterColumnAction
         _dbScope = dbScope;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the alter column action.
      * @return the SQL string corresponding to the fields of the column definition.
@@ -115,9 +112,8 @@ public class AlterColumnAction
         else if (getScopeDropBehavior() != null)
             sAction = K.DROP.getKeyword() + sSP + K.SCOPE.getKeyword() + sSP + getScopeDropBehavior().getKeywords();
         return sAction;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the alter column action from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -126,9 +122,8 @@ public class AlterColumnAction
     public void parse(SqlParser.AlterColumnActionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the alter column action from SQL.
      * @param sSql SQL.
@@ -137,9 +132,8 @@ public class AlterColumnAction
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().alterColumnAction());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an alter column action.
      * @param sDefaultOption value for SET DEFAULT (or null).
@@ -158,15 +152,14 @@ public class AlterColumnAction
         setScopeTable(qScopeTable);
         setScopeDropBehavior(dbScope);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public AlterColumnAction(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class AlterColumnAction */
+}

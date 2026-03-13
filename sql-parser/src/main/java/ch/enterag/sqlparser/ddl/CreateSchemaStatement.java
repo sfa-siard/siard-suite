@@ -14,7 +14,6 @@ public class CreateSchemaStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CreateSchemaStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -58,7 +57,6 @@ public class CreateSchemaStatement
         _idAuthorizationName = idAuthorizationName;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the create schema statement.
      * @return the SQL string corresponding to the fields of the create schema statement.
@@ -70,9 +68,8 @@ public class CreateSchemaStatement
             sStatement = sStatement + sSP + K.AUTHORIZATION.getKeyword() + sSP +
                     getAuthorizationName().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create schema statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -81,9 +78,8 @@ public class CreateSchemaStatement
     public void parse(SqlParser.CreateSchemaStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create schema statement from SQL.
      * @param sSql SQL.
@@ -92,9 +88,8 @@ public class CreateSchemaStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().createSchemaStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create schema statement.
      * @param sidSchemaName name of schema to be created.
@@ -105,15 +100,14 @@ public class CreateSchemaStatement
         setSchemaName(sidSchemaName);
         setAuthorizationName(idAuthorizationName);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CreateSchemaStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CreateSchemaStatement */
+}

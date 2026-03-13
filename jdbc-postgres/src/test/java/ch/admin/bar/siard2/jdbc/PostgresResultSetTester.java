@@ -63,7 +63,7 @@ public class PostgresResultSetTester
         sbSql.append("\r\nFROM ");
         sbSql.append(qiTable.format());
         return sbSql.toString();
-    } /* getTableQuery */
+    }
 
     private static final String _sNativeQuerySimple = getTableQuery(TestPostgresDatabase.getQualifiedSimpleTable(), TestPostgresDatabase._listCdSimple);
     private static final String _sNativeQueryComplex = getTableQuery(TestPostgresDatabase.getQualifiedComplexTable(), TestPostgresDatabase._listCdComplex);
@@ -214,7 +214,7 @@ public class PostgresResultSetTester
         }
         _conn.commit();
         return _conn;
-    } /* closeResultSet */
+    }
 
     private void openResultSet(String sQuery, int iType, int iConcurrency)
             throws SQLException {
@@ -224,7 +224,7 @@ public class PostgresResultSetTester
         ResultSet rs = stmt.executeQuery(sQuery);
         setResultSet(rs);
         rs.next();
-    } /* openResultSet */
+    }
 
     @Before
     public void setUp() {
@@ -250,13 +250,13 @@ public class PostgresResultSetTester
                 tcd = tcdTry;
         }
         return tcd;
-    } /* findColumnDefinition */
+    }
 
     @Test
     public void testClass() {
         enter();
         assertEquals("Wrong result set class!", PostgresResultSet.class, getResultSet().getClass());
-    } /* testClass */
+    }
 
     @Test
     @Override
@@ -270,7 +270,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testAbsolute */
+    }
 
     @Test
     @Override
@@ -284,7 +284,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testRelative */
+    }
 
     @Test
     @Override
@@ -298,7 +298,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testFirst */
+    }
 
     @Test
     @Override
@@ -312,7 +312,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testLast */
+    }
 
     @Test
     @Override
@@ -327,7 +327,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrevious */
+    }
 
     @Test
     @Override
@@ -341,7 +341,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testBeforeFirst */
+    }
 
     @Test
     @Override
@@ -355,7 +355,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testAfterLast */
+    }
 
     @Test
     public void testSetFetchDirection() {
@@ -368,7 +368,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetFetchDirection */
+    }
 
     @Test
     @Override
@@ -381,7 +381,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testFindColumn */
+    }
 
     @Test
     @Override
@@ -394,7 +394,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNull */
+    }
 
     @Test
     @Override
@@ -411,7 +411,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetString */
+    }
 
     @Test
     @Override
@@ -425,7 +425,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateString */
+    }
 
     @Test
     @Override
@@ -441,7 +441,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetString */
+    }
 
     @Test
     @Override
@@ -455,7 +455,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNString */
+    }
 
     @Test
     @Override
@@ -468,7 +468,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBoolean */
+    }
 
     @Test
     @Override
@@ -480,7 +480,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBoolean */
+    }
 
     @Test
     @Override
@@ -495,7 +495,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetByte */
+    }
 
     @Test
     @Override
@@ -509,7 +509,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateByte */
+    }
 
     @Test
     @Override
@@ -522,7 +522,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetShort */
+    }
 
     @Test
     @Override
@@ -534,7 +534,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateShort */
+    }
 
     @Test
     @Override
@@ -547,7 +547,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetInt */
+    }
 
     @Test
     @Override
@@ -559,7 +559,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateInt */
+    }
 
     @Test
     @Override
@@ -572,7 +572,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetLong */
+    }
 
     @Test
     @Override
@@ -584,7 +584,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateLong */
+    }
 
     @Test
     @Override
@@ -597,7 +597,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetFloat */
+    }
 
     @Test
     @Override
@@ -609,7 +609,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateFloat */
+    }
 
     @Test
     @Override
@@ -622,7 +622,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetDouble */
+    }
 
     @Test
     @Override
@@ -634,7 +634,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateDouble */
+    }
 
     @Test
     @Override
@@ -654,7 +654,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBigDecimal */
+    }
 
     @Test
     @Override
@@ -666,7 +666,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBigDecimal */
+    }
 
     @Test
     @Override
@@ -680,7 +680,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBigDecimal_String_Int */
+    }
 
     @Test
     @Override
@@ -693,7 +693,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBytes */
+    }
 
     @Test
     @Override
@@ -705,7 +705,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBytes */
+    }
 
     @Test
     @Override
@@ -718,7 +718,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetDate */
+    }
 
     @Test
     @Override
@@ -730,7 +730,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateDate */
+    }
 
     @Test
     @Override
@@ -744,7 +744,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetDate_Calendar */
+    }
 
     @Test
     @Override
@@ -757,7 +757,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTime */
+    }
 
 
     @Test
@@ -770,7 +770,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateTime */
+    }
 
     @Test
     @Override
@@ -784,13 +784,13 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTime_Calendar */
+    }
 
     private Timestamp truncateToMicros(Timestamp ts) {
         int iNanos = ts.getNanos();
         ts.setNanos(1000 * ((iNanos + 499) / 1000));
         return ts;
-    } /* truncateToMicros */
+    }
 
     @Test
     @Override
@@ -804,7 +804,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTimestamp */
+    }
 
     @Test
     @Override
@@ -816,7 +816,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateTimestamp */
+    }
 
     @Test
     @Override
@@ -830,7 +830,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTimestamp_Calendar */
+    }
 
     @Test
     @Override
@@ -859,7 +859,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateDuration */
+    }
 
     @Test
     @Override
@@ -880,7 +880,7 @@ public class PostgresResultSetTester
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetAsciiStream */
+    }
 
     @Test
     @Override
@@ -895,7 +895,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateAsciiStream */
+    }
 
     @Test
     @Override
@@ -908,7 +908,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateAsciiStream_Int */
+    }
 
     @Test
     @Override
@@ -923,7 +923,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateAsciiStream_Long */
+    }
 
     @Test
     @Override
@@ -948,7 +948,7 @@ public class PostgresResultSetTester
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetUnicodeStream */
+    }
 
     @Test
     @Override
@@ -969,7 +969,7 @@ public class PostgresResultSetTester
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetCharacterStream */
+    }
 
     @Test
     @Override
@@ -984,7 +984,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateCharacterStream */
+    }
 
     @Test
     @Override
@@ -997,7 +997,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateCharacterStream_Int */
+    }
 
     @Test
     @Override
@@ -1013,7 +1013,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateCharacterStream_Long */
+    }
 
     @Test
     @Override
@@ -1036,7 +1036,7 @@ public class PostgresResultSetTester
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetNCharacterStream */
+    }
 
     @Test
     @Override
@@ -1051,7 +1051,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNCharacterStream */
+    }
 
     @Test
     @Override
@@ -1064,7 +1064,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNCharacterStream_String_Int */
+    }
 
     @Test
     @Override
@@ -1079,7 +1079,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNCharacterStream_String_Long */
+    }
 
     @Test
     @Override
@@ -1099,7 +1099,7 @@ public class PostgresResultSetTester
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetBinaryStream */
+    }
 
     @Test
     @Override
@@ -1114,7 +1114,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBinaryStream */
+    }
 
     @Test
     @Override
@@ -1129,7 +1129,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBinaryStream_Int */
+    }
 
     @Test
     @Override
@@ -1144,7 +1144,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBinaryStream_Long */
+    }
 
     @Test
     @Override
@@ -1165,7 +1165,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObject */
+    }
 
     @Test
     @Override
@@ -1188,7 +1188,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateObject */
+    }
 
     @Test
     @Override
@@ -1200,7 +1200,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateObject_Int */
+    }
 
     @Test
     @Override
@@ -1220,7 +1220,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObject_Map */
+    }
 
     @Test
     @Override
@@ -1233,19 +1233,19 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObject_Class */
+    }
 
     @Test
     @Override
     public void testGetRef() {
         enter();
-    } /* testGetRef */
+    }
 
     @Test
     @Override
     public void testUpdateRef() {
         enter();
-    } /* testUpdateRef */
+    }
 
     @Test
     @Override
@@ -1260,7 +1260,7 @@ public class PostgresResultSetTester
             fail(EU.getExceptionMessage(se));
         }
         // catch(IOException ie) { fail(EU.getExceptionMessage(ie)); }
-    } /* testGetBlob */
+    }
 
     @Test
     @Override
@@ -1278,7 +1278,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBlob */
+    }
 
     @Test
     @Override
@@ -1293,7 +1293,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBlob_InputStream */
+    }
 
     @Override
     @Test
@@ -1308,7 +1308,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateBlob_String_InputStream_Long */
+    }
 
     @Test
     @Override
@@ -1332,7 +1332,7 @@ public class PostgresResultSetTester
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* testGetClob */
+    }
 
     @Test
     @Override
@@ -1350,7 +1350,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateClob */
+    }
 
     @Test
     @Override
@@ -1365,7 +1365,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateClob_Reader */
+    }
 
     @Test
     @Override
@@ -1380,7 +1380,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateClob_Reader_Long */
+    }
 
     @Test
     @Override
@@ -1396,7 +1396,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetNClob */
+    }
 
     @Test
     @Override
@@ -1414,7 +1414,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNClob */
+    }
 
     @Test
     @Override
@@ -1429,7 +1429,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNClob_Reader */
+    }
 
     @Test
     @Override
@@ -1444,7 +1444,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateNClob_Reader_Long */
+    }
 
     @Test
     @Override
@@ -1459,7 +1459,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetSqlXml */
+    }
 
     @Test
     @Override
@@ -1475,7 +1475,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateSqlXml */
+    }
 
     @Test
     @Override
@@ -1490,7 +1490,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetArray */
+    }
 
     @Test
     @Override
@@ -1505,7 +1505,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateArray */
+    }
 
     @Test
     @Override
@@ -1518,7 +1518,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetRowId */
+    }
 
     @Test
     @Override
@@ -1532,7 +1532,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testUpdateRowId */
+    }
 
 
     @Override
@@ -1589,7 +1589,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testInsertRow */
+    }
 
     @Test
     @Override
@@ -1606,7 +1606,7 @@ public class PostgresResultSetTester
         } catch (Exception e) {
             fail(EU.getExceptionMessage(e));
         }
-    } /* testDeleteRow */
+    }
 
     @Test
     @Override
@@ -1630,7 +1630,7 @@ public class PostgresResultSetTester
         } catch (Exception e) {
             fail(EU.getExceptionMessage(e));
         }
-    } /* testUpdateRow */
+    }
 
     private void checkTsVector(String s, String sExpected) {
         String[] asTokens = sExpected.split(" ");
@@ -1648,7 +1648,7 @@ public class PostgresResultSetTester
             }
         }
         assertEquals("Invalid value for " + PostgresType.TSVECTOR.getKeyword() + "!", sbExpected.toString(), s);
-    } /* checkTsVector */
+    }
 
     private void checkTsQuery(String s, String sExpected) {
         String[] asTokens = sExpected.split(" ");
@@ -1677,56 +1677,56 @@ public class PostgresResultSetTester
             }
         }
         assertEquals("Invalid value for " + PostgresType.TSQUERY.getKeyword() + "!", sbExpected.toString(), s);
-    } /* checkTsQuery */
+    }
 
     private void checkPoint(String s, String sExpected)
             throws SQLException {
         PGpoint pp = new PGpoint(s);
         PGpoint ppExpected = new PGpoint(sExpected);
         assertEquals("Invalid value for " + PostgresType.POINT.getKeyword() + "!", ppExpected, pp);
-    } /* checkPoint */
+    }
 
     private void checkLine(String s, String sExpected)
             throws SQLException {
         PGline pl = new PGline(s);
         PGline plExpected = new PGline(sExpected);
         assertEquals("Invalid value for " + PostgresType.LINE.getKeyword() + "!", plExpected, pl);
-    } /* checkLine */
+    }
 
     private void checkLseg(String s, String sExpected)
             throws SQLException {
         PGlseg pl = new PGlseg(s);
         PGlseg plExpected = new PGlseg(sExpected);
         assertEquals("Invalid value for " + PostgresType.LSEG.getKeyword() + "!", plExpected, pl);
-    } /* checkLseg */
+    }
 
     private void checkBox(String s, String sExpected)
             throws SQLException {
         PGbox pb = new PGbox(s);
         PGbox pbExpected = new PGbox(sExpected.substring(1, sExpected.length() - 1));
         assertEquals("Invalid value for " + PostgresType.BOX.getKeyword() + "!", pbExpected, pb);
-    } /* checkBox */
+    }
 
     private void checkPath(String s, String sExpected)
             throws SQLException {
         PGpath pp = new PGpath(s);
         PGpath ppExpected = new PGpath(sExpected);
         assertEquals("Invalid value for " + PostgresType.PATH.getKeyword() + "!", ppExpected, pp);
-    } /* checkPath */
+    }
 
     private void checkPolygon(String s, String sExpected)
             throws SQLException {
         PGpolygon pp = new PGpolygon(s);
         PGpolygon ppExpected = new PGpolygon(sExpected);
         assertEquals("Invalid value for " + PostgresType.POLYGON.getKeyword() + "!", ppExpected, pp);
-    } /* checkPolygon */
+    }
 
     private void checkCircle(String s, String sExpected)
             throws SQLException {
         PGcircle pc = new PGcircle(s);
         PGcircle pcExpected = new PGcircle(sExpected);
         assertEquals("Invalid value for " + PostgresType.CIRCLE.getKeyword() + "!", pcExpected, pc);
-    } /* checkPolygon */
+    }
 
     private void checkString(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1766,7 +1766,7 @@ public class PostgresResultSetTester
             }
         } else
             fail("Type String expected for " + sDataType + "!");
-    } /* checkString */
+    }
 
     private void checkClob(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1774,7 +1774,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), clob.getSubString(1L, (int) clob.length()));
         } else
             fail("Type Clob expected for " + sDataType + "!");
-    } /* checkClob */
+    }
 
     private void checkSqlXml(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1782,7 +1782,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), sqlxml.getString());
         } else
             fail("Type SQLXML expected for " + sDataType + "!");
-    } /* checkSqlXml */
+    }
 
     private void checkBytes(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1803,7 +1803,7 @@ public class PostgresResultSetTester
             assertArrayEquals("Invalid value for " + sTypeName + "!", bufExpected, buf);
         } else
             fail("Type byte[] expected for " + sDataType + "!");
-    } /* checkBytes */
+    }
 
     private void checkBlob(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1811,7 +1811,7 @@ public class PostgresResultSetTester
             assertArrayEquals("Invalid value for " + sTypeName + "!", (byte[]) tcd.getValue(), blob.getBytes(1L, (int) blob.length()));
         } else
             fail("Type Blob expected for " + "!");
-    } /* checkBlob */
+    }
 
     private void checkBigDecimal(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1825,7 +1825,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", bdExpected, bd);
         } else
             fail("Type BigDecimal expected for " + "!");
-    } /* checkBigDecimal */
+    }
 
     private void checkShort(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1833,7 +1833,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), sh);
         } else
             fail("Type Short expected for " + sDataType + "!");
-    } /* checkShort */
+    }
 
     private void checkInteger(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1841,7 +1841,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), i);
         } else
             fail("Type Integer expected for " + sDataType + "!");
-    } /* checkInteger */
+    }
 
     private void checkOid(long l, byte[] bufExpected)
             throws SQLException {
@@ -1854,7 +1854,7 @@ public class PostgresResultSetTester
         lo.read(buf, 0, buf.length);
         lo.close();
         assertArrayEquals("Invalid value for " + PostgresType.OID.getKeyword() + "!", bufExpected, buf);
-    } /* checkOid */
+    }
 
     private void checkLong(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1865,7 +1865,7 @@ public class PostgresResultSetTester
                 assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), l);
         } else
             fail("Type Long expected for " + sDataType + "!");
-    } /* checkLong */
+    }
 
     private void checkDouble(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1881,7 +1881,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", dExpected, d);
         } else
             fail("Type Double expected for " + sDataType + "!");
-    } /* checkDouble */
+    }
 
     private void checkFloat(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1889,7 +1889,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), f);
         } else
             fail("Type Float expected for " + sDataType + "!");
-    } /* checkFloat */
+    }
 
     private void checkBoolean(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1897,7 +1897,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), b);
         } else
             fail("Type Boolean expected for " + sDataType + "!");
-    } /* checkBoolean */
+    }
 
     private void checkDate(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1905,7 +1905,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), d);
         } else
             fail("Type Date expected for " + sDataType + "!");
-    } /* checkDate */
+    }
 
     private void checkTime(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1913,7 +1913,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), t);
         } else
             fail("Type Time expected for " + sDataType + "!");
-    } /* checkTime */
+    }
 
     private void checkTimestamp(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1923,7 +1923,7 @@ public class PostgresResultSetTester
             assertEquals("Invalid value for " + sTypeName + "!", tsExpected, ts);
         } else
             fail("Type Timestamp expected for " + sDataType + "!");
-    } /* checkTimestamp */
+    }
 
     private void checkDuration(Object o, Object oExpected) {
         Duration d = (Duration) o;
@@ -1934,7 +1934,7 @@ public class PostgresResultSetTester
         lNanoSeconds = 1000000 * lNanoSeconds;
         ivExpected.setNanoSeconds(lNanoSeconds);
         assertEquals("Invalid value for " + PostgresType.INTERVAL.getKeyword() + "!", ivExpected, iv);
-    } /* checkDuration */
+    }
 
     private void checkDuration(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1942,7 +1942,7 @@ public class PostgresResultSetTester
             checkDuration(o, tcd.getValue());
         else
             fail("Type Duration expected for " + sTypeName + "!");
-    } /* checkDuration */
+    }
 
     private void checkStruct(String sIndent, Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -1989,7 +1989,7 @@ public class PostgresResultSetTester
         } catch (ParseException pe) {
             fail("Type name " + sTypeName + " could not be parsed!");
         }
-    } /* checkStruct */
+    }
 
     private List<TestColumnDefinition> flattenElements(List<TestColumnDefinition> listElements) {
         List<TestColumnDefinition> listFlat = new ArrayList<TestColumnDefinition>();
@@ -2003,7 +2003,7 @@ public class PostgresResultSetTester
                 listFlat.add(tcd);
         }
         return listFlat;
-    } /* flattenElements */
+    }
 
     private void checkArray(String sIndent, Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -2029,7 +2029,7 @@ public class PostgresResultSetTester
                 fail("Value of Array must be a list!");
         } else
             fail("Type Array expected for " + sTypeName + "!");
-    } /* checkArray */
+    }
 
     private void checkDistinct(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
@@ -2045,7 +2045,7 @@ public class PostgresResultSetTester
             fail("List expected for DISTINCT values!");
         //}
         //catch(ParseException pe) { fail("Type name "+sTypeName+" could not be parsed!"); }
-    } /* checkDistinct */
+    }
 
     private void checkObject(String sIndent, Object o, TestColumnDefinition tcd, int iDataType, String sTypeName, String sDataType)
             throws SQLException {
@@ -2120,7 +2120,7 @@ public class PostgresResultSetTester
             }
         } else if (o != null)
             fail("Expected NULL value not found!");
-    } /* checkObject */
+    }
 
     @Test
     public void testGetObjectSqlSimple() throws SQLException {
@@ -2190,7 +2190,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObjectNativeSimple */
+    }
 
     @Test
     public void testGetObjectSqlComplex() {
@@ -2232,7 +2232,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObjectSqlComplex */
+    }
 
     @Test
     public void testGetObjectNativeComplex() {
@@ -2269,7 +2269,7 @@ public class PostgresResultSetTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetObjectNativeComplex */
+    }
 
     @Test
     public void testInsertRowSimple() throws SQLException {
@@ -2564,7 +2564,7 @@ public class PostgresResultSetTester
             }
         }
         return bEqual;
-    } /* equalsStructValue */
+    }
 
     private boolean equalsArrayValue(Array array, List<TestColumnDefinition> listCd)
             throws SQLException, ParseException {
@@ -2580,7 +2580,7 @@ public class PostgresResultSetTester
         } else
             fail("Array has unexpected length!");
         return bEqual;
-    } /* equalsArrayValue */
+    }
 
     private Struct createStruct(TestColumnDefinition tcd)
             throws SQLException, ParseException {
@@ -2622,7 +2622,7 @@ public class PostgresResultSetTester
         PostgresQualifiedId pqiType = new PostgresQualifiedId(tcd.getType());
         struct = conn.createStruct(pqiType.format(), aoAttribute);
         return struct;
-    } /* createStruct */
+    }
 
     private Array createArray(TestColumnDefinition tcd)
             throws SQLException {
@@ -2644,7 +2644,7 @@ public class PostgresResultSetTester
         }
         array = conn.createArrayOf(sBaseTypeName, aoElement);
         return array;
-    } /* createArray */
+    }
 
     @Test
     public void testInsertRowComplex() throws SQLException {
@@ -2731,6 +2731,6 @@ public class PostgresResultSetTester
         } catch (ParseException pe) {
             fail(EU.getExceptionMessage(pe));
         }
-    } /* testInsertRowSqlComplex */
+    }
 
 }

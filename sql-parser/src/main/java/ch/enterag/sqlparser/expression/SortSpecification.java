@@ -13,7 +13,6 @@ public class SortSpecification
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SortSpecification.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -37,7 +36,6 @@ public class SortSpecification
             return SortSpecification.this;
         }
     }
-    /*==================================================================*/
 
     private SsVisitor _visitor = new SsVisitor();
 
@@ -75,7 +73,6 @@ public class SortSpecification
         _no = no;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the sort specification.
      * @return the SQL string corresponding to the fields of the sort specification.
@@ -88,9 +85,8 @@ public class SortSpecification
         if (getNullOrdering() != null)
             sSpecification = sSpecification + sSP + getNullOrdering().getKeywords();
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the sort specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -99,9 +95,8 @@ public class SortSpecification
     public void parse(SqlParser.SortSpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the sort specification from SQL.
      * @param sSql SQL.
@@ -110,9 +105,8 @@ public class SortSpecification
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().sortSpecification());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a sort specification
      * @param ve value expression to be sorted by.
@@ -129,15 +123,14 @@ public class SortSpecification
         setOrderingSpecification(os);
         setNullOrdering(no);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SortSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SortSpecification */
+}

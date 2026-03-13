@@ -31,7 +31,6 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
 
-/* =============================================================================== */
 
 /**
  * MySqlResultSet implements a wrapped MySql ResultSet
@@ -49,7 +48,6 @@ public class MySqlResultSet
         _sPrimaryColumn = sPrimaryColumn;
     }
 
-    /* ------------------------------------------------------------------------ */
 
     /** Constructor
      * @param rsWrapped
@@ -58,9 +56,8 @@ public class MySqlResultSet
             throws SQLException {
         super(rsWrapped);
         _conn = conn;
-    } /* constructor */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Gets the wrapped Statement
@@ -68,18 +65,16 @@ public class MySqlResultSet
     @Override
     public Statement getStatement() throws SQLException {
         return new MySqlStatement(super.getStatement(), _conn);
-    } /* getStatement */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Gets the wrapped ResultSetMetaData
      */
     public ResultSetMetaData getMetaData() throws SQLException {
         return new MySqlResultSetMetaData(super.getMetaData(), _sPrimaryColumn);
-    } /* getMetaData */
+    }
 
-    /* ------------------------------------------------------------------------ */
     private Object mapObject(Object o, int iType) throws SQLException {
         if ((o instanceof String) && (iType == Types.LONGVARCHAR)) {
             Clob clob = getStatement().getConnection()
@@ -114,7 +109,6 @@ public class MySqlResultSet
         return o;
     }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
@@ -152,7 +146,6 @@ public class MySqlResultSet
         return o;
     }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
@@ -182,16 +175,14 @@ public class MySqlResultSet
         else
             oMapped = mapObject(o, iType, type);
         return oMapped;
-    } /* getObject */
+    }
 
-    /* ------------------------------------------------------------------------ */
     private <T> T mapObject(Object o, int iType, Class<T> type) throws SQLException {
         T oMapped = null;
         oMapped = type.cast(mapObject(o, iType));
         return oMapped;
-    } /* mapObject */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
@@ -214,17 +205,15 @@ public class MySqlResultSet
         } else
             result = super.getString(columnIndex);
         return result;
-    } /* getString */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
     public String getNString(int columnIndex) throws SQLException {
         return getString(columnIndex);
-    } /* getNString */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
@@ -233,9 +222,8 @@ public class MySqlResultSet
         byte[] buf = getBytes(columnIndex);
         Interval iv = SqlLiterals.deserialize(buf, Interval.class);
         return iv.toDuration();
-    } /* getDuration */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -247,9 +235,8 @@ public class MySqlResultSet
         Blob b = _conn.createBlob();
         b.setBytes(1l, buf);
         updateBlob(columnIndex, b);
-    } /* updateBlob */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -261,9 +248,8 @@ public class MySqlResultSet
         Blob b = _conn.createBlob();
         b.setBytes(1l, buf);
         updateBlob(columnIndex, b);
-    } /* updateBlob */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -273,9 +259,8 @@ public class MySqlResultSet
     public void updateClob(int columnIndex, Reader reader) throws SQLException {
         String s = readString(reader);
         updateString(columnIndex, s);
-    } /* updateClob */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -285,9 +270,8 @@ public class MySqlResultSet
     public void updateClob(int columnIndex, Reader reader, long length) throws SQLException {
         String s = readString(reader);
         updateString(columnIndex, s);
-    } /* updateClob */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -295,9 +279,8 @@ public class MySqlResultSet
      */
     public void updateBinaryStream(int columnIndex, InputStream x) throws SQLException {
         updateBytes(columnIndex, readByteArray(x));
-    } /* updateBinaryStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -306,9 +289,8 @@ public class MySqlResultSet
     @Override
     public void updateBinaryStream(int columnIndex, InputStream x, int length) throws SQLException {
         updateBytes(columnIndex, readByteArray(x));
-    } /* updateBinaryStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -317,9 +299,8 @@ public class MySqlResultSet
     @Override
     public void updateBinaryStream(int columnIndex, InputStream x, long length) throws SQLException {
         updateBytes(columnIndex, readByteArray(x));
-    } /* updateBinaryStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -328,9 +309,8 @@ public class MySqlResultSet
     @Override
     public void updateCharacterStream(int columnIndex, Reader reader) throws SQLException {
         updateString(columnIndex, readString(reader));
-    } /* updateCharacterStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -339,9 +319,8 @@ public class MySqlResultSet
     @Override
     public void updateCharacterStream(int columnIndex, Reader reader, int length) throws SQLException {
         updateString(columnIndex, readString(reader));
-    } /* updateCharacterStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -350,9 +329,8 @@ public class MySqlResultSet
     @Override
     public void updateCharacterStream(int columnIndex, Reader reader, long length) throws SQLException {
         updateString(columnIndex, readString(reader));
-    } /* updateCharacterStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -365,9 +343,8 @@ public class MySqlResultSet
         nclob.setString(1L, clob.getSubString(1L, (int) clob.length()));
         clob.free();
         return nclob;
-    } /* getNClob */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -378,7 +355,6 @@ public class MySqlResultSet
         return getCharacterStream(columnIndex);
     }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -390,9 +366,8 @@ public class MySqlResultSet
         clob.setString(1L, nclob.getSubString(1L, (int) nclob.length()));
         updateClob(columnIndex, clob);
         clob.free();
-    } /* updateNClob */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * (https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-implementation-notes.html)
@@ -400,9 +375,8 @@ public class MySqlResultSet
     @Override
     public void updateNCharacterStream(int columnIndex, Reader x) throws SQLException {
         updateCharacterStream(columnIndex, x);
-    } /* updateNCharacterStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * (https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-implementation-notes.html)
@@ -410,9 +384,8 @@ public class MySqlResultSet
     @Override
     public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
         updateCharacterStream(columnIndex, x, length);
-    } /* updateNCharacterStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -421,9 +394,8 @@ public class MySqlResultSet
     @Override
     public void updateNClob(int columnIndex, Reader x) throws SQLException {
         updateClob(columnIndex, x);
-    } /* updateNClob */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc}
      * Overridden as the MySql driver simply throws an NotUpdatable exception
@@ -432,7 +404,7 @@ public class MySqlResultSet
     @Override
     public void updateNClob(int columnIndex, Reader x, long length) throws SQLException {
         updateClob(columnIndex, x, length);
-    } /* updateNClob */
+    }
 
     private void setNoBackslashEscapes(boolean bNoBackslashEscapes)
             throws SQLException {
@@ -444,9 +416,8 @@ public class MySqlResultSet
         Statement stmt = connNative.createStatement();
         stmt.executeUpdate(sSql);
         stmt.close();
-    } /* setNoBackSlashEscapes */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
@@ -454,9 +425,8 @@ public class MySqlResultSet
         setNoBackslashEscapes(false);
         super.insertRow();
         setNoBackslashEscapes(true);
-    } /* insertRow */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
@@ -464,9 +434,8 @@ public class MySqlResultSet
         setNoBackslashEscapes(false);
         super.updateRow();
         setNoBackslashEscapes(true);
-    } /* updateRow */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -496,9 +465,8 @@ public class MySqlResultSet
         if (doc != null) {
             updateString(columnIndex, sXML);
         }
-    } /* updateSQLXML */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -511,7 +479,6 @@ public class MySqlResultSet
             super.updateObject(columnIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -520,9 +487,8 @@ public class MySqlResultSet
         Interval iv = Interval.fromDuration(x);
         byte[] buf = SqlLiterals.serialize(iv);
         updateBytes(columnIndex, buf);
-    } /* updateDuration */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** Gets a Object from an InputStream
      * @param inputStream an input stream
@@ -564,9 +530,8 @@ public class MySqlResultSet
         }
 
         return geometry;
-    } /* getGeometryFromInputStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** Reads an inputStream and returns a byte array
      * @param inputStream the input stream to read
@@ -584,9 +549,8 @@ public class MySqlResultSet
             e.printStackTrace();
         }
         return os.toByteArray();
-    } /* getByteArrayFromInputStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** Reads a string from a reader
      * @param reader
@@ -607,9 +571,8 @@ public class MySqlResultSet
             e.printStackTrace();
         }
         return builder.toString();
-    } /* getStringFromReader */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -623,9 +586,8 @@ public class MySqlResultSet
             throw new SQLFeatureNotSupportedException("getCursorName not supported!", se);
         }
         return s;
-    } /* getCursorName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -638,9 +600,8 @@ public class MySqlResultSet
         } catch (SQLException se) {
             throw new SQLFeatureNotSupportedException("updateAsciiStream not supported!", se);
         }
-    } /* updateAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -653,9 +614,8 @@ public class MySqlResultSet
         } catch (SQLException se) {
             throw new SQLFeatureNotSupportedException("updateAsciiStream not supported!", se);
         }
-    } /* updateAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -668,7 +628,7 @@ public class MySqlResultSet
         } catch (SQLException se) {
             throw new SQLFeatureNotSupportedException("updateAsciiStream not supported!", se);
         }
-    } /* updateAsciiStream */
+    }
 
     public URL updateURL(int columnIndex, URL url) throws SQLException {
         super.updateObject(columnIndex, url.getPath());
@@ -680,7 +640,6 @@ public class MySqlResultSet
         return url;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -690,4 +649,4 @@ public class MySqlResultSet
         stmt.removePrimaryColumn(_qiTable, _sPrimaryColumn);
     }
 
-} /* class MySqlResultSet */
+}

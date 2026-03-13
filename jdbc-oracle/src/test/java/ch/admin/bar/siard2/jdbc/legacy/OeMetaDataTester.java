@@ -51,7 +51,7 @@ public class OeMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
     @Test
     public void test() {

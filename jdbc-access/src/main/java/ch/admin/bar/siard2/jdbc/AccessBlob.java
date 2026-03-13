@@ -35,7 +35,6 @@ public class AccessBlob implements Blob {
             throw new SQLException("Cannot position Blob beyond its current length!");
         return bytes.length;
     }
-    /*==================================================================*/
 
 
     /** {@link Blob} */
@@ -113,7 +112,6 @@ public class AccessBlob implements Blob {
     }
 
 
-    /*==================================================================*/
     private class BlobOutputStream extends ByteArrayOutputStream {
 
         public BlobOutputStream(byte[] bufInitialContent) throws SQLException {

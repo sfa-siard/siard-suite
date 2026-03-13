@@ -20,7 +20,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/* =============================================================================== */
 
 /**
  * MySqlStatement implements a wrapped MySql Statement
@@ -29,7 +28,6 @@ import java.sql.Statement;
 public class MySqlStatement extends BaseStatement implements Statement {
     private MySqlConnection _conn = null;
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * @param stmtWrapped Statement to be wrapped
@@ -38,17 +36,15 @@ public class MySqlStatement extends BaseStatement implements Statement {
             throws SQLException {
         super(stmtWrapped);
         _conn = conn;
-    } /* constructor */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** {@inheritDoc} */
     @Override
     public Connection getConnection() throws SQLException {
         return _conn;
-    } /* getConnection */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** dropReferencingKeys drops referencing foreign keys in preparation
      * for a DROP TABLE CASCADE statement.
@@ -85,9 +81,8 @@ public class MySqlStatement extends BaseStatement implements Statement {
                 rs.close();
             }
         }
-    } /* dropReferencingKeys */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** add a autoincremented primary key column to the single primary
      * table in the query which does not have a primary key.
@@ -124,9 +119,8 @@ public class MySqlStatement extends BaseStatement implements Statement {
             }
         }
         return sPrimaryColumn;
-    } /* addPrimaryColumn */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** remove the primary key column from the single primary table in the
      * query which should not have a primary key.
@@ -145,9 +139,8 @@ public class MySqlStatement extends BaseStatement implements Statement {
             }
             _conn.resetTableWithoutPrimaryKey();
         }
-    } /* removePrimaryColumn */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -170,9 +163,8 @@ public class MySqlStatement extends BaseStatement implements Statement {
         MySqlResultSet rs = new MySqlResultSet(super.executeQuery(sNative), _conn);
         rs.setPrimaryColumn(_conn.getTableWithoutPrimaryKey(), sPrimaryColumn);
         return rs;
-    } /* executeQuery */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -185,9 +177,8 @@ public class MySqlStatement extends BaseStatement implements Statement {
         _conn.resetTableDropCascade();
         if (iResult == -1) iResult = 0; // MySQL does not conform to JDBC specification
         return iResult;
-    } /* executeUpdate */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -200,9 +191,8 @@ public class MySqlStatement extends BaseStatement implements Statement {
         _conn.resetTableDropCascade();
         if (iResult == -1) iResult = 0; // MySQL does not conform to JDBC specification
         return iResult;
-    } /* executeUpdate */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -215,9 +205,8 @@ public class MySqlStatement extends BaseStatement implements Statement {
         _conn.resetTableDropCascade();
         if (iResult == -1) iResult = 0; // MySQL does not conform to JDBC specification
         return iResult;
-    } /* executeUpdate */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -230,9 +219,8 @@ public class MySqlStatement extends BaseStatement implements Statement {
         _conn.resetTableDropCascade();
         if (iResult == -1) iResult = 0; // MySQL does not conform to JDBC specification
         return iResult;
-    } /* executeUpdate */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -241,6 +229,6 @@ public class MySqlStatement extends BaseStatement implements Statement {
     public ResultSet getResultSet() throws SQLException {
         ResultSet rs = new MySqlResultSet(super.getResultSet(), _conn);
         return rs;
-    } /* getResultSet */
+    }
 
-} /* class MySqlStatement */
+}

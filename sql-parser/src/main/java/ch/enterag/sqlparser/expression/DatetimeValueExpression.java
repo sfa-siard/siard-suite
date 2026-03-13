@@ -23,7 +23,6 @@ public class DatetimeValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DatetimeValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -79,7 +78,6 @@ public class DatetimeValueExpression
             return DatetimeValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private DveVisitor _visitor = new DveVisitor();
 
@@ -190,7 +188,6 @@ public class DatetimeValueExpression
         _iveAbsArgument = iveAbsArgument;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the datetime value expression.
      * @return the SQL string corresponding to the fields of the datetime
@@ -228,9 +225,8 @@ public class DatetimeValueExpression
             }
         }
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the data type of a date/time value expression fromt the
      * context of a query.
@@ -249,9 +245,8 @@ public class DatetimeValueExpression
             // we don't handle the TIME ZONE nonsense
         }
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a date/time value expression from its components.
      * @return date/time value.
@@ -296,9 +291,8 @@ public class DatetimeValueExpression
             // we don't handle the TIME ZONE nonsense
         }
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a date/time value expression against the context of a query.
      * @param ss sql statement.
@@ -321,9 +315,8 @@ public class DatetimeValueExpression
             oValuePrimary = getValueExpressionPrimary().evaluate(ss, bAggregated);
         Object oValue = evaluate(oDatetimeOperand, ivIntervalOperand, oDatetimeValue, oValuePrimary);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a date/time value expression to
      * their initial value.
@@ -345,9 +338,8 @@ public class DatetimeValueExpression
             oValuePrimary = getValueExpressionPrimary().resetAggregates(ss);
         Object oValue = evaluate(oDatetimeOperand, ivIntervalOperand, oDatetimeValue, oValuePrimary);
         return oValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the datetime value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -356,9 +348,8 @@ public class DatetimeValueExpression
     public void parse(SqlParser.DatetimeValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the datetime value expression from SQL.
      * @param sSql SQL.
@@ -367,9 +358,8 @@ public class DatetimeValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().datetimeValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a datetime value expression.
      * @param bAddition true, if the expression is an addition.
@@ -407,15 +397,14 @@ public class DatetimeValueExpression
         setIntervalQualifier(iq);
         setAbsArgument(iveAbsArgument);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DatetimeValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DatetimeValueExpression */
+}

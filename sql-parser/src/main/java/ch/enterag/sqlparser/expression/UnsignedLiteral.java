@@ -23,7 +23,6 @@ public class UnsignedLiteral
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(UnsignedLiteral.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -86,7 +85,6 @@ public class UnsignedLiteral
             return UnsignedLiteral.this;
         }
     }
-    /*==================================================================*/
 
     private UlVisitor _visitor = new UlVisitor();
 
@@ -204,7 +202,6 @@ public class UnsignedLiteral
         _bl = bl;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the unsigned literal
      * @return the SQL string corresponding to the fields of the unsigned literal.
@@ -235,9 +232,8 @@ public class UnsignedLiteral
         else if (getBoolean() != null)
             sFormatted = SqlLiterals.formatBooleanLiteral(getBoolean());
         return sFormatted;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the literal value.
      * @return literal value.
@@ -281,9 +277,8 @@ public class UnsignedLiteral
         else if (getBoolean() != null)
             oValue = getBoolean();
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the data type of the literal value.
      * @return data type of literal value.
@@ -394,9 +389,8 @@ public class UnsignedLiteral
         DataType dt = getSqlFactory().newDataType();
         dt.initPredefinedDataType(pt);
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the unsigned literal from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -405,9 +399,8 @@ public class UnsignedLiteral
     public void parse(SqlParser.UnsignedLiteralContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the unsigned literal from SQL.
      * @param sSql SQL.
@@ -416,9 +409,8 @@ public class UnsignedLiteral
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().unsignedLiteral());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from character string.
      * @param sCharacterString character string value.
@@ -427,9 +419,8 @@ public class UnsignedLiteral
         _il.enter(sCharacterString);
         setCharacterString(sCharacterString);
         _il.exit();
-    } /* initCharacterString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from national character string.
      * @param sNationalCharacterString character string value.
@@ -438,9 +429,8 @@ public class UnsignedLiteral
         _il.enter(sNationalCharacterString);
         setNationalCharacterString(sNationalCharacterString);
         _il.exit();
-    } /* initNationalCharacterString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from bit string.
      * @param sBitString bit string value.
@@ -449,9 +439,8 @@ public class UnsignedLiteral
         _il.enter(sBitString);
         setBitString(sBitString);
         _il.exit();
-    } /* initBitString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from bytes.
      * @param bufBytes bytes value.
@@ -460,9 +449,8 @@ public class UnsignedLiteral
         _il.enter(bufBytes);
         setBytes(bufBytes);
         _il.exit();
-    } /* initBytes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from big decimal.
      * @param bdExact exact numeric value.
@@ -471,9 +459,8 @@ public class UnsignedLiteral
         _il.enter(bdExact);
         setExact(bdExact);
         _il.exit();
-    } /* initBigDecimal */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from long
      * @param lExact exact long numeric value.
@@ -483,9 +470,8 @@ public class UnsignedLiteral
         BigDecimal bd = BigDecimal.valueOf(lExact);
         setExact(bd);
         _il.exit();
-    } /* initLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from int
      * @param iExact exact numeric int value.
@@ -495,9 +481,8 @@ public class UnsignedLiteral
         BigDecimal bd = BigDecimal.valueOf(iExact);
         setExact(bd);
         _il.exit();
-    } /* initInteger */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from double.
      * @param dApproximate approximate numeric value.
@@ -506,9 +491,8 @@ public class UnsignedLiteral
         _il.enter(dApproximate);
         setApproximate(dApproximate);
         _il.exit();
-    } /* initDouble */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from boolean literal.
      * @param bl boolean literal value.
@@ -517,9 +501,8 @@ public class UnsignedLiteral
         _il.enter(bl);
         setBooleanLiteral(bl);
         _il.exit();
-    } /* initBoolean */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from date.
      * @param date date value.
@@ -528,9 +511,8 @@ public class UnsignedLiteral
         _il.enter(date);
         setDate(date);
         _il.exit();
-    } /* initDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from time.
      * @param time time value.
@@ -539,9 +521,8 @@ public class UnsignedLiteral
         _il.enter(time);
         setTime(time);
         _il.exit();
-    } /* initTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from time stamp.
      * @param ts timestamp value.
@@ -550,9 +531,8 @@ public class UnsignedLiteral
         _il.enter(ts);
         setTimestamp(ts);
         _il.exit();
-    } /* initTimestamp */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal from interval.
      * @param iv interval value.
@@ -561,9 +541,8 @@ public class UnsignedLiteral
         _il.enter(iv);
         setInterval(iv);
         _il.exit();
-    } /* initInterval */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an unsigned literal.
      * Only one parameter must be not null.
@@ -606,15 +585,14 @@ public class UnsignedLiteral
         setInterval(iv);
         setBooleanLiteral(bl);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public UnsignedLiteral(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class UnsignedLiteral */
+}

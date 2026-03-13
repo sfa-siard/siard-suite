@@ -19,7 +19,6 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/*====================================================================*/
 
 /** OracleDriver implements a wrapped Oracle Driver.
  * @author Simon Jutz
@@ -48,7 +47,7 @@ public class OracleDriver
         if (!sUrl.startsWith(sORACLE_URL_PREFIX))
             sUrl = sORACLE_URL_PREFIX + "thin:@" + sDatabaseName;
         return sUrl;
-    } /* getUrl */
+    }
 
 
     /** register this driver, replacing original H2 driver
@@ -59,14 +58,13 @@ public class OracleDriver
         } catch (Exception e) {
             throw new Error(e);
         }
-    } /* register */
+    }
 
     /** replace OracleDriver driver by this */
     static {
         register();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}*/
     @Override
@@ -75,9 +73,8 @@ public class OracleDriver
         boolean bAccepts = url.startsWith("jdbc:oracle:");
         _il.exit(bAccepts);
         return bAccepts;
-    } /* acceptsUrl */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * returns the appropriately wrapped Oracle Connection.
@@ -91,6 +88,6 @@ public class OracleDriver
             conn = new OracleConnection(conn);
         _il.exit(conn);
         return conn;
-    } /* connect */
+    }
 
-} /* class OracleDriver */
+}

@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.expression.enums.NumericFunction;
 public class MsSqlNumericValueFunction
         extends NumericValueFunction {
 
-    /*------------------------------------------------------------------*/
 
     /** format the numeric value function.
      * MS SQL Server uses DATALENGTH for OCTET_LENGTH.
@@ -21,15 +20,14 @@ public class MsSqlNumericValueFunction
             sFunction = "DATALENGTH" +
                     sLEFT_PAREN + getStringValueExpression().format() + sRIGHT_PAREN;
         return sFunction;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlNumericValueFunction(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlNumericValueFunction */
+}

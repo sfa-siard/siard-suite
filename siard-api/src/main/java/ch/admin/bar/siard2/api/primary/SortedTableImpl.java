@@ -85,7 +85,6 @@ public class SortedTableImpl
         return new FileInputStream(_fileSorted);
     }
 
-    /*-------------------------------------------------------------------*/
 
     /**
      * compare two strings in the current Locale.
@@ -101,7 +100,6 @@ public class SortedTableImpl
                        .compare(sLeft, sRight);
     }
 
-    /*-------------------------------------------------------------------*/
 
     /**
      * compare two byte arrays (using unsigned bytes).
@@ -136,7 +134,6 @@ public class SortedTableImpl
         return iCompare;
     }
 
-    /*-------------------------------------------------------------------*/
 
     /**
      * compare two input stream unsigned byte by unsigned byte and close
@@ -168,7 +165,6 @@ public class SortedTableImpl
         return iCompare;
     }
 
-    /*-------------------------------------------------------------------*/
 
     /**
      * compare two readers in the current Locale and close them afterwards.
@@ -201,7 +197,6 @@ public class SortedTableImpl
         return iCompare;
     }
 
-    /*-------------------------------------------------------------------*/
 
     /**
      * compare two values (cells, fields) according to their types,
@@ -301,7 +296,6 @@ public class SortedTableImpl
         return iCompare;
     }
 
-    /*-------------------------------------------------------------------*/
 
     /**
      * compare two table records by the sort column in the sort direction.
@@ -325,7 +319,6 @@ public class SortedTableImpl
         return bLessEqual;
     }
 
-    /*-------------------------------------------------------------------*/
 
     /**
      * merge two sorted XML streams of records into a sorted XML stream.

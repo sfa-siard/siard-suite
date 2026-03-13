@@ -14,7 +14,6 @@ public class SetClause
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SetClause.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -44,7 +43,6 @@ public class SetClause
             return SetClause.this;
         }
     }
-    /*==================================================================*/
 
     private ScVisitor _visitor = new ScVisitor();
 
@@ -102,7 +100,6 @@ public class SetClause
         }
         return s;
     }
-    /*------------------------------------------------------------------*/
 
     /** format the set clause
      * @return the SQL string corresponding to the fields of the set clause.
@@ -116,9 +113,8 @@ public class SetClause
         else
             s = sLEFT_PAREN + formatSetTargets() + sRIGHT_PAREN + sSP + sEQUALS + sSP + getAssignedRow().format();
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the set clause from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -127,9 +123,8 @@ public class SetClause
     public void parse(SqlParser.SetClauseContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the set clause from SQL.
      * @param sSql SQL.
@@ -138,9 +133,8 @@ public class SetClause
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().setClause());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a set clause.
      * @param st set target.
@@ -160,15 +154,14 @@ public class SetClause
         setSetTargets(listSetTargets);
         setAssignedRow(as);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SetClause(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SetClause */
+}

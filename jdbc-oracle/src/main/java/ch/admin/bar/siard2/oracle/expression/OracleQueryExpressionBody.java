@@ -27,6 +27,6 @@ public class OracleQueryExpressionBody
 
     public OracleQueryExpressionBody(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
 }

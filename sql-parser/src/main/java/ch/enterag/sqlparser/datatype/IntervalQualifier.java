@@ -13,7 +13,6 @@ public class IntervalQualifier
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(IntervalQualifier.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -48,7 +47,6 @@ public class IntervalQualifier
         }
     }
 
-    /*==================================================================*/
     public static final int iUNDEFINED = -1;
     public static final int iTIME_PRECISION_DEFAULT = 0;
     public static final int iTIMESTAMP_PRECISION_DEFAULT = 6;
@@ -106,7 +104,6 @@ public class IntervalQualifier
         _iSecondsDecimals = iSecondsDecimals;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the interval qualifier.
      * @return the SQL string corresponding to the fields of the interval
@@ -130,9 +127,8 @@ public class IntervalQualifier
                 sQualifier = sQualifier + sLEFT_PAREN + String.valueOf(getSecondsDecimals()) + sRIGHT_PAREN;
         }
         return sQualifier;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the interval qualifier from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -141,9 +137,8 @@ public class IntervalQualifier
     public void parse(SqlParser.IntervalQualifierContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the interval qualifier from SQL.
      * @param sSql SQL.
@@ -152,9 +147,8 @@ public class IntervalQualifier
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().intervalQualifier());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an interval qualifier.
      * @param startField start field of interval.
@@ -173,15 +167,14 @@ public class IntervalQualifier
         setPrecision(iPrecision);
         setSecondsDecimals(iSecondsDecimals);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public IntervalQualifier(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class IntervalQualifier */
+}

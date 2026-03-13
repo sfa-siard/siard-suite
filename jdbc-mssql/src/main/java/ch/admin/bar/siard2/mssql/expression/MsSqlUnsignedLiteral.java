@@ -15,7 +15,6 @@ import ch.admin.bar.siard2.mssql.MsSqlLiterals;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.UnsignedLiteral;
 
-/*====================================================================*/
 
 /** MsSqlUnsignedLiteral implements the value translation from ISO
  * SQL:2008 to MS SQL Server.
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.expression.UnsignedLiteral;
  */
 public class MsSqlUnsignedLiteral
         extends UnsignedLiteral {
-    /*------------------------------------------------------------------*/
 
     /** format the unsigned literal
      * @return the MSSQL string corresponding to the fields of the unsigned literal.
@@ -46,15 +44,14 @@ public class MsSqlUnsignedLiteral
         else
             sFormatted = super.format();
         return sFormatted;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlUnsignedLiteral(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlUnsignedLiteral */
+}

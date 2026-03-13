@@ -23,18 +23,16 @@ import ch.enterag.sqlparser.ddl.enums.DropBehavior;
  */
 public class MySqlDropSchemaStatement extends DropSchemaStatement {
 
-    /* ------------------------------------------------------------------------ */
     public MySqlDropSchemaStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-    /* ------------------------------------------------------------------------ */
     @Override
     public String format() {
         if (getDropBehavior() == DropBehavior.CASCADE)
             throw new IllegalArgumentException("Schema drop behavior CASCADE not supported by MSSQL!");
         String sStatement = K.DROP.getKeyword() + sSP + K.SCHEMA.getKeyword() + sSP + getSchemaName().format();
         return sStatement;
-    } /* format */
+    }
 
-} /* class MySqlDropSchemaStatement */
+}

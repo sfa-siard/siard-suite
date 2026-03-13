@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Mapping {
-    /*------------------------------------------------------------------*/
 
     /** limitations on maximum length of identifiers leads to a need to
      * truncate and disambiguate identifiers in a set which need to be unique.
@@ -30,6 +29,6 @@ public class Mapping {
             map.put(sOriginalName, sMappedName);
         }
         return map;
-    } /* getDisambiguated */
+    }
 
-} /* Mapping */
+}

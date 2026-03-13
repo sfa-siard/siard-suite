@@ -31,9 +31,6 @@ public interface MetaAttribute
      */
     boolean isValid();
   
-  /*====================================================================
-  attribute properties
-  ====================================================================*/
 
     /**
      * get attribute name.

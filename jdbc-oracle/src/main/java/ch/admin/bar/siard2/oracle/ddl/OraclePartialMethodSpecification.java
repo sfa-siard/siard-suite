@@ -18,10 +18,8 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.PartialMethodSpecification;
 import ch.enterag.sqlparser.ddl.enums.MethodType;
 
-/*====================================================================*/
 public class OraclePartialMethodSpecification
         extends PartialMethodSpecification {
-    /*------------------------------------------------------------------*/
 
     /**
      * format the partial method specification
@@ -50,9 +48,8 @@ public class OraclePartialMethodSpecification
             }
         }
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * format the method parameters
@@ -76,15 +73,14 @@ public class OraclePartialMethodSpecification
             sList = sList + sNEW_LINE;
         sList = sList + sRIGHT_PAREN;
         return sList;
-    } /* formatSqlParameterDeclarations */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OraclePartialMethodSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
 }

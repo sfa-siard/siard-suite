@@ -20,7 +20,6 @@ public class QuerySpecification
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(QuerySpecification.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -117,7 +116,6 @@ public class QuerySpecification
             return QuerySpecification.this;
         }
     }
-    /*==================================================================*/
 
     private QsVisitor _visitor = new QsVisitor();
 
@@ -259,7 +257,6 @@ public class QuerySpecification
         boolean bCount = hasCount() && (getSelectSublists().size() == 1) && (getWhereCondition() == null);
         return bCount;
     }
-    /*------------------------------------------------------------------*/
 
     /** determine if query is grouped.
      * @return true, if query is grouped explicitly or implicitly.
@@ -267,9 +264,8 @@ public class QuerySpecification
     public boolean isGrouped() {
         boolean bGrouped = hasAggregates() || (getGroupingElements().size() > 0);
         return bGrouped;
-    } /* isGrouped */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** true, if either the query has no grouping or the column
      * is in the grouping set.
@@ -288,14 +284,12 @@ public class QuerySpecification
             }
         }
         return bGroupedOk;
-    } /* isGroupedOk */
+    }
 
-    /*------------------------------------------------------------------*/
     protected boolean equalTables(QualifiedId qiTable1, QualifiedId qiTable2) {
         return qiTable1.equals(qiTable2);
-    } /* equalTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private TablePrimary getTablePrimary(SqlStatement sqlstmt, QualifiedId qiTable, TablePrimary tp, String sColumnName) {
         TablePrimary tpFound = null;
         if ((tp.getTableName()
@@ -326,9 +320,8 @@ public class QuerySpecification
         if ((tpFound == null) && (tp.getTableReference() != null))
             tpFound = getTablePrimary(sqlstmt, qiTable, tp.getTableReference(), sColumnName);
         return tpFound;
-    } /* getTablePrimary */
+    }
 
-    /*------------------------------------------------------------------*/
     private TablePrimary getTablePrimary(SqlStatement sqlstmt, QualifiedId qiTable, TableReference tr, String sColumnName) {
         TablePrimary tp = null;
         if (tr.getTablePrimary() != null)
@@ -338,9 +331,8 @@ public class QuerySpecification
         if ((tp == null) && (tr.getSecondTableReference() != null))
             tp = getTablePrimary(sqlstmt, qiTable, tr.getSecondTableReference(), sColumnName);
         return tp;
-    } /* getTablePrimary */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** look up the registered data type of a query column.
      * @param sqlstmt SQL statement.
@@ -371,9 +363,8 @@ public class QuerySpecification
         } else
             throw new IllegalArgumentException("Identifier chain is invalid for column!");
         return tpFound;
-    } /* getTablePrimary */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the query specification.
      * @return the SQL string corresponding to the fields of the query specification.
@@ -433,9 +424,8 @@ public class QuerySpecification
             }
         }
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the query specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -444,9 +434,8 @@ public class QuerySpecification
     public void parse(SqlParser.QuerySpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the WHERE condition.
      * @param ss SqlStatement to which this query specification belongs.
@@ -459,9 +448,8 @@ public class QuerySpecification
             bWhere = getWhereCondition().evaluate(ss, true)
                                         .booleanValue();
         return bWhere;
-    } /* evaluateWhere */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the HAVING condition.
      * @param ss SqlStatement to which this query specification belongs.
@@ -474,9 +462,8 @@ public class QuerySpecification
             bHaving = getHavingCondition().evaluate(ss, false)
                                           .booleanValue();
         return bHaving;
-    } /* evaluateHaving */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the query specification from SQL.
      * @param sSql SQL.
@@ -492,9 +479,8 @@ public class QuerySpecification
             ctx = getParser().querySpecification();
         }
         parse(ctx);
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor for building a query specification.
      * @param sq set quantifier.
@@ -535,9 +521,8 @@ public class QuerySpecification
         setWindowNames(listWindowNames);
         setWindowSpecifications(listWindowSpecifications);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor for building a simple query specification.
      * @param bAsterisk true, for "*" instead of SELECT sublists.
@@ -557,15 +542,14 @@ public class QuerySpecification
         setTableReferences(listTableReferences);
         setWhereCondition(bveWhere);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public QuerySpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class QuerySpecification */
+}

@@ -12,7 +12,6 @@ public class RoutineCharacteristics
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(RoutineCharacteristics.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -47,7 +46,6 @@ public class RoutineCharacteristics
             return RoutineCharacteristics.this;
         }
     }
-    /*==================================================================*/
 
     private RcVisitor _visitor = new RcVisitor();
 
@@ -106,7 +104,6 @@ public class RoutineCharacteristics
         _ncc = ncc;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the routine characteristics.
      * @return the SQL string corresponding to the fields of the routine characteristics.
@@ -127,9 +124,8 @@ public class RoutineCharacteristics
         if (getNullCallClause() != null)
             s = s + sNEW_LINE + sINDENT + getNullCallClause().getKeywords();
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the routine characteristics from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -138,9 +134,8 @@ public class RoutineCharacteristics
     public void parse(SqlParser.RoutineCharacteristicsContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the routine characteristics from SQL.
      * @param sSql SQL.
@@ -149,9 +144,8 @@ public class RoutineCharacteristics
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().routineCharacteristics());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize routine characteristics.
      * @param ln LANGUAGE name characteristic (or null).
@@ -173,15 +167,14 @@ public class RoutineCharacteristics
         setDataAccess(da);
         setNullCallClause(ncc);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public RoutineCharacteristics(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class RoutineCharacteristics */
+}

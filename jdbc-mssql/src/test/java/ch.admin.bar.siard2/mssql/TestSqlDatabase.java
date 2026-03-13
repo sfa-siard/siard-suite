@@ -195,7 +195,7 @@ public class TestSqlDatabase {
 
     private void dropTypes() {
         dropType(getQualifiedDistinctType());
-    } /* dropTypes */
+    }
 
     private void dropType(QualifiedId qiType) {
         DropTypeStatement dts = _sf.newDropTypeStatement();

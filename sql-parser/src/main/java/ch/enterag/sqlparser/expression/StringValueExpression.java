@@ -15,7 +15,6 @@ public class StringValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(StringValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -39,7 +38,6 @@ public class StringValueExpression
             return StringValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private SveVisitor _visitor = new SveVisitor();
 
@@ -97,7 +95,6 @@ public class StringValueExpression
         _svf = svf;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the string value expression.
      * @return the SQL string corresponding to the fields of the string
@@ -113,9 +110,8 @@ public class StringValueExpression
         else if (getStringValueFunction() != null)
             sExpression = getStringValueFunction().format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get data type of the string value expression from the context of
      * a query.
@@ -254,9 +250,8 @@ public class StringValueExpression
         else if (getStringValueFunction() != null)
             dt = getStringValueFunction().getDataType(ss);
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a string value expression from its components.
      * @return string value.
@@ -287,7 +282,6 @@ public class StringValueExpression
             oValue = oStringValue;
         return oValue;
     }
-    /*------------------------------------------------------------------*/
 
     /** evaluate the string value expression against the context of a query.
      * @param ss sql statement.
@@ -310,9 +304,8 @@ public class StringValueExpression
             oStringValue = getStringValueFunction().evaluate(ss, bAggregated);
         Object oValue = evaluate(oFirstOperand, oSecondOperand, oValuePrimary, oStringValue);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a string value expression to
      * their initial value.
@@ -334,9 +327,8 @@ public class StringValueExpression
             oStringValue = getStringValueFunction().resetAggregates(ss);
         Object oValue = evaluate(oFirstOperand, oSecondOperand, oValuePrimary, oStringValue);
         return oValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the string value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -345,9 +337,8 @@ public class StringValueExpression
     public void parse(SqlParser.StringValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the string value expression from SQL.
      * @param sSql SQL.
@@ -356,9 +347,8 @@ public class StringValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().stringValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a string value expression.
      * @param bConcatenation true, if concatentation expression.
@@ -380,15 +370,14 @@ public class StringValueExpression
         setValueExpressionPrimary(vep);
         setStringValueFunction(svf);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public StringValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class StringValueExpression */
+}

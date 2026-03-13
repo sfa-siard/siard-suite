@@ -37,9 +37,6 @@ public class AccessResultSetMetaData
         _conn = conn;
     }
   
-  /*======================================================================
-  Wrapper 
-  ======================================================================*/
 
     /** {@link ResultSetMetaData} */
     @Override
@@ -60,9 +57,6 @@ public class AccessResultSetMetaData
         return impl;
     }
 
-  /*======================================================================
-  Catalog, Schema, ... 
-  ======================================================================*/
 
     /** {@link ResultSetMetaData} */
     @Override
@@ -85,9 +79,6 @@ public class AccessResultSetMetaData
         return _rsh.getTableName();
     }
 
-  /*======================================================================
-  ResultSet properties
-  ======================================================================*/
 
     /** {@link ResultSetMetaData} */
     @Override
@@ -95,9 +86,6 @@ public class AccessResultSetMetaData
         return _rsh.getColumns();
     }
 
-  /*======================================================================
-  Column properties 
-  ======================================================================*/
 
     /** {@link ResultSetMetaData} */
     @Override

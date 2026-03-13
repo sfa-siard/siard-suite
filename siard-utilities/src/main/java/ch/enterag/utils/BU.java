@@ -10,7 +10,6 @@ Created    : 12.03.2008, Hartwig Thomas
 
 package ch.enterag.utils;
 
-/*====================================================================*/
 
 /** Implements a number of often used byte-buffer utilities.
  @author Hartwig Thomas
@@ -25,13 +24,9 @@ public class BU {
     /** byte mask for high bit in byte */
     private static final int iHIGH_BIT_MASK = 0x00000080;
 
-  /*====================================================================
-  hex utilities
-  ====================================================================*/
     /** hex digits */
     private static String sHexDigits = "0123456789ABCDEF";
 
-    /*------------------------------------------------------------------*/
 
     /** converts int to byte (unsigned)
      * @param i int to be converted.
@@ -42,9 +37,8 @@ public class BU {
         if (i >= 0x00000080)
             i = -0x00000100 + i;
         return (byte) i;
-    } /* lowByte */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts an short from 2 bytes of a byte buffer in little-endian
      * order.
@@ -67,9 +61,8 @@ public class BU {
             wShort = (short) (wShort | iByte);
         }
         return wShort;
-    } /* toShort */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts an short from first 2 bytes of a byte buffer in little-endian
      * order.
@@ -78,9 +71,8 @@ public class BU {
      */
     public static short toShort(byte[] bufShort) {
         return toShort(bufShort, 0);
-    } /* toShort */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** converts a short into a 2-byte little-endian byte buffer.
      @param wShort short to be converted.
@@ -94,9 +86,8 @@ public class BU {
             wShort >>= 8;
         }
         return bufShort;
-    } /* fromShort */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts an int from 4 bytes of a byte buffer in little-endian
      * order.
@@ -119,9 +110,8 @@ public class BU {
             iInt |= iByte;
         }
         return iInt;
-    } /* toInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts an int from first 4 bytes of a byte buffer in little-endian
      * order.
@@ -130,9 +120,8 @@ public class BU {
      */
     public static int toInt(byte[] bufInt) {
         return toInt(bufInt, 0);
-    } /* toInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** converts an int into a 4-byte little-endian byte buffer.
      @param iInt int to be converted.
@@ -146,9 +135,8 @@ public class BU {
             iInt >>= 8;
         }
         return bufInt;
-    } /* fromInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts a long from 8 bytes of a byte buffer in little-endian
      * order.
@@ -171,9 +159,8 @@ public class BU {
             lLong |= lByte;
         }
         return lLong;
-    } /* toLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts a long from first 8 bytes of a byte buffer in little-endian
      * order.
@@ -182,9 +169,8 @@ public class BU {
      */
     public static long toLong(byte[] bufLong) {
         return toLong(bufLong, 0);
-    } /* toLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** converts a long into a 8-byte little-endian byte buffer.
      @param lLong long to be converted.
@@ -198,9 +184,8 @@ public class BU {
             lLong >>= 8;
         }
         return bufLong;
-    } /* fromLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the eight binary digits representing the given byte.
      @param b byte to be converted.
@@ -217,9 +202,8 @@ public class BU {
                 sbBinary.append("0");
         }
         return sbBinary.toString();
-    } /* toBinary */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts a binary string from the byte buffer.
      @param buffer buffer to be converted to binary string.
@@ -232,9 +216,8 @@ public class BU {
         for (int i = iOffset; i < iOffset + iLength; i++)
             sbBinary.append(toBinary(buffer[i]));
         return sbBinary.toString();
-    } /* toBinary */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts a binary string from the byte buffer.
      @param buffer buffer to be converted to binary string.
@@ -242,9 +225,8 @@ public class BU {
      */
     public static String toBinary(byte[] buffer) {
         return toBinary(buffer, 0, buffer.length);
-    } /* toBinary */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the two hex digits representing the given byte.
      @param b byte to be converted.
@@ -258,9 +240,8 @@ public class BU {
         sbHex.append(sHexDigits.charAt(iHigh));
         sbHex.append(sHexDigits.charAt(iLow));
         return sbHex.toString();
-    } /* toHex */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts a hex string from the byte buffer.
      @param buffer buffer to be converted to hex string.
@@ -273,9 +254,8 @@ public class BU {
         for (int i = iOffset; i < iOffset + iLength; i++)
             sbHex.append(toHex(buffer[i]));
         return sbHex.toString();
-    } /* toHex */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** extracts a hex string from the byte buffer.
      @param buffer buffer to be converted to hex string.
@@ -283,9 +263,8 @@ public class BU {
      */
     public static String toHex(byte[] buffer) {
         return toHex(buffer, 0, buffer.length);
-    } /* toHex */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** converts two hex characters into a byte.
      @param cHigh high hex digit.
@@ -303,9 +282,8 @@ public class BU {
         } else
             throw new IllegalArgumentException("Invalid hex data " + Character.toString(cHigh) + Character.toString(cLow) + "!");
         return b;
-    } /* fromHex */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** converts four hex characters into an int.
      @param c3 most significant hex digit.
@@ -325,9 +303,8 @@ public class BU {
         else
             throw new IllegalArgumentException("Invalid hex data " + Character.toString(c3) + Character.toString(c2) + Character.toString(c1) + Character.toString(c0) + "!");
         return i;
-    } /* fromHex */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** converts a hex string into a byte buffer.
      @param sHex hex string (even length).
@@ -341,9 +318,8 @@ public class BU {
         for (int i = 0; i < buffer.length; i++)
             buffer[i] = fromHex(sHex.charAt(2 * i), sHex.charAt(2 * i + 1));
         return buffer;
-    } /* fromHex */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** converts a byte to an int between 0 and 255.
      @param by byte to be converted.
@@ -354,9 +330,8 @@ public class BU {
         if (iResult < 0)
             iResult = iResult + 256;
         return iResult;
-    } /* fromUnsignedByte */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** converts an int between 0 and 255 to a byte.
      @param i int to be converted.
@@ -367,9 +342,8 @@ public class BU {
             i = i - 256;
         byte by = (byte) i;
         return by;
-    } /* toUnsignedByte */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** Search the data byte array for the first occurrence
      * of the byte array pattern using the Knuth-Morris-Pratt Pattern Matching Algorithm.
@@ -391,9 +365,8 @@ public class BU {
                 iIndex = i - pattern.length + 1;
         }
         return iIndex;
-    } /* indexOf */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** Computes the failure function using a boot-strapping process,
      * where the pattern is matched against itself.
@@ -409,6 +382,6 @@ public class BU {
             failure[i] = j;
         }
         return failure;
-    } /* computeFailure */
+    }
 
-} /* BU */
+}

@@ -188,7 +188,6 @@ public class TestSqlDatabase {
     private Connection _conn = null;
     private String _sDbUser = null;
 
-    /*------------------------------------------------------------------*/
     public TestSqlDatabase(Connection conn, String sDbUser)
             throws SQLException {
         _conn = conn;
@@ -200,9 +199,8 @@ public class TestSqlDatabase {
         }
         drop();
         create();
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
     private void rollback(String sMessage, SQLException se) {
         System.out.println(sMessage + ": " + EU.getExceptionMessage(se));
         try {
@@ -211,73 +209,63 @@ public class TestSqlDatabase {
             System.err.println("Rollback failed: " +
                                        EU.getExceptionMessage(seRollback));
         }
-    } /* rollback */
+    }
 
-    /*------------------------------------------------------------------*/
     private void drop() {
         deleteTables();
         dropTables();
         dropTypes();
         dropSchema();
-    } /* drop */
+    }
 
-    /*------------------------------------------------------------------*/
     private void deleteTables() {
         deleteTable(getQualifiedSimpleTable());
         deleteTable(getQualifiedComplexTable());
-    } /* deleteTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropTables() {
         dropView(getQualifiedSimpleView()); // before referenced tables ...
         dropTable(getQualifiedComplexTable()); // first, because of foreign key ...
         dropTable(getQualifiedSimpleTable());
-    } /* dropTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropTypes() {
         dropType(getQualifiedDistinctType());
         dropType(getQualifiedComplexType());
         dropType(getQualifiedSimpleType());
         dropType(getQualifiedAllType());
-    } /* dropTypes */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropSchema() {
         DropSchemaStatement dss = _sf.newDropSchemaStatement();
         dss.initialize(new SchemaId(null, _sTEST_SCHEMA), DropBehavior.RESTRICT);
         executeDrop(dss.format());
-    } /* dropSchema */
+    }
 
-    /*------------------------------------------------------------------*/
     private void deleteTable(QualifiedId qiTable) {
         DeleteStatement ds = _sf.newDeleteStatement();
         ds.initialize(qiTable, null);
         executeDrop(ds.format());
-    } /* deleteTable */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropTable(QualifiedId qiTable) {
         DropTableStatement dts = _sf.newDropTableStatement();
         dts.initialize(qiTable, DropBehavior.CASCADE);
         executeDrop(dts.format());
-    } /* dropTable */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropView(QualifiedId qiView) {
         DropViewStatement dvs = _sf.newDropViewStatement();
         dvs.initialize(qiView, DropBehavior.RESTRICT);
         executeDrop(dvs.format());
-    } /* dropView */
+    }
 
-    /*------------------------------------------------------------------*/
     private void dropType(QualifiedId qiType) {
         DropTypeStatement dts = _sf.newDropTypeStatement();
         dts.initialize(qiType, DropBehavior.RESTRICT);
         executeDrop(dts.format());
-    } /* dropType */
+    }
 
-    /*------------------------------------------------------------------*/
     private void executeDrop(String sSql) {
         try {
             Statement stmt = _conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -293,18 +281,16 @@ public class TestSqlDatabase {
                 System.out.println("Rollback failed with " + EU.getExceptionMessage(seRollback));
             }
         }
-    } /* executeDrop */
+    }
 
-    /*------------------------------------------------------------------*/
     private void create()
             throws SQLException {
         createSchema();
         createTypes();
         createTables();
         insertTables();
-    } /* create */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createSchema()
             throws SQLException {
         CreateSchemaStatement css = _sf.newCreateSchemaStatement();
@@ -315,18 +301,16 @@ public class TestSqlDatabase {
             throw new SQLException("Create schema " + _sTEST_SCHEMA + " failed!");
         stmt.close();
         _conn.commit();
-    } /* createSchema */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createTypes()
             throws SQLException {
         createType(getQualifiedDistinctType(), _listBaseDistinct);
         createType(getQualifiedSimpleType(), _listAdSimple);
         createType(getQualifiedAllType(), _listCdSimple);
         createType(getQualifiedComplexType(), _listAdComplex);
-    } /* createTypes */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createTables()
             throws SQLException {
         createTable(getQualifiedSimpleTable(), _listCdSimple,
@@ -342,16 +326,14 @@ public class TestSqlDatabase {
                     Arrays.asList(_listCdSimple.get(_iPrimarySimple)
                                                .getName()));
         createView(getQualifiedSimpleView(), _listCdSimple, getQualifiedSimpleTable());
-    } /* createTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private void insertTables()
             throws SQLException {
         insertTable(getQualifiedSimpleTable(), _listCdSimple);
         insertTable(getQualifiedComplexTable(), _listCdComplex);
-    } /* insertTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private AttributeDefinition getAttributeDefinition(TestColumnDefinition tcd)
             throws SQLException {
         DataType dt = _sf.newDataType();
@@ -370,9 +352,8 @@ public class TestSqlDatabase {
         AttributeDefinition ad = _sf.newAttributeDefinition();
         ad.initNameType(new Identifier(tcd.getName()), dt);
         return ad;
-    } /* getAttributeDefinition */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createType(QualifiedId qiType, List<TestColumnDefinition> _listAd)
             throws SQLException {
         CreateTypeStatement cts = _sf.newCreateTypeStatement();
@@ -390,9 +371,8 @@ public class TestSqlDatabase {
             cts.initAttributes(qiType, listAttributeDefinitions);
         }
         executeCreate(cts.format());
-    } /* createType */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createTable(QualifiedId qiTable, List<TestColumnDefinition> listCd,
                              List<String> listPrimary, List<String> listForeign,
                              QualifiedId qiTableReferenced, List<String> listReferenced)
@@ -413,9 +393,8 @@ public class TestSqlDatabase {
                               qiTable,
                               listTableElements, null);
         executeCreate(cts.format());
-    } /* createTable */
+    }
 
-    /*------------------------------------------------------------------*/
     private TableElement getTableElement(TestColumnDefinition tcd, boolean bNotNull)
             throws SQLException {
         DataType dt = _sf.newDataType();
@@ -433,9 +412,8 @@ public class TestSqlDatabase {
         TableElement te = _sf.newTableElement();
         te.initColumnDefinition(cd);
         return te;
-    } /* getTableElement */
+    }
 
-    /*------------------------------------------------------------------*/
     private TableElement getPrimaryTableElement(String sPkName, List<String> listPrimary) {
         IdList ilPrimary = new IdList();
         for (int i = 0; i < listPrimary.size(); i++)
@@ -446,9 +424,8 @@ public class TestSqlDatabase {
         TableElement te = _sf.newTableElement();
         te.initTableConstraintDefinition(tcd);
         return te;
-    } /* getPrimaryTableElement */
+    }
 
-    /*------------------------------------------------------------------*/
     private TableElement getForeignTableElement(String sFkName, List<String> listForeign,
                                                 QualifiedId qiTableReferenced, List<String> listReferenced) {
         IdList ilForeign = new IdList();
@@ -466,9 +443,8 @@ public class TestSqlDatabase {
         TableElement te = _sf.newTableElement();
         te.initTableConstraintDefinition(tcd);
         return te;
-    } /* getForeignTableElement */
+    }
 
-    /*------------------------------------------------------------------*/
     private void createView(QualifiedId qiView,
                             List<TestColumnDefinition> listCd, QualifiedId qiTable)
             throws SQLException {
@@ -497,9 +473,8 @@ public class TestSqlDatabase {
                        ilColumnNames, new QualifiedId(), new ArrayList<ViewElement>(),
                        new QualifiedId(), qe, false, null);
         executeCreate(cvs.format());
-    } /* createView */
+    }
 
-    /*------------------------------------------------------------------*/
     private void executeCreate(String sSql)
             throws SQLException {
         Statement stmt = _conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -511,9 +486,8 @@ public class TestSqlDatabase {
             _conn.rollback();
             throw new SQLException(sSql + " failed!");
         }
-    } /* executeCreate */
+    }
 
-    /*------------------------------------------------------------------*/
     private void insertTable(QualifiedId qiTable, List<TestColumnDefinition> listCd)
             throws SQLException {
         IdList ilColumns = new IdList();
@@ -551,17 +525,15 @@ public class TestSqlDatabase {
             _conn.rollback();
             throw new SQLException("Insert into table " + qiTable.format() + " failed!");
         }
-    } /* insertTable */
+    }
 
-    /*------------------------------------------------------------------*/
     private CommonValueExpression getCommonValueExpression() {
         ValueExpressionPrimary vep = _sf.newValueExpressionPrimary();
         CommonValueExpression cve = _sf.newCommonValueExpression();
         cve.initialize(null, null, null, null, null, null, vep);
         return cve;
-    } /* getCommonValueExpressionArray */
+    }
 
-    /*------------------------------------------------------------------*/
     private CommonValueExpression getCommonValueExpressionLiteral() {
         UnsignedLiteral ul = _sf.newUnsignedLiteral();
         ValueExpressionPrimary vep = _sf.newValueExpressionPrimary();
@@ -569,9 +541,8 @@ public class TestSqlDatabase {
         CommonValueExpression cve = _sf.newCommonValueExpression();
         cve.initialize(null, null, null, null, null, null, vep);
         return cve;
-    } /* getCommonValueExpression */
+    }
 
-    /*------------------------------------------------------------------*/
     private CommonValueExpression getCommonValueExpressionDynamic() {
         GeneralValueSpecification gvs = _sf.newGeneralValueSpecification();
         gvs.initialize(new ColonId(), new ColonId(), new IdChain(), GeneralValue.QUESTION_MARK);
@@ -579,9 +550,8 @@ public class TestSqlDatabase {
         cve.getValueExpressionPrimary()
            .setGeneralValueSpecification(gvs);
         return cve;
-    } /* getCommonValueExpressionDynamic */
+    }
 
-    /*------------------------------------------------------------------*/
     private CommonValueExpression getCommonValueExpressionNumeric() {
         UnsignedLiteral ul = _sf.newUnsignedLiteral();
         ValueExpressionPrimary vep = _sf.newValueExpressionPrimary();
@@ -591,9 +561,8 @@ public class TestSqlDatabase {
         CommonValueExpression cve = _sf.newCommonValueExpression();
         cve.initialize(nve, null, null, null, null, null, null);
         return cve;
-    } /* getCommonValueExpressionNumeric */
+    }
 
-    /*------------------------------------------------------------------*/
     private ValueExpression getValueExpression(TestColumnDefinition tcd,
                                                List<TestColumnDefinition> listLobs)
             throws SQLException {
@@ -764,9 +733,8 @@ public class TestSqlDatabase {
         }
         ve.initialize(cve, null, null);
         return ve;
-    } /* getValueExpression */
+    }
 
-    /*------------------------------------------------------------------*/
     private SqlArgument getAttributeValue(TestColumnDefinition tcd,
                                           List<TestColumnDefinition> listLobs)
             throws SQLException {
@@ -774,9 +742,8 @@ public class TestSqlDatabase {
         ValueExpression ve = getValueExpression(tcd, listLobs);
         sa.initialize(ve, new QualifiedId(), null);
         return sa;
-    } /* getAttributeValue */
+    }
 
-    /*------------------------------------------------------------------*/
     private UpdateSource getUpdateSource(TestColumnDefinition tcd,
                                          List<TestColumnDefinition> listLobs)
             throws SQLException {
@@ -787,6 +754,6 @@ public class TestSqlDatabase {
         } else
             us.initialize(null, SpecialValue.NULL);
         return us;
-    } /* getUpdateSource */
+    }
 
-} /* TestSqlDatabase */
+}

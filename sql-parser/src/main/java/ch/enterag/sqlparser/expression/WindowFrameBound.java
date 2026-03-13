@@ -13,7 +13,6 @@ public class WindowFrameBound
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(WindowFrameBound.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -52,7 +51,6 @@ public class WindowFrameBound
             return WindowFrameBound.this;
         }
     }
-    /*==================================================================*/
 
     private WfbVisitor _visitor = new WfbVisitor();
 
@@ -111,7 +109,6 @@ public class WindowFrameBound
         _wfo = wfo;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the window frame bound.
      * @return the SQL string corresponding to the fields of the window
@@ -132,9 +129,8 @@ public class WindowFrameBound
             sBound = sBound + sSP + getWindowFrameOrder().getKeywords();
         }
         return sBound;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the window frame bound from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -143,9 +139,8 @@ public class WindowFrameBound
     public void parse(SqlParser.WindowFrameBoundContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the window frame bound from SQL.
      * @param sSql SQL.
@@ -154,9 +149,8 @@ public class WindowFrameBound
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().windowFrameBound());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
     /* initialize a window frame bound.
      */
     public void initialize(
@@ -173,15 +167,14 @@ public class WindowFrameBound
         setGeneralValueSpecification(gv);
         setWindowFrameOrder(wfo);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public WindowFrameBound(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class WindowFrameBound */
+}

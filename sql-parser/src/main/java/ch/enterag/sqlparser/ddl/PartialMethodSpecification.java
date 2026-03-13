@@ -18,7 +18,6 @@ public class PartialMethodSpecification
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(PartialMethodSpecification.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -73,7 +72,6 @@ public class PartialMethodSpecification
             return PartialMethodSpecification.this;
         }
     }
-    /*==================================================================*/
 
     private PmsVisitor _visitor = new PmsVisitor();
 
@@ -171,7 +169,6 @@ public class PartialMethodSpecification
         _listTableColumns = listTableColumns;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the parameter declarations list.
      * @return formatted list.
@@ -188,9 +185,8 @@ public class PartialMethodSpecification
             sList = sList + sNEW_LINE;
         sList = sList + sRIGHT_PAREN;
         return sList;
-    } /* formatSqlParameterDeclarations */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the table columns list.
      * @return formatted list.
@@ -205,9 +201,8 @@ public class PartialMethodSpecification
         }
         sList = sList + sNEW_LINE + sRIGHT_PAREN;
         return sList;
-    } /* formatTableColumns */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the partial method specification.
      * @return the SQL string corresponding to the fields of the partial
@@ -241,9 +236,8 @@ public class PartialMethodSpecification
             sSpecification = sSpecification + sSP + K.SPECIFIC.getKeyword() + sSP +
                     getSpecificMethodName().format();
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the partial method specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -252,9 +246,8 @@ public class PartialMethodSpecification
     public void parse(SqlParser.PartialMethodSpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the partial method specification from SQL.
      * @param sSql SQL.
@@ -263,9 +256,8 @@ public class PartialMethodSpecification
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().partialMethodSpecification());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a method specification.
      * @param mt method type (or null).
@@ -303,15 +295,14 @@ public class PartialMethodSpecification
         setTableColumns(listTableColumns);
         setSpecificMethodName(qSpecificMethodName);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public PartialMethodSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-}/* class PartialMethodSpecification */
+}

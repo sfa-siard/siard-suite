@@ -23,7 +23,6 @@ public class NumericValueFunction
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(NumericValueFunction.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -177,7 +176,6 @@ public class NumericValueFunction
             return NumericValueFunction.this;
         }
     }
-    /*==================================================================*/
 
     private NvfVisitor _visitor = new NvfVisitor();
 
@@ -352,7 +350,6 @@ public class NumericValueFunction
         _nveWidthBucketCount = nveWidthBucketCount;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the numeric value function.
      * @return the SQL string corresponding to the fields of the numeric
@@ -409,9 +406,8 @@ public class NumericValueFunction
         }
         sFunction = sFunction + sRIGHT_PAREN;
         return sFunction;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return data type of a numeric value function from the context of a query.
      * @param ss sql statement.
@@ -451,9 +447,8 @@ public class NumericValueFunction
                 throw new IllegalArgumentException("Numeric function WIDTH_BUCKET not supported for evaluation!");
         }
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a numeric value function from its components.
      * @return numeric value (Double or BigDecimal).
@@ -570,9 +565,8 @@ public class NumericValueFunction
                 throw new IllegalArgumentException("Numeric function WIDTH_BUCKET not supported for evaluation!");
         }
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a numeric value function against the context of a query.
      * @param ss sql statement.
@@ -595,9 +589,8 @@ public class NumericValueFunction
             oSecondStringValue = getSecondStringValueExpression().evaluate(ss, bAggregated);
         Object oValue = evaluate(oNumericValue, oSecondNumericValue, oStringValue, oSecondStringValue);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a numeric value function to
      * their initial value.
@@ -619,9 +612,8 @@ public class NumericValueFunction
             oSecondStringValue = getSecondStringValueExpression().resetAggregates(ss);
         Object oValue = evaluate(oNumericValue, oSecondNumericValue, oStringValue, oSecondStringValue);
         return oValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the numeric value function from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -630,9 +622,8 @@ public class NumericValueFunction
     public void parse(SqlParser.NumericValueFunctionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the numeric value function from SQL.
      * @param sSql SQL.
@@ -641,9 +632,8 @@ public class NumericValueFunction
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().numericValueFunction());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a numeric value function.
      * @param nf numeric function.
@@ -700,15 +690,14 @@ public class NumericValueFunction
         setWidthBucketBound2(nveWidthBucketBound2);
         setWidthBucketCount(nveWidthBucketCount);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public NumericValueFunction(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class NumericValueFunction */
+}

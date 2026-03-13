@@ -22,7 +22,6 @@ public class CreateTriggerStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CreateTriggerStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -86,7 +85,6 @@ public class CreateTriggerStatement
             return CreateTriggerStatement.this;
         }
     }
-    /*==================================================================*/
 
     private CtsVisitor _visitor = new CtsVisitor();
 
@@ -204,7 +202,6 @@ public class CreateTriggerStatement
         _rb = rb;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the create trigger statement.
      * @return the SQL string corresponding to the fields of the create
@@ -238,9 +235,8 @@ public class CreateTriggerStatement
         else
             sStatement = sStatement + sSP + getRoutineBody().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create trigger statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -249,9 +245,8 @@ public class CreateTriggerStatement
     public void parse(SqlParser.CreateTriggerStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create trigger statement from SQL.
      * @param sSql SQL.
@@ -260,9 +255,8 @@ public class CreateTriggerStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().createTriggerStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create trigger statement.
      * @param qiTriggerName name of trigger.
@@ -303,15 +297,14 @@ public class CreateTriggerStatement
         setAtomicBody(bAtomicBody);
         setRoutineBody(rb);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CreateTriggerStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CreateTriggerStatement */
+}

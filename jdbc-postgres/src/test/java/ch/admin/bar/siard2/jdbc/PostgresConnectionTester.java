@@ -52,12 +52,12 @@ public class PostgresConnectionTester extends BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUp */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong connection class!", PostgresConnection.class, getConnection().getClass());
-    } /* testClass */
+    }
 
     @Override
     @Test
@@ -72,7 +72,7 @@ public class PostgresConnectionTester extends BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* createArrayOf */
+    }
 
     @Override
     @Test
@@ -86,6 +86,6 @@ public class PostgresConnectionTester extends BaseConnectionTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testPrepareStatement_String_AInt */
+    }
 
-} /* class PostgresConnectionTester */
+}

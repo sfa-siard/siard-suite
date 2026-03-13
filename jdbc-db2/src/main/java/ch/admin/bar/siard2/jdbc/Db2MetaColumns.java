@@ -19,7 +19,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.text.ParseException;
 
-/*====================================================================*/
 
 /** Db2MetaColumn implements data type mapping from DB/2 to ISO SQL.
  * N.B.: column TYPE_NAME (6) has the original MSSQL data type name,
@@ -37,7 +36,6 @@ public class Db2MetaColumns
     private int _iLength = -1;
     private ResultSet _rsUnwrapped = null;
 
-    /*------------------------------------------------------------------*/
     static int getDataType(int iDataType, String sTypeName)
             throws SQLException {
         _il.enter(SqlTypes.getTypeName(iDataType), sTypeName);
@@ -71,9 +69,8 @@ public class Db2MetaColumns
         }
         _il.exit(SqlTypes.getTypeName(iDataType));
         return iDataType;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
     static String getTypeName(String sTypeName, int iDataType)
             throws SQLException {
         if (sTypeName != null) {
@@ -94,7 +91,6 @@ public class Db2MetaColumns
         return sTypeName;
     }
 
-    /*------------------------------------------------------------------*/
     static long getColumnSize(long lColumnSize, String sTypeName)
             throws SQLException {
         _il.enter(String.valueOf(lColumnSize), sTypeName);
@@ -109,9 +105,8 @@ public class Db2MetaColumns
             lColumnSize = -1;
         _il.exit(String.valueOf(lColumnSize));
         return lColumnSize;
-    } /* getColumnSize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped DatabaseMetaData.getColumns() result set to be wrapped.
@@ -125,9 +120,8 @@ public class Db2MetaColumns
         _iPrecision = iPrecision;
         _iLength = iLength;
         _rsUnwrapped = unwrap(ResultSet.class);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -152,9 +146,8 @@ public class Db2MetaColumns
         } else
             iResult = _rsUnwrapped.getInt(columnIndex);
         return iResult;
-    } /* getInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -179,9 +172,8 @@ public class Db2MetaColumns
         } else
             lResult = _rsUnwrapped.getLong(columnIndex);
         return lResult;
-    } /* getInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Type name (mapped to ISO SQL) is returned in TYPE_NAME.
@@ -196,9 +188,8 @@ public class Db2MetaColumns
                     _rsUnwrapped.getInt(_iDataType));
         }
         return sResult;
-    } /* getString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -215,14 +206,13 @@ public class Db2MetaColumns
         else if (oResult instanceof String)
             oResult = getString(columnIndex);
         return oResult;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public boolean next() throws SQLException {
         return _rsUnwrapped.next();
-    } /* next */
+    }
 
-} /* Db2MetaColumns */
+}

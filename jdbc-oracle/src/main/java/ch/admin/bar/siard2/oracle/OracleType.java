@@ -61,5 +61,5 @@ public enum OracleType {
                 ostResult = ost;
         }
         return ostResult;
-    } /* getBySystemTypeId */
-} /* OracleType */
+    }
+}

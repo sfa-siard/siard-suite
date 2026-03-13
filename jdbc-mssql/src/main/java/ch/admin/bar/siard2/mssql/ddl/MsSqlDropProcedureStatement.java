@@ -18,7 +18,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.DropProcedureStatement;
 import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 
-/*====================================================================*/
 
 /** MsSqlDropSchemaStatement overrides DropSchemaStatement of SQL parser
  * because MSSQL does not support drop behavior (CASCADE, RESTRICT) for 
@@ -27,7 +26,6 @@ import ch.enterag.sqlparser.ddl.enums.DropBehavior;
  */
 public class MsSqlDropProcedureStatement
         extends DropProcedureStatement {
-    /*------------------------------------------------------------------*/
 
     /** format the drop schema statement for MSSQL without the drop behavior.
      * @return the SQL string corresponding to the fields of the drop schema statement.
@@ -39,15 +37,14 @@ public class MsSqlDropProcedureStatement
         String sStatement = K.DROP.getKeyword() + sSP + K.SCHEMA.getKeyword() + sSP +
                 getProcedureName().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlDropProcedureStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlDropSchemaStatement */
+}

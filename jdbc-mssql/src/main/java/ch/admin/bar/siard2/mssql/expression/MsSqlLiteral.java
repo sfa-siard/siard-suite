@@ -15,7 +15,6 @@ import ch.admin.bar.siard2.mssql.MsSqlLiterals;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.Literal;
 
-/*====================================================================*/
 
 /** MsSqlLiteral implements the value translation from ISO
  * SQL:2008 to MS SQL Server.
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.expression.Literal;
  */
 public class MsSqlLiteral
         extends Literal {
-    /*------------------------------------------------------------------*/
 
     /** format the literal
      * @return the MSSQL string corresponding to the fields of the literal.
@@ -42,15 +40,14 @@ public class MsSqlLiteral
         else if (getBoolean() != null)
             sFormatted = MsSqlLiterals.formatBooleanLiteral(getBoolean());
         return sFormatted;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlLiteral(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlLiteral */
+}

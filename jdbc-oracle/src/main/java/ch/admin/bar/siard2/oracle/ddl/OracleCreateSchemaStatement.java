@@ -18,7 +18,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.sqlparser.ddl.CreateSchemaStatement;
 
-/*====================================================================*/
 
 /** OracleCreateSchemaStatement implements the formatting of CREATE
  * SCHEMA statements
@@ -36,7 +35,6 @@ public class OracleCreateSchemaStatement
     ;
     private static final String _sDEFAULT_PERMANENT_TABLESPACE = "USERS";
 
-    /*------------------------------------------------------------------*/
 
     /** * format the create schema statement as a create user statement
      * not granting anything to the user and using the standard password
@@ -54,15 +52,14 @@ public class OracleCreateSchemaStatement
                 sSP + "QUOTA" + sSP + "UNLIMITED" +
                 sSP + K.ON.getKeyword() + sSP + _sDEFAULT_PERMANENT_TABLESPACE;
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleCreateSchemaStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class OracleCreateStatement */
+}

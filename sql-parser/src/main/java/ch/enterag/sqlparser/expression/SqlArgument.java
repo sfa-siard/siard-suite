@@ -13,7 +13,6 @@ public class SqlArgument
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SqlArgument.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -55,7 +54,6 @@ public class SqlArgument
             return SqlArgument.this;
         }
     }
-    /*==================================================================*/
 
     private SaVisitor _visitor = new SaVisitor();
 
@@ -133,7 +131,6 @@ public class SqlArgument
         _bEmptyMultisetArgument = bEmptyMultisetArgument;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the SQL argument.
      * @return the SQL string corresponding to the fields of the SQL argument.
@@ -157,9 +154,8 @@ public class SqlArgument
         else if (getValueExpression() != null)
             s = getValueExpression().format();
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the SQL argument from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -168,9 +164,8 @@ public class SqlArgument
     public void parse(SqlParser.SqlArgumentContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the SQL argument from SQL.
      * @param sSql SQL.
@@ -179,9 +174,8 @@ public class SqlArgument
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().sqlArgument());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an SQL argument.
      * @param ve value expression.
@@ -197,15 +191,14 @@ public class SqlArgument
         setUdtName(qiUdtName);
         setTargetSpecification(ts);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SqlArgument(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SqlArgument */
+}

@@ -16,7 +16,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.datatype.PredefinedType;
 
-/*====================================================================*/
 
 /** MySqlDataType implements the type translation from ISO SQL to MySQL
  * for complex types.
@@ -24,16 +23,14 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
  */
 public class MySqlDataType extends DataType {
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MySqlDataType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * format the STRUCT type for MySql (serialized as a BLOB)
@@ -43,9 +40,8 @@ public class MySqlDataType extends DataType {
         PredefinedType pt = getSqlFactory().newPredefinedType();
         pt.initBlobType(PredefinedType.iUNDEFINED, null);
         return pt.format();
-    } /* formatStructType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * format the ROW type for MySql (serialized as a BLOB)
@@ -55,9 +51,8 @@ public class MySqlDataType extends DataType {
         PredefinedType pt = getSqlFactory().newPredefinedType();
         pt.initBlobType(PredefinedType.iUNDEFINED, null);
         return pt.format();
-    } /* formatStructType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * format the REF type for MySql (serialized as a BLOB)
@@ -67,9 +62,8 @@ public class MySqlDataType extends DataType {
         PredefinedType pt = getSqlFactory().newPredefinedType();
         pt.initBlobType(PredefinedType.iUNDEFINED, null);
         return pt.format();
-    } /* formatStructType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * format the ARRAY type for MySql (serialized as a BLOB)
@@ -79,9 +73,8 @@ public class MySqlDataType extends DataType {
         PredefinedType pt = getSqlFactory().newPredefinedType();
         pt.initBlobType(PredefinedType.iUNDEFINED, null);
         return pt.format();
-    } /* formatStructType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * format the MULTISET type for MySql (serialized as a BLOB)
@@ -91,9 +84,8 @@ public class MySqlDataType extends DataType {
         PredefinedType pt = getSqlFactory().newPredefinedType();
         pt.initBlobType(PredefinedType.iUNDEFINED, null);
         return pt.format();
-    } /* formatStructType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the data type for MySql.
      * @return the SQL string corresponding to the fields of the data type.
@@ -122,6 +114,6 @@ public class MySqlDataType extends DataType {
                 break;
         }
         return sDataType;
-    } /* format */
+    }
 
-} /* class MySqlDataType */
+}

@@ -16,7 +16,6 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/*====================================================================*/
 
 /** Utility for handling files.
  * @author Hartwig
@@ -24,7 +23,6 @@ import java.nio.file.Paths;
 public class FU {
     private static int iBUFSIZ = 8192;
 
-    /*------------------------------------------------------------------*/
 
     /** java.nio.Files.copy is problematic, because of unpredictable Windows
      * file locking. For some reason this happens
@@ -51,9 +49,8 @@ public class FU {
             if (fis != null) fis.close();
         }
         return lCopied;
-    } /* copy */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** copy a file or folder.
      * If it is a folder, copy it recursively.
@@ -74,9 +71,8 @@ public class FU {
             if (bReplace || (!fileTarget.exists()))
                 copy(fileSource, fileTarget);
         }
-    } /* copyFiles */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** delete the file or folder.
      * If it is a folder, delete it recursively.
@@ -90,9 +86,8 @@ public class FU {
                 deleteFiles(afile[i]);
         }
         return file.delete();
-    } /* delete */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a File to a file-URI.
      * N.B.: Uses JAVA 1.7 java.nio.Paths for correct handling of UNC file
@@ -103,9 +98,8 @@ public class FU {
     public static URI toUri(File file) {
         Path path = Paths.get(file.toString());
         return path.toUri();
-    } /* toUri */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a file-URI to a File.
      * N.B.: Uses JAVA 1.7 java.nio.Paths for correct handling of UNC file
@@ -116,6 +110,6 @@ public class FU {
     public static File fromUri(URI uri) {
         Path path = Paths.get(uri);
         return path.toFile();
-    } /* fromUri */
+    }
 
-} /* FU */
+}

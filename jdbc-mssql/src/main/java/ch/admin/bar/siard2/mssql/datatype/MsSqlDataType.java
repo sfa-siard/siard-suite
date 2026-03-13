@@ -16,7 +16,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.datatype.PredefinedType;
 
-/*====================================================================*/
 
 /** MsSqlDataType implements the type translation from ISO SQL to MSSQL
  * for complex types.
@@ -25,7 +24,6 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 public class MsSqlDataType
         extends DataType {
 
-    /*------------------------------------------------------------------*/
 
     /** format an ARRAY type.
      * In MSSQL an ARRAY is serialized to as a BLOB.
@@ -36,9 +34,8 @@ public class MsSqlDataType
         PredefinedType pt = getSqlFactory().newPredefinedType();
         pt.initBlobType(PredefinedType.iUNDEFINED, null);
         return pt.format();
-    } /* formatArrayType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the data type for MSSQL.
      * @return the SQL string corresponding to the fields of the data type.
@@ -67,15 +64,14 @@ public class MsSqlDataType
                 break;
         }
         return sDataType;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlDataType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* MsSqlDataType */
+}

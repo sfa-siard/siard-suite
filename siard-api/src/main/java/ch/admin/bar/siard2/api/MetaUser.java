@@ -23,9 +23,6 @@ public interface MetaUser
      */
     MetaData getParentMetaData();
 
-  /*====================================================================
-  user properties
-  ====================================================================*/
 
     /**
      * get user name.

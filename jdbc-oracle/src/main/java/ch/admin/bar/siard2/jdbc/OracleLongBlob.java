@@ -12,7 +12,7 @@ public class OracleLongBlob implements Blob {
 
     public OracleLongBlob(byte[] bufLong) {
         _bufLong = bufLong;
-    } /* constructor */
+    }
 
     @Override
     public long length() throws SQLException {

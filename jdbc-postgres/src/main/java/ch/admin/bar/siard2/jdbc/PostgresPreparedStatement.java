@@ -23,7 +23,6 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Calendar;
 
-/*====================================================================*/
 
 /** PostgresPreparedStatement implements a wrapped Postgres PreparedStatement.
  * @author Hartwig Thomas
@@ -35,7 +34,6 @@ public class PostgresPreparedStatement
     /** wrapped prepared statement */
     private PreparedStatement _pstmtWrapped = null;
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param stmtWrapped statement to be wrapped.
@@ -45,9 +43,8 @@ public class PostgresPreparedStatement
             throws SQLException {
         super(pstmtWrapped, conn);
         _pstmtWrapped = pstmtWrapped;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -55,7 +52,6 @@ public class PostgresPreparedStatement
         return new PostgresResultSetMetaData(_pstmtWrapped.getMetaData(), this);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -63,7 +59,6 @@ public class PostgresPreparedStatement
         return _pstmtWrapped.getParameterMetaData();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -71,7 +66,6 @@ public class PostgresPreparedStatement
         return new PostgresResultSet(_pstmtWrapped.executeQuery(), this);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -79,7 +73,6 @@ public class PostgresPreparedStatement
         return _pstmtWrapped.executeUpdate();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -87,7 +80,6 @@ public class PostgresPreparedStatement
         return _pstmtWrapped.execute();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -95,7 +87,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.addBatch();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -103,7 +94,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.clearParameters();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -112,7 +102,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setNull(parameterIndex, sqlType);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -121,7 +110,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setNull(parameterIndex, sqlType, typeName);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -129,7 +117,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setDate(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -138,7 +125,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setDate(parameterIndex, x, cal);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -146,7 +132,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setTime(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -155,7 +140,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setTime(parameterIndex, x, cal);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -164,7 +148,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setTimestamp(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -173,7 +156,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setTimestamp(parameterIndex, x, cal);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -182,7 +164,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setBoolean(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -190,7 +171,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setByte(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -198,7 +178,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setShort(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -206,7 +185,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setInt(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -214,7 +192,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setLong(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -222,7 +199,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setFloat(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -231,7 +207,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setDouble(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -240,7 +215,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setBigDecimal(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -249,7 +223,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setString(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -258,7 +231,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setString(parameterIndex, value);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -267,7 +239,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setClob(parameterIndex, px.unwrap(Clob.class));
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -276,7 +247,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setClob(parameterIndex, reader);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -285,7 +255,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setClob(parameterIndex, reader, length);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -294,7 +263,6 @@ public class PostgresPreparedStatement
         setClob(parameterIndex, value);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -303,7 +271,6 @@ public class PostgresPreparedStatement
         setClob(parameterIndex, reader);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -312,7 +279,6 @@ public class PostgresPreparedStatement
         setClob(parameterIndex, reader, length);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -324,7 +290,6 @@ public class PostgresPreparedStatement
         }
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -336,7 +301,6 @@ public class PostgresPreparedStatement
         }
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -348,7 +312,6 @@ public class PostgresPreparedStatement
         }
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -389,7 +352,6 @@ public class PostgresPreparedStatement
         return lLength;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -401,9 +363,8 @@ public class PostgresPreparedStatement
             _pstmtWrapped.setCharacterStream(parameterIndex, reader);
         else
             createClob(parameterIndex, reader);
-    } /* setCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -412,7 +373,6 @@ public class PostgresPreparedStatement
         setCharacterStream(parameterIndex, reader, (long) length);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -429,7 +389,6 @@ public class PostgresPreparedStatement
         }
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -438,7 +397,6 @@ public class PostgresPreparedStatement
         setCharacterStream(parameterIndex, value);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -447,7 +405,6 @@ public class PostgresPreparedStatement
         setCharacterStream(parameterIndex, value, length);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -456,7 +413,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setSQLXML(parameterIndex, xmlObject);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -464,7 +420,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setURL(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -472,7 +427,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setRowId(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -480,7 +434,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setRef(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -488,7 +441,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setBytes(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -497,7 +449,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setBlob(parameterIndex, px.unwrap(Blob.class));
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -506,7 +457,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setBlob(parameterIndex, inputStream);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -538,9 +488,8 @@ public class PostgresPreparedStatement
             throw new SQLException("Reading BinaryStream failed" + EU.getExceptionMessage(ie) + "!");
         }
         return lLength;
-    } /* createBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -554,7 +503,6 @@ public class PostgresPreparedStatement
             createBlob(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -563,7 +511,6 @@ public class PostgresPreparedStatement
         setBinaryStream(parameterIndex, x, (long) length);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -580,7 +527,6 @@ public class PostgresPreparedStatement
         }
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -588,7 +534,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setArray(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -598,7 +543,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setObject(parameterIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -608,7 +552,6 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setObject(parameterIndex, x, targetSqlType);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -618,4 +561,4 @@ public class PostgresPreparedStatement
         _pstmtWrapped.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
     }
 
-} /* PostgresPreparedStatement */
+}

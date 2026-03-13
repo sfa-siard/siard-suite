@@ -27,7 +27,6 @@ public class SqlStatement
     private static final int _iMAX_USER_NAME_LENGTH = 64;
     private static final int _iBUFSIZ = 8192;
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -53,7 +52,6 @@ public class SqlStatement
             return SqlStatement.this;
         }
     }
-    /*==================================================================*/
 
     private SsVisitor _visitor = new SsVisitor();
 
@@ -114,7 +112,7 @@ public class SqlStatement
         _sUser = sUser;
         _sDefaultCatalog = sDefaultCatalog;
         _sDefaultSchema = sDefaultSchema;
-    } /* setEvaluationContext */
+    }
 
     private Map<GeneralValueSpecification, Object> _mapQuestionMarkValues = new HashMap<GeneralValueSpecification, Object>();
     private Map<GeneralValueSpecification, DataType> _mapQuestionMarkTypes = new HashMap<GeneralValueSpecification, DataType>();
@@ -126,12 +124,12 @@ public class SqlStatement
             _mapQuestionMarkValues.put(gvs, null);
             _mapQuestionMarkTypes.put(gvs, null);
         }
-    } /* setQuestionMarks */
+    }
 
     public void setQuestionMarkType(GeneralValueSpecification gvs, DataType dt) {
         if (_mapQuestionMarkTypes.containsKey(gvs))
             _mapQuestionMarkValues.put(gvs, dt);
-    } /* setQuestionMarkType */
+    }
 
     public void setQuestionMarkValue(GeneralValueSpecification gvs, Object oValue) {
         try {
@@ -203,7 +201,7 @@ public class SqlStatement
         } catch (IOException ie) {
             throw new IllegalArgumentException("Parameter value could not be set!", ie);
         }
-    } /* setQuestionMarkValue */
+    }
 
     public DataType getGeneralType(GeneralValueSpecification gvs) {
         DataType dt = null;
@@ -227,7 +225,7 @@ public class SqlStatement
                 break;
         }
         return dt;
-    } /* getGeneralType */
+    }
 
     public Object getGeneralValue(GeneralValueSpecification gvs) {
         Object oValue = null;
@@ -248,9 +246,8 @@ public class SqlStatement
                 break;
         }
         return oValue;
-    } /* getGeneralValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** look up the registered data type of a query column.
      * @param idcColumn column.
@@ -282,9 +279,8 @@ public class SqlStatement
         } else
             throw new IllegalArgumentException("Identifier chain is invalid for column!");
         return dt;
-    } /* getColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** look up the registered value of a query column.
      * @param idcColumn column.
@@ -324,9 +320,8 @@ public class SqlStatement
         } else
             throw new IllegalArgumentException("Identifier chain is invalid for column!");
         return oValue;
-    } /* getColumnValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the SQL statement.
      * @return the SQL string corresponding to the fields of the SQL statement.
@@ -341,9 +336,8 @@ public class SqlStatement
         else if (getQuerySpecification() != null)
             sStatement = getQuerySpecification().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the SQL statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -352,9 +346,8 @@ public class SqlStatement
     public void parse(SqlParser.SqlStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the SQL statement from SQL.
      * @param sSql SQL.
@@ -370,9 +363,8 @@ public class SqlStatement
             ctx = getParser().sqlStatement();
         }
         parse(ctx);
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an SQL statement.
      * Only one parameter not null!
@@ -390,15 +382,14 @@ public class SqlStatement
         setDmlStatement(dmls);
         setQuerySpecification(qs);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SqlStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SqlStatement */
+}

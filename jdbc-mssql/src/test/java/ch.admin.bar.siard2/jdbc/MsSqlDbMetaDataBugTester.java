@@ -38,7 +38,7 @@ public class MsSqlDbMetaDataBugTester extends BaseDatabaseMetaDataTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @Test
     @Override

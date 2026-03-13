@@ -41,7 +41,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         sbSql.append("\r\nFROM ");
         sbSql.append(qiTable.format());
         return sbSql.toString();
-    } /* getTableQuery */
+    }
 
     private static String _sNativeQuerySimple = getTableQuery(TestMySqlDatabase.getQualifiedSimpleTable(), TestMySqlDatabase._listCdSimple);
     private static String _sNativeQueryComplex = getTableQuery(TestMySqlDatabase.getQualifiedComplexTable(), TestMySqlDatabase._listCdComplex);
@@ -90,7 +90,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
             }
         }
         return _conn;
-    } /* closeResultSet */
+    }
 
     private void openResultSet(String sQuery)
             throws SQLException {
@@ -99,7 +99,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         ResultSet rs = stmt.executeQuery(sQuery);
         ResultSetMetaData rsmd = rs.getMetaData();
         setResultSetMetaData(rsmd, rs);
-    } /* openResultSet */
+    }
 
     @Before
     public void setUp() {
@@ -128,13 +128,13 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
 
     @Test
     public void testClass() {
         assertEquals("Wrong result set metadata class!", MySqlResultSetMetaData.class, getResultSetMetaData().getClass());
-    } /* testClass */
+    }
 
     @Test
     public void testNativeSimple() {
@@ -145,7 +145,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeSimple */
+    }
 
     @Test
     public void testNativeComplex() {
@@ -155,7 +155,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeComplex */
+    }
 
     @Test
     public void testSqlSimple() {
@@ -165,7 +165,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSqlSimple */
+    }
 
     @Test
     public void testSqlComplex() {
@@ -175,7 +175,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSqlComplex */
+    }
 
 
 }

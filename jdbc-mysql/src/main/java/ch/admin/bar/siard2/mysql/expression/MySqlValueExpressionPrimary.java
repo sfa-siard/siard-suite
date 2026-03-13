@@ -15,7 +15,6 @@ package ch.admin.bar.siard2.mysql.expression;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 
-/* =============================================================================== */
 
 /**
  * Implements the value translation from ISO SQL to MySQL
@@ -41,9 +40,8 @@ public class MySqlValueExpressionPrimary extends ValueExpressionPrimary {
         }
 
         return sExpression;
-    } /* format */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * constructor (only to be called by the factory)
@@ -51,6 +49,6 @@ public class MySqlValueExpressionPrimary extends ValueExpressionPrimary {
      */
     public MySqlValueExpressionPrimary(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
 }

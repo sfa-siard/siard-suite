@@ -67,7 +67,7 @@ public class SchemaMapping extends Mapping {
                            TableMapping.newInstance(bSupportsArrays, bSupportsUdts,
                                                     mapTables.get(mt.getName()), mt, iMaxColumnNameLength));
         }
-    } /* constructor */
+    }
 
     public static SchemaMapping newInstance(boolean bSupportsArrays, boolean bSupportsUdts,
                                             String sMappedSchemaName, MetaSchema ms,
@@ -75,6 +75,6 @@ public class SchemaMapping extends Mapping {
             throws IOException {
         return new SchemaMapping(bSupportsArrays, bSupportsUdts,
                                  sMappedSchemaName, ms, iMaxTableNameLength, iMaxColumnNameLength);
-    } /* newInstance */
+    }
 
-} /* class SchemaMapping */
+}

@@ -104,7 +104,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             throw new SQLException("Empty meta data result set!");
         else
             fail("Invalid meta data result set");
-    } /* print */
+    }
 
     @BeforeClass
     public static void setUpClass() throws SQLException, IOException {
@@ -147,12 +147,12 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong database meta data class!", PostgresDatabaseMetaData.class, getDatabaseMetaData().getClass());
-    } /* testClass */
+    }
 
     @Override
     @Test
@@ -243,7 +243,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         setTablesViews.addAll(_setTestTables);
         setTablesViews.addAll(_setTestViews);
         return setTablesViews;
-    } /* getTablesUserViews */
+    }
 
     /** compute size in characters of the int type with the given maximum.
      * N.B.: Postgres uses this value. The correct value would be
@@ -406,7 +406,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         }
 
         return iPrecision;
-    } /* parsePrecision */
+    }
 
     private int parseScale(String sType) {
         int iScale = 0;
@@ -440,7 +440,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             }
         }
         return iScale;
-    } /* parseScale */
+    }
 
     /** find column definition in list with matching column name.
      * @param sColumnName column name.
@@ -456,7 +456,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 cdFound = cd;
         }
         return cdFound;
-    } /* findTestColumnDefinition */
+    }
 
     @Test
     @Override
@@ -470,7 +470,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (ParseException pe) {
             fail(EU.getExceptionMessage(pe));
         }
-    } /* testGetColumns */
+    }
 
     /** list columns of user tables
      */
@@ -644,7 +644,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetUserColumns */
+    }
 
     /** determine set of schemas holding user tables.
      * @return schemas, holding user tables.
@@ -657,7 +657,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         setSchemas.add(TestSqlDatabase._sTEST_SCHEMA.toLowerCase());
         setSchemas.add("public");
         return setSchemas;
-    } /* getUserSchemas */
+    }
 
     @Test
     public void testGetUDTsUserDistinct() {
@@ -781,7 +781,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetUserProcedures */
+    }
 
     /** get parameters of procedures of schemas holding user tables
      */
@@ -798,7 +798,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetUserProcedureColumns */
+    }
 
     /** get functions of schemas holding user tables
      */

@@ -19,7 +19,6 @@ public class SelectSublist
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SelectSublist.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -43,7 +42,6 @@ public class SelectSublist
             return SelectSublist.this;
         }
     }
-    /*==================================================================*/
 
     private SsVisitor _visitor = new SsVisitor();
 
@@ -91,7 +89,6 @@ public class SelectSublist
         _listColumnNames = listColumnNames;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the select sublist.
      * @return the SQL string corresponding to the fields of the select sublist.
@@ -122,9 +119,8 @@ public class SelectSublist
                                                                         .format();
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the data type of a select sublist from the context of a query.
      * @param ss sql statement.
@@ -137,9 +133,8 @@ public class SelectSublist
         else
             throw new IllegalArgumentException("Qualified asterisk is not supported for evaluation!");
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a select sublist from its components.
      * @return value.
@@ -151,9 +146,8 @@ public class SelectSublist
         else
             throw new IllegalArgumentException("Qualified asterisk is not supported for evaluation!");
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a select sublist against the context of a query.
      * @param ss sql statement.
@@ -165,9 +159,8 @@ public class SelectSublist
             oExpressionValue = getValueExpression().evaluate(ss, false);
         Object oValue = evaluate(oExpressionValue);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a select sublist to their initial value.
      * @param ss sql statement.
@@ -179,9 +172,8 @@ public class SelectSublist
             oExpressionValue = getValueExpression().resetAggregates(ss);
         Object oValue = evaluate(oExpressionValue);
         return oValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the select sublist from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -190,9 +182,8 @@ public class SelectSublist
     public void parse(SqlParser.SelectSublistContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the select sublist from SQL.
      * @param sSql SQL.
@@ -201,9 +192,8 @@ public class SelectSublist
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().selectSublist());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a select sublist.
      * @param ve value expression.
@@ -222,15 +212,14 @@ public class SelectSublist
         setAsteriskQualifier(icAsteriskQualifier);
         setColumnNames(listColumnNames);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SelectSublist(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SelectSublist */
+}

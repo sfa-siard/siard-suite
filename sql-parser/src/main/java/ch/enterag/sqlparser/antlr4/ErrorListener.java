@@ -28,7 +28,6 @@ public class ErrorListener
     // public void suppressException() { bExceptionSuppressed = true; }
     // public void resetExceptionSuppressed() { bExceptionSuppressed = false; }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -49,9 +48,8 @@ public class ErrorListener
         if (!isExceptionSuppressed())
             throw new IllegalArgumentException("SQL ambiguity for input \"" + sInput + "\" " +
                                                        ambigAlts.toString());
-    } /* reportAmbiguity */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -65,9 +63,8 @@ public class ErrorListener
         if (!isExceptionSuppressed())
             throw new IllegalArgumentException("SQL attempting full context for substring " +
                                                        String.valueOf(startIndex) + " to " + String.valueOf(stopIndex));
-    } /* reportAttemptingFullContext */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -80,9 +77,8 @@ public class ErrorListener
         if (!isExceptionSuppressed())
             throw new IllegalArgumentException("SQL context sensitivity for substring " +
                                                        String.valueOf(startIndex) + " to " + String.valueOf(stopIndex));
-    } /* reportContextSensitivity */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -96,16 +92,14 @@ public class ErrorListener
         throw new IllegalArgumentException("SQL parsing error at position "
                                                    + String.valueOf(line) + "/" + String.valueOf(charPositionInLine) +
                                                    " at " + String.valueOf(offendingSymbol) + ": " + msg + "\r\nRule stack: " + String.valueOf(listRuleStack));
-    } /* syntaxError */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** private constructor for singleton.
      */
     private ErrorListener() {
-    } /* constructor ErrorListener */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** singleton factory
      * @return singleton error listener.
@@ -114,6 +108,6 @@ public class ErrorListener
         if (_en == null)
             _en = new ErrorListener();
         return _en;
-    } /* getInstance */
+    }
 
-} /* ErrorListener */
+}

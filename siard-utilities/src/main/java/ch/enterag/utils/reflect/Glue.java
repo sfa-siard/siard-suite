@@ -10,13 +10,11 @@ package ch.enterag.utils.reflect;
 
 import java.lang.reflect.*;
 
-/*====================================================================*/
 
 /** Implements access to private members of classes.
  * @author Hartwig
  */
 public abstract class Glue {
-    /*------------------------------------------------------------------*/
 
     /** Returns the value of the private - static, if oOwner is a class - field
      * of the owner
@@ -51,9 +49,8 @@ public abstract class Glue {
                                                   .getName() + ": " + iae.getMessage());
         }
         return oResult;
-    } /* getPrivate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** Sets the value of a private - static of oOwner is a class - field
      * of the owner - even if it was declared final.
@@ -98,9 +95,8 @@ public abstract class Glue {
             throw new IllegalArgumentException(iae.getClass()
                                                   .getName() + ": " + iae.getMessage());
         }
-    } /* setPrivate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the constructor for the given class with the given signature.
      * @param cls class.
@@ -115,9 +111,8 @@ public abstract class Glue {
         } catch (NoSuchMethodException nsme) {
         }
         return constructor;
-    } /* getConstructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** invoke a private method on the given object.
      * @param oInstance instance of object.
@@ -143,6 +138,6 @@ public abstract class Glue {
                                                   .getName() + ": " + iae.getMessage());
         }
         return oResult;
-    } /* invokePrivate */
+    }
 
-} /* class Glue */
+}

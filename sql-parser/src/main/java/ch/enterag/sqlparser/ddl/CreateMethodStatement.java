@@ -16,7 +16,6 @@ public class CreateMethodStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CreateMethodStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -68,7 +67,6 @@ public class CreateMethodStatement
             return CreateMethodStatement.this;
         }
     }
-    /*==================================================================*/
 
     private CmsVisitor _visitor = new CmsVisitor();
 
@@ -156,9 +154,8 @@ public class CreateMethodStatement
         }
         s = s + sNEW_LINE + sRIGHT_PAREN;
         return s;
-    } /* formatParameters */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the create method statement.
      * @return the SQL string corresponding to the fields of the method specification.
@@ -177,9 +174,8 @@ public class CreateMethodStatement
         if (getRoutineBody() != null)
             sStatement = sStatement + sNEW_LINE + getRoutineBody().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create method statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -188,9 +184,8 @@ public class CreateMethodStatement
     public void parse(SqlParser.CreateMethodStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create method statement from SQL.
      * @param sSql SQL.
@@ -199,9 +194,8 @@ public class CreateMethodStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().createMethodStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create method statement.
      * @param mt method type.
@@ -230,15 +224,14 @@ public class CreateMethodStatement
         setRoutineCharacteristics(rcs);
         setRoutineBody(rb);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CreateMethodStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CreateMethodStatement */
+}

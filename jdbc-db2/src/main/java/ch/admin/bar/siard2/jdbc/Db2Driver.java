@@ -18,7 +18,6 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/*====================================================================*/
 
 /** Db2Driver implements a wrapped DB/2 Driver.
  * @author Hartwig Thomas
@@ -42,7 +41,7 @@ public class Db2Driver
         if (!sUrl.startsWith(sDB2_URL_PREFIX))
             sUrl = sDB2_URL_PREFIX + "//" + sDatabaseName;
         return sUrl;
-    } /* getUrl */
+    }
 
     /** register this driver, replacing original DB/2 driver
      */
@@ -59,7 +58,6 @@ public class Db2Driver
         register();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}*/
     @Override
@@ -70,9 +68,8 @@ public class Db2Driver
                 url.startsWith("jdbc:ids:");
         _il.exit(bAccepts);
         return bAccepts;
-    } /* acceptsUrl */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * returns the appropriately wrapped H2 Connection.
@@ -86,6 +83,6 @@ public class Db2Driver
             conn = new Db2Connection(super.connect(url, info));
         _il.exit(conn);
         return conn;
-    } /* connect */
+    }
 
-} /* Db2Driver */
+}

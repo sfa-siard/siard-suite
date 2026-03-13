@@ -33,9 +33,6 @@ public interface MetaUniqueKey
      */
     boolean isValid();
   
-  /*====================================================================
-  unique key properties
-  ====================================================================*/
 
     /**
      * get name of unique key.

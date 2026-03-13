@@ -41,14 +41,14 @@ public class MySqlDataSourceTester {
     @Before
     public void setUp() throws Exception {
         _dsMySql = new MySqlDataSource();
-    } /* setUp */
+    }
 
     @After
     public void tearDown() throws Exception {
         if ((_conn != null) && (!_conn.isClosed())) {
             _conn.close();
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testWrapper() {
@@ -60,7 +60,7 @@ public class MySqlDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testWrapper */
+    }
 
     @Test
     public void testConnection() {
@@ -74,7 +74,7 @@ public class MySqlDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testConnection */
+    }
 
     @Test
     public void testLoginTimeout() {
@@ -85,6 +85,6 @@ public class MySqlDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testLoginTimeout */
+    }
 
-} /* class MySqlDataSourceTester */
+}

@@ -16,7 +16,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 
-/*====================================================================*/
 
 /** PostgresPredefinedType implements the type translation from
  * ISO SQL:2008 to Postgres. 
@@ -24,7 +23,6 @@ import ch.enterag.sqlparser.datatype.enums.PreType;
  */
 public class PostgresPredefinedType
         extends PredefinedType {
-    /*------------------------------------------------------------------*/
 
     /** decimals of seconds in parentheses (maximum 6).
      * @param iDefaultDecimals default decimals.
@@ -39,9 +37,8 @@ public class PostgresPredefinedType
                 sSecondsDecimals = sSecondsDecimals + sLEFT_PAREN + String.valueOf(getSecondsDecimals()) + sRIGHT_PAREN;
         }
         return sSecondsDecimals;
-    } /* formatSecondsDecimals */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** length field in parentheses.
      * @return length in parentheses.
@@ -51,9 +48,8 @@ public class PostgresPredefinedType
         if (getLength() != iUNDEFINED)
             sLength = sLEFT_PAREN + String.valueOf(8 * getLength()) + sRIGHT_PAREN;
         return sLength;
-    } /* formatLength */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the predefined data type.
      * @return the SQL string corresponding to the fields of the data type.
@@ -83,13 +79,12 @@ public class PostgresPredefinedType
         return sType;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public PostgresPredefinedType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class PostgresPredefinedType */
+}

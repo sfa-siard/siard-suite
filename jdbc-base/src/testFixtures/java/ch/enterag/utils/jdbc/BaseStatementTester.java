@@ -37,7 +37,7 @@ public abstract class BaseStatementTester {
             getStatement().getConnection()
                           .rollback();
         }
-    } /* clean */
+    }
 
     private String getCallingMethod(int iDepth) {
         String sCallingMethod = null;
@@ -46,12 +46,12 @@ public abstract class BaseStatementTester {
                                           .getStackTrace();
         sCallingMethod = asSte[iDepth].getMethodName();
         return sCallingMethod;
-    } /* getCallingMethod */
+    }
 
     protected void enter() {
         System.out.println(getCallingMethod(3));
         System.out.flush();
-    } /* enter */
+    }
 
     @After
     public void tearDown() {
@@ -68,11 +68,8 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
-    /*--------------------------------------------------------------------
-    Base tests for all database statements extending BaseStatement.
-    --------------------------------------------------------------------*/
     @Test
     public void testGetConnection() {
         enter();
@@ -81,7 +78,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetConnection */
+    }
 
     @Test
     public void testExecuteQuery() {
@@ -93,7 +90,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecuteQuery */
+    }
 
     @Test
     public void testExecuteUpdate() {
@@ -112,7 +109,7 @@ public abstract class BaseStatementTester {
                 fail(EU.getExceptionMessage(se1));
             }
         }
-    } /* testExecuteUpdate */
+    }
 
     @Test
     public void testExecuteUpdate_String_int() {
@@ -133,7 +130,7 @@ public abstract class BaseStatementTester {
                 fail(EU.getExceptionMessage(se1));
             }
         }
-    } /* testExecuteUpdate_String_int */
+    }
 
     @Test
     public void testExecuteUpdate_String_AInt() {
@@ -154,7 +151,7 @@ public abstract class BaseStatementTester {
                 fail(EU.getExceptionMessage(se1));
             }
         }
-    } /* testExecuteUpdate_String_AInt */
+    }
 
     @Test
     public void testExecuteUpdate_String_AString() {
@@ -175,7 +172,7 @@ public abstract class BaseStatementTester {
                 fail(EU.getExceptionMessage(se1));
             }
         }
-    } /* testExecuteUpdate */
+    }
 
     @Test
     public void testExecute() {
@@ -187,7 +184,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute */
+    }
 
     @Test
     public void testExecute_String_int() {
@@ -201,7 +198,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute_String_int */
+    }
 
     @Test
     public void testExecute_String_AInt() {
@@ -215,7 +212,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute_String_AInt */
+    }
 
     @Test
     public void testExecute_String_AString() {
@@ -229,7 +226,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute_String_AString */
+    }
 
     @Test
     public void testAddBatch() {
@@ -239,7 +236,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testAddBatch */
+    }
 
     @Test
     public void testClearBatch() {
@@ -249,7 +246,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testClearBatch */
+    }
 
     @Test
     public void testExecuteBatch() {
@@ -259,7 +256,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecuteBatch */
+    }
 
     @Test
     public void testGetResultSet() {
@@ -269,7 +266,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetResultSet */
+    }
 
     @Test
     public void testGetUpdateCount() {
@@ -279,7 +276,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetUpdateCount */
+    }
 
     @Test
     public void testGetMoreResults() {
@@ -289,7 +286,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetMoreResults */
+    }
 
     @Test
     public void testGetMoreResults_Int() {
@@ -301,7 +298,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetMoreResults_int */
+    }
 
     @Test
     public void testClose() {
@@ -314,7 +311,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testClose */
+    }
 
     @Test
     public void testIsClosed() {
@@ -324,7 +321,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testIsClosed */
+    }
 
     @Test
     public void testCloseOnCompletion() {
@@ -336,7 +333,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCloseOnCompletion */
+    }
 
     @Test
     public void testIsCloseOnCompletion() {
@@ -348,7 +345,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testIsCloseOnCompletion */
+    }
 
     @Test
     public void testCancel() {
@@ -360,7 +357,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCancel */
+    }
 
     @Test
     public void testGetMaxFieldSize() {
@@ -370,7 +367,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetMaxFieldSize */
+    }
 
     @Test
     public void testSetMaxFieldSize() {
@@ -380,7 +377,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetMaxFieldSize */
+    }
 
     @Test
     public void testGetMaxRows() {
@@ -390,7 +387,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetMaxRows */
+    }
 
     @Test
     public void testSetMaxRows() {
@@ -400,7 +397,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetMaxRows */
+    }
 
     @Test
     public void testSetEscapeProcessing() {
@@ -410,7 +407,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetMaxRows */
+    }
 
     @Test
     public void testGetQueryTimeout() {
@@ -420,7 +417,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetQueryTimeout */
+    }
 
     @Test
     public void testSetQueryTimeout() {
@@ -430,7 +427,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetQueryTimeout */
+    }
 
     @Test
     public void testGetWarnings() {
@@ -440,7 +437,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetWarnings */
+    }
 
     @Test
     public void testClearWarnings() {
@@ -450,7 +447,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testClearWarnings */
+    }
 
     @Test
     public void testSetCursorName() {
@@ -462,7 +459,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetCursorName */
+    }
 
     @Test
     public void testGetFetchDirection() {
@@ -472,7 +469,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetFetchDirection */
+    }
 
     @Test
     public void testSetFetchDirection() {
@@ -482,7 +479,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetFetchDirection */
+    }
 
     @Test
     public void testGetFetchSize() {
@@ -492,7 +489,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetFetchSize */
+    }
 
     @Test
     public void testSetFetchSize() {
@@ -502,7 +499,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetFetchSize */
+    }
 
     @Test
     public void testGetResultSetConcurrency() {
@@ -512,7 +509,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetResultSetConcurrency */
+    }
 
     @Test
     public void testGetResultSetType() {
@@ -522,7 +519,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetResultSetType */
+    }
 
     @Test
     public void testGetGeneratedKeys() {
@@ -534,7 +531,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetGeneratedKeys */
+    }
 
     @Test
     public void testGetResultSetHoldability() {
@@ -544,7 +541,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetResultSetHoldability */
+    }
 
     @Test
     public void testIsPoolable() {
@@ -554,7 +551,7 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testIsPoolable */
+    }
 
     @Test
     public void testSetPoolable() {
@@ -564,6 +561,6 @@ public abstract class BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetPoolable */
+    }
 
-} /* BaseStatementTester */
+}

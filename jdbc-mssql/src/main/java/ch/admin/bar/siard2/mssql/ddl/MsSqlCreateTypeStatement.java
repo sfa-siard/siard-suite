@@ -16,7 +16,6 @@ import ch.enterag.sqlparser.K;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.CreateTypeStatement;
 
-/*====================================================================*/
 
 /** MsSqlCreateTypeStatement overrides CreateTypeStatement of SQL parser
  * because MSSQL only supports DISTINCT types and uses another syntax 
@@ -26,7 +25,6 @@ import ch.enterag.sqlparser.ddl.CreateTypeStatement;
 public class MsSqlCreateTypeStatement
         extends CreateTypeStatement {
 
-    /*------------------------------------------------------------------*/
 
     /** format the create type statement.
      * @return the SQL string corresponding to the fields of the create
@@ -42,15 +40,14 @@ public class MsSqlCreateTypeStatement
         else
             throw new IllegalArgumentException("MS SQL Server only supports DISTINCT types!");
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlCreateTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlCreateTypeStatement */
+}

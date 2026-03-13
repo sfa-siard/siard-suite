@@ -19,7 +19,6 @@ public class QueryExpressionBody
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(QueryExpressionBody.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -69,7 +68,6 @@ public class QueryExpressionBody
             return QueryExpressionBody.this;
         }
     }
-    /*==================================================================*/
 
     private QebVisitor _visitor = new QebVisitor();
 
@@ -189,7 +187,6 @@ public class QueryExpressionBody
         return s;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the query expression body.
      * @return the SQL string corresponding to the fields of the query expression body.
@@ -226,9 +223,8 @@ public class QueryExpressionBody
         else if (getTableRowValueExpressions().size() > 0)
             s = formatValues();
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the query expression body from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -237,9 +233,8 @@ public class QueryExpressionBody
     public void parse(SqlParser.QueryExpressionBodyContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the query expression body from SQL.
      * @param sSql SQL.
@@ -248,9 +243,8 @@ public class QueryExpressionBody
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().queryExpressionBody());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a query expression body.
      * @param qo query operator.
@@ -288,15 +282,14 @@ public class QueryExpressionBody
         setTableName(qiTableName);
         setTableRowValueExpressions(listTrve);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public QueryExpressionBody(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class QueryExpressionBody */
+}

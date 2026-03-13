@@ -14,7 +14,7 @@ public abstract class TestUtils {
             buf[i] = (byte) j;
         }
         return buf;
-    } /* getBytes */
+    }
 
     public static byte[] getBytes(InputStream is) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -27,7 +27,7 @@ public abstract class TestUtils {
                                  .getName() + ": " + ie.getMessage());
         }
         return baos.toByteArray();
-    } /* getBytes */
+    }
 
     public static String getString(int iLength) {
         StringBuilder sb = new StringBuilder();
@@ -36,7 +36,7 @@ public abstract class TestUtils {
             sb.appendCodePoint(32 + j);
         }
         return sb.toString();
-    } /* getString */
+    }
 
     public static String getString(Reader rdr) {
         StringWriter sw = new StringWriter();
@@ -50,7 +50,7 @@ public abstract class TestUtils {
         }
         return sw.getBuffer()
                  .toString();
-    } /* getString */
+    }
 
     public static String getNString(int iLength) {
         /* generate random bytes in the range [x20,xFF] */
@@ -64,7 +64,7 @@ public abstract class TestUtils {
         }
         /* read them into a string as 1252 */
         return SU.getIsoLatin1String(buf);
-    } /* getNString */
+    }
 
     public static String getNString(Reader rdr) {
         StringWriter sw = new StringWriter();
@@ -78,6 +78,6 @@ public abstract class TestUtils {
         }
         return sw.getBuffer()
                  .toString();
-    } /* getNString */
+    }
 
 }

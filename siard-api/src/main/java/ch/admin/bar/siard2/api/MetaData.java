@@ -45,9 +45,6 @@ public interface MetaData
     void setTemplate(MetaData mdTemplate)
             throws IOException;
   
-  /*====================================================================
-  global properties
-  ====================================================================*/
 
     /**
      * get current version of SIARD format of XML.
@@ -294,9 +291,6 @@ public interface MetaData
      */
     String getDatabaseUser();
   
-  /*====================================================================
-  list properties
-  ====================================================================*/
 
     /**
      * get number of schema meta data entries.
@@ -433,9 +427,6 @@ public interface MetaData
     MetaPrivilege createMetaPrivilege(String sType, String sObject, String sGrantor, String sGrantee)
             throws IOException;
 
-  /*====================================================================
-  methods
-  ====================================================================*/
 
     /**
      * checks whether this is the meta data instance of a valid archive,

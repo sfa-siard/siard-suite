@@ -16,7 +16,6 @@ import java.sql.*;
 import java.text.ParseException;
 import java.util.*;
 
-/*====================================================================*/
 
 /** Db2ResultSetMetaData implements wrapped DB/2 ResultSetMetaData.
  * @author Hartwig Thomas
@@ -261,9 +260,8 @@ public class Db2ResultSetMetaData
         md.setSigned(super.isSigned(iColumn));
         md.setWritable(super.isWritable(iColumn));
         return md;
-    } /* getMetaData */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** retrieve all types that have the given attribute in the given position.
      * @param setTypesMatching the set of all types whose attributes with
@@ -310,9 +308,8 @@ public class Db2ResultSetMetaData
             rs.close();
         }
         return setTypes;
-    } /* getAttrTypes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** retrieve all types whose attributes match the metadata in the list.
      * @param listStruct attribute meta data
@@ -347,9 +344,8 @@ public class Db2ResultSetMetaData
             }
         }
         return setTypes;
-    } /* getStructTypes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped result set to be wrapped.
@@ -478,155 +474,134 @@ public class Db2ResultSetMetaData
                     throw new SQLException("Type matching failed for " + sColumnLabel + "!");
             }
         }
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      */
     @Override
     public int getColumnCount() throws SQLException {
         return _listMetaData.size();
-    } /* getColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public String getCatalogName(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getCatalogName();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public String getSchemaName(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getSchemaName();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public String getTableName(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getTableName();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public String getColumnName(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getColumnName();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public String getColumnLabel(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getColumnLabel();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public int getColumnType(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getColumnType();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public String getColumnTypeName(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getColumnTypeName();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public String getColumnClassName(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getColumnClassName();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public int getColumnDisplaySize(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getColumnDisplaySize();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public int getPrecision(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getPrecision();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public int getScale(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .getScale();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public boolean isAutoIncrement(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isAutoIncrement();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public boolean isCaseSensitive(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isCaseSensitive();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public boolean isCurrency(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isCurrency();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public boolean isDefinitelyWritable(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isDefinitelyWritable();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public int isNullable(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isNullable();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public boolean isReadOnly(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isReadOnly();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public boolean isSearchable(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isSearchable();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public boolean isSigned(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isSigned();
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public boolean isWritable(int iColumn) {
         return _listMetaData.get(iColumn - 1)
                             .isWritable();
     }
-} /* class Db2ResultSetMetaData */
+}

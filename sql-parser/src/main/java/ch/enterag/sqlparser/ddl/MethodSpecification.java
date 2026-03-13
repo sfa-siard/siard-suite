@@ -12,7 +12,6 @@ public class MethodSpecification
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(MethodSpecification.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -74,7 +73,6 @@ public class MethodSpecification
             return MethodSpecification.this;
         }
     }
-    /*==================================================================*/
 
     private MsVisitor _visitor = new MsVisitor();
 
@@ -173,7 +171,6 @@ public class MethodSpecification
         _ncc = ncc;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the method specification.
      * @return the SQL string corresponding to the fields of the method specification.
@@ -205,9 +202,8 @@ public class MethodSpecification
                 sSpecification = sSpecification + sSP + getNullCallClause().getKeywords();
         }
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the method specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -216,9 +212,8 @@ public class MethodSpecification
     public void parse(SqlParser.MethodSpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the method specification from SQL.
      * @param sSql SQL.
@@ -227,9 +222,8 @@ public class MethodSpecification
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().methodSpecification());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a method specification.
      * @param bOverriding true, if it is an OVERRIDING specification.
@@ -265,15 +259,14 @@ public class MethodSpecification
         setDataAccess(da);
         setNullCallClause(ncc);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MethodSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MethodSpecification */
+}

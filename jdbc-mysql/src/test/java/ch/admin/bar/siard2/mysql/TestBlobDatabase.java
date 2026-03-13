@@ -97,13 +97,13 @@ public class TestBlobDatabase {
             drop();
             create();
         }
-    } /* constructor */
+    }
 
     private void drop() {
         deleteTables();
         dropTables();
         dropSchema();
-    } /* drop */
+    }
 
     private void executeDrop(String sSql) {
         try {
@@ -114,34 +114,34 @@ public class TestBlobDatabase {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* executeDrop */
+    }
 
     private void deleteTables() {
         deleteTable(getQualifiedSimpleTable());
-    } /* deleteTables */
+    }
 
     private void deleteTable(QualifiedId qiTable) {
         executeDrop("DELETE FROM " + qiTable.format());
-    } /* deleteTable */
+    }
 
     private void dropTables() {
         dropTable(getQualifiedSimpleTable());
-    } /* dropTables */
+    }
 
     private void dropTable(QualifiedId qiTable) {
         executeDrop("DROP TABLE " + qiTable.format());
-    } /* dropTable */
+    }
 
     private void dropSchema() {
         executeDrop("DROP SCHEMA " + SqlLiterals.formatId(_sTEST_SCHEMA));
-    } /* dropSchema */
+    }
 
     private void create()
             throws SQLException, IOException {
         createSchema();
         createTables();
         insertTables();
-    } /* create */
+    }
 
     private void executeCreate(String sSql)
             throws SQLException {
@@ -149,19 +149,19 @@ public class TestBlobDatabase {
         stmt.executeUpdate(sSql);
         stmt.close();
         _conn.commit();
-    } /* executeCreate */
+    }
 
     private void createSchema()
             throws SQLException {
         SchemaId sid = new SchemaId(null, _sTEST_SCHEMA);
         executeCreate("CREATE SCHEMA " + sid.format());
-    } /* createSchema */
+    }
 
     private void createTables()
             throws SQLException {
         createTable(getQualifiedSimpleTable(), _listCdSimple,
                     Arrays.asList(new String[]{_listCdSimple.get(_iPrimarySimple).getName()}));
-    } /* createTables */
+    }
 
     private void createTable(QualifiedId qiTable, List<TestColumnDefinition> listCd,
                              List<String> listPrimary)
@@ -186,13 +186,13 @@ public class TestBlobDatabase {
         }
         sbSql.append("\r\n)");
         executeCreate(sbSql.toString());
-    } /* createTable */
+    }
 
     private void insertTables()
             throws SQLException, IOException {
         for (int iRecord = 0; (iRecord < _listPngs.size()) && (iRecord < _listFlacs.size()); iRecord++)
             insertTableRecord(getQualifiedSimpleTable(), _listCdSimple, iRecord);
-    } /* insertTables */
+    }
 
     private void insertTableRecord(QualifiedId qiTable, List<TestColumnDefinition> listCd, int iRecord)
             throws SQLException, IOException {
@@ -238,6 +238,6 @@ public class TestBlobDatabase {
         assertSame("Insert failed!", 1, iResult);
         pstmt.close();
         _conn.commit();
-    } /* insertTable */
+    }
 
-} /* TestBlobDatabase */
+}

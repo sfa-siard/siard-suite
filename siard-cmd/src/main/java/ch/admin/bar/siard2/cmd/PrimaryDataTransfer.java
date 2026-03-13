@@ -23,7 +23,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-/*====================================================================*/
 
 /** Opens a record set to a database for up- or download.
  @author Hartwig Thomas
@@ -57,7 +56,6 @@ public class PrimaryDataTransfer {
         return _bSupportsUdts;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** issue a SELECT query for all fields of the table.
      * @param table table.
@@ -125,9 +123,8 @@ public class PrimaryDataTransfer {
         LOG.debug("Data from table '{}.{}' successfully loaded", qiTable.getSchema(), qiTable.getName());
 
         return rs;
-    } /* openTable */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param conn database connection.
@@ -145,6 +142,6 @@ public class PrimaryDataTransfer {
         _bSupportsArrays = bSupportsArrays;
         _bSupportsDistincts = bSupportsDistincts;
         _bSupportsUdts = bSupportsUdts;
-    } /* constructor PrimaryDataTransfer */
+    }
 
-} /* class PrimaryDataTransfer */
+}

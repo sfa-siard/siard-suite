@@ -19,7 +19,6 @@ public class NumericValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(NumericValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -62,7 +61,6 @@ public class NumericValueExpression
             return NumericValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private NveVisitor _visitor = new NveVisitor();
 
@@ -150,7 +148,6 @@ public class NumericValueExpression
         _nvf = nvf;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the numeric value expression.
      * @return the SQL string corresponding to the fields of the numeric
@@ -175,9 +172,8 @@ public class NumericValueExpression
         } else if (getNumericValueFunction() != null)
             sExpression = getNumericValueFunction().format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the data type of the numeric value expression from the context
      * of a query.
@@ -332,9 +328,8 @@ public class NumericValueExpression
         else if (getNumericValueFunction() != null)
             dt = getNumericValueFunction().getDataType(ss);
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the operator on the two numeric arguments.
      * @param ao additive operator.
@@ -394,9 +389,8 @@ public class NumericValueExpression
             }
         }
         return oValue;
-    } /* evaluateOperator */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the effects of the sign on a numeric value.
      * @param sign sign.
@@ -414,9 +408,8 @@ public class NumericValueExpression
             }
         }
         return oValue;
-    } /* evaluateSign */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate an integer numeric value.
      * @param oValue numeric value
@@ -431,9 +424,8 @@ public class NumericValueExpression
         else
             throw new IllegalArgumentException("Numeric value could not be cast to int!");
         return iValue;
-    } /* evaluateInteger */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a numeric value expression from its components.
      * @return numeric value (Double or BigDecimal).
@@ -455,9 +447,8 @@ public class NumericValueExpression
         else if (getNumericValueFunction() != null)
             oValue = oNumericValue;
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a numeric value expression against the context of a query.
      * @param ss sql statement.
@@ -483,9 +474,8 @@ public class NumericValueExpression
             oNumericValue = getNumericValueFunction().evaluate(ss, bAggregated);
         Object oValue = evaluate(oFirstOperand, oSecondOperand, oParenthesized, oValuePrimary, oNumericValue);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a numeric value expression to
      * their initial value.
@@ -510,9 +500,8 @@ public class NumericValueExpression
             oNumericValue = getNumericValueFunction().resetAggregates(ss);
         Object oValue = evaluate(oFirstOperand, oSecondOperand, oParenthesized, oValuePrimary, oNumericValue);
         return oValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the numeric value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -521,9 +510,8 @@ public class NumericValueExpression
     public void parse(SqlParser.NumericValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the numeric value expression from SQL.
      * @param sSql SQL.
@@ -532,9 +520,8 @@ public class NumericValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().numericValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a numeric value expression.
      * @param ao additive operator (or null).
@@ -565,15 +552,14 @@ public class NumericValueExpression
         setValueExpressionPrimary(vep);
         setNumericValueFunction(nvf);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public NumericValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class NumericValueExpression */
+}

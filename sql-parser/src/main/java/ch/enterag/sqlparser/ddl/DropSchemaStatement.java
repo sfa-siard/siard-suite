@@ -14,7 +14,6 @@ public class DropSchemaStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DropSchemaStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -31,7 +30,6 @@ public class DropSchemaStatement
             return DropSchemaStatement.this;
         }
     }
-    /*==================================================================*/
 
     private DssVisitor _visitor = new DssVisitor();
 
@@ -59,7 +57,6 @@ public class DropSchemaStatement
         _db = db;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the drop schema statement.
      * @return the SQL string corresponding to the fields of the drop schema statement.
@@ -69,9 +66,8 @@ public class DropSchemaStatement
         String sStatement = K.DROP.getKeyword() + sSP + K.SCHEMA.getKeyword() + sSP +
                 getSchemaName().format() + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop schema statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -80,9 +76,8 @@ public class DropSchemaStatement
     public void parse(SqlParser.DropSchemaStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop schema statement from SQL.
      * @param sSql SQL.
@@ -91,9 +86,8 @@ public class DropSchemaStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dropSchemaStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a drop schema statement.
      * @param sidSchemaName name of schema to be dropped.
@@ -104,15 +98,14 @@ public class DropSchemaStatement
         setSchemaName(sidSchemaName);
         setDropBehavior(db);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DropSchemaStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DropSchemaStatement */
+}

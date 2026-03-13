@@ -74,7 +74,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
             getStatement().getConnection()
                           .rollback();
         }
-    } /* clean */
+    }
 
     @BeforeClass
     public static void setUpClass() {
@@ -95,7 +95,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     @Before
     public void setUp() {
@@ -112,9 +112,8 @@ public class MsSqlStatementTester extends BaseStatementTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return unwrapped MSSQL DataSource
      */
@@ -126,7 +125,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
             fail(EU.getExceptionMessage(se));
         }
         return ssstmt;
-    } /* getUnwrapped */
+    }
 
     @Test
     public void testClass() {
@@ -142,7 +141,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testClass */
+    }
 
     @Test
     @Override
@@ -162,7 +161,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate */
+    }
 
     @Test
     @Override
@@ -184,7 +183,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate_String_int */
+    }
 
     @Test
     @Override
@@ -206,7 +205,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate_String_AInt */
+    }
 
     @Test
     @Override
@@ -228,7 +227,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate */
+    }
 
     @Test
     @Override
@@ -241,7 +240,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testGetGeneratedKeys */
+    }
 
     @Test
     @Override
@@ -256,7 +255,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute_String_AInt */
+    }
 
     @Test
     @Override
@@ -271,7 +270,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute_String_AString */
+    }
 
     @Test
     public void testExecuteQuery() {
@@ -283,7 +282,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecuteQuery */
+    }
 
     @Test
     public void testExecuteSelectSizes() {
@@ -319,7 +318,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testExecuteSelectSize */
+    }
 
     @Test
     public void testDropTableCascade() {
@@ -376,4 +375,4 @@ public class MsSqlStatementTester extends BaseStatementTester {
     }
 
 
-} /* class MsSqlStatementTester */
+}

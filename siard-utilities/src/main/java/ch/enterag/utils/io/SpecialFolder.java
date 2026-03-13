@@ -23,29 +23,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/*====================================================================*/
 
 /** SpecialFolder is an abstract class that statically
  implements a number of special folders.
  @author Hartwig Thomas
  */
 public abstract class SpecialFolder {
-    /*====================================================================
-    (private) constants
-    ====================================================================*/
     private static final String sJAVA_SETTINGS_DIRECTORY = ".java";
     private static final String sDATA_DIRECTORY = "data";
     private static final String sAPPLICATIONS_DIRECTORY = "applications";
     private static final String sTEMP_DIRECTORY = "temp";
 	
-  /*====================================================================
-  (private) data members
-  ====================================================================*/
-
-  /*====================================================================
-  methods
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** returns the JAR file which contains the given class or the
      * root folder for the class.
@@ -99,9 +87,8 @@ public abstract class SpecialFolder {
         }
         // catch(ClassNotFoundException cnfe) { System.err.println(EU.getExceptionMessage(cnfe)); }
         return fileJar;
-    } /* getJarFromClass */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the JAR file which contains the given class or the root
      * folder for the class.
@@ -113,9 +100,8 @@ public abstract class SpecialFolder {
     public static File getJarFromClass(Class<?> classAnchor, boolean bReport) {
         return getJarFromClass("/" + classAnchor.getName()
                                                 .replaceAll("\\.", "/") + ".class", bReport);
-    } /* getJarFromClass */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns JAR file which contains the class with the main() method
      * that started the program.
@@ -124,9 +110,8 @@ public abstract class SpecialFolder {
      */
     public static File getMainJar() {
         return getJarFromClass(Threads.getMainClass(Threads.getMainThread()), false);
-    } /* getMainJar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns JAR file which contains the first class in the current thread.
      * @return File for Jar containing class or folder containing the
@@ -134,9 +119,8 @@ public abstract class SpecialFolder {
      */
     public static File getCurrentMainJar() {
         return getJarFromClass(Threads.getMainClass(Thread.currentThread()), false);
-    } /* getMainCurrentJar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** search for given file name in the folders of the PATH environment variable.
      * @param sFile file name.
@@ -158,9 +142,8 @@ public abstract class SpecialFolder {
             }
         }
         return fileFound;
-    } /* findInPath */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the user's home directory.
      * For Windows: C:\Users\&lt;user&gt;
@@ -170,9 +153,8 @@ public abstract class SpecialFolder {
     public static String getUserHome() {
         return (String) System.getProperties()
                               .get("user.home");
-    } /* getUserHome */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the Desktop folder in the user's home directory.
      * For Windows: C:\Users\&lt;user&gt;\Desktop
@@ -182,9 +164,8 @@ public abstract class SpecialFolder {
     public static String getDesktopFolder() {
         File fileHome = new File(getUserHome());
         return fileHome.getAbsolutePath() + File.separator + "Desktop";
-    } /* getDesktopFolder */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the data directory under the user's home directory,
      *  creating it if it did not exist.
@@ -204,9 +185,8 @@ public abstract class SpecialFolder {
         if (!fileUserAppHome.exists())
             fileUserAppHome.mkdirs();
         return sUserAppHome;
-    } /* getUserDataHome */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** removes the data directory under the user's home directory,
      *  if it is empty.
@@ -223,9 +203,8 @@ public abstract class SpecialFolder {
             System.err.println(ie.getClass()
                                  .getName() + ": " + ie.getMessage());
         }
-    } /* removeUserDataHome */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the local directory under the user's home directory,
      *  creating it if it did not exist.
@@ -245,9 +224,8 @@ public abstract class SpecialFolder {
         if (!fileUserLocalHome.exists())
             fileUserLocalHome.mkdirs();
         return sUserLocalHome;
-    } /* getUserLocalHome */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** removes the local directory under the user's home directory,
      *  if it is empty.
@@ -264,9 +242,8 @@ public abstract class SpecialFolder {
             System.err.println(ie.getClass()
                                  .getName() + ": " + ie.getMessage());
         }
-    } /* removeUserLocalHome */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the temp directory for the user, creating it if it did
      * not exist.
@@ -283,9 +260,8 @@ public abstract class SpecialFolder {
         if (!fileTemp.exists())
             fileTemp.mkdirs();
         return sTemp;
-    } /* getUserLocalHome */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the JAVA settings directory under the user's home directory,
      *  creating it if it did not exist.
@@ -300,6 +276,6 @@ public abstract class SpecialFolder {
         if (!fileUserJavaSettings.exists())
             fileUserJavaSettings.mkdir();
         return sUserJavaSettings;
-    } /* getUserJavaSettings */
+    }
 
-} /* class SpecialFolder */
+}

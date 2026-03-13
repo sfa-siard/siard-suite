@@ -34,7 +34,7 @@ public abstract class BaseStruct
      */
     public BaseStruct(Struct structWrapped) {
         _structWrapped = structWrapped;
-    } /* constructor BaseStruct */
+    }
 
     /**
      * {@inheritDoc}

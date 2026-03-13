@@ -19,7 +19,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.DropTableStatement;
 import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 
-/*====================================================================*/
 
 /** OracleDropTableStatement implements the formatting of DROP
  * TABLE statements
@@ -27,7 +26,6 @@ import ch.enterag.sqlparser.ddl.enums.DropBehavior;
  */
 public class OracleDropTableStatement
         extends DropTableStatement {
-    /*------------------------------------------------------------------*/
 
     /**
      * format the drop schema statement
@@ -42,14 +40,13 @@ public class OracleDropTableStatement
             sStatement += sSP + K.CASCADE.getKeyword() + sSP + K.CONSTRAINTS.getKeyword();
 
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleDropTableStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 }

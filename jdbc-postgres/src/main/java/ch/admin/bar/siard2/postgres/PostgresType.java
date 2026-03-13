@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-/*====================================================================*/
 
 /** PostgresType enum lists all native predefined Postgres data types.
  * See also: https://www.postgresql.org/docs/11/datatype.html
@@ -103,7 +102,7 @@ public enum PostgresType {
         _sKeyword = sKeyword;
         _setAliases = new HashSet<String>(Arrays.asList(asAliases));
         _pt = pt;
-    } /* constructor */
+    }
 
     public static PostgresType getByKeyword(String sKeyword) {
         PostgresType pgt = null;
@@ -114,7 +113,7 @@ public enum PostgresType {
                 pgt = dt;
         }
         return pgt;
-    } /* getByKeyword */
+    }
 
     public static PostgresType getByPreType(PreType pt) {
         PostgresType pgt = null;
@@ -179,5 +178,5 @@ public enum PostgresType {
                 break;
         }
         return pgt;
-    } /* getByPreType */
-} /* enum PostgresType */
+    }
+}

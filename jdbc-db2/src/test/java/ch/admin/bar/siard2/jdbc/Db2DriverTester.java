@@ -39,7 +39,7 @@ public class Db2DriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @After
     public void tearDown() {
@@ -52,18 +52,18 @@ public class Db2DriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testWrapping() {
         assertSame("Registration of driver wrapper failed!", Db2Driver.class, _driver.getClass());
         assertSame("Choice of connection wrapper failed!", Db2Connection.class, _conn.getClass());
-    } /* testWrapping */
+    }
 
     @Test
     public void testCompliant() {
         assertSame("DB/2 driver not JDBC compliant!", true, _driver.jdbcCompliant());
-    } /* testCompliant */
+    }
 
     @Test
     public void testAcceptsURL() {
@@ -74,7 +74,7 @@ public class Db2DriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testAcceptsURL */
+    }
 
     @Test
     public void testVersion() {
@@ -82,7 +82,7 @@ public class Db2DriverTester {
         int iMinorVersion = _driver.getMinorVersion();
         String sVersion = String.valueOf(iMajorVersion) + "." + String.valueOf(iMinorVersion);
         assertEquals("Wrong DB/2 version " + sVersion + " found!", "4.31", sVersion);
-    } /* testVersion */
+    }
 
     @Test
     public void testDriverProperties() {
@@ -95,6 +95,6 @@ public class Db2DriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testDriverProperties */
+    }
 
 }

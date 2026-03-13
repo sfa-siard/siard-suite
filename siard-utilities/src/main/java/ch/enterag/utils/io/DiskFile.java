@@ -17,15 +17,11 @@ import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/*====================================================================*/
 
 /** DiskFile implements a number of useful methods for RandomAccessFile.
  @author Hartwig Thomas
  */
 public class DiskFile extends RandomAccessFile {
-  /*====================================================================
-  constants
-  ====================================================================*/
     /** read mode */
     private static final String sMODE_READ = "r";
     /** read/write mode */
@@ -33,17 +29,11 @@ public class DiskFile extends RandomAccessFile {
     /** size of I/O buffer */
     private static final int iBUFFER_SIZE = 4096;
 	
-  /*====================================================================
-  (private) data members
-  ====================================================================*/
     /** file name */
     private String m_sFileName = null;
     /** read only iFlags */
     private boolean m_bReadOnly = false;
 	
-  /*====================================================================
-  Accessors
-  ====================================================================*/
 
     /** @return file name */
     public String getFileName() {
@@ -55,10 +45,6 @@ public class DiskFile extends RandomAccessFile {
         return m_bReadOnly;
     }
   
-  /*====================================================================
-  Constructors
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** opens a disk file for reading (mode MODE_READ) or writing/updating
      (mode MODE_READ_WRITE).
@@ -75,9 +61,8 @@ public class DiskFile extends RandomAccessFile {
         File file = new File(sFileName);
         m_sFileName = file.getAbsolutePath();
         m_bReadOnly = bReadOnly;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** opens a disk file for reading (mode MODE_READ) or writing/updating
      (mode MODE_READ_WRITE).
@@ -93,9 +78,8 @@ public class DiskFile extends RandomAccessFile {
         super(file, bReadOnly ? sMODE_READ : sMODE_READ_WRITE);
         m_sFileName = file.getAbsolutePath();
         m_bReadOnly = bReadOnly;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** opens a disk file for writing/updating.
      @param sFileName name of file to be opened.
@@ -107,9 +91,8 @@ public class DiskFile extends RandomAccessFile {
         super(sFileName, sMODE_READ_WRITE);
         File file = new File(sFileName);
         m_sFileName = file.getAbsolutePath();
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** opens a disk file for reading (mode MODE_READ) or writing/updating
      (mode MODE_READ_WRITE).
@@ -121,9 +104,8 @@ public class DiskFile extends RandomAccessFile {
             throws FileNotFoundException {
         super(file, sMODE_READ_WRITE);
         m_sFileName = file.getAbsolutePath();
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** digest returns a message digest for the bytes from lStart to lEnd
      as a hex string prefixed by the algorithm.
@@ -162,9 +144,8 @@ public class DiskFile extends RandomAccessFile {
         }
         seek(lFilePointer);
         return bufDigest;
-    } /* digest */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** moves shifts the whole file from lSource to lDestination, setting
      the file pointer to the final write position (new end of file)
@@ -220,9 +201,8 @@ public class DiskFile extends RandomAccessFile {
         }
         setLength(getFilePointer());
         return lMoved;
-    } /* move */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the last position where the byte pattern is encountered
      starting at the current file pointer position or -1 if the byte pattern
@@ -277,6 +257,6 @@ public class DiskFile extends RandomAccessFile {
             seek(lFilePointer);
         }
         return lLastIndex;
-    } /* lastIndexOf */
+    }
 
-} /* class DiskFile */
+}

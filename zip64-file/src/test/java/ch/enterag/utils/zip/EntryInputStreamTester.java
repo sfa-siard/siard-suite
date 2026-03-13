@@ -35,7 +35,6 @@ import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-/*====================================================================*/
 
 /** Tests EntryInputStream.
  @author Hartwig Thomas
@@ -56,7 +55,6 @@ public class EntryInputStreamTester {
     /** temp directory */
     private final static String sTEMP_DIRECTORY = "tmp" + File.separator + "test";
 
-    /*------------------------------------------------------------------*/
 
     /** create file of moderate size.
      * @param fileModerate file to be created.
@@ -79,7 +77,7 @@ public class EntryInputStreamTester {
             fos.write(buffer);
         }
         fos.close();
-    } /* createModerate */
+    }
 
     private void zipPkZip(File fileFolderUnzip, File fileFileZip) {
         /* use pkzipc to create zip file in zip directory */
@@ -106,7 +104,7 @@ public class EntryInputStreamTester {
         } catch (InterruptedException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* zipPkZip */
+    }
 
     private void zipInfoZip(File fileFolderUnzip, File fileFileZip) {
         /* use Info-ZIP zip.exe to create zip file in zip directory */
@@ -170,7 +168,6 @@ public class EntryInputStreamTester {
         }
     }
 
-    /*------------------------------------------------------------------*/
   /* (non-Javadoc)
    @see junit.framework.TestCase#setUp()
    */
@@ -199,15 +196,14 @@ public class EntryInputStreamTester {
         else
             zip64Zip(fileTemp, fileZip);
         m_sZipFile = fileZip.getAbsolutePath();
-    } /* setUp */
+    }
 
-    /*------------------------------------------------------------------*/
   /* (non-Javadoc)
    @see junit.framework.TestCase#tearDown()
    */
     @AfterEach
     public void tearDown() throws Exception {
-    } /* tearDown */
+    }
 
     /**
      * Test method for {@link ch.enterag.utils.zip.Zip64File#openEntryInputStream(java.lang.String)}.
@@ -227,7 +223,7 @@ public class EntryInputStreamTester {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
         }
-    } /* testEntryInputStream */
+    }
 
     /**
      * Test method for {@link ch.enterag.utils.zip.EntryInputStream#available()}.
@@ -250,7 +246,7 @@ public class EntryInputStreamTester {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
         }
-    } /* testAvailable */
+    }
 
     /**
      * Test method for {@link ch.enterag.utils.zip.EntryInputStream#read(byte[], int, int)}.
@@ -277,7 +273,7 @@ public class EntryInputStreamTester {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
         }
-    } /* testReadByteArrayIntInt */
+    }
 
     /**
      * Test method for {@link ch.enterag.utils.zip.EntryInputStream#read(byte[])}.
@@ -311,7 +307,7 @@ public class EntryInputStreamTester {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
         }
-    } /* testReadByteArray */
+    }
 
     /**
      * Test method for {@link ch.enterag.utils.zip.EntryInputStream#read()}.
@@ -339,7 +335,7 @@ public class EntryInputStreamTester {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
         }
-    } /* testRead */
+    }
 
     /**
      * Test method for {@link ch.enterag.utils.zip.EntryInputStream#skip(long)}.
@@ -373,6 +369,6 @@ public class EntryInputStreamTester {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
         }
-    } /* testSkip */
+    }
 
-} /* class EntryInputStreamTester */
+}

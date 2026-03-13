@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*===================================================================*/
 
 /**
  * This class parses the command line and makes the arguments

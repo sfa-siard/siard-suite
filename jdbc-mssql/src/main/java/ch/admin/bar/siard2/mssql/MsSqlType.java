@@ -59,5 +59,5 @@ public enum MsSqlType {
                 mstResult = mst;
         }
         return mstResult;
-    } /* getBySystemTypeId */
-} /* MsSqlType */
+    }
+}

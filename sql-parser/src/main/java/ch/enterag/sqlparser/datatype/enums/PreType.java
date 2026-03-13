@@ -72,7 +72,7 @@ public enum PreType {
         _sKeyword = sKeyword;
         _setAliases = new HashSet<String>(Arrays.asList(asAliases));
         _iSqlType = iSqlType;
-    } /* constructor */
+    }
 
     public static PreType getBySqlType(int iSqlType) {
         PreType datatype = null;
@@ -82,7 +82,7 @@ public enum PreType {
                 datatype = dt;
         }
         return datatype;
-    } /* getBySqlType */
+    }
 
     public static PreType getByKeyword(String sKeyword) {
         PreType datatype = null;
@@ -94,5 +94,5 @@ public enum PreType {
                 datatype = dt;
         }
         return datatype;
-    } /* getByKeyword */
+    }
 }

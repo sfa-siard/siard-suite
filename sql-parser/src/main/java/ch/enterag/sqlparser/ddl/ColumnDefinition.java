@@ -17,7 +17,6 @@ public class ColumnDefinition
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(ColumnDefinition.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -71,7 +70,6 @@ public class ColumnDefinition
         }
     }
 
-    /*==================================================================*/
     public static final int iUNDEFINED = -1;
 
     private CdVisitor _visitor = new CdVisitor();
@@ -150,7 +148,6 @@ public class ColumnDefinition
         _ccd = ccd;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the column definition.
      * @return the SQL string corresponding to the fields of the column definition.
@@ -171,9 +168,8 @@ public class ColumnDefinition
         if (getColumnConstraintDefinition() != null)
             sDefinition = sDefinition + sSP + getColumnConstraintDefinition().format();
         return sDefinition;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the column definition from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -182,9 +178,8 @@ public class ColumnDefinition
     public void parse(SqlParser.ColumnDefinitionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the column definition from SQL.
      * @param sSql SQL.
@@ -193,9 +188,8 @@ public class ColumnDefinition
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().columnDefinition());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a column definition.
      * @param idColumnName column name (not null!).
@@ -220,9 +214,8 @@ public class ColumnDefinition
         setDefaultOption(sDefaultOption);
         setColumnConstraintDefinition(ccd);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a column definition.
      * @param idColumnName column name (not null!).
@@ -235,15 +228,14 @@ public class ColumnDefinition
         setColumnName(idColumnName);
         setDataType(dt);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public ColumnDefinition(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class ColumnDefinition */
+}

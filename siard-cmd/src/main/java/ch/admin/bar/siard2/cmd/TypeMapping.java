@@ -29,10 +29,10 @@ public class TypeMapping extends Mapping {
             listAttributes.add(ma.getName());
         }
         _mapAttributes = getDisambiguated(listAttributes, iMaxColumnNameLength);
-    } /* constructor */
+    }
 
     public static TypeMapping newInstance(String sMappedTypeName, MetaType mt, int iMaxColumnNameLength) {
         return new TypeMapping(sMappedTypeName, mt, iMaxColumnNameLength);
-    } /* newInstance */
+    }
 
-} /* class TypeMapping */
+}

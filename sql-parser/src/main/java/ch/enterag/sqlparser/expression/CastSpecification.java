@@ -13,7 +13,6 @@ public class CastSpecification
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CastSpecification.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -40,7 +39,6 @@ public class CastSpecification
             return CastSpecification.this;
         }
     }
-    /*==================================================================*/
 
     private CeVisitor _visitor = new CeVisitor();
 
@@ -98,7 +96,6 @@ public class CastSpecification
         _dt = dt;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the cast specification.
      * @return the SQL string corresponding to the fields of the cast specification.
@@ -117,9 +114,8 @@ public class CastSpecification
         sSpecification = sSpecification + sSP + K.AS.getKeyword() + sSP +
                 getDataType().format() + sRIGHT_PAREN;
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the cast specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -128,9 +124,8 @@ public class CastSpecification
     public void parse(SqlParser.CastSpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the cast specification from SQL.
      * @param sSql SQL.
@@ -139,9 +134,8 @@ public class CastSpecification
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().castSpecification());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a cast specification.
      * @param veCastOperand cast operand.
@@ -163,15 +157,14 @@ public class CastSpecification
         setEmptyMultisetCast(bEmptyMultisetCast);
         setDataType(dt);
         _il.exit();
-    } /* initalize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CastSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CastSpecification */
+}

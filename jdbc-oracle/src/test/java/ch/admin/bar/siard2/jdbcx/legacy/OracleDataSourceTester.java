@@ -30,7 +30,7 @@ public class OracleDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @After
     public void tearDown() {
@@ -41,7 +41,7 @@ public class OracleDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testConnection() {
@@ -54,7 +54,7 @@ public class OracleDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testConnection */
+    }
 
     @Test
     public void testWrapper() {
@@ -66,7 +66,7 @@ public class OracleDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testWrapper */
+    }
 
 
     @Test
@@ -78,5 +78,5 @@ public class OracleDataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testLoginTimeout */
+    }
 }

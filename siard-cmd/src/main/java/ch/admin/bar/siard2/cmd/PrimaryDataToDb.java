@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-/*====================================================================*/
 
 /** Transfers primary data from SIARD files to databases.
  @author Hartwig Thomas
@@ -40,7 +39,6 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
     private long _lRecordsTotal = -1;
     private long _lRecordsPercent = -1;
 
-    /*------------------------------------------------------------------*/
 
     /** increment the number or records uploaded, issuing a notification,
      * when a percent is reached.
@@ -51,7 +49,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             int iPercent = (int) ((100 * _lRecordsUploaded) / _lRecordsTotal);
             _progress.notifyProgress(iPercent);
         }
-    } /* incUploaded */
+    }
 
     /** check if cancel was requested.
      * @return true, if cancel was requested.
@@ -71,7 +69,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             wr.write(cbuf, 0, iRead);
         rdr.close();
         wr.close();
-    } /* copyFromReaderToWriter */
+    }
 
     private void copyFromInputToOutput(InputStream is, OutputStream os)
             throws IOException {
@@ -80,7 +78,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             os.write(buf, 0, iRead);
         is.close();
         os.close();
-    } /* copyFromInputToOutput */
+    }
 
     private void freeResources(Set<Object> setResources)
             throws SQLException {
@@ -97,7 +95,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             else if (oResource instanceof Array)
                 ((Array) oResource).free();
         }
-    } /* freeResources */
+    }
 
     public void addCandidateKeys(Connection conn, MetaTable mt)
             throws SQLException {
@@ -132,7 +130,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
                           tm.getMappedTableName());
             }
         }
-    } /* addCandidateKeys */
+    }
 
     public void addForeignKeys(Connection conn, MetaTable mt)
             throws SQLException {
@@ -178,7 +176,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
                           tm.getMappedTableName());
             }
         }
-    } /* addForeignKeys */
+    }
 
     private void enableConstraints(MetaSchema ms) {
         for (int iTable = 0; (iTable < ms.getMetaTables()) && (!cancelRequested()); iTable++) {
@@ -194,9 +192,8 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
                 System.err.println(EU.getExceptionMessage(se));
             }
         }
-    }  /* enableConstraints */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** try to enable all table constraints.
      * displays warnings on failure but continues.
@@ -208,9 +205,8 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             MetaSchema ms = md.getMetaSchema(iSchema);
             enableConstraints(ms);
         }
-    } /* enableConstraints */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the value of the Cell or Field using an appropriate type.
      * @param value Cell or Field instance.
@@ -325,7 +321,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
                         o = obj;
                         break;
                     }
-                } /* switch */
+                }
             } else if (iCardinality >= 0) {
                 Object[] aoValues = new Object[value.getElements()];
                 // collect values
@@ -352,9 +348,8 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             }
         }
         return o;
-    } /* getValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** put primary data from a record to the result set.
      * @param record record to be filled.
@@ -375,11 +370,10 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
                 Object oValue = getValue(value, (ch.enterag.utils.jdbc.BaseConnection) rs.getStatement()
                                                                                          .getConnection(), setResources);
                 rs.updateObject(iValue + 1, oValue);
-            } /* if not NULL */
-        } /* loop over values */
-    } /* putRecord */
+            }
+        }
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** upload primary data of a table using a SELECT query for all fields.
      * @param table table.
@@ -429,9 +423,8 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
         rd.close();
         _conn.commit();
         LOG.debug("Records of table '{}.{}' successfully uploaded", qiTable.getSchema(), qiTable.getName());
-    } /* putTable */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** upload primary data of a schema.
      * @param schema schema
@@ -449,9 +442,8 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
         _conn.commit();
 
         LOG.debug("Records of schema '{}' successfully uploaded", ms.getName());
-    } /* putSchema */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** upload primary data.
      * @throws IOException if an I/O error occurred.
@@ -490,9 +482,8 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
         _conn.commit();
 
         LOG.info("Primary data upload finished");
-    } /* upload */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param conn database connection.
@@ -508,9 +499,8 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             throws SQLException {
         super(conn, archive, am, bSupportsArrays, bSupportsDistincts, bSupportsUdts);
         conn.setAutoCommit(false);
-    } /* constructor PrimaryDataTransfer */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** factory
      * @param conn database connection.
@@ -526,6 +516,6 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
                                               ArchiveMapping am, boolean bSupportsArrays, boolean bSupportsDistincts, boolean bSupportsUdts)
             throws SQLException {
         return new PrimaryDataToDb(conn, archive, am, bSupportsArrays, bSupportsDistincts, bSupportsUdts);
-    } /* newInstance */
+    }
 
-} /* class PrimaryDataToDb */
+}

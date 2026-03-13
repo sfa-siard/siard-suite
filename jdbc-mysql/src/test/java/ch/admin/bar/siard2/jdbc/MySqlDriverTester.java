@@ -50,7 +50,7 @@ public class MySqlDriverTester {
         } catch (ClassNotFoundException cnfe) {
             fail(EU.getExceptionMessage(cnfe));
         }
-    } /* setUp */
+    }
 
     @After
     public void tearDown() throws Exception {
@@ -64,18 +64,18 @@ public class MySqlDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testWrapping() {
         assertSame("Registration of driver wrapper failed!", MySqlDriver.class, _driver.getClass());
         assertSame("Registration of connection wrapper failed!", MySqlConnection.class, _conn.getClass());
-    } /* testWrapping */
+    }
 
     @Test
     public void testCompliant() {
         assertSame("MySql driver is suddenly JDBC compliant!", false, _driver.jdbcCompliant());
-    } /* testCompliant */
+    }
 
     @Test
     public void testAcceptsURL() {
@@ -86,7 +86,7 @@ public class MySqlDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testAcceptsURL */
+    }
 
     @Test
     public void testVersion() {
@@ -94,7 +94,7 @@ public class MySqlDriverTester {
         int iMinorVersion = _driver.getMinorVersion();
         String sVersion = String.valueOf(iMajorVersion) + "." + String.valueOf(iMinorVersion);
         assertEquals("Wrong MySql version " + sVersion + " found!", "8.3", sVersion);
-    } /* testVersion */
+    }
 
     @Test
     public void testDriverProperties() {
@@ -108,6 +108,6 @@ public class MySqlDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testDriverProperties */
+    }
 
-} /* class MySqlDriverTester */
+}

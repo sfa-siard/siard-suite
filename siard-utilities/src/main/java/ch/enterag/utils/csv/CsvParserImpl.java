@@ -253,7 +253,7 @@ public class CsvParserImpl implements CsvParser {
         for (int i = 0; bWhite && (i < sb.length()); i++)
             bWhite = Character.isWhitespace(sb.charAt(i));
         return bWhite;
-    } /* isWhitespace */
+    }
 
     /**
      * Parses an incoming String and returns an array of elements.

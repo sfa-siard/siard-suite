@@ -33,9 +33,6 @@ public interface MetaCheckConstraint
      */
     boolean isValid();
   
-  /*====================================================================
-  check constraint properties
-  ====================================================================*/
 
     /**
      * get name of check constraint.

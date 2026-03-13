@@ -50,9 +50,8 @@ public class OracleResultSetMetaData extends BaseResultSetMetaData implements Re
     public OracleResultSetMetaData(ResultSetMetaData rsmdWrapped, Connection conn) {
         super(rsmdWrapped);
         _conn = conn;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} fix invalid original class name.
@@ -75,9 +74,8 @@ public class OracleResultSetMetaData extends BaseResultSetMetaData implements Re
             }
         }
         return cls.getName();
-    } /* getColumnClassName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * map java.sql.Types type.
@@ -92,9 +90,8 @@ public class OracleResultSetMetaData extends BaseResultSetMetaData implements Re
                 _conn,
                 super.getCatalogName(column),
                 super.getSchemaName(column));
-    } /* getColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * map java.sql.Types type.
@@ -109,9 +106,8 @@ public class OracleResultSetMetaData extends BaseResultSetMetaData implements Re
                 _conn,
                 super.getCatalogName(column),
                 super.getSchemaName(column));
-    } /* getColumnSize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * map type name.
@@ -132,6 +128,6 @@ public class OracleResultSetMetaData extends BaseResultSetMetaData implements Re
                     super.getCatalogName(column),
                     super.getSchemaName(column));
         return sTypeName;
-    } /* getColumnTypeName */
+    }
 
-} /* class OracleResultSetMetaData */
+}

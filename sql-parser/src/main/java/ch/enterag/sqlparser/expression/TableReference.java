@@ -18,7 +18,6 @@ public class TableReference
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(TableReference.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -83,7 +82,6 @@ public class TableReference
             return TableReference.this;
         }
     }
-    /*==================================================================*/
 
     private TrVisitor _visitor = new TrVisitor();
 
@@ -191,7 +189,6 @@ public class TableReference
         _nveRep = nveRep;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the table reference.
      * @return the SQL string corresponding to the fields of the table reference.
@@ -239,9 +236,8 @@ public class TableReference
         } else
             s = getTablePrimary().format();
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table reference from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -250,9 +246,8 @@ public class TableReference
     public void parse(SqlParser.TableReferenceContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table reference from SQL.
      * @param sSql SQL.
@@ -261,9 +256,8 @@ public class TableReference
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().tableReference());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a table reference.
      * @param tp table primary.
@@ -297,15 +291,14 @@ public class TableReference
         setSampleMethod(sm);
         setNumericValueExpression(nve);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public TableReference(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class TableReference */
+}

@@ -19,7 +19,6 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-/*====================================================================*/
 
 /** Db2DatabaseMetaData implements wrapped DB/2 DatabaseMetaData.
  * @author Hartwig Thomas
@@ -83,32 +82,28 @@ public class Db2DatabaseMetaData
         mapClass.put("DATALINK", Blob.class);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param dmdWrapped database meta data to be wrapped.
      */
     public Db2DatabaseMetaData(DatabaseMetaData dmdWrapped) {
         super(dmdWrapped);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Connection getConnection() throws SQLException {
         return new Db2Connection(super.getConnection());
-    } /* getConnection */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public ResultSet getTypeInfo() throws SQLException {
         return super.getTypeInfo();
-    } /* getTypeInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Use MsSqlMetaColumn for data type translation.
@@ -119,9 +114,8 @@ public class Db2DatabaseMetaData
             throws SQLException {
         return new Db2MetaColumns(super.getColumns(catalog, schemaPattern, tableNamePattern, columnNamePattern),
                                   5, 6, 7, 7);
-    } /* getColumns */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -131,9 +125,8 @@ public class Db2DatabaseMetaData
         return new Db2MetaColumns(
                 super.getProcedureColumns(catalog, schemaPattern, procedureNamePattern, columnNamePattern),
                 6, 7, 8, 9);
-    } /* getProcedureColumns */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -143,9 +136,8 @@ public class Db2DatabaseMetaData
         return new Db2MetaColumns(
                 super.getAttributes(catalog, schemaPattern, typeNamePattern, attributeNamePattern),
                 5, 6, 7, 7);
-    } /* getAttributes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      */
@@ -218,9 +210,8 @@ public class Db2DatabaseMetaData
         rsTables = pstmt.executeQuery();
         rsTables = new Db2ResultSet(rsTables);
         return rsTables;
-    } /* getTables */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Function columns are not reasonably supported by JDBC driver of DB/2:
@@ -232,9 +223,8 @@ public class Db2DatabaseMetaData
     public ResultSet getFunctions(String catalog, String schemaPattern,
                                   String functionNamePattern) throws SQLException {
         throw new SQLFeatureNotSupportedException("Function metadata are nor supported by DB/2!");
-    } /* getFunctions */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Function columns are not reasonably supported by JDBC driver of DB/2:
@@ -247,9 +237,8 @@ public class Db2DatabaseMetaData
                                         String schemaPattern, String functionNamePattern,
                                         String columnNamePattern) throws SQLException {
         throw new SQLFeatureNotSupportedException("Function metadata are nor supported by DB/2!");
-    } /* getFunctionColumns */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -339,6 +328,6 @@ public class Db2DatabaseMetaData
                                         .createStatement();
         ResultSet rs = stmt.executeQuery(sbSql.toString());
         return rs;
-    } /* getUDTs */
+    }
 
-} /* class Db2DatabaseMetaData */
+}

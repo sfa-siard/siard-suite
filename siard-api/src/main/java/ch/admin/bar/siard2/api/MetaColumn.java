@@ -40,9 +40,6 @@ public interface MetaColumn
      */
     boolean isValid();
   
-  /*====================================================================
-  column properties
-  ====================================================================*/
 
     /**
      * set SQL:2008 predefined data type of the column.

@@ -11,7 +11,7 @@ public class OracleValueExpressionPrimary
 
     public static void setArrayType(String sArrayType) {
         _sArrayType = sArrayType;
-    } /* setArrayType */
+    }
 
     @Override
     protected String formatCollectionValueComponents() {
@@ -27,7 +27,7 @@ public class OracleValueExpressionPrimary
             s = s + sRIGHT_PAREN;
         }
         return s;
-    } /* formatCollectionValueComponents */
+    }
 
     @Override
     public String format() {
@@ -57,9 +57,9 @@ public class OracleValueExpressionPrimary
         } else
             sExpression = super.format();
         return sExpression;
-    } /* format */
+    }
 
     public OracleValueExpressionPrimary(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 }
