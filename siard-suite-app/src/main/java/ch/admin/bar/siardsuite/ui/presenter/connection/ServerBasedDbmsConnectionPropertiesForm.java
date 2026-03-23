@@ -16,6 +16,7 @@ import lombok.NonNull;
 import lombok.val;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertiesForm {
@@ -232,7 +233,9 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                         .build();
     }
 
+    private static final Set<String> SCHEMA_SELECTION = Set.of("oracle", "postgresql");
+
     private boolean shouldShowSchemaField(boolean showSchemaField, ServerBasedDbms dbms) {
-        return showSchemaField && "oracle".equals(dbms.getId());
+        return showSchemaField && SCHEMA_SELECTION.contains(dbms.getId());
     }
 }

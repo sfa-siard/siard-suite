@@ -16,6 +16,7 @@ public class SqlScripts {
         public final static String SIARDCMD_31 = "postgres/issues/siardcmd31/case-sensitive-column-names-postgres.sql";
         public static final String SIARDSUITE_128_BIT = "postgres/issues/siardsuite128/bit-types-schema-postgres.sql";
         public static final String SIARDSUITE_128_PRECISION_TYPES = "postgres/issues/siardsuite128/precision-types-schema-postgres.sql";
+        public static final String MULTIPLE_SCHEMAS = "postgres/issues/multiple-schemas/multiple-schemas-postgres.sql";
     }
 
     public static class MySQL {

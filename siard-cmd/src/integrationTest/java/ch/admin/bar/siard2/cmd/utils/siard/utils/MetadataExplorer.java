@@ -3,6 +3,7 @@ package ch.admin.bar.siard2.cmd.utils.siard.utils;
 import ch.admin.bar.siard2.cmd.utils.siard.model.SiardArchive;
 import ch.admin.bar.siard2.cmd.utils.siard.model.header.Metadata;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.*;
+import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedViewId;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -80,5 +81,17 @@ public class MetadataExplorer {
                                        .filter(foreignKey -> foreignKey.getName()
                                                                        .equals(foreignKeyId.getForeignKeyId()))
                                        .findAny());
+    }
+
+    public Metadata.View findByViewId(final QualifiedViewId qualifiedViewId) {
+        return tryFindByViewId(qualifiedViewId)
+                .orElseThrow(() -> new IllegalArgumentException("No view with id " + qualifiedViewId + " found"));
+    }
+
+    public Optional<Metadata.View> tryFindByViewId(final QualifiedViewId qualifiedId) {
+        return tryFindBySchemaId(qualifiedId.getSchemaId())
+                .flatMap(schema -> schema.getViews().stream()
+                        .filter(view -> view.getName().equals(qualifiedId.getViewId()))
+                        .findAny());
     }
 }
