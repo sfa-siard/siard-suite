@@ -1209,16 +1209,19 @@ public class MetaDataFromDb extends MetaDataBase {
      * @throws SQLException if a database error occurred.
      */
     private void ensureSchemasExist(String schemaName) throws IOException, SQLException {
-        if ("%".equals(schemaName)) return;
-        ResultSet rs = _dmd.getSchemas(null, schemaName);
-        while (rs.next()) {
-            String sSchemaName = rs.getString("TABLE_SCHEM");
-            if (_md.getArchive().getSchema(sSchemaName) == null) {
-                _md.getArchive().createSchema(sSchemaName);
-                LOG.debug("Created schema '{}' (no tables found, but may contain views/routines)", sSchemaName);
+        if (schemaName == null || "%".equals(schemaName)) return;
+        try (ResultSet rs = _dmd.getSchemas(null, schemaName)) {
+            while (rs.next()) {
+                String sSchemaName = rs.getString("TABLE_SCHEM");
+                if (_md.getArchive()
+                       .getSchema(sSchemaName) == null) {
+                    _md.getArchive()
+                       .createSchema(sSchemaName);
+                    LOG.debug("Created schema '{}' (no tables found, but may contain views/routines)", sSchemaName);
+                }
             }
+            rs.close();
         }
-        rs.close();
     }
 
     /**
