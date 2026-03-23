@@ -14,7 +14,6 @@ public class DropViewStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DropViewStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -30,8 +29,7 @@ public class DropViewStatement
             setDropBehavior(getDropBehavior(ctx));
             return DropViewStatement.this;
         }
-    } /* class DtsVisitor */
-    /*==================================================================*/
+    }
 
     private DvsVisitor _visitor = new DvsVisitor();
 
@@ -59,7 +57,6 @@ public class DropViewStatement
         _db = db;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the drop view statement.
      * @return the SQL string corresponding to the fields of the drop view statement.
@@ -69,9 +66,8 @@ public class DropViewStatement
         String sStatement = K.DROP.getKeyword() + sSP + K.VIEW.getKeyword() + sSP +
                 getViewName().format() + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop view statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -80,9 +76,8 @@ public class DropViewStatement
     public void parse(SqlParser.DropViewStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop view statement from SQL.
      * @param sSql SQL.
@@ -91,9 +86,8 @@ public class DropViewStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dropViewStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a drop view statement.
      * @param qViewName name of view to be dropped.
@@ -104,15 +98,14 @@ public class DropViewStatement
         setViewName(qViewName);
         setDropBehavior(db);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DropViewStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DropViewStatement */
+}

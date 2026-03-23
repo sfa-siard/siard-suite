@@ -11,7 +11,6 @@ public class DdlStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DdlStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -142,7 +141,6 @@ public class DdlStatement
             return DdlStatement.this;
         }
     }
-    /*==================================================================*/
 
     private DsVisitor _visitor = new DsVisitor();
 
@@ -330,7 +328,6 @@ public class DdlStatement
         _dtrs = dtrs;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the DDL statement.
      * @return the SQL string corresponding to the fields of the DDL statement.
@@ -375,9 +372,8 @@ public class DdlStatement
         else if (getDropTriggerStatement() != null)
             sStatement = getDropTriggerStatement().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the DDL statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -386,9 +382,8 @@ public class DdlStatement
     public void parse(SqlParser.DdlStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the DDL statement from SQL.
      * @param sSql SQL.
@@ -397,9 +392,8 @@ public class DdlStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().ddlStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a DDL statement.
      * Only one parameter not null!
@@ -462,15 +456,14 @@ public class DdlStatement
         setCreateTriggerStatement(ctrs);
         setDropTriggerStatement(dtrs);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DdlStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DdlStatement */
+}

@@ -16,7 +16,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.datatype.IntervalQualifier;
 import ch.enterag.sqlparser.datatype.enums.IntervalField;
 
-/*====================================================================*/
 
 /** PostgresIntervalQualifier implements the interval translation from
  * ISO SQL:2008 to Postgres. 
@@ -24,7 +23,6 @@ import ch.enterag.sqlparser.datatype.enums.IntervalField;
  */
 public class PostgresIntervalQualifier
         extends IntervalQualifier {
-    /*------------------------------------------------------------------*/
 
     /** format the interval qualifier.
      * @return the SQL string corresponding to the fields of the interval
@@ -51,15 +49,14 @@ public class PostgresIntervalQualifier
                 sQualifier = sQualifier + sLEFT_PAREN + String.valueOf(getSecondsDecimals()) + sRIGHT_PAREN;
         }
         return sQualifier;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public PostgresIntervalQualifier(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class PostgresIntervalQualifier */
+}

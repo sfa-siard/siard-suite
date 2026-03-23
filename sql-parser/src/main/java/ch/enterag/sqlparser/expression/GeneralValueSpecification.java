@@ -17,7 +17,6 @@ public class GeneralValueSpecification
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(GeneralValueSpecification.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -49,7 +48,6 @@ public class GeneralValueSpecification
             return GeneralValueSpecification.this;
         }
     }
-    /*==================================================================*/
 
     private GvsVisitor _visitor = new GvsVisitor();
 
@@ -98,7 +96,6 @@ public class GeneralValueSpecification
         _gv = generalValue;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the general value specification.
      * @return the SQL string corresponding to the fields of the general value specification.
@@ -115,9 +112,8 @@ public class GeneralValueSpecification
         else if (getGeneralValue() != null)
             sSpecification = getGeneralValue().getKeywords();
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get the type of the general value from the context of a query.
      * @param ss sql statement.
@@ -132,9 +128,8 @@ public class GeneralValueSpecification
         else
             throw new IllegalArgumentException("Evaluating variables is not supported!");
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the general value against the context of a query.
      * @param ss sql statement.
@@ -151,9 +146,8 @@ public class GeneralValueSpecification
         else
             throw new IllegalArgumentException("Evaluating variables is not supported!");
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the general value specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -162,9 +156,8 @@ public class GeneralValueSpecification
     public void parse(SqlParser.GeneralValueSpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the general value specification from SQL.
      * @param sSql SQL.
@@ -173,9 +166,8 @@ public class GeneralValueSpecification
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().generalValueSpecification());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a general value specification.
      * @param cidVariable variable name.
@@ -195,24 +187,22 @@ public class GeneralValueSpecification
         setColumnOrParameter(idcColumnOrParameter);
         setGeneralValue(gv);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a general value specification.
      * @param idcColumnOrParameter column or parameter name.
      */
     public void initialize(IdChain idcColumnOrParameter) {
         setColumnOrParameter(idcColumnOrParameter);
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public GeneralValueSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class GeneralValueSpecification */
+}

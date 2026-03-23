@@ -17,14 +17,12 @@ import ch.enterag.sqlparser.K;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.CreateTypeStatement;
 
-/*====================================================================*/
 
 /** OracleCreateTypeStatement overrides CreateTypeStatement of SQL parser.
  * @author Simon Jutz
  */
 public class OracleCreateTypeStatement
         extends CreateTypeStatement {
-    /*------------------------------------------------------------------*/
 
     /**
      * format the create type statement
@@ -73,13 +71,12 @@ public class OracleCreateTypeStatement
         return sStatement;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleCreateTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
 }

@@ -50,7 +50,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     @Before
     public void setUp() throws SQLException {
@@ -62,12 +62,12 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         conn.setAutoCommit(false);
         _dmdDb2 = (Db2DatabaseMetaData) conn.getMetaData();
         setDatabaseMetaData(_dmdDb2);
-    } /* setUp */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong database meta data class!", Db2DatabaseMetaData.class, _dmdDb2.getClass());
-    } /* testClass */
+    }
 
     @Test
     public void testGetPseudoColumns() {
@@ -197,7 +197,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnsDb2Simple */
+    }
 
     @Test
     public void testGetColumnsSqlSimple() {
@@ -313,7 +313,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnsDb2Simple */
+    }
 
     @Test
     public void testGetColumnsDb2Complex() {
@@ -442,7 +442,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnsDb2Complex */
+    }
 
     @Test
     public void testGetColumnsSqlComplex() {
@@ -571,7 +571,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnsSqlComplex */
+    }
 
     @Test
     public void testGetUDTsSample() {

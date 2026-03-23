@@ -21,7 +21,6 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** MsSqlMetaColumns implements the type translation from MSSQL ot ISO SQL.
  * N.B.: column TYPE_NAME (6) has the original MSSQL data type name.
@@ -99,7 +98,6 @@ public class MsSqlMetaColumns
     private int _iLength = -1;
     private int _iScale = -1;
 
-    /*------------------------------------------------------------------*/
     static int getDataType(int iType, String sTypeName,
                            Connection conn, String sCatalogName, String sSchemaName)
             throws SQLException {
@@ -132,9 +130,8 @@ public class MsSqlMetaColumns
         }
         _il.exit(SqlTypes.getTypeName(iType));
         return iType;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
     static long getColumnSize(int iType, String sTypeName,
                               long lColumnSize, Connection conn, String sCatalogName,
                               String sSchemaName)
@@ -170,9 +167,8 @@ public class MsSqlMetaColumns
          }
          ***/
         return lColumnSize;
-    } /* getColumnSize */
+    }
 
-    /*------------------------------------------------------------------*/
     static String getTypeName(String sTypeName, int iColumnSize, int iDecimals,
                               Connection conn, String sCatalogName, String sSchemaName)
             throws SQLException {
@@ -232,9 +228,8 @@ public class MsSqlMetaColumns
             sTypeName = qiType.format();
         }
         return sTypeName;
-    } /* getTypeName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped DatabaseMetaData.getColumns() result set to be wrapped.
@@ -251,9 +246,8 @@ public class MsSqlMetaColumns
         _iPrecision = iPrecision;
         _iLength = iLength;
         _iScale = iScale;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Type name (mapped to ISO SQL) is returned in TYPE_NAME.
@@ -275,9 +269,8 @@ public class MsSqlMetaColumns
                     super.getString(_iSchema));
         }
         return sResult;
-    } /* getString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -308,9 +301,8 @@ public class MsSqlMetaColumns
         } else
             iResult = super.getInt(columnIndex);
         return iResult;
-    } /* getInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Mapped java.sql.Types type is returned in DATA_TYPE.
@@ -334,6 +326,6 @@ public class MsSqlMetaColumns
         } else
             lResult = super.getLong(columnIndex);
         return lResult;
-    } /* getLong */
+    }
 
-} /*class MsSqlMetaColumns */
+}

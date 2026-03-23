@@ -9,7 +9,6 @@ Created    : 28.08.2016, Hartwig Thomas, Enter AG, Rüti ZH
 package ch.enterag.utils;
 
 public abstract class EU {
-    /*------------------------------------------------------------------*/
     /* constructs a full message with all causes from a throwable.
      * @return full message.
      */
@@ -27,9 +26,8 @@ public abstract class EU {
                 sMessage = sMessage + tException.getMessage();
         }
         return "  " + sMessage;
-    } /* getThrowableMessage */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** retrieves a full error message.
      * @param e error.
@@ -37,9 +35,8 @@ public abstract class EU {
      */
     public static String getErrorMessage(Error e) {
         return getThrowableMessage(e);
-    } /* getErrorMessage */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** retrieves a full exception message.
      * @param e exception.
@@ -47,6 +44,6 @@ public abstract class EU {
      */
     public static String getExceptionMessage(Exception e) {
         return getThrowableMessage(e);
-    } /* getExceptionMessage */
+    }
 
-} /* class EU */
+}

@@ -82,7 +82,7 @@ public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
             }
         }
         return conn;
-    } /* closeResultSet */
+    }
 
     private void openResultSet(Connection conn, String sQuery) throws SQLException {
         closeResultSet();
@@ -90,7 +90,7 @@ public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         ResultSet rs = stmt.executeQuery(sQuery);
         ResultSetMetaData rsmd = rs.getMetaData();
         setResultSetMetaData(rsmd, rs);
-    } /* openResultSet */
+    }
 
     @Before
     public void setUp() {
@@ -111,7 +111,7 @@ public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
     @Test
     public void testClass() {
         assertEquals("Wrong result set metadata class!", OracleResultSetMetaData.class, getResultSetMetaData().getClass());
-    } /* testClass */
+    }
 
     @Test
     public void testNativeSimple() {
@@ -122,7 +122,7 @@ public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeSimple */
+    }
 
     @Test
     public void testNativeComplex() {
@@ -133,7 +133,7 @@ public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeComplex */
+    }
 
     @Test
     public void testSqlSimple() {

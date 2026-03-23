@@ -57,7 +57,7 @@ public class PostgresStatementTester extends BaseStatementTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* setUpClass */
+    }
 
     @Before
     public void setUp() {
@@ -74,11 +74,11 @@ public class PostgresStatementTester extends BaseStatementTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong statement class!", PostgresStatement.class, getStatement().getClass());
-    } /* testClass */
+    }
 
-} /* class PostgresStatementTester */
+}

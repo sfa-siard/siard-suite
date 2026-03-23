@@ -14,7 +14,6 @@ public class WindowFunction
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(WindowFunction.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -52,7 +51,6 @@ public class WindowFunction
             return WindowFunction.this;
         }
     }
-    /*==================================================================*/
 
     private WfVisitor _visitor = new WfVisitor();
 
@@ -110,7 +108,6 @@ public class WindowFunction
         _ws = ws;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the window function.
      * @return the SQL string corresponding to the fields of the window function.
@@ -130,9 +127,8 @@ public class WindowFunction
         else if (getWindowSpecification() != null)
             sFunction = sFunction + sSP + sLEFT_PAREN + getWindowSpecification().format() + sRIGHT_PAREN;
         return sFunction;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the window function from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -141,9 +137,8 @@ public class WindowFunction
     public void parse(SqlParser.WindowFunctionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the window function from SQL.
      * @param sSql SQL.
@@ -152,9 +147,8 @@ public class WindowFunction
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().windowFunction());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a window function
      * @param rf rank function.
@@ -176,15 +170,14 @@ public class WindowFunction
         setWindowName(idWindowName);
         setWindowSpecification(ws);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public WindowFunction(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class WindowFunction */
+}

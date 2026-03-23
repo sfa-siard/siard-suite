@@ -26,7 +26,7 @@ public class UUIDLE {
         for (int i = 8; i < 16; i++)
             bufOutput[i] = buf[i];
         return bufOutput;
-    } /* uuidToBytes */
+    }
 
     public static UUID uuidFromBytes(byte[] bufInput, int iPos) {
         // endian-nonsense (this explains it: https://msdn.microsoft.com/en-us/library/fx22893a.aspx)
@@ -48,10 +48,10 @@ public class UUIDLE {
         long low = bb.getLong();
         UUID uuid = new UUID(high, low);
         return uuid;
-    } /* uuidFromBytes */
+    }
 
     public static UUID uuidFromBytes(byte[] bufInput) {
         return uuidFromBytes(bufInput, 0);
-    } /* uuidFromBytes */
+    }
 
-} /* LEUUID */
+}

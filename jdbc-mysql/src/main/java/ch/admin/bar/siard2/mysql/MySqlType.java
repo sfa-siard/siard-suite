@@ -64,7 +64,7 @@ public enum MySqlType {
      */
     MySqlType(String _sTypeName) {
         sTypeName = _sTypeName;
-    } /* constructor */
+    }
 
     /**
      * Gets the enum constant with a given type name
@@ -111,4 +111,4 @@ public enum MySqlType {
         return sTypeName;
     }
 
-} /* enum MySqlType */
+}

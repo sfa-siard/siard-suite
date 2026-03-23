@@ -44,7 +44,7 @@ public class OracleStatementTester extends BaseStatementTester {
             getStatement().getConnection()
                           .rollback();
         }
-    } /* clean */
+    }
 
     @BeforeClass
     public static void setUpClass() {
@@ -68,7 +68,7 @@ public class OracleStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     @Before
     public void setUp() {
@@ -85,17 +85,17 @@ public class OracleStatementTester extends BaseStatementTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @After
     public void tearDown() {
         super.tearDown();
-    } /* tearDown */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong statement class!", OracleStatement.class, _stmtOracle.getClass());
-    } /* testClass */
+    }
 
     @Test
     public void testExecute() {
@@ -114,7 +114,7 @@ public class OracleStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecute */
+    }
 
     @Test
     @Ignore("What is this buguser?")
@@ -140,7 +140,7 @@ public class OracleStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecuteBug */
+    }
 
     @Test
     @Override
@@ -162,7 +162,7 @@ public class OracleStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecute_String_int */
+    }
 
     @Test
     @Override
@@ -184,7 +184,7 @@ public class OracleStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecute_String_AInt */
+    }
 
     @Test
     @Override
@@ -206,7 +206,7 @@ public class OracleStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecute_String_AString */
+    }
 
     @Test
     @Override
@@ -226,7 +226,7 @@ public class OracleStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate */
+    }
 
     @Test
     @Override
@@ -239,7 +239,7 @@ public class OracleStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecuteQuery */
+    }
 
     @Test
     @Override
@@ -251,7 +251,7 @@ public class OracleStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetResultSet */
+    }
 
     @Test
     public void testGetGeneratedKeys() {
@@ -263,7 +263,7 @@ public class OracleStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testGetGeneratedKeys */
+    }
 
 
     @Test
@@ -277,7 +277,7 @@ public class OracleStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testSetCursorName */
+    }
 
     @Test
     public void testExecuteSelectSizes() {
@@ -312,7 +312,7 @@ public class OracleStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testExecuteSelectSizes */
+    }
 
     @Test
     @Ignore("What is this buguser?")
@@ -351,4 +351,4 @@ public class OracleStatementTester extends BaseStatementTester {
         }
     }
 
-} /* OracleStatementTester */
+}

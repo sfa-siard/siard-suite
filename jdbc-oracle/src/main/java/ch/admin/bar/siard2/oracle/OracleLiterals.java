@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 
 public abstract class OracleLiterals
         extends SqlLiterals {
-    /*------------------------------------------------------------------*/
 
     /** format byte buffer value.
      * @param bufValue byte buffer value to be formatted.
@@ -21,9 +20,8 @@ public abstract class OracleLiterals
         if (bufValue != null)
             sFormatted = "HEXTORAW" + sLEFT_PAREN + sAPOSTROPHE + BU.toHex(bufValue) + sAPOSTROPHE + sRIGHT_PAREN;
         return sFormatted;
-    } /* formatBytesLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a boolean literal value
      * in Oracle the BOOLEAN data type is realized as a "RAW(1)" data type
@@ -44,9 +42,8 @@ public abstract class OracleLiterals
                 break;
         }
         return sFormatted;
-    } /* formatBooleanLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a time literal value
      * in Oracle the TIME data type is realized as a "TIMESTAMP" data type
@@ -56,6 +53,6 @@ public abstract class OracleLiterals
     public static String formatTimeLiteral(Time timeValue) {
         Timestamp ts = new Timestamp(timeValue.getTime());
         return formatTimestampLiteral(ts);
-    } /* formatTimeLiteral */
+    }
 
-} /* class OracleSqlLiteral */
+}

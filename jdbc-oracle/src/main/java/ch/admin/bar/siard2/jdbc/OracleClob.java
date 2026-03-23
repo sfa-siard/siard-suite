@@ -16,10 +16,8 @@ public class OracleClob
     public OracleClob(String sValue) {
         super(null);
         _sValue = sValue;
-    } /* constructor */
+    }
 
-
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -27,7 +25,6 @@ public class OracleClob
         return _sValue.length();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -35,7 +32,6 @@ public class OracleClob
         return _sValue.substring((int) (pos - 1), (int) (pos + length - 1));
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -43,7 +39,6 @@ public class OracleClob
         return (long) _sValue.indexOf(searchstr, (int) (start - 1)) + 1;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -51,7 +46,6 @@ public class OracleClob
         throw new SQLFeatureNotSupportedException("Cannot search for Clob in String!");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -60,7 +54,6 @@ public class OracleClob
         return str.length();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -70,7 +63,6 @@ public class OracleClob
         return len;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -78,7 +70,6 @@ public class OracleClob
         return new ByteArrayInputStream(SU.putEncodedString(_sValue, "ASCII"));
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -86,7 +77,6 @@ public class OracleClob
         throw new SQLFeatureNotSupportedException("OracleClob is only used for reading!!");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -94,7 +84,6 @@ public class OracleClob
         return new StringReader(_sValue);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -103,7 +92,6 @@ public class OracleClob
         return new StringReader(_sValue.substring((int) (pos - 1), (int) (pos + length - 1)));
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -111,7 +99,6 @@ public class OracleClob
         throw new SQLFeatureNotSupportedException("OracleClob is only used for reading!!");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -119,7 +106,6 @@ public class OracleClob
         _sValue = _sValue.substring(0, (int) len);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -127,4 +113,4 @@ public class OracleClob
         _sValue = null;
     }
 
-} /* class OracleClob */
+}

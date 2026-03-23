@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/* ===============================================================================- */
 
 /**
  * MySqlDataSource implements a wrapped MySql DataSource
@@ -41,9 +40,8 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
         ds.setEnableEscapeProcessing(false);
         ds.setProcessEscapeCodesForPrepStmts(false);
         ds.setSessionVariables("sql_mode='ANSI,NO_BACKSLASH_ESCAPES'");
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param sUrl JDBC URL identifying the database instance to connect to.
@@ -63,18 +61,16 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
         ds.setEnableEscapeProcessing(false);
         ds.setProcessEscapeCodesForPrepStmts(false);
         ds.setSessionVariables("sqlmode='ANSI,NO_BACKSLASH_ESCAPES'");
-    } /* constructor */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Returns a appropriately wrapped MySql Connection
      */
     public Connection getConnection() throws SQLException {
         return new MySqlConnection(super.getConnection());
-    } /* getConnection */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Returns the unwrapped MySql DataSource
@@ -88,9 +84,8 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
             _il.exception(se);
         }
         return msds;
-    } /* getUnwrapped */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Get the database name to be used in the connection
@@ -98,9 +93,8 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
      */
     public String getDatabaseName() {
         return getUnwrapped().getDatabaseName();
-    } /* getDatabaseName */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Get the URL to be used in the connection
@@ -108,9 +102,8 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
      */
     public String getUrl() {
         return getUnwrapped().getUser();
-    } /* getUrl */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Get the user to be used in the connection
@@ -118,9 +111,8 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
      */
     public String getUser() {
         return getUnwrapped().getUser();
-    } /* getUser */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Set the database name to be used in the connection
@@ -128,9 +120,8 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
      */
     public void setDatabaseName(String dbName) {
         getUnwrapped().setDatabaseName(dbName);
-    } /* setDatabaseName */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Set the password to be used in the connection
@@ -138,9 +129,8 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
      */
     public void setPassword(String password) {
         getUnwrapped().setPassword(password);
-    } /* setPassword */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Set the URL to be used in the connection
@@ -148,9 +138,8 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
      */
     public void setUrl(String url) {
         getUnwrapped().setUrl(url);
-    } /* setUrl */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Set the user to use in connection
@@ -158,5 +147,5 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
      */
     public void setUser(String user) {
         getUnwrapped().setUser(user);
-    } /* setUser */
-} /* class MySqlDataSource */
+    }
+}

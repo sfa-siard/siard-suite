@@ -33,7 +33,6 @@ import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-/*====================================================================*/
 
 /** Tests EntryOutputStream.
  @author Hartwig Thomas
@@ -48,7 +47,6 @@ public class EntryOutputStreamTester {
     /** temp directory */
     private final static String sTEMP_DIRECTORY = "tmp";
 
-    /*------------------------------------------------------------------*/
   /* (non-Javadoc)
    @see junit.framework.TestCase#setUp()
    */
@@ -61,15 +59,14 @@ public class EntryOutputStreamTester {
         if (fileZip.exists())
             fileZip.delete();
         m_sZipFile = fileZip.getAbsolutePath();
-    } /* setUp */
+    }
 
-    /*------------------------------------------------------------------*/
   /* (non-Javadoc)
    @see junit.framework.TestCase#tearDown()
    */
     @AfterEach
     public void tearDown() throws Exception {
-    } /* tearDown */
+    }
 
     @Test
     public void testWriteRead() {
@@ -103,6 +100,6 @@ public class EntryOutputStreamTester {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
         }
-    } /* testEntryInputStream */
+    }
 
-} /* class EntryOutputStreamTester */
+}

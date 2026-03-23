@@ -19,7 +19,6 @@ public class StringValueFunction
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(StringValueFunction.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -64,7 +63,6 @@ public class StringValueFunction
             return StringValueFunction.this;
         }
     }
-    /*==================================================================*/
 
     private SvfVisitor _visitor = new SvfVisitor();
 
@@ -146,7 +144,6 @@ public class StringValueFunction
         _vepSpecific = vepSpecific;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the string value function.
      * @return the SQL string corresponding to the fields of the string
@@ -170,9 +167,8 @@ public class StringValueFunction
         } else
             sFunction = getUdtValueSpecific().format() + sPERIOD + K.SPECIFICTYPE.getKeyword();
         return sFunction;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return data type of a string value function from the context of a query.
      * @param ss sql statement.
@@ -195,9 +191,8 @@ public class StringValueFunction
         } else
             throw new IllegalArgumentException("Evaluation of UDT methods not yet supported!");
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a string value function from its components.
      * @return string value.
@@ -250,9 +245,8 @@ public class StringValueFunction
         } else
             throw new IllegalArgumentException("Evaluation of UDT methods not yet supported!");
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a string value function against the context of a query.
      * @param ss sql statement.
@@ -272,9 +266,8 @@ public class StringValueFunction
             oLength = getLength().evaluate(ss, bAggregated);
         Object oValue = evaluate(oStringValue, oStartPosition, oLength);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a string value function to
      * their initial value.
@@ -293,9 +286,8 @@ public class StringValueFunction
             oLength = getLength().resetAggregates(ss);
         Object oValue = evaluate(oStringValue, oStartPosition, oLength);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the string value function from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -304,9 +296,8 @@ public class StringValueFunction
     public void parse(SqlParser.StringValueFunctionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the string value function from SQL.
      * @param sSql SQL.
@@ -315,9 +306,8 @@ public class StringValueFunction
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().stringValueFunction());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a string value function.
      * @param sf string function (or null).
@@ -345,15 +335,14 @@ public class StringValueFunction
         setEscapeLetter(sEscapeLetter);
         setUdtValueSpecific(vepSpecific);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public StringValueFunction(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class StringValueFunction */
+}

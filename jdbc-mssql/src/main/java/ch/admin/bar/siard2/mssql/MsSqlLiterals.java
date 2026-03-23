@@ -9,7 +9,6 @@ import ch.enterag.utils.BU;
 public abstract class MsSqlLiterals extends SqlLiterals {
     private static final String sBYTE_LITERAL_PREFIX = "0x";
 
-    /*------------------------------------------------------------------*/
 
     /** format byte buffer value.
      * @param bufValue byte buffer value to be formatted.
@@ -20,9 +19,8 @@ public abstract class MsSqlLiterals extends SqlLiterals {
         if (bufValue != null)
             sFormatted = sBYTE_LITERAL_PREFIX + BU.toHex(bufValue);
         return sFormatted;
-    } /* formatBytesLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a date value
      * MSSQL does not like date/time prefixes.
@@ -34,9 +32,8 @@ public abstract class MsSqlLiterals extends SqlLiterals {
         if (dateValue != null)
             sFormatted = formatStringLiteral(sdfDATE.format(dateValue));
         return sFormatted;
-    } /* formatDateLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a time value
      * MSSQL does not like date/time prefixes.
@@ -59,9 +56,8 @@ public abstract class MsSqlLiterals extends SqlLiterals {
             sFormatted = formatStringLiteral(sFormatted);
         }
         return sFormatted;
-    } /* formatTimeLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a timestamp value.
      * MSSQL does not like date/time prefixes.
@@ -84,9 +80,8 @@ public abstract class MsSqlLiterals extends SqlLiterals {
             sFormatted = formatStringLiteral(sFormatted);
         }
         return sFormatted;
-    } /* formatTimestampLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format an interval value
      * In MSSQL an interval is serialized to an "image".
@@ -95,9 +90,8 @@ public abstract class MsSqlLiterals extends SqlLiterals {
      */
     public static String formatIntervalLiteral(Interval ivValue) {
         return formatStringLiteral(SqlLiterals.formatIntervalLiteral(ivValue));
-    } /* formatIntervalLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a boolean literal value.
      * in MSSQL the BOOLEAN data type is realized as a "bit" data type.
@@ -118,6 +112,6 @@ public abstract class MsSqlLiterals extends SqlLiterals {
                 break;
         }
         return sFormatted;
-    } /* formatBooleanLiteral */
+    }
 
-} /* class MsSqlSqlLiteral */
+}

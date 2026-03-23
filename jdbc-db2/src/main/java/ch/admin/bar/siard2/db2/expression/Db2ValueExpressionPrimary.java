@@ -15,7 +15,6 @@ public class Db2ValueExpressionPrimary
         extends ValueExpressionPrimary {
     private List<String> listAttribute = null;
 
-    /*------------------------------------------------------------------*/
     @Override
     protected String formatSqlArguments() {
         String s = "";
@@ -29,9 +28,8 @@ public class Db2ValueExpressionPrimary
         } else
             s = super.formatSqlArguments();
         return s;
-    } /* formatSqlArguments */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the value expression primary.
      * @return the SQL string corresponding to the fields of the value
@@ -71,15 +69,14 @@ public class Db2ValueExpressionPrimary
         } else
             sExpression = super.format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public Db2ValueExpressionPrimary(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* Db2ValueExpressionPrimary */
+}

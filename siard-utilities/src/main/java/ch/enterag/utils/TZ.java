@@ -23,7 +23,6 @@ public abstract class TZ {
         TimeZone.setDefault(getUtcTimeZone());
     }
 
-    /*------------------------------------------------------------------*/
 
     /** returns UTC TimeZone.
      @return UTC TimeZone.
@@ -32,6 +31,6 @@ public abstract class TZ {
         TimeZone tz = TimeZone.getTimeZone("GMT");
         tz.setRawOffset(0);
         return tz;
-    } /* getUtcTimeZone */
+    }
 
-} /* TZ */
+}

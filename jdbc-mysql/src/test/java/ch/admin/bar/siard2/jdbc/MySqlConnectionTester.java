@@ -61,7 +61,7 @@ public class MySqlConnectionTester extends BaseConnectionTester {
             se.printStackTrace();
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     @AfterClass
     public static void tearDownClass() {
@@ -81,12 +81,12 @@ public class MySqlConnectionTester extends BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUp */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong connection class!", MySqlConnection.class, _connMySql.getClass());
-    } /* testClass */
+    }
 
     @Test
     @Override
@@ -100,7 +100,7 @@ public class MySqlConnectionTester extends BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetMetadata */
+    }
 
     @Test
     @Override
@@ -110,6 +110,6 @@ public class MySqlConnectionTester extends BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetCatalog */
+    }
 
-} /* class MySqlConnectionTester */
+}

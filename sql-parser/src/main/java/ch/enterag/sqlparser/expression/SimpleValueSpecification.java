@@ -14,7 +14,6 @@ public class SimpleValueSpecification
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SimpleValueSpecification.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -44,7 +43,6 @@ public class SimpleValueSpecification
             return SimpleValueSpecification.this;
         }
     }
-    /*==================================================================*/
 
     private SvsVisitor _visitor = new SvsVisitor();
 
@@ -92,7 +90,6 @@ public class SimpleValueSpecification
         _icSqlParameter = icSqlParameter;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the simple value specification.
      * @return the SQL string corresponding to the fields of the simple
@@ -112,9 +109,8 @@ public class SimpleValueSpecification
         } else if (getSqlParameterSpecification().isSet())
             sSpecification = getSqlParameterSpecification().format();
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the simple value specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -123,9 +119,8 @@ public class SimpleValueSpecification
     public void parse(SqlParser.SimpleValueSpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the simple value specification from SQL.
      * @param sSql SQL.
@@ -134,9 +129,8 @@ public class SimpleValueSpecification
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().simpleValueSpecification());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a simple value specification.
      * @param literal literal value.
@@ -155,15 +149,14 @@ public class SimpleValueSpecification
         setIndicatorVariable(ciIndicatorVariable);
         setSqlParameterSpecification(icSqlParameter);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SimpleValueSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SimpleValueSpecification */
+}

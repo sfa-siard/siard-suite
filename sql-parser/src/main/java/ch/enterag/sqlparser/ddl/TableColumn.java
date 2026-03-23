@@ -13,7 +13,6 @@ public class TableColumn
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(TableColumn.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -31,7 +30,6 @@ public class TableColumn
             return TableColumn.this;
         }
     }
-    /*==================================================================*/
 
     private TcVisitor _visitor = new TcVisitor();
 
@@ -59,7 +57,6 @@ public class TableColumn
         _dt = dt;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the table column.
      * @return the SQL string corresponding to the fields of the table column.
@@ -68,9 +65,8 @@ public class TableColumn
     public String format() {
         String sTableColumn = getColumnName().format() + sSP + getDataType().format();
         return sTableColumn;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table column from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -79,9 +75,8 @@ public class TableColumn
     public void parse(SqlParser.TableColumnContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table column from SQL.
      * @param sSql SQL.
@@ -90,9 +85,8 @@ public class TableColumn
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().tableColumn());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a table column.
      * @param idColumnName column name (not null!).
@@ -105,15 +99,14 @@ public class TableColumn
         setColumnName(idColumnName);
         setDataType(dt);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public TableColumn(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class TableColumn */
+}

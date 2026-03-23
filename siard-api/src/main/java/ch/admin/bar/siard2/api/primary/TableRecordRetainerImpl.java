@@ -45,7 +45,6 @@ public class TableRecordRetainerImpl
         return FU.toUri(_fileTemporaryLobFolder);
     }
 
-    /*==================================================================*/
     private class CountingOutputStream
             extends OutputStream {
         private OutputStream _os = null;
@@ -86,7 +85,6 @@ public class TableRecordRetainerImpl
             return _lCount;
         }
     }
-    /*==================================================================*/
 
     /**
      * get ArchiveImpl instance.
@@ -294,7 +292,7 @@ public class TableRecordRetainerImpl
         } catch (XMLStreamException xse) {
             throw new IOException("End of document could not be written!", xse);
         }
-    } /* writeFooter */
+    }
 
     /**
      * {@inheritDoc}
@@ -325,7 +323,7 @@ public class TableRecordRetainerImpl
         }
         ((TableImpl) _table).setCreating(false);
         _lRecord = -1;
-    } /* close */
+    }
 
     /**
      * {@inheritDoc}
@@ -335,7 +333,7 @@ public class TableRecordRetainerImpl
             throws IOException {
         TableRecord tableRecord = TableRecordImpl.newInstance(_table, getPosition(), getTemporaryLobFolder());
         return tableRecord;
-    } /* createRecord */
+    }
 
     /**
      * {@inheritDoc}
@@ -343,7 +341,7 @@ public class TableRecordRetainerImpl
     @Override
     public long getPosition() {
         return _lRecord;
-    } /* getPosition */
+    }
 
     /**
      * {@inheritDoc}
@@ -351,6 +349,6 @@ public class TableRecordRetainerImpl
     @Override
     public long getByteCount() {
         return _osXml.getByteCount();
-    } /* getByteCount */
+    }
 
-} /* class RecordRetainer */
+}

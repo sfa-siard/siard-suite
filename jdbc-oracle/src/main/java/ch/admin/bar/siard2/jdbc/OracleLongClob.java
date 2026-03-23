@@ -11,44 +11,44 @@ public class OracleLongClob
 
     public OracleLongClob(String sLong) {
         _sLong = sLong;
-    } /* constructor */
+    }
 
     @Override
     public long length() throws SQLException {
         return _sLong.length();
-    } /* length */
+    }
 
     @Override
     public String getSubString(long pos, int length) throws SQLException {
         return _sLong.substring((int) pos - 1, (int) pos - 1 + length);
-    } /* getSubString */
+    }
 
     @Override
     public Reader getCharacterStream() throws SQLException {
         return new StringReader(_sLong);
-    } /* getCharacterStream */
+    }
 
     @Override
     public InputStream getAsciiStream() throws SQLException {
         throw new SQLFeatureNotSupportedException("ASCII stream LONG value is not supported!");
-    } /* getAsciiStream */
+    }
 
     @Override
     public long position(String searchstr, long start)
             throws SQLException {
         return _sLong.indexOf(searchstr, (int) start - 1) + 1;
-    } /* position */
+    }
 
     @Override
     public long position(Clob searchstr, long start) throws SQLException {
         String s = searchstr.getSubString(1l, (int) searchstr.length());
         return position(s, start);
-    } /* position */
+    }
 
     @Override
     public int setString(long pos, String str) throws SQLException {
         return setString(pos, str, 0, str.length());
-    } /* setString */
+    }
 
     @Override
     public int setString(long pos, String str, int offset, int len)
@@ -60,7 +60,7 @@ public class OracleLongClob
         sb.append(str.substring(offset, len));
         _sLong = sb.toString();
         return len;
-    } /* setString */
+    }
 
     @Override
     public OutputStream setAsciiStream(long pos) throws SQLException {

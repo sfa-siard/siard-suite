@@ -15,7 +15,6 @@ public class AttributeDefinition
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(AttributeDefinition.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -54,7 +53,6 @@ public class AttributeDefinition
             return AttributeDefinition.this;
         }
     }
-    /*==================================================================*/
 
     private AdVisitor _visitor = new AdVisitor();
 
@@ -112,7 +110,6 @@ public class AttributeDefinition
         _sDefaultOption = sDefaultOption;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the attribute definition.
      * @return the SQL string corresponding to the fields of the attribute definition.
@@ -128,9 +125,8 @@ public class AttributeDefinition
         if (getDefaultOption() != null)
             sDefinition = sDefinition + sSP + K.DEFAULT.getKeyword() + sSP + getDefaultOption();
         return sDefinition;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the attribute definition from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -139,9 +135,8 @@ public class AttributeDefinition
     public void parse(SqlParser.AttributeDefinitionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the attribute definition from SQL.
      * @param sSql SQL.
@@ -150,9 +145,8 @@ public class AttributeDefinition
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().attributeDefinition());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an attribute definition.
      * @param idAttributeName attribute name (not null!).
@@ -174,9 +168,8 @@ public class AttributeDefinition
         setDeleteAction(raDelete);
         setDefaultOption(sDefaultOption);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an attribute definition.
      * @param idAttributeName attribute name (not null!).
@@ -189,15 +182,14 @@ public class AttributeDefinition
         setAttributeName(idAttributeName);
         setDataType(dt);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public AttributeDefinition(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class AttributeDefinition */
+}

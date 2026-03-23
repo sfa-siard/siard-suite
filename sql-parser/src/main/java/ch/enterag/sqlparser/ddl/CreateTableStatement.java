@@ -20,7 +20,6 @@ public class CreateTableStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CreateTableStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -82,7 +81,6 @@ public class CreateTableStatement
             return CreateTableStatement.this;
         }
     }
-    /*==================================================================*/
 
     private CtsVisitor _visitor = new CtsVisitor();
 
@@ -180,7 +178,6 @@ public class CreateTableStatement
         _wowd = wowd;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the table elements list.
      * @return formatted list.
@@ -195,9 +192,8 @@ public class CreateTableStatement
         }
         sElements = sElements + sNEW_LINE + sRIGHT_PAREN;
         return sElements;
-    } /* formatTableElements */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the create table statement.
      * @return the SQL string corresponding to the fields of the create
@@ -229,9 +225,8 @@ public class CreateTableStatement
         if (getCommitAction() != null)
             sStatement = sStatement + sSP + getCommitAction().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create table statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -240,9 +235,8 @@ public class CreateTableStatement
     public void parse(SqlParser.CreateTableStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create table statement from SQL.
      * @param sSql SQL.
@@ -251,9 +245,8 @@ public class CreateTableStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().createTableStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor for building a create table statement.
      * @param ts table scope (or null).
@@ -288,9 +281,8 @@ public class CreateTableStatement
         setQueryExpression(qe);
         setWithOrWithoutData(wowd);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create table statement from table elements.
      * @param ts table scope (or null).
@@ -309,15 +301,14 @@ public class CreateTableStatement
         setTableElements(listElements);
         setCommitAction(ca);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CreateTableStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CreateTableStatement */
+}

@@ -17,7 +17,6 @@ public class DropProcedureStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DropProcedureStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -46,7 +45,6 @@ public class DropProcedureStatement
             return DropProcedureStatement.this;
         }
     }
-    /*==================================================================*/
 
     private DpsVisitor _visitor = new DpsVisitor();
 
@@ -114,9 +112,8 @@ public class DropProcedureStatement
         }
         s = s + sRIGHT_PAREN;
         return s;
-    } /* formatParameters */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the drop procedure statement.
      * @return the SQL string corresponding to the fields of the drop procedure statement.
@@ -132,9 +129,8 @@ public class DropProcedureStatement
             sStatement = sStatement + formatParameters();
         sStatement = sStatement + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop procedure statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -143,9 +139,8 @@ public class DropProcedureStatement
     public void parse(SqlParser.DropProcedureStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop procedure statement from SQL.
      * @param sSql SQL.
@@ -154,9 +149,8 @@ public class DropProcedureStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dropProcedureStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a drop procedure statement.
      * @param bSpecific true for SPECIFIC.
@@ -179,15 +173,14 @@ public class DropProcedureStatement
         setParameters(listParameters);
         setDropBehavior(db);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DropProcedureStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DropProcedureStatement */
+}

@@ -12,7 +12,6 @@ package ch.enterag.utils.lang;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.logging.IndentLogger;
 
-/*====================================================================*/
 
 /** Threads implements utilities for detecting the main thread/class.
  * @author Hartwig Thomas
@@ -20,7 +19,6 @@ import ch.enterag.utils.logging.IndentLogger;
 public abstract class Threads {
     private static IndentLogger _il = IndentLogger.getIndentLogger(Threads.class.getName());
 
-    /*------------------------------------------------------------------*/
 
     /** get the main thread as the thread with the smallest ID.
      * @return main thread.
@@ -44,9 +42,8 @@ public abstract class Threads {
         }
         _il.exit(threadMain.getName());
         return threadMain;
-    } /* getMainThread */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the class with which the application (JVM) was started.
      * More precisely: the main class in the given thread, which is
@@ -73,6 +70,6 @@ public abstract class Threads {
             }
         }
         return clsMain;
-    } /* getMainClass */
+    }
 
-} /* Threads */
+}

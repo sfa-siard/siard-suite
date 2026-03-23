@@ -15,7 +15,6 @@ import ch.enterag.sqlparser.K;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.ReturnsClause;
 
-/*====================================================================*/
 
 /** OracleReturnsClause overrides the formatting
  * of the ReturnsClause
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.ddl.ReturnsClause;
  */
 public class OracleReturnsClause
         extends ReturnsClause {
-    /*------------------------------------------------------------------*/
 
     /**
      * format the returns clause
@@ -33,14 +31,13 @@ public class OracleReturnsClause
     public String format() {
         String sReturnsClause = K.RETURN.getKeyword() + sSP + getDataType().format();
         return sReturnsClause;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleReturnsClause(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 }

@@ -13,7 +13,6 @@ public class DropTriggerStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DropTriggerStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -24,7 +23,6 @@ public class DropTriggerStatement
             return visitChildren(ctx);
         }
     }
-    /*==================================================================*/
 
     private DtsVisitor _visitor = new DtsVisitor();
 
@@ -42,7 +40,6 @@ public class DropTriggerStatement
         _qiTriggerName = qiTriggerName;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the drop trigger statement.
      * @return the SQL string corresponding to the fields of the drop procedure statement.
@@ -52,9 +49,8 @@ public class DropTriggerStatement
         String sStatement = K.DROP.getKeyword() + sSP + K.TRIGGER.getKeyword() + sSP +
                 getTriggerName().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop trigger statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -63,9 +59,8 @@ public class DropTriggerStatement
     public void parse(SqlParser.DropTriggerStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop trigger statement from SQL.
      * @param sSql SQL.
@@ -74,9 +69,8 @@ public class DropTriggerStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dropTriggerStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a drop trigger statement.
      * @param qiTriggerName name of trigger to be dropped (not null).
@@ -85,15 +79,14 @@ public class DropTriggerStatement
         _il.enter();
         setTriggerName(qiTriggerName);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DropTriggerStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DropTriggerStatement */
+}

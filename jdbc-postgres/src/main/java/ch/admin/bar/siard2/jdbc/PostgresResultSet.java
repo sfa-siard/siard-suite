@@ -38,7 +38,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-/*====================================================================*/
 
 /** PostgresResultSet implements a wrapped PostgreSQL ResultSet.
  * @author Hartwig Thomas
@@ -50,7 +49,6 @@ public class PostgresResultSet
     private Statement _stmt = null;
     private ResultSetMetaData _rsmd = null;
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped result set to be wrapped.
@@ -61,25 +59,22 @@ public class PostgresResultSet
         super(rsWrapped);
         _stmt = stmt;
         _rsmd = new PostgresResultSetMetaData(super.getMetaData(), _stmt);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Statement getStatement() throws SQLException {
         return _stmt;
-    } /* getStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
         return _rsmd;
-    } /* getMetaData */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -109,9 +104,8 @@ public class PostgresResultSet
                 buf = PostgresLiterals.parseBitString(sBitString);
         }
         return buf;
-    } /* getBytes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -124,9 +118,8 @@ public class PostgresResultSet
             super.updateString(columnIndex, PostgresLiterals.formatBitString(x, 8 * x.length));
         else
             super.updateBytes(columnIndex, x);
-    } /* updateBytes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -160,9 +153,8 @@ public class PostgresResultSet
             }
         }
         return bd;
-    } /* getBigDecimal */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -177,9 +169,8 @@ public class PostgresResultSet
         else
             is = super.getBinaryStream(columnIndex);
         return is;
-    } /* getBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
     private byte[] getByteArray(InputStream is)
             throws SQLException {
         try {
@@ -193,9 +184,8 @@ public class PostgresResultSet
         } catch (IOException ie) {
             throw new SQLException("UpdateBinaryStream failed for data type BIT (" + EU.getExceptionMessage(ie) + ")!");
         }
-    } /* getByteArray */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -208,18 +198,16 @@ public class PostgresResultSet
             updateBytes(columnIndex, getByteArray(x));
         else
             super.updateBinaryStream(columnIndex, x);
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateBinaryStream(int columnIndex, InputStream x,
                                    int length) throws SQLException {
         updateBinaryStream(columnIndex, x, (long) length);
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -236,9 +224,8 @@ public class PostgresResultSet
                 throw new SQLException("Invalid length of binary stream in updateBinaryStream!");
         } else
             super.updateBinaryStream(columnIndex, x, length);
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -246,9 +233,8 @@ public class PostgresResultSet
         PgArray pgarray = (PgArray) super.getArray(columnIndex);
         Array array = pgarray != null ? new PostgresArray(pgarray) : null;
         return array;
-    } /* getArray */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -256,9 +242,8 @@ public class PostgresResultSet
         PostgresArray pa = (PostgresArray) x;
         PgArray pga = (PgArray) pa.unwrap(Array.class);
         super.updateArray(columnIndex, pga);
-    } /* updateArray */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -266,18 +251,16 @@ public class PostgresResultSet
         long lOid = super.getLong(columnIndex);
         Blob blob = new PostgresBlob((PostgresConnection) getStatement().getConnection(), lOid);
         return blob;
-    } /* getBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateBlob(int columnIndex, Blob x) throws SQLException {
         PostgresBlob pb = (PostgresBlob) x;
         super.updateLong(columnIndex, pb.getOid());
-    } /* updateBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -285,18 +268,16 @@ public class PostgresResultSet
         long lOid = super.getLong(columnIndex);
         Clob clob = new PostgresClob((PostgresConnection) getStatement().getConnection(), lOid);
         return clob;
-    } /* getClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateClob(int columnIndex, Clob x) throws SQLException {
         PostgresClob pc = (PostgresClob) x;
         super.updateLong(columnIndex, pc.getOid());
-    } /* updateClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -304,18 +285,16 @@ public class PostgresResultSet
         long lOid = super.getLong(columnIndex);
         NClob nclob = new PostgresNClob((PostgresConnection) getStatement().getConnection(), lOid);
         return nclob;
-    } /* getNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNClob(int columnIndex, NClob x) throws SQLException {
         PostgresNClob pnc = (PostgresNClob) x;
         super.updateLong(columnIndex, pnc.getOid());
-    } /* updateClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -328,9 +307,8 @@ public class PostgresResultSet
             time = Time.valueOf(s);
         }
         return time;
-    } /* getTime */
+    }
 
-    /*------------------------------------------------------------------*/
     public Duration getDuration(int columnIndex)
             throws SQLException, SQLFeatureNotSupportedException {
         Duration duration = null;
@@ -378,9 +356,8 @@ public class PostgresResultSet
             }
         }
         return duration;
-    } /* getDuration */
+    }
 
-    /*------------------------------------------------------------------*/
     public void updateDuration(int columnIndex, Duration x)
             throws SQLException {
         int iSign = x.getSign();
@@ -393,7 +370,7 @@ public class PostgresResultSet
         double dSeconds = iSign * lMillis / 1000.0;
         PGInterval pgi = new PGInterval(iYears, iMonths, iDays, iHours, iMinutes, dSeconds);
         super.updateObject(columnIndex, pgi);
-    } /* updateDuration */
+    }
 
     /**
      * {@inheritDoc}
@@ -417,7 +394,6 @@ public class PostgresResultSet
         return url;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -470,9 +446,8 @@ public class PostgresResultSet
         } else
             o = super.getObject(columnIndex);
         return o;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -480,9 +455,8 @@ public class PostgresResultSet
             throws SQLException {
         Object o = getObject(columnIndex);
         return o;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
@@ -491,9 +465,8 @@ public class PostgresResultSet
             throws SQLException {
         T o = (T) getObject(columnIndex);
         return o;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -556,6 +529,6 @@ public class PostgresResultSet
             }
         } else
             super.updateObject(columnIndex, x);
-    } /* updateObject */
+    }
 
-} /* class PostgresResultSet */
+}

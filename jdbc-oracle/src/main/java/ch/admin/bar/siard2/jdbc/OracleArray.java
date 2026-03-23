@@ -24,7 +24,6 @@ public class OracleArray
     private Object[] _aoElements = null;
     private oracle.jdbc.OracleConnection _conn = null;
 
-    /*------------------------------------------------------------------*/
 
     /** match the token to the beginning of the text and return
      * the text shortened by the token's length, if it matches.
@@ -40,9 +39,8 @@ public class OracleArray
         else
             sText = null;
         return sText;
-    } /* matchToken */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** check, whether the source text of the type definition matches the
      * base type and the length.
@@ -89,9 +87,8 @@ public class OracleArray
         } catch (ParseException pe) {
         }
         return bMatch;
-    } /* matchesText */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** find or create an VARRAY type for the given base type and length
      * to which the PUBLIC has EXECUTE privileges.
@@ -168,7 +165,7 @@ public class OracleArray
         }
         _il.exit(qiVarray);
         return qiVarray;
-    } /* findOrCreateVarray */
+    }
 
     private oracle.sql.ARRAY getOracleArray()
             throws SQLException {
@@ -180,7 +177,7 @@ public class OracleArray
                                  .getMaxLength();
         }
         return _oarray;
-    } /* getOracleArray */
+    }
 
     public OracleArray(oracle.sql.ARRAY oarray)
             throws SQLException {
@@ -234,12 +231,12 @@ public class OracleArray
         if (oa.length != _lMaxLength)
             oa = Arrays.copyOf(oa, (int) _lMaxLength);
         return oa;
-    } /* adjustArray */
+    }
 
     @Override
     public Object getArray() throws SQLException {
         return adjustArray((Object[]) getOracleArray().getArray());
-    } /* getArray */
+    }
 
     @Override
     public Object getArray(Map<String, Class<?>> map) throws SQLException {
@@ -290,4 +287,4 @@ public class OracleArray
             _oarray.free();
     }
 
-} /* OracleArray */
+}

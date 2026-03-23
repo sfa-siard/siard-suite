@@ -14,7 +14,6 @@ public class DropTableStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DropTableStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -30,8 +29,7 @@ public class DropTableStatement
             setDropBehavior(getDropBehavior(ctx));
             return DropTableStatement.this;
         }
-    } /* class DtsVisitor */
-    /*==================================================================*/
+    }
 
     private DtsVisitor _visitor = new DtsVisitor();
 
@@ -59,7 +57,6 @@ public class DropTableStatement
         _db = db;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the drop table statement.
      * @return the SQL string corresponding to the fields of the drop table statement.
@@ -69,9 +66,8 @@ public class DropTableStatement
         String sStatement = K.DROP.getKeyword() + sSP + K.TABLE.getKeyword() + sSP +
                 getTableName().format() + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop table statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -80,9 +76,8 @@ public class DropTableStatement
     public void parse(SqlParser.DropTableStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop table statement from SQL.
      * @param sSql SQL.
@@ -91,9 +86,8 @@ public class DropTableStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dropTableStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a drop table statement.
      * @param qTableName name of table to be dropped.
@@ -104,15 +98,14 @@ public class DropTableStatement
         setTableName(qTableName);
         setDropBehavior(db);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DropTableStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DropTableStatement */
+}

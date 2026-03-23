@@ -15,7 +15,6 @@ public class SetTarget
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SetTarget.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -42,7 +41,6 @@ public class SetTarget
             return SetTarget.this;
         }
     }
-    /*==================================================================*/
 
     private StVisitor _visitor = new StVisitor();
 
@@ -80,7 +78,6 @@ public class SetTarget
         _idMethodName = idMethodName;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the set target.
      * @return the SQL string corresponding to the fields of the set target.
@@ -98,9 +95,8 @@ public class SetTarget
             s = s + getMethodName();
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the set target from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -109,9 +105,8 @@ public class SetTarget
     public void parse(SqlParser.SetTargetContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the set target from SQL.
      * @param sSql SQL.
@@ -120,9 +115,8 @@ public class SetTarget
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().setTarget());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a set target.
      * @param ut update target.
@@ -138,15 +132,14 @@ public class SetTarget
         setUpdateTargets(listUpdateTargets);
         setMethodName(idMethodName);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SetTarget(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SetTarget */
+}

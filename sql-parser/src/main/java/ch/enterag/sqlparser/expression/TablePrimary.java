@@ -20,7 +20,6 @@ public class TablePrimary
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(TablePrimary.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -88,7 +87,6 @@ public class TablePrimary
         }
 
     }
-    /*==================================================================*/
 
     private TpVisitor _visitor = new TpVisitor();
 
@@ -217,7 +215,6 @@ public class TablePrimary
     }
 
     /* for evaluation */
-    /*------------------------------------------------------------------*/
 
     /** check, if the table has a column with the given name.
      * @param sColumn column name.
@@ -226,7 +223,7 @@ public class TablePrimary
     public boolean hasColumn(String sColumn) {
         return getColumnTypes().keySet()
                                .contains(sColumn);
-    } /* hasColumn */
+    }
 
     private List<String> _listColumnNames = new ArrayList<String>();
 
@@ -234,7 +231,6 @@ public class TablePrimary
         return _listColumnNames;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** set the column names of the table and initialize their values to null.
      * @param listColumnNames list of column names of table.
@@ -244,7 +240,7 @@ public class TablePrimary
         getColumnValues().clear();
         for (int iColumn = 0; iColumn < listColumnNames.size(); iColumn++)
             getColumnValues().put(listColumnNames.get(iColumn), null);
-    } /* setColumnNames */
+    }
 
     private Map<String, DataType> _mapColumnTypes = new HashMap<String, DataType>();
 
@@ -257,7 +253,6 @@ public class TablePrimary
     protected Map<String, Object> getColumnValues() {
         return _mapColumnValues;
     }
-    /*------------------------------------------------------------------*/
 
     /** set data type of a table column.
      * @param sColumnName name of column.
@@ -265,9 +260,8 @@ public class TablePrimary
      */
     public void setColumnType(String sColumnName, DataType dtColumn) {
         getColumnTypes().put(sColumnName, dtColumn);
-    } /* setColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set data type of a table column.
      * @param iPosition (1-based) position of column.
@@ -275,9 +269,8 @@ public class TablePrimary
      */
     public void setColumnType(int iPosition, DataType dtColumn) {
         setColumnType(getColumnNames().get(iPosition - 1), dtColumn);
-    } /* setColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get type of table column.
      * N.B.: We ignore alias names of column for the moment!
@@ -286,9 +279,8 @@ public class TablePrimary
      */
     public DataType getColumnType(String sColumnName) {
         return getColumnTypes().get(sColumnName);
-    } /* getColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set value of a table column.
      * @param sColumnName name of column.
@@ -296,9 +288,8 @@ public class TablePrimary
      */
     public void setColumnValue(String sColumnName, Object oColumnValue) {
         getColumnValues().put(sColumnName, oColumnValue);
-    } /* setColumnValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set value of a table column.
      * @param iPosition (1-based) position of column.
@@ -306,9 +297,8 @@ public class TablePrimary
      */
     public void setColumnValue(int iPosition, Object oColumnValue) {
         setColumnValue(getColumnNames().get(iPosition - 1), oColumnValue);
-    } /* setColumnValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get value of table column.
      * N.B.: We ignore alias names of column for the moment!
@@ -317,9 +307,8 @@ public class TablePrimary
      */
     public Object getColumnValue(String sColumnName) {
         return getColumnValues().get(sColumnName);
-    } /* setColumnValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the table primary.
      * @return the SQL string corresponding to the fields of the table primary.
@@ -367,9 +356,8 @@ public class TablePrimary
             }
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table primary from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -378,9 +366,8 @@ public class TablePrimary
     public void parse(SqlParser.TablePrimaryContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table primary from SQL.
      * @param sSql SQL.
@@ -389,9 +376,8 @@ public class TablePrimary
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().tablePrimary());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a table primary.
      * @param qiTableName table name.
@@ -434,9 +420,8 @@ public class TablePrimary
         setTable(bTable);
         setOnly(bOnly);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a table primary.
      * @param qiTableName table name.
@@ -449,9 +434,8 @@ public class TablePrimary
         setTableName(qiTableName);
         setCorrelationName(idCorrelationName);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a table primary.
      * @param qiTableName table name.
@@ -460,15 +444,14 @@ public class TablePrimary
         _il.enter();
         setTableName(qiTableName);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public TablePrimary(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class TablePrimary */
+}

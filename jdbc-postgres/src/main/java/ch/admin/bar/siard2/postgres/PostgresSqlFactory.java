@@ -26,7 +26,6 @@ import ch.enterag.sqlparser.ddl.DropTypeStatement;
 import ch.enterag.sqlparser.expression.UnsignedLiteral;
 import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 
-/* =============================================================================== */
 
 /** PostgresSqlFactory implements a wrapped SqlFactory for Postgres.
  * @author Hartwig Thomas
@@ -45,31 +44,31 @@ public class PostgresSqlFactory extends BaseSqlFactory implements SqlFactory {
     @Override
     public PredefinedType newPredefinedType() {
         return new PostgresPredefinedType(this);
-    } /* newPredefinedType */
+    }
 
     @Override
     public IntervalQualifier newIntervalQualifier() {
         return new PostgresIntervalQualifier(this);
-    } /* newIntervalQualifier */
+    }
 
     @Override
     public CreateTypeStatement newCreateTypeStatement() {
         return new PostgresCreateTypeStatement(this);
-    } /* newCreateTypeStatement */
+    }
 
     @Override
     public DropTypeStatement newDropTypeStatement() {
         return new PostgresDropTypeStatement(this);
-    } /* newDropTypeStatement */
+    }
 
     @Override
     public ValueExpressionPrimary newValueExpressionPrimary() {
         return new PostgresValueExpressionPrimary(this);
-    } /* newValueExpressionPrimary */
+    }
 
     @Override
     public UnsignedLiteral newUnsignedLiteral() {
         return new PostgresUnsignedLiteral(this);
-    } /* newUnsignedLiteral */
+    }
 
-} /* class PostgresSqlFactory */
+}

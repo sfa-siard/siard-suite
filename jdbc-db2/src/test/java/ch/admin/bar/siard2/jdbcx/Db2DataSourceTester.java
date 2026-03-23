@@ -26,7 +26,7 @@ public class Db2DataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @After
     public void tearDown() {
@@ -36,7 +36,7 @@ public class Db2DataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testWrapper() {
@@ -48,7 +48,7 @@ public class Db2DataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testWrapper */
+    }
 
     @Test
     public void testLoginTimeout() {
@@ -59,7 +59,7 @@ public class Db2DataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testLoginTimeout */
+    }
 
     @Test
     public void testConnection() {
@@ -72,6 +72,6 @@ public class Db2DataSourceTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testConnection */
+    }
 
 }

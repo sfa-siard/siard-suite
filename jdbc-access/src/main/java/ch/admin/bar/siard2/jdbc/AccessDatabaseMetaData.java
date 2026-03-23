@@ -360,9 +360,6 @@ public class AccessDatabaseMetaData
         return bMatch;
     }
 
-  /*====================================================================
-  Wrapper
-  ====================================================================*/
 
     /** Compares two string, handling nulls.
      * @param s1 first string.
@@ -389,9 +386,6 @@ public class AccessDatabaseMetaData
         return clsInterface.equals(DatabaseMetaData.class);
     }
 
-  /*====================================================================
-  Database properties
-  ====================================================================*/
 
     /** {@link DatabaseMetaData} */
     @Override
@@ -1569,9 +1563,6 @@ public class AccessDatabaseMetaData
         return true;
     }
 
-  /*====================================================================
-  Meta data result sets
-  ====================================================================*/
 
     /** {@link DatabaseMetaData}
      * returns empty set */
@@ -2518,8 +2509,6 @@ public class AccessDatabaseMetaData
         }
         return iColumnIndex;
     } /* addViewColumns
-
-  /*------------------------------------------------------------------*/
 
 
     /** {@link DatabaseMetaData} */

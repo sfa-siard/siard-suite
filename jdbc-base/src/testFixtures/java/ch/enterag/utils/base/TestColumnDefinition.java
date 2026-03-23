@@ -89,4 +89,4 @@ public class TestColumnDefinition {
         _sType = sType;
         _oValue = oValue;
     }
-} /* TestColumnDefinition */
+}

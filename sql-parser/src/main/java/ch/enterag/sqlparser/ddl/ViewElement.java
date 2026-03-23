@@ -15,7 +15,6 @@ public class ViewElement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(ViewElement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -47,7 +46,6 @@ public class ViewElement
             return ViewElement.this;
         }
     }
-    /*==================================================================*/
 
     private VeVisitor _visitor = new VeVisitor();
 
@@ -98,7 +96,6 @@ public class ViewElement
         _qTableName = qTableName;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the view element.
      * @return the SQL string corresponding to the fields of the view element.
@@ -118,9 +115,8 @@ public class ViewElement
                 break;
         }
         return sDefinition;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the view element from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -129,9 +125,8 @@ public class ViewElement
     public void parse(SqlParser.ViewElementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the view element from SQL.
      * @param sSql SQL.
@@ -140,9 +135,8 @@ public class ViewElement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().viewElement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a view element.
      * @param type type of view element (not null!).
@@ -162,15 +156,14 @@ public class ViewElement
         setColumnName(idColumnName);
         setReferenceGeneration(rg);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public ViewElement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class ViewElement */
+}

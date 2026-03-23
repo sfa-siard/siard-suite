@@ -27,7 +27,6 @@ import ch.enterag.utils.logging.IndentLogger;
 import java.sql.*;
 import java.util.concurrent.Executor;
 
-/* ===============================================================================- */
 
 /**
  * MySqlConnection implements a wrapped MySql Connection
@@ -58,7 +57,6 @@ public class MySqlConnection extends BaseConnection implements Connection {
 
     public static final String _sSET_FOREIGN_KEYS = "SET FOREIGN_KEY_CHECKS = {0};";
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc}
@@ -67,9 +65,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
      */
     public MySqlConnection(Connection connNative) throws SQLException {
         super(connNative);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc}
@@ -123,9 +120,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         sql = ss.format();
         _il.exit(sql);
         return sql;
-    } /* nativeSQL */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} MySql does not allow the executor argument to be null
@@ -136,9 +132,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
             throw new SQLFeatureNotSupportedException("MySql does not allow the executor argument to be null");
         }
         super.setNetworkTimeout(executor, milliseconds);
-    } /* setNetworkTimeout */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} Wraps database meta data
@@ -147,9 +142,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
         return new MySqlDatabaseMetaData(super.getMetaData(), this);
-    } /* getMetaData */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} wraps statement.
@@ -158,9 +152,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
     public Statement createStatement() throws SQLException {
         Statement stmt = super.createStatement();
         return new MySqlStatement(stmt, this);
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} wraps statement.
@@ -169,9 +162,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
         Statement stmt = super.createStatement(resultSetType, resultSetConcurrency);
         return new MySqlStatement(stmt, this);
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -180,9 +172,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
             throws SQLException {
         Statement stmt = super.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
         return new MySqlStatement(stmt, this);
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} wraps creation of an SQLXML object
@@ -190,9 +181,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
     @Override
     public SQLXML createSQLXML() throws SQLException {
         return MySqlSqlXml.getInstance();
-    } /* createSQLXML */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -200,9 +190,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         PreparedStatement ps = super.prepareStatement(sNative);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -210,9 +199,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         PreparedStatement ps = super.prepareStatement(sNative, resultSetType, resultSetConcurrency);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -220,9 +208,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         PreparedStatement ps = super.prepareStatement(sNative, resultSetType, resultSetConcurrency, resultSetHoldability);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -230,9 +217,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         PreparedStatement ps = super.prepareStatement(sNative, autoGeneratedKeys);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -240,9 +226,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         PreparedStatement ps = super.prepareStatement(sNative, columnIndexes);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -250,9 +235,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         PreparedStatement ps = super.prepareStatement(sNative, columnNames);
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -260,9 +244,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         CallableStatement cs = super.prepareCall(sNative);
         return cs;
-    } /* prepareCall */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -270,9 +253,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         CallableStatement cs = super.prepareCall(sNative, resultSetType, resultSetConcurrency);
         return cs;
-    } /* prepareCall */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -280,11 +262,11 @@ public class MySqlConnection extends BaseConnection implements Connection {
         String sNative = nativeSQL(sql);
         CallableStatement cs = super.prepareCall(sNative, resultSetType, resultSetConcurrency, resultSetHoldability);
         return cs;
-    } /* prepareCall */
+    }
 
     @Override
     public Object createDatalinkObject() throws SQLException {
         return createBlob();
     }
 
-} /* class MySqlConnection */
+}

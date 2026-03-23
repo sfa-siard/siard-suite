@@ -18,7 +18,6 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/*====================================================================*/
 
 /** MsSqlDriver implements a wrapped MSSQL Driver.
  * @author Hartwig Thomas
@@ -42,7 +41,7 @@ public class MsSqlDriver
         if (!sUrl.startsWith(sSQLSERVER_URL_PREFIX))
             sUrl = sSQLSERVER_URL_PREFIX + "//" + sDatabaseName;
         return sUrl;
-    } /* getUrl */
+    }
 
     /** register this driver, replacing original MS SQL driver
      */
@@ -59,7 +58,6 @@ public class MsSqlDriver
         register();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}*/
     @Override
@@ -68,9 +66,8 @@ public class MsSqlDriver
         boolean bAccepts = url.startsWith(sSQLSERVER_URL_PREFIX);
         _il.exit(bAccepts);
         return bAccepts;
-    } /* acceptsUrl */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * returns the appropriately wrapped MSSQL Connection.
@@ -84,6 +81,6 @@ public class MsSqlDriver
             conn = new MsSqlConnection(super.connect(url, info));
         _il.exit(conn);
         return conn;
-    } /* connect */
+    }
 
-} /* class MsSqlDriver */
+}

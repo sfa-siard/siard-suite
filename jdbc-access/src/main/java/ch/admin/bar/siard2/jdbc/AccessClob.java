@@ -32,7 +32,6 @@ public class AccessClob implements Clob {
             throw new SQLException("Cannot position Clob beyond its current length!");
         return str.length();
     }
-    /*==================================================================*/
 
     /** {@link Clob} */
     @Override
@@ -40,7 +39,6 @@ public class AccessClob implements Clob {
             throws SQLException {
         return setString(pos, str.substring(offset, offset + len));
     }
-    /*==================================================================*/
 
 
     /** {@link Clob} */
@@ -133,7 +131,6 @@ public class AccessClob implements Clob {
     }
 
 
-    /*==================================================================*/
     private class ClobWriter extends StringWriter {
 
         public ClobWriter(String sInitialContent) {

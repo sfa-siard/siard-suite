@@ -11,7 +11,6 @@ public class TableRowValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(TableRowValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -44,7 +43,6 @@ public class TableRowValueExpression
             return TableRowValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private TrveVisitor _visitor = new TrveVisitor();
 
@@ -92,7 +90,6 @@ public class TableRowValueExpression
         _vep = vep;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the table row value expression.
      * @return the SQL string corresponding to the fields of the value expression.
@@ -109,9 +106,8 @@ public class TableRowValueExpression
         else if (getValueExpressionPrimary() != null)
             sExpression = getValueExpressionPrimary().format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table row value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -120,9 +116,8 @@ public class TableRowValueExpression
     public void parse(SqlParser.TableRowValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table row value expression from SQL.
      * @param sSql SQL.
@@ -131,9 +126,8 @@ public class TableRowValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().tableRowValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a table row value expression.
      * @param cve common value expression.
@@ -152,15 +146,14 @@ public class TableRowValueExpression
         setRowValueExpression(rve);
         setValueExpressionPrimary(vep);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public TableRowValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class TableRowValueExpression */
+}

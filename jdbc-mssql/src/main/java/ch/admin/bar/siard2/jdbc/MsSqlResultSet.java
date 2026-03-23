@@ -26,7 +26,6 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** MsSqlResultSet implements a wrapped MSSQL ResultSet.
  * @author Hartwig Thomas
@@ -39,7 +38,6 @@ public class MsSqlResultSet
     private static IndentLogger _il = IndentLogger.getIndentLogger(MsSqlResultSet.class.getName());
     protected MsSqlConnection _conn = null;
 
-    /*------------------------------------------------------------------*/
 
     /** convert an MSSQL SQLServerException into an SQLException.
      * @param sse SQLServerException
@@ -48,9 +46,8 @@ public class MsSqlResultSet
     private void throwSqlException(SQLServerException sse)
             throws SQLException {
         throw new SQLException("MSSQL exception!", sse);
-    } /* throwSqlException */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an MSSQL SQLServerException into an SQLFeatureNotSupportedException.
      * @param sse
@@ -59,9 +56,8 @@ public class MsSqlResultSet
     private void throwNotSupportedException(SQLServerException sse)
             throws SQLFeatureNotSupportedException {
         throw new SQLFeatureNotSupportedException("MSSQL Exception!", sse);
-    } /* throwFeatureNotSupportedSqlException */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** map MSSQL object to appropriate java type.
      * @param o object.
@@ -73,9 +69,8 @@ public class MsSqlResultSet
         if (o instanceof microsoft.sql.DateTimeOffset)
             o = o.toString();
         return o;
-    } /* mapObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** map MSSQL object to appropriate java type.
      * @param o original object.
@@ -91,9 +86,8 @@ public class MsSqlResultSet
         oMapped = type.cast(mapObject(o, iType));
         /* then convert */
         return oMapped;
-    } /* mapObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped result set to be wrapped.
@@ -101,25 +95,22 @@ public class MsSqlResultSet
     public MsSqlResultSet(ResultSet rsWrapped, MsSqlConnection conn) {
         super(rsWrapped);
         _conn = conn;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Statement getStatement() throws SQLException {
         return new MsSqlStatement(super.getStatement(), _conn);
-    } /* getStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
         return new MsSqlResultSetMetaData(super.getMetaData(), _conn);
-    } /* getMetaData */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** an extension of the ResultSet API supporting predefined type
      * INTERVAL.
@@ -129,9 +120,8 @@ public class MsSqlResultSet
      */
     public Interval getInterval(int columnIndex) throws SQLException {
         return SqlLiterals.deserialize(super.getBytes(columnIndex), Interval.class);
-    } /* getInterval */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** an extension of the ResultSet API supporting predefined type
      * INTERVAL.
@@ -141,9 +131,8 @@ public class MsSqlResultSet
      */
     public Interval getInterval(String columnLabel) throws SQLException {
         return getInterval(findColumn(columnLabel));
-    } /* getInterval */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -155,9 +144,8 @@ public class MsSqlResultSet
             throwNotSupportedException(sse);
         }
         return sCursorName;
-    } /* getCursorName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -167,9 +155,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwNotSupportedException(sse);
         }
-    } /* setFetchDirection */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -181,9 +168,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return i;
-    } /* findColumn */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -195,9 +181,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return s;
-    } /* getString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -209,9 +194,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return b;
-    } /* getBoolean */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -223,9 +207,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return by;
-    } /* getByte */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -237,9 +220,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return sh;
-    } /* getShort */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -251,9 +233,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return i;
-    } /* getInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -265,9 +246,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return l;
-    } /* getLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -279,9 +259,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return f;
-    } /* getFloat */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -293,9 +272,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return d;
-    } /* getDouble */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -307,9 +285,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return bd;
-    } /* getBigDecimal */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -323,9 +300,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return bd;
-    } /* getBigDecimal */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -337,9 +313,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return buf;
-    } /* getBytes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -351,9 +326,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return date;
-    } /* getDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -366,9 +340,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return date;
-    } /* getDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -380,9 +353,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return time;
-    } /* getTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -395,9 +367,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return time;
-    } /* getTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -409,9 +380,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return ts;
-    } /* getTimestamp */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -424,9 +394,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return ts;
-    } /* getTimestamp */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -441,9 +410,8 @@ public class MsSqlResultSet
             throw new SQLException("Could not parse interval " + s + "!", pe);
         }
         return duration;
-    } /* getDuration */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -456,9 +424,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return is;
-    } /* getAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -472,9 +439,8 @@ public class MsSqlResultSet
             throwNotSupportedException(sse);
         }
         return is;
-    } /* getUnicodeStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -486,9 +452,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return rdr;
-    } /* getCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -501,9 +466,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return is;
-    } /* getBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -527,7 +491,6 @@ public class MsSqlResultSet
         return mapObject(o, iType);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -543,9 +506,8 @@ public class MsSqlResultSet
         else
             oMapped = mapObject(o, iType, type);
         return oMapped;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -558,9 +520,8 @@ public class MsSqlResultSet
             throwNotSupportedException(sse);
         }
         return o;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -572,9 +533,8 @@ public class MsSqlResultSet
             throwNotSupportedException(sse);
         }
         return ref;
-    } /* getRef */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -586,9 +546,8 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return blob;
-    } /* getBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -600,17 +559,15 @@ public class MsSqlResultSet
             throwSqlException(sse);
         }
         return clob;
-    } /* getClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Array getArray(int columnIndex) throws SQLException {
         return getObject(columnIndex, Array.class);
-    } /* getArray */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -632,7 +589,6 @@ public class MsSqlResultSet
         return url;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -644,34 +600,30 @@ public class MsSqlResultSet
             throwNotSupportedException(sse);
         }
         return ri;
-    } /* getRowId */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public String getNString(int columnIndex) throws SQLException {
         return super.getNString(columnIndex);
-    } /* getNString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Reader getNCharacterStream(int columnIndex)
             throws SQLException {
         return super.getNCharacterStream(columnIndex);
-    } /* getNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public NClob getNClob(int columnIndex) throws SQLException {
         return super.getNClob(columnIndex);
-    } /* getNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -681,9 +633,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateNull */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -694,9 +645,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBoolean */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -706,9 +656,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateByte */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -718,9 +667,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateShort */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -730,9 +678,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -742,9 +689,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -754,9 +700,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateFloat */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -767,9 +712,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateDouble */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -780,9 +724,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBigDecimal */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -793,9 +736,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -806,9 +748,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateNString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -819,9 +760,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBytes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -831,9 +771,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -843,9 +782,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -856,9 +794,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateTimestamp */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     public void updateDuration(int columnIndex, Duration x)
@@ -866,9 +803,8 @@ public class MsSqlResultSet
         Interval iv = Interval.fromDuration(x);
         String s = SqlLiterals.formatIntervalLiteral(iv);
         updateString(columnIndex, s);
-    } /* updateDuration */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -879,9 +815,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -892,9 +827,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -905,9 +839,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -918,9 +851,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -931,9 +863,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -944,9 +875,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -957,9 +887,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -970,9 +899,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -983,9 +911,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -996,9 +923,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1009,9 +935,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1035,7 +960,6 @@ public class MsSqlResultSet
             super.updateObject(columnIndex, x);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1047,9 +971,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1059,9 +982,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwNotSupportedException(sse);
         }
-    } /* updateRef */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1071,9 +993,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1084,9 +1005,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1097,9 +1017,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1109,9 +1028,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1122,9 +1040,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1135,9 +1052,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1148,9 +1064,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1161,9 +1076,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1174,9 +1088,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1187,9 +1100,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateSQLXML */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1199,9 +1111,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwNotSupportedException(sse);
         }
-    } /* updateArray */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1211,9 +1122,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateRowId */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1223,9 +1133,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* insertRow */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1235,9 +1144,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* updateRow */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1247,9 +1155,8 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* deleteRow */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1259,6 +1166,6 @@ public class MsSqlResultSet
         } catch (SQLServerException sse) {
             throwSqlException(sse);
         }
-    } /* refreshRow */
+    }
 
-} /* class MsSqlResultSet */
+}

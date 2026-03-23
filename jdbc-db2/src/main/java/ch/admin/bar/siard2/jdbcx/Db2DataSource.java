@@ -21,7 +21,6 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*====================================================================*/
 
 /** Db2DataSource implements a wrapped DB/2 DataSource.
  * @author Hartwig Thomas
@@ -34,7 +33,6 @@ public class Db2DataSource
     // see: http://www.ibm.com/support/knowledgecenter/SSEPGG_9.7.0/com.ibm.db2.luw.apdv.java.doc/src/tpc/imjcc_r0052342.html
     private static Pattern _patUrl = Pattern.compile("^jdbc:((db2:)|(db2j:net:)|(ids:))//(.*?)(:(\\d*))?/(.*)$");
 
-    /*------------------------------------------------------------------*/
 
     /** constructor */
     public Db2DataSource()
@@ -45,9 +43,8 @@ public class Db2DataSource
         /***
          setEnableExtendedDescribe(DB2BaseDataSource.YES);
          ***/
-    } /* constructor Db2DataSource */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param sUrl JDBC URL identifying the database instance to connect to.
@@ -66,9 +63,8 @@ public class Db2DataSource
         setUrl(sUrl);
         setUser(sUser);
         setPassword(sPassword);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * returns the appropriately wrapped H2 Connection.
@@ -76,9 +72,8 @@ public class Db2DataSource
     @Override
     public Connection getConnection() throws SQLException {
         return new Db2Connection(super.getConnection());
-    } /* getConnection */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * returns the appropriately wrapped H2 Connection.
@@ -87,9 +82,8 @@ public class Db2DataSource
     public Connection getConnection(String username, String password)
             throws SQLException {
         return new Db2Connection(super.getConnection(username, password));
-    } /* getConnection */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return unwrapped MSSQL DataSource
      */
@@ -101,9 +95,8 @@ public class Db2DataSource
             _il.exception(se);
         }
         return dsds;
-    } /* getUnwrapped */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set URL to be used for connection.
      * @param url URL (format: "jdbc:h2:<database path>" results in file
@@ -124,9 +117,8 @@ public class Db2DataSource
             dsds.setDatabaseName(sDatabase);
         } else
             throw new IllegalArgumentException("Invalid jdbc:db2: URL!");
-    } /* setUrl */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return URL used for connection.
      */
@@ -137,75 +129,67 @@ public class Db2DataSource
         String sDatabase = dsds.getDatabaseName();
         String sUrl = "jdbc:db2://" + sHost + ":" + String.valueOf(iPort) + "/" + sDatabase;
         return sUrl;
-    } /* getUrl */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set database user to be used for connection.
      * @param user database user to be used for connection.
      */
     public void setUser(String user) {
         getUnwrapped().setUser(user);
-    } /* setUser */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return database user used for connection.
      */
     public String getUser() {
         return getUnwrapped().getUser();
-    } /* getUser */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set database password to be used for connection.
      * @param user database password to be used for connection.
      */
     public void setPassword(String password) {
         getUnwrapped().setPassword(password);
-    } /* setPassword */
+    }
 
-    /*------------------------------------------------------------------*/
     /** The password of the connection is private but not very well hidden.
      * This method will be deleted again!
      * @return database password for connection.
     public String getPassword()
     {
     return (String)ch.enterag.utils.reflect.Glue.invokePrivate(getUnwrapped(), "getPassword", new Class<?>[]{}, new Object[]{});
-    } /* getPassword */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set database description.
      * @param description database description.
      */
     public void setDescription(String description) {
         getUnwrapped().setDescription(description);
-    } /* setDescription */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return database description.
      */
     public String getDescription() {
         return getUnwrapped().getDescription();
-    } /* getDescription */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set database name.
      * @param name database name.
      */
     public void setDatabaseName(String name) {
         getUnwrapped().setDatabaseName(name);
-    } /* setDatabaseName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return database name.
      */
     public String getDatabaseName() {
         return getUnwrapped().getDatabaseName();
-    } /* getDatabaseName */
+    }
 
-} /* class Db2DataSource */
+}

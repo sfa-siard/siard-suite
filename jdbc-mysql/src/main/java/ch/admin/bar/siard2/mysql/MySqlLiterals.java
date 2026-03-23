@@ -14,7 +14,6 @@ import ch.enterag.sqlparser.Interval;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.BU;
 
-/* =============================================================================== */
 
 /**
  * MySqlLiterals extends SqlLiterals by overriding non-JDBC-conformant literal formatters
@@ -29,9 +28,8 @@ public abstract class MySqlLiterals extends SqlLiterals {
             sQuoted = sAPOSTROPHE + sValue.replaceAll(sAPOSTROPHE, sDOUBLE_APOSTROPHE) + sAPOSTROPHE;
 
         return sQuoted;
-    } /* formatStringLiteral */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * format byte buffer value
@@ -44,10 +42,8 @@ public abstract class MySqlLiterals extends SqlLiterals {
             sFormatted = sBYTE_LITERAL_PREFIX + formatStringLiteral(BU.toHex(bufValue));
         }
         return sFormatted;
-    } /* formatBytesLiteral */
+    }
 
-
-    /* ------------------------------------------------------------------------ */
 
     /**
      * format interval value
@@ -60,6 +56,6 @@ public abstract class MySqlLiterals extends SqlLiterals {
             sFormatted = formatBytesLiteral(serialize(intervalValue));
         }
         return sFormatted;
-    } /* formatIntervalLiteral */
+    }
 
-} /* class MySqlLiterals */
+}

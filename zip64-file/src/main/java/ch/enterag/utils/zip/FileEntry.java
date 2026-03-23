@@ -16,7 +16,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/*====================================================================*/
 
 /** FileEntry is inspired by java.util.zip.ZipEntry.
  It represents a file header entry in the central directory
@@ -25,9 +24,6 @@ import java.util.GregorianCalendar;
  */
 public class FileEntry
         implements Cloneable {
-  /*====================================================================
-  (private) data members
-  ====================================================================*/
     /** version needed to extract */
     private int m_iVersionNeeded;
 
@@ -118,7 +114,7 @@ public class FileEntry
         if ((lCrc < 0) || (lCrc > 0xFFFFFFFFL))
             throw new IllegalArgumentException("invalid entry crc-32");
         m_lCrc = lCrc;
-    } /* setCrc */
+    }
 
     /** uncompressed size of entry data */
     private long m_lSize = -1;
@@ -159,7 +155,7 @@ public class FileEntry
         if ((bufExtra != null) && (bufExtra.length > 0xFFFF))
             throw new IllegalArgumentException("invalid extra field length");
         m_bufExtra = bufExtra;
-    } /* setExtra */
+    }
 
     /** optional comment string for entry */
     private String m_sComment = "";
@@ -189,9 +185,6 @@ public class FileEntry
         m_lOffset = lOffset;
     }
 
-  /*====================================================================
-  constants
-  ====================================================================*/
     /** Compression method for uncompressed entries. */
     public static final int iMETHOD_STORED = 0;
     /** Compression method for compressed (deflated) entries. */
@@ -207,10 +200,6 @@ public class FileEntry
     /** version needed for reading ZIP files produced by ZIP32 tools */
     public static final int iVERSION_NEEDED_ZIP = 0x00000014; /* 2.0 */
 
-  /*====================================================================
-  Methods
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** returns a string representation of the ZIP entry.
      * @return name as string representation.
@@ -218,9 +207,8 @@ public class FileEntry
     @Override
     public String toString() {
         return getName();
-    } /* toString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** clones the FileEntry instance.
      * @return cloned instance.
@@ -229,12 +217,8 @@ public class FileEntry
     public Object clone()
             throws CloneNotSupportedException {
         return super.clone();
-    } /* clone */
+    }
   
-  /*====================================================================
-  Constructors
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /**
      * Creates a new file entry with the specified name.
@@ -250,9 +234,8 @@ public class FileEntry
         if (sName.length() > 0xFFFF)
             throw new IllegalArgumentException("entry name too long");
         m_sName = sName;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns true if this is a directory entry. A directory entry is
      * defined to be one whose name ends with a '/'.
@@ -262,7 +245,6 @@ public class FileEntry
         return m_sName.endsWith("/");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** Converts DOS time to Java time (number of milliseconds since epoch).
      * @param dtime DOS time.
@@ -293,9 +275,8 @@ public class FileEntry
          (int)((dtime >> 5) & 0x3f), (int)((dtime << 1) & 0x3e));
          **/
         return gc.getTimeInMillis();
-    } /* dosToJavaTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** Converts Java time to DOS time.
      * @param time JAVA time (number of milliseconds since epoch).
@@ -328,6 +309,6 @@ public class FileEntry
          | d.getDate() << 16 | d.getHours() << 11 | d.getMinutes() << 5
          | d.getSeconds() >> 1;
          ***/
-    } /* javaToDosTime */
+    }
 
-} /* FileEntry */
+}

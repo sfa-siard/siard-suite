@@ -18,7 +18,6 @@ import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.*;
 
-/*====================================================================*/
 
 /** PostgresDatabaseMetaData implements wrapped Postgres DatabaseMetaData.
  * @author Hartwig Thomas
@@ -35,7 +34,6 @@ public class PostgresDatabaseMetaData
     private static int iMAX_VAR_SIZE = 10 * 1024 * 1024;
     Connection _conn = null;
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param dmdWrapped database meta data to be wrapped.
@@ -43,17 +41,15 @@ public class PostgresDatabaseMetaData
     public PostgresDatabaseMetaData(DatabaseMetaData dmdWrapped, Connection conn) {
         super(dmdWrapped);
         _conn = conn;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Connection getConnection() throws SQLException {
         return _conn;
-    } /* getConnection */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * Use PostgresMetaColumn for data type translation.
@@ -66,9 +62,8 @@ public class PostgresDatabaseMetaData
         ResultSet rs = dmd.getColumns(catalog, schemaPattern, tableNamePattern, columnNamePattern);
         PostgresStatement stmt = new PostgresStatement(rs.getStatement(), _conn);
         return new PostgresMetaColumns(new PostgresResultSet(rs, stmt), _conn, 1, 2, 5, 6, 7, 16, 9, 10, 22);
-    } /* getColumns */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -79,9 +74,8 @@ public class PostgresDatabaseMetaData
         ResultSet rs = dmd.getProcedureColumns(catalog, schemaPattern, procedureNamePattern, columnNamePattern);
         PostgresStatement stmt = new PostgresStatement(rs.getStatement(), _conn);
         return new PostgresMetaColumns(new PostgresResultSet(rs, stmt), _conn, 1, 2, 6, 7, 8, 9, 10, -1, -1);
-    } /* getProcedureColumns */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -92,19 +86,16 @@ public class PostgresDatabaseMetaData
         ResultSet rs = dmd.getFunctionColumns(catalog, schemaPattern, functionNamePattern, columnNamePattern);
         PostgresStatement stmt = new PostgresStatement(rs.getStatement(), _conn);
         return new PostgresMetaColumns(new PostgresResultSet(rs, stmt), _conn, 1, 2, 6, 7, 8, 9, 10, -1, -1);
-    } /* getFunctionColumns */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getTypeNamespace(String sPgType, String sPgNamespace) {
         return "(pg_type " + sPgType + " JOIN pg_namespace " + sPgNamespace + " ON " + sPgType + ".typnamespace = " + sPgNamespace + ".oid)";
-    } /* getTypeNamespace */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getQualifiedType(String sPgNamespace, String sPgType) {
         return "'\"' || " + sPgNamespace + ".nspname || '\".\"' || " + sPgType + ".typname || '\"'";
-    } /* getQualifiedType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return CASE statement evaluating predefined type of expression.
      */
@@ -123,9 +114,8 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n      ELSE " + String.valueOf(Types.NULL));
         sb.append("\r\n    END");
         return sb.toString();
-    } /* getCasePredefinedType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the base type of domains, enums and ranges.
      * @return base type.
@@ -142,9 +132,8 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n    ELSE " + String.valueOf(Types.NULL));
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseBaseType */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getCaseDataType(String sDataType) {
         StringBuilder sbDataTypeCase = new StringBuilder("  CASE " + sDataType);
         for (PostgresType pgt : PostgresType.values()) {
@@ -160,14 +149,12 @@ public class PostgresDatabaseMetaData
         sbDataTypeCase.append("\r\n    ELSE " + String.valueOf(Types.STRUCT));
         sbDataTypeCase.append("\r\n  END");
         return sbDataTypeCase.toString();
-    } /* getCaseDataType */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getClassWhen(String sCategory, Class<?> cls) {
         return "\r\n    WHEN " + PostgresLiterals.formatStringLiteral(sCategory) +
                 " THEN " + PostgresLiterals.formatStringLiteral(cls.getName());
     }
-    /*------------------------------------------------------------------*/
 
     /** return class name for UDT.
      * (Could be improved by basing it on the base type for DISTINCT ...)
@@ -191,9 +178,8 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n    ELSE " + PostgresLiterals.formatStringLiteral(java.lang.Object.class.getName()));
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseClassName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the data type of the UDT.
      * @return STRUCT or DISTINCT.
@@ -206,9 +192,8 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n    ELSE " + String.valueOf(Types.DISTINCT));
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseUdtDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the FROM tables for the UDT query.
      * @return FROM tables.
@@ -221,9 +206,8 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n  LEFT JOIN " + getTypeNamespace(sPgTypeBase, sPgNamespaceTypeBase) + " ON " + sPgType + ".typbasetype = " + sPgTypeBase + ".oid");
         sb.append("\r\n  LEFT JOIN pg_description " + sPgDescription + " ON " + sPgType + ".oid = " + sPgDescription + ".objoid");
         return sb.toString();
-    } /* getUdtFromTables */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getUdtCondition(String sPgType, String sPgNamespace, String sPgClass,
                                    String catalog, String schemaPattern, String typeNamePattern, int[] types) {
         if (types == null)
@@ -253,9 +237,8 @@ public class PostgresDatabaseMetaData
         if (typeNamePattern != null)
             sb.append(" AND\r\n  " + sPgType + ".typname LIKE " + PostgresLiterals.formatStringLiteral(typeNamePattern));
         return sb.toString();
-    } /* getUdtCondition */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -284,9 +267,8 @@ public class PostgresDatabaseMetaData
                                         .unwrap(Statement.class);
         ResultSet rsUdts = stmt.executeQuery(sb.toString());
         return rsUdts;
-    } /* getUDTs */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getAttributesFrom(String sPgTypeParent, String sPgNamespaceTypeParent, String sPgClass,
                                      String sPgAttribute, String sPgTypeAttribute, String sPgNamespaceTypeAttribute,
                                      String sPgTypeAttributeBase, String sPgNamespaceTypeAttributeBase, String sPgDescription,
@@ -313,9 +295,8 @@ public class PostgresDatabaseMetaData
 
         sb.append("\r\n    LEFT JOIN pg_description " + sPgDescription + " ON (" + sPgClass + ".oid = " + sPgDescription + ".objoid) OR (" + sPgRange + ".rngsubtype = " + sPgDescription + ".objoid)");
         return sb.toString();
-    } /* getAttributesFrom */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getAttributesCondition(String sPgTypeParent, String sPgTypeNamespace,
                                           String sPgClass, String sPgAttribute, String sPgValues,
                                           String catalog, String schemaPattern, String typeNamePattern, String attributeNamePattern) {
@@ -332,7 +313,7 @@ public class PostgresDatabaseMetaData
         if (attributeNamePattern != null)
             sb.append(" AND\r\n  " + getCaseAttributeName(sPgAttribute, sPgValues) + " LIKE " + PostgresLiterals.formatStringLiteral(attributeNamePattern));
         return sb.toString();
-    } /* getAttributesCondition */
+    }
 
     private String getCaseAttributeName(String sPgAttribute, String sPgValues) {
         StringBuilder sb = new StringBuilder();
@@ -341,9 +322,8 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n    ELSE " + sPgAttribute + ".attname");
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseAttributeName */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getCaseTypeName(String sPgTypeAttribute, String sPgNamespaceTypeAttribute,
                                    String sPgTypeRange, String sPgNamespaceTypeRange, String sPgValues) {
         StringBuilder sb = new StringBuilder();
@@ -356,7 +336,7 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n    ELSE " + getQualifiedType(sPgNamespaceTypeAttribute, sPgTypeAttribute));
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseTypeName */
+    }
 
     private String getCaseAttrSize(String sPgTypeAttribute, String sPgTypeRange, String sPgValues) {
         StringBuilder sb = new StringBuilder();
@@ -377,7 +357,7 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n      END");
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseAttrSize */
+    }
 
     private String getCaseOrdinalPosition(String sPgAttribute, String sPgValues) {
         StringBuilder sb = new StringBuilder();
@@ -386,7 +366,7 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n    ELSE " + sPgValues + ".attnum");
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseOrdinalPosition */
+    }
 
     private String getCaseNullable(String sPgClass, String sPgAttribute, String sPgTypeAttribute, String sPgTypeRange, String sPgValues) {
         StringBuilder sb = new StringBuilder();
@@ -411,7 +391,7 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n      END");
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseNullable */
+    }
 
     private String getCaseIsNullable(String sPgClass, String sPgAttribute, String sPgTypeAttribute, String sPgTypeRange, String sPgValues) {
         StringBuilder sb = new StringBuilder();
@@ -436,7 +416,7 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n      END");
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseNullable */
+    }
 
     private String getCaseSourceTypeName(String sPgClass, String sPgValues,
                                          String sPgTypeAttributeBase, String sPgNamespaceTypeAttributeBase,
@@ -451,9 +431,8 @@ public class PostgresDatabaseMetaData
         sb.append("\r\n    ELSE " + getQualifiedType(sPgNamespaceTypeAttributeBase, sPgTypeAttributeBase));
         sb.append("\r\n  END");
         return sb.toString();
-    } /* getCaseSourceTypeName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -515,6 +494,6 @@ public class PostgresDatabaseMetaData
         ResultSet rsAttributes = new PostgresResultSet(stmt.unwrap(Statement.class)
                                                            .executeQuery(sb.toString()), stmt);
         return new PostgresMetaColumns(rsAttributes, getConnection(), 1, 2, 5, 6, 7, 7, 8, 9, 21);
-    } /* getAttributes */
+    }
 
-} /* class PostgresDatabaseMetaData */
+}

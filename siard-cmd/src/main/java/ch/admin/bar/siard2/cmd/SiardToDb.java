@@ -32,24 +32,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** Loads the data from a siard file to a database instance.
  @author Hartwig Thomas
  */
 @Slf4j
 public class SiardToDb {
-    /*====================================================================
-    (private) constants
-    ====================================================================*/
     public static final int iRETURN_OK = 0;
     public static final int iRETURN_WARNING = 4;
     public static final int iRETURN_ERROR = 8;
     public static final int iRETURN_FATAL = 12;
 
-  /*====================================================================
-  (private) data members
-  ====================================================================*/
     /** info */
     private static ProgramInfo _pi = ProgramInfo.getProgramInfo(
             "SIARD Suite", VersionsExplorer.INSTANCE.getSiardVersion(),
@@ -88,9 +81,6 @@ public class SiardToDb {
         return _iReturn;
     }
   
-  /*====================================================================
-  methods
-  ====================================================================*/
 
     /** prints usage information */
     private void printUsage() {
@@ -120,9 +110,8 @@ public class SiardToDb {
         System.out.println("  <siard file>        name of .siard file (will be overwritten. if it exists!)");
         System.out.println("  <schema>            schema name in SIARD file");
         System.out.println("  <mappedschema>      schema name to be used in database");
-    } /* printUsage */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reads the parameters from the command line or from the config file.
      */
@@ -240,12 +229,8 @@ public class SiardToDb {
             System.out.println(message);
         } else
             printUsage();
-    } /* getParameters */
+    }
 
-  /*====================================================================
-  constructor
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** runs main program of SiardFromDb. */
     public SiardToDb(String asArgs[])
@@ -308,12 +293,8 @@ public class SiardToDb {
                 System.err.println("Connection to " + _sJdbcUrl + " not supported (" + sError + ")!");
             _archive.close();
         }
-    } /* constructor SiardToDb */
+    }
 
-  /*====================================================================
-  factory
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** main entry point starts logging and creates running instance.
      @param asArgs command-line arguments are ignored
@@ -341,6 +322,6 @@ public class SiardToDb {
             iReturn = iRETURN_FATAL;
         }
         System.exit(iReturn);
-    } /* main */
+    }
 
-} /* class SiardToDb */
+}

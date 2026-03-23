@@ -15,7 +15,6 @@ import ch.admin.bar.siard2.mysql.MySqlLiterals;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.UnsignedLiteral;
 
-/* =============================================================================== */
 
 /**
  * MySqlLiteral implements the value translation from ISO SQL:2008 to MySql Server
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.expression.UnsignedLiteral;
  */
 public class MySqlUnsignedLiteral extends UnsignedLiteral {
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * Constructor with factory only to be called by factory
@@ -33,7 +31,6 @@ public class MySqlUnsignedLiteral extends UnsignedLiteral {
         super(sf);
     }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * formats the unsigned literal value
@@ -49,6 +46,6 @@ public class MySqlUnsignedLiteral extends UnsignedLiteral {
         }
 
         return sExpression;
-    } /* format */
+    }
 
-} /* class MySqlUnsignedLiteral */
+}

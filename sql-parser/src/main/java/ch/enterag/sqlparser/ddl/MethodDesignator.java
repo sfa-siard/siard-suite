@@ -17,7 +17,6 @@ public class MethodDesignator
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(MethodDesignator.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -42,7 +41,6 @@ public class MethodDesignator
             return MethodDesignator.this;
         }
     }
-    /*==================================================================*/
 
     private MdVisitor _visitor = new MdVisitor();
 
@@ -80,7 +78,6 @@ public class MethodDesignator
         _listDataTypes = listDataTypes;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the of for data types.
      * @return formatted list.
@@ -95,9 +92,8 @@ public class MethodDesignator
         }
         sDataTypes = sDataTypes + sRIGHT_PAREN;
         return sDataTypes;
-    } /* formatDataTypes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the method designator.
      * @return the SQL string corresponding to the fields of the method
@@ -110,9 +106,8 @@ public class MethodDesignator
             sDesignator = sDesignator + getMethodType().getKeywords() + sSP;
         sDesignator = sDesignator + getMethodName().format() + formatDataTypes();
         return sDesignator;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the method designator from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -121,9 +116,8 @@ public class MethodDesignator
     public void parse(SqlParser.MethodDesignatorContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the method designator from SQL.
      * @param sSql SQL.
@@ -132,9 +126,8 @@ public class MethodDesignator
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().methodDesignator());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a method designator.
      * @param mt method type (or null).
@@ -150,15 +143,14 @@ public class MethodDesignator
         setMethodName(idMethod);
         setDataTypes(listDataTypes);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MethodDesignator(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MethodDesignator */
+}

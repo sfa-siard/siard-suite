@@ -17,7 +17,6 @@ public class DropFunctionStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DropFunctionStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -46,7 +45,6 @@ public class DropFunctionStatement
             return DropFunctionStatement.this;
         }
     }
-    /*==================================================================*/
 
     private DfsVisitor _visitor = new DfsVisitor();
 
@@ -114,9 +112,8 @@ public class DropFunctionStatement
         }
         s = s + sRIGHT_PAREN;
         return s;
-    } /* formatParameters */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the drop function statement.
      * @return the SQL string corresponding to the fields of the drop function statement.
@@ -132,9 +129,8 @@ public class DropFunctionStatement
             sStatement = sStatement + formatParameters();
         sStatement = sStatement + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop function statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -143,9 +139,8 @@ public class DropFunctionStatement
     public void parse(SqlParser.DropFunctionStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop function statement from SQL.
      * @param sSql SQL.
@@ -154,9 +149,8 @@ public class DropFunctionStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dropFunctionStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a drop function statement.
      * @param bSpecific true for SPECIFIC.
@@ -179,15 +173,14 @@ public class DropFunctionStatement
         setParameters(listParameters);
         setDropBehavior(db);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DropFunctionStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DropFunctionStatement */
+}

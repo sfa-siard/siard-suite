@@ -13,7 +13,6 @@ public class DmlStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DmlStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -39,7 +38,6 @@ public class DmlStatement
             return DmlStatement.this;
         }
     }
-    /*==================================================================*/
 
     private DsVisitor _visitor = new DsVisitor();
 
@@ -77,7 +75,6 @@ public class DmlStatement
         _us = us;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the DML statement.
      * @return the SQL string corresponding to the fields of the DML statement.
@@ -92,9 +89,8 @@ public class DmlStatement
         else if (getUpdateStatement() != null)
             sStatement = getUpdateStatement().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the DML statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -103,9 +99,8 @@ public class DmlStatement
     public void parse(SqlParser.DmlStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the DML statement from SQL.
      * @param sSql SQL.
@@ -114,9 +109,8 @@ public class DmlStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dmlStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a DML statement.
      * Only one parameter not null!
@@ -134,15 +128,14 @@ public class DmlStatement
         setDeleteStatement(ds);
         setUpdateStatement(us);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DmlStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DmlStatement */
+}

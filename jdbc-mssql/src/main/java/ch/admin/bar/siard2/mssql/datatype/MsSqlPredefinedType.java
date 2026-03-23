@@ -18,7 +18,6 @@ import ch.enterag.sqlparser.datatype.enums.PreType;
 import java.util.HashMap;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** MsSqlPredefinedType implements the type translation from ISO SQL to
  * MSSQL.
@@ -58,7 +57,6 @@ public class MsSqlPredefinedType
 
     private static int iMAX_BYTE_LENGTH = 8000;
 
-    /*------------------------------------------------------------------*/
 
     /** format the predefined data type for MSSQL.
      * In MSSQL SMALLINT is a short, INTEGER is an int and BIGINT is a long.
@@ -107,15 +105,14 @@ public class MsSqlPredefinedType
             }
         }
         return sType;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlPredefinedType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlPredefinedType */
+}

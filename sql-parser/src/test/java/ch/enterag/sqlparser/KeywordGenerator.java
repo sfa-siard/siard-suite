@@ -546,7 +546,7 @@ public class KeywordGenerator {
                 sLine = sb.toString();
         }
         return sLine;
-    } /* readLine */
+    }
 
     private void readKeywordHeaderAndFooter(Reader rdr)
             throws IOException {
@@ -566,7 +566,7 @@ public class KeywordGenerator {
             sbFooter.append(sLine);
         _sKeywordHeader = sbHeader.toString();
         _sKeywordFooter = sbFooter.toString();
-    } /* readKeywordHeaderAndFooter */
+    }
 
     private void readEnumHeaderAndFooter(Reader rdr)
             throws IOException {
@@ -586,7 +586,7 @@ public class KeywordGenerator {
             sbFooter.append(sLine);
         _sEnumHeader = sbHeader.toString();
         _sEnumFooter = sbFooter.toString();
-    } /* readKeywordHeaderAndFooter */
+    }
 
     private void writeKeywordHeader(Writer wr)
             throws IOException {
@@ -604,13 +604,13 @@ public class KeywordGenerator {
             throws IOException {
         wr.write(_sEnumHeader);
         wr.write(sENUM_GENERATED_STARTS);
-    } /* writeEnumHeader */
+    }
 
     private void writeEnumFooter(Writer wr)
             throws IOException {
         wr.write(sENUM_GENERATED_ENDS);
         wr.write(_sEnumFooter);
-    } /* writeEnumFooter */
+    }
 
     private String getRule(String sKeyword) {
         String sRule = sKeyword.replace("-", "_")
@@ -619,7 +619,7 @@ public class KeywordGenerator {
         if (sRule.equalsIgnoreCase("more"))
             sRule = sKeyword + "_";
         return sRule;
-    } /* getRule */
+    }
 
     private String formatKeywordLine(String sKeyword) {
         StringBuilder sbKeywordLine = new StringBuilder();
@@ -649,7 +649,7 @@ public class KeywordGenerator {
             sbKeywordLine.append(" '" + sRule.toUpperCase() + "' | '" + sRule.toLowerCase() + "'");
         sbKeywordLine.append(";");
         return sbKeywordLine.toString();
-    } /* formatKeywordLine */
+    }
 
     private String formatEnumLine(String sKeyword, boolean bReserved, boolean bLast) {
         StringBuilder sbKeywordLine = new StringBuilder();
@@ -665,12 +665,12 @@ public class KeywordGenerator {
         else
             sbKeywordLine.append(";");
         return sbKeywordLine.toString();
-    } /* formatEnumLine */
+    }
 
     private void writeKeywordIdentifier(Writer wr)
             throws IOException {
         wr.write(sLINE_END + "IDENTIFIER: REGULAR_IDENTIFIER |  NON_RESERVED_KEYWORD | DELIMITED_IDENTIFIER;" + sLINE_END + sLINE_END);
-    } /* writeKeywordIdentifier */
+    }
 
     private void writeKeywords(Writer wrEnum, Writer wrKeyword, String[] asKeyword, Set<String> setKeywords, boolean bReserved, boolean bLast)
             throws IOException {
@@ -715,7 +715,7 @@ public class KeywordGenerator {
             }
             wrKeyword.write("  ;" + sLINE_END);
         }
-    } /* writeKeywords */
+    }
 
     private KeywordGenerator()
             throws IOException {
@@ -759,4 +759,4 @@ public class KeywordGenerator {
         }
     }
 
-} /* KeywordGenerator */
+}

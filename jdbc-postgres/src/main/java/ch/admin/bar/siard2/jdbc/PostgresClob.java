@@ -23,7 +23,6 @@ public class PostgresClob
         return _lOid;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param pgClob
@@ -34,9 +33,8 @@ public class PostgresClob
         PgConnection pgconn = (PgConnection) conn.unwrap(Connection.class);
         _lom = pgconn.getLargeObjectAPI();
         _lOid = lOid;
-    } /* constructor PostgresClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -54,9 +52,8 @@ public class PostgresClob
             throw new SQLException("Length of PostgresClob could not be determined (" + EU.getExceptionMessage(ie) + ")!");
         }
         return lLength;
-    } /* length */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -80,9 +77,8 @@ public class PostgresClob
             throw new SQLException("String could not be read from PostgresClob (" + EU.getExceptionMessage(ie) + ")!");
         }
         return swr.toString();
-    } /* getSubstring */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -90,7 +86,6 @@ public class PostgresClob
         throw new SQLFeatureNotSupportedException("Position of substrings in PostgresClob is not supported!");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -98,7 +93,6 @@ public class PostgresClob
         throw new SQLFeatureNotSupportedException("Position of substrings in PostgresClob is not supported!");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -106,7 +100,6 @@ public class PostgresClob
         return setString(pos, str, 0, str.length());
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -124,7 +117,6 @@ public class PostgresClob
         return iWritten;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -133,9 +125,8 @@ public class PostgresClob
         InputStream is = lo.getInputStream();
         // lo.close();
         return is;
-    } /* getAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -147,7 +138,6 @@ public class PostgresClob
         return os;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -155,7 +145,6 @@ public class PostgresClob
         return new InputStreamReader(getAsciiStream(), Charset.forName("UTF-8"));
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -180,7 +169,6 @@ public class PostgresClob
         return lBytePos;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -195,7 +183,6 @@ public class PostgresClob
         return wr;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -210,7 +197,6 @@ public class PostgresClob
         }
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -219,4 +205,4 @@ public class PostgresClob
         _lom = null;
     }
 
-} /* class PostgresClob */
+}

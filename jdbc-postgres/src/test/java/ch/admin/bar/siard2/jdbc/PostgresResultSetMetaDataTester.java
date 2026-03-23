@@ -42,7 +42,7 @@ public class PostgresResultSetMetaDataTester
         sbSql.append("\r\nFROM ");
         sbSql.append(qiTable.format());
         return sbSql.toString();
-    } /* getTableQuery */
+    }
 
     private static final String _sNativeQuerySimple = getTableQuery(TestPostgresDatabase.getQualifiedSimpleTable(), TestPostgresDatabase._listCdSimple);
     private static final String _sNativeQueryComplex = getTableQuery(TestPostgresDatabase.getQualifiedComplexTable(), TestPostgresDatabase._listCdComplex);
@@ -97,7 +97,7 @@ public class PostgresResultSetMetaDataTester
             }
         }
         return conn;
-    } /* closeResultSet */
+    }
 
     private void openResultSet(Connection conn, String sQuery)
             throws SQLException {
@@ -106,7 +106,7 @@ public class PostgresResultSetMetaDataTester
         ResultSet rs = stmt.executeQuery(sQuery);
         ResultSetMetaData rsmd = rs.getMetaData();
         setResultSetMetaData(rsmd, rs);
-    } /* openResultSet */
+    }
 
     @Before
     public void setUp() {
@@ -138,12 +138,12 @@ public class PostgresResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong result set metadata class!", PostgresResultSetMetaData.class, getResultSetMetaData().getClass());
-    } /* testClass */
+    }
 
     @Test
     public void testNativeSimple() {
@@ -154,7 +154,7 @@ public class PostgresResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeSimple */
+    }
 
     @Test
     public void testNativeComplex() {
@@ -165,7 +165,7 @@ public class PostgresResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeComplex */
+    }
 
     @Test
     public void testSqlSimple() {
@@ -176,7 +176,7 @@ public class PostgresResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSqlSimple */
+    }
 
     @Test
     public void testSqlComplex() {
@@ -187,6 +187,6 @@ public class PostgresResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSqlComplex */
+    }
 
 }

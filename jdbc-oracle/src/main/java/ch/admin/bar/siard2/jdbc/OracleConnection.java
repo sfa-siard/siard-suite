@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-/*====================================================================*/
 
 /**
  * OracleConnection implements a wrapped Oracle Connection.
@@ -34,7 +33,6 @@ public class OracleConnection extends BaseConnection implements Connection {
     private static IndentLogger _il = IndentLogger.getIndentLogger(OracleConnection.class.getName());
     private static final int iBUFFER_SIZE = 8192;
 
-    /*------------------------------------------------------------------*/
 
     /** convert an OracleSQLException into an SQLException.
      * @param ose SQLServerException
@@ -42,9 +40,8 @@ public class OracleConnection extends BaseConnection implements Connection {
      */
     private void throwSqlException(OracleSQLException ose) throws SQLException {
         throw new SQLException("Oracle exception!", ose);
-    } /* throwSqlException */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an OracleSQLException into an
      * SQLFeatureNotSupportedException.
@@ -53,9 +50,8 @@ public class OracleConnection extends BaseConnection implements Connection {
      */
     private void throwNotSupportedException(OracleSQLException ose) throws SQLFeatureNotSupportedException {
         throw new SQLFeatureNotSupportedException("ose Exception!", ose);
-    } /* throwFeatureNotSupportedSqlException */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param connWrapped connection to wrapped
@@ -71,9 +67,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             stmt.close();
             _il.exit();
         }
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} wraps statement.
@@ -82,27 +77,24 @@ public class OracleConnection extends BaseConnection implements Connection {
     public Statement createStatement() throws SQLException {
         Statement stmt = new OracleStatement(super.createStatement());
         return stmt;
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
         PreparedStatement ps = super.prepareStatement(nativeSQL(sql));
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public CallableStatement prepareCall(String sql) throws SQLException {
         CallableStatement cs = super.prepareCall(nativeSQL(sql));
         return cs;
-    } /* prepareCall */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -115,9 +107,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         sql = ss.format();
         _il.exit(sql);
         return sql;
-    } /* nativeSQL */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -127,9 +118,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* setAutoCommit */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -141,9 +131,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return bAutoCommit;
-    } /* getAutoCommit */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -153,9 +142,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* commit */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -165,9 +153,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* rollback */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -177,9 +164,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* close */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -191,9 +177,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return bIsClosed;
-    } /* isClosed */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} wraps database meta data.
@@ -207,9 +192,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return dmd;
-    } /* getMetadata */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -219,9 +203,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* setReadOnly */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -233,9 +216,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return bIsReadOnly;
-    } /* isReadOnly */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -245,9 +227,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* setCatalog */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -259,9 +240,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return sCatalog;
-    } /* getCatalog */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -271,9 +251,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* setTransactionIsolation */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -285,9 +264,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return iTransactionIsolation;
-    } /* getTransactionIsolation */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -299,9 +277,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return sw;
-    } /* getWarnings */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -311,9 +288,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* clearWarnings */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} wraps statement.
@@ -327,9 +303,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return stmt;
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -342,9 +317,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -356,9 +330,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return cs;
-    } /* prepareCall */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -370,9 +343,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return mapTypes;
-    } /* getTypeMap */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -382,9 +354,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* setTypeMap */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -394,9 +365,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* setHoldability */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -408,9 +378,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return iHoldability;
-    } /* getHoldability */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -422,9 +391,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return sp;
-    } /* setSavePoint */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -436,9 +404,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return sp;
-    } /* setSavePoint */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -448,9 +415,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* rollback */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -462,9 +428,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (SQLException se) {
             throw new SQLFeatureNotSupportedException(se);
         }
-    } /* releaseSavePoint */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} wraps statement.
@@ -480,9 +445,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwNotSupportedException(ose);
         }
         return stmt;
-    } /* createStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -495,9 +459,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwNotSupportedException(ose);
         }
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -510,9 +473,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwNotSupportedException(ose);
         }
         return cs;
-    } /* prepareCall */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -524,9 +486,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -538,9 +499,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -552,9 +512,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return ps;
-    } /* prepareStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -566,9 +525,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return clob;
-    } /* createClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -580,18 +538,16 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return blob;
-    } /* createBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public NClob createNClob() throws SQLException {
         NClob nclob = super.createNClob();
         return nclob;
-    } /* createNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -605,9 +561,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throw new SQLFeatureNotSupportedException(cce);
         }
         return sqlxml;
-    } /* createSQLXML */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -619,25 +574,22 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return bIsValid;
-    } /* isValid */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
         super.setClientInfo(name, value);
-    } /* setClientInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
         super.setClientInfo(properties);
-    } /* setClientInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -649,9 +601,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return sClientInfo;
-    } /* getClientInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -663,18 +614,16 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return propClientInfo;
-    } /* getClientInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
         Array array = new OracleArray(this, typeName, elements);
         return array;
-    } /* createArrayOf */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**
      * {@inheritDoc} The names and types of the attributes are derived from the
@@ -734,9 +683,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throw new SQLException("Input stream could not be read!", ie);
         }
         return struct;
-    } /* createStruct */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -746,9 +694,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* setSchema */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -760,9 +707,8 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return sSchema;
-    } /* getSchema */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -772,9 +718,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* abort */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -784,9 +729,8 @@ public class OracleConnection extends BaseConnection implements Connection {
         } catch (OracleSQLException ose) {
             throwSqlException(ose);
         }
-    } /* setNetworkTimeout */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -798,11 +742,11 @@ public class OracleConnection extends BaseConnection implements Connection {
             throwSqlException(ose);
         }
         return iNetWorkTimeout;
-    } /* getNetworkTimeout */
+    }
 
     @Override
     public Blob createDatalinkObject() throws SQLException {
         return createBlob();
     }
 
-} /* class OracleConnection */
+}

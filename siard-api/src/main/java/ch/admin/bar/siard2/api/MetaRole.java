@@ -25,9 +25,6 @@ public interface MetaRole
      */
     MetaData getParentMetaData();
   
-  /*====================================================================
-  role properties
-  ====================================================================*/
 
     /**
      * get role name.

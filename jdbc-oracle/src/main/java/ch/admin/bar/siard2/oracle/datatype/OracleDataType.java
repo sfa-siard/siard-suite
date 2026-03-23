@@ -24,7 +24,6 @@ import java.sql.SQLException;
 
 public class OracleDataType
         extends DataType {
-    /*------------------------------------------------------------------*/
 
     /** format an ARRAY type.
      * @return SQL for ARRAY type.
@@ -46,15 +45,14 @@ public class OracleDataType
             throw new IllegalArgumentException(se);
         }
         return sDataType;
-    } /* formatArrayType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleDataType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* OracleDataType */
+}

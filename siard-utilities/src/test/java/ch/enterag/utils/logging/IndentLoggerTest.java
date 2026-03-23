@@ -16,4 +16,4 @@ public class IndentLoggerTest {
         _il.exit();
     }
 
-} /* IndentLoggerTest */
+}

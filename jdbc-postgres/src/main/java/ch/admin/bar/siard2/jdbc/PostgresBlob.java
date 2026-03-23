@@ -31,9 +31,8 @@ public class PostgresBlob
         PgConnection pgconn = (PgConnection) conn.unwrap(Connection.class);
         _lom = pgconn.getLargeObjectAPI();
         _lOid = lOid;
-    } /* constructor PostgresBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -44,7 +43,6 @@ public class PostgresBlob
         return lLength;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -70,7 +68,6 @@ public class PostgresBlob
         return baos.toByteArray();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -78,7 +75,6 @@ public class PostgresBlob
         throw new SQLFeatureNotSupportedException("Position of byte patterns in PostgresBlob is not supported!");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -86,7 +82,6 @@ public class PostgresBlob
         throw new SQLFeatureNotSupportedException("Position of Blob in PostgresBlob is not supported!");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -94,7 +89,6 @@ public class PostgresBlob
         return setBytes(pos, bytes, 0, bytes.length);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -112,7 +106,6 @@ public class PostgresBlob
         return iWritten;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -123,7 +116,6 @@ public class PostgresBlob
         return is;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -132,7 +124,6 @@ public class PostgresBlob
         throw new SQLFeatureNotSupportedException("BinaryStream with limited length in PostgresBlob is not supported!");
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -144,7 +135,6 @@ public class PostgresBlob
         return os;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -154,7 +144,6 @@ public class PostgresBlob
         lo.close();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -163,4 +152,4 @@ public class PostgresBlob
         _lom = null;
     }
 
-} /* class PostgresBlob */
+}

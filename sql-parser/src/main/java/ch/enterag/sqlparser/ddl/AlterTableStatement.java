@@ -14,7 +14,6 @@ public class AlterTableStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(AlterTableStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -60,7 +59,6 @@ public class AlterTableStatement
             return AlterTableStatement.this;
         }
     }
-    /*==================================================================*/
 
     private AtsVisitor _visitor = new AtsVisitor();
 
@@ -144,7 +142,6 @@ public class AlterTableStatement
         _db = db;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the alter table statement.
      * @return the SQL string corresponding to the fields of the alter table
@@ -170,9 +167,8 @@ public class AlterTableStatement
             sStatement = sStatement + sSP + K.DROP.getKeyword() + sSP + K.CONSTRAINT.getKeyword() + sSP +
                     getConstraintName().format() + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the alter table statement  from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -181,9 +177,8 @@ public class AlterTableStatement
     public void parse(SqlParser.AlterTableStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the alter table statement from SQL.
      * @param sSql SQL.
@@ -192,9 +187,8 @@ public class AlterTableStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().alterTableStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an alter table statement.
      * @param qTableName name of type to be altered (not null!).
@@ -222,15 +216,14 @@ public class AlterTableStatement
         setConstraintName(qConstraintName);
         setDropBehavior(db);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public AlterTableStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class AlterTableStatement */
+}

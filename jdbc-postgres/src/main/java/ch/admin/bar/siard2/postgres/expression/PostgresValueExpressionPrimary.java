@@ -14,7 +14,6 @@ package ch.admin.bar.siard2.postgres.expression;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 
-/*====================================================================*/
 
 /** PostgresValueExpressionPrimary overrides ValueExpressionPrimary of
  * SQL parser in order to format UDT literals for Postgres.
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.expression.ValueExpressionPrimary;
 public class PostgresValueExpressionPrimary
         extends ValueExpressionPrimary {
 
-    /*------------------------------------------------------------------*/
 
     /** format the value expression primary.
      * @return the SQL string corresponding to the fields of the value
@@ -39,15 +37,14 @@ public class PostgresValueExpressionPrimary
         else
             sExpression = super.format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public PostgresValueExpressionPrimary(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class PostgresValueExpressionPrimary */
+}

@@ -13,7 +13,6 @@ public class UpdateTarget
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(UpdateTarget.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -31,7 +30,6 @@ public class UpdateTarget
             return UpdateTarget.this;
         }
     }
-    /*==================================================================*/
 
     private UtVisitor _visitor = new UtVisitor();
 
@@ -59,7 +57,6 @@ public class UpdateTarget
         _svs = svs;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the update target.
      * @return the SQL string corresponding to the fields of the update
@@ -71,9 +68,8 @@ public class UpdateTarget
         if (getSimpleValueSpecification() != null)
             s = s + sLEFT_BRACKET + getSimpleValueSpecification().format() + sRIGHT_BRACKET;
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the update target from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -82,9 +78,8 @@ public class UpdateTarget
     public void parse(SqlParser.UpdateTargetContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the update target from SQL.
      * @param sSql SQL.
@@ -93,9 +88,8 @@ public class UpdateTarget
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().updateTarget());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an update target.
      * @param idColumnName name of column.
@@ -108,15 +102,14 @@ public class UpdateTarget
         setColumnName(idColumnName);
         setSimpleValueSpecification(svs);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public UpdateTarget(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class UpdateTarget */
+}

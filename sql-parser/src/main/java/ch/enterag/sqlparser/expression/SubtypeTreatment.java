@@ -13,7 +13,6 @@ public class SubtypeTreatment
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SubtypeTreatment.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -34,7 +33,6 @@ public class SubtypeTreatment
             return SubtypeTreatment.this;
         }
     }
-    /*==================================================================*/
 
     private StVisitor _visitor = new StVisitor();
 
@@ -72,7 +70,6 @@ public class SubtypeTreatment
         _qiScopeTable = qiScopeTable;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the subtype treatment.
      * @return the SQL string corresponding to the fields of the subtype
@@ -89,9 +86,8 @@ public class SubtypeTreatment
             s = s + sSP + getUdtName().format();
         s = s + sRIGHT_PAREN;
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the subtype treatment from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -100,9 +96,8 @@ public class SubtypeTreatment
     public void parse(SqlParser.SubtypeTreatmentContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the subtype treatment from SQL.
      * @param sSql SQL.
@@ -111,9 +106,8 @@ public class SubtypeTreatment
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().subtypeTreatment());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a subtype treatment.
      * @param ve value expression (not null!).
@@ -129,15 +123,14 @@ public class SubtypeTreatment
         setUdtName(qiUdtName);
         setScopeTable(qiScopeTable);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public SubtypeTreatment(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class SubtypeTreatment */
+}

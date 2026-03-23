@@ -15,7 +15,6 @@ import ch.enterag.sqlparser.K;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.CreateFunctionStatement;
 
-/*====================================================================*/
 
 /** OracleCreateFunctionStatement overrides the formatting
  * of the CreateFunctionStatement
@@ -24,7 +23,6 @@ import ch.enterag.sqlparser.ddl.CreateFunctionStatement;
  */
 public class OracleCreateFunctionStatement
         extends CreateFunctionStatement {
-    /*------------------------------------------------------------------*/
 
     /**
      * format the drop schema statement
@@ -37,14 +35,13 @@ public class OracleCreateFunctionStatement
         if (getRoutineBody() != null)
             sStatement = sStatement + K.IS.getKeyword() + sNEW_LINE + getRoutineBody().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleCreateFunctionStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 }

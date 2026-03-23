@@ -20,7 +20,6 @@ public class WindowSpecification
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(WindowSpecification.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -100,7 +99,6 @@ public class WindowSpecification
             return WindowSpecification.this;
         }
     }
-    /*==================================================================*/
 
     private WsVisitor _visitor = new WsVisitor();
 
@@ -220,7 +218,6 @@ public class WindowSpecification
         _wfe = wfe;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the window specification.
      * @return the SQL string corresponding to the fields of the window specification.
@@ -266,9 +263,8 @@ public class WindowSpecification
                 sSpecification = sSpecification + sSP + getWindowFrameExclusion().getKeywords();
         }
         return sSpecification;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the window specification from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -277,9 +273,8 @@ public class WindowSpecification
     public void parse(SqlParser.WindowSpecificationContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the window specification from SQL.
      * @param sSql SQL.
@@ -288,9 +283,8 @@ public class WindowSpecification
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().windowSpecification());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a window specification
      * @param idWindowName window name (not null!).
@@ -331,15 +325,14 @@ public class WindowSpecification
         setBound2(wfb2);
         setWindowFrameExclusion(wfe);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public WindowSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class WindowSpecification */
+}

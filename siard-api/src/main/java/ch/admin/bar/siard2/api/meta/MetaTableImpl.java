@@ -857,4 +857,4 @@ public class MetaTableImpl
     public String toString() {
         return getName();
     }
-} /* class MetaTableImpl */
+}

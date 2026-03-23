@@ -106,9 +106,6 @@ public class AccessConnection
         return _sUserName;
     }
   
-  /*====================================================================
-  Wrapper 
-  ====================================================================*/
 
     /** @return log writer */
     PrintWriter getLogWriter() {
@@ -121,9 +118,6 @@ public class AccessConnection
         return clsInterface.equals(Connection.class);
     }
 
-  /*====================================================================
-  Warnings 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -303,9 +297,6 @@ public class AccessConnection
         // Transactions are not supported
     }
 
-  /*====================================================================
-  Statements 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -437,9 +428,6 @@ public class AccessConnection
         return pstmt;
     }
 
-  /*====================================================================
-  large objects 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -484,9 +472,6 @@ public class AccessConnection
         throw new SQLFeatureNotSupportedException("UDT creation not supported for MS Access database!");
     }
 
-  /*====================================================================
-  SQL 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -498,9 +483,6 @@ public class AccessConnection
         return sql;
     }
 
-  /*====================================================================
-  Meta data 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -508,9 +490,6 @@ public class AccessConnection
         return new AccessDatabaseMetaData(this);
     }
 
-  /*====================================================================
-  UDTs 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -525,9 +504,6 @@ public class AccessConnection
         throw new SQLFeatureNotSupportedException("UDTs not supported for MS Access database!");
     }
 
-  /*====================================================================
-  Catalog 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -544,9 +520,6 @@ public class AccessConnection
         // "If the driver does not support catalogs, it will silently ignore this request."
     }
 
-  /*====================================================================
-  ClientInfo 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override

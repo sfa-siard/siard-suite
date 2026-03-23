@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/*====================================================================*/
 
 /** MsSqlDataSource implements a wrapped MSSQL DataSource.
  * @author Hartwig Thomas
@@ -30,7 +29,6 @@ public class MsSqlDataSource
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(MsSqlDataSource.class.getName());
 
-    /*------------------------------------------------------------------*/
 
     /** constructor */
     public MsSqlDataSource() {
@@ -39,9 +37,8 @@ public class MsSqlDataSource
          SQLServerDataSource ssds = (SQLServerDataSource)getUnwrapped();
          ssds.setSelectMethod("cursor");
          **/
-    } /* constructor MsSqlDataSource */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param sUrl JDBC URL identifying the database instance to connect to.
@@ -55,9 +52,8 @@ public class MsSqlDataSource
         setUrl(sUrl);
         setUser(sUser);
         setPassword(sPassword);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * returns the appropriately wrapped MSSQL Connection.
@@ -65,9 +61,8 @@ public class MsSqlDataSource
     @Override
     public Connection getConnection() throws SQLException {
         return new MsSqlConnection(super.getConnection());
-    } /* getConnection */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      * returns the appropriately wrapped MSSQL Connection.
@@ -76,9 +71,8 @@ public class MsSqlDataSource
     public Connection getConnection(String username, String password)
             throws SQLException {
         return new MsSqlConnection(super.getConnection(username, password));
-    } /* getConnection */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return unwrapped MSSQL DataSource
      */
@@ -90,9 +84,8 @@ public class MsSqlDataSource
             _il.exception(se);
         }
         return ssds;
-    } /* getUnwrapped */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set URL to be used for connection.
      * @param url URL (format: "jdbc:h2:<database path>" results in file
@@ -100,83 +93,74 @@ public class MsSqlDataSource
      */
     public void setUrl(String url) {
         getUnwrapped().setURL(url);
-    } /* setUrl */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return URL used for connection.
      */
     public String getUrl() {
         return getUnwrapped().getURL();
-    } /* getUrl */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set database user to be used for connection.
      * @param user database user to be used for connection.
      */
     public void setUser(String user) {
         getUnwrapped().setUser(user);
-    } /* setUser */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return database user used for connection.
      */
     public String getUser() {
         return getUnwrapped().getUser();
-    } /* getUser */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set database password to be used for connection.
      * @param user database password to be used for connection.
      */
     public void setPassword(String password) {
         getUnwrapped().setPassword(password);
-    } /* setPassword */
+    }
 
-    /*------------------------------------------------------------------*/
     /** The password of the connection is private but not very well hidden.
      * This method will be deleted again!
      * @return database password for connection.
     public String getPassword()
     {
     return (String)ch.enterag.utils.reflect.Glue.invokePrivate(getUnwrapped(), "getPassword", new Class<?>[]{}, new Object[]{});
-    } /* getPassword */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set database description.
      * @param description database description.
      */
     public void setDescription(String description) {
         getUnwrapped().setDescription(description);
-    } /* setDescription */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return database description.
      */
     public String getDescription() {
         return getUnwrapped().getDescription();
-    } /* getDescription */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set database name.
      * @param name database name.
      */
     public void setDatabaseName(String name) {
         ((SQLServerDataSource) getUnwrapped()).setDatabaseName(name);
-    } /* setDatabaseName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** @return database name.
      */
     public String getDatabaseName() {
         return ((SQLServerDataSource) getUnwrapped()).getDatabaseName();
-    } /* getDatabaseName */
+    }
 
-} /* class MsSqlDataSource */
+}

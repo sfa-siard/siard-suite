@@ -30,7 +30,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/*====================================================================*/
 
 /** Db2ResultSet implements a wrapped DB/2 ResultSet.
  * @author Hartwig Thomas
@@ -47,30 +46,26 @@ public class Db2ResultSet
     private List<Object> _listValues = null;
     private boolean _bNull = false;
 
-    /*------------------------------------------------------------------*/
     public Db2ResultSet(ResultSet rs)
             throws SQLException {
         super(rs);
         _rsmd = getMetaData();
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Statement getStatement() throws SQLException {
         return new Db2Statement(super.getStatement());
-    } /* getStatement */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
         return new Db2ResultSetMetaData(super.getMetaData(), getStatement().getConnection());
-    } /* getMetaData */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** compute the number of predefined columns in the struct.
      * @param struct
@@ -89,9 +84,8 @@ public class Db2ResultSet
                 iStructSize++;
         }
         return iStructSize;
-    } /* getStructSize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** create a Struct from the values starting a iColumn (1-based).
      * @param iColumn column position.
@@ -135,9 +129,8 @@ public class Db2ResultSet
             throw new SQLException("Type name \"" + sTypeName + "\" could not be parsed!", pe);
         }
         return struct;
-    } /* getStruct */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** map value of predefined data type.
      * @param iDataType type.
@@ -193,9 +186,8 @@ public class Db2ResultSet
             o = iv.toDuration();
         }
         return o;
-    } /* mapValue */
+    }
 
-    /*------------------------------------------------------------------*/
     private void freeRecord()
             throws SQLException {
         if (_listValues != null) {
@@ -216,9 +208,8 @@ public class Db2ResultSet
                 }
             }
         }
-    } /* freeRecord */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** load the record set into the object list.
      * @throws SQLException
@@ -250,7 +241,6 @@ public class Db2ResultSet
         }
     }
 
-    /*------------------------------------------------------------------*/
 
     /** update the record set from the Struct starting with iColumn.
      * @param iColumn column position.
@@ -270,9 +260,8 @@ public class Db2ResultSet
                 iColumn++;
             }
         }
-    } /* setStruct */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** update the record set from the object list.
      * @throws SQLException
@@ -314,9 +303,8 @@ public class Db2ResultSet
                 iColumn++;
             }
         }
-    } /* updateRecord */
+    }
 
-    /*------------------------------------------------------------------*/
     private String getLiteral(Object oValue, List<Object> listLobs)
             throws SQLException {
         String sLiteral = null;
@@ -384,9 +372,8 @@ public class Db2ResultSet
             }
         }
         return sLiteral;
-    } /* getLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
     private String formatStructValue(Struct struct, List<Object> listLobs)
             throws SQLException {
         StringBuilder sbSql = new StringBuilder();
@@ -422,9 +409,8 @@ public class Db2ResultSet
         if (sSql.length() == 0)
             sSql = null;
         return sbSql.toString();
-    } /* formatStructValue */
+    }
 
-    /*------------------------------------------------------------------*/
     private void insertRecord()
             throws SQLException {
         // original insertRow fails for column names with special characters!
@@ -489,9 +475,8 @@ public class Db2ResultSet
         pstmt.close();
         if (iResult != 1)
             throw new SQLException("Insert into table " + qiTable.format() + " failed!");
-    } /* insertRecord */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** for debugging */
     @SuppressWarnings("unused")
@@ -528,9 +513,8 @@ public class Db2ResultSet
                 break;
         }
         System.out.println(s);
-    } /* printState */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -539,9 +523,8 @@ public class Db2ResultSet
         if (bPositioned)
             loadRecord();
         return bPositioned;
-    } /* absolute */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -550,9 +533,8 @@ public class Db2ResultSet
         if (bPositioned)
             loadRecord();
         return bPositioned;
-    } /* relative */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -561,9 +543,8 @@ public class Db2ResultSet
         if (bPositioned)
             loadRecord();
         return bPositioned;
-    } /* first */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -572,9 +553,8 @@ public class Db2ResultSet
         if (bPositioned)
             loadRecord();
         return bPositioned;
-    } /* last */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -583,9 +563,8 @@ public class Db2ResultSet
         if (bPositioned)
             loadRecord();
         return bPositioned;
-    } /* next */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -594,63 +573,55 @@ public class Db2ResultSet
         if (bPositioned)
             loadRecord();
         return bPositioned;
-    } /* previous */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void moveToInsertRow() throws SQLException {
         super.moveToInsertRow();
         loadRecord();
-    } /* moveToInsertRow */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void moveToCurrentRow() throws SQLException {
         super.moveToCurrentRow();
         loadRecord();
-    } /* moveToCurrentRow */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void refreshRow() throws SQLException {
         super.refreshRow();
         loadRecord();
-    } /* refreshRow */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void insertRow() throws SQLException {
         insertRecord();
-    } /* insertRow */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateRow() throws SQLException {
         updateRecord();
         super.updateRow();
-    } /* updateRow */
+    }
 
-    /*------------------------------------------------------------------*/
     /** {@inheritDoc} */
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public boolean isBeforeFirst() throws SQLException {
         return (getRow() == 0);
-    } /* isBeforeFirst */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -662,25 +633,22 @@ public class Db2ResultSet
                 iFound = iValue;
         }
         return iFound;
-    } /* findColumn */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public boolean wasNull() throws SQLException {
         return _bNull;
-    } /* wasNull */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNull(int columnIndex) throws SQLException {
         _listValues.set(columnIndex + 1, null);
-    } /* updateNull */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -688,17 +656,15 @@ public class Db2ResultSet
         Object o = _listValues.get(columnIndex - 1);
         _bNull = (o == null);
         return o;
-    } /* getObject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateObject(int columnIndex, Object oValue) throws SQLException {
         _listValues.set(columnIndex - 1, oValue);
-    } /* updateObject */
+    }
 
-    /*------------------------------------------------------------------*/
     private int getDataType(int columnIndex)
             throws SQLException {
         int iDataType = _rsmd.getColumnType(columnIndex);
@@ -721,9 +687,8 @@ public class Db2ResultSet
             }
         }
         return iDataType;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -779,9 +744,8 @@ public class Db2ResultSet
             }
         }
         return b;
-    } /* getBoolean */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -821,9 +785,8 @@ public class Db2ResultSet
                 throw new SQLException("Boolean cannot be converted to value of type " + SqlTypes.getTypeName(iDataType) + "!");
         }
         updateObject(columnIndex, o);
-    } /* updateBoolean */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -865,9 +828,8 @@ public class Db2ResultSet
             }
         }
         return by;
-    } /* getByte */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -907,9 +869,8 @@ public class Db2ResultSet
                 throw new SQLException("Byte cannot be converted to value of type " + SqlTypes.getTypeName(iDataType) + "!");
         }
         updateObject(columnIndex, o);
-    } /* updateByte */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -951,9 +912,8 @@ public class Db2ResultSet
             }
         }
         return sh;
-    } /* getShort */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -993,9 +953,8 @@ public class Db2ResultSet
                 throw new SQLException("Short cannot be converted to value of type " + SqlTypes.getTypeName(iDataType) + "!");
         }
         updateObject(columnIndex, o);
-    } /* updateShort */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1037,9 +996,8 @@ public class Db2ResultSet
             }
         }
         return i;
-    } /* getInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1079,9 +1037,8 @@ public class Db2ResultSet
                 throw new SQLException("Integer cannot be converted to value of type " + SqlTypes.getTypeName(iDataType) + "!");
         }
         updateObject(columnIndex, o);
-    } /* updateInt */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1123,9 +1080,8 @@ public class Db2ResultSet
             }
         }
         return l;
-    } /* getLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1165,9 +1121,8 @@ public class Db2ResultSet
                 throw new SQLException("Long cannot be converted to value of type " + SqlTypes.getTypeName(iDataType) + "!");
         }
         updateObject(columnIndex, o);
-    } /* updateLong */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1209,9 +1164,8 @@ public class Db2ResultSet
             }
         }
         return f;
-    } /* getFloat */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1251,9 +1205,8 @@ public class Db2ResultSet
                 throw new SQLException("Float cannot be converted to value of type " + SqlTypes.getTypeName(iDataType) + "!");
         }
         updateObject(columnIndex, o);
-    } /* updateFloat */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1295,9 +1248,8 @@ public class Db2ResultSet
             }
         }
         return d;
-    } /* getDouble */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1337,9 +1289,8 @@ public class Db2ResultSet
                 throw new SQLException("Double cannot be converted to value of type " + SqlTypes.getTypeName(iDataType) + "!");
         }
         updateObject(columnIndex, o);
-    } /* updateDouble */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1381,9 +1332,8 @@ public class Db2ResultSet
             }
         }
         return bd;
-    } /* getBigDecimal */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1424,9 +1374,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateBigDecimal */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1479,9 +1428,8 @@ public class Db2ResultSet
             }
         }
         return s;
-    } /* getString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1551,26 +1499,23 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public String getNString(int columnIndex) throws SQLException {
         return getString(columnIndex);
-    } /* getString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNString(int columnIndex, String x)
             throws SQLException {
         updateString(columnIndex, x);
-    } /* updateString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1593,9 +1538,8 @@ public class Db2ResultSet
             }
         }
         return buf;
-    } /* getBytes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1620,9 +1564,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateBytes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1646,9 +1589,8 @@ public class Db2ResultSet
             }
         }
         return date;
-    } /* getDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1671,9 +1613,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1697,9 +1638,8 @@ public class Db2ResultSet
             }
         }
         return time;
-    } /* getTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1722,9 +1662,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1748,9 +1687,8 @@ public class Db2ResultSet
             }
         }
         return ts;
-    } /* getTimestamp */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1773,9 +1711,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateTimestamp */
+    }
 
-    /*------------------------------------------------------------------*/
     public Duration getDuration(int columnIndex)
             throws SQLException {
         Duration duration = null;
@@ -1788,9 +1725,8 @@ public class Db2ResultSet
                 throw new SQLException("Column of type " + SqlTypes.getTypeName(iDataType) + " cannot be converted to duration!");
         }
         return duration;
-    } /* getDuration */
+    }
 
-    /*------------------------------------------------------------------*/
     public void updateDuration(int columnIndex, Duration x)
             throws SQLException {
         Object o = null;
@@ -1802,9 +1738,8 @@ public class Db2ResultSet
                 throw new SQLException("Duration cannot be converted to value of type " + SqlTypes.getTypeName(iDataType) + "!");
         }
         updateObject(columnIndex, o);
-    } /* updateDuration */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1840,27 +1775,24 @@ public class Db2ResultSet
             }
         }
         return is;
-    } /* getAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateAsciiStream(int columnIndex, InputStream x)
             throws SQLException {
         updateAsciiStream(columnIndex, x, -1l);
-    } /* updateAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateAsciiStream(int columnIndex, InputStream x, int length)
             throws SQLException {
         updateAsciiStream(columnIndex, x, (long) length);
-    } /* updateAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
     private byte[] readBytes(InputStream is)
             throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -1869,9 +1801,8 @@ public class Db2ResultSet
         baos.close();
         is.close();
         return baos.toByteArray();
-    } /* readBytes */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1930,9 +1861,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateAsciiStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -1961,27 +1891,24 @@ public class Db2ResultSet
             }
         }
         return is;
-    } /* getBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateBinaryStream(int columnIndex, InputStream x)
             throws SQLException {
         updateBinaryStream(columnIndex, x, -1l);
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateBinaryStream(int columnIndex, InputStream x, int length)
             throws SQLException {
         updateBinaryStream(columnIndex, x, (long) length);
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2034,9 +1961,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateBinaryStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2077,27 +2003,24 @@ public class Db2ResultSet
             }
         }
         return rdr;
-    } /* getCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateCharacterStream(int columnIndex, Reader x)
             throws SQLException {
         updateCharacterStream(columnIndex, x, -1l);
-    } /* updateCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateCharacterStream(int columnIndex, Reader x, int length)
             throws SQLException {
         updateCharacterStream(columnIndex, x, (long) length);
-    } /* updateCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
     private String readString(Reader rdr)
             throws IOException {
         StringWriter sw = new StringWriter();
@@ -2106,9 +2029,8 @@ public class Db2ResultSet
         sw.close();
         rdr.close();
         return sw.toString();
-    } /* readString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2190,36 +2112,32 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public Reader getNCharacterStream(int columnIndex)
             throws SQLException {
         return getCharacterStream(columnIndex);
-    } /* getNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNCharacterStream(int columnIndex, Reader x)
             throws SQLException {
         updateCharacterStream(columnIndex, x);
-    } /* updateNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNCharacterStream(int columnIndex, Reader x, long length)
             throws SQLException {
         updateNCharacterStream(columnIndex, x, length);
-    } /* updateNCharacterStream */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2238,9 +2156,8 @@ public class Db2ResultSet
             }
         }
         return clob;
-    } /* getClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2258,18 +2175,16 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateClob(int columnIndex, Reader reader)
             throws SQLException {
         updateClob(columnIndex, reader, -1l);
-    } /* updateClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2301,9 +2216,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2321,9 +2235,8 @@ public class Db2ResultSet
             }
         }
         return nclob;
-    } /* getNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2341,18 +2254,16 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateNClob(int columnIndex, Reader reader)
             throws SQLException {
         updateNClob(columnIndex, reader, -1l);
-    } /* updateNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2383,9 +2294,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateNClob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2403,9 +2313,8 @@ public class Db2ResultSet
             }
         }
         return blob;
-    } /* getBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2422,18 +2331,16 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
     public void updateBlob(int columnIndex, InputStream inputStream)
             throws SQLException {
         updateBlob(columnIndex, inputStream, -1l);
-    } /* updateBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2464,9 +2371,8 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateBlob */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2484,9 +2390,8 @@ public class Db2ResultSet
             }
         }
         return sqlxml;
-    } /* getSQLXML */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc} */
     @Override
@@ -2504,7 +2409,7 @@ public class Db2ResultSet
             }
         }
         updateObject(columnIndex, o);
-    } /* updateSQLXML */
+    }
 
     @Override
     public URL getURL(int columnIndex) throws SQLException {
@@ -2525,4 +2430,4 @@ public class Db2ResultSet
         return url;
     }
 
-} /* class Db2ResultSet */
+}

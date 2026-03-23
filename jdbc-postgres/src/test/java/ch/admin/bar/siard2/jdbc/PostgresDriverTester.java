@@ -54,7 +54,7 @@ public class PostgresDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @After
     public void tearDown() {
@@ -67,18 +67,18 @@ public class PostgresDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testWrapping() {
         assertSame("Registration of driver wrapper failed!", PostgresDriver.class, _driver.getClass());
         assertSame("Choice of connection wrapper failed!", PostgresConnection.class, _conn.getClass());
-    } /* testWrapping */
+    }
 
     @Test
     public void testCompliant() {
         assertSame("Postgres driver is suddenly JDBC compliant!", false, _driver.jdbcCompliant());
-    } /* testCompliant */
+    }
 
     @Test
     public void testAcceptsURL() {
@@ -89,7 +89,7 @@ public class PostgresDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testAcceptsURL */
+    }
 
     @Test
     public void testVersion() {
@@ -97,7 +97,7 @@ public class PostgresDriverTester {
         int iMinorVersion = _driver.getMinorVersion();
         String sVersion = iMajorVersion + "." + iMinorVersion;
         assertEquals("Wrong Postgres version " + sVersion + " found!", "42.2", sVersion);
-    } /* testVersion */
+    }
 
     @Test
     public void testDriverProperties() {
@@ -110,6 +110,6 @@ public class PostgresDriverTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* testDriverProperties */
+    }
 
-} /* class PostgresDriverTester */
+}

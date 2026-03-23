@@ -18,21 +18,14 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 import java.util.zip.ZipException;
 
-/*====================================================================*/
 
 /** InputStream for reading data from a file entry of a Zip64File.
  @author Hartwig Thomas
  */
 public class EntryInputStream extends InputStream {
-  /*====================================================================
-  (private) constants
-  ====================================================================*/
     /** buffer size for i/o */
     private final static int iBUFFER_SIZE = 4096;
 	
-  /*====================================================================
-  (private) data members
-  ====================================================================*/
     /** Zip64File */
     private Zip64File m_zf = null;
     /** local file entry of open input stream */
@@ -65,10 +58,6 @@ public class EntryInputStream extends InputStream {
         return m_lFilePointer;
     }
 
-  /*====================================================================
-  Constructors
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** package-private constructor is called by Zip64File.
      @param zf random-access ZIP64 file from which file entry is read.
@@ -102,12 +91,8 @@ public class EntryInputStream extends InputStream {
             }
         } else
             throw new FileNotFoundException("File entry " + sEntryName + " not in ZIP file!");
-    } /* constructor EntryInputStream */
+    }
 
-    /*====================================================================
-    (public) methods
-    ====================================================================*/
-    /*------------------------------------------------------------------*/
 	/* (non-Javadoc)
 	 @see java.io.InputStream#available()
 	 */
@@ -118,9 +103,8 @@ public class EntryInputStream extends InputStream {
         if (m_lRemainingSize <= iAvailable)
             iAvailable = (int) m_lRemainingSize;
         return iAvailable;
-    } /* available */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reads iLength bytes into buffer starting at iOffset.
      * NB.: Inflater never sets its finished flag!
@@ -161,9 +145,8 @@ public class EntryInputStream extends InputStream {
             }
         }
         return iRead;
-    } /* readDeflated */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reads iLength bytes into buffer starting at iOffset.
      @param buf buffer to receive input.
@@ -186,9 +169,8 @@ public class EntryInputStream extends InputStream {
             }
         }
         return iRead;
-    } /* readStored */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reads iLength bytes into buffer starting at iOffset.
      * This package-private method is called by EntryInputStream.
@@ -244,9 +226,8 @@ public class EntryInputStream extends InputStream {
                 .seek(lFilePointer);
         }
         return iRead;
-    } /* read */
+    }
 
-    /*------------------------------------------------------------------*/
 	/* (non-Javadoc)
 	 @see java.io.InputStream#read(byte[])
 	 */
@@ -255,9 +236,8 @@ public class EntryInputStream extends InputStream {
             throws IOException {
         int iRead = read(b, 0, b.length);
         return iRead;
-    } /* read */
+    }
 
-    /*------------------------------------------------------------------*/
 	/* (non-Javadoc)
 	 @see java.io.InputStream#read()
 	 */
@@ -273,9 +253,8 @@ public class EntryInputStream extends InputStream {
                 iRead = 0x0100 + buf[0];
         }
         return iRead;
-    } /* read */
+    }
 
-    /*------------------------------------------------------------------*/
 	/* (non-Javadoc)
 	 @see java.io.InputStream#skip(long)
 	 */
@@ -294,9 +273,8 @@ public class EntryInputStream extends InputStream {
                 iLength = (int) n;
         }
         return lSkipped;
-    } /* skip */
+    }
 
-    /*------------------------------------------------------------------*/
 	/* (non-Javadoc)
 	 @see java.io.InputStream#close()
 	 */
@@ -338,6 +316,6 @@ public class EntryInputStream extends InputStream {
                     .seek(lFilePointer);
             }
         }
-    } /* close */
+    }
 
-} /* EntryInputStream */
+}

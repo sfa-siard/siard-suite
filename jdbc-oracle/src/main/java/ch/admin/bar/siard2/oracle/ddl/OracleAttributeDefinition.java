@@ -17,11 +17,9 @@ package ch.admin.bar.siard2.oracle.ddl;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.AttributeDefinition;
 
-/*====================================================================*/
 public class OracleAttributeDefinition
         extends AttributeDefinition {
 
-    /*------------------------------------------------------------------*/
 
     /**
      * format the attribute definition
@@ -35,5 +33,5 @@ public class OracleAttributeDefinition
 
     public OracleAttributeDefinition(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 }

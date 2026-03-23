@@ -16,9 +16,6 @@ import java.io.IOException;
  *
  */
 public interface TableRecordRetainer {
-  /*====================================================================
-  methods
-  ====================================================================*/
 
     /**
      * create an (empty) record with the current record number.

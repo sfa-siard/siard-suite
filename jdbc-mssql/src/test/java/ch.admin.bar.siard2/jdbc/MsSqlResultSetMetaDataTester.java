@@ -41,7 +41,7 @@ public class MsSqlResultSetMetaDataTester
         sbSql.append("\r\nFROM ");
         sbSql.append(qiTable.format());
         return sbSql.toString();
-    } /* getTableQuery */
+    }
 
     private static String _sNativeQuerySimple = getTableQuery(TestMsSqlDatabase.getQualifiedSimpleTable(), TestMsSqlDatabase._listCdSimple);
     private static String _sNativeQueryComplex = getTableQuery(TestMsSqlDatabase.getQualifiedComplexTable(), TestMsSqlDatabase._listCdComplex);
@@ -67,7 +67,7 @@ public class MsSqlResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     private Connection closeResultSet()
             throws SQLException {
@@ -85,7 +85,7 @@ public class MsSqlResultSetMetaDataTester
             }
         }
         return conn;
-    } /* closeResultSet */
+    }
 
     private void openResultSet(Connection conn, String sQuery)
             throws SQLException {
@@ -94,7 +94,7 @@ public class MsSqlResultSetMetaDataTester
         ResultSet rs = stmt.executeQuery(sQuery);
         ResultSetMetaData rsmd = rs.getMetaData();
         setResultSetMetaData(rsmd, rs);
-    } /* openResultSet */
+    }
 
     @Before
     public void setUp() {
@@ -109,7 +109,7 @@ public class MsSqlResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUp */
+    }
 
     @After
     @Override
@@ -125,12 +125,12 @@ public class MsSqlResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong result set metadata class!", MsSqlResultSetMetaData.class, getResultSetMetaData().getClass());
-    } /* testClass */
+    }
 
     @Test
     public void testNativeSimple() {
@@ -141,7 +141,7 @@ public class MsSqlResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeSimple */
+    }
 
     @Test
     public void testNativeComplex() {
@@ -152,7 +152,7 @@ public class MsSqlResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeComplex */
+    }
 
     @Test
     public void testSqlSimple() {
@@ -163,7 +163,7 @@ public class MsSqlResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSqlSimple */
+    }
 
     @Test
     public void testSqlComplex() {
@@ -174,6 +174,6 @@ public class MsSqlResultSetMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSqlComplex */
+    }
 
 }

@@ -17,7 +17,6 @@ public class RowValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(RowValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -51,7 +50,6 @@ public class RowValueExpression
             return RowValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private RveVisitor _visitor = new RveVisitor();
 
@@ -99,7 +97,6 @@ public class RowValueExpression
         _qe = qe;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the row value expression.
      * @return the SQL string corresponding to the fields of the row value expression.
@@ -126,9 +123,8 @@ public class RowValueExpression
             }
         }
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return data type of a row value expression from the context of a query.
      * @param ss sql statement.
@@ -147,9 +143,8 @@ public class RowValueExpression
                 throw new IllegalArgumentException("List of expressions not supported for evaluation!");
         }
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a row value expression from its components.
      * @return value.
@@ -167,9 +162,8 @@ public class RowValueExpression
                 throw new IllegalArgumentException("List of expressions not supported for evaluation!");
         }
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a row value expression against the context of a query.
      * @param ss sql statement.
@@ -183,9 +177,8 @@ public class RowValueExpression
             oValuePrimary = getValueExpressionPrimary().evaluate(ss, bAggregated);
         Object oValue = evaluate(oValuePrimary);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a row value expression to their initial value.
      * @param ss sql statement.
@@ -197,9 +190,8 @@ public class RowValueExpression
             oValuePrimary = getValueExpressionPrimary().resetAggregates(ss);
         Object oValue = evaluate(oValuePrimary);
         return oValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the row value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -208,9 +200,8 @@ public class RowValueExpression
     public void parse(SqlParser.RowValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the row value expression from SQL.
      * @param sSql SQL.
@@ -219,9 +210,8 @@ public class RowValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().rowValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a row value expression.
      * @param vep value expression primary.
@@ -230,9 +220,8 @@ public class RowValueExpression
         _il.enter(vep);
         setValueExpressionPrimary(vep);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a row value expression.
      * @param vep value expression primary.
@@ -251,15 +240,14 @@ public class RowValueExpression
         setRow(bRow);
         setQueryExpression(qe);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public RowValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class RowValueExpression */
+}

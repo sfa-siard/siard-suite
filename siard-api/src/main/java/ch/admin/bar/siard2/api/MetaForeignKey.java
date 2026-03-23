@@ -33,9 +33,6 @@ public interface MetaForeignKey
      */
     boolean isValid();
   
-  /*====================================================================
-  candidate key properties
-  ====================================================================*/
 
     /**
      * get name of candidate key.

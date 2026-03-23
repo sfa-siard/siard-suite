@@ -14,7 +14,6 @@ public class DropTypeStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DropTypeStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -31,7 +30,6 @@ public class DropTypeStatement
             return DropTypeStatement.this;
         }
     }
-    /*==================================================================*/
 
     private DtsVisitor _visitor = new DtsVisitor();
 
@@ -59,7 +57,6 @@ public class DropTypeStatement
         _db = db;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the drop type statement.
      * @return the SQL string corresponding to the fields of the drop type statement.
@@ -69,9 +66,8 @@ public class DropTypeStatement
         String sStatement = K.DROP.getKeyword() + sSP + K.TYPE.getKeyword() + sSP +
                 getUdtName().format() + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop type statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -80,9 +76,8 @@ public class DropTypeStatement
     public void parse(SqlParser.DropTypeStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop type statement from SQL.
      * @param sSql SQL.
@@ -91,9 +86,8 @@ public class DropTypeStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dropTypeStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a drop type statement.
      * @param qUdtName name of UDT to be dropped.
@@ -104,15 +98,14 @@ public class DropTypeStatement
         setUdtName(qUdtName);
         setDropBehavior(db);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DropTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DropTypeStatement */
+}

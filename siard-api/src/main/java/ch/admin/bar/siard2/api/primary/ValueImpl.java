@@ -528,7 +528,7 @@ public abstract class ValueImpl
             }
         }
         return s;
-    } /* getString */
+    }
 
     /**
      * {@inheritDoc}
@@ -543,7 +543,7 @@ public abstract class ValueImpl
             StringReader srdr = new StringReader(s);
             setReader(srdr);
         }
-    } /* setString */
+    }
 
     /**
      * {@inheritDoc}
@@ -566,7 +566,7 @@ public abstract class ValueImpl
             }
         }
         return buf;
-    } /* getBytes */
+    }
 
     /**
      * {@inheritDoc}
@@ -582,7 +582,7 @@ public abstract class ValueImpl
             ByteArrayInputStream bais = new ByteArrayInputStream(buf);
             setInputStream(bais);
         }
-    } /* setBytes */
+    }
 
     /**
      * {@inheritDoc}
@@ -601,7 +601,7 @@ public abstract class ValueImpl
                 throw new IllegalArgumentException("Value of cell of complex type cannot be converted to boolean!");
         }
         return b;
-    } /* getBoolean */
+    }
 
     /**
      * {@inheritDoc}
@@ -616,7 +616,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to boolean value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to boolean!");
-    } /* setBoolean */
+    }
 
     /**
      * {@inheritDoc}
@@ -645,7 +645,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to short value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to short!");
-    } /* setShort */
+    }
 
     /**
      * {@inheritDoc}
@@ -674,7 +674,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to int value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to int!");
-    } /* setInt */
+    }
 
     /**
      * {@inheritDoc}
@@ -702,7 +702,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to int value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to int!");
-    } /* setLong */
+    }
 
     /**
      * {@inheritDoc}
@@ -730,7 +730,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to BigInteger value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to BigInteger!");
-    } /* setBigInteger */
+    }
 
     /**
      * {@inheritDoc}
@@ -767,7 +767,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to BigDecimal value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to BigDecimal!");
-    } /* setBigDecimal */
+    }
 
     /**
      * {@inheritDoc}
@@ -796,7 +796,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to float value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to float!");
-    } /* setFloat */
+    }
 
     /**
      * {@inheritDoc}
@@ -809,7 +809,7 @@ public abstract class ValueImpl
         if (iPreType != Types.NULL)
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be converted to double!");
         throw new IllegalArgumentException("Value of cell of complex type cannot be converted to double!");
-    } /* getDouble */
+    }
 
     /**
      * {@inheritDoc}
@@ -824,7 +824,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to double value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to double!");
-    } /* setDouble */
+    }
 
     /**
      * {@inheritDoc}
@@ -877,7 +877,7 @@ public abstract class ValueImpl
         if (iPreType != Types.NULL)
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be converted to time!");
         throw new IllegalArgumentException("Value of cell of complex type cannot be converted to time!");
-    } /* getTime */
+    }
 
     /**
      * {@inheritDoc}
@@ -892,7 +892,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to time value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to time!");
-    } /* setTime */
+    }
 
     /**
      * {@inheritDoc}
@@ -927,7 +927,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to timestamp value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to timestamp!");
-    } /* setTimestamp */
+    }
 
     /**
      * {@inheritDoc}
@@ -946,7 +946,7 @@ public abstract class ValueImpl
         if (iPreType != Types.NULL)
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be converted to duration!");
         throw new IllegalArgumentException("Value of cell of complex type cannot be converted to duration!");
-    } /* getDuration */
+    }
 
     /**
      * {@inheritDoc}
@@ -961,7 +961,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to duration value!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to duration!");
-    } /* setDuration */
+    }
 
     /**
      * {@inheritDoc}
@@ -1033,7 +1033,7 @@ public abstract class ValueImpl
             throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set using a reader!");
         else
             throw new IllegalArgumentException("Value of cell of complex type cannot be set using a reader!");
-    } /* setReader */
+    }
 
 
     /**
@@ -1193,7 +1193,7 @@ public abstract class ValueImpl
         if (iCardinality >= 0)
             iElements = getMetaValue().getMetaFields();
         return iElements;
-    } /* getElements */
+    }
 
     /**
      * {@inheritDoc}
@@ -1208,7 +1208,7 @@ public abstract class ValueImpl
             return getFieldMap().get(getElementTag(iElement));
         }
         throw new IllegalArgumentException("Cell or field is not an ARRAY!");
-    } /* getElement */
+    }
 
     /**
      * {@inheritDoc}
@@ -1224,7 +1224,7 @@ public abstract class ValueImpl
         if (cat == CategoryType.UDT)
             iAttributes = getFieldMap().size();
         return iAttributes;
-    } /* getAttributes */
+    }
 
     /**
      * {@inheritDoc}
@@ -1242,7 +1242,7 @@ public abstract class ValueImpl
         else
             throw new IllegalArgumentException("Cell or field is not a UDT!");
         return field;
-    } /* getAttribute */
+    }
 
     /**
      * {@inheritDoc}
@@ -1294,7 +1294,7 @@ public abstract class ValueImpl
         if (listValues.isEmpty())
             listValues.add(this);
         return listValues;
-    } /* getValues */
+    }
 
     private void dumpElement(Element el, String sIndent) {
         System.out.print("\r\n" + sIndent + el.getTagName() + ":");
@@ -1318,7 +1318,7 @@ public abstract class ValueImpl
             dumpElement(_elValue, "");
         else
             System.out.println("null");
-    } /* dumpDom */
+    }
 
 
     private boolean isIntegerType(int iPreType) {

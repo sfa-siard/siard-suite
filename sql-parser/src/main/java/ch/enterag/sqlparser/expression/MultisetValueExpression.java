@@ -14,7 +14,6 @@ public class MultisetValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(MultisetValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -45,7 +44,6 @@ public class MultisetValueExpression
             return MultisetValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private MveVisitor _visitor = new MveVisitor();
 
@@ -103,7 +101,6 @@ public class MultisetValueExpression
         _mveSetArgument = mveSetArgument;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the multiset value expression.
      * @return the SQL string corresponding to the fields of the multiset
@@ -124,9 +121,8 @@ public class MultisetValueExpression
             sExpression = sExpression + K.SET.getKeyword() +
                     sLEFT_PAREN + getSetArgument().format() + sRIGHT_PAREN;
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the multiset value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -135,9 +131,8 @@ public class MultisetValueExpression
     public void parse(SqlParser.MultisetValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the multiset value expression from SQL.
      * @param sSql SQL.
@@ -146,9 +141,8 @@ public class MultisetValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().multisetValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a multiset value expression.
      * @param mve first operand of multiset operator.
@@ -171,15 +165,14 @@ public class MultisetValueExpression
         setValueExpressionPrimary(vep);
         setSetArgument(mveSetArgument);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MultisetValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MultisetValueExpression */
+}

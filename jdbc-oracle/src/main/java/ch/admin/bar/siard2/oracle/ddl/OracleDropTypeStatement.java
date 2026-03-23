@@ -17,7 +17,6 @@ import ch.enterag.sqlparser.K;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.DropTypeStatement;
 
-/*====================================================================*/
 
 /** OracleDropTypeStatement implements the formatting of DROP
  * Type statements
@@ -25,7 +24,6 @@ import ch.enterag.sqlparser.ddl.DropTypeStatement;
  */
 public class OracleDropTypeStatement
         extends DropTypeStatement {
-    /*------------------------------------------------------------------*/
 
     /**
      * format the drop type statement
@@ -37,14 +35,13 @@ public class OracleDropTypeStatement
                 getUdtName().quote();
 
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleDropTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 }

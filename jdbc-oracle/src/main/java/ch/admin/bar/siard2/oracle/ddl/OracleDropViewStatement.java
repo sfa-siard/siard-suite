@@ -19,7 +19,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.DropViewStatement;
 import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 
-/*====================================================================*/
 
 /** OracleDropViewStatement implements the formatting of DROP
  * TABLE statements
@@ -27,7 +26,6 @@ import ch.enterag.sqlparser.ddl.enums.DropBehavior;
  */
 public class OracleDropViewStatement
         extends DropViewStatement {
-    /*------------------------------------------------------------------*/
 
     /** format the drop schema statement
      * @return the SQL string corresponding to a drop view statement
@@ -40,14 +38,13 @@ public class OracleDropViewStatement
             sStatement += sSP + K.CASCADE.getKeyword() + sSP + K.CONSTRAINTS.getKeyword();
 
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleDropViewStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
-} /* class DropViewStatement */
+    }
+}

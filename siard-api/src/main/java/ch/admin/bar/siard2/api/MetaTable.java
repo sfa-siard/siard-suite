@@ -39,10 +39,6 @@ public interface MetaTable
      */
     boolean isValid();
   
-  /*====================================================================
-  table properties
-  ====================================================================*/
-
 
     /**
      * get table name.
@@ -91,9 +87,6 @@ public interface MetaTable
      */
     long getRows();
   
-  /*====================================================================
-  list properties
-  ====================================================================*/
 
     /**
      * get number of column meta data entries.

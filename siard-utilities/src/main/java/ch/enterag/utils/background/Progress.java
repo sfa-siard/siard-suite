@@ -12,7 +12,6 @@ Created    : 15.10.2016, Hartwig Thomas, Enter AG, Rüti ZH
 package ch.enterag.utils.background;
 
 public interface Progress {
-    /*------------------------------------------------------------------*/
 
     /** check, if cancel was requested.
      * (To be called by long-running method.)
@@ -20,7 +19,6 @@ public interface Progress {
      */
     public boolean cancelRequested();
 
-    /*------------------------------------------------------------------*/
 
     /** notify progress in percent.
      * (To be called by long-running method.)
@@ -29,4 +27,4 @@ public interface Progress {
      */
     public void notifyProgress(int iPercent);
 
-} /* Progress */
+}

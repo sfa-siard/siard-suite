@@ -13,7 +13,7 @@ public class TestInputStream
 
     public TestInputStream(long lSize) {
         _lSize = lSize;
-    } /* constructor */
+    }
 
     @Override
     public int read() throws IOException {
@@ -28,7 +28,7 @@ public class TestInputStream
             _lPosition++;
         }
         return iByte;
-    } /* read */
+    }
 
     @Override
     public int read(byte[] bufRead, int iOffset, int iLength)
@@ -47,13 +47,13 @@ public class TestInputStream
         _lPosition = l;
         _iOffset = i;
         return iRead;
-    } /* read */
+    }
 
     @Override
     public int read(byte[] bufRead)
             throws IOException {
         int iRead = read(bufRead, 0, bufRead.length);
         return iRead;
-    } /* read */
+    }
 
-} /* TestInputStream */
+}

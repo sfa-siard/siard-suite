@@ -20,16 +20,12 @@ import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-/*====================================================================*/
 
 /** IndentLogger extends java.util.logging.Logger with automatic
  * indentation, automatic method name detection on entry and exit.
  * @author Hartwig Thomas
  */
 public class IndentLogger extends Logger {
-  /*=====================================================================
-  Constants
-  /*===================================================================*/
     /** amount to increase/decrease indentation */
     private static final int iINDENT_AMOUNT = 2;
     /** tag for logged "events" */
@@ -39,10 +35,6 @@ public class IndentLogger extends Logger {
     /** tag for logged method exit */
     private static final String sTAG_EXIT = "<< ";
 
-  /*=====================================================================
-  Properties
-  /*===================================================================*/
-    /*-------------------------------------------------------------------*/
     /** static indent property.
      */
     private static StringBuilder m_sbIndent = new StringBuilder();
@@ -53,7 +45,7 @@ public class IndentLogger extends Logger {
     public int getIndent() {
         return m_sbIndent.toString()
                          .length();
-    } /* getIndent */
+    }
 
     /** sets indent amount.
      @param iIndent indent amount.
@@ -65,12 +57,8 @@ public class IndentLogger extends Logger {
         m_sbIndent.setLength(iIndent);
         for (int i = iPreviousIndent; i < iIndent; i++)
             m_sbIndent.setCharAt(i, ' ');
-    } /* setIndent */
+    }
   
-  /*====================================================================
-  constructors
-  ====================================================================*/
-    /*-------------------------------------------------------------------*/
 
     /** constructor (see java.util.logging.Logger).
      * Protected method to construct a logger for a named subsystem.
@@ -89,12 +77,8 @@ public class IndentLogger extends Logger {
     protected IndentLogger(String sName, String sResources)
             throws MissingResourceException {
         super(sName, sResources);
-    } /* constructor IndentLogger */
+    }
   
-  /*====================================================================
-  methods
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** returns the full name of the calling method which has given depth
      * on stack.
@@ -110,12 +94,8 @@ public class IndentLogger extends Logger {
         String sMethodName = asSte[iDepth].getMethodName();
         sCallingMethod = sClassName + "." + sMethodName;
         return sCallingMethod;
-    } /* getCallingMethod */
+    }
   
-  /*====================================================================
-  Overrides
-  /*==================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** every log action passes through this.
      * @param record log record.
@@ -124,21 +104,16 @@ public class IndentLogger extends Logger {
     public void log(LogRecord record) {
         if (isLoggable(record.getLevel()))
             super.log(record);
-    } /* log */
+    }
   
-  /*====================================================================
-  Indented logging
-  /*==================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** logs an indented message object with the FINER level.
      @param sMessage the message to log.
      */
     public synchronized void event(String sMessage) {
         finer(m_sbIndent.toString() + sTAG_EVENT + sMessage);
-    } /* event */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs an indented method and its parameters with the FINEST level
      * and increases indentation.
@@ -157,9 +132,8 @@ public class IndentLogger extends Logger {
             finest(m_sbIndent.toString() + sTAG_ENTER + sbMethod.toString());
             setIndent(getIndent() + iINDENT_AMOUNT);
         }
-    } /* enter */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** decreases indentation and logs an indented method and its return
      * value with the FINEST level.
@@ -170,9 +144,8 @@ public class IndentLogger extends Logger {
             setIndent(getIndent() - iINDENT_AMOUNT);
             finest(m_sbIndent.toString() + sTAG_EXIT + sbMethod.toString());
         }
-    } /* exit */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** decreases indentation and logs an indented method and its return
      * value with the FINEST level.
@@ -184,9 +157,8 @@ public class IndentLogger extends Logger {
             setIndent(getIndent() - iINDENT_AMOUNT);
             finest(m_sbIndent.toString() + sTAG_EXIT + sbMethod.toString() + "(" + String.valueOf(oReturn) + ")");
         }
-    } /* exit */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs the given properties.
      @param sTitle properties' title in log.
@@ -207,9 +179,8 @@ public class IndentLogger extends Logger {
             info("  " + sPropKey + ": " + sPropValue);
         }
         setIndent(getIndent() - iINDENT_AMOUNT);
-    } /* logProperties */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs the current system properties.
      */
@@ -220,9 +191,8 @@ public class IndentLogger extends Logger {
         info("maximum memory: " + String.valueOf(rt.maxMemory()));
         Properties propSystem = System.getProperties();
         properties("System properties", propSystem);
-    } /* systemProperties */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs an error with the INFO level.
      @param e error to log.
@@ -230,9 +200,8 @@ public class IndentLogger extends Logger {
     public synchronized void error(Error e) {
         if (isLoggable(Level.INFO))
             event(EU.getErrorMessage(e));
-    } /* error */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs an exception with the FINER level.
      @param e exception to log.
@@ -240,9 +209,8 @@ public class IndentLogger extends Logger {
     public synchronized void exception(Exception e) {
         if (isLoggable(Level.FINER))
             event(EU.getExceptionMessage(e));
-    } /* exception */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs an SQLWarning with the FINER level.
      @param sw warning to log.
@@ -260,12 +228,8 @@ public class IndentLogger extends Logger {
             if (sbMessage != null)
                 event(sbMessage.toString());
         }
-    } /* sqlwarning */
+    }
 
-  /*====================================================================
-  factories
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** returns a new IndentLogger, attempting to initialize it from the
      * logging configuration or from the system property first.
@@ -277,6 +241,6 @@ public class IndentLogger extends Logger {
         LogManager lm = LogManager.getLogManager();
         lm.addLogger(il); // sets parent, inherits handlers, level is null, if parent's level is to be used.
         return il;
-    } /* getIndentLogger */
+    }
 
-} /* class IndentLogger */
+}

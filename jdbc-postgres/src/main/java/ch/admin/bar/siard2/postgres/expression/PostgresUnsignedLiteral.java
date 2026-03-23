@@ -15,7 +15,6 @@ import ch.admin.bar.siard2.postgres.PostgresLiterals;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.UnsignedLiteral;
 
-/*====================================================================*/
 
 /** PostgresUnsignedLiteral overrides UnsignedLiteral of SQL parser and
  * uses PostgresLiteral for formatting.
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.expression.UnsignedLiteral;
  */
 public class PostgresUnsignedLiteral
         extends UnsignedLiteral {
-    /*------------------------------------------------------------------*/
 
     /** format the unsigned literal
      * @return the SQL string corresponding to the fields of the unsigned literal.
@@ -54,15 +52,14 @@ public class PostgresUnsignedLiteral
         else if (getBoolean() != null)
             sFormatted = PostgresLiterals.formatBooleanLiteral(getBoolean());
         return sFormatted;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public PostgresUnsignedLiteral(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class PostgresUnsignedLiteral */
+}

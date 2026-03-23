@@ -15,10 +15,8 @@ import ch.enterag.sqlparser.K;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.CreateProcedureStatement;
 
-/*====================================================================*/
 public class OracleCreateProcedureStatement
         extends CreateProcedureStatement {
-    /*------------------------------------------------------------------*/
 
     /**
      * format the create procedure statement
@@ -31,15 +29,14 @@ public class OracleCreateProcedureStatement
         if (getRoutineBody() != null)
             sStatement = sStatement + K.AS.getKeyword() + sNEW_LINE + getRoutineBody().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleCreateProcedureStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
 }

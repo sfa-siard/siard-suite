@@ -14,7 +14,6 @@ public class CommonValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CommonValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -68,7 +67,6 @@ public class CommonValueExpression
             return CommonValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private CveVisitor _visitor = new CveVisitor();
 
@@ -146,7 +144,6 @@ public class CommonValueExpression
         _vep = vep;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the common value expression.
      * @return the SQL string corresponding to the fields of the common
@@ -170,9 +167,8 @@ public class CommonValueExpression
         else if (getValueExpressionPrimary() != null)
             sExpression = getValueExpressionPrimary().format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the data type of the common value expression from the context
      * of a query.
@@ -196,9 +192,8 @@ public class CommonValueExpression
         else if (getValueExpressionPrimary() != null)
             dt = getValueExpressionPrimary().getDataType(ss);
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a common value expression from its components.
      * @return value.
@@ -225,9 +220,8 @@ public class CommonValueExpression
         else if (getValueExpressionPrimary() != null)
             oValue = oValuePrimary;
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the common value expression against the context of a query.
      * @param ss sql statement.
@@ -253,9 +247,8 @@ public class CommonValueExpression
             oValuePrimary = getValueExpressionPrimary().evaluate(ss, bAggregated);
         Object oValue = evaluate(oNumericValue, oStringValue, oDatetimeValue, ivIntervalValue, oValuePrimary);
         return oValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a common value expression to
      * their initial value.
@@ -280,9 +273,8 @@ public class CommonValueExpression
             oValuePrimary = getValueExpressionPrimary().resetAggregates(ss);
         Object oValue = evaluate(oNumericValue, oStringValue, oDatetimeValue, ivIntervalValue, oValuePrimary);
         return oValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the common value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -291,9 +283,8 @@ public class CommonValueExpression
     public void parse(SqlParser.CommonValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the common value expression from SQL.
      * @param sSql SQL.
@@ -302,9 +293,8 @@ public class CommonValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().commonValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a common value expression.
      * Only one parameter not null!
@@ -333,15 +323,14 @@ public class CommonValueExpression
         setMultisetValueExpression(mve);
         setValueExpressionPrimary(vep);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CommonValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CommonValueExpression */
+}

@@ -114,7 +114,7 @@ public class TestMsSqlDatabase {
         public ColumnDefinition(String sName, String sType, Object oValue) {
             super(sName, sType, oValue);
         }
-    } /* ColumnDefinition */
+    }
 
     /* Output of DatabaseMetaData.getTypeInfo:
   TYPE_NAME DATA_TYPE PRECISION LITERAL_PREFIX  LITERAL_SUFFIX  CREATE_PARAMS NULLABLE  CASE_SENSITIVE  SEARCHABLE  UNSIGNED_ATTRIBUTE  FIXED_PREC_SCALE  AUTO_INCREMENT  LOCAL_TYPE_NAME MINIMUM_SCALE MAXIMUM_SCALE SQL_DATA_TYPE SQL_DATETIME_SUB  NUM_PREC_RADIX  INTERVAL_PRECISION  USERTYPE
@@ -252,14 +252,14 @@ public class TestMsSqlDatabase {
         _conn.setAutoCommit(false);
         drop();
         create();
-    } /* constructor */
+    }
 
     private void drop() {
         deleteTables();
         dropTables();
         dropTypes();
         dropSchema();
-    } /* drop */
+    }
 
     private void executeDrop(String sSql) {
         try {
@@ -270,37 +270,37 @@ public class TestMsSqlDatabase {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* executeDrop */
+    }
 
     private void deleteTables() {
         deleteTable(getQualifiedSimpleTable());
         deleteTable(getQualifiedComplexTable());
-    } /* deleteTables */
+    }
 
     private void deleteTable(QualifiedId qiTable) {
         executeDrop("DELETE FROM " + qiTable.format());
-    } /* deleteTable */
+    }
 
     private void dropTables() {
         dropTable(getQualifiedSimpleTable());
         dropTable(getQualifiedComplexTable());
-    } /* dropTables */
+    }
 
     private void dropTable(QualifiedId qiTable) {
         executeDrop("DROP TABLE " + qiTable.format());
-    } /* dropTable */
+    }
 
     private void dropTypes() {
         dropType(getQualifiedDistinctType());
-    } /* dropTypes */
+    }
 
     private void dropType(QualifiedId qiType) {
         executeDrop("DROP TYPE " + qiType.format());
-    } /* dropType */
+    }
 
     private void dropSchema() {
         executeDrop("DROP SCHEMA " + SqlLiterals.formatId(_sTEST_SCHEMA));
-    } /* dropSchema */
+    }
 
     private void create()
             throws SQLException {
@@ -308,7 +308,7 @@ public class TestMsSqlDatabase {
         createTypes();
         createTables();
         insertTables();
-    } /* create */
+    }
 
     private void executeCreate(String sSql)
             throws SQLException {
@@ -316,24 +316,24 @@ public class TestMsSqlDatabase {
         stmt.executeUpdate(sSql);
         stmt.close();
         _conn.commit();
-    } /* executeCreate */
+    }
 
     private void createSchema()
             throws SQLException {
         SchemaId sid = new SchemaId(null, _sTEST_SCHEMA);
         executeCreate("CREATE SCHEMA " + sid.format());
-    } /* createSchema */
+    }
 
     private void createTypes()
             throws SQLException {
         createType(getQualifiedDistinctType(), _listBaseDistinct);
-    } /* createTypes */
+    }
 
     private void createType(QualifiedId qiType, List<TestColumnDefinition> listBase)
             throws SQLException {
         TestColumnDefinition tcd = listBase.get(0);
         executeCreate("CREATE TYPE " + qiType.format() + " FROM " + tcd.getType());
-    } /* createType */
+    }
 
     private void createTables()
             throws SQLException {
@@ -341,7 +341,7 @@ public class TestMsSqlDatabase {
                     Arrays.asList(new String[]{_listCdSimple.get(_iPrimarySimple).getName()}),
                     Arrays.asList(new String[]{_listCdSimple.get(_iCandidateSimple).getName()}));
         createTable(getQualifiedComplexTable(), _listCdComplex, null, null);
-    } /* createTables */
+    }
 
     private void createTable(QualifiedId qiTable, List<TestColumnDefinition> listCd,
                              List<String> listPrimary, List<String> listUnique)
@@ -373,13 +373,13 @@ public class TestMsSqlDatabase {
         }
         sbSql.append("\r\n)");
         executeCreate(sbSql.toString());
-    } /* createTable */
+    }
 
     private void insertTables()
             throws SQLException {
         insertTable(getQualifiedSimpleTable(), _listCdSimple);
         insertTable(getQualifiedComplexTable(), _listCdComplex);
-    } /* insertTables */
+    }
 
     private void insertTable(QualifiedId qiTable, List<TestColumnDefinition> listCd)
             throws SQLException {
@@ -429,6 +429,6 @@ public class TestMsSqlDatabase {
         assertSame("Insert failed!", 1, iResult);
         pstmt.close();
         _conn.commit();
-    } /* insertTable */
+    }
 
-} /* class TestMsSqlDatabase */
+}

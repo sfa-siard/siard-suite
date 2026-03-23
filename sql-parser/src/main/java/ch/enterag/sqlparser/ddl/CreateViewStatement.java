@@ -18,7 +18,6 @@ public class CreateViewStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CreateViewStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -77,7 +76,6 @@ public class CreateViewStatement
             return CreateViewStatement.this;
         }
     }
-    /*==================================================================*/
 
     private CvsVisitor _visitor = new CvsVisitor();
 
@@ -175,7 +173,6 @@ public class CreateViewStatement
         _levels = levels;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the create view statement.
      * @return the SQL string corresponding to the fields of the create
@@ -210,9 +207,8 @@ public class CreateViewStatement
             sStatement = sStatement + sSP + K.CHECK.getKeyword() + sSP + K.OPTION.getKeyword();
         }
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create view statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -221,9 +217,8 @@ public class CreateViewStatement
     public void parse(SqlParser.CreateViewStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create view statement from SQL.
      * @param sSql SQL.
@@ -232,9 +227,8 @@ public class CreateViewStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().createViewStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create view statement.
      * @param bRecursive true, of recursive view definition.
@@ -268,15 +262,14 @@ public class CreateViewStatement
         setCheckOption(bCheckOption);
         setLevels(levels);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CreateViewStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CreateViewStatement */
+}

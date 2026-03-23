@@ -13,7 +13,6 @@ package ch.admin.bar.siard2.db2.ddl;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.CreateTypeStatement;
 
-/*====================================================================*/
 
 /** Db2CreateTypeStatement overrides CreateTypeStatement of SQL parser
  * because DB/2 requires MODE DB2SQL.
@@ -22,7 +21,6 @@ import ch.enterag.sqlparser.ddl.CreateTypeStatement;
 public class Db2CreateTypeStatement
         extends CreateTypeStatement {
 
-    /*------------------------------------------------------------------*/
 
     /** format the create type statement.
      * @return the SQL string corresponding to the fields of the create
@@ -34,15 +32,14 @@ public class Db2CreateTypeStatement
         if (getDistinctBaseType() == null)
             sStatement = sStatement + sSP + "MODE" + sSP + "DB2SQL";
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public Db2CreateTypeStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* Db2CreateTypeStatement */
+}

@@ -20,7 +20,6 @@ public class DeleteStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DeleteStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -38,7 +37,6 @@ public class DeleteStatement
             return DeleteStatement.this;
         }
     }
-    /*==================================================================*/
 
     private DsVisitor _visitor = new DsVisitor();
 
@@ -67,7 +65,6 @@ public class DeleteStatement
     }
 
     /* for evaluation */
-    /*------------------------------------------------------------------*/
 
     /** check, if the table has a column with the given name.
      * @param sColumn column name.
@@ -76,7 +73,7 @@ public class DeleteStatement
     public boolean hasColumn(String sColumn) {
         return getColumnValues().keySet()
                                 .contains(sColumn);
-    } /* hasColumn */
+    }
 
     private List<String> _listColumnNames = new ArrayList<String>();
 
@@ -84,7 +81,6 @@ public class DeleteStatement
         return _listColumnNames;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** set the column names of the table and initialize their values to null.
      * @param listColumnNames list of column names of table.
@@ -94,7 +90,7 @@ public class DeleteStatement
         getColumnValues().clear();
         for (int iColumn = 0; iColumn < listColumnNames.size(); iColumn++)
             getColumnValues().put(listColumnNames.get(iColumn), null);
-    } /* setColumnNames */
+    }
 
     private Map<String, DataType> _mapColumnTypes = new HashMap<String, DataType>();
 
@@ -107,7 +103,6 @@ public class DeleteStatement
     private Map<String, Object> getColumnValues() {
         return _mapColumnValues;
     }
-    /*------------------------------------------------------------------*/
 
     /** set data type of a table column.
      * @param sColumnName name of column.
@@ -115,9 +110,8 @@ public class DeleteStatement
      */
     public void setColumnType(String sColumnName, DataType dtColumn) {
         getColumnTypes().put(sColumnName, dtColumn);
-    } /* setColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set data type of a table column.
      * @param iPosition (1-based) position of column.
@@ -125,9 +119,8 @@ public class DeleteStatement
      */
     public void setColumnType(int iPosition, DataType dtColumn) {
         setColumnType(getColumnNames().get(iPosition - 1), dtColumn);
-    } /* setColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get type of table column.
      * N.B.: We ignore alias names of column for the moment!
@@ -136,9 +129,8 @@ public class DeleteStatement
      */
     public DataType getColumnType(String sColumnName) {
         return getColumnTypes().get(sColumnName);
-    } /* getColumnType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set value of a table column.
      * @param sColumnName name of column.
@@ -146,9 +138,8 @@ public class DeleteStatement
      */
     public void setColumnValue(String sColumnName, Object oColumnValue) {
         getColumnValues().put(sColumnName, oColumnValue);
-    } /* setColumnValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** set value of a table column.
      * @param iPosition (1-based) position of column.
@@ -156,9 +147,8 @@ public class DeleteStatement
      */
     public void setColumnValue(int iPosition, Object oColumnValue) {
         setColumnValue(getColumnNames().get(iPosition - 1), oColumnValue);
-    } /* setColumnValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** get value of table column.
      * N.B.: We ignore alias names of column for the moment!
@@ -167,9 +157,8 @@ public class DeleteStatement
      */
     public Object getColumnValue(String sColumnName) {
         return getColumnValues().get(sColumnName);
-    } /* setColumnValue */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the delete statement.
      * @return the SQL string corresponding to the fields of the delete
@@ -182,9 +171,8 @@ public class DeleteStatement
         if (getBooleanValueExpression() != null)
             sStatement = sStatement + sSP + K.WHERE + sSP + getBooleanValueExpression().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the delete statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -193,9 +181,8 @@ public class DeleteStatement
     public void parse(SqlParser.DeleteStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the delete statement from SQL.
      * @param sSql SQL.
@@ -204,9 +191,8 @@ public class DeleteStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().deleteStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a delete statement.
      * @param qiTableName name of table.
@@ -219,15 +205,14 @@ public class DeleteStatement
         setTableName(qiTableName);
         setBooleanValueExpression(bve);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DeleteStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DeleteStatement */
+}

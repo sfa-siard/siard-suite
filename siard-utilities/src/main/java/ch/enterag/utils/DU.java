@@ -22,7 +22,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-/*====================================================================*/
 
 /** Utility for handling date strings.
  * @author Hartwig
@@ -85,7 +84,6 @@ public class DU {
         return (_sdfTimestamp == null) ? null : _sdfTimestamp.toPattern();
     }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor creates an instance of this language with this date format.
      * @param sLanguage language (2 characters)
@@ -116,9 +114,8 @@ public class DU {
         _sdf = new SimpleDateFormat(sDateFormat);
         _sdfTimestamp = new SimpleDateFormat(sDateFormat);
         _map.put(sLanguage, this);
-    } /* constructor DU */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** factory gets the instance corresponding to the language and the
      * date format.
@@ -132,9 +129,8 @@ public class DU {
                                 .equals(sDateFormat)))
             du = new DU(sLanguage, sDateFormat);
         return du;
-    } /* factory getInstance */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a date to a string
      * @param date date to be converted.
@@ -145,9 +141,8 @@ public class DU {
         if (date != null)
             s = _sdf.format(date);
         return s;
-    } /* fromDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a string to a date.
      * @param s string to be converted.
@@ -161,9 +156,8 @@ public class DU {
         if (s.length() > 0)
             date = _sdf.parse(s);
         return date;
-    } /* toDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an SQL date (date only) to a string
      * @param date SQL date to be converted.
@@ -174,9 +168,8 @@ public class DU {
         if ((date != null) && (_sdfDate != null))
             s = _sdfDate.format(date);
         return s;
-    } /* fromSqlDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an SQL time (time only) to a string
      * @param time SQL time to be converted.
@@ -187,9 +180,8 @@ public class DU {
         if ((time != null) && (_sdfTime != null))
             s = _sdfTime.format(time);
         return s;
-    } /* fromSqlTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an SQL timestamp to a string.
      * N.B.: loses precision, because not more than milliseconds can be
@@ -202,9 +194,8 @@ public class DU {
         if ((ts != null) && (_sdfTimestamp != null))
             s = _sdfTimestamp.format(ts);
         return s;
-    } /* fromSqlTimestamp */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a gregorian calendar date to a date.
      * @param gc gregorian calendar date to be converted.
@@ -215,9 +206,8 @@ public class DU {
         if (gc != null)
             date = gc.getTime();
         return date;
-    } /* toDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a gregorian calendar date in XML format to a date.
      * @param xgc gregorian calendar date in XML format to be converted.
@@ -228,9 +218,8 @@ public class DU {
         if (xgc != null)
             date = toDate(xgc.toGregorianCalendar());
         return date;
-    } /* toDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a Gregorian calendar date to a string
      * @param gc Gregorian calendar date to be converted.
@@ -241,9 +230,8 @@ public class DU {
         if (gc != null)
             s = _sdf.format(gc.getTime());
         return s;
-    } /* fromGregorianCalendar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a string to a gregorian calendar date.
      * @param s string to be converted.
@@ -261,9 +249,8 @@ public class DU {
             gc.setTime(date);
         }
         return gc;
-    } /* toGregorianCalendar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a date to a gregorian calendar date.
      * @param date to be converted.
@@ -276,9 +263,8 @@ public class DU {
             gc.setTime(date);
         }
         return gc;
-    } /* toGregorianCalendar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a gregorian calendar date in XML format to a gregorian
      * calendar date.
@@ -291,9 +277,8 @@ public class DU {
         if (xgc != null)
             gc = xgc.toGregorianCalendar();
         return gc;
-    } /* toGregorianCalendar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a Gregorian calendar date in XML format to a string
      * @param xgc Gregorian calendar date in XML format to be converted.
@@ -305,9 +290,8 @@ public class DU {
             s = _sdf.format(xgc.toGregorianCalendar()
                                .getTime());
         return s;
-    } /* fromXmlGregorianCalendar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a string to a gregorian calendar date in XML format.
      * @param s string to be converted.
@@ -330,9 +314,8 @@ public class DU {
             }
         }
         return xgc;
-    } /* toXmlGregorianCalendar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a date to a gregorian calendar date in XML format.
      * @param date to be converted.
@@ -352,9 +335,8 @@ public class DU {
             }
         }
         return xgc;
-    } /* toXmlGregorianCalendar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a gregorian calendar date to a gregorian calendar date
      * in XML format.
@@ -374,9 +356,8 @@ public class DU {
             }
         }
         return xgc;
-    } /* toXmlGregorianCalendar */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a java.sql.Date to xs:date format.
      * @param date date value.
@@ -393,9 +374,8 @@ public class DU {
         }
         String s = _sdfXS_DATE.format(date);
         return s;
-    } /* toXsDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert XML representation of xs:date to java.sql.Date.
      * NB.: Resulting date will be restricted to 01.01.01 to 31.12.9999.
@@ -417,9 +397,8 @@ public class DU {
             d = dateMINIMUM_SQL;
         }
         return d;
-    } /* fromXsDate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a java.sql.Time to xs:time format.
      * @param time time value.
@@ -439,9 +418,8 @@ public class DU {
         }
         sbTime.append(_sZ);
         return sbTime.toString();
-    } /* toXsTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an xs:time string to java.sql.Time.
      * N.B.: will truncate input to milliseconds!
@@ -471,9 +449,8 @@ public class DU {
         time = new java.sql.Time(_sdfXS_TIME.parse(s)
                                             .getTime() + iMillis);
         return time;
-    } /* fromXsTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a java.sql.Timestamp to xs:dateTime format.
      * @param ts timestamp value.
@@ -500,9 +477,8 @@ public class DU {
         }
         sbDateTime.append(_sZ);
         return sbDateTime.toString();
-    } /* toXsDateTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an xs:dateTime string to java.sql.Timestamp.
      * N.B.: will truncate input to nanoseconds!
@@ -541,9 +517,8 @@ public class DU {
             ts = tsMINIMUM_SQL;
         }
         return ts;
-    } /* fromXsDateTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a duration value to a xs:duration string.
      * @param duration duration value.
@@ -552,9 +527,8 @@ public class DU {
     public String toXsDuration(Duration duration) {
         String s = duration.toString();
         return s;
-    } /* toXsDuration */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert an xs:duration string to Duration.
      * @param s duration as xs:duration.
@@ -572,6 +546,6 @@ public class DU {
                                    .getName() + ": " + dtce.getMessage());
         }
         return duration;
-    } /* fromXsDate */
+    }
 
-} /* class DU */
+}

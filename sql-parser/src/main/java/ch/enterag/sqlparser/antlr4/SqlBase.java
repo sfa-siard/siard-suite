@@ -22,7 +22,6 @@ import java.io.IOException;
 public abstract class SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(SqlBase.class.getName());
-    /*==================================================================*/
 
     /** visitor lists the parse tree.
      */
@@ -71,7 +70,6 @@ public abstract class SqlBase {
             return SqlBase.this;
         }
     }
-    /*==================================================================*/
 
     public static final String sIDENTIFIER = "IDENTIFIER"; /* identifier symbolic name */
     public static final String sNEW_LINE = "\r\n";
@@ -177,7 +175,7 @@ public abstract class SqlBase {
             _il.exception(ie);
         }
         return sp;
-    } /* newSqlParser */
+    }
 
     public static SqlParser newSqlParser2(String sSql) {
         SqlParser sp = null;
@@ -198,12 +196,12 @@ public abstract class SqlBase {
             _il.exception(ie);
         }
         return sp;
-    } /* newSqlParser */
+    }
 
     /* every part of the SQL parser must be created by a factory */
     public SqlBase(SqlFactory sf) {
         setSqlFactory(sf);
-    } /* constructor Base */
+    }
 
     /* every parsable object can be formated */
     public abstract String format();
@@ -211,4 +209,4 @@ public abstract class SqlBase {
     /* create the parser for SQL */
     public abstract void parse(String sSql);
 
-} /* SqlBase */
+}

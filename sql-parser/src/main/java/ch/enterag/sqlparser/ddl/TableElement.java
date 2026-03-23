@@ -17,7 +17,6 @@ public class TableElement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(TableElement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -97,7 +96,6 @@ public class TableElement
             return TableElement.this;
         }
     }
-    /*==================================================================*/
 
     private TeVisitor _visitor = new TeVisitor();
 
@@ -211,7 +209,6 @@ public class TableElement
         _ccd = ccd;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the table element.
      * @return the SQL string corresponding to the fields of the table element.
@@ -249,9 +246,8 @@ public class TableElement
                 break;
         }
         return sDefinition;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table element from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -260,9 +256,8 @@ public class TableElement
     public void parse(SqlParser.TableElementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the table element from SQL.
      * @param sSql SQL.
@@ -271,9 +266,8 @@ public class TableElement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().tableElement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a table element.
      * @param type type of table element (not null!).
@@ -310,9 +304,8 @@ public class TableElement
         setDefaultOption(sDefaultOption);
         setColumnConstraintDefinition(ccd);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a column definition table element.
      * @param cd column definition (type = COLUMN_DEFINITION) or null.
@@ -322,9 +315,8 @@ public class TableElement
         setType(TableElementType.COLUMN_DEFINITION);
         setColumnDefinition(cd);
         _il.exit();
-    } /* initColumnDefinition */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a column definition table element.
      * @param tcd table constraint definition (type = TABLE_CONSTRAINT_DEFINITION) or null.
@@ -334,15 +326,14 @@ public class TableElement
         setType(TableElementType.TABLE_CONSTRAINT_DEFINITION);
         setTableConstraintDefinition(tcd);
         _il.exit();
-    } /* initTableConstraintDefinition */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public TableElement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class TableElement */
+}

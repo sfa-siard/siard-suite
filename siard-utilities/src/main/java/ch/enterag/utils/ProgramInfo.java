@@ -13,15 +13,11 @@ import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.*;
 
-/*====================================================================*/
 
 /** ProgramInfo is the container of program info.
  @author Hartwig Thomas, Katja Reinhardt
  */
 public class ProgramInfo {
-    /*====================================================================
-    (private) constants
-    ====================================================================*/
     private static final String sSPECIFIED_BY = "Specified by : ";
     private static final String sDEVELOPED_BY = "Developed by : ";
     private static final String sTESTED_BY = "Tested by    : ";
@@ -29,9 +25,6 @@ public class ProgramInfo {
     private static final String sTRANSLATED_BY = "Translated by: ";
     private static final String sJAVA = "JAVA         : ";
 	
-  /*====================================================================
-  (private) data members
-  ====================================================================*/
     /** the only instance of this class */
     protected static ProgramInfo _info = null;
     /** logger */
@@ -60,9 +53,6 @@ public class ProgramInfo {
     /** Program translators */
     private Map<String, String> _mapTranslators = new HashMap<String, String>();
 
-    /*====================================================================
-    (private) utility method
-    ====================================================================*/
     public String toString(List<String> list) {
         StringBuffer sb = new StringBuffer();
         for (Iterator<String> iterator = list.iterator(); iterator.hasNext(); ) {
@@ -72,237 +62,208 @@ public class ProgramInfo {
             sb.append(s);
         }
         return sb.toString();
-    } /* toString */
+    }
   
-  /*====================================================================
-  Accessors
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** returns OS name (e.g. Windows 7).
      @return operating system name.
      */
     public String getOs() {
         return System.getProperty("os.name");
-    } /* getOs */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns OS version (e.g. 6.1).
      @return operating system version.
      */
     public String getOsVersion() {
         return System.getProperty("os.version");
-    } /* getOsVersion */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns OS architecture (e.g. amd64).
      @return operating system architecture (32/64 bit).
      */
     public String getOsArchitecture() {
         return System.getProperty("os.arch");
-    } /* getOsArchitecture */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns JAVA version (e.g. 1.7.0_01).
      @return JAVA (runtime) version.
      */
     public String getJavaVersion() {
         return System.getProperty("java.version");
-    } /* getJavaVersion */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns JAVA architecture.
      @return JAVA architecture (32/64 bit).
      */
     public String getJavaArchitecture() {
         return System.getProperty("sun.arch.data.model");
-    } /* getJavaArchitecture */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns application name.
      @return application name.
      */
     public String getApplication() {
         return _sApplication;
-    } /* getApplication */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns application version.
      @return application version.
      */
     public String getAppVersion() {
         return _sAppVersion;
-    } /* getAppVersion */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program name.
      @return program name.
      */
     public String getProgram() {
         return _sProgram;
-    } /* getProgram */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program version.
      @return program version.
      */
     public String getVersion() {
         return _sVersion;
-    } /* getVersion */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program description.
      @return program description.
      */
     public String getDescription() {
         return _sDescription;
-    } /* getDescription */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program description.
      @param sDescription program description.
      */
     public void setDescription(String sDescription) {
         _sDescription = sDescription;
-    } /* setDescription */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program copyright.
      @return program copyright.
      */
     public String getCopyright() {
         return _sCopyright;
-    } /* getCopyright */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program specification authors.
      @return program specification authors.
      */
     public List<String> getSpecifierList() {
         return _listSpecifiers;
-    } /* getSpecifierList */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program specification authors.
      @return program specification authors.
      */
     public String getSpecifiers() {
         return toString(_listSpecifiers);
-    } /* getSpecifiers */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** add a program specification author.
      @param sSpecifier program specification author.
      */
     public void addSpecifier(String sSpecifier) {
         _listSpecifiers.add(sSpecifier);
-    } /* addSpecifier */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program developers.
      @return program developers.
      */
     public List<String> getDeveloperList() {
         return _listDevelopers;
-    } /* getDeveloperList */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program developers.
      @return program developers.
      */
     public String getDevelopers() {
         return toString(_listDevelopers);
-    } /* getDevelopers */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** add a program developer.
      @param sDeveloper program developer.
      */
     public void addDeveloper(String sDeveloper) {
         _listDevelopers.add(sDeveloper);
-    } /* addDeveloper */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program testers.
      @return program testers.
      */
     public List<String> getTesterList() {
         return _listTesters;
-    } /* getTesterList */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program testers.
      @return program testers.
      */
     public String getTesters() {
         return toString(_listTesters);
-    } /* getTesters */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** add a program tester.
      @param sTester program tester.
      */
     public void addTester(String sTester) {
         _listTesters.add(sTester);
-    } /* addTester */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program development managers.
      @return program development managers.
      */
     public List<String> getManagerList() {
         return _listManagers;
-    } /* getManagerList */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program development managers.
      @return program development managers.
      */
     public String getManagers() {
         return toString(_listManagers);
-    } /* getManagers */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** add a program development manager.
      @param sManager program development manager.
      */
     public void addManager(String sManager) {
         _listManagers.add(sManager);
-    } /* addManager */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns program translators.
      @return program translators (null for untranslated).
      */
     public Map<String, String> getTranslatorMap() {
         return _mapTranslators;
-    } /* getTranslatorMap */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** add a program translator.
      @param sLanguage ISO 639-1 code (2 characters, lower-case) for language.
@@ -310,12 +271,8 @@ public class ProgramInfo {
      */
     public void addTranslator(String sLanguage, String sTranslator) {
         _mapTranslators.put(sLanguage, sTranslator);
-    } /* addManager */
+    }
   
-  /*====================================================================
-  methods
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** returns the new instance with initialized fields.
      @param sApplication application name.
@@ -345,9 +302,8 @@ public class ProgramInfo {
                                 listTesters,
                                 listManagers);
         return _info;
-    } /* getProgramInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the new instance with initialized fields.
      @param sApplication application name.
@@ -363,9 +319,8 @@ public class ProgramInfo {
         _info = new ProgramInfo(sApplication, sAppVersion,
                                 sProgram, sVersion, sDescription, sCopyright);
         return _info;
-    } /* getProgramInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** returns the existing instance.
      @return existing instance of singleton class.
@@ -374,9 +329,8 @@ public class ProgramInfo {
         if (_info == null)
             throw new RuntimeException("ProgramInfo must be initialized first!");
         return _info;
-    } /* getProgramInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** prints a list.
      */
@@ -388,7 +342,7 @@ public class ProgramInfo {
             for (iItem++; iItem < list.size(); iItem++)
                 System.out.println(sIndent + list.get(iItem));
         }
-    } /* printList */
+    }
 
     private void printMap(String sLabel, Map<String, String> map) {
         int iItem = 0;
@@ -400,9 +354,8 @@ public class ProgramInfo {
             for (iItem++; iItem < asLanguage.length; iItem++)
                 System.out.println(sIndent + map.get(asLanguage[iItem]) + " (" + asLanguage[iItem] + ")");
         }
-    } /* printMap */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** displays initial program information.
      */
@@ -423,17 +376,15 @@ public class ProgramInfo {
             sbOs.append(" ");
         sbOs.append(": ");
         System.out.println(sbOs.toString() + "Version " + getOsVersion() + " (" + getOsArchitecture() + ")");
-    } /* printStart */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** displays program termination information.
      */
     public void printTermination() {
         System.out.println(getProgram() + " " + getVersion() + " terminates.");
-    } /* printTermination */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs a list.
      */
@@ -445,9 +396,8 @@ public class ProgramInfo {
             for (iItem++; iItem < list.size(); iItem++)
                 _il.info(sIndent + list.get(iItem));
         }
-    } /* logList */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs a map.
      */
@@ -461,9 +411,8 @@ public class ProgramInfo {
             for (iItem++; iItem < asLanguage.length; iItem++)
                 _il.info(sIndent + map.get(asLanguage[iItem]) + " (" + asLanguage[iItem] + ")");
         }
-    } /* logMap */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs initial program information.
      */
@@ -484,20 +433,15 @@ public class ProgramInfo {
             sbOs.append(" ");
         sbOs.append(": ");
         _il.info(sbOs.toString() + "Version " + getOsVersion() + " (" + getOsArchitecture() + ")");
-    } /* logStart */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** logs program termination information.
      */
     public void logTermination() {
         _il.info(getProgram() + " " + getVersion() + " terminates.");
-    } /* logTermination */
+    }
   
-  /*====================================================================
-  constructors
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /**  creates an instance of ProgramInfo with  partially initialized fields.
      @param sApplication application name.
@@ -516,9 +460,8 @@ public class ProgramInfo {
         _sVersion = sVersion;
         _sDescription = sDescription;
         _sCopyright = sCopyright;
-    } /* constructor ProgramInfo */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /**  creates an instance of ProgramInfo with initialized fields.
      @param sApplication application name.
@@ -554,12 +497,8 @@ public class ProgramInfo {
             _listTesters = listTesters;
         if (listManagers != null)
             _listManagers = listManagers;
-    } /* constructor ProgramInfo */
+    }
   
-  /*====================================================================
-  methods
-  ====================================================================*/
-    /*------------------------------------------------------------------*/
 
     /** compare the given version with the this program info's internal
      * version.
@@ -590,6 +529,6 @@ public class ProgramInfo {
             }
         }
         return iCompare;
-    } /* compareVersion */
+    }
 
-} /* class ProgramInfo */
+}

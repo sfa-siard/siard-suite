@@ -73,7 +73,7 @@ public class SqlTester {
             fail(pe.getClass()
                    .getName() + " [" + String.valueOf(pe.getErrorOffset()) + "]: " + pe.getMessage());
         }
-    } /* testParseId */
+    }
 
     @Test
     public void testFormatId() {

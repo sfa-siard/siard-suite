@@ -84,7 +84,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         new TestSqlDatabase(connDb2, TESTUSER);
         new TestDb2Database(connDb2, TESTUSER);
         connDb2.close();
-    } /* setUpClass */
+    }
 
     private Connection closeResultSet() throws SQLException {
         Connection conn = null;
@@ -101,7 +101,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
             }
         }
         return conn;
-    } /* closeResultSet */
+    }
 
     private void openResultSet(Connection conn, String sQuery) throws SQLException {
         closeResultSet();
@@ -109,7 +109,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         ResultSet rs = stmt.executeQuery(sQuery);
         ResultSetMetaData rsmd = rs.getMetaData();
         setResultSetMetaData(rsmd, rs);
-    } /* openResultSet */
+    }
 
 
     @Before
@@ -121,7 +121,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         Connection conn = dsDb2.getConnection();
         conn.setAutoCommit(false);
         openResultSet(conn, _sNativeQuerySimple);
-    } /* setUp */
+    }
 
     @After
     @Override
@@ -137,12 +137,12 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong database meta data class!", Db2ResultSetMetaData.class, getResultSetMetaData().getClass());
-    } /* testClass */
+    }
 
     @Test
     public void testNativeSimple() {
@@ -153,7 +153,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeSimple */
+    }
 
     @Test
     public void testNativeComplex() {
@@ -164,7 +164,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeComplex */
+    }
 
     @Test
     public void testSqlSimple() {
@@ -175,7 +175,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSqlSimple */
+    }
 
     @Test
     public void testSqlComplex() {
@@ -186,6 +186,6 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSqlComplex */
+    }
 
 }

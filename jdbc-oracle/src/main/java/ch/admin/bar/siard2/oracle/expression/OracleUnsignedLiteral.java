@@ -15,7 +15,6 @@ import ch.admin.bar.siard2.oracle.OracleLiterals;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.expression.UnsignedLiteral;
 
-/*====================================================================*/
 
 /** OracleUnsignedLiteral implements the value translation from ISO SQL:2008
  * to Oracle
@@ -36,10 +35,10 @@ public class OracleUnsignedLiteral
             sFormatted = super.format();
         }
         return sFormatted;
-    } /* format */
+    }
 
     public OracleUnsignedLiteral(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class OracleUnsignedLiteral */
+}

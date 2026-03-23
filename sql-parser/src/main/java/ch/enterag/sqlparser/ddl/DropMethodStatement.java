@@ -17,7 +17,6 @@ public class DropMethodStatement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DropMethodStatement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -52,7 +51,6 @@ public class DropMethodStatement
             return DropMethodStatement.this;
         }
     }
-    /*==================================================================*/
 
     private DmsVisitor _visitor = new DmsVisitor();
 
@@ -130,9 +128,8 @@ public class DropMethodStatement
         }
         s = s + sRIGHT_PAREN;
         return s;
-    } /* formatParameters */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the drop method statement.
      * @return the SQL string corresponding to the fields of the drop method statement.
@@ -149,9 +146,8 @@ public class DropMethodStatement
         sStatement = sStatement + sSP + K.FOR.getKeyword() + sSP +
                 getUdtName().format() + sSP + getDropBehavior().getKeywords();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop method statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -160,9 +156,8 @@ public class DropMethodStatement
     public void parse(SqlParser.DropMethodStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the drop method statement from SQL.
      * @param sSql SQL.
@@ -171,9 +166,8 @@ public class DropMethodStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().dropMethodStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize drop method statement.
      * @param bSpecific true for SPECIFIC.
@@ -199,15 +193,14 @@ public class DropMethodStatement
         setUdtName(qiUdtName);
         setDropBehavior(db);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DropMethodStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DropMethodStatement */
+}

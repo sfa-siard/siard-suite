@@ -115,5 +115,5 @@ public class QualifiedId {
             if (listIds.size() > 2)
                 setCatalog(listIds.get(listIds.size() - 3));
         }
-    } /* parse */
+    }
 }

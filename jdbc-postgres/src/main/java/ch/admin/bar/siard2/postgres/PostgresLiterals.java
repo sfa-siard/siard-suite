@@ -25,7 +25,6 @@ import java.text.ParsePosition;
 import java.time.LocalTime;
 import java.util.UUID;
 
-/* =============================================================================== */
 
 /** PostgresLiterals extends SqlLiterals.
  * @author Hartwig Thomas
@@ -44,7 +43,7 @@ public abstract class PostgresLiterals extends SqlLiterals {
         for (; (iIndex < s.length()) && Character.isWhitespace(s.charAt(iIndex)); iIndex++) {
         }
         return iIndex;
-    } /* skipWhite */
+    }
 
     static long getNanos(LocalTime lt) {
         long lNanos = lt.getHour();
@@ -52,7 +51,7 @@ public abstract class PostgresLiterals extends SqlLiterals {
         lNanos = lNanos * iSECONDS_PER_MINUTE + lt.getSecond();
         lNanos = lNanos * iNANOS_PER_SECOND + lt.getNano();
         return lNanos;
-    } /* getNanos */
+    }
 
     static LocalTime getLocalTime(long lNanos) {
         LocalTime lt = null;
@@ -68,9 +67,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         if (iDays == 0)
             lt = LocalTime.of(iHours, iMinutes, iSeconds, iNanos);
         return lt;
-    } /* getLocalTime */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** test a prefix and detach it.
      * @param s string to be tested.
@@ -84,9 +82,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
             sResult = s.substring(sPrefix.length())
                        .trim();
         return sResult;
-    } /* cutPrefix */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** quote an identifier in normal form (upper case, regular).
      * @param sIdentifier identifier in normal form.
@@ -108,9 +105,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         } else
             throw new NullPointerException("Identifier must not be null!");
         return sDelimited;
-    } /* formatId */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a catalog-qualified schema name for use in an SQL statement.
      * @param sCatalogName catalog name or null.
@@ -122,9 +118,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         if (sCatalogName != null)
             sFormattedSchemaName = formatId(sCatalogName) + sDOT + sFormattedSchemaName;
         return sFormattedSchemaName;
-    } /* formatQualifiedSchema */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a schema-qualified name for use in an SQL statement.
      * @param sCatalogName catalog name or null.
@@ -137,9 +132,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         if (sSchemaName != null)
             sFormattedQualifiedName = formatQualifiedSchema(sCatalogName, sSchemaName) + sDOT + sFormattedQualifiedName;
         return sFormattedQualifiedName;
-    } /* formatQualifiedName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format byte buffer value.
      * @param bufValue byte buffer value to be formatted.
@@ -150,9 +144,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         if (bufValue != null)
             sFormatted = formatStringLiteral(sPOSTGRES_BYTE_LITERAL_PREFIX + BU.toHex(bufValue));
         return sFormatted;
-    } /* formatBytesLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a byte string literal.
      * @param sByteString byte string literal.
@@ -168,9 +161,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         else
             throw new ParseException("Byte character string literal must start with " + sPOSTGRES_BYTE_LITERAL_PREFIX + "!", 0);
         return bufParsed;
-    } /* parseBytesLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format an interval value
      * @param ivValue interval value to be formatted.
@@ -262,9 +254,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
                 sFormatted = sFormatted + sLEFT_PAREN + String.valueOf(iSecondsPrecision) + sRIGHT_PAREN;
         }
         return sFormatted;
-    } /* formatIntervalLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse an interval literal.
      * See https://www.postgresql.org/docs/11/datatype-datetime.html#DATATYPE-INTERVAL-INPUT
@@ -357,9 +348,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
             interval = new Interval(iSign, iDays, lt.getHour(), lt.getMinute(), lt.getSecond(), lt.getNano());
         }
         return interval;
-    } /* parseInterval */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a bit string
      * @param buffer bytes for bit string.
@@ -382,9 +372,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
             }
         }
         return sb.toString();
-    } /* formatBitString */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a bit string
      * @param sBitString bit string of 0s and 1s.
@@ -411,7 +400,6 @@ public abstract class PostgresLiterals extends SqlLiterals {
         return buf;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** convert UUID to big-endian byte buffer.
      * @param uuid UUID
@@ -426,7 +414,6 @@ public abstract class PostgresLiterals extends SqlLiterals {
         return buf;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a boolean literal.
      * @param sBooleanLiteral boolean literal.
@@ -439,9 +426,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         blParsed = sBooleanLiteral.toLowerCase()
                                   .startsWith("t") ? BooleanLiteral.TRUE : BooleanLiteral.FALSE;
         return blParsed;
-    } /* parseBooleanLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a boolean literal value.
      * N.B.: the tree-valued SQL booleans are also often rendered as JAVA
@@ -452,9 +438,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
     public static String formatBooleanLiteral(BooleanLiteral blValue) {
         String sFormatted = blValue.getKeywords();
         return sFormatted;
-    } /* formatBooleanLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a date literal.
      * @param sDateLiteral date literal.
@@ -469,9 +454,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
             dateParsed = new Date(date.getTime());
         }
         return dateParsed;
-    } /* parseDateLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a date value
      * @param dateValue date value to be formatted.
@@ -485,9 +469,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
             sFormatted = sDATE_LITERAL_PREFIX + formatStringLiteral(sFormatted);
         }
         return sFormatted;
-    } /* formatDateLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a time literal.
      * @param sTimeLiteral time literal.
@@ -520,9 +503,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         } else
             throw new ParseException("Time character string literal must start with " + sTIME_LITERAL_PREFIX + "!", 0);
         return timeParsed;
-    } /* parseTimeLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a time value
      * @param timeValue time value to be formatted.
@@ -545,9 +527,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
             sFormatted = sTIME_LITERAL_PREFIX + formatStringLiteral(sFormatted);
         }
         return sFormatted;
-    } /* formatTimeLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a timestamp literal.
      * @param sTimestampLiteral timestamp literal.
@@ -580,9 +561,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         } else
             throw new ParseException("Timestamp character string literal must start with " + sTIMESTAMP_LITERAL_PREFIX + "!", 0);
         return tsParsed;
-    } /* parseTimestampLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a timestamp value
      * @param tsValue timestamp value to be formatted.
@@ -604,9 +584,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
             sFormatted = sTIMESTAMP_LITERAL_PREFIX + formatStringLiteral(sFormatted);
         }
         return sFormatted;
-    } /* formatTimestampLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** convert a big-endian byte buffer into a UUID.
      * taking the first 4 bytes as a little-endian integer,
@@ -631,7 +610,6 @@ public abstract class PostgresLiterals extends SqlLiterals {
         return uuid;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format a binary MAC address as a string.
      * @param buffer binary MAC address.
@@ -642,9 +620,8 @@ public abstract class PostgresLiterals extends SqlLiterals {
         for (int i = 0; i < buffer.length; i++)
             as[i] = BU.toHex(buffer[i]);
         return String.join(":", as);
-    } /* formatMacAddr */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the string representation of a MAC address.
      * @param s string representation of the MAC address
@@ -654,4 +631,4 @@ public abstract class PostgresLiterals extends SqlLiterals {
         return BU.fromHex(s.replace(":", ""));
     }
 
-} /* class PostgresLiterals */
+}

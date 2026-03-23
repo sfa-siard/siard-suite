@@ -34,7 +34,7 @@ public class PostgresQualifiedId
         setCatalog(handleUppercaseRegular(getCatalog()));
         setSchema(handleUppercaseRegular(getSchema()));
         setName(handleUppercaseRegular(getName()));
-    } /* parse */
+    }
 
 
 }

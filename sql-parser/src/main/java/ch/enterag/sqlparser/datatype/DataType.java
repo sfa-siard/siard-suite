@@ -16,7 +16,6 @@ public class DataType
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(DataType.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -84,12 +83,10 @@ public class DataType
             addFieldDefinition(fd);
             return DataType.this;
         }
-    } /* class DtVisitor */
+    }
 
-    /*==================================================================*/
     public static enum Type {PRE, STRUCT, ROW, REF, ARRAY, MULTISET}
 
-    /*==================================================================*/
     public static final int iUNDEFINED = -1;
 
     protected DtVisitor _visitor = new DtVisitor();
@@ -179,7 +176,6 @@ public class DataType
         _iLength = iLength;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format a STRUCT type.
      * @return SQL for STRUCT type.
@@ -187,9 +183,8 @@ public class DataType
     protected String formatStructType() {
         String sDataType = getUdtName().format();
         return sDataType;
-    } /* formatStructType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a ROW type
      * @return SQL for ROW type.
@@ -204,9 +199,8 @@ public class DataType
         }
         sDataType = sDataType + sRIGHT_PAREN;
         return sDataType;
-    } /* formatRowType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a REF type.
      * @return SQL for REF type.
@@ -217,9 +211,8 @@ public class DataType
         if (getScopeTable() != null)
             sDataType = sDataType + sSP + K.SCOPE.getKeyword() + sSP + getScopeTable().format();
         return sDataType;
-    } /* formatRefType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format an ARRAY type.
      * @return SQL for ARRAY type.
@@ -229,9 +222,8 @@ public class DataType
         if (getLength() != iUNDEFINED)
             sDataType = sDataType + sLEFT_BRACKET + String.valueOf(getLength()) + sRIGHT_BRACKET;
         return sDataType;
-    } /* formatArrayType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a MULTISET type.
      * @return SQL for MULTISET type.
@@ -239,9 +231,8 @@ public class DataType
     protected String formatMultisetType() {
         String sDataType = getDataType().format() + sSP + K.MULTISET.getKeyword();
         return sDataType;
-    } /* formatMultisetType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the data type.
      * @return the SQL string corresponding to the fields of the data type.
@@ -270,9 +261,8 @@ public class DataType
                 break;
         }
         return sDataType;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the data type from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -281,9 +271,8 @@ public class DataType
     public void parse(SqlParser.DataTypeContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the data type from SQL.
      * @param sSql SQL.
@@ -299,18 +288,16 @@ public class DataType
             ctx = getParser().dataType();
         }
         parse(ctx);
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization of a predefined data type.
      * @param ptType predefined data type.
      */
     public void initPredefinedDataType(PredefinedType ptType) {
         initialize(Type.PRE, ptType, new QualifiedId(), new ArrayList<FieldDefinition>(), new QualifiedId(), null, iUNDEFINED);
-    } /* initPredefinedDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for ARRAY type.
      * @param ptBase base type of array.
@@ -320,9 +307,8 @@ public class DataType
         DataType dtBase = getSqlFactory().newDataType();
         dtBase.initPredefinedDataType(ptBase);
         initialize(Type.ARRAY, null, new QualifiedId(), new ArrayList<FieldDefinition>(), new QualifiedId(), dtBase, iLength);
-    } /* initArrayType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for STRUCT (DISTINCT or UDT) type.
      * N.B.: Structure of type (attributes etc.) can be retrieved from type
@@ -332,9 +318,8 @@ public class DataType
      */
     public void initStructType(QualifiedId qidTypeName) {
         initialize(Type.STRUCT, null, qidTypeName, new ArrayList<FieldDefinition>(), new QualifiedId(), null, iUNDEFINED);
-    } /* initDistinctType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a data type.
      * @param type type of data type.
@@ -361,15 +346,14 @@ public class DataType
         setDataType(dtCollection);
         setLength(iLength);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public DataType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class DataType */
+}

@@ -16,7 +16,6 @@ public class GroupingElement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(GroupingElement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -49,7 +48,6 @@ public class GroupingElement
             return GroupingElement.this;
         }
     }
-    /*==================================================================*/
 
     private GeVisitor _visitor = new GeVisitor();
 
@@ -107,7 +105,6 @@ public class GroupingElement
         _listGroupingElements = listGroupingElements;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the grouping element.
      * @return the SQL string corresponding to the fields of the grouping element.
@@ -153,9 +150,8 @@ public class GroupingElement
             }
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the grouping element from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -164,9 +160,8 @@ public class GroupingElement
     public void parse(SqlParser.GroupingElementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the grouping element from SQL.
      * @param sSql SQL.
@@ -175,9 +170,8 @@ public class GroupingElement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().groupingElement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a grouping element.
      * @param listOrdinaryGroupingSets list of ordinary grouping sets.
@@ -198,15 +192,14 @@ public class GroupingElement
         setCube(bCube);
         setGroupingElements(listGroupingElements);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public GroupingElement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class GroupingElement */
+}

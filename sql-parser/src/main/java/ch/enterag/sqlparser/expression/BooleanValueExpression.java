@@ -17,7 +17,6 @@ public class BooleanValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(BooleanValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -47,7 +46,6 @@ public class BooleanValueExpression
             return BooleanValueExpression.this;
         }
     }
-    /*==================================================================*/
 
     private BveVisitor _visitor = new BveVisitor();
 
@@ -115,7 +113,6 @@ public class BooleanValueExpression
         _bl = bl;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the boolean value expression.
      * @return the SQL string corresponding to the fields of the boolean
@@ -142,9 +139,8 @@ public class BooleanValueExpression
             }
         }
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the data type of a boolean value expression from the context of a query.
      * @param ss sql statement.
@@ -156,9 +152,8 @@ public class BooleanValueExpression
         dt.initPredefinedDataType(pt);
         pt.initBooleanType();
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate a boolean value expression from its components.
      * @return Boolean.TRUE, Boolean.FALSE oder null for the value.
@@ -206,9 +201,8 @@ public class BooleanValueExpression
             }
         }
         return bValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate the boolean value expression against the context of a query.
      * @param ss sql statement.
@@ -228,9 +222,8 @@ public class BooleanValueExpression
             bSecondBooleanValue = getSecondBooleanValueExpression().evaluate(ss, bAggregated);
         Boolean bValue = evaluate(bBooleanPrimary, bBooleanValue, bSecondBooleanValue);
         return bValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** reset the aggregate values in a boolean value expression to
      * their initial value.
@@ -249,9 +242,8 @@ public class BooleanValueExpression
             bSecondBooleanValue = getSecondBooleanValueExpression().resetAggregates(ss);
         Boolean bValue = evaluate(bBooleanPrimary, bBooleanValue, bSecondBooleanValue);
         return bValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the boolean value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -260,9 +252,8 @@ public class BooleanValueExpression
     public void parse(SqlParser.BooleanValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the boolean value expression from SQL.
      * @param sSql SQL.
@@ -271,9 +262,8 @@ public class BooleanValueExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().booleanValueExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a boolean value expression.
      * @param bNot NOT.
@@ -298,15 +288,14 @@ public class BooleanValueExpression
         setBooleanPrimary(bp);
         setBooleanLiteral(bl);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public BooleanValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class BooleanValueExpression */
+}

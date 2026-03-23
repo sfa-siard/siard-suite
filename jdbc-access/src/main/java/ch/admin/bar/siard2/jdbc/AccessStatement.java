@@ -66,9 +66,6 @@ public class AccessStatement
     /** poolability */
     private boolean _bPoolable = false;
   
-  /*====================================================================
-  Wrapper 
-  ====================================================================*/
 
     /** constructor starts with an H2 session to be used for SQL parsing.
      * The H2 database contains the full empty schema of the MS Access
@@ -83,9 +80,6 @@ public class AccessStatement
     }
 
 
-    /*====================================================================
-    Queries
-    ====================================================================*/
     private static void addColumn(ResultSetHeader rsh, String sColumnName, DataType dt)
             throws SQLException {
         if (dt.getLength() == DataType.iUNDEFINED) {
@@ -136,9 +130,6 @@ public class AccessStatement
             rsh.addColumn(sColumnName, Types.ARRAY, PredefinedType.iUNDEFINED, PredefinedType.iUNDEFINED);
     }
 
-  /*====================================================================
-  Warnings 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -159,9 +150,6 @@ public class AccessStatement
         return impl;
     }
   
-  /*====================================================================
-  Statement 
-  ====================================================================*/
 
     /** {@link Connection} */
     @Override
@@ -337,9 +325,6 @@ public class AccessStatement
         return _bPoolable;
     }
   
-  /*====================================================================
-  Exceptions 
-  ====================================================================*/
 
     /** {@link Statement} */
     @Override
@@ -689,9 +674,6 @@ public class AccessStatement
         return rs;
     }
   
-  /*====================================================================
-  Updates 
-  ====================================================================*/
 
     /** DROP TABLE command
      * @param dt parsed DropTable statement
@@ -1324,9 +1306,6 @@ public class AccessStatement
         throw new SQLFeatureNotSupportedException("JdbcAccess does not support generated keys!");
     }
 
-  /*====================================================================
-  Execute 
-  ====================================================================*/
 
     /** {@link Statement} */
     @Override
@@ -1411,9 +1390,6 @@ public class AccessStatement
         throw new SQLFeatureNotSupportedException("JdbcAccessStatement does not support complex execute()!");
     }
 
-  /*====================================================================
-  Batch processing 
-  ====================================================================*/
 
     /** {@link Statement} */
     @Override

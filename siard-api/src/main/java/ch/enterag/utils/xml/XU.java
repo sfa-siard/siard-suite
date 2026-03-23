@@ -48,9 +48,6 @@ public class XU {
         }
     } 
   
-  /*====================================================================
-  (static, public) Methods
-  ====================================================================*/
 
     /**
      * prepare text for xs:string by replacing all "critical" but

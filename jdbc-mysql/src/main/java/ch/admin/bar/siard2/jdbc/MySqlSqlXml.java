@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLXML;
 
-/* =============================================================================== */
 
 /**
  * MySqlSqlXml implements an SqlXml instance
@@ -29,7 +28,6 @@ import java.sql.SQLXML;
 public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     private String _sXml = null;
 
-    /* ------------------------------------------------------------------------ */
 
     /** XmlOutputStream captures output */
     private class XmlOutputStream extends ByteArrayOutputStream {
@@ -37,9 +35,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
         public void close() throws IOException {
             _sXml = SU.getUtf8String(toByteArray());
         }
-    } /* class XmlOutputStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /** XmlWriter captures output */
     private class XmlWriter extends StringWriter {
@@ -49,7 +46,6 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
         }
     }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * constructor
@@ -57,9 +53,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
      */
     public MySqlSqlXml(SQLXML sqlxmlWrapped) {
         super(sqlxmlWrapped);
-    } /* constructor */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * gets a new MySqlSqlXml instance
@@ -67,9 +62,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
      */
     public static MySqlSqlXml getInstance() {
         return new MySqlSqlXml(null);
-    } /* getIntance */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -77,9 +71,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public InputStream getBinaryStream() throws SQLException {
         return new ByteArrayInputStream(SU.putUtf8String(_sXml));
-    } /* getBinaryStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -87,9 +80,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public OutputStream setBinaryStream() throws SQLException {
         return new XmlOutputStream();
-    } /* setBinaryStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -97,9 +89,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public Reader getCharacterStream() throws SQLException {
         return new StringReader(_sXml);
-    } /* getCharacterStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -107,9 +98,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public Writer setCharacterStream() throws SQLException {
         return new XmlWriter();
-    } /* setCharacterStream */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -117,9 +107,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public String getString() throws SQLException {
         return _sXml;
-    } /* getString */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -127,9 +116,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public void setString(String value) throws SQLException {
         _sXml = value;
-    } /* setString */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -137,9 +125,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public <T extends Source> T getSource(Class<T> sourceClass) throws SQLException {
         throw new SQLFeatureNotSupportedException("getSource() not supported!");
-    } /* getSource */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -147,9 +134,8 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public <T extends Result> T setResult(Class<T> resultClass) throws SQLException {
         throw new SQLFeatureNotSupportedException("setResult() not supported!");
-    } /* setResult */
+    }
 
-    /* ------------------------------------------------------------------------ */
 
     /**
      * {@inheritDoc}
@@ -157,6 +143,6 @@ public class MySqlSqlXml extends BaseSqlXml implements SQLXML {
     @Override
     public void free() throws SQLException {
         _sXml = null;
-    } /* free */
+    }
 
-} /* class MySqlSqlXml */
+}

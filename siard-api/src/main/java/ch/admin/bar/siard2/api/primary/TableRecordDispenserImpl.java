@@ -50,7 +50,6 @@ public class TableRecordDispenserImpl
 
     private long _lRecord = -1;
 
-    /*==================================================================*/
     private class CountingInputStream
             extends InputStream {
         private InputStream _is = null;
@@ -97,7 +96,6 @@ public class TableRecordDispenserImpl
             return _lCount;
         }
     }
-    /*==================================================================*/
 
     /**
      * get ArchiveImpl instance.
@@ -301,7 +299,7 @@ public class TableRecordDispenserImpl
             }
         }
         return lSkipped;
-    } /* skip */
+    }
 
     /**
      * {@inheritDoc}
@@ -321,7 +319,7 @@ public class TableRecordDispenserImpl
         } catch (XMLStreamException xse) {
             throw new IOException(lSkip + " records starting with " + _lRecord + " could not be skipped (" + EU.getExceptionMessage(xse) + ")!");
         }
-    } /* skip */
+    }
 
     /**
      * {@inheritDoc}
@@ -340,7 +338,7 @@ public class TableRecordDispenserImpl
             throw new IOException("XMLStreamReader could not be closed!", xse);
         }
         _lRecord = -1;
-    } /* close */
+    }
 
     /**
      * {@inheritDoc}
@@ -348,7 +346,7 @@ public class TableRecordDispenserImpl
     @Override
     public long getPosition() {
         return _lRecord;
-    } /* getPosition */
+    }
 
     /**
      * {@inheritDoc}
@@ -356,6 +354,6 @@ public class TableRecordDispenserImpl
     @Override
     public long getByteCount() {
         return _isXml.getByteCount();
-    } /* getByteCount */
+    }
 
-} /* class RecordDispenser */
+}

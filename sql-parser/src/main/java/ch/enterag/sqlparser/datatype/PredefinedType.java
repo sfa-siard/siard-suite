@@ -17,7 +17,6 @@ public class PredefinedType
     /** logger */
     protected static IndentLogger _il = IndentLogger.getIndentLogger(PredefinedType.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -211,9 +210,8 @@ public class PredefinedType
             setWithOrWithoutTimeZone(getWithOrWithoutTimeZone(ctx));
             return PredefinedType.this;
         }
-    } /* class PdtVisitor */
+    }
 
-    /*==================================================================*/
     public static final int iUNDEFINED = -1;
     public static final int iTIME_DECIMALS_DEFAULT = 0;
     public static final int iTIMESTAMP_DECIMALS_DEFAULT = 6;
@@ -304,7 +302,6 @@ public class PredefinedType
         _iq = iq;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** length field in parentheses.
      * @return length in parentheses.
@@ -314,9 +311,8 @@ public class PredefinedType
         if (getLength() != iUNDEFINED)
             sLength = sLEFT_PAREN + String.valueOf(getLength()) + sRIGHT_PAREN;
         return sLength;
-    } /* formatLength */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** LOB length (possibly qualified by K, M, or G) in parentheses.
      * @return lob length in parentheses.
@@ -330,9 +326,8 @@ public class PredefinedType
             sLength = sLength + sRIGHT_PAREN;
         }
         return sLength;
-    } /* formatLobLength */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** precision and scale in parentheses.
      * @return scale and precision in parentheses.
@@ -346,9 +341,8 @@ public class PredefinedType
             sPrecisionScale = sPrecisionScale + sRIGHT_PAREN;
         }
         return sPrecisionScale;
-    } /* formatPrecisionScale */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** decimals of seconds in parentheses.
      * @param iDefaultDecimals default decimals.
@@ -361,9 +355,8 @@ public class PredefinedType
                 sSecondsDecimals = sSecondsDecimals + sLEFT_PAREN + String.valueOf(getSecondsDecimals()) + sRIGHT_PAREN;
         }
         return sSecondsDecimals;
-    } /* formatSecondsDecimals */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** Add TIME ZONE to type.
      * @return type with TIME ZONE.
@@ -373,9 +366,8 @@ public class PredefinedType
         if (getWithOrWithoutTimeZone() != null)
             sTimeZone = sSP + getWithOrWithoutTimeZone().getKeywords();
         return sTimeZone;
-    } /* formatTimeZone */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the predefined data type.
      * @return the SQL string corresponding to the fields of the data type.
@@ -408,9 +400,8 @@ public class PredefinedType
                 sType = sType + sSP + getIntervalQualifier().format();
         }
         return sType;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the predefined type from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -419,9 +410,8 @@ public class PredefinedType
     public void parse(SqlParser.PredefinedTypeContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the predefined type from SQL.
      * @param sSql SQL.
@@ -437,27 +427,24 @@ public class PredefinedType
             ctx = getParser().predefinedType();
         }
         parse(ctx);
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type CHAR
      * @param iLength length.
      */
     public void initCharType(int iLength) {
         initialize(PreType.CHAR, iLength, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initCharType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type VARCHAR
      * @param iLength length.
      */
     public void initVarCharType(int iLength) {
         initialize(PreType.VARCHAR, iLength, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initVarCharType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type CLOB
      * @param iLength length.
@@ -465,27 +452,24 @@ public class PredefinedType
      */
     public void initClobType(int iLength, Multiplier multiplier) {
         initialize(PreType.CLOB, iLength, multiplier, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initClobType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type NCHAR
      * @param iLength length.
      */
     public void initNCharType(int iLength) {
         initialize(PreType.NCHAR, iLength, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initNCharType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type NVARCHAR.
      * @param iLength length.
      */
     public void initNVarCharType(int iLength) {
         initialize(PreType.NVARCHAR, iLength, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initNVarCharType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type NCLOB.
      * @param iLength length.
@@ -493,35 +477,31 @@ public class PredefinedType
      */
     public void initNClobType(int iLength, Multiplier multiplier) {
         initialize(PreType.NCLOB, iLength, multiplier, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initNClobType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type XML.
      */
     public void initXmlType() {
         initialize(PreType.XML, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initXmlType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type BINARY
      * @param iLength length.
      */
     public void initBinaryType(int iLength) {
         initialize(PreType.BINARY, iLength, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initBinaryType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type CHAR
      * @param iLength length.
      */
     public void initVarbinaryType(int iLength) {
         initialize(PreType.VARBINARY, iLength, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initVarbinaryType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type BLOB.
      * @param iLength length.
@@ -529,9 +509,8 @@ public class PredefinedType
      */
     public void initBlobType(int iLength, Multiplier multiplier) {
         initialize(PreType.BLOB, iLength, multiplier, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initBlobType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type NUMERIC
      * @param iPrecision number of digits and sign.
@@ -539,9 +518,8 @@ public class PredefinedType
      */
     public void initNumericType(int iPrecision, int iScale) {
         initialize(PreType.NUMERIC, iUNDEFINED, null, iPrecision, iScale, iUNDEFINED, null, null);
-    } /* initNumericType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type DECIMAL
      * @param iPrecision number of digits and sign.
@@ -549,82 +527,72 @@ public class PredefinedType
      */
     public void initDecimalType(int iPrecision, int iScale) {
         initialize(PreType.DECIMAL, iUNDEFINED, null, iPrecision, iScale, iUNDEFINED, null, null);
-    } /* initDecimalType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type SMALLINT.
      */
     public void initSmallIntType() {
         initialize(PreType.SMALLINT, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initSmallIntType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type INTEGER.
      */
     public void initIntegerType() {
         initialize(PreType.INTEGER, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initIntegerType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type BIGINT.
      */
     public void initBigIntType() {
         initialize(PreType.BIGINT, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initBigIntType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type FLOAT
      * @param iPrecision minimum number of binary digits.
      */
     public void initFloatType(int iPrecision) {
         initialize(PreType.FLOAT, iUNDEFINED, null, iPrecision, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initFloatType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type REAL.
      */
     public void initRealType() {
         initialize(PreType.REAL, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initRealType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type DOUBLE PRECISION.
      */
     public void initDoubleType() {
         initialize(PreType.DOUBLE, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initDoubleType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type BOOLEAN.
      */
     public void initBooleanType() {
         initialize(PreType.BOOLEAN, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initBooleanType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type DATALINK.
      */
     public void initDatalinkType() {
         initialize(PreType.DATALINK, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initDatalinkType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type DATE.
      */
     public void initDateType() {
         initialize(PreType.DATE, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, null);
-    } /* initDateType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type TIME.
      * @param iSecondsDecimals number decimals for seconds.
@@ -632,9 +600,8 @@ public class PredefinedType
      */
     public void initTimeType(int iSecondsDecimals, WithOrWithoutTimeZone wowtz) {
         initialize(PreType.TIME, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iSecondsDecimals, wowtz, null);
-    } /* initTimeType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type TIMESTAMP.
      * @param iSecondsDecimals number decimals for seconds.
@@ -642,9 +609,8 @@ public class PredefinedType
      */
     public void initTimestampType(int iSecondsDecimals, WithOrWithoutTimeZone wowtz) {
         initialize(PreType.TIMESTAMP, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iSecondsDecimals, wowtz, null);
-    } /* initTimestampType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialization for predefined type INTERVAL.
      * @param ifStart interval start field.
@@ -657,9 +623,8 @@ public class PredefinedType
         IntervalQualifier iq = getSqlFactory().newIntervalQualifier();
         iq.initialize(ifStart, ifEnd, iPrecision, iSecondsDecimals);
         initialize(PreType.INTERVAL, iUNDEFINED, null, iUNDEFINED, iUNDEFINED, iUNDEFINED, null, iq);
-    } /* initIntervalType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a predefined type.
      * @param pretype predefined data type name.
@@ -687,9 +652,8 @@ public class PredefinedType
         setWithOrWithoutTimeZone(wowtz);
         setIntervalQualifier(iq);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize datatype from java.sql.Types data type and length and scale.
      * @param iDataType java.sql.Types data type.
@@ -718,15 +682,14 @@ public class PredefinedType
             PreType pt = PreType.getBySqlType(iDataType);
             initialize(pt, iLength, multiplier, iPrecision, iScale, iSecondsDecimals, null, null);
         }
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public PredefinedType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class PredefinedType */
+}

@@ -63,7 +63,7 @@ public class MySqlBlobTester {
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-    } /* setUpClass */
+    }
 
     @AfterClass
     public static void tearDownClass() {
@@ -83,7 +83,7 @@ public class MySqlBlobTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUp */
+    }
 
     @After
     public void tearDown() {
@@ -95,7 +95,7 @@ public class MySqlBlobTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
     @Test
     public void testSizes() {

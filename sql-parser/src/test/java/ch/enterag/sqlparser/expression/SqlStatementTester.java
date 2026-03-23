@@ -61,7 +61,7 @@ public class SqlStatementTester {
         ss.parse(sSql);
         long lDuration = System.currentTimeMillis() - lStart;
         System.out.println(String.valueOf(lDuration) + " ms");
-    } /* testSelectQuery */
+    }
 
     @Test
     public void testQueryEvaluation() {
@@ -201,6 +201,6 @@ public class SqlStatementTester {
                                                     .evaluate(_ss, true) + " " + qs.getWhereCondition()
                                                                                    .getDataType(_ss)
                                                                                    .format())); // false
-    } /* testQueryEvaluation */
+    }
 
-} /* SqlStatementTester */
+}

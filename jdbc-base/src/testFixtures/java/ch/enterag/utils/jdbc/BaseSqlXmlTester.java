@@ -18,7 +18,7 @@ public abstract class BaseSqlXmlTester {
     protected static void printExceptionMessage(Exception e) {
         System.err.println("  " + EU.getExceptionMessage(e));
         System.err.flush();
-    } /* printExceptionMessage */
+    }
 
     private String getCallingMethod(int iDepth) {
         String sCallingMethod = null;
@@ -27,17 +27,17 @@ public abstract class BaseSqlXmlTester {
                                           .getStackTrace();
         sCallingMethod = asSte[iDepth].getMethodName();
         return sCallingMethod;
-    } /* getCallingMethod */
+    }
 
     protected void enter() {
         System.out.println(getCallingMethod(3));
         System.out.flush();
-    } /* enter */
+    }
 
     /* setUp must create the SQLXML instance and call this method */
     protected void setSqlXml(SQLXML sqlxml) {
         _sqlxml = (BaseSqlXml) sqlxml;
-    } /* setSqlXml */
+    }
 
     @After
     public void tearDown() {
@@ -47,11 +47,8 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
-    /*--------------------------------------------------------------------
-    Base tests for all arrays extending BaseSqlXml.
-    --------------------------------------------------------------------*/
     @Test
     public void testGetBinaryStream() {
         enter();
@@ -60,7 +57,7 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetBinaryStream */
+    }
 
     @Test
     public void testSetBinaryStream() {
@@ -70,7 +67,7 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetBinaryStream */
+    }
 
     @Test
     public void testGetCharacterStream() {
@@ -80,7 +77,7 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetCharacterStream */
+    }
 
     @Test
     public void testSetCharacterStream() {
@@ -90,7 +87,7 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetCharacterStream */
+    }
 
     @Test
     public void testGetString() {
@@ -100,7 +97,7 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetString */
+    }
 
     @Test
     public void testSetString() {
@@ -110,7 +107,7 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetString */
+    }
 
     @Test
     public void testGetSource() {
@@ -122,7 +119,7 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetSource */
+    }
 
     @Test
     public void testSetResult() {
@@ -134,7 +131,7 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetResult */
+    }
 
     @Test
     public void testFree() {
@@ -144,6 +141,6 @@ public abstract class BaseSqlXmlTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetResult */
+    }
 
-} /* BaseSqlXmlTester */
+}

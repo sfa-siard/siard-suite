@@ -16,11 +16,9 @@ package ch.admin.bar.siard2.oracle.ddl;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.MethodSpecification;
 
-/*====================================================================*/
 public class OracleMethodSpecification
         extends MethodSpecification {
 
-    /*------------------------------------------------------------------*/
 
     /**
      * format the method specification
@@ -30,14 +28,13 @@ public class OracleMethodSpecification
     public String format() {
         String sDefinition = "";
         return sDefinition;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleMethodSpecification(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 }

@@ -34,12 +34,12 @@ public abstract class BaseConnectionTester {
                                           .getStackTrace();
         sCallingMethod = asSte[iDepth].getMethodName();
         return sCallingMethod;
-    } /* getCallingMethod */
+    }
 
     protected void enter() {
         System.out.println(getCallingMethod(3));
         System.out.flush();
-    } /* enter */
+    }
 
     @After
     public void tearDown() {
@@ -51,11 +51,8 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
-    /*--------------------------------------------------------------------
-    Base tests for all database connections extending BaseConnection.
-    --------------------------------------------------------------------*/
     @Test
     public void testCreateStatement() {
         enter();
@@ -64,7 +61,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCreateStatement */
+    }
 
     @Test
     public void testPrepareStatement() {
@@ -74,7 +71,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareStatement */
+    }
 
     @Test
     public void testPrepareCall() {
@@ -84,7 +81,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareCall*/
+    }
 
     @Test
     public void testNativeSql() {
@@ -94,7 +91,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testNativeSql */
+    }
 
     @Test
     public void testSetAutoCommit() {
@@ -104,7 +101,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetAutoCommit */
+    }
 
     @Test
     public void testGetAutoCommit() {
@@ -114,7 +111,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetAutoCommit */
+    }
 
     @Test
     public void testCommit() {
@@ -124,7 +121,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCommit */
+    }
 
     @Test
     public void testRollback() {
@@ -134,7 +131,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testRollback */
+    }
 
     @Test
     public void testClose() {
@@ -144,7 +141,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testClose */
+    }
 
     @Test
     public void testIsClosed() {
@@ -154,7 +151,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testIsClosed */
+    }
 
     @Test
     public void testGetMetadata() {
@@ -164,7 +161,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetMetadata */
+    }
 
     @Test
     public void testSetReadOnly() {
@@ -174,7 +171,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetReadOnly */
+    }
 
     @Test
     public void testIsReadOnly() {
@@ -184,7 +181,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testIsReadOnly */
+    }
 
     @Test
     public void testSetCatalog() {
@@ -194,7 +191,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetCatalog */
+    }
 
     @Test
     public void testGetCatalog() {
@@ -204,7 +201,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetCatalog */
+    }
 
     @Test
     public void testSetTransactionIsolation() {
@@ -214,7 +211,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetTransactionIsolation */
+    }
 
     @Test
     public void testGetTransactionIsolation() {
@@ -224,7 +221,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTransactionIsolation */
+    }
 
     @Test
     public void testGetWarnings() {
@@ -234,7 +231,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetWarnings */
+    }
 
     @Test
     public void testClearWarnings() {
@@ -244,7 +241,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testClearWarnings */
+    }
 
     @Test
     public void testCreateStatement_Int_Int() {
@@ -258,7 +255,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCreateStatement_Int_Int */
+    }
 
     @Test
     public void testPrepareStatement_String_Int_Int() {
@@ -272,7 +269,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareStatement_String_Int_Int */
+    }
 
     @Test
     public void testPrepareCall_String_Int_Int() {
@@ -286,7 +283,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareCall_String_Int_Int */
+    }
 
     @Test
     public void testGetTypeMap() {
@@ -298,7 +295,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTypeMap */
+    }
 
     @Test
     public void testSetTypeMap() {
@@ -310,7 +307,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetTypeMap */
+    }
 
     @Test
     public void testSetHoldability() {
@@ -322,7 +319,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetHoldability */
+    }
 
     @Test
     public void testGetHoldability() {
@@ -334,7 +331,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetHoldability */
+    }
 
     @Test
     public void testSetSavepoint() {
@@ -346,7 +343,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetSavepoint */
+    }
 
     @Test
     public void testSetSavepoint_String() {
@@ -358,7 +355,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetSavepoint_String */
+    }
 
     @Test
     public void testRollback_Savepoint() {
@@ -371,7 +368,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testRollback */
+    }
 
     @Test
     public void testReleaseSavePoint() {
@@ -384,7 +381,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testReleaseSavePoint */
+    }
 
     @Test
     public void testCreateStatement_Int_Int_Int() {
@@ -399,7 +396,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCreateStatement_Int_Int_Int */
+    }
 
     @Test
     public void testPrepareStatement_String_Int_Int_Int() {
@@ -414,7 +411,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareStatement_String_Int_Int_Int */
+    }
 
     @Test
     public void testPrepareCall_String_Int_Int_Int() {
@@ -429,7 +426,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareCall_String_Int_Int_Int */
+    }
 
     @Test
     public void testPrepareStatement_String_Int() {
@@ -441,7 +438,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareStatement_String_Int */
+    }
 
     @Test
     public void testPrepareStatement_String_AInt() {
@@ -453,7 +450,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareStatement_String_AInt */
+    }
 
     @Test
     public void testPrepareStatement_String_AString() {
@@ -465,7 +462,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testPrepareStatement_String_AString */
+    }
 
     @Test
     public void testCreateClob() {
@@ -479,7 +476,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCreateClob */
+    }
 
     @Test
     public void testCreateBlob() {
@@ -493,7 +490,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCreateBlob */
+    }
 
     @Test
     public void testCreateNClob() {
@@ -507,7 +504,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCreateNClob */
+    }
 
     @Test
     public void testCreateSqlXml() {
@@ -520,7 +517,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCreateSqlXml */
+    }
 
     @Test
     public void testValid() {
@@ -531,7 +528,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testValid */
+    }
 
     @Test
     public void testSetClientInfo_String_String() {
@@ -541,7 +538,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLClientInfoException scie) {
             System.out.println(EU.getExceptionMessage(scie));
         }
-    } /* testSetClientInfo_String_String */
+    }
 
     @Test
     public void testSetClientInfo() {
@@ -552,7 +549,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLClientInfoException scie) {
             System.out.println(EU.getExceptionMessage(scie));
         }
-    } /* testSetClientInfo */
+    }
 
     @Test
     public void testGetClientInfo_String() {
@@ -564,7 +561,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetClientInfo_String */
+    }
 
     @Test
     public void testGetClientInfo() {
@@ -576,7 +573,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetClientInfo */
+    }
 
     @Test
     public void testCreateArrayOf() {
@@ -589,7 +586,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* createArrayOf */
+    }
 
     @Test
     public void testCreateStruct() {
@@ -601,7 +598,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testCreateStruct */
+    }
 
     @Test
     public void testSetSchema() {
@@ -613,7 +610,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetSchema */
+    }
 
     @Test
     public void testGetSchema() {
@@ -625,7 +622,7 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetSchema */
+    }
 
     @Test
     public void testAbort() {
@@ -639,7 +636,7 @@ public abstract class BaseConnectionTester {
         } catch (SecurityException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testAbort */
+    }
 
     @Test
     public void testSetNetworkTimeout() {
@@ -654,7 +651,7 @@ public abstract class BaseConnectionTester {
         } catch (SecurityException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSetNetworkTimeout */
+    }
 
     @Test
     public void testGetNetworkTimeout() {
@@ -667,6 +664,6 @@ public abstract class BaseConnectionTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetNetworkTimeout */
+    }
 
-} /* BaseConnectionTester */
+}

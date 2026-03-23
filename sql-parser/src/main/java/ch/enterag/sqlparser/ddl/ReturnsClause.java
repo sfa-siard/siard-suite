@@ -15,7 +15,6 @@ public class ReturnsClause
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(ReturnsClause.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -50,7 +49,6 @@ public class ReturnsClause
             return ReturnsClause.this;
         }
     }
-    /*==================================================================*/
 
     private RcVisitor _visitor = new RcVisitor();
 
@@ -118,9 +116,8 @@ public class ReturnsClause
         }
         s = s + sRIGHT_PAREN;
         return s;
-    } /* formatTableColumns */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the returns clause.
      * @return the SQL string corresponding to the fields of the returns
@@ -144,9 +141,8 @@ public class ReturnsClause
         } else if (getTableColumns().size() > 0)
             s = s + K.TABLE.getKeyword() + formatTableColumns();
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the returns clause from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -155,9 +151,8 @@ public class ReturnsClause
     public void parse(SqlParser.ReturnsClauseContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the returns clause from SQL.
      * @param sSql SQL.
@@ -166,9 +161,8 @@ public class ReturnsClause
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().returnsClause());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a returns clause.
      * @param dt data type of returned value.
@@ -190,15 +184,14 @@ public class ReturnsClause
         setCastAsLocator(bCastAsLocator);
         setTableColumns(listTableColumns);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public ReturnsClause(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class ReturnsClause */
+}

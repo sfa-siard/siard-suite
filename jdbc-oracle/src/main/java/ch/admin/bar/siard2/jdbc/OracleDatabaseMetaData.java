@@ -185,7 +185,7 @@ public class OracleDatabaseMetaData
      */
     public OracleDatabaseMetaData(DatabaseMetaData dmdWrapped) {
         super(dmdWrapped);
-    } /* constructor */
+    }
 
     /**
      * {@inheritDoc}

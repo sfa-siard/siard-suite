@@ -20,7 +20,6 @@ import java.util.logging.Formatter;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 
-/*====================================================================*/
 
 /** MessageFormatFormatter implements a simple customizable formatter.
  * It retrieves its format from the property
@@ -35,15 +34,13 @@ public class MessageFormatFormatter extends Formatter {
     /** default format */
     private final String sDEFAULT_FORMAT = "{1,choice,300#D|700#C|800#I|900#W|1000#E} {3,date,yyyy.MM.dd HH:mm:ss}: {4}\n";
 
-    /*------------------------------------------------------------------*/
 
     /** constructor
      */
     public MessageFormatFormatter() {
         super();
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format consults LogManager property for message format.
      */
@@ -67,6 +64,6 @@ public class MessageFormatFormatter extends Formatter {
         MessageFormat mf = new MessageFormat(sFormat);
         String s = mf.format(arguments);
         return s;
-    } /* format */
+    }
 
-} /* class MessageFormatFormatter */
+}

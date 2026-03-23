@@ -15,7 +15,6 @@ public class ColumnConstraintDefinition
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(ColumnConstraintDefinition.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -81,7 +80,6 @@ public class ColumnConstraintDefinition
             return ColumnConstraintDefinition.this;
         }
     }
-    /*==================================================================*/
 
     private CcdVisitor _visitor = new CcdVisitor();
 
@@ -189,7 +187,6 @@ public class ColumnConstraintDefinition
         _cct = cct;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the column constraint definition.
      * @return the SQL string corresponding to the fields of the column
@@ -220,9 +217,8 @@ public class ColumnConstraintDefinition
         if (getConstraintCheckTime() != null)
             sDefinition = sDefinition + sSP + getConstraintCheckTime().getKeywords();
         return sDefinition;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the column constraint definition from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -231,9 +227,8 @@ public class ColumnConstraintDefinition
     public void parse(SqlParser.ColumnConstraintDefinitionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the column constraint definition from SQL.
      * @param sSql SQL.
@@ -242,9 +237,8 @@ public class ColumnConstraintDefinition
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().columnConstraintDefinition());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a column constraint definition.
      * @param qConstraint constraint name (not null!).
@@ -280,15 +274,14 @@ public class ColumnConstraintDefinition
         setDeferrability(def);
         setConstraintCheckTime(cct);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public ColumnConstraintDefinition(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class ColumnConstraintDefinition */
+}

@@ -40,7 +40,7 @@ public class Db2QuerySpecification
         }
         rs.close();
         return mapStructColumns;
-    } /* getStructColumns */
+    }
 
     private String formatStructColumn(QualifiedId qiType, String sColumnPrefix, String sColumnAlias)
             throws SQLException, ParseException {
@@ -73,7 +73,7 @@ public class Db2QuerySpecification
         }
         rs.close();
         return sSpecification;
-    } /* formatStructColumn */
+    }
 
     @Override
     public String format() {
@@ -136,7 +136,7 @@ public class Db2QuerySpecification
                             sSpecification = sSpecification + sNEW_LINE + K.FROM.getKeyword() +
                                     sSP + tr.format();
                             ;
-                        } /* if table has struct columns */
+                        }
                     } catch (SQLException se) {
                         sSpecification = null;
                     }

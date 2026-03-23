@@ -18,7 +18,6 @@ public class WithElement
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(WithElement.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -88,7 +87,6 @@ public class WithElement
             return WithElement.this;
         }
     }
-    /*==================================================================*/
 
     private WeVisitor _visitor = new WeVisitor();
 
@@ -196,7 +194,6 @@ public class WithElement
         _idCycleColumnName = idCycleColumnName;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the with element.
      * @return the SQL string corresponding to the fields of the with element.
@@ -251,9 +248,8 @@ public class WithElement
             }
         }
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the with element from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -262,9 +258,8 @@ public class WithElement
     public void parse(SqlParser.WithElementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the with element from SQL.
      * @param sSql SQL.
@@ -273,9 +268,8 @@ public class WithElement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().withElement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
     /* initialize a with element.
      */
     public void initialize(
@@ -301,15 +295,14 @@ public class WithElement
         setValueExpression(ve);
         setCycleColumnName(idCycleColumnName);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public WithElement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class WithElement */
+}

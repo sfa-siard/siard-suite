@@ -59,13 +59,13 @@ public class TableMapping extends Mapping {
             listExtendedColumnNames.add(sbColumn.toString());
         }
         _mapExtendedColumns = getDisambiguated(listExtendedColumnNames, iMaxColumnNameLength);
-    } /* constructor */
+    }
 
     public static TableMapping newInstance(boolean bSupportsArrays, boolean bSupportsUdts,
                                            String sMappedTableName, MetaTable mt, int iMaxColumnNameLength)
             throws IOException {
         return new TableMapping(bSupportsArrays, bSupportsUdts,
                                 sMappedTableName, mt, iMaxColumnNameLength);
-    } /* newInstance */
+    }
 
-} /* class TableMapping */
+}

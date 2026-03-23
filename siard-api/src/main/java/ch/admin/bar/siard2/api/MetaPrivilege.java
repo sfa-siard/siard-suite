@@ -25,9 +25,6 @@ public interface MetaPrivilege
      */
     MetaData getParentMetaData();
 
-  /*====================================================================
-  privilege properties
-  ====================================================================*/
 
     /**
      * get privilege type (incl. ROLE privilege or "ALL PRIVILEGES".

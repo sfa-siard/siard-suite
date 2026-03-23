@@ -17,7 +17,6 @@ import ch.enterag.sqlparser.datatype.enums.PreType;
 import java.util.HashMap;
 import java.util.Map;
 
-/*====================================================================*/
 
 /**
  * MySqlPredefinedType implements the type translation from ISO SQL to MySql
@@ -59,9 +58,8 @@ public class MySqlPredefinedType extends PredefinedType {
      */
     public MySqlPredefinedType(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** decimals of seconds in parentheses.
      * @param iDefaultDecimals default decimals.
@@ -77,7 +75,7 @@ public class MySqlPredefinedType extends PredefinedType {
                 sSecondsDecimals = sSecondsDecimals + sLEFT_PAREN + String.valueOf(iSecondsDecimals) + sRIGHT_PAREN;
         }
         return sSecondsDecimals;
-    } /* formatSecondsDecimals */
+    }
 
     /**
      * format the predefined data type.
@@ -167,6 +165,6 @@ public class MySqlPredefinedType extends PredefinedType {
                 sType.startsWith("LONGTEXT"))
             sType = sType + " BINARY";
         return sType;
-    } /* format */
+    }
 
-} /* class MySqlPredefinedType */
+}

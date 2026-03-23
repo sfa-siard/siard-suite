@@ -20,7 +20,6 @@ public class IntervalValueExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(IntervalValueExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -80,7 +79,6 @@ public class IntervalValueExpression
             return iveReturn;
         }
     }
-    /*==================================================================*/
 
     private IveVisitor _visitor = new IveVisitor();
 
@@ -198,7 +196,6 @@ public class IntervalValueExpression
         _iveAbsArgument = iveAbsArgument;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the interval value expression.
      * @return the SQL string corresponding to the fields of the interval
@@ -242,9 +239,8 @@ public class IntervalValueExpression
                     getIntervalQualifier().format();
         }
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return data type of an interval value expression from the context
      * of a query.
@@ -276,9 +272,8 @@ public class IntervalValueExpression
                 (getIntervalQualifier() != null))
             throw new IllegalArgumentException("Subtraction of intervals not supported for evaluation!");
         return dt;
-    } /* getDataType */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate an interval value expression from its components.
      * @return interval value.
@@ -317,9 +312,8 @@ public class IntervalValueExpression
                 (getIntervalQualifier() != null))
             throw new IllegalArgumentException("Subtraction of intervals not supported for evaluation!");
         return ivValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate an interval value expression against the context of a query.
      * @param ss sql statement.
@@ -336,9 +330,8 @@ public class IntervalValueExpression
             ivAbsArgument = getAbsArgument().evaluate(ss, bAggregated);
         Interval ivValue = evaluate(oValuePrimary, ivAbsArgument);
         return ivValue;
-    } /* evaluate */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** evaluate an interval value expression against the context of a query.
      * @param ss sql statement.
@@ -353,9 +346,8 @@ public class IntervalValueExpression
             ivAbsArgument = getAbsArgument().resetAggregates(ss);
         Interval ivValue = evaluate(oValuePrimary, ivAbsArgument);
         return ivValue;
-    } /* resetAggregates */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the interval value expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -364,9 +356,8 @@ public class IntervalValueExpression
     public void parse(SqlParser.IntervalValueExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the interval value expression from SQL.
      * @param sSql SQL.
@@ -382,9 +373,8 @@ public class IntervalValueExpression
             ctx = getParser().intervalValueExpression();
         }
         parse(ctx);
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an interval value expression.
      * @param ao additive operator (or null).
@@ -424,15 +414,14 @@ public class IntervalValueExpression
         setIntervalQualifier(iq);
         setAbsArgument(iveAbsArgument);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public IntervalValueExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class IntervalValueExpression */
+}

@@ -16,7 +16,6 @@ import ch.enterag.sqlparser.K;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.DropViewStatement;
 
-/*====================================================================*/
 
 /** MsSqlDropViewStatement overrides DropViewStatement of SQL parser
  * because MSSQL does not support drop behavior (CASCADE, RESTRICT) for 
@@ -25,7 +24,6 @@ import ch.enterag.sqlparser.ddl.DropViewStatement;
  */
 public class MsSqlDropViewStatement
         extends DropViewStatement {
-    /*------------------------------------------------------------------*/
 
     /** format the drop view statement for MSSQL without the drop behavior.
      * @return the SQL string corresponding to the fields of the drop view statement.
@@ -35,15 +33,14 @@ public class MsSqlDropViewStatement
         String sStatement = K.DROP.getKeyword() + sSP + K.VIEW.getKeyword() + sSP +
                 getViewName().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public MsSqlDropViewStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class MsSqlDropViewStatement */
+}

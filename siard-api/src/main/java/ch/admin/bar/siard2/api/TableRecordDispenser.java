@@ -16,9 +16,6 @@ import java.io.IOException;
  *
  */
 public interface TableRecordDispenser {
-  /*====================================================================
-  methods
-  ====================================================================*/
 
     /**
      * read the next record.

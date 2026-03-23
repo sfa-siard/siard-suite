@@ -25,7 +25,7 @@ public class ValidatingReader
             } catch (UnsupportedEncodingException usee) {
             }
         }
-    } /* constructor validating Reader */
+    }
 
     private void validateAtEof()
             throws IOException {

@@ -29,7 +29,7 @@ public abstract class BaseDatabaseMetaDataTester {
 
     protected static void println(String s) {
         System.out.println("  " + s);
-    } /* println */
+    }
 
     public static void print(ResultSet rs)
             throws SQLException {
@@ -70,7 +70,7 @@ public abstract class BaseDatabaseMetaDataTester {
             throw new SQLException("Empty meta data result set!");
         else
             fail("Invalid meta data result set");
-    } /* print */
+    }
 
     private String getCallingMethod(int iDepth) {
         String sCallingMethod = null;
@@ -79,12 +79,12 @@ public abstract class BaseDatabaseMetaDataTester {
                                           .getStackTrace();
         sCallingMethod = asSte[iDepth].getMethodName();
         return sCallingMethod;
-    } /* getCallingMethod */
+    }
 
     protected void enter() {
         System.out.println(getCallingMethod(3));
         System.out.flush();
-    } /* enter */
+    }
 
     @After
     public void tearDown() {
@@ -97,11 +97,8 @@ public abstract class BaseDatabaseMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
-    /*--------------------------------------------------------------------
-    Base tests for all database statements extending BaseDatabaseMetaData.
-    --------------------------------------------------------------------*/
     @Test
     public void testGetConnection() {
         enter();
@@ -1892,4 +1889,4 @@ public abstract class BaseDatabaseMetaDataTester {
         }
     }
 
-} /* class BaseDatabaseMetaDataTester */
+}

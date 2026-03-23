@@ -15,7 +15,6 @@ public class CreateFunctionStatement
         extends SqlBase {
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(CreateFunctionStatement.class.getName());
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -62,7 +61,6 @@ public class CreateFunctionStatement
             return CreateFunctionStatement.this;
         }
     }
-    /*==================================================================*/
 
     private CfsVisitor _visitor = new CfsVisitor();
 
@@ -140,9 +138,8 @@ public class CreateFunctionStatement
         }
         s = s + sNEW_LINE + sRIGHT_PAREN;
         return s;
-    } /* formatParameters */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format the create function statement.
      * @return the SQL string corresponding to the fields of the create
@@ -157,9 +154,8 @@ public class CreateFunctionStatement
         if (getRoutineBody() != null)
             sStatement = sStatement + sNEW_LINE + getRoutineBody().format();
         return sStatement;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create function statement from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -168,9 +164,8 @@ public class CreateFunctionStatement
     public void parse(SqlParser.CreateFunctionStatementContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the create function statement from SQL.
      * @param sSql SQL.
@@ -179,9 +174,8 @@ public class CreateFunctionStatement
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().createFunctionStatement());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a create function statement.
      * @param qiFunctionName name of function.
@@ -203,15 +197,14 @@ public class CreateFunctionStatement
         setRoutineCharacteristics(rcs);
         setRoutineBody(rb);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public CreateFunctionStatement(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class CreateFunctionStatement */
+}

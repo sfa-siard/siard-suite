@@ -19,7 +19,6 @@ import ch.enterag.utils.jdbc.BaseResultSetMetaData;
 import java.sql.*;
 import java.text.ParseException;
 
-/*====================================================================*/
 
 /** PostgresResultSetMetaData implements wrapped PostgreSQL ResultSetMetaData.
  * @author Hartwig Thomas
@@ -28,7 +27,6 @@ public class PostgresResultSetMetaData
         extends BaseResultSetMetaData
         implements ResultSetMetaData {
     protected Statement _stmt = null;
-    /*------------------------------------------------------------------*/
 
     /** constructor
      * @param rsWrapped result set to be wrapped.
@@ -37,7 +35,7 @@ public class PostgresResultSetMetaData
     public PostgresResultSetMetaData(ResultSetMetaData rsmdWrapped, Statement stmt) {
         super(rsmdWrapped);
         _stmt = stmt;
-    } /* constructor */
+    }
 
     @Override
     public int getColumnType(int column) throws SQLException {
@@ -91,4 +89,4 @@ public class PostgresResultSetMetaData
         return sTypeName;
     }
 
-} /* PostgresResultSetMetaData */
+}

@@ -1032,9 +1032,6 @@ public class DatabaseImpl implements Database {
         return _defaultCodePage;
     }
 
-  /*====================================================================
-  Start of additions by Hartwig Thomas
-  ====================================================================*/
 
     /**
      * Reads various config info from the db page 0.
@@ -1140,9 +1137,6 @@ public class DatabaseImpl implements Database {
         }
     }
   
-  /*====================================================================
-  End of additions by Hartwig Thomas
-  ====================================================================*/
 
     public TableIterableBuilder newIterable() {
         return new TableIterableBuilder(this);

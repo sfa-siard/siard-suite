@@ -291,7 +291,7 @@ public class OracleDatabaseMetaDataTester
         } catch (ParseException pe) {
             fail(EU.getExceptionMessage(pe));
         }
-    } /* testColumns */
+    }
 
     /*
     I decided to skip this test, because it fails for the column CCHAR_50.
@@ -316,13 +316,13 @@ public class OracleDatabaseMetaDataTester
     public void testColumnsOracleSimple() {
         enter();
         testColumns(TestOracleDatabase.getQualifiedSimpleTable(), TestOracleDatabase._listCdSimple);
-    } /* testColumnsOracleSimple */
+    }
 
     @Test
     public void testColumnsOracleComplex() {
         enter();
         testColumns(TestOracleDatabase.getQualifiedComplexTable(), TestOracleDatabase._listCdComplex);
-    } /* testColumnsOracleComplex */
+    }
 
     @Test
     @Ignore
@@ -332,13 +332,13 @@ public class OracleDatabaseMetaDataTester
     public void testColumnsSqlSimple() {
         enter();
         testColumns(TestSqlDatabase.getQualifiedSimpleTable(), TestSqlDatabase._listCdSimple);
-    } /* testColumnsSqlSimple */
+    }
 
     @Test
     public void testColumnsSqlComplex() {
         enter();
         testColumns(TestSqlDatabase.getQualifiedComplexTable(), TestSqlDatabase._listCdComplex);
-    } /* testColumnsSqlComplex */
+    }
 
     @Test
     public void testSchema() {
@@ -391,7 +391,7 @@ public class OracleDatabaseMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testSchemas */
+    }
 
     @Test
     public void testTable() {
@@ -460,7 +460,7 @@ public class OracleDatabaseMetaDataTester
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testView */
+    }
 
     @Test
     @Override

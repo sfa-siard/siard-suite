@@ -74,7 +74,7 @@ public class MySqlStatementTester extends BaseStatementTester {
             getStatement().getConnection()
                           .rollback();
         }
-    } /* clean */
+    }
 
     @BeforeClass
     public static void setUpClass() {
@@ -100,7 +100,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* setUpClass */
+    }
 
     @AfterClass
     public static void tearDownClass() {
@@ -122,12 +122,12 @@ public class MySqlStatementTester extends BaseStatementTester {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
         }
-    } /* setUp */
+    }
 
     @Test
     public void testClass() {
         assertEquals("Wrong statement class!", MySqlStatement.class, _stmtMySql.getClass());
-    } /* testClass */
+    }
 
     @Test
     @Override
@@ -147,7 +147,7 @@ public class MySqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate */
+    }
 
     @Test
     @Override
@@ -169,7 +169,7 @@ public class MySqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate_String_int */
+    }
 
     @Test
     @Override
@@ -191,7 +191,7 @@ public class MySqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate_String_AInt */
+    }
 
     @Test
     @Override
@@ -213,7 +213,7 @@ public class MySqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate */
+    }
 
     @Test
     @Override
@@ -226,7 +226,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testGetGeneratedKeys */
+    }
 
     @Test
     @Override
@@ -241,7 +241,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute_String_AInt */
+    }
 
     @Test
     @Override
@@ -256,7 +256,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute_String_AString */
+    }
 
     @Test
     public void testExecuteQuery() {
@@ -268,7 +268,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecuteQuery */
+    }
 
     @Test
     public void testExecuteQueryWithUpdate() {
@@ -304,7 +304,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetResultSet */
+    }
 
     @Test
     public void testExecuteSelectSizes() {
@@ -340,7 +340,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testExecuteSelectSize */
+    }
 
     @Test
     public void testDropTableCascade() {
@@ -400,6 +400,6 @@ public class MySqlStatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testCreateTable */
+    }
 
 }

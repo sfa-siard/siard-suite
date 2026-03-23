@@ -15,7 +15,6 @@ public class QueryExpression
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(QueryExpression.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -40,7 +39,6 @@ public class QueryExpression
             return QueryExpression.this;
         }
     }
-    /*==================================================================*/
 
     private QeVisitor _visitor = new QeVisitor();
 
@@ -80,7 +78,6 @@ public class QueryExpression
         _qeb = qeb;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the query expression.
      * @return the SQL string corresponding to the fields of the query expression.
@@ -102,9 +99,8 @@ public class QueryExpression
         }
         sExpression = sExpression + getQueryExpressionBody().format();
         return sExpression;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the query expression from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -113,9 +109,8 @@ public class QueryExpression
     public void parse(SqlParser.QueryExpressionContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the query expression from SQL.
      * @param sSql SQL.
@@ -124,9 +119,8 @@ public class QueryExpression
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().queryExpression());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize a query expression.
      * @param bRecursive true for RECURSIVE.
@@ -142,15 +136,14 @@ public class QueryExpression
         setWithElements(listWithElements);
         setQueryExpressionBody(qeb);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public QueryExpression(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class QueryExpression */
+}

@@ -150,9 +150,6 @@ public class SchemaImpl
         return new SchemaImpl(archiveParent, sName);
     } 
   
-  /*====================================================================
-  methods
-  ====================================================================*/
 
     /**
      * {@inheritDoc}

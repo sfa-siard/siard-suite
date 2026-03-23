@@ -22,7 +22,7 @@ public class ExecuteTester {
         } catch (IOException ie) {
             System.err.println(EU.getExceptionMessage(ie));
         }
-    } /* testFind */
+    }
 
 }
 

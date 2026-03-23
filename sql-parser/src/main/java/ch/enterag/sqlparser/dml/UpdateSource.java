@@ -13,7 +13,6 @@ public class UpdateSource
     /** logger */
     private static IndentLogger _il = IndentLogger.getIndentLogger(UpdateSource.class.getName());
 
-    /*==================================================================*/
 
     /** visitor initializes fields from parse tree.
      */
@@ -31,7 +30,6 @@ public class UpdateSource
             return UpdateSource.this;
         }
     }
-    /*==================================================================*/
 
     private UsVisitor _visitor = new UsVisitor();
 
@@ -59,7 +57,6 @@ public class UpdateSource
         _sv = sv;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** format the update source.
      * @return the SQL string corresponding to the fields of the update
@@ -73,9 +70,8 @@ public class UpdateSource
         else if (getSpecialValue() != null)
             s = getSpecialValue().getKeywords();
         return s;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the update source from the parsing tree context.
      * @param ctx parsing context (tree).
@@ -84,9 +80,8 @@ public class UpdateSource
     public void parse(SqlParser.UpdateSourceContext ctx) {
         setContext(ctx);
         getVisitor().visit(getContext());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse the update source from SQL.
      * @param sSql SQL.
@@ -95,9 +90,8 @@ public class UpdateSource
     public void parse(String sSql) {
         setParser(newSqlParser(sSql));
         parse(getParser().updateSource());
-    } /* parse */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** initialize an update source.
      * @param ve value expression.
@@ -110,15 +104,14 @@ public class UpdateSource
         setValueExpression(ve);
         setSpecialValue(sv);
         _il.exit();
-    } /* initialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public UpdateSource(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 
-} /* class UpdateSource */
+}

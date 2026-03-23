@@ -10,7 +10,6 @@ package ch.enterag.utils;
 
 import java.util.Objects;
 
-/*====================================================================*/
 
 /** Pair implements an ordered pair of objects.
  * Can be used for Triplets (Pair&lt;Cl1,Pair&lt;Cl2,Cl3&gt;&gt;) etc.
@@ -31,7 +30,6 @@ public class Pair<CLFIRST, CLSECOND> {
         return _s;
     }
 
-    /*------------------------------------------------------------------*/
 
     /** Constructor
      * @param f first component.
@@ -40,18 +38,16 @@ public class Pair<CLFIRST, CLSECOND> {
     public Pair(CLFIRST f, CLSECOND s) {
         _f = f;
         _s = s;
-    } /* constructor */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** hashCode identifies the pair by its components and meshes with equals.
      */
     @Override
     public int hashCode() {
         return Objects.hash(_f, _s);
-    } /* hashCode */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** equality of two objects including null-equality.
      * @param o1 first object.
@@ -66,9 +62,8 @@ public class Pair<CLFIRST, CLSECOND> {
         } else if (o2 == null)
             bEqual = true;
         return bEqual;
-    } /* areEqual */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** symmetric static comparison for equality.
      * Two pairs are equal, if their components are equal.
@@ -86,7 +81,6 @@ public class Pair<CLFIRST, CLSECOND> {
             bEqual = true;
         return bEqual;
     }
-    /*------------------------------------------------------------------*/
 
     /** {@inheritDoc}
      */
@@ -98,5 +92,5 @@ public class Pair<CLFIRST, CLSECOND> {
             bEqual = areEqual(this, pair);
         }
         return bEqual;
-    } /* equals */
-} /* Pair */
+    }
+}

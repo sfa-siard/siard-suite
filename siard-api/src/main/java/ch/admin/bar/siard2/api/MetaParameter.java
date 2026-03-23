@@ -32,9 +32,6 @@ public interface MetaParameter
      */
     boolean isValid();
   
-  /*====================================================================
-  parameter properties
-  ====================================================================*/
 
     /**
      * get name of parameter.

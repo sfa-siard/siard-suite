@@ -54,7 +54,7 @@ public class Db2StatementTester extends BaseStatementTester {
             getStatement().getConnection()
                           .rollback();
         }
-    } /* clean */
+    }
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
@@ -68,7 +68,7 @@ public class Db2StatementTester extends BaseStatementTester {
         new TestSqlDatabase(connDb2, TESTUSER);
         new TestDb2Database(connDb2, TESTUSER);
         connDb2.close();
-    } /* setUpClass */
+    }
 
     @Before
     public void setUp() throws SQLException {
@@ -80,7 +80,7 @@ public class Db2StatementTester extends BaseStatementTester {
         connDb2.setAutoCommit(false);
         _stmtDb2 = (Db2Statement) connDb2.createStatement();
         setStatement(_stmtDb2);
-    } /* setUp */
+    }
 
     private void changeUser(String sUser, String sPassword) {
         try {
@@ -106,9 +106,8 @@ public class Db2StatementTester extends BaseStatementTester {
     @Test
     public void testClass() {
         assertEquals("Wrong statement class!", Db2Statement.class, _stmtDb2.getClass());
-    } /* testClass */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** check, whether table exists in the database.
      * @param sMangledSchema schema name.
@@ -124,7 +123,7 @@ public class Db2StatementTester extends BaseStatementTester {
         if (rs.next()) bExists = true;
         rs.close();
         return bExists;
-    } /* existsTable */
+    }
 
 
     @Test
@@ -151,7 +150,7 @@ public class Db2StatementTester extends BaseStatementTester {
                 fail(EU.getExceptionMessage(se));
             }
         }
-    } /* testExecuteUpdate */
+    }
 
     @Test
     @Override
@@ -165,7 +164,7 @@ public class Db2StatementTester extends BaseStatementTester {
          catch(SQLTimeoutException ste) { fail(EU.getExceptionMessage(ste)); }
          catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
          ***/
-    } /* testExecuteUpdate_String_int */
+    }
 
     @Test
     @Override
@@ -179,7 +178,7 @@ public class Db2StatementTester extends BaseStatementTester {
          catch(SQLTimeoutException ste) { fail(EU.getExceptionMessage(ste)); }
          catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
          ***/
-    } /* testExecuteUpdate_String_AInt */
+    }
 
     @Test
     @Override
@@ -193,7 +192,7 @@ public class Db2StatementTester extends BaseStatementTester {
          catch(SQLTimeoutException ste) { fail(EU.getExceptionMessage(ste)); }
          catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
          ***/
-    } /* testExecuteUpdate */
+    }
 
     @Test
     @Override
@@ -215,7 +214,7 @@ public class Db2StatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testGetGeneratedKeys */
+    }
 
     @Test
     @Override
@@ -227,7 +226,7 @@ public class Db2StatementTester extends BaseStatementTester {
          catch(SQLTimeoutException ste) { fail(EU.getExceptionMessage(ste)); }
          catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
          ***/
-    } /* testExecute_String_AInt */
+    }
 
     @Test
     @Override
@@ -239,7 +238,7 @@ public class Db2StatementTester extends BaseStatementTester {
          catch(SQLTimeoutException ste) { fail(EU.getExceptionMessage(ste)); }
          catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
          ***/
-    } /* testExecute_String_AString */
+    }
 
     @Test
     public void testExecuteQuery() {
@@ -273,7 +272,7 @@ public class Db2StatementTester extends BaseStatementTester {
         } finally {
             changeUser(db2.getUsername(), db2.getPassword());
         }
-    } /* testExecuteQuery */
+    }
 
     @Test
     public void testExecute() {
@@ -285,7 +284,7 @@ public class Db2StatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute */
+    }
 
     @Test
     public void testExecute_String_int() {
@@ -299,7 +298,7 @@ public class Db2StatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testExecute_String_int */
+    }
 
     @Test
     public void testExecuteSelectSizes() {
@@ -333,7 +332,7 @@ public class Db2StatementTester extends BaseStatementTester {
         } catch (SQLException se) {
             System.out.println(EU.getExceptionMessage(se));
         }
-    } /* testExecuteSelectSize */
+    }
 
     @Test
     public void testDropTableCascade() {
@@ -352,4 +351,4 @@ public class Db2StatementTester extends BaseStatementTester {
         }
     }
 
-}  /* class Db2StatementTester */
+}

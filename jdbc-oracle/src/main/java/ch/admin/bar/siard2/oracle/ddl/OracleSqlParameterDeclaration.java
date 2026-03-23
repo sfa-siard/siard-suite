@@ -14,7 +14,6 @@ package ch.admin.bar.siard2.oracle.ddl;
 import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.ddl.SqlParameterDeclaration;
 
-/*====================================================================*/
 
 /** OracleSqlParameterDeclaration overrides the formatting
  * of the SqlParameterDeclaration
@@ -23,7 +22,6 @@ import ch.enterag.sqlparser.ddl.SqlParameterDeclaration;
  */
 public class OracleSqlParameterDeclaration
         extends SqlParameterDeclaration {
-    /*------------------------------------------------------------------*/
 
     /**
      * format the sql parameter declaration
@@ -40,14 +38,13 @@ public class OracleSqlParameterDeclaration
             sDeclaration = sDeclaration + sSP + getDataType().format();
 
         return sDeclaration;
-    } /* format */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** constructor with factory only to be called by factory.
      * @param sf factory.
      */
     public OracleSqlParameterDeclaration(SqlFactory sf) {
         super(sf);
-    } /* constructor */
+    }
 }

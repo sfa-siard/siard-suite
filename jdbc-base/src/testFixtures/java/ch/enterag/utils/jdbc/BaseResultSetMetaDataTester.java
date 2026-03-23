@@ -33,16 +33,16 @@ public abstract class BaseResultSetMetaDataTester {
     protected void setResultSetMetaData(ResultSetMetaData rsmd, ResultSet rs) {
         _rs = rs;
         _rsmd = rsmd;
-    } /* setResultSetMetaData */
+    }
 
     protected static void printExceptionMessage(Exception e) {
         System.err.println("  " + EU.getExceptionMessage(e));
         System.err.flush();
-    } /* printExceptionMessage */
+    }
 
     protected static void println(String s) {
         System.out.println("  " + s);
-    } /* println */
+    }
 
     protected static void println(List<String> list) {
         StringBuilder sb = new StringBuilder();
@@ -52,7 +52,7 @@ public abstract class BaseResultSetMetaDataTester {
             sb.append(String.valueOf(list.get(i)));
         }
         System.out.println(sb.toString());
-    } /* println */
+    }
 
     protected static void print(ResultSet rs)
             throws SQLException {
@@ -92,12 +92,12 @@ public abstract class BaseResultSetMetaDataTester {
                                           .getStackTrace();
         sCallingMethod = asSte[iDepth].getMethodName();
         return sCallingMethod;
-    } /* getCallingMethod */
+    }
 
     protected void enter() {
         System.out.println(getCallingMethod(3));
         System.out.flush();
-    } /* enter */
+    }
 
     @After
     public void tearDown() {
@@ -119,11 +119,8 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* tearDown */
+    }
 
-    /*--------------------------------------------------------------------
-    Base tests for all database statements extending BaseResultSetMetaData.
-    --------------------------------------------------------------------*/
     @Test
     public void testGetColumnCount() {
         enter();
@@ -132,7 +129,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnCount */
+    }
 
     @Test
     public void testGetCatalogName() {
@@ -145,7 +142,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetCatalogName */
+    }
 
     @Test
     public void testGetSchemaName() {
@@ -158,7 +155,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetSchemaName */
+    }
 
     @Test
     public void testGetTableName() {
@@ -171,7 +168,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetTableName */
+    }
 
     @Test
     public void testGetColumnName() {
@@ -184,7 +181,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnName */
+    }
 
     @Test
     public void testGetColumnLabel() {
@@ -197,7 +194,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnLabel */
+    }
 
     @Test
     public void testGetColumnClassName() {
@@ -210,7 +207,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnClassName */
+    }
 
     @Test
     public void testGetColumnType() {
@@ -223,7 +220,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnType */
+    }
 
     @Test
     public void testGetColumnTypeName() {
@@ -236,7 +233,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnTypeName */
+    }
 
     @Test
     public void testGetColumnDisplaySize() {
@@ -249,7 +246,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetColumnDisplaySize */
+    }
 
     @Test
     public void testGetPrecision() {
@@ -262,7 +259,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetPrecision */
+    }
 
     @Test
     public void testGetScale() {
@@ -275,7 +272,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetPrecision */
+    }
 
     @Test
     public void testIsAutoIncrement() {
@@ -288,7 +285,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsAutoIncrement */
+    }
 
     @Test
     public void testIsCaseSensitive() {
@@ -301,7 +298,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsCaseSensitive */
+    }
 
     @Test
     public void testIsSearchable() {
@@ -314,7 +311,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsSearchable */
+    }
 
     @Test
     public void testIsCurrency() {
@@ -327,7 +324,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsCurrency */
+    }
 
     @Test
     public void testIsNullable() {
@@ -340,7 +337,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsNullable */
+    }
 
     @Test
     public void testIsSigned() {
@@ -353,7 +350,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsSigned */
+    }
 
     @Test
     public void testIsReadOnly() {
@@ -366,7 +363,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsReadOnly */
+    }
 
     @Test
     public void testIsWritable() {
@@ -379,7 +376,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsWritable */
+    }
 
     @Test
     public void testIsDefinitelyWritable() {
@@ -392,7 +389,7 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
-    } /* testGetIsDefinitelyWritable */
+    }
 
     @Test
     public void testAll() {
@@ -468,6 +465,6 @@ public abstract class BaseResultSetMetaDataTester {
         } catch (Exception e) {
             fail(EU.getExceptionMessage(e));
         }
-    } /* testAll */
+    }
 
-}  /* class BaseResultSetMetaDataTester */
+}

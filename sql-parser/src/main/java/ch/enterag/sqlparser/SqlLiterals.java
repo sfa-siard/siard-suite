@@ -51,7 +51,6 @@ public abstract class SqlLiterals {
         dfAPPROXIMATE = new DecimalFormat("0.###############E0", dfsSYMBOLS);
     }
 
-    /*------------------------------------------------------------------*/
 
     /** serialize an object to a byte array.
      * @param o object.
@@ -68,9 +67,8 @@ public abstract class SqlLiterals {
             _il.exception(ie);
         }
         return baos.toByteArray();
-    } /* serializeOpbject */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** deserialize an object from a byte array.
      * @param buf byte array.
@@ -89,9 +87,8 @@ public abstract class SqlLiterals {
             _il.exception(cnfe);
         }
         return o;
-    } /* deserialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** serialize an object to a byte buffer.
      * @param <T> type of object.
@@ -100,9 +97,8 @@ public abstract class SqlLiterals {
      */
     public static <T> byte[] serialize(T o) {
         return serializeObject(o);
-    } /* serialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** deserialize an object from a byte buffer.
      * @param <T> type of object.
@@ -112,9 +108,8 @@ public abstract class SqlLiterals {
      */
     public static <T> T deserialize(byte[] buf, Class<T> type) {
         return type.cast(deserializeObject(buf));
-    } /* deserialize */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** check, whether the given string is a reserved keyword.
      * @param s string.
@@ -126,13 +121,12 @@ public abstract class SqlLiterals {
         if (k != null)
             bReserved = k.isReserved();
         return bReserved;
-    } /* isKeyword */
+    }
 
     public static boolean isAlNum(char c) {
         return Character.isLetter(c) || (c == '_') || ((c >= '0') && (c <= '9'));
-    } /* isAlNum */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** check, whether an identifier is a regular identifier.
      * @param sIdentifier identifier.
@@ -154,9 +148,8 @@ public abstract class SqlLiterals {
             }
         }
         return bRegular;
-    } /* isRegular */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** check whether an identifier is delimited.
      * @param sDelimited
@@ -165,9 +158,8 @@ public abstract class SqlLiterals {
     protected static boolean isDelimited(String sDelimited) {
         return (sDelimited != null) && (sDelimited.length() >= 2) &&
                 sDelimited.startsWith(sQUOTE) && sDelimited.endsWith(sQUOTE);
-    } /* isDelimited */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** return the identifier starting at 0 as a delimited
      * identifier (with quotes and not converted to uppercase).
@@ -207,9 +199,8 @@ public abstract class SqlLiterals {
         } else
             throw new IllegalArgumentException("String with identifier must have length greater than 0!");
         return sIdentifier;
-    } /* parseIdPrefix */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** turn a regular (mixed-case) or delimited identifier into its
      * normal form (uppercase for regular, undelimited for delimited
@@ -252,9 +243,8 @@ public abstract class SqlLiterals {
         } else
             throw new NullPointerException("Identifier must not be null!");
         return sIdentifier;
-    } /* parseId */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** quote an identifier unconditionally.
      * @param sIdentifier identifier to be quoted.
@@ -262,9 +252,8 @@ public abstract class SqlLiterals {
      */
     public static String quoteId(String sIdentifier) {
         return sQUOTE + sIdentifier.replace(sQUOTE, sDOUBLE_QUOTE) + sQUOTE;
-    } /* quoteId */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** quote an identifier in normal form (upper case, regular).
      * @param sIdentifier identifier in normal form.
@@ -286,9 +275,8 @@ public abstract class SqlLiterals {
         } else
             throw new NullPointerException("Identifier must not be null!");
         return sDelimited;
-    } /* formatId */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** scan input for end of identifier.
      * @param sQualified qualified formatted identifier.
@@ -330,9 +318,8 @@ public abstract class SqlLiterals {
         } else
             throw new NullPointerException("Qualified identifier must not be null!");
         return iEnd;
-    } /* getIdentifierEnd */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** unconditionally quote  a catalog-qualified schema name for use in
      * an SQL statement.
@@ -345,9 +332,8 @@ public abstract class SqlLiterals {
         if (sCatalogName != null)
             sQuotedSchemaName = quoteId(sCatalogName) + sDOT + sQuotedSchemaName;
         return sQuotedSchemaName;
-    } /* quoteQualifiedSchema */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a catalog-qualified schema name for use in an SQL statement.
      * @param sCatalogName catalog name or null.
@@ -359,9 +345,8 @@ public abstract class SqlLiterals {
         if (sCatalogName != null)
             sFormattedSchemaName = formatId(sCatalogName) + sDOT + sFormattedSchemaName;
         return sFormattedSchemaName;
-    } /* formatQualifiedSchema */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** unconditionally quote a schema-qualified name for use in an SQL statement.
      * @param sCatalogName catalog name or null.
@@ -374,9 +359,8 @@ public abstract class SqlLiterals {
         if (sSchemaName != null)
             sQuotedQualifiedName = quoteQualifiedSchema(sCatalogName, sSchemaName) + sDOT + sQuotedQualifiedName;
         return sQuotedQualifiedName;
-    } /* quoteQualifiedName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a schema-qualified name for use in an SQL statement.
      * @param sCatalogName catalog name or null.
@@ -389,9 +373,8 @@ public abstract class SqlLiterals {
         if (sSchemaName != null)
             sFormattedQualifiedName = formatQualifiedSchema(sCatalogName, sSchemaName) + sDOT + sFormattedQualifiedName;
         return sFormattedQualifiedName;
-    } /* formatQualifiedName */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** unconditionally quote a list of identifiers as a comma-separated list.
      * @param list list of identifiers.
@@ -405,9 +388,8 @@ public abstract class SqlLiterals {
             sbCommaList.append(quoteId(list.get(i)));
         }
         return sbCommaList.toString();
-    } /* quoteIdentifierCommaList */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a list of identifiers as a comma-separated list.
      * @param list list of identifiers.
@@ -421,9 +403,8 @@ public abstract class SqlLiterals {
             sbCommaList.append(formatId(list.get(i)));
         }
         return sbCommaList.toString();
-    } /* formatIdentifierCommaList */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** test a prefix and detach it.
      * @param s string to be tested.
@@ -437,9 +418,8 @@ public abstract class SqlLiterals {
             sResult = s.substring(sPrefix.length())
                        .trim();
         return sResult;
-    } /* cutPrefix */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a quoted character string literal.
      * @param sQuoted quoted character string literal.
@@ -467,9 +447,8 @@ public abstract class SqlLiterals {
         } else
             throw new ParseException("Quoted string must be quoted!", 0);
         return sParsed;
-    } /* parseStringLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format (quote) string value.
      * @param sValue string to be quoted.
@@ -481,9 +460,8 @@ public abstract class SqlLiterals {
             sQuoted = sAPOSTROPHE + sValue.replaceAll(sAPOSTROPHE, sDOUBLE_APOSTROPHE) + sAPOSTROPHE;
 
         return sQuoted;
-    } /* formatStringLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse national character string
      * @param sNationalString national character string
@@ -498,9 +476,8 @@ public abstract class SqlLiterals {
         else
             throw new ParseException("National character string literal must start with " + sNATIONAL_LITERAL_PREFIX + "!", 0);
         return sParsed;
-    } /* parseNationalStringLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format national character string value.
      * @param sValue string to be formatted.
@@ -511,9 +488,8 @@ public abstract class SqlLiterals {
         if (sValue != null)
             sFormatted = sNATIONAL_LITERAL_PREFIX + formatStringLiteral(sValue);
         return sFormatted;
-    } /* formatNationalStringLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse bit string
      * @param sBitString bit string
@@ -532,9 +508,8 @@ public abstract class SqlLiterals {
         } else
             throw new ParseException("Bit character string literal must start with " + sBIT_LITERAL_PREFIX + "!", 0);
         return sParsed;
-    } /* parseBitStringLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format bit string value.
      * @param sValue bit string to be formatted.
@@ -545,9 +520,8 @@ public abstract class SqlLiterals {
         if (sValue != null)
             sFormatted = sBIT_LITERAL_PREFIX + formatStringLiteral(sValue);
         return sFormatted;
-    } /* formatBitStringLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a byte string literal.
      * @param sByteString byte string literal.
@@ -564,9 +538,8 @@ public abstract class SqlLiterals {
         } else
             throw new ParseException("Byte character string literal must start with " + sBYTE_LITERAL_PREFIX + "!", 0);
         return bufParsed;
-    } /* parseBytesLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format byte buffer value.
      * @param bufValue byte buffer value to be formatted.
@@ -577,9 +550,8 @@ public abstract class SqlLiterals {
         if (bufValue != null)
             sFormatted = sBYTE_LITERAL_PREFIX + formatStringLiteral(BU.toHex(bufValue));
         return sFormatted;
-    } /* formatBytesLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a date literal.
      * @param sDateLiteral date literal.
@@ -602,9 +574,8 @@ public abstract class SqlLiterals {
         } else
             throw new ParseException("Date character string literal must start with " + sDATE_LITERAL_PREFIX + "!", 0);
         return dateParsed;
-    } /* parseDateLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a date value
      * @param dateValue date value to be formatted.
@@ -615,9 +586,8 @@ public abstract class SqlLiterals {
         if (dateValue != null)
             sFormatted = sDATE_LITERAL_PREFIX + formatStringLiteral(sdfDATE.format(dateValue));
         return sFormatted;
-    } /* formatDateLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a time literal.
      * @param sTimeLiteral time literal.
@@ -652,9 +622,8 @@ public abstract class SqlLiterals {
         } else
             throw new ParseException("Time character string literal must start with " + sTIME_LITERAL_PREFIX + "!", 0);
         return timeParsed;
-    } /* parseTimeLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a time value
      * @param timeValue time value to be formatted.
@@ -676,9 +645,8 @@ public abstract class SqlLiterals {
             sFormatted = sTIME_LITERAL_PREFIX + formatStringLiteral(sFormatted);
         }
         return sFormatted;
-    } /* formatTimeLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a timestamp literal.
      * @param sTimestampLiteral timestamp literal.
@@ -713,9 +681,8 @@ public abstract class SqlLiterals {
         } else
             throw new ParseException("Timestamp character string literal must start with " + sTIMESTAMP_LITERAL_PREFIX + "!", 0);
         return tsParsed;
-    } /* parseTimestampLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a timestamp value
      * @param tsValue timestamp value to be formatted.
@@ -737,9 +704,8 @@ public abstract class SqlLiterals {
             sFormatted = sTIMESTAMP_LITERAL_PREFIX + formatStringLiteral(sFormatted);
         }
         return sFormatted;
-    } /* formatTimestampLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse an interval literal.
      * @param sIntervalLiteral interval literal.
@@ -954,9 +920,8 @@ public abstract class SqlLiterals {
         } else
             throw new ParseException("Interval literal must start with " + sINTERVAL_LITERAL_PREFIX + "!", 0);
         return interval;
-    } /* parseInterval */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format an interval value
      * @param ivValue interval value to be formatted.
@@ -1059,9 +1024,8 @@ public abstract class SqlLiterals {
                 sFormatted = sFormatted + sLEFT_PAREN + String.valueOf(iSecondsPrecision) + sRIGHT_PAREN;
         }
         return sFormatted;
-    } /* formatIntervalLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse a boolean literal.
      * @param sBooleanLiteral boolean literal.
@@ -1084,9 +1048,8 @@ public abstract class SqlLiterals {
                                              BooleanLiteral.FALSE.getKeywords() + ", or " +
                                              BooleanLiteral.UNKNOWN.getKeywords() + "!", 0);
         return blParsed;
-    } /* parseBooleanLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a boolean literal value.
      * N.B.: the tree-valued SQL booleans are also often rendered as JAVA
@@ -1097,9 +1060,8 @@ public abstract class SqlLiterals {
     public static String formatBooleanLiteral(BooleanLiteral blValue) {
         String sFormatted = blValue.getKeywords();
         return sFormatted;
-    } /* formatBooleanLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse an approximate numeric literal.
      * @param sApproximateLiteral approximate numeric literal.
@@ -1111,9 +1073,8 @@ public abstract class SqlLiterals {
         Double dParsed = dfAPPROXIMATE.parse(sApproximateLiteral)
                                       .doubleValue();
         return dParsed;
-    } /* parseApproximateLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a double value as an approximate numeric literal.
      * @param dValue double value to be formatted.
@@ -1122,9 +1083,8 @@ public abstract class SqlLiterals {
     public static String formatApproximateLiteral(Double dValue) {
         String sFormatted = dfAPPROXIMATE.format(dValue.doubleValue());
         return sFormatted;
-    } /* formatApproximateLiteral */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** parse an exact numeric literal.
      * @param sExactLiteral exact numeric literal.
@@ -1140,9 +1100,8 @@ public abstract class SqlLiterals {
             throw new ParseException("Invalid exact literal (" + nfe.getMessage() + ")!", 0);
         }
         return bd;
-    } /* parseExact */
+    }
 
-    /*------------------------------------------------------------------*/
 
     /** format a decimal value as an exact numeric literal.
      * @param bd decimal value to be formatted.
@@ -1151,6 +1110,6 @@ public abstract class SqlLiterals {
     public static String formatExactLiteral(BigDecimal bd) {
         String sFormatted = bd.toPlainString();
         return sFormatted;
-    } /* formatExactLiteral */
+    }
 
-} /* class SqlLiterals */
+}

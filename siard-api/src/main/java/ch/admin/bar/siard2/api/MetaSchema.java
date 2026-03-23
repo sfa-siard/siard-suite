@@ -38,10 +38,6 @@ public interface MetaSchema
      */
     boolean isValid();
   
-  /*====================================================================
-  schema properties
-  ====================================================================*/
-
 
     /**
      * get schema name.
@@ -72,9 +68,6 @@ public interface MetaSchema
      */
     String getDescription();
   
-  /*====================================================================
-  list properties
-  ====================================================================*/
 
     /**
      * get number of table meta data entries.
