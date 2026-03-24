@@ -4,7 +4,7 @@ import java.util.Locale
 
 plugins {
     java
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.lombok)
 }
 
 description = "SIARD API"
@@ -30,31 +30,30 @@ dependencies {
     implementation(project(":sql-parser"))
     implementation(project(":zip64-file"))
 
-    implementation("org.antlr:antlr4-runtime:4.5.2")
+    implementation(libs.antlr4.runtime)
 
-    implementation("javax.activation:activation:1.1.1")
-    implementation("javax.xml.bind:jaxb-api:2.3.0")
-    implementation("com.sun.xml.bind:jaxb-core:2.3.0")
-    implementation("com.sun.xml.bind:jaxb-impl:2.3.0")
+    implementation(libs.jaxb.activation)
+    implementation(libs.jaxb.api)
+    implementation(libs.jaxb.core)
+    implementation(libs.jaxb.impl)
 
-    implementation("org.codehaus.woodstox:stax2-api:3.1.1")
-    implementation("org.codehaus.woodstox:woodstox-core-lgpl:4.1.2")
+    implementation(libs.woodstox.stax2)
+    implementation(libs.woodstox.core)
 
-    implementation("net.java.dev.msv:msv-core:2010.2")
-    implementation("net.java.dev.msv:xsdlib:2013.2.2")
+    implementation(libs.msv.core)
+    implementation(libs.xsdlib)
 
-    implementation("org.apache.commons:commons-text:1.14.0")
-    implementation("org.jsoup:jsoup:1.21.2") // html pretty printing in html export
+    implementation(libs.commons.text)
+    implementation(libs.jsoup)
 
-    testImplementation(platform("org.junit:junit-bom:5.13.4"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.mockito:mockito-junit-jupiter:5.19.0")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.vintage.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.mockito.junit.jupiter)
 
-    // 4.x uses jakarta.* packages.  For a javax‑based project stick to 2.3.*.
-    xjcConfiguration("org.glassfish.jaxb:jaxb-xjc:2.3.2")
-    xjcConfiguration("org.glassfish.jaxb:jaxb-runtime:2.3.2")  // needed by the compiler itself
+    xjcConfiguration(libs.jaxb.xjc)
+    xjcConfiguration(libs.jaxb.runtime)
 }
 
 tasks.test {

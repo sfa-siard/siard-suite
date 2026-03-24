@@ -1,5 +1,5 @@
 plugins {
-    id("pl.allegro.tech.build.axion-release") version "1.14.3"
+    alias(libs.plugins.axion.release)
 }
 
 group = "ch.admin.bar"

@@ -3,7 +3,7 @@ import java.util.Date
 
 plugins {
     `java-library`
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.lombok)
 }
 
 description = "Oracle JDBC Wrapper"
@@ -15,22 +15,22 @@ repositories {
 }
 
 dependencies {
-    implementation("org.antlr:antlr4-runtime:4.5.2")
+    implementation(libs.antlr4.runtime)
     implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
-    implementation("com.oracle.ojdbc:xdb:19.3.0.0")
-    implementation("com.oracle.ojdbc:xmlparserv2:19.3.0.0")
+    implementation(libs.oracle.xdb)
+    implementation(libs.oracle.xmlparser)
     implementation(project(":jdbc-base"))
     implementation(fileTree("lib") { include("*.jar") })
 
-    // test dependencies
-    testImplementation("junit:junit:4.13.1")
-    testImplementation("org.hamcrest:hamcrest-core:1.3")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-    testImplementation("org.testcontainers:testcontainers:1.21.4")
-    testImplementation("org.testcontainers:oracle-xe:1.21.4")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit4)
+    testImplementation(libs.hamcrest.core)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.vintage.engine)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.testcontainers)
+    testImplementation(libs.testcontainers.oracle)
     testImplementation(testFixtures(project(":jdbc-base")))
 }
 

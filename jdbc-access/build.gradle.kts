@@ -4,7 +4,7 @@ import java.util.*
 plugins {
     `java-library`
     `java-test-fixtures`
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.lombok)
 }
 
 description = "MS Access JDBC Wrapper"
@@ -14,17 +14,18 @@ dependencies {
     implementation(project(":sql-parser"))
     implementation(project(":jdbc-base"))
 
-    implementation("org.antlr:antlr4-runtime:4.5.2")
+    implementation(libs.antlr4.runtime)
 
-    implementation("commons-lang:commons-lang:2.6")
-    implementation("commons-logging:commons-logging:1.1.3")
-    implementation("com.healthmarketscience.jackcess:jackcess:2.1.12")
+    implementation(libs.commons.lang)
+    implementation(libs.commons.logging)
+    implementation(libs.jackcess)
 
-    implementation("com.googlecode.json-simple:json-simple:1.1.1")
+    implementation(libs.json.simple)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.vintage.engine)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 
     testImplementation(testFixtures(project(":jdbc-base")))
 }

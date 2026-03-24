@@ -11,8 +11,8 @@ val generatedResourcesDir = Files.createDirectories(layout.buildDirectory.dir("g
 plugins {
     application
     `java-library`
-    id("pl.allegro.tech.build.axion-release") version "1.14.3"
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.axion.release)
+    alias(libs.plugins.lombok)
 }
 
 java {
@@ -35,12 +35,12 @@ sourceSets {
 }
 
 dependencies {
-    implementation("org.apache.tika:tika-core:2.9.1") // used for getting mime-type from binary data
-    implementation("commons-lang:commons-lang:2.6")
-    implementation("commons-logging:commons-logging:1.1.3")
-    implementation("ch.qos.logback:logback-classic:1.5.18")
-    implementation("com.mysql:mysql-connector-j:8.3.0") // transitive dependency from lib/jdbcmysql.jar
-    implementation("org.glassfish.jaxb:jaxb-runtime:2.3.9")
+    implementation(libs.tika.core)
+    implementation(libs.commons.lang)
+    implementation(libs.commons.logging)
+    implementation(libs.logback.classic)
+    implementation(libs.mysql.connector)
+    implementation(libs.jaxb.runtime)
 
     api(project(":siard-api"))
     api(project(":sql-parser"))
@@ -54,26 +54,25 @@ dependencies {
     api(project(":jdbc-access"))
     api(project(":jdbc-db2"))
 
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.assertj:assertj-core:3.24.2")
-    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2")
-    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.15.2")
-    testImplementation("org.mockito:mockito-core:5.19.0")
+    testImplementation(libs.junit4)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.jackson.dataformat.xml)
+    testImplementation(libs.jackson.datatype.jdk8)
+    testImplementation(libs.mockito.core)
 
-    // testcontainers
-    testImplementation("org.testcontainers:testcontainers:1.21.4")
-    testImplementation("org.testcontainers:mssqlserver:1.21.4")
-    testImplementation("org.testcontainers:postgresql:1.21.4")
-    testImplementation("org.testcontainers:mysql:1.21.4")
-    testImplementation("org.testcontainers:mariadb:1.21.4")
-    testImplementation("org.mariadb.jdbc:mariadb-java-client:2.7.4") // Used by mariadb testcontainer
-    testImplementation("org.testcontainers:oracle-xe:1.21.4")
-    testImplementation("org.testcontainers:db2:1.21.4")
+    testImplementation(libs.testcontainers)
+    testImplementation(libs.testcontainers.mssql)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers.mysql)
+    testImplementation(libs.testcontainers.mariadb)
+    testImplementation(libs.mariadb.client)
+    testImplementation(libs.testcontainers.oracle)
+    testImplementation(libs.testcontainers.db2)
 
-    testImplementation(platform("org.junit:junit-bom:5.13.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.13.1")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.junit.vintage.engine)
 }
 
 tasks.withType(JavaExec::class) {

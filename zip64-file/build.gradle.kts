@@ -3,15 +3,16 @@ import java.util.*
 
 plugins {
     `java-library`
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.lombok)
 }
 
 description = "Zip64 File Library"
 
 dependencies {
     implementation(project(":siard-utilities"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 }
 
 tasks.test {

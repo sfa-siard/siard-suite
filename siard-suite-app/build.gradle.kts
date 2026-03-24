@@ -2,11 +2,11 @@ import org.gradle.api.tasks.application.CreateStartScripts
 
 plugins {
     application
-    id("org.beryx.runtime") version "1.12.7"
-    id("org.asciidoctor.jvm.convert") version "3.3.2"
-    id("org.asciidoctor.jvm.pdf") version "3.3.2"
-    id("io.freefair.lombok") version "6.5.0"
-    id("com.cosminpolifronie.gradle.plantuml") version "1.6.0"
+    alias(libs.plugins.beryx.runtime)
+    alias(libs.plugins.asciidoctor.convert)
+    alias(libs.plugins.asciidoctor.pdf)
+    alias(libs.plugins.lombok)
+    alias(libs.plugins.plantuml)
 }
 
 description = "SIARD Suite Application"
@@ -34,33 +34,32 @@ tasks.jar {
 dependencies {
     implementation(project(":siard-cmd"))
 
-    implementation("com.github.vatbub:mslinks:1.0.6.2")
-    implementation("org.apache.tika:tika-core:2.9.1")
+    implementation(libs.mslinks)
+    implementation(libs.tika.core)
 
-    implementation("org.glavo.materialfx:materialfx:11.13.5")
-    implementation("ch.qos.logback:logback-classic:1.5.18")
-    implementation("org.jetbrains:annotations:24.1.0")
+    implementation(libs.materialfx)
+    implementation(libs.logback.classic)
+    implementation(libs.jetbrains.annotations)
 
-    val javaFxVersion = "17.0.7"
+    implementation(variantOf(libs.javafx.base.win) { classifier("win") })
+    implementation(variantOf(libs.javafx.base.mac) { classifier("mac") })
+    implementation(variantOf(libs.javafx.base.linux) { classifier("linux") })
+    implementation(variantOf(libs.javafx.controls.win) { classifier("win") })
+    implementation(variantOf(libs.javafx.controls.mac) { classifier("mac") })
+    implementation(variantOf(libs.javafx.controls.linux) { classifier("linux") })
+    implementation(variantOf(libs.javafx.fxml.win) { classifier("win") })
+    implementation(variantOf(libs.javafx.fxml.mac) { classifier("mac") })
+    implementation(variantOf(libs.javafx.fxml.linux) { classifier("linux") })
+    implementation(variantOf(libs.javafx.graphics.win) { classifier("win") })
+    implementation(variantOf(libs.javafx.graphics.mac) { classifier("mac") })
+    implementation(variantOf(libs.javafx.graphics.linux) { classifier("linux") })
 
-    implementation(group = "org.openjfx", name = "javafx-base", version = javaFxVersion, classifier = "win")
-    implementation(group = "org.openjfx", name = "javafx-base", version = javaFxVersion, classifier = "mac")
-    implementation(group = "org.openjfx", name = "javafx-base", version = javaFxVersion, classifier = "linux")
-    implementation(group = "org.openjfx", name = "javafx-controls", version = javaFxVersion, classifier = "win")
-    implementation(group = "org.openjfx", name = "javafx-controls", version = javaFxVersion, classifier = "mac")
-    implementation(group = "org.openjfx", name = "javafx-controls", version = javaFxVersion, classifier = "linux")
-    implementation(group = "org.openjfx", name = "javafx-fxml", version = javaFxVersion, classifier = "win")
-    implementation(group = "org.openjfx", name = "javafx-fxml", version = javaFxVersion, classifier = "mac")
-    implementation(group = "org.openjfx", name = "javafx-fxml", version = javaFxVersion, classifier = "linux")
-    implementation(group = "org.openjfx", name = "javafx-graphics", version = javaFxVersion, classifier = "win")
-    implementation(group = "org.openjfx", name = "javafx-graphics", version = javaFxVersion, classifier = "mac")
-    implementation(group = "org.openjfx", name = "javafx-graphics", version = javaFxVersion, classifier = "linux")
-
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
-    testImplementation("org.testfx:testfx-core:4.0.16-alpha")
-    testImplementation("org.testfx:testfx-junit5:4.0.16-alpha")
-    testImplementation("org.testfx:openjfx-monocle:jdk-12.0.1+2")
-    testImplementation("org.mockito:mockito-core:2.1.0")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.testfx.core)
+    testImplementation(libs.testfx.junit5)
+    testImplementation(libs.testfx.monocle)
+    testImplementation(libs.mockito.core)
 
     implementation(files("lib/jfxrt.jar"))
 }
