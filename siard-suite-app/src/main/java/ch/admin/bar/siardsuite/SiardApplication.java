@@ -14,6 +14,16 @@ import java.util.Properties;
 @Slf4j
 public class SiardApplication extends Application {
 
+    private static SiardApplication instance;
+
+    public SiardApplication() {
+        instance = this;
+    }
+
+    public static SiardApplication getInstance() {
+        return instance;
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         log.info("Application started");
