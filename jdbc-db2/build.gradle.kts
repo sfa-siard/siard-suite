@@ -27,6 +27,7 @@ dependencies {
     testImplementation(testFixtures(project(":jdbc-base")))
 
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.testcontainers.junit)
     testImplementation(libs.testcontainers.db2)
 }

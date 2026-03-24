@@ -31,6 +31,7 @@ dependencies {
     testImplementation(libs.hamcrest.core)
     testImplementation(testFixtures(project(":jdbc-base")))
     testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.test {

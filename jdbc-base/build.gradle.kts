@@ -20,6 +20,7 @@ dependencies {
     testFixturesImplementation(libs.junit.jupiter.api)
     testFixturesImplementation(libs.junit.vintage.engine)
     testFixturesRuntimeOnly(libs.junit.jupiter.engine)
+    testFixturesRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.test {

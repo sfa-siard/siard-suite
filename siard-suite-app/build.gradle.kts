@@ -56,6 +56,7 @@ dependencies {
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.testfx.core)
     testImplementation(libs.testfx.junit5)
     testImplementation(libs.testfx.monocle)

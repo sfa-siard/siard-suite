@@ -29,7 +29,6 @@ woodstox-core = "4.1.2"
 
 # Testing
 junit-bom = "5.13.4"
-junit-vintage = "5.13.4"
 junit4 = "4.13.2"
 testcontainers = "1.21.4"
 hamcrest = "2.2"
