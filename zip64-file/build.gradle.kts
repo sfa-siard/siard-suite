@@ -9,7 +9,10 @@ plugins {
 description = "Zip64 File Library"
 
 dependencies {
-    implementation(project(":siard-utilities"))
+    api(project(":siard-utilities"))
+    
+    annotationProcessor(libs.lombok)
+    
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)

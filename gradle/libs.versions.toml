@@ -1,7 +1,8 @@
 [versions]
 # Plugins
 axion-release = "1.21.1"
-lombok = "8.14.2"
+lombok-plugin = "8.14.2"
+lombok = "1.18.38"
 beryx-runtime = "1.12.7"
 asciidoctor = "3.3.2"
 plantuml = "1.6.0"
@@ -66,6 +67,9 @@ commons-text = { module = "org.apache.commons:commons-text", version.ref = "comm
 
 # Apache Tika
 tika-core = { module = "org.apache.tika:tika-core", version.ref = "tika" }
+
+# Lombok
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 # Database Drivers
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
@@ -146,7 +150,7 @@ testfx-monocle = { module = "org.testfx:openjfx-monocle", version = "jdk-12.0.1+
 
 [plugins]
 axion-release = { id = "pl.allegro.tech.build.axion-release", version.ref = "axion-release" }
-lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
+lombok = { id = "io.freefair.lombok", version.ref = "lombok-plugin" }
 beryx-runtime = { id = "org.beryx.runtime", version.ref = "beryx-runtime" }
 asciidoctor-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor" }
 asciidoctor-pdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor" }
