@@ -16,7 +16,6 @@ dependencies {
 
     implementation(libs.antlr4.runtime)
 
-    implementation(libs.commons.lang)
     implementation(libs.commons.logging)
     implementation(libs.jackcess)
 

@@ -36,7 +36,7 @@ sourceSets {
 
 dependencies {
     implementation(libs.tika.core)
-    implementation(libs.commons.lang)
+
     implementation(libs.commons.logging)
     implementation(libs.logback.classic)
     implementation(libs.mysql.connector)
