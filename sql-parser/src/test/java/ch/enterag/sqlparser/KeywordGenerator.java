@@ -8,7 +8,7 @@ public class KeywordGenerator {
 
     private static final String ENUM_FILE_PATH = "src/main/java/ch/enterag/sqlparser/K.java";
     private static final String KEYWORD_FILE_PATH = "src/main/antlr/LexSql.g4";
-    private static final String[] RESERVER_WORDS = new String[]
+    private static final String[] RESERVED_WORDS = new String[]
             {
                     "A",
                     "ABS",
@@ -347,7 +347,7 @@ public class KeywordGenerator {
                     "YEAR",
                     "ZONE"
             };
-    private static final String[] NON_RESERVER_WORDS = new String[]
+    private static final String[] NON_RESERVED_WORDS = new String[]
             {
                     "ABSOLUTE",
                     "ADA",
@@ -718,9 +718,9 @@ public class KeywordGenerator {
         writeKeywordHeader(keywordWriter);
 
         Set<String> keywords = new HashSet<>();
-        writeKeywords(enumWriter, keywordWriter, RESERVER_WORDS, keywords, true, false);
+        writeKeywords(enumWriter, keywordWriter, RESERVED_WORDS, keywords, true, false);
         writeKeywordIdentifier(keywordWriter);
-        writeKeywords(enumWriter, keywordWriter, NON_RESERVER_WORDS, keywords, false, true);
+        writeKeywords(enumWriter, keywordWriter, NON_RESERVED_WORDS, keywords, false, true);
 
         writeKeywordFooter(keywordWriter);
         writeEnumFooter(enumWriter);
