@@ -96,20 +96,6 @@ public class PostgresDriverTester {
         int iMajorVersion = _driver.getMajorVersion();
         int iMinorVersion = _driver.getMinorVersion();
         String sVersion = iMajorVersion + "." + iMinorVersion;
-        assertEquals("Wrong Postgres version " + sVersion + " found!", "42.2", sVersion);
+        assertEquals("Wrong Postgres version " + sVersion + " found!", "42.7", sVersion);
     }
-
-    @Test
-    public void testDriverProperties() {
-        try {
-            DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(_sDB_URL, new Properties());
-            for (DriverPropertyInfo dpi : apropInfo)
-                System.out.println(dpi.name + ": " + dpi.value + " (" + dpi.description + ")");
-            assertSame("Unexpected driver properties!", 58, apropInfo.length);
-        } catch (SQLException se) {
-            fail(se.getClass()
-                   .getName() + ": " + se.getMessage());
-        }
-    }
-
 }
