@@ -25,6 +25,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.compileJava {
+    dependsOn(tasks.generateGrammarSource)
+}
+
 tasks.register<JavaExec>("keywordgenerator") {
     mainClass.set("ch.enterag.sqlparser.KeywordGenerator")
     classpath = sourceSets["test"].runtimeClasspath

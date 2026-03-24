@@ -5,6 +5,7 @@ lombok = "8.14.2"
 beryx-runtime = "1.12.7"
 asciidoctor = "3.3.2"
 plantuml = "1.6.0"
+dependency-analysis = "3.6.1"
 
 # Core Libraries
 antlr = "4.5.2-1"
@@ -150,3 +151,4 @@ beryx-runtime = { id = "org.beryx.runtime", version.ref = "beryx-runtime" }
 asciidoctor-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor" }
 asciidoctor-pdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor" }
 plantuml = { id = "com.cosminpolifronie.gradle.plantuml", version.ref = "plantuml" }
+dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependency-analysis" }

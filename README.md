@@ -109,6 +109,41 @@ Examples:
 
 **Note:** all tests require Docker to be running (uses [Testcontainers](https://www.testcontainers.org/)).
 
+### Dependency Analysis
+
+The project uses the [Dependency Analysis Gradle Plugin](https://github.com/autonomousapps/dependency-analysis-gradle-plugin) to detect dependency issues.
+
+**Analyze all dependencies:**
+```shell
+./gradlew buildHealth
+```
+
+This generates a report showing:
+- **Unused dependencies**: Dependencies declared but not actually used in code
+- **Used transitive dependencies**: Dependencies used in code but not explicitly declared
+- **Misused dependencies**: Dependencies that should use a different configuration (e.g., `api` instead of `implementation`)
+
+**View the report:**
+```shell
+# Console output shows summary
+./gradlew buildHealth
+
+# Detailed HTML report
+open build/reports/dependency-analysis/build-health-report.html
+```
+
+**Fix issues automatically (where possible):**
+```shell
+./gradlew buildHealth --auto-correct
+```
+
+**Analyze a specific module:**
+```shell
+./gradlew :module-name:buildHealth
+```
+
+**Note:** The plugin may suggest removing dependencies that are actually needed as transitive dependencies. Always verify suggestions before applying them.
+
 ### Creating Platform-Specific Packages
 
 **Create application image:**
