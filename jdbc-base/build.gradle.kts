@@ -5,7 +5,7 @@ plugins {
     `java-library`
     `java-test-fixtures`
     `maven-publish`
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.lombok)
 }
 
 description = "Base JDBC Wrapper"
@@ -16,9 +16,11 @@ dependencies {
 
     testFixturesImplementation(project(":siard-utilities"))
     testFixturesImplementation(project(":sql-parser"))
-    testFixturesImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    testFixturesImplementation("org.junit.vintage:junit-vintage-engine")
-    testFixturesRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+    testFixturesImplementation(platform(libs.junit.bom))
+    testFixturesImplementation(libs.junit.jupiter.api)
+    testFixturesImplementation(libs.junit.vintage.engine)
+    testFixturesRuntimeOnly(libs.junit.jupiter.engine)
+    testFixturesRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.test {

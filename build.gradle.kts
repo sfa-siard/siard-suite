@@ -1,5 +1,6 @@
 plugins {
-    id("pl.allegro.tech.build.axion-release") version "1.14.3"
+    alias(libs.plugins.axion.release)
+    alias(libs.plugins.dependency.analysis)
 }
 
 group = "ch.admin.bar"
@@ -23,5 +24,10 @@ subprojects {
     
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
+    }
+    
+    // Apply dependency-analysis to all modules except sql-parser (ANTLR issues)
+    if (project.name != "sql-parser") {
+        apply(plugin = "com.autonomousapps.dependency-analysis")
     }
 }

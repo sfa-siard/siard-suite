@@ -3,24 +3,26 @@ import java.util.*
 
 plugins {
     `java-library`
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.lombok)
 }
 
 description = "Postgres JDBC Wrapper"
 
 dependencies {
-    implementation("org.antlr:antlr4-runtime:4.5.2")
-    implementation("com.googlecode.json-simple:json-simple:1.1.1")
-    implementation("org.postgresql:postgresql:42.2.5")
+    implementation(libs.antlr4.runtime)
+    implementation(libs.json.simple)
+    implementation(libs.postgresql)
     implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
     implementation(project(":jdbc-base"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.testcontainers:testcontainers:1.21.4")
-    testImplementation("org.testcontainers:postgresql:1.21.4")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.vintage.engine)
+    testImplementation(libs.junit4)
+    testImplementation(libs.testcontainers)
+    testImplementation(libs.testcontainers.postgresql)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(testFixtures(project(":jdbc-base")))
 }
 

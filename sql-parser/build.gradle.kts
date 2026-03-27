@@ -9,18 +9,24 @@ plugins {
 description = "SQL Parser"
 
 dependencies {
-    antlr("org.antlr:antlr4:4.5.2-1")
-    antlr("org.antlr:antlr4-runtime:4.5.2-1")
-    antlr("org.antlr:antlr4-master:4.5.2-1")
-    implementation("com.microsoft.sqlserver:mssql-jdbc:12.2.0.jre8")
+    antlr(libs.antlr4)
+    antlr(libs.antlr4.runtime)
+    antlr(libs.antlr4.master)
+    implementation(libs.mssql.jdbc)
     implementation(project(":siard-utilities"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.vintage.engine)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.compileJava {
+    dependsOn(tasks.generateGrammarSource)
 }
 
 tasks.register<JavaExec>("keywordgenerator") {

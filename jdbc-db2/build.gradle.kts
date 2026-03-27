@@ -4,7 +4,7 @@ import java.util.*
 plugins {
     `java-library`
     `java-test-fixtures`
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.lombok)
 }
 
 description = "DB2 JDBC Wrapper"
@@ -13,21 +13,23 @@ dependencies {
 
     implementation(fileTree(mapOf("dir" to "lib", "include" to listOf("*.jar"))))
 
-    implementation("org.antlr:antlr4-runtime:4.5.2")
-    implementation("com.googlecode.json-simple:json-simple:1.1.1")
-    implementation("org.postgresql:postgresql:42.2.5")
+    implementation(libs.antlr4.runtime)
+    implementation(libs.json.simple)
+    implementation(libs.postgresql)
     implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
     implementation(project(":jdbc-base"))
-    implementation("com.mysitex.sx.lib:db2jcc_license_cu:1.1")
+    implementation(libs.db2.license)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.vintage.engine)
     testImplementation(testFixtures(project(":jdbc-base")))
 
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
-    testImplementation("org.testcontainers:junit-jupiter:1.21.4")
-    testImplementation("org.testcontainers:db2:1.21.4")
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.testcontainers.junit)
+    testImplementation(libs.testcontainers.db2)
 }
 
 tasks.test {

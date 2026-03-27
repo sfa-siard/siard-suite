@@ -3,7 +3,7 @@ import java.util.*
 
 plugins {
     `java-library`
-    id("io.freefair.lombok") version "6.5.0"
+    alias(libs.plugins.lombok)
 }
 
 description = "MS SQL Server JDBC Wrapper"
@@ -17,20 +17,21 @@ repositories {
 dependencies {
     implementation(fileTree("lib") { include("*.jar") })
 
-    implementation("org.antlr:antlr4-runtime:4.5.2")
+    implementation(libs.antlr4.runtime)
     implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))
     implementation(project(":jdbc-base"))
 
-    //test dependencies
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testImplementation("org.junit.vintage:junit-vintage-engine")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.testcontainers:testcontainers:1.21.4")
-    testImplementation("org.testcontainers:mssqlserver:1.21.4")
-    testImplementation("org.hamcrest:hamcrest-core:1.3")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.vintage.engine)
+    testImplementation(libs.junit4)
+    testImplementation(libs.testcontainers)
+    testImplementation(libs.testcontainers.mssql)
+    testImplementation(libs.hamcrest.core)
     testImplementation(testFixtures(project(":jdbc-base")))
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.test {

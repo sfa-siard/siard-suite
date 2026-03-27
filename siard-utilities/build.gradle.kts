@@ -3,17 +3,20 @@ import java.util.*
 
 plugins {
     `java-library`
-    id("io.freefair.lombok") version "8.14.2"
+    alias(libs.plugins.lombok)
 }
 
 description = "SIARD Utilities"
 
 dependencies {
-    implementation("org.apache.tika:tika-core:3.2.3")
+    implementation(libs.tika.core)
 
-    testImplementation(platform("org.junit:junit-bom:5.13.4"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    annotationProcessor(libs.lombok)
+
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.test {
