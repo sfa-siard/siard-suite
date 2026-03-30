@@ -61,8 +61,6 @@ dependencies {
     testImplementation(libs.testfx.junit5)
     testImplementation(libs.testfx.monocle)
     testImplementation(libs.mockito.core)
-
-    implementation(files("lib/jfxrt.jar"))
 }
 
 tasks.withType<JavaExec> {

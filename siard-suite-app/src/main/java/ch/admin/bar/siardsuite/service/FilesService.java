@@ -4,7 +4,6 @@ import ch.admin.bar.siardsuite.SiardApplication;
 import ch.admin.bar.siardsuite.util.I18n;
 import ch.admin.bar.siardsuite.util.OS;
 import ch.admin.bar.siardsuite.util.ResourcesResolver;
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -65,9 +64,12 @@ public class FilesService {
             }
         }
 
-        val hostServices = HostServicesFactory.getInstance(new SiardApplication());
-        hostServices.showDocument(file.toURI()
-                                      .toString());
+        val application = SiardApplication.getInstance();
+        if (application != null) {
+            application.getHostServices().showDocument(file.toURI().toString());
+        } else {
+            log.error("Cannot open file: SiardApplication instance not available");
+        }
     }
 
     /**
