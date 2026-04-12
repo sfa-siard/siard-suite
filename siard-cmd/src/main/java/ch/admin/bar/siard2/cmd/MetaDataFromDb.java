@@ -690,6 +690,7 @@ public class MetaDataFromDb extends MetaDataBase {
     private void getColumnData(ResultSet rs, MetaColumn mc) throws IOException, SQLException {
         int iDataType = rs.getInt("DATA_TYPE");
         String sTypeName = rs.getString("TYPE_NAME");
+        LOG.debug("JDBC Type: " + iDataType + " (" + getJdbcTypeName(iDataType) + "), DB Type: " + sTypeName);
         long lColumnSize = rs.getLong("COLUMN_SIZE");
         int iDecimalDigits = rs.getInt("DECIMAL_DIGITS");
         MetaSchema ms;
@@ -751,6 +752,19 @@ public class MetaDataFromDb extends MetaDataBase {
         }
         int iOrdinalPosition = rs.getInt("ORDINAL_POSITION");
         if (iOrdinalPosition != mc.getPosition()) throw new IOException("Invalid column position found!");
+    }
+
+    private String getJdbcTypeName(int type) {
+        try {
+            for (java.lang.reflect.Field field : java.sql.Types.class.getFields()) {
+                if ((Integer) field.get(null) == type) {
+                    return field.getName();
+                }
+            }
+        } catch (Exception e) {
+            return "UNKNOWN";
+        }
+        return "UNKNOWN";
     }
 
     /**
