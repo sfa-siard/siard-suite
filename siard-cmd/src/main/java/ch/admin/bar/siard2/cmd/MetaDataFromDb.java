@@ -690,9 +690,10 @@ public class MetaDataFromDb extends MetaDataBase {
     private void getColumnData(ResultSet rs, MetaColumn mc) throws IOException, SQLException {
         int iDataType = rs.getInt("DATA_TYPE");
         String sTypeName = rs.getString("TYPE_NAME");
-        LOG.debug("JDBC Type: " + iDataType + " (" + getJdbcTypeName(iDataType) + "), DB Type: " + sTypeName);
         long lColumnSize = rs.getLong("COLUMN_SIZE");
         int iDecimalDigits = rs.getInt("DECIMAL_DIGITS");
+        LOG.debug("JDBC Type: " + iDataType + " (" + getJdbcTypeName(iDataType) + "), Column Size: " + lColumnSize + ", Decimal Digits: " + iDecimalDigits);
+        LOG.debug("TypeOriginal: " + sTypeName);
         MetaSchema ms;
         QualifiedId qiParent;
         if (mc.getParentMetaTable() != null) {
@@ -711,6 +712,7 @@ public class MetaDataFromDb extends MetaDataBase {
             if (iDataType != Types.OTHER) mc.setPreType(iDataType, lColumnSize, iDecimalDigits);
             else mc.setType(sTypeName);
             mc.setTypeOriginal(sTypeName);
+            LOG.debug("SQL:1999 Type: " + mc.getType());
         } else if (iDataType == Types.ARRAY) {
             /* parse array constructor "<base> ARRAY[<n>]" */
             Matcher m = _patARRAY_CONSTRUCTOR.matcher(sTypeName);
@@ -756,15 +758,10 @@ public class MetaDataFromDb extends MetaDataBase {
 
     private String getJdbcTypeName(int type) {
         try {
-            for (java.lang.reflect.Field field : java.sql.Types.class.getFields()) {
-                if ((Integer) field.get(null) == type) {
-                    return field.getName();
-                }
-            }
-        } catch (Exception e) {
+            return java.sql.JDBCType.valueOf(type).getName();
+        } catch (IllegalArgumentException e) {
             return "UNKNOWN";
         }
-        return "UNKNOWN";
     }
 
     /**
