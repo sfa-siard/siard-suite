@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.ZipException;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -33,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author Hartwig Thomas
  */
-public class Zip64FileTester {
+public class Zip64FileTest {
     /**
      * buffer size for I/O
      */
@@ -82,10 +81,10 @@ public class Zip64FileTester {
     /**
      * zip executables
      */
-    private static ZipProperties _zp = ZipProperties.getInstance();
-    private static String _sPkZipC = _zp.getPkzipc();
-    private static String _sZip30 = _zp.getZip30();
-    private static String _sUnzip60 = _zp.getUnzip60();
+    private static final ZipProperties _zp = ZipProperties.getInstance();
+    private static final String _sPkZipC = _zp.getPkzipc();
+    private static final String _sZip30 = _zp.getZip30();
+    private static final String _sUnzip60 = _zp.getUnzip60();
 
     /**
      * append a file to the ZIP64 file.
@@ -105,12 +104,6 @@ public class Zip64FileTester {
                 eos.write(buffer, 0, iRead);
             fis.close();
             eos.close();
-        } catch (ZipException ze) {
-            System.out.println(ze.getClass()
-                                 .getName() + ": " + ze.getMessage());
-        } catch (FileNotFoundException fnfe) {
-            System.out.println(fnfe.getClass()
-                                   .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             System.out.println(ie.getClass()
                                  .getName() + ": " + ie.getMessage());
@@ -120,19 +113,12 @@ public class Zip64FileTester {
     /**
      * append a directory to the ZIP64 file.
      *
-     * @param zf         ZIP64 file.
-     * @param sDirectory name of the directory file entry in ZIP64 file.
+     * @param zf ZIP64 file.
      */
-    private void appendDirectory(Zip64File zf, String sDirectory) {
+    private void appendDirectory(Zip64File zf) {
         try {
-            EntryOutputStream eos = zf.openEntryOutputStream(sDirectory, FileEntry.iMETHOD_STORED, null);
+            EntryOutputStream eos = zf.openEntryOutputStream("many/", FileEntry.iMETHOD_STORED, null);
             eos.close();
-        } catch (ZipException ze) {
-            System.out.println(ze.getClass()
-                                 .getName() + ": " + ze.getMessage());
-        } catch (FileNotFoundException fnfe) {
-            System.out.println(fnfe.getClass()
-                                   .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             System.out.println(ie.getClass()
                                  .getName() + ": " + ie.getMessage());
@@ -158,7 +144,7 @@ public class Zip64FileTester {
             File fileLargeOriginal = new File(fileTemp.getAbsolutePath() + File.separator + "large.txt");
             /* test zip file */
             System.out.println("Create " + m_sTestZipFile);
-            StopWatch sw = StopWatch.getInstance();
+            StopWatch sw = new StopWatch();
             sw.start();
             Zip64File zf = new Zip64File(m_sTestZipFile);
             /* add moderate */
@@ -171,7 +157,7 @@ public class Zip64FileTester {
             System.out.println("add " + fileLargeOriginal.getAbsolutePath());
             appendFile(zf, "large.txt", fileLargeOriginal, iMethod);
             /* add directory many */
-            appendDirectory(zf, "many/");
+            appendDirectory(zf);
             /* add all small files */
             for (int iSmall = 0; iSmall < 0x00014000; iSmall++) {
                 DecimalFormat df = new DecimalFormat("00000");
@@ -193,7 +179,7 @@ public class Zip64FileTester {
 
     private static void zipPkZip(File fileFolderUnzip, File fileFileZip) {
         System.out.println("(pkzipc) zip all files in " + fileFolderUnzip.getAbsolutePath() + " to " + fileFileZip.getAbsolutePath());
-        StopWatch sw = StopWatch.getInstance();
+        StopWatch sw = new StopWatch();
         sw.start();
         /* use pkzipc to create zip file in zip directory */
         String[] asProg = new String[]
@@ -212,7 +198,7 @@ public class Zip64FileTester {
         int iExitCode = exec.getResult();
         if (iExitCode != 0) {
             System.err.println(exec.getStdErr());
-            fail(_sPkZipC + " exit code: " + String.valueOf(iExitCode));
+            fail(_sPkZipC + " exit code: " + iExitCode);
         }
         sw.stop();
         System.out.println("pkzipc finished in " + sw.formatMs() + " ms");
@@ -225,7 +211,7 @@ public class Zip64FileTester {
 
     private static void zipInfoZip(File fileFolderUnzip, File fileFileZip) {
         System.out.println("(Info-Zip) zip all files in " + fileFolderUnzip.getAbsolutePath() + " to " + fileFileZip.getAbsolutePath());
-        StopWatch sw = StopWatch.getInstance();
+        StopWatch sw = new StopWatch();
         sw.start();
         /* use Info-ZIP zip.exe to create zip file in zip directory */
         String[] asProg = new String[]
@@ -247,7 +233,7 @@ public class Zip64FileTester {
         int iExitCode = exec.getResult();
         if (iExitCode != 0) {
             System.err.println(exec.getStdErr());
-            fail(_sZip30 + " exit code: " + String.valueOf(iExitCode));
+            fail(_sZip30 + " exit code: " + iExitCode);
         }
         sw.stop();
         System.out.println("zip finished in " + sw.formatMs() + " ms");
@@ -270,7 +256,7 @@ public class Zip64FileTester {
                         "-silent=normal",
                         m_sTestZipFile,
                         sEntryName,
-                        fileExtract.getAbsolutePath() + File.separator + ""
+                        fileExtract.getAbsolutePath() + File.separator
                 };
         Execute exec = Execute.execute(asProg);
         System.out.println(exec.getStdOut());
@@ -340,9 +326,11 @@ public class Zip64FileTester {
     private boolean equalBuffers(byte[] buffer1, int iSize1, byte[] buffer2, int iSize2) {
         boolean bEqual = true;
         if (iSize1 == iSize2) {
-            for (int i = 0; bEqual && (i < iSize1); i++)
-                if (buffer1[i] != buffer2[i])
+            for (int i = 0; i < iSize1; i++)
+                if (buffer1[i] != buffer2[i]) {
                     bEqual = false;
+                    break;
+                }
         } else
             bEqual = false;
 
@@ -375,10 +363,6 @@ public class Zip64FileTester {
             }
             fis1.close();
             fis2.close();
-        } catch (FileNotFoundException fnfe) {
-            bEqual = false;
-            System.out.println(fnfe.getClass()
-                                   .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             bEqual = false;
             System.out.println(ie.getClass()
@@ -417,10 +401,6 @@ public class Zip64FileTester {
                     }
                     raf1.close();
                     raf2.close();
-                } catch (FileNotFoundException fnfe) {
-                    bEqual = false;
-                    System.out.println(fnfe.getClass()
-                                           .getName() + ": " + fnfe.getMessage());
                 } catch (IOException ie) {
                     bEqual = false;
                     System.out.println(ie.getClass()
@@ -482,7 +462,7 @@ public class Zip64FileTester {
             /* fill the buffer with randomly chosen prepared words */
             for (int iPos = 0; iPos < buffer.length; ) {
                 int iWord = (int) Math.floor(256 * Math.random());
-                if (Math.floor(iPos / 76) != Math.floor((iPos + abufWord[iWord].length) / 76)) {
+                if ((double) (iPos / 76) != (double) ((iPos + abufWord[iWord].length) / 76)) {
                     buffer[iPos] = 0x0A;
                     iPos++;
                 }
@@ -574,15 +554,13 @@ public class Zip64FileTester {
                         createSmall(fileSmall);
                 }
             }
-        } catch (FileNotFoundException fnfe) {
-            fail(EU.getExceptionMessage(fnfe));
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         File tempDir = new File(sTEMP_DIRECTORY);
         File extractDir = new File(sEXTRACT_DIRECTORY);
         tempDir.mkdirs();
@@ -613,7 +591,7 @@ public class Zip64FileTester {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
     }
 
     /**
@@ -626,9 +604,6 @@ public class Zip64FileTester {
         try {
             Zip64File zf = new Zip64File(m_sExtZipFile, true);
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -671,9 +646,6 @@ public class Zip64FileTester {
                 fileTest.delete();
             Zip64File zf = new Zip64File(m_sTestZipFile);
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -691,9 +663,6 @@ public class Zip64FileTester {
             File fileZip = new File(m_sExtZipFile);
             Zip64File zf = new Zip64File(fileZip);
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -713,9 +682,6 @@ public class Zip64FileTester {
                 fileTest.delete();
             Zip64File zf = new Zip64File(m_sTestZipFile);
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -736,9 +702,6 @@ public class Zip64FileTester {
             if (!sZIP_COMMENT.equals(sComment))
                 fail("Invalid ZIP comment found: " + sComment + "!");
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -763,9 +726,6 @@ public class Zip64FileTester {
             if (!sComment.equals(zf.getComment()))
                 fail("ZIP comment could not be set!");
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -784,11 +744,8 @@ public class Zip64FileTester {
             /* get the number of file entries */
             int iFileEntries = zf.getFileEntries();
             if (iFileEntries != 0x00014004)
-                fail("Invalid number of file entries found: " + String.valueOf(iFileEntries) + "!");
+                fail("Invalid number of file entries found: " + iFileEntries + "!");
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -810,13 +767,10 @@ public class Zip64FileTester {
                 long lSize = iBUFFER_SIZE;
                 lSize *= iMODERATE_BUFFERS;
                 if (feMedium.getSize() != lSize)
-                    fail("Invalid size for medium.txt: " + String.valueOf(feMedium.getSize()));
+                    fail("Invalid size for medium.txt: " + feMedium.getSize());
             } else
                 fail("file entry medium.txt not found!");
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -835,12 +789,9 @@ public class Zip64FileTester {
             /* get the file entries */
             List<FileEntry> listFileEntries = zf.getListFileEntries();
             for (FileEntry fe : listFileEntries) {
-                System.out.println(fe.getName() + " " + String.valueOf(fe.getSize()));
+                System.out.println(fe.getName() + " " + fe.getSize());
             }
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -877,9 +828,6 @@ public class Zip64FileTester {
                 }
             }
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -963,9 +911,6 @@ public class Zip64FileTester {
                     }
                 }
             }
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());
@@ -1113,7 +1058,6 @@ public class Zip64FileTester {
         File fileExtract = new File(sEXTRACT_DIRECTORY);
         /* small files */
         File fileSmall12344 = new File(fileExtract.getAbsolutePath() + File.separator + "many" + File.separator + "small12344.txt");
-        File fileSmall12345 = new File(fileExtract.getAbsolutePath() + File.separator + "many" + File.separator + "small12345.txt");
         File fileSmall12346 = new File(fileExtract.getAbsolutePath() + File.separator + "many" + File.separator + "small12346.txt");
         /* temp directory */
         File fileTemp = new File(sTEMP_DIRECTORY);
@@ -1140,9 +1084,6 @@ public class Zip64FileTester {
                 fail("extracted compressed small12346 file is not equal to its original!");
             if (nonExistentDel != null)
                 fail("deleting a non-existent file should return null!");
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());

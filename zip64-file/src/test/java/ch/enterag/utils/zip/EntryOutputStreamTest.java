@@ -25,7 +25,6 @@ it is possible to negotiate a different license with the copyright holder.
 ======================================================================*/
 package ch.enterag.utils.zip;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -39,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /** Tests EntryOutputStream.
  @author Hartwig Thomas
  */
-public class EntryOutputStreamTester {
+public class EntryOutputStreamTest {
     /** buffer size for I/O */
     private final static int iBUFFER_SIZE = 8192;
     /** zip file */
@@ -54,17 +53,11 @@ public class EntryOutputStreamTester {
      @see junit.framework.TestCase#setUp()
      */
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         File fileZip = tempDir.resolve("moderate.zip").toFile();
         m_sZipFile = fileZip.getAbsolutePath();
     }
 
-    /* (non-Javadoc)
-     @see junit.framework.TestCase#tearDown()
-     */
-    @AfterEach
-    public void tearDown() throws Exception {
-    }
 
     @Test
     public void testWriteRead() {
@@ -91,9 +84,6 @@ public class EntryOutputStreamTester {
             eis.close();
 
             zf.close();
-        } catch (FileNotFoundException fnfe) {
-            fail(fnfe.getClass()
-                     .getName() + ": " + fnfe.getMessage());
         } catch (IOException ie) {
             fail(ie.getClass()
                    .getName() + ": " + ie.getMessage());

@@ -48,7 +48,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  @author Hartwig Thomas
  */
 @Disabled
-public class zip64Tester {
+public class Zip64Tester {
     /** small file size for test file */
     private final static int iSMALL_SIZE = 12345;
     /** temp directory */
