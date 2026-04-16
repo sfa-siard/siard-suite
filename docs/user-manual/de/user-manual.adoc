@@ -261,6 +261,16 @@ Der Datenbankbenutzer, dessen Anmeldedaten für den Upload verwendet werden, mus
 
 Die Konvertierung von TIMEs und TIMESTAMPs in der Datenbank hängt von der lokalen Zeitzone ab. Die UTC-Zeit 14:30 im SIARD-Archiv wird beim Upload in Zürich als lokale Zeit 15:30 in die Datenbank geladen - im Winter. Um diese Konvertierung zu unterdrücken, muss SiardToDb mit der Option `-Duser.timezone=GMT` gestartet werden, was SIARD dazu veranlasst, alle Datenbankzeiten als UTC-Zeiten zu interpretieren.
 
+=== Verschlüsselte Verbindung
+
+==== MS SQL Server
+
+* Mit Java 17 neue Anforderungen, insbesondere wird TLS 1.2 nicht mehr unterstützt.
+** TODO: falls nötig für Rückwärtskompatibilität beschreiben, wie für die JVM TLS 1.0 wieder aktiviert werden kann
+* Wenn Verschlüsselung verwendet wird.
+** Parameter `encrypt=true` setzen in der jdbc-url. Dann musste aber wohl das CA-Zertifikat im Truststore sein. Falls das nicht klappt, dann auch `trustServerCertificate=true` setzen, dann sollte die Verbindung klappen
+
+
 == Einschränkungen
 
 Das SIARD-Format unterliegt folgenden Einschränkungen
