@@ -30,8 +30,10 @@ import ch.enterag.utils.lang.Execute;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -53,7 +55,8 @@ public class EntryInputStreamTester {
     /** zip file produced by pkzipc */
     private String m_sZipFile = null;
     /** temp directory */
-    private final static String sTEMP_DIRECTORY = "tmp" + File.separator + "test";
+    @TempDir
+    Path tempDir;
 
 
     /** create file of moderate size.
@@ -173,21 +176,12 @@ public class EntryInputStreamTester {
    */
     @BeforeEach
     public void setUp() throws Exception {
-        /* create a file of moderate length in Temp and zip it */
-        /* temp directory */
-        File fileTemp = new File(sTEMP_DIRECTORY);
-        if (!fileTemp.exists())
-            fileTemp.mkdirs();
+        File fileTemp = tempDir.toFile();
         /* 2.a) write more than 65 KB random file */
-        String sModerateFile = fileTemp.getAbsolutePath() + File.separator + "moderate.txt";
-        File fileModerate = new File(sModerateFile);
-        if (fileModerate.exists())
-            fileModerate.delete();
+        File fileModerate = tempDir.resolve("moderate.txt").toFile();
         createModerate(fileModerate);
         /* 5. zip everything using pkzipc */
-        File fileZip = new File("tmp" + File.separator + "test.zip");
-        if (fileZip.exists())
-            fileZip.delete();
+        File fileZip = tempDir.resolve("test.zip").toFile();
         System.out.println("creating " + fileZip.getAbsolutePath());
         if (_sPkZipC != null)
             zipPkZip(fileTemp, fileZip);

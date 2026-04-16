@@ -34,8 +34,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.text.*;
 import java.util.Date;
 
@@ -49,28 +51,29 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class zip64Tester {
     /** small file size for test file */
     private final static int iSMALL_SIZE = 12345;
-    /** temp location */
-    private final static String sTEMP_LOCATION = "tmp";
+    /** temp directory */
+    @TempDir
+    Path tempDir;
     /** directory for unzipped files */
-    private final static String sFOLDER_UNZIP = sTEMP_LOCATION + "/unzip64";
+    private String sFOLDER_UNZIP;
     /** empty folder */
-    private final static String sFOLDER_EMPTY = sFOLDER_UNZIP + "/empty";
+    private String sFOLDER_EMPTY;
     /** full folder */
-    private final static String sFOLDER_FULL = sFOLDER_UNZIP + "/full";
+    private String sFOLDER_FULL;
     /** empty file */
-    private final static String sFILE_EMPTY = sFOLDER_FULL + "/empty.txt";
+    private String sFILE_EMPTY;
     /** full file */
-    private final static String sFILE_FULL = sFOLDER_FULL + "/full.txt";
+    private String sFILE_FULL;
     /** directory for zipped files */
-    private final static String sFOLDER_ZIP = sTEMP_LOCATION + "/zip64";
+    private String sFOLDER_ZIP;
     /** zip file */
-    private final static String sFILE_ZIP = sFOLDER_ZIP + "/test.zip";
+    private String sFILE_ZIP;
     /** directory for test files */
-    private final static String sFOLDER_TEST = sTEMP_LOCATION + "/test";
+    private String sFOLDER_TEST;
     /** test zip file */
-    private final static String sFILE_TEST = sFOLDER_TEST + "/test.zip";
+    private String sFILE_TEST;
     /** list file */
-    private final static String sFILE_LIST = sTEMP_LOCATION + "/list.txt";
+    private String sFILE_LIST;
     /** global file comment */
     private final static String sZIP_COMMENT = "a global ZIP file comment";
     /** buffer size */
@@ -290,6 +293,18 @@ public class zip64Tester {
     @BeforeEach
     public void setUp()
             throws IOException {
+        /* Initialize all paths */
+        sFOLDER_UNZIP = tempDir.resolve("unzip64").toString();
+        sFOLDER_EMPTY = sFOLDER_UNZIP + "/empty";
+        sFOLDER_FULL = sFOLDER_UNZIP + "/full";
+        sFILE_EMPTY = sFOLDER_FULL + "/empty.txt";
+        sFILE_FULL = sFOLDER_FULL + "/full.txt";
+        sFOLDER_ZIP = tempDir.resolve("zip64").toString();
+        sFILE_ZIP = sFOLDER_ZIP + "/test.zip";
+        sFOLDER_TEST = tempDir.resolve("test").toString();
+        sFILE_TEST = sFOLDER_TEST + "/test.zip";
+        sFILE_LIST = tempDir.resolve("list.txt").toString();
+        
         /* create two folders and two test files in a zip folder using pkzipc */
         File fileFolderUnzip = new File(sFOLDER_UNZIP);
         if (deleteAll(fileFolderUnzip))
@@ -355,12 +370,6 @@ public class zip64Tester {
     @AfterEach
     public void tearDown()
             throws IOException {
-        /***
-         File fileFolderUnzip = new File(sFOLDER_UNZIP);
-         deleteAll(fileFolderUnzip);
-         File fileFolderZip = new File(sFOLDER_ZIP);
-         deleteAll(fileFolderZip);
-         ***/
     }
 
     /**

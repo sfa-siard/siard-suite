@@ -17,8 +17,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
@@ -65,17 +67,18 @@ public class Zip64FileTester {
      */
     private final static String sTESTFILES_DIRECTORY = "src/test/resources";
     /**
-     * temp location with lots of free space which does not need to be backuped
+     * temp directory for test files
      */
-    private final static String sTEMP_LOCATION = "tmp";
+    @TempDir
+    static Path staticTempDir;
     /**
      * temp directory
      */
-    private final static String sTEMP_DIRECTORY = sTEMP_LOCATION + File.separator + "Temp";
+    private static String sTEMP_DIRECTORY;
     /**
      * extract directory
      */
-    private final static String sEXTRACT_DIRECTORY = sTEMP_LOCATION + File.separator + "Extract";
+    private static String sEXTRACT_DIRECTORY;
     /**
      * zip executables
      */
@@ -541,9 +544,10 @@ public class Zip64FileTester {
     @BeforeAll
     public static void setupClass() {
         try {
+            sTEMP_DIRECTORY = staticTempDir.resolve("Temp").toString();
+            sEXTRACT_DIRECTORY = staticTempDir.resolve("Extract").toString();
             File fileTemp = new File(sTEMP_DIRECTORY);
-            if (!fileTemp.exists())
-                fileTemp.mkdirs();
+            fileTemp.mkdirs();
             String sLargeFile = fileTemp.getAbsolutePath() + File.separator + "large.txt";
             File fileLarge = new File(sLargeFile);
             if (!fileLarge.exists())
@@ -584,7 +588,7 @@ public class Zip64FileTester {
         tempDir.mkdirs();
         extractDir.mkdirs();
 
-        File externalZipFile = new File(tempDir.getParent(), "exttest.zip");
+        File externalZipFile = staticTempDir.resolve("exttest.zip").toFile();
         if (!externalZipFile.exists()) {
             System.out.println("zipping everything");
             if (_sPkZipC != null) {
@@ -595,8 +599,8 @@ public class Zip64FileTester {
         }
         m_sExtZipFile = externalZipFile.getAbsolutePath();
 
-        File testZipFile = new File(tempDir.getParent(), "test.zip");
-        File moderateZipFile = new File(tempDir.getParent(), "moderate.zip");
+        File testZipFile = staticTempDir.resolve("test.zip").toFile();
+        File moderateZipFile = staticTempDir.resolve("moderate.zip").toFile();
 
         if (testZipFile.exists()) {
             testZipFile.delete();
@@ -1070,8 +1074,7 @@ public class Zip64FileTester {
         /* moderate zip file */
         try {
             File fileTemp = new File(sTEMP_DIRECTORY);
-            File fileZip = new File(fileTemp.getParentFile()
-                                            .getAbsolutePath() + File.separator + "moderate.zip");
+            File fileZip = staticTempDir.resolve("moderate.zip").toFile();
 
             Zip64File zf = new Zip64File(fileZip);
             byte[] buf = new byte[4096];

@@ -28,8 +28,10 @@ package ch.enterag.utils.zip;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -45,25 +47,21 @@ public class EntryOutputStreamTester {
     /** test files directory */
     private final static String sTESTFILES_DIRECTORY = "src/test/resources";
     /** temp directory */
-    private final static String sTEMP_DIRECTORY = "tmp";
+    @TempDir
+    Path tempDir;
 
-  /* (non-Javadoc)
-   @see junit.framework.TestCase#setUp()
-   */
+    /* (non-Javadoc)
+     @see junit.framework.TestCase#setUp()
+     */
     @BeforeEach
     public void setUp() throws Exception {
-        /* create a file of moderate length in Temp and zip it */
-        /* temp directory */
-        File fileTemp = new File(sTEMP_DIRECTORY);
-        File fileZip = new File(fileTemp.getAbsolutePath() + File.separator + "moderate.zip");
-        if (fileZip.exists())
-            fileZip.delete();
+        File fileZip = tempDir.resolve("moderate.zip").toFile();
         m_sZipFile = fileZip.getAbsolutePath();
     }
 
-  /* (non-Javadoc)
-   @see junit.framework.TestCase#tearDown()
-   */
+    /* (non-Javadoc)
+     @see junit.framework.TestCase#tearDown()
+     */
     @AfterEach
     public void tearDown() throws Exception {
     }
@@ -86,7 +84,7 @@ public class EntryOutputStreamTester {
 
             /* read moderate file from ZIP */
             EntryInputStream eis = zf.openEntryInputStream("moderate.txt");
-            FileOutputStream fos = new FileOutputStream(sTEMP_DIRECTORY + File.separator + "moderate.txt");
+            FileOutputStream fos = new FileOutputStream(tempDir.resolve("moderate.txt").toFile());
             for (int iRead = eis.read(buf); iRead != -1; iRead = eis.read(buf))
                 fos.write(buf, 0, iRead);
             fos.close();
