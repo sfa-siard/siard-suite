@@ -18,7 +18,7 @@ tika = "3.2.3"
 # Database Drivers
 postgresql = "42.2.5"
 mysql = "8.3.0"
-mssql = "12.8.1.jre11"
+mssql = "13.4.0.jre11"
 oracle-ojdbc = "19.3.0.0"
 db2-license = "1.1"
 mariadb = "2.7.4"

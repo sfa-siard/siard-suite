@@ -34,7 +34,8 @@ public class MsSqlUploadDownloadSiardProjectUsingSslIT {
             .withCopyToContainer(MountableFile.forClasspathResource("mssql/ssl/mssql.pem", 0644), "/var/opt/mssql/mssql.pem")
             .withCopyToContainer(MountableFile.forClasspathResource("mssql/ssl/mssql.key", 0644), "/var/opt/mssql/mssql.key")
             .withCopyToContainer(MountableFile.forClasspathResource("mssql/ssl/mssql.conf", 0644), "/var/opt/mssql/mssql.conf")
-            // Use Log-based wait strategy
+            .withUrlParam("trustServerCertificate", "true")
+            .withUrlParam("encrypt", "true")
             .waitingFor(Wait.forLogMessage(".*SQL Server is now ready for client connections.*\\n", 1));
 
     @Test
