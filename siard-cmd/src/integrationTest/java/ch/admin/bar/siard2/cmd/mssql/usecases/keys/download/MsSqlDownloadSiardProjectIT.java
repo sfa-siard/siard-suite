@@ -98,7 +98,7 @@ public class MsSqlDownloadSiardProjectIT {
             .withInitScript(CREATE_SIMPLE_TEAMS_EXAMPLE);
 
     @Test
-    public void uploadAndDownload_expectNoExceptions() throws IOException, SQLException, ClassNotFoundException {
+    public void download_expectNoExceptions() throws IOException, SQLException, ClassNotFoundException {
         // given
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
@@ -170,8 +170,8 @@ public class MsSqlDownloadSiardProjectIT {
                                                                                                       .column(COLUMN_MEMBER_ID)
                                                                                                       .referenced(COLUMN_MEMBER_ID)
                                                                                                       .build()))
-                                                .deleteAction(Optional.of(StringWrapper.of("RESTRICT"))) // FIXME: Should be "NO ACTION" (RESTRICT is unknown in MS SQL)
-                                                .updateAction(Optional.of(StringWrapper.of("RESTRICT"))) // FIXME: Should be "NO ACTION" (RESTRICT is unknown in MS SQL)
+                                                .deleteAction(Optional.of(StringWrapper.of("NO ACTION")))
+                                                .updateAction(Optional.of(StringWrapper.of("NO ACTION")))
                                                 .build());
     }
 }
