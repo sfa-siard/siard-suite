@@ -262,6 +262,16 @@ L'utente del database i cui dati di accesso vengono utilizzati per il caricament
 
 La conversione di TIME e TIMESTAMP nel database dipende dal fuso orario locale. L'ora UTC 14:30 nell'archivio SIARD viene caricata nel database come ora locale 15:30 quando viene caricata a Zurigo - in inverno. Per sopprimere questa conversione, SiardToDb deve essere avviato con l'opzione `Duser.timezone=GMT`, che fa sì che SIARD interpreti tutti gli orari del database come orari UTC.
 
+=== Connessioni crittografate
+
+==== MS SQL Server
+
+* *Requisiti Java 17:* Per motivi di sicurezza, le versioni recenti di Java non supportano più i protocolli obsoleti TLS 1.0 e 1.1 come impostazione predefinita. È richiesto almeno TLS 1.2.
+** _Nota:_ Se TLS 1.0/1.1 è strettamente necessario per sistemi legacy, deve essere riattivato esplicitamente nel file `+java.security+` della JVM.
+* *Driver JDBC (Crittografia):* Dalla versione 10.2 (inclusa la 13.4.0), la crittografia è attiva per impostazione predefinita (`+encrypt=true+`).
+* *Verifica del certificato:* Il driver ora verifica rigorosamente se il certificato del server è attendibile (`+trustServerCertificate=false+`).
+** Se il certificato di SQL Server non è presente nel truststore Java locale, è necessario aggiungere il parametro `+;trustServerCertificate=true+` alla stringa di connessione per consentire il collegamento.
+
 == Restrizioni
 
 Il formato SIARD è soggetto alle seguenti restrizioni

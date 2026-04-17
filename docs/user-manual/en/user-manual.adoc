@@ -460,6 +460,17 @@ The database user whose credentials are used for the upload must have the right 
 
 The conversion of `TIMES` and `TIMESTAMPS` in the database depends on the local time zone. The UTC time 14:30 in the SIARD archive is loaded into the database as local time 15:30 when uploading in Zurich during wintertime. To suppress this conversion, SiardToDb must be started with the option `-Duser.timezone=GMT`, which causes SIARD to interpret all database times as UTC times.
 
+=== Encrypted connections
+
+==== MS SQL Server
+
+* *Java 17 Requirements:* For security reasons, recent Java versions no longer support the obsolete TLS 1.0 and 1.1 protocols by default. At least TLS 1.2 is required.
+** _Note:_ If TLS 1.0/1.1 is strictly required for legacy systems, it must be explicitly re-enabled in the JVM's `+java.security+` file.
+* *JDBC Driver (Encryption):* Starting with driver version 10.2 (including 13.4.0), encryption is enabled by default (`+encrypt=true+`).
+* *Certificate Validation:* The driver now strictly validates whether the server certificate is trusted (`+trustServerCertificate=false+`).
+** If the SQL Server certificate is not stored in the local Java TrustStore, the parameter `+;trustServerCertificate=true+` must be added to the connection string to allow the connection.
+
+
 == Restrictions
 
 The SIARD format has the following limitations
