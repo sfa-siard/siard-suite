@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 
 // should probably test some obscure bug - but there is no documentation about that and how the db should be set up...
 @Ignore
-public class MsSqlDbMetaDataBugTester extends BaseDatabaseMetaDataTester {
+public class MsSqlDbMetaDataBugTest extends BaseDatabaseMetaDataTester {
     private static final ConnectionProperties _cp = new ConnectionProperties();
     private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort() + ";databaseName=bugdb");
     private static final String _sDB_USER = "buglogin";

@@ -34,7 +34,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class MsSqlResultSetTester
+public class MsSqlResultSetTest
         extends BaseResultSetTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";

@@ -9,7 +9,7 @@ import java.sql.Connection;
 
 import static org.junit.Assert.*;
 
-public class MSSQLDatasourceTests {
+public class MSSQLDatasourceTest {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 

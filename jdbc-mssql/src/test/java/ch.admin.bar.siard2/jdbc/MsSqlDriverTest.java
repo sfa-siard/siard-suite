@@ -7,11 +7,10 @@ import org.junit.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.sql.*;
-import java.util.Properties;
 
 import static org.junit.Assert.*;
 
-public class MsSqlDriverTester {
+public class MsSqlDriverTest {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 

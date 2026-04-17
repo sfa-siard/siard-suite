@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class MsSqlDatabaseMetaDataTests extends BaseDatabaseMetaDataTester {
+public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
