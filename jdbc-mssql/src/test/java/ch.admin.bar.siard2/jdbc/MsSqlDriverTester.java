@@ -19,7 +19,7 @@ public class MsSqlDriverTester {
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
             .withPassword(SA_PASSWORD)
-            .withUrlParam("encrypt", "false");
+            .withUrlParam("trustServerCertificate", "true");
 
     private static String _sDB_URL;
     private static final String sDRIVER_CLASS = "ch.admin.bar.siard2.jdbc.MsSqlDriver";

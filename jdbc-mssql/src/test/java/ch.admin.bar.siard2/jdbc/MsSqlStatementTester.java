@@ -27,7 +27,8 @@ public class MsSqlStatementTester extends BaseStatementTester {
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
-            .withPassword(SA_PASSWORD);
+            .withPassword(SA_PASSWORD)
+            .withUrlParam("trustServerCertificate", "true");
 
     private static String _sDB_URL;
     private static String _sDB_USER;

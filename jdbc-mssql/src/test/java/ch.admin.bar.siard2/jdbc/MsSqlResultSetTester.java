@@ -43,7 +43,8 @@ public class MsSqlResultSetTester
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
             .withPassword(SA_PASSWORD)
-            .withUrlParam("encrypt", "false");
+            .withUrlParam("trustServerCertificate", "true");
+
 
     private static String _sDB_URL;
     private static String _sDB_USER;
@@ -121,7 +122,7 @@ public class MsSqlResultSetTester
             _lMsTotalStart = System.currentTimeMillis();
         }
 
-        _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+        _sDB_URL = mssqlContainer.getJdbcUrl();
         _sDB_USER = mssqlContainer.getUsername();
         _sDB_PASSWORD = mssqlContainer.getPassword();
 

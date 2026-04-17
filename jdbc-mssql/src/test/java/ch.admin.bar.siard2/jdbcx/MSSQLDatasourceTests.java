@@ -17,7 +17,7 @@ public class MSSQLDatasourceTests {
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
             .withPassword(SA_PASSWORD)
-            .withUrlParam("encrypt", "false");
+            .withUrlParam("trustServerCertificate", "true");
 
     private static String DB_URL;
     private static String DB_USER;

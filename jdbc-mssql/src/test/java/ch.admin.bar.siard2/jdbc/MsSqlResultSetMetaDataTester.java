@@ -25,7 +25,7 @@ public class MsSqlResultSetMetaDataTester
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
             .withPassword(SA_PASSWORD)
-            .withUrlParam("encrypt", "false");
+            .withUrlParam("trustServerCertificate", "true");
 
     private static String _sDB_URL;
     private static String _sDB_USER;
