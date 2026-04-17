@@ -24,7 +24,8 @@ public class MsSqlResultSetMetaDataTester
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
-            .withPassword(SA_PASSWORD);
+            .withPassword(SA_PASSWORD)
+            .withUrlParam("encrypt", "false");
 
     private static String _sDB_URL;
     private static String _sDB_USER;
@@ -51,7 +52,7 @@ public class MsSqlResultSetMetaDataTester
     @BeforeClass
     public static void setUpClass() {
         try {
-            _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+            _sDB_URL = mssqlContainer.getJdbcUrl();
             _sDB_USER = mssqlContainer.getUsername();
             _sDB_PASSWORD = mssqlContainer.getPassword();
 

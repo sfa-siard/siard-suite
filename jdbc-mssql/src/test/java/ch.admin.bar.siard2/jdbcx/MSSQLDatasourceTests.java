@@ -16,7 +16,8 @@ public class MSSQLDatasourceTests {
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
-            .withPassword(SA_PASSWORD);
+            .withPassword(SA_PASSWORD)
+            .withUrlParam("encrypt", "false");
 
     private static String DB_URL;
     private static String DB_USER;
@@ -27,7 +28,7 @@ public class MSSQLDatasourceTests {
 
     @BeforeClass
     public static void setUpClass() {
-        DB_URL = "jdbc:sqlserver://" + mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433);
+        DB_URL = mssqlContainer.getJdbcUrl();
         DB_USER = mssqlContainer.getUsername();
         DB_PASSWORD = mssqlContainer.getPassword();
     }

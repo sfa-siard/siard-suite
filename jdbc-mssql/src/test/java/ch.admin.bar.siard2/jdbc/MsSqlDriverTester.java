@@ -18,7 +18,8 @@ public class MsSqlDriverTester {
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
-            .withPassword(SA_PASSWORD);
+            .withPassword(SA_PASSWORD)
+            .withUrlParam("encrypt", "false");
 
     private static String _sDB_URL;
     private static final String sDRIVER_CLASS = "ch.admin.bar.siard2.jdbc.MsSqlDriver";
@@ -37,7 +38,7 @@ public class MsSqlDriverTester {
                      .getName() + ": " + cnfe.getMessage());
         }
         try {
-            _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+            _sDB_URL = mssqlContainer.getJdbcUrl();
             _driver = DriverManager.getDriver(sTEST_MSSQL_URL);
             _conn = DriverManager.getConnection(_sDB_URL, mssqlContainer.getUsername(), mssqlContainer.getPassword());
         } catch (SQLException se) {

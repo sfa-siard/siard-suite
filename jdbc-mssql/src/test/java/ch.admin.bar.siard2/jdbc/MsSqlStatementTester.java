@@ -79,7 +79,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
     @BeforeClass
     public static void setUpClass() {
         try {
-            _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+            _sDB_URL = mssqlContainer.getJdbcUrl();
             _sDB_USER = mssqlContainer.getUsername();
             _sDB_PASSWORD = mssqlContainer.getPassword();
 
