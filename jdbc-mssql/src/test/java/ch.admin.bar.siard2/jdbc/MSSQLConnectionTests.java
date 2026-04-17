@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.jdbcx.MsSqlDataSource;
 import ch.admin.bar.siard2.mssql.TestMsSqlDatabase;
 import ch.admin.bar.siard2.mssql.TestSqlDatabase;
 import ch.enterag.utils.jdbc.BaseConnectionTester;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -206,5 +207,12 @@ public class MSSQLConnectionTests extends BaseConnectionTester {
         if (originalCatalog != null) {
             msSqlConnection.setCatalog(originalCatalog);
         }
+    }
+
+    @Test(expected = SQLServerException.class)
+    @Override
+    @SneakyThrows
+    public void testCreateStruct() {
+        msSqlConnection.createStruct("TEST_SCHEMA.TEST_STRUCT_TYPE", new String[]{"a", "b", "c"});
     }
 }
