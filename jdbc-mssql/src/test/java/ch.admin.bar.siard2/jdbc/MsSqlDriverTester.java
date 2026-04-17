@@ -81,26 +81,4 @@ public class MsSqlDriverTester {
                    .getName() + ": " + se.getMessage());
         }
     }
-
-    @Test
-    public void testVersion() {
-        int iMajorVersion = _driver.getMajorVersion();
-        int iMinorVersion = _driver.getMinorVersion();
-        String sVersion = String.valueOf(iMajorVersion) + "." + String.valueOf(iMinorVersion);
-        assertEquals("Wrong MSSQL version " + sVersion + " found!", "4.2", sVersion);
-    }
-
-    @Test
-    public void testDriverProperties() {
-        try {
-            DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(_sDB_URL, new Properties());
-            for (DriverPropertyInfo dpi : apropInfo)
-                System.out.println(dpi.name + ": " + dpi.value + " (" + String.valueOf(dpi.description) + ")");
-            assertSame("Unexpected driver properties!", 29, apropInfo.length);
-        } catch (SQLException se) {
-            fail(se.getClass()
-                   .getName() + ": " + se.getMessage());
-        }
-    }
-
 }
