@@ -49,8 +49,8 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("char_col"))
                 .build());
-        softly.assertThat(charCol.getType()).contains(Id.of("CHARACTER(1)"));
-        softly.assertThat(charCol.getTypeOriginal()).contains(Id.of("char"));
+        softly.assertThat(charCol.getType()).contains(Id.of("CHAR(1)"));
+        softly.assertThat(charCol.getTypeOriginal()).contains(Id.of("char(1)"));
 
         // CHAR(n)
         val charNCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -58,7 +58,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("char_n_col"))
                 .build());
-        softly.assertThat(charNCol.getType()).contains(Id.of("CHARACTER(10)"));
+        softly.assertThat(charNCol.getType()).contains(Id.of("CHAR(10)"));
         softly.assertThat(charNCol.getTypeOriginal()).contains(Id.of("char(10)"));
 
         // VARCHAR
@@ -67,8 +67,8 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("varchar_col"))
                 .build());
-        softly.assertThat(varcharCol.getType()).contains(Id.of("CHARACTER VARYING(1)"));
-        softly.assertThat(varcharCol.getTypeOriginal()).contains(Id.of("varchar"));
+        softly.assertThat(varcharCol.getType()).contains(Id.of("VARCHAR(1)"));
+        softly.assertThat(varcharCol.getTypeOriginal()).contains(Id.of("varchar(1)"));
 
         // VARCHAR(n)
         val varcharNCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -76,7 +76,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("varchar_n_col"))
                 .build());
-        softly.assertThat(varcharNCol.getType()).contains(Id.of("CHARACTER VARYING(100)"));
+        softly.assertThat(varcharNCol.getType()).contains(Id.of("VARCHAR(100)"));
         softly.assertThat(varcharNCol.getTypeOriginal()).contains(Id.of("varchar(100)"));
 
         // TEXT
@@ -85,7 +85,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("text_col"))
                 .build());
-        softly.assertThat(textCol.getType()).contains(Id.of("CHARACTER LARGE OBJECT"));
+        softly.assertThat(textCol.getType()).contains(Id.of("CLOB"));
         softly.assertThat(textCol.getTypeOriginal()).contains(Id.of("text"));
 
         // NCHAR
@@ -94,8 +94,8 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("nchar_col"))
                 .build());
-        softly.assertThat(ncharCol.getType()).contains(Id.of("NATIONAL CHARACTER(1)"));
-        softly.assertThat(ncharCol.getTypeOriginal()).contains(Id.of("nchar"));
+        softly.assertThat(ncharCol.getType()).contains(Id.of("NCHAR(1)"));
+        softly.assertThat(ncharCol.getTypeOriginal()).contains(Id.of("nchar(1)"));
 
         // NCHAR(n)
         val ncharNCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -103,7 +103,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("nchar_n_col"))
                 .build());
-        softly.assertThat(ncharNCol.getType()).contains(Id.of("NATIONAL CHARACTER(10)"));
+        softly.assertThat(ncharNCol.getType()).contains(Id.of("NCHAR(10)"));
         softly.assertThat(ncharNCol.getTypeOriginal()).contains(Id.of("nchar(10)"));
 
         // NVARCHAR
@@ -112,8 +112,8 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("nvarchar_col"))
                 .build());
-        softly.assertThat(nvarcharCol.getType()).contains(Id.of("NATIONAL CHARACTER VARYING(1)"));
-        softly.assertThat(nvarcharCol.getTypeOriginal()).contains(Id.of("nvarchar"));
+        softly.assertThat(nvarcharCol.getType()).contains(Id.of("NCHAR VARYING(1)"));
+        softly.assertThat(nvarcharCol.getTypeOriginal()).contains(Id.of("nvarchar(1)"));
 
         // NVARCHAR(n)
         val nvarcharNCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -121,7 +121,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("nvarchar_n_col"))
                 .build());
-        softly.assertThat(nvarcharNCol.getType()).contains(Id.of("NATIONAL CHARACTER VARYING(100)"));
+        softly.assertThat(nvarcharNCol.getType()).contains(Id.of("NCHAR VARYING(100)"));
         softly.assertThat(nvarcharNCol.getTypeOriginal()).contains(Id.of("nvarchar(100)"));
 
         // NTEXT
@@ -130,7 +130,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("ntext_col"))
                 .build());
-        softly.assertThat(ntextCol.getType()).contains(Id.of("NATIONAL CHARACTER LARGE OBJECT"));
+        softly.assertThat(ntextCol.getType()).contains(Id.of("NCLOB"));
         softly.assertThat(ntextCol.getTypeOriginal()).contains(Id.of("ntext"));
 
         // XML
@@ -166,7 +166,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("int_col"))
                 .build());
-        softly.assertThat(intCol.getType()).contains(Id.of("INTEGER"));
+        softly.assertThat(intCol.getType()).contains(Id.of("INT"));
         softly.assertThat(intCol.getTypeOriginal()).contains(Id.of("int"));
 
         // BIGINT
@@ -175,7 +175,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("bigint_col"))
                 .build());
-        softly.assertThat(bigintCol.getType()).contains(Id.of("NUMERIC(19)"));
+        softly.assertThat(bigintCol.getType()).contains(Id.of("BIGINT"));
         softly.assertThat(bigintCol.getTypeOriginal()).contains(Id.of("bigint"));
 
         // NUMERIC
@@ -185,7 +185,7 @@ public class MsSqlDataTypeMappingIT {
                 .columnId(Id.of("numeric_col"))
                 .build());
         softly.assertThat(numericCol.getType()).contains(Id.of("NUMERIC(18)"));
-        softly.assertThat(numericCol.getTypeOriginal()).contains(Id.of("numeric"));
+        softly.assertThat(numericCol.getTypeOriginal()).contains(Id.of("numeric(18)"));
 
         // NUMERIC(p)
         val numericPCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -202,7 +202,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("numeric_ps_col"))
                 .build());
-        softly.assertThat(numericPSCol.getType()).contains(Id.of("NUMERIC(10,2)"));
+        softly.assertThat(numericPSCol.getType()).contains(Id.of("NUMERIC(10, 2)"));
         softly.assertThat(numericPSCol.getTypeOriginal()).contains(Id.of("numeric(10,2)"));
 
         // DECIMAL
@@ -211,8 +211,8 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("decimal_col"))
                 .build());
-        softly.assertThat(decimalCol.getType()).contains(Id.of("DECIMAL(18)"));
-        softly.assertThat(decimalCol.getTypeOriginal()).contains(Id.of("decimal"));
+        softly.assertThat(decimalCol.getType()).contains(Id.of("DEC(18)"));
+        softly.assertThat(decimalCol.getTypeOriginal()).contains(Id.of("decimal(18)"));
 
         // DECIMAL(p)
         val decimalPCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -220,7 +220,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("decimal_p_col"))
                 .build());
-        softly.assertThat(decimalPCol.getType()).contains(Id.of("DECIMAL(10)"));
+        softly.assertThat(decimalPCol.getType()).contains(Id.of("DEC(10)"));
         softly.assertThat(decimalPCol.getTypeOriginal()).contains(Id.of("decimal(10)"));
 
         // DECIMAL(p,s)
@@ -229,7 +229,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("decimal_ps_col"))
                 .build());
-        softly.assertThat(decimalPSCol.getType()).contains(Id.of("DECIMAL(10,2)"));
+        softly.assertThat(decimalPSCol.getType()).contains(Id.of("DEC(10, 2)"));
         softly.assertThat(decimalPSCol.getTypeOriginal()).contains(Id.of("decimal(10,2)"));
 
         // SMALLMONEY
@@ -238,7 +238,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("smallmoney_col"))
                 .build());
-        softly.assertThat(smallmoneyCol.getType()).contains(Id.of("DECIMAL(10,4)"));
+        softly.assertThat(smallmoneyCol.getType()).contains(Id.of("DEC(10, 4)"));
         softly.assertThat(smallmoneyCol.getTypeOriginal()).contains(Id.of("smallmoney"));
 
         // MONEY
@@ -247,7 +247,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("money_col"))
                 .build());
-        softly.assertThat(moneyCol.getType()).contains(Id.of("DECIMAL(19,4)"));
+        softly.assertThat(moneyCol.getType()).contains(Id.of("DEC(19, 4)"));
         softly.assertThat(moneyCol.getTypeOriginal()).contains(Id.of("money"));
 
         // FLOAT
@@ -266,7 +266,7 @@ public class MsSqlDataTypeMappingIT {
                 .columnId(Id.of("float_p_small_col"))
                 .build());
         softly.assertThat(floatPSmallCol.getType()).contains(Id.of("REAL"));
-        softly.assertThat(floatPSmallCol.getTypeOriginal()).contains(Id.of("float"));
+        softly.assertThat(floatPSmallCol.getTypeOriginal()).contains(Id.of("real"));
 
         // FLOAT(p) where p > 7
         val floatPLargeCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -274,8 +274,8 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("float_p_large_col"))
                 .build());
-        softly.assertThat(floatPLargeCol.getType()).contains(Id.of("DOUBLE PRECISION"));
-        softly.assertThat(floatPLargeCol.getTypeOriginal()).contains(Id.of("float"));
+        softly.assertThat(floatPLargeCol.getType()).contains(Id.of("REAL"));
+        softly.assertThat(floatPLargeCol.getTypeOriginal()).contains(Id.of("real"));
 
         // REAL
         val realCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -301,8 +301,8 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("binary_col"))
                 .build());
-        softly.assertThat(binaryCol.getType()).contains(Id.of("BIT(8)"));
-        softly.assertThat(binaryCol.getTypeOriginal()).contains(Id.of("binary"));
+        softly.assertThat(binaryCol.getType()).contains(Id.of("BINARY(1)"));
+        softly.assertThat(binaryCol.getTypeOriginal()).contains(Id.of("binary(1)"));
 
         // BINARY(n)
         val binaryNCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -310,7 +310,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("binary_n_col"))
                 .build());
-        softly.assertThat(binaryNCol.getType()).contains(Id.of("BIT(128)"));
+        softly.assertThat(binaryNCol.getType()).contains(Id.of("BINARY(16)"));
         softly.assertThat(binaryNCol.getTypeOriginal()).contains(Id.of("binary(16)"));
 
         // VARBINARY
@@ -319,8 +319,8 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("varbinary_col"))
                 .build());
-        softly.assertThat(varbinaryCol.getType()).contains(Id.of("BIT VARYING(8)"));
-        softly.assertThat(varbinaryCol.getTypeOriginal()).contains(Id.of("varbinary"));
+        softly.assertThat(varbinaryCol.getType()).contains(Id.of("VARBINARY(1)"));
+        softly.assertThat(varbinaryCol.getTypeOriginal()).contains(Id.of("varbinary(1)"));
 
         // VARBINARY(n)
         val varbinaryNCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -328,7 +328,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("varbinary_n_col"))
                 .build());
-        softly.assertThat(varbinaryNCol.getType()).contains(Id.of("BIT VARYING(800)"));
+        softly.assertThat(varbinaryNCol.getType()).contains(Id.of("VARBINARY(100)"));
         softly.assertThat(varbinaryNCol.getTypeOriginal()).contains(Id.of("varbinary(100)"));
 
         // IMAGE
@@ -337,7 +337,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("image_col"))
                 .build());
-        softly.assertThat(imageCol.getType()).contains(Id.of("BINARY LARGE OBJECT"));
+        softly.assertThat(imageCol.getType()).contains(Id.of("BLOB"));
         softly.assertThat(imageCol.getTypeOriginal()).contains(Id.of("image"));
 
         // DATE
@@ -356,7 +356,7 @@ public class MsSqlDataTypeMappingIT {
                 .columnId(Id.of("time_col"))
                 .build());
         softly.assertThat(timeCol.getType()).contains(Id.of("TIME(7)"));
-        softly.assertThat(timeCol.getTypeOriginal()).contains(Id.of("time"));
+        softly.assertThat(timeCol.getTypeOriginal()).contains(Id.of("time(7)"));
 
         // DATETIME
         val datetimeCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -364,7 +364,7 @@ public class MsSqlDataTypeMappingIT {
                 .tableId(Id.of("datatype_mapping_test_table"))
                 .columnId(Id.of("datetime_col"))
                 .build());
-        softly.assertThat(datetimeCol.getType()).contains(Id.of("TIMESTAMP(7)"));
+        softly.assertThat(datetimeCol.getType()).contains(Id.of("TIMESTAMP(3)"));
         softly.assertThat(datetimeCol.getTypeOriginal()).contains(Id.of("datetime"));
 
         // DATETIME2
@@ -374,7 +374,7 @@ public class MsSqlDataTypeMappingIT {
                 .columnId(Id.of("datetime2_col"))
                 .build());
         softly.assertThat(datetime2Col.getType()).contains(Id.of("TIMESTAMP(7)"));
-        softly.assertThat(datetime2Col.getTypeOriginal()).contains(Id.of("datetime2"));
+        softly.assertThat(datetime2Col.getTypeOriginal()).contains(Id.of("datetime2(7)"));
 
         // SMALLDATETIME
         val smalldatetimeCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
