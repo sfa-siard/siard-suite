@@ -32,6 +32,10 @@ public class SqlScripts {
         public final static String SIARDSUITE_163_DATATYPE_MAPPING = "mysql/issues/siardsuite163/datatype-mapping-mysql.sql";
     }
 
+    public static class Db2 {
+        public final static String SIARDSUITE_163_DATATYPE_MAPPING = "db2/issues/siardsuite163/datatype-mapping-db2.sql";
+    }
+
     public static class MsSQL {
         public final static String SIARDSUITE_112 = "mssql/issues/siardsuite112/mssql-file-types.sql";
         public final static String SIARDSUITE_115 = "mssql/issues/siardsuite115/mssql-varchar-types.sql";
