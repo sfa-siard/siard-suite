@@ -49,7 +49,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("CHAR_COL"))
                 .build());
-        softly.assertThat(charCol.getType()).contains(Id.of("CHARACTER(1)"));
+        softly.assertThat(charCol.getType()).contains(Id.of("CHAR(1)"));
         softly.assertThat(charCol.getTypeOriginal()).contains(Id.of("CHAR"));
 
         // CHAR(n)
@@ -58,7 +58,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("CHAR_N_COL"))
                 .build());
-        softly.assertThat(charNCol.getType()).contains(Id.of("CHARACTER(10)"));
+        softly.assertThat(charNCol.getType()).contains(Id.of("CHAR(10)"));
         softly.assertThat(charNCol.getTypeOriginal()).contains(Id.of("CHAR"));
 
         // VARCHAR(n)
@@ -67,7 +67,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("VARCHAR_N_COL"))
                 .build());
-        softly.assertThat(varcharNCol.getType()).contains(Id.of("CHARACTER VARYING(100)"));
+        softly.assertThat(varcharNCol.getType()).contains(Id.of("VARCHAR(100)"));
         softly.assertThat(varcharNCol.getTypeOriginal()).contains(Id.of("VARCHAR"));
 
         // CLOB
@@ -76,7 +76,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("CLOB_COL"))
                 .build());
-        softly.assertThat(clobCol.getType()).contains(Id.of("CHARACTER LARGE OBJECT"));
+        softly.assertThat(clobCol.getType()).contains(Id.of("CLOB(1048576)"));
         softly.assertThat(clobCol.getTypeOriginal()).contains(Id.of("CLOB"));
 
         // XML
@@ -94,7 +94,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("GRAPHIC_COL"))
                 .build());
-        softly.assertThat(graphicCol.getType()).contains(Id.of("CHARACTER(1)"));
+        softly.assertThat(graphicCol.getType()).contains(Id.of("NCHAR(1)"));
         softly.assertThat(graphicCol.getTypeOriginal()).contains(Id.of("GRAPHIC"));
 
         // GRAPHIC(n)
@@ -103,7 +103,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("GRAPHIC_N_COL"))
                 .build());
-        softly.assertThat(graphicNCol.getType()).contains(Id.of("CHARACTER(10)"));
+        softly.assertThat(graphicNCol.getType()).contains(Id.of("NCHAR(10)"));
         softly.assertThat(graphicNCol.getTypeOriginal()).contains(Id.of("GRAPHIC"));
 
         // VARGRAPHIC(n)
@@ -112,7 +112,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("VARGRAPHIC_N_COL"))
                 .build());
-        softly.assertThat(vargraphicNCol.getType()).contains(Id.of("CHARACTER(100)"));
+        softly.assertThat(vargraphicNCol.getType()).contains(Id.of("NCHAR VARYING(100)"));
         softly.assertThat(vargraphicNCol.getTypeOriginal()).contains(Id.of("VARGRAPHIC"));
 
         // DBCLOB
@@ -121,7 +121,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("DBCLOB_COL"))
                 .build());
-        softly.assertThat(dbclobCol.getType()).contains(Id.of("CHARACTER LARGE OBJECT"));
+        softly.assertThat(dbclobCol.getType()).contains(Id.of("NCLOB(1048576)"));
         softly.assertThat(dbclobCol.getTypeOriginal()).contains(Id.of("DBCLOB"));
 
         // CHAR FOR BIT DATA
@@ -130,7 +130,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("CHAR_BIT_COL"))
                 .build());
-        softly.assertThat(charBitCol.getType()).contains(Id.of("BIT(8)"));
+        softly.assertThat(charBitCol.getType()).contains(Id.of("BINARY(1)"));
         softly.assertThat(charBitCol.getTypeOriginal()).contains(Id.of("CHAR () FOR BIT DATA"));
 
         // CHAR(n) FOR BIT DATA
@@ -139,7 +139,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("CHAR_N_BIT_COL"))
                 .build());
-        softly.assertThat(charNBitCol.getType()).contains(Id.of("BIT(128)"));
+        softly.assertThat(charNBitCol.getType()).contains(Id.of("BINARY(16)"));
         softly.assertThat(charNBitCol.getTypeOriginal()).contains(Id.of("CHAR () FOR BIT DATA"));
 
         // VARCHAR(n) FOR BIT DATA
@@ -148,7 +148,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("VARCHAR_N_BIT_COL"))
                 .build());
-        softly.assertThat(varcharNBitCol.getType()).contains(Id.of("BIT VARYING(800)"));
+        softly.assertThat(varcharNBitCol.getType()).contains(Id.of("VARBINARY(100)"));
         softly.assertThat(varcharNBitCol.getTypeOriginal()).contains(Id.of("VARCHAR () FOR BIT DATA"));
 
         // BLOB
@@ -157,7 +157,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("BLOB_COL"))
                 .build());
-        softly.assertThat(blobCol.getType()).contains(Id.of("BINARY LARGE OBJECT"));
+        softly.assertThat(blobCol.getType()).contains(Id.of("BLOB(1048576)"));
         softly.assertThat(blobCol.getTypeOriginal()).contains(Id.of("BLOB"));
 
         // SMALLINT
@@ -175,7 +175,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("INTEGER_COL"))
                 .build());
-        softly.assertThat(integerCol.getType()).contains(Id.of("INTEGER"));
+        softly.assertThat(integerCol.getType()).contains(Id.of("INT"));
         softly.assertThat(integerCol.getTypeOriginal()).contains(Id.of("INTEGER"));
 
         // BIGINT
@@ -184,7 +184,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("BIGINT_COL"))
                 .build());
-        softly.assertThat(bigintCol.getType()).contains(Id.of("DECIMAL(19)"));
+        softly.assertThat(bigintCol.getType()).contains(Id.of("BIGINT"));
         softly.assertThat(bigintCol.getTypeOriginal()).contains(Id.of("BIGINT"));
 
         // NUMERIC
@@ -193,8 +193,8 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("NUMERIC_COL"))
                 .build());
-        softly.assertThat(numericCol.getType()).contains(Id.of("DECIMAL(5)"));
-        softly.assertThat(numericCol.getTypeOriginal()).contains(Id.of("NUMERIC"));
+        softly.assertThat(numericCol.getType()).contains(Id.of("DEC(5)"));
+        softly.assertThat(numericCol.getTypeOriginal()).contains(Id.of("DECIMAL"));
 
         // NUMERIC(p)
         val numericPCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -202,8 +202,8 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("NUMERIC_P_COL"))
                 .build());
-        softly.assertThat(numericPCol.getType()).contains(Id.of("DECIMAL(10)"));
-        softly.assertThat(numericPCol.getTypeOriginal()).contains(Id.of("NUMERIC"));
+        softly.assertThat(numericPCol.getType()).contains(Id.of("DEC(10)"));
+        softly.assertThat(numericPCol.getTypeOriginal()).contains(Id.of("DECIMAL"));
 
         // NUMERIC(p,s)
         val numericPSCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -211,8 +211,8 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("NUMERIC_PS_COL"))
                 .build());
-        softly.assertThat(numericPSCol.getType()).contains(Id.of("DECIMAL(10,2)"));
-        softly.assertThat(numericPSCol.getTypeOriginal()).contains(Id.of("NUMERIC"));
+        softly.assertThat(numericPSCol.getType()).contains(Id.of("DEC(10, 2)"));
+        softly.assertThat(numericPSCol.getTypeOriginal()).contains(Id.of("DECIMAL"));
 
         // DECIMAL
         val decimalCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -220,7 +220,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("DECIMAL_COL"))
                 .build());
-        softly.assertThat(decimalCol.getType()).contains(Id.of("DECIMAL(5)"));
+        softly.assertThat(decimalCol.getType()).contains(Id.of("DEC(5)"));
         softly.assertThat(decimalCol.getTypeOriginal()).contains(Id.of("DECIMAL"));
 
         // DECIMAL(p)
@@ -229,7 +229,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("DECIMAL_P_COL"))
                 .build());
-        softly.assertThat(decimalPCol.getType()).contains(Id.of("DECIMAL(10)"));
+        softly.assertThat(decimalPCol.getType()).contains(Id.of("DEC(10)"));
         softly.assertThat(decimalPCol.getTypeOriginal()).contains(Id.of("DECIMAL"));
 
         // DECIMAL(p,s)
@@ -238,7 +238,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("DECIMAL_PS_COL"))
                 .build());
-        softly.assertThat(decimalPSCol.getType()).contains(Id.of("DECIMAL(10,2)"));
+        softly.assertThat(decimalPSCol.getType()).contains(Id.of("DEC(10, 2)"));
         softly.assertThat(decimalPSCol.getTypeOriginal()).contains(Id.of("DECIMAL"));
 
         // FLOAT
@@ -248,7 +248,7 @@ public class Db2DataTypeMappingIT {
                 .columnId(Id.of("FLOAT_COL"))
                 .build());
         softly.assertThat(floatCol.getType()).contains(Id.of("DOUBLE PRECISION"));
-        softly.assertThat(floatCol.getTypeOriginal()).contains(Id.of("FLOAT"));
+        softly.assertThat(floatCol.getTypeOriginal()).contains(Id.of("DOUBLE"));
 
         // FLOAT(p) where p <= 7
         val floatPSmallCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -257,7 +257,7 @@ public class Db2DataTypeMappingIT {
                 .columnId(Id.of("FLOAT_P_SMALL_COL"))
                 .build());
         softly.assertThat(floatPSmallCol.getType()).contains(Id.of("REAL"));
-        softly.assertThat(floatPSmallCol.getTypeOriginal()).contains(Id.of("FLOAT"));
+        softly.assertThat(floatPSmallCol.getTypeOriginal()).contains(Id.of("REAL"));
 
         // FLOAT(p) where p > 7
         val floatPLargeCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -265,8 +265,8 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("FLOAT_P_LARGE_COL"))
                 .build());
-        softly.assertThat(floatPLargeCol.getType()).contains(Id.of("DOUBLE PRECISION"));
-        softly.assertThat(floatPLargeCol.getTypeOriginal()).contains(Id.of("FLOAT"));
+        softly.assertThat(floatPLargeCol.getType()).contains(Id.of("REAL"));
+        softly.assertThat(floatPLargeCol.getTypeOriginal()).contains(Id.of("REAL"));
 
         // REAL
         val realCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
@@ -310,7 +310,7 @@ public class Db2DataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("TIMESTAMP_COL"))
                 .build());
-        softly.assertThat(timestampCol.getType()).contains(Id.of("TIMESTAMP(6)"));
+        softly.assertThat(timestampCol.getType()).contains(Id.of("TIMESTAMP"));
         softly.assertThat(timestampCol.getTypeOriginal()).contains(Id.of("TIMESTAMP"));
 
         // TIMESTAMP(n)
