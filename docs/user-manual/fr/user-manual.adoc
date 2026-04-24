@@ -262,10 +262,11 @@ La conversion des TIMEs et des TIMESTAMPs dans la base de données dépend du fu
 
 === Connexions chiffrées
 
-=== MS SQL Server
-
 * *Exigences Java 17 :* Pour des raisons de sécurité, les versions récentes de Java ne prennent plus en charge les protocoles obsolètes TLS 1.0 et 1.1 par défaut. TLS 1.2 ou supérieur est requis.
 ** _Remarque :_ Si TLS 1.0/1.1 est impérativement requis pour des systèmes hérités, il doit être réactivé explicitement dans le fichier `+java.security+` de la JVM.
+
+=== MS SQL Server
+
 * *Pilote JDBC (Chiffrement) :* Depuis la version 10.2 (y compris la 13.4.0), le chiffrement est activé par défaut (`+encrypt=true+`).
 * *Vérification du certificat :* Le pilote vérifie désormais rigoureusement si le certificat du serveur est fiable (`+trustServerCertificate=false+`).
 ** Si le certificat SQL Server n'est pas enregistré dans le magasin de certificats (truststore) Java local, vous devez ajouter le paramètre `+;trustServerCertificate=true+` à la chaîne de connexion pour permettre la connexion.

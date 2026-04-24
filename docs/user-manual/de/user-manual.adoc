@@ -263,10 +263,11 @@ Die Konvertierung von TIMEs und TIMESTAMPs in der Datenbank hängt von der lokal
 
 === Verschlüsselte Verbindungen
 
-==== MS SQL Server
-
 * *Java 17 Anforderungen:* Aus Sicherheitsgründen unterstützen aktuelle Java-Versionen die veralteten Protokolle TLS 1.0 und 1.1 nicht mehr standardmäßig. Es wird mindestens TLS 1.2 vorausgesetzt.
 ** _Hinweis:_ Falls für Altsysteme TLS 1.0/1.1 zwingend benötigt wird, muss dies explizit in der Datei `+java.security+` der JVM wieder aktiviert werden.
+
+==== MS SQL Server
+
 * *JDBC-Treiber (Verschlüsselung):* Ab Treiber-Version 10.2 (inkl. 13.4.0) ist die Verschlüsselung standardmäßig aktiv (`+encrypt=true+`).
 * *Zertifikatsprüfung:* Der Treiber prüft nun streng, ob das Server-Zertifikat vertrauenswürdig ist (`+trustServerCertificate=false+`).
 ** Wenn das Zertifikat des SQL-Servers nicht im lokalen Java-Truststore hinterlegt ist, muss im Connection-String der Parameter `+;trustServerCertificate=true+` ergänzt werden, um die Verbindung zu ermöglichen.
