@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class PostgresUploadDownloadSiardProjectUsingSslIT {
+public class PostgresUploadDownloadSiardProjectUsingSSL_IT {
 
     @Rule
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
