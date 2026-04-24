@@ -131,20 +131,20 @@ Classes like `EU`, `SU`, `DU`, `BU`, `FU`, `TZ` are cryptic single/two-letter ut
 
 ## Suggested Execution Order
 
-| Order | Step | Risk | Effort | Value |
-|-------|------|------|--------|-------|
-| 1 | 1.1 Formatting | Low | Small | High (baseline) |
-| 2 | 1.3 Logging cleanup | Low | Medium | High |
-| 3 | 2.1 Extract CLI config | Low | Medium | High |
-| 4 | 2.2 Extract constructor logic | Medium | Medium | High |
-| 5 | 4.1 Add unit tests | Low | Medium | High |
-| 6 | 2.3 Break up MetaDataFromDb | Medium | Large | High |
-| 7 | 2.4 Eliminate duplication | Low | Medium | Medium |
-| 8 | 3.1 Eliminate downcasting | Medium | Medium | High |
-| 9 | 1.2 Rename Hungarian notation | Low | Large (mechanical) | Medium |
-| 10 | 3.2 Modernize collections | Medium | Medium | Medium |
-| 11 | 3.3 Domain exceptions | Low | Small | Medium |
-| 12 | 5.1–5.2 Utility cleanup | Low | Medium | Low–Medium |
-| 13 | 6.1–6.3 Modernizations | Low | Small–Medium | Low |
+| Order | Step | Risk | Effort | Value | Done |
+|-------|------|------|--------|-------|------|
+| 1 | 1.1 Formatting | Low | Small | High (baseline) | ✅ |
+| 2 | 1.3 Logging cleanup | Low | Medium | High | |
+| 3 | 2.1 Extract CLI config | Low | Medium | High | |
+| 4 | 2.2 Extract constructor logic | Medium | Medium | High | |
+| 5 | 4.1 Add unit tests | Low | Medium | High | |
+| 6 | 2.3 Break up MetaDataFromDb | Medium | Large | High | |
+| 7 | 2.4 Eliminate duplication | Low | Medium | Medium | |
+| 8 | 3.1 Eliminate downcasting | Medium | Medium | High | |
+| 9 | 1.2 Rename Hungarian notation | Low | Large (mechanical) | Medium | |
+| 10 | 3.2 Modernize collections | Medium | Medium | Medium | |
+| 11 | 3.3 Domain exceptions | Low | Small | Medium | |
+| 12 | 5.1–5.2 Utility cleanup | Low | Medium | Low–Medium | |
+| 13 | 6.1–6.3 Modernizations | Low | Small–Medium | Low | |
 
 Each step is designed to be independently mergeable. The integration tests provide a safety net for the riskier structural changes in Phase 2–3. Always run the full integration test suite after each step.
