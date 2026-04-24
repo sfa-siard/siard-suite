@@ -8,6 +8,7 @@ import ch.admin.bar.siardsuite.service.database.model.DbmsConnectionData;
 import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbms;
 import ch.admin.bar.siardsuite.service.database.model.ServerBasedDbmsConnectionProperties;
 import ch.admin.bar.siardsuite.ui.common.Validator;
+import ch.admin.bar.siardsuite.ui.presenter.connection.fields.BooleanFormField;
 import ch.admin.bar.siardsuite.ui.presenter.connection.fields.StringFormField;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -31,6 +32,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private static final I18nKey USERNAME_LABEL = I18nKey.of("connection.view.username.label");
     private static final I18nKey PASSWORD_LABEL = I18nKey.of("connection.view.password.label");
     private static final I18nKey SCHEMA_LABEL = I18nKey.of("connection.view.schema.label");
+    private static final I18nKey TRUST_SERVER_CERTIFICATE_LABEL = I18nKey.of("connection.view.trustServerCertificate.label");
 
     private final Supplier<ServerBasedDbmsConnectionProperties> connectionPropertiesSupplier;
     private final ServerBasedDbms serverBasedDbms;
@@ -40,6 +42,7 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
     private final StringFormField dbName;
     private final StringFormField jdbcUrl;
     private final StringFormField schema;
+    private final BooleanFormField trustServerCertificate;
     private String connectionOptions;
 
     public ServerBasedDbmsConnectionPropertiesForm(
@@ -131,6 +134,16 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
         HBox.setMargin(placeHolder, new Insets(25));
         val schemaNameBox = new HBox(schema, placeHolder);
 
+        // Trust server certificate checkbox for MS SQL Server
+        trustServerCertificate = BooleanFormField.builder()
+                                                 .title(TranslatableText.of(TRUST_SERVER_CERTIFICATE_LABEL))
+                                                 .initialValue(initialValue
+                                                         .flatMap(ServerBasedDbmsConnectionProperties::getOptions)
+                                                         .map(opts -> opts.contains("trustServerCertificate=true"))
+                                                         .orElse(true))
+                                                 .onNewUserInput(checked -> handleTrustServerCertificateChange(checked))
+                                                 .build();
+
         jdbcUrl = StringFormField.builder()
                                  .title(TranslatableText.of(JDBC_URL_LABEL))
                                  .initialValue(initialValue
@@ -156,6 +169,14 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                                          dbName.setValue(decoded.getDbName());
                                          connectionOptions = decoded.getOptions()
                                                                     .orElse(null);
+                                         
+                                         // Update checkbox state from URL for MS SQL Server
+                                         if (isMsSqlServer(dbms)) {
+                                             val hasTrustServerCert = decoded.getOptions()
+                                                     .map(opts -> opts.contains("trustServerCertificate=true"))
+                                                     .orElse(false);
+                                             trustServerCertificate.setValue(hasTrustServerCert);
+                                         }
                                      } catch (Exception e) {
                                          // should not be thrown, because of validator
                                      }
@@ -163,6 +184,12 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
                                  .build();
 
         HBox.setMargin(jdbcUrl, new Insets(25));
+        
+        // Add checkbox to JDBC URL field for MS SQL Server
+        if (isMsSqlServer(dbms)) {
+            jdbcUrl.getChildren().add(trustServerCertificate.getChildren().get(0));
+        }
+        
         val thirdLineHBox = new HBox(jdbcUrl);
 
         if (shouldShowSchemaField(showSchemaField, dbms)) {
@@ -223,7 +250,44 @@ public class ServerBasedDbmsConnectionPropertiesForm extends ConnectionPropertie
             val currentJdbcUrl = serverBasedDbms.getJdbcConnectionStringEncoder()
                                                 .apply(currentProperties);
             jdbcUrl.setValue(currentJdbcUrl);
+            
+            // Update checkbox state from URL for MS SQL Server
+            if (isMsSqlServer(serverBasedDbms)) {
+                val hasTrustServerCert = currentProperties.getOptions()
+                        .map(opts -> opts.contains("trustServerCertificate=true"))
+                        .orElse(false);
+                trustServerCertificate.setValue(hasTrustServerCert);
+            }
         }
+    }
+
+    private void handleTrustServerCertificateChange(Boolean checked) {
+        if (!isMsSqlServer(serverBasedDbms)) {
+            return;
+        }
+
+        // Update connection options based on checkbox state
+        val currentOptions = Optional.ofNullable(connectionOptions).orElse("");
+        val optionsList = new java.util.ArrayList<>(java.util.Arrays.asList(currentOptions.split(";")));
+        
+        // Remove existing trustServerCertificate parameter
+        optionsList.removeIf(opt -> opt.startsWith("trustServerCertificate="));
+        
+        // Add new value if checked
+        if (checked) {
+            optionsList.add("trustServerCertificate=true");
+        }
+        
+        // Clean up empty strings and rebuild
+        optionsList.removeIf(String::isEmpty);
+        connectionOptions = String.join(";", optionsList);
+        
+        // Update JDBC URL
+        handleJdbcUrl();
+    }
+
+    private boolean isMsSqlServer(ServerBasedDbms dbms) {
+        return "sqlserver".equals(dbms.getId());
     }
 
     private Validator<String> validJdbcUrlValidator(final ServerBasedDbms serverBasedDbms) {

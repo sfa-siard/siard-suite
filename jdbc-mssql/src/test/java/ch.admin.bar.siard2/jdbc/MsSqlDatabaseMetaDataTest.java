@@ -26,13 +26,14 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class MsSqlDatabaseMetaDataTests extends BaseDatabaseMetaDataTester {
+public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE).acceptLicense()
-                                                                                                  .withPassword(SA_PASSWORD);
+                                                                                                  .withPassword(SA_PASSWORD)
+                                                                                                  .withUrlParam("trustServerCertificate", "true");
 
     private static String DB_URL;
     private static String DB_USER;
@@ -46,7 +47,7 @@ public class MsSqlDatabaseMetaDataTests extends BaseDatabaseMetaDataTester {
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
-        DB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+        DB_URL = mssqlContainer.getJdbcUrl();
         DB_USER = mssqlContainer.getUsername();
         DB_PASSWORD = mssqlContainer.getPassword();
         DB_CATALOG = "master";

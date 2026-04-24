@@ -8,15 +8,9 @@ plugins {
 
 description = "MS SQL Server JDBC Wrapper"
 
-repositories {
-    flatDir {
-        dirs("lib")
-    }
-}
-
 dependencies {
-    implementation(fileTree("lib") { include("*.jar") })
 
+    implementation(libs.mssql.jdbc)
     implementation(libs.antlr4.runtime)
     implementation(project(":siard-utilities"))
     implementation(project(":sql-parser"))

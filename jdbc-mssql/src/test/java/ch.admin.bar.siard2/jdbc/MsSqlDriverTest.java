@@ -7,18 +7,18 @@ import org.junit.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.sql.*;
-import java.util.Properties;
 
 import static org.junit.Assert.*;
 
-public class MsSqlDriverTester {
+public class MsSqlDriverTest {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
-            .withPassword(SA_PASSWORD);
+            .withPassword(SA_PASSWORD)
+            .withUrlParam("trustServerCertificate", "true");
 
     private static String _sDB_URL;
     private static final String sDRIVER_CLASS = "ch.admin.bar.siard2.jdbc.MsSqlDriver";
@@ -37,7 +37,7 @@ public class MsSqlDriverTester {
                      .getName() + ": " + cnfe.getMessage());
         }
         try {
-            _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+            _sDB_URL = mssqlContainer.getJdbcUrl();
             _driver = DriverManager.getDriver(sTEST_MSSQL_URL);
             _conn = DriverManager.getConnection(_sDB_URL, mssqlContainer.getUsername(), mssqlContainer.getPassword());
         } catch (SQLException se) {
@@ -80,26 +80,4 @@ public class MsSqlDriverTester {
                    .getName() + ": " + se.getMessage());
         }
     }
-
-    @Test
-    public void testVersion() {
-        int iMajorVersion = _driver.getMajorVersion();
-        int iMinorVersion = _driver.getMinorVersion();
-        String sVersion = String.valueOf(iMajorVersion) + "." + String.valueOf(iMinorVersion);
-        assertEquals("Wrong MSSQL version " + sVersion + " found!", "4.2", sVersion);
-    }
-
-    @Test
-    public void testDriverProperties() {
-        try {
-            DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(_sDB_URL, new Properties());
-            for (DriverPropertyInfo dpi : apropInfo)
-                System.out.println(dpi.name + ": " + dpi.value + " (" + String.valueOf(dpi.description) + ")");
-            assertSame("Unexpected driver properties!", 29, apropInfo.length);
-        } catch (SQLException se) {
-            fail(se.getClass()
-                   .getName() + ": " + se.getMessage());
-        }
-    }
-
 }

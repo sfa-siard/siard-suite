@@ -20,14 +20,15 @@ import java.sql.*;
 
 import static org.junit.Assert.*;
 
-public class MsSqlStatementTester extends BaseStatementTester {
+public class MsSqlStatementTest extends BaseStatementTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
-            .withPassword(SA_PASSWORD);
+            .withPassword(SA_PASSWORD)
+            .withUrlParam("trustServerCertificate", "true");
 
     private static String _sDB_URL;
     private static String _sDB_USER;
@@ -79,7 +80,7 @@ public class MsSqlStatementTester extends BaseStatementTester {
     @BeforeClass
     public static void setUpClass() {
         try {
-            _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+            _sDB_URL = mssqlContainer.getJdbcUrl();
             _sDB_USER = mssqlContainer.getUsername();
             _sDB_PASSWORD = mssqlContainer.getPassword();
 

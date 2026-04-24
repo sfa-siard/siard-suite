@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.jdbcx.MsSqlDataSource;
 import ch.admin.bar.siard2.mssql.TestMsSqlDatabase;
 import ch.admin.bar.siard2.mssql.TestSqlDatabase;
 import ch.enterag.utils.jdbc.BaseConnectionTester;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -15,13 +16,14 @@ import java.sql.*;
 
 import static org.junit.Assert.*;
 
-public class MSSQLConnectionTests extends BaseConnectionTester {
+public class MSSQLConnectionTest extends BaseConnectionTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE).acceptLicense()
-                                                                                                  .withPassword(SA_PASSWORD);
+                                                                                                  .withPassword(SA_PASSWORD)
+                                                                                                  .withUrlParam("trustServerCertificate", "true");
 
     private static String DB_URL;
     private static String DB_USER;
@@ -31,7 +33,7 @@ public class MSSQLConnectionTests extends BaseConnectionTester {
 
     @BeforeClass
     public static void setUpClass() throws SQLException {
-        DB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+        DB_URL = mssqlContainer.getJdbcUrl();
         DB_USER = mssqlContainer.getUsername();
         DB_PASSWORD = mssqlContainer.getPassword();
 
@@ -205,5 +207,12 @@ public class MSSQLConnectionTests extends BaseConnectionTester {
         if (originalCatalog != null) {
             msSqlConnection.setCatalog(originalCatalog);
         }
+    }
+
+    @Test(expected = SQLServerException.class)
+    @Override
+    @SneakyThrows
+    public void testCreateStruct() {
+        msSqlConnection.createStruct("TEST_SCHEMA.TEST_STRUCT_TYPE", new String[]{"a", "b", "c"});
     }
 }

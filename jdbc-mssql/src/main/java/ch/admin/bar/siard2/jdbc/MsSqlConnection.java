@@ -275,4 +275,12 @@ public class MsSqlConnection
         return createBlob();
     }
 
+    /** {@inheritDoc}
+     * MS SQL Server does not support the ARRAY type.
+     */
+    @Override
+    public Array createArrayOf(String typeName, Object[] elements)
+            throws SQLException {
+        throw new SQLFeatureNotSupportedException("MS SQL Server does not support the ARRAY type");
+    }
 }

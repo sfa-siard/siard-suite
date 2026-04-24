@@ -34,7 +34,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class MsSqlResultSetTester
+public class MsSqlResultSetTest
         extends BaseResultSetTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
@@ -42,7 +42,9 @@ public class MsSqlResultSetTester
     @ClassRule
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
-            .withPassword(SA_PASSWORD);
+            .withPassword(SA_PASSWORD)
+            .withUrlParam("trustServerCertificate", "true");
+
 
     private static String _sDB_URL;
     private static String _sDB_USER;
@@ -120,7 +122,7 @@ public class MsSqlResultSetTester
             _lMsTotalStart = System.currentTimeMillis();
         }
 
-        _sDB_URL = MsSqlDriver.getUrl(mssqlContainer.getHost() + ":" + mssqlContainer.getMappedPort(1433));
+        _sDB_URL = mssqlContainer.getJdbcUrl();
         _sDB_USER = mssqlContainer.getUsername();
         _sDB_PASSWORD = mssqlContainer.getPassword();
 
