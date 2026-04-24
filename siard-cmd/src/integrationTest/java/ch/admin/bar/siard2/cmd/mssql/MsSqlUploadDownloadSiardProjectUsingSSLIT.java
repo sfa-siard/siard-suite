@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Duration;
 
-public class MsSqlUploadDownloadSiardProjectUsingSLLIT {
+public class MsSqlUploadDownloadSiardProjectUsingSSLIT {
 
     /**
      * Output of {@link MsSqlDownloadSiardProjectIT}
