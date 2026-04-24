@@ -53,6 +53,7 @@ jackson = "2.18.2"
 mslinks = "1.0.6.2"
 jetbrains-annotations = "24.1.0"
 testfx = "4.0.16-alpha"
+bouncycastle = "1.84"
 
 [libraries]
 # ANTLR
@@ -147,6 +148,7 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "j
 testfx-core = { module = "org.testfx:testfx-core", version.ref = "testfx" }
 testfx-junit5 = { module = "org.testfx:testfx-junit5", version.ref = "testfx" }
 testfx-monocle = { module = "org.testfx:openjfx-monocle", version = "jdk-12.0.1+2" }
+bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncycastle" }
 
 [plugins]
 axion-release = { id = "pl.allegro.tech.build.axion-release", version.ref = "axion-release" }

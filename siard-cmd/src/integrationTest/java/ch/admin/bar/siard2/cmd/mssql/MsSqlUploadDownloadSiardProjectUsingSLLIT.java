@@ -5,19 +5,21 @@ import ch.admin.bar.siard2.cmd.SiardToDb;
 import ch.admin.bar.siard2.cmd.mssql.usecases.keys.download.MsSqlDownloadSiardProjectIT;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
+import ch.admin.bar.siard2.cmd.utils.ssl.SelfSignedCert;
 import lombok.val;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.images.builder.Transferable;
 import org.testcontainers.utility.MountableFile;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Duration;
 
-public class MsSqlUploadDownloadSiardProjectUsingSslIT {
+public class MsSqlUploadDownloadSiardProjectUsingSLLIT {
 
     /**
      * Output of {@link MsSqlDownloadSiardProjectIT}
@@ -28,11 +30,13 @@ public class MsSqlUploadDownloadSiardProjectUsingSslIT {
     @Rule
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
+    private final SelfSignedCert cert = SelfSignedCert.generate("localhost", Duration.ofDays(1));
+
     @Rule
     public final MSSQLServerContainer<?> db = new MSSQLServerContainer<>("mcr.microsoft.com/mssql/server:2022-latest")
             .acceptLicense()
-            .withCopyToContainer(MountableFile.forClasspathResource("mssql/ssl/mssql.pem", 0644), "/var/opt/mssql/mssql.pem")
-            .withCopyToContainer(MountableFile.forClasspathResource("mssql/ssl/mssql.key", 0644), "/var/opt/mssql/mssql.key")
+            .withCopyToContainer(Transferable.of(cert.getCertificatePem(), 0644), "/var/opt/mssql/mssql.pem")
+            .withCopyToContainer(Transferable.of(cert.getPrivateKeyPem(), 0644), "/var/opt/mssql/mssql.key")
             .withCopyToContainer(MountableFile.forClasspathResource("mssql/ssl/mssql.conf", 0644), "/var/opt/mssql/mssql.conf")
             .withUrlParam("trustServerCertificate", "true")
             .withUrlParam("encrypt", "true")
