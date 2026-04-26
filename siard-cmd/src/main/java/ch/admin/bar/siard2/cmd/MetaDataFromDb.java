@@ -692,8 +692,6 @@ public class MetaDataFromDb extends MetaDataBase {
         String sTypeName = rs.getString("TYPE_NAME");
         long lColumnSize = rs.getLong("COLUMN_SIZE");
         int iDecimalDigits = rs.getInt("DECIMAL_DIGITS");
-        LOG.debug("JDBC Type: " + iDataType + " (" + getJdbcTypeName(iDataType) + "), Column Size: " + lColumnSize + ", Decimal Digits: " + iDecimalDigits);
-        LOG.debug("TypeOriginal: " + sTypeName);
         MetaSchema ms;
         QualifiedId qiParent;
         if (mc.getParentMetaTable() != null) {
@@ -712,7 +710,6 @@ public class MetaDataFromDb extends MetaDataBase {
             if (iDataType != Types.OTHER) mc.setPreType(iDataType, lColumnSize, iDecimalDigits);
             else mc.setType(sTypeName);
             mc.setTypeOriginal(sTypeName);
-            LOG.debug("SQL:1999 Type: " + mc.getType());
         } else if (iDataType == Types.ARRAY) {
             /* parse array constructor "<base> ARRAY[<n>]" */
             Matcher m = _patARRAY_CONSTRUCTOR.matcher(sTypeName);
@@ -754,14 +751,6 @@ public class MetaDataFromDb extends MetaDataBase {
         }
         int iOrdinalPosition = rs.getInt("ORDINAL_POSITION");
         if (iOrdinalPosition != mc.getPosition()) throw new IOException("Invalid column position found!");
-    }
-
-    private String getJdbcTypeName(int type) {
-        try {
-            return java.sql.JDBCType.valueOf(type).getName();
-        } catch (IllegalArgumentException e) {
-            return "UNKNOWN";
-        }
     }
 
     /**
