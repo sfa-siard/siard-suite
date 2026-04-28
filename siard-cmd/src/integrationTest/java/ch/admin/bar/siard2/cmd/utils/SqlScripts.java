@@ -10,6 +10,7 @@ public class SqlScripts {
         public final static String SIARDSUITE_129_BINARY = "oracle/issues/siardsuite129/binary-types-schema.sql";
         public final static String SIARDSUITE_129_VARCHAR = "oracle/issues/siardsuite129/varchar-types-schema.sql";
         public final static String SIARDSUITE_106_SCHEMA_NAME = "oracle/issues/siardsuite106/schema-with-underscore.sql";
+        public final static String SIARDSUITE_163_DATATYPE_MAPPING = "oracle/issues/siardsuite163/datatype-mapping-oracle.sql";
     }
 
     public static class Postgres {
@@ -28,6 +29,11 @@ public class SqlScripts {
         public final static String JDBCMYSQL_4 = "mysql/issues/jdbcmysql4/nation.sql";
         public final static String JDBCMYSQL_4_WILDCARD = "mysql/issues/jdbcmysql4/wildcard.sql";
         public final static String SIARDSUITE_112 = "mysql/issues/siardsuite112/mysql-file-types.sql";
+        public final static String SIARDSUITE_163_DATATYPE_MAPPING = "mysql/issues/siardsuite163/datatype-mapping-mysql.sql";
+    }
+
+    public static class Db2 {
+        public final static String SIARDSUITE_163_DATATYPE_MAPPING = "db2/issues/siardsuite163/datatype-mapping-db2.sql";
     }
 
     public static class MsSQL {
@@ -35,5 +41,6 @@ public class SqlScripts {
         public final static String SIARDSUITE_115 = "mssql/issues/siardsuite115/mssql-varchar-types.sql";
         public final static String SIARDSUITE_125 = "mssql/issues/siardsuite125/mssql-bit-types.sql";
         public final static String SIARDSUITE_106_SCHEMA_NAME = "mssql/issues/siardsuite106/schema-with-underscore.sql";
+        public final static String SIARDSUITE_163_DATATYPE_MAPPING = "mssql/issues/siardsuite163/datatype-mapping-mssql.sql";
     }
 }
