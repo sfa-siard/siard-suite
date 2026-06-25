@@ -94,7 +94,8 @@ runtime {
         "java.sql",
         "java.management",
         "java.naming",
-        "java.security.jgss"
+        "java.security.jgss",
+        "jdk.crypto.ec"
     )
 
     imageZip.set(file("${layout.buildDirectory.get()}/image-zip/SIARD-Suite.${version}.zip"))
