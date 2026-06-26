@@ -1,6 +1,3 @@
-/* add -Djava.util.logging.config.file=etc/debug.properties to the VM arguments
- * and check logs/siard*.log afterwards.
- */
 package ch.enterag.utils.logging;
 
 

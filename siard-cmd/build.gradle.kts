@@ -242,7 +242,6 @@ distributions {
 
             from(layout.projectDirectory.dir("etc")) {
                 into("etc")
-                exclude("debug.properties")
             }
 
             from(layout.projectDirectory.dir("doc")) {
