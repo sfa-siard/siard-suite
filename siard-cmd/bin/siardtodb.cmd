@@ -13,7 +13,6 @@ if "%~1"=="/?" goto help
 if "%~1"=="-h" goto help
 if "%~1"=="/h" goto help
 set jar=lib\siardcmd.jar
-set logprop=etc\logging.properties
 set class=ch.admin.bar.siard2.cmd.SiardToDb
 goto start
 
@@ -148,7 +147,7 @@ goto error
 rem --------------------------------------------------------------------
 rem execute bin/SiardToDb
 rem --------------------------------------------------------------------
-set opts="-Xmx1024m" "-Djava.util.logging.config.file=%execdir%\%logprop%" %JAVA_OPTS%
+set opts="-Xmx1024m" %JAVA_OPTS%
 "%java%" %opts% -cp "%execdir%\%jar%" %class% %args%
 goto exit
 
@@ -166,7 +165,7 @@ rem --------------------------------------------------------------------
 rem we need the quotes for protecting the angular brackets
 @echo "Calling syntax                                                      "
 @echo "  siardtodb.cmd [-h] | <args>                                 "
-@echo "executes %class% in %jar% using %logprop% for logging."
+@echo "executes %class% in %jar%."
 @echo "                                                                    "
 @echo "Parameters:                                                         "
 @echo "  -h        displays usage information                              "

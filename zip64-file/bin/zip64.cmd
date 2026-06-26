@@ -13,7 +13,6 @@ if "%~1"=="/?" goto help
 if "%~1"=="-h" goto help
 if "%~1"=="/h" goto help
 set jar=lib\zip64.jar
-set logprop=etc\logging.properties
 set class=ch.enterag.zip.zip64
 goto start
 
@@ -148,7 +147,7 @@ goto error
 rem --------------------------------------------------------------------
 rem execute %class% in "%jar%"
 rem --------------------------------------------------------------------
-set opts="-Djava.util.logging.config.file=%execdir%\%logprop%" %JAVA_OPTS%
+set opts=%JAVA_OPTS%
 "%java%" %opts% -cp "%execdir%\%jar%" %class% %args%
 goto exit
 
