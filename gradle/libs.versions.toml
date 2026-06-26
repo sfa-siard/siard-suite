@@ -16,7 +16,7 @@ commons-text = "1.15.0"
 tika = "3.2.3"
 
 # Database Drivers
-postgresql = "42.2.5"
+postgresql = "42.7.11"
 mysql = "8.3.0"
 mssql = "13.4.0.jre11"
 oracle-ojdbc = "19.3.0.0"

@@ -574,11 +574,7 @@ public class MetaDataFromDb extends MetaDataBase {
             if (sSpecificName == null) sSpecificName = sFunctionName;
             /* we are only interested in the parameters of this specific routine */
             if (sSpecificName.equals(mr.getSpecificName())) {
-                /* the functionColumn... constants are defined inconsistently and
-                 * probably were supposed to be identical with the corresponding
-                 * procedureColumn... constants.
-                 */
-                if ((iColumnType == DatabaseMetaData.procedureColumnReturn) || (iColumnType == DatabaseMetaData.procedureColumnResult)) {
+                if ((iColumnType == DatabaseMetaData.functionReturn) || (iColumnType == DatabaseMetaData.functionColumnResult) || (iColumnType == DatabaseMetaData.procedureColumnResult)) {
                     mr.setReturnType(sTypeName);
                     if ((iDataType != Types.DISTINCT) && (iDataType != Types.ARRAY) && (iDataType != Types.STRUCT))
                         mr.setReturnPreType(iDataType, lPrecision, iScale);
