@@ -10,6 +10,7 @@ description = "SIARD Utilities"
 
 dependencies {
     implementation(libs.tika.core)
+    implementation(libs.slf4j.api)
 
     annotationProcessor(libs.lombok)
 
@@ -17,6 +18,7 @@ dependencies {
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.logback.classic)
 }
 
 tasks.test {

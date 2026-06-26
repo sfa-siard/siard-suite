@@ -49,6 +49,7 @@ msv-core = "2010.2"
 xsdlib = "2013.2.2"
 jsoup = "1.21.2"
 logback = "1.5.18"
+slf4j = "2.0.16"
 jackson = "2.18.2"
 mslinks = "1.0.6.2"
 jetbrains-annotations = "24.1.0"
@@ -99,6 +100,7 @@ msv-core = { module = "net.java.dev.msv:msv-core", version.ref = "msv-core" }
 xsdlib = { module = "net.java.dev.msv:xsdlib", version.ref = "xsdlib" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 # JavaFX
 javafx-base-win = { module = "org.openjfx:javafx-base", version.ref = "javafx" }
