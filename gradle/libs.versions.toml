@@ -26,7 +26,7 @@ mariadb = "2.7.4"
 # JAXB & XML
 jaxb-api = "2.3.0"
 jaxb-impl = "2.3.9"
-woodstox-stax2 = "3.1.1"
+woodstox-stax2 = "4.3.0"
 woodstox-core = "4.1.2"
 
 # Testing
