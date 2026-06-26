@@ -25,6 +25,6 @@ This module provides shared utilities for:
 
 ## Module-Specific Notes
 
-- Pure utility library with no external dependencies
+- Utility library with minimal external dependencies (SLF4J, Apache Tika, Lombok)
 - Used by all other SIARD Suite modules
 - No database or UI dependencies 
