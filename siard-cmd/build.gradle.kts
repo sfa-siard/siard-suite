@@ -5,6 +5,7 @@ group = "ch.admin.bar"
 version = scmVersion.version
 val siardVersion = "2.2"
 val versionedProjectName = "${project.name}-${scmVersion.version}"
+val xercesSaxParserFactory: String by extra
 
 val generatedResourcesDir = Files.createDirectories(layout.buildDirectory.dir("generated/resources").get().asFile.toPath())
 
@@ -78,14 +79,11 @@ dependencies {
 }
 
 tasks.withType(JavaExec::class) {
-    jvmArgs =
-        listOf("-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl")
+    jvmArgs = listOf(xercesSaxParserFactory)
 }
 
 tasks.withType<Test> {
-    jvmArgs = listOf(
-        "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"
-    )
+    jvmArgs = listOf(xercesSaxParserFactory)
 }
 
 // Helper function to create database-specific integration test tasks
@@ -266,9 +264,7 @@ val createSiardToDbStartScript by tasks.registering(CreateStartScripts::class) {
 
 tasks.withType<CreateStartScripts>().configureEach {
     doLast {
-        val jvmArgsLine = listOf(
-            "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"
-        ).joinToString(" ")
+        val jvmArgsLine = listOf(xercesSaxParserFactory).joinToString(" ")
 
         // UNIX script
         unixScript.writeText(

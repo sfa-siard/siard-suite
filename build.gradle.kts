@@ -15,7 +15,9 @@ subprojects {
     repositories {
         mavenCentral()
     }
-    
+
+    extra["xercesSaxParserFactory"] = "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"
+
     configure<JavaPluginExtension> {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(17))
