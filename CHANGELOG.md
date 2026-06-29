@@ -13,6 +13,7 @@
   * Upgrade to MSSQL JDBC Driver 13.4.0.jre11
   * Dependency library updates, see https://github.com/sfa-siard/siard-suite/commit/60966331b5ff9c771677a1ca486072eae0b46395
   * Apply standard code style to all java files
+  * Consistent usage of SLF4J logging with logback, replacing old logging mechanism. Calls to system.out and system.err are not yet replaced everywhere.
   
 * Fix: 
   * Issues with encrypted secure connections to MSSQL Server:
