@@ -33,6 +33,18 @@ import static ch.admin.bar.siard2.cmd.utils.TestResourcesResolver.resolve;
  */
 public class SiardArchivesHandler extends ExternalResource {
 
+    // jdbc-oracle's xmlparserv2 registers a SAXParserFactory that does not support the
+    // external-general-entities feature required by Logback during XML configuration.
+    // This causes Logback to print a JoranException stack trace on startup when running
+    // tests from the IDE (Gradle already passes this via jvmArgs). Force the JDK Xerces
+    // parser so the logback configuration can be parsed without errors.
+    static {
+        if (System.getProperty("javax.xml.parsers.SAXParserFactory") == null) {
+            System.setProperty("javax.xml.parsers.SAXParserFactory",
+                    "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
+        }
+    }
+
     private final TemporaryFolder temporaryFolder = new TemporaryFolder();
     private final XmlMapper xmlMapper = new XmlMapper();
 

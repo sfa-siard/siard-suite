@@ -13,6 +13,7 @@ description = "SIARD Suite Application"
 
 val mainClassName = "ch.admin.bar.siardsuite.Launcher"
 val applicationName = "SIARD-Suite"
+val xercesSaxParserFactory: String by extra
 
 application {
     mainClass.set(mainClassName)
@@ -65,7 +66,7 @@ dependencies {
 
 tasks.withType<JavaExec> {
     jvmArgs(
-        "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+        xercesSaxParserFactory,
         "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
         "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
         "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
@@ -80,7 +81,7 @@ runtime {
     launcher {
         noConsole = false
         jvmArgs = listOf(
-            "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+            xercesSaxParserFactory,
             "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
             "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
@@ -152,7 +153,7 @@ tasks.test {
     jvmArgs(
         "-Djava.awt.headless=true",
         "-Dtestfx.headless=true",
-        "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+        xercesSaxParserFactory,
         "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
         "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
         "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",
@@ -271,7 +272,7 @@ tasks.named("jpackageImage") {
 tasks.withType<CreateStartScripts>().configureEach {
     doLast {
         val jvmArgsLine = listOf(
-            "-Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+            xercesSaxParserFactory,
             "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
             "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
             "--add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED",

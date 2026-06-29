@@ -12,8 +12,6 @@ param (
 
 $EXECUTABLE='java.exe'
 $MIN_JAVA_VERSION = [Version]'1.8'
-# logging properties relative to script location
-$REL_LOGGING_PROPERTIES = 'etc\logging.properties'
 # jar file relative to script location
 $REL_JAR_FILE = 'lib\siardcmd.jar'
 # class with main() to be run
@@ -26,7 +24,7 @@ Function Help()
 {
 	Write-Host "Calling syntax"
 	Write-Host "  siardtodb.ps1 [-h] | <args>"
-  Write-Host "executes $CLASS in $REL_JAR_FILE using $REL_LOGGING_PROPERTIES for logging."
+  Write-Host "executes $CLASS in $REL_JAR_FILE."
 	Write-Host "                                                                    "
   Write-Host "Parameters:"
   Write-Host "  -h        displays usage information"
@@ -161,9 +159,7 @@ else
     #Write-Host 'scriptName: '+$scriptName
     $execDir = (Split-Path -Path $scriptName)
     #Write-Host 'execDir: '+$execDir
-    $logProp = (Join-Path $execDir $REL_LOGGING_PROPERTIES)
-    #Write-Host 'logProp: '+$logProp
-    $opts = '-Xmx1024m',$('-Djava.util.logging.config.file=' + $logProp),$env:JAVA_OPTS
+    $opts = '-Xmx1024m',$env:JAVA_OPTS
     #Write-Host 'opts: '+$opts
     $jarFile = (Join-Path $execDir $REL_JAR_FILE)
     #Write-Host 'jarFile: '+$jarFile

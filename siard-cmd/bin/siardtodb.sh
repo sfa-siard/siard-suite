@@ -15,8 +15,6 @@ rc=12
 minjavaversion="1.8"
 # jar file relative to script location
 reljar=lib/siardcmd.jar
-# logging properties relative to script location
-rellogprop=etc/logging.properties
 # class with main() to be run
 class=ch.admin.bar.siard2.cmd.SiardToDb
 
@@ -76,7 +74,7 @@ help()
 {
   echo "Calling syntax"
   echo "  siardtodb.sh [-h] | <args>"
-  echo "executes $class in $reljar using $rellogprop for logging."
+  echo "executes $class in $reljar."
   echo ""
   echo "Parameters"
   echo "  -h          displays usage information"
@@ -113,7 +111,7 @@ execute()
 {
   execdir="$0"
   execdir=${execdir%/*}
-  opts="-Xmx1024m -Djava.util.logging.config.file=\"$execdir/$rellogprop\" $JAVA_OPTS"
+  opts="-Xmx1024m $JAVA_OPTS"
   #echo "$java" $opts -cp "$execdir/$reljar"  "$class" "$args"
   if [ ${#args} -eq 0 ];
   then

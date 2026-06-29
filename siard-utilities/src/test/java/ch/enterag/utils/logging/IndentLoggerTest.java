@@ -1,10 +1,9 @@
-/* add -Djava.util.logging.config.file=etc/debug.properties to the VM arguments
- * and check logs/siard*.log afterwards.
- */
 package ch.enterag.utils.logging;
 
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class IndentLoggerTest {
     IndentLogger _il = IndentLogger.getIndentLogger(IndentLoggerTest.class.getPackage()
@@ -14,6 +13,11 @@ public class IndentLoggerTest {
     public void test() {
         _il.enter();
         _il.exit();
+    }
+
+    @Test
+    public void getParent_returnsParentLogger() {
+        assertNotNull(_il.getParent());
     }
 
 }

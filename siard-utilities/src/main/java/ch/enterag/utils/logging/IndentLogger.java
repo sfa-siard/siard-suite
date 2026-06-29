@@ -1,246 +1,243 @@
-/*== IndentLogger.java =================================================
-IndentLogger implements a customized logger with indentation. 
-Version     : $Id: IndentLogger.java 461 2015-12-18 09:47:55Z hartwig $
-Application : Logging Utilities
-Description : IndentLogger implements a customized logger with indentation.
+/**
+Description : IndentLogger wraps an SLF4J logger and adds automatic
+              indentation, automatic method name detection on entry and exit.
 ------------------------------------------------------------------------
 Copyright  : 2010, 2012, 2016 Enter AG, Rüti ZH, Switzerland
+             2026 Puzzle ITC GmbH, Switzerland
 Created    : 15.04.2010, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.logging;
 
 import ch.enterag.utils.EU;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLWarning;
 import java.util.Enumeration;
-import java.util.MissingResourceException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
-
-/** IndentLogger extends java.util.logging.Logger with automatic
+/** IndentLogger wraps an SLF4J logger and adds automatic
  * indentation, automatic method name detection on entry and exit.
  * @author Hartwig Thomas
  */
-public class IndentLogger extends Logger {
+public class IndentLogger {
     /** amount to increase/decrease indentation */
-    private static final int iINDENT_AMOUNT = 2;
+    private static final int INDENT_AMOUNT = 2;
     /** tag for logged "events" */
-    private static final String sTAG_EVENT = "-- ";
+    private static final String TAG_EVENT = "-- ";
     /** tag for logged method entry */
-    private static final String sTAG_ENTER = ">> ";
+    private static final String TAG_ENTER = ">> ";
     /** tag for logged method exit */
-    private static final String sTAG_EXIT = "<< ";
+    private static final String TAG_EXIT = "<< ";
 
-    /** static indent property.
+    /** static indent property. */
+    private static StringBuilder stringBuilder = new StringBuilder();
+
+    /** wrapped SLF4J logger */
+    private final Logger logger;
+
+    /**
+     * constructor
+     * @param loggerName logger loggerName
      */
-    private static StringBuilder m_sbIndent = new StringBuilder();
+    protected IndentLogger(String loggerName) {
+        this.logger = LoggerFactory.getLogger(loggerName);
+    }
 
-    /** returns current indent amount.
+    /**
+     * returns current indent amount.
      @return indent amount.
      */
     public int getIndent() {
-        return m_sbIndent.toString()
-                         .length();
+        return stringBuilder.toString()
+                            .length();
     }
 
-    /** sets indent amount.
-     @param iIndent indent amount.
+    /**
+     * sets indent amount.
+     @param indent indent amount.
      */
-    public void setIndent(int iIndent) {
-        int iPreviousIndent = getIndent();
-        if (iIndent < 0)
-            iIndent = 0;
-        m_sbIndent.setLength(iIndent);
-        for (int i = iPreviousIndent; i < iIndent; i++)
-            m_sbIndent.setCharAt(i, ' ');
+    public synchronized void setIndent(int indent) {
+        int previousIndent = getIndent();
+        if (indent < 0) indent = 0;
+        stringBuilder.setLength(indent);
+        for (int i = previousIndent; i < indent; i++)
+            stringBuilder.setCharAt(i, ' ');
     }
-  
 
-    /** constructor (see java.util.logging.Logger).
-     * Protected method to construct a logger for a named subsystem.
-     * The logger will be initially configured with a null Level and with
-     * useParentHandlers true.
-     * @param sName a name for the logger. This should be a dot-separated
-     *              name and should normally be based on the package name
-     *              or class name of the subsystem, such as java.net or
-     *              javax.swing. It may be null for anonymous Loggers.
-     * @param sResources name of ResourcePropertyBundle to be used for localizing
-     *              messages for this logger. May be null if none of
-     *              the messages require localization.
-     * @throws MissingResourceException if the ResourceBundleName is non-null
-     *              and no corresponding resource can be found.
+    /** returns the parent of the java.util.logging logger with the same name.
+     @return parent logger.
      */
-    protected IndentLogger(String sName, String sResources)
-            throws MissingResourceException {
-        super(sName, sResources);
+    public java.util.logging.Logger getParent() {
+        return java.util.logging.Logger.getLogger(logger.getName())
+                                       .getParent();
     }
-  
 
-    /** returns the full name of the calling method which has given depth
-     * on stack.
-     * @param iDepth depth on stack.
-     * @return full name of the calling method.
+    /** logs an indented message object with the DEBUG level.
+     @param message the message to log.
      */
-    private String getCallingMethod(int iDepth) {
-        String sCallingMethod = null;
-
-        StackTraceElement[] asSte = Thread.currentThread()
-                                          .getStackTrace();
-        String sClassName = asSte[iDepth].getClassName();
-        String sMethodName = asSte[iDepth].getMethodName();
-        sCallingMethod = sClassName + "." + sMethodName;
-        return sCallingMethod;
-    }
-  
-
-    /** every log action passes through this.
-     * @param record log record.
-     */
-    @Override
-    public void log(LogRecord record) {
-        if (isLoggable(record.getLevel()))
-            super.log(record);
-    }
-  
-
-    /** logs an indented message object with the FINER level.
-     @param sMessage the message to log.
-     */
-    public synchronized void event(String sMessage) {
-        finer(m_sbIndent.toString() + sTAG_EVENT + sMessage);
+    public synchronized void event(String message) {
+        logger.debug("{}{}{}", stringBuilder.toString(), TAG_EVENT, message);
     }
 
-
-    /** logs an indented method and its parameters with the FINEST level
+    /** logs an indented method and its parameters with the TRACE level
      * and increases indentation.
-     * @param aoParm method parameter values to be logged.
+     * @param params method parameter values to be logged.
      */
-    public synchronized void enter(Object... aoParm) {
-        if (isLoggable(Level.FINEST)) {
-            StringBuilder sbMethod = new StringBuilder(getCallingMethod(3));
-            sbMethod.append("(");
-            for (int iParameter = 0; iParameter < aoParm.length; iParameter++) {
-                if (iParameter > 0)
-                    sbMethod.append(", ");
-                sbMethod.append(String.valueOf(aoParm[iParameter]));
+    public synchronized void enter(Object... params) {
+        if (logger.isTraceEnabled()) {
+            StringBuilder sb = new StringBuilder(getCallingMethod(3));
+            sb.append("(");
+            for (int i = 0; i < params.length; i++) {
+                if (i > 0) sb.append(", ");
+                sb.append(params[i]);
             }
-            sbMethod.append(")");
-            finest(m_sbIndent.toString() + sTAG_ENTER + sbMethod.toString());
-            setIndent(getIndent() + iINDENT_AMOUNT);
+            sb.append(")");
+            logger.trace("{}{}{}", stringBuilder.toString(), TAG_ENTER, sb);
+            setIndent(getIndent() + INDENT_AMOUNT);
         }
     }
 
-
     /** decreases indentation and logs an indented method and its return
-     * value with the FINEST level.
+     * value with the TRACE level.
      */
     public synchronized void exit() {
-        if (isLoggable(Level.FINEST)) {
-            StringBuilder sbMethod = new StringBuilder(getCallingMethod(3));
-            setIndent(getIndent() - iINDENT_AMOUNT);
-            finest(m_sbIndent.toString() + sTAG_EXIT + sbMethod.toString());
+        if (logger.isTraceEnabled()) {
+            setIndent(getIndent() - INDENT_AMOUNT);
+            logger.trace("{}{}{}", stringBuilder.toString(), TAG_EXIT, getCallingMethod(3));
         }
     }
-
 
     /** decreases indentation and logs an indented method and its return
-     * value with the FINEST level.
-     @param oReturn return value to be logged.
+     * value with the TRACE level.
+     @param object return value to be logged.
      */
-    public synchronized void exit(Object oReturn) {
-        if (isLoggable(Level.FINEST)) {
-            StringBuilder sbMethod = new StringBuilder(getCallingMethod(3));
-            setIndent(getIndent() - iINDENT_AMOUNT);
-            finest(m_sbIndent.toString() + sTAG_EXIT + sbMethod.toString() + "(" + String.valueOf(oReturn) + ")");
+    public synchronized void exit(Object object) {
+        if (logger.isTraceEnabled()) {
+            setIndent(getIndent() - INDENT_AMOUNT);
+            logger.trace("{}{}{}({})", stringBuilder.toString(), TAG_EXIT, getCallingMethod(3), object);
         }
     }
-
 
     /** logs the given properties.
-     @param sTitle properties' title in log.
-     @param prop properties to be logged.
+     @param title properties' title in log.
+     @param properties properties to be logged.
      */
-    public final void properties(
-            String sTitle,
-            Properties prop) {
-        event(sTitle + ":");
-        setIndent(getIndent() + iINDENT_AMOUNT);
-        String sPropKey = null;
-        String sPropValue = null;
-        for (Enumeration<?> enumProperty = prop.propertyNames();
-             enumProperty.hasMoreElements();
-        ) {
-            sPropKey = (String) enumProperty.nextElement();
-            sPropValue = prop.getProperty(sPropKey);
-            info("  " + sPropKey + ": " + sPropValue);
+    public final void properties(String title, Properties properties) {
+        event(title + ":");
+        setIndent(getIndent() + INDENT_AMOUNT);
+        for (Enumeration<?> enumProperty = properties.propertyNames(); enumProperty.hasMoreElements(); ) {
+            logger.info("  {}: {}", enumProperty.nextElement(), properties.getProperty((String) enumProperty.nextElement()));
         }
-        setIndent(getIndent() - iINDENT_AMOUNT);
+        setIndent(getIndent() - INDENT_AMOUNT);
     }
-
 
     /** logs the current system properties.
      */
     public final void systemProperties() {
         Runtime rt = Runtime.getRuntime();
-        info("free memory: " + String.valueOf(rt.freeMemory()));
-        info("total memory: " + String.valueOf(rt.totalMemory()));
-        info("maximum memory: " + String.valueOf(rt.maxMemory()));
-        Properties propSystem = System.getProperties();
-        properties("System properties", propSystem);
+        logger.info("free memory: {}", rt.freeMemory());
+        logger.info("total memory: {}", rt.totalMemory());
+        logger.info("maximum memory: {}", rt.maxMemory());
+        properties("System properties", System.getProperties());
     }
 
-
-    /** logs an error with the INFO level.
+    /** logs an error with the DEBUG level.
      @param e error to log.
      */
     public synchronized void error(Error e) {
-        if (isLoggable(Level.INFO))
-            event(EU.getErrorMessage(e));
+        if (logger.isDebugEnabled()) event(EU.getErrorMessage(e));
     }
 
-
-    /** logs an exception with the FINER level.
+    /** logs an exception with the DEBUG level.
      @param e exception to log.
      */
     public synchronized void exception(Exception e) {
-        if (isLoggable(Level.FINER))
-            event(EU.getExceptionMessage(e));
+        if (logger.isDebugEnabled()) event(EU.getExceptionMessage(e));
     }
 
-
-    /** logs an SQLWarning with the FINER level.
-     @param sw warning to log.
+    /** logs an SQLWarning with the DEBUG level.
+     @param sqlWarning warning to log.
      */
-    public synchronized void sqlwarning(SQLWarning sw) {
-        if (isLoggable(Level.FINER)) {
-            StringBuilder sbMessage = null;
-            for (; sw != null; sw = sw.getNextWarning()) {
-                if (sbMessage == null)
-                    sbMessage = new StringBuilder();
-                else
-                    sbMessage = sbMessage.append("\n");
-                sbMessage.append("Warning " + sw.getMessage() + " / SQL State " + sw.getSQLState() + " / Error Code " + sw.getErrorCode());
+    public synchronized void sqlwarning(SQLWarning sqlWarning) {
+        if (logger.isDebugEnabled()) {
+            StringBuilder sb = null;
+            for (; sqlWarning != null; sqlWarning = sqlWarning.getNextWarning()) {
+                if (sb == null) sb = new StringBuilder();
+                else sb.append("\n");
+                sb.append("Warning " + sqlWarning.getMessage() + " / SQL State " + sqlWarning.getSQLState() + " / Error Code " + sqlWarning.getErrorCode());
             }
-            if (sbMessage != null)
-                event(sbMessage.toString());
+            if (sb != null) event(sb.toString());
         }
     }
 
+    /** logs a message with the INFO level.
+     @param message message to log.
+     */
+    public void info(String message) {
+        logger.info(message);
+    }
 
-    /** returns a new IndentLogger, attempting to initialize it from the
-     * logging configuration or from the system property first.
-     * @param sName name of the logger.
+    /** logs a message with the WARN level.
+     @param message message to log.
+     */
+    public void warning(String message) {
+        logger.warn(message);
+    }
+
+    /** logs a message with the ERROR level.
+     @param message message to log.
+     */
+    public void severe(String message) {
+        logger.error(message);
+    }
+
+    /** logs a message with the DEBUG level.
+     @param message message to log.
+     */
+    public void config(String message) {
+        logger.debug(message);
+    }
+
+    /** logs a message with the DEBUG level.
+     @param message message to log.
+     */
+    public void fine(String message) {
+        logger.debug(message);
+    }
+
+    /** logs a message with the DEBUG level.
+     @param message message to log.
+     */
+    public void finer(String message) {
+        logger.debug(message);
+    }
+
+    /** logs a message with the TRACE level.
+     @param message message to log.
+     */
+    public void finest(String message) {
+        logger.trace(message);
+    }
+
+    /** returns the full name of the calling method which has given depth
+     * on stack.
+     * @param depth depth on stack.
+     * @return full name of the calling method.
+     */
+    private String getCallingMethod(int depth) {
+
+        StackTraceElement[] stackTraceElements = Thread.currentThread()
+                                          .getStackTrace();
+        return stackTraceElements[depth].getClassName() + "." + stackTraceElements[depth].getMethodName();
+    }
+
+    /** returns a new IndentLogger backed by an SLF4J logger.
+     * @param loggerName name of the logger.
      * @return the logger
      */
-    public static IndentLogger getIndentLogger(String sName) {
-        IndentLogger il = new IndentLogger(sName, null);
-        LogManager lm = LogManager.getLogManager();
-        lm.addLogger(il); // sets parent, inherits handlers, level is null, if parent's level is to be used.
-        return il;
+    public static IndentLogger getIndentLogger(String loggerName) {
+        return new IndentLogger(loggerName);
     }
 
 }
