@@ -2429,8 +2429,8 @@ public class AccessDatabaseMetaData
                     }
                 }
             }
-            if (idcColumn.get()
-                         .size() > 0) {
+            if (idcColumn != null && idcColumn.get()
+                                              .size() > 0) {
                 String sColumn = idcColumn.get()
                                           .get(idcColumn.get()
                                                         .size() - 1);
@@ -2441,11 +2441,17 @@ public class AccessDatabaseMetaData
                     iOccurrences = Integer.valueOf(iOccurrences.intValue() + 1);
                 mapOccurrences.put(sColumn, iOccurrences);
                 listSelectColumns.add(idcColumn);
+            } else {
+                listSelectColumns.add(null);
             }
         }
         List<String> listColumnNames = new ArrayList<String>();
         for (int iSelect = 0; iSelect < listSelectColumns.size(); iSelect++) {
             IdChain idcColumn = listSelectColumns.get(iSelect);
+            if (idcColumn == null) {
+                listColumnNames.add(null);
+                continue;
+            }
             String sColumn = idcColumn.get()
                                       .get(idcColumn.get()
                                                     .size() - 1);
@@ -2467,6 +2473,8 @@ public class AccessDatabaseMetaData
                         throw new SQLException("Select column " + idcColumn.format() + " could not be disambiguated!");
                     mapOccurrences.put(sColumn, iOccurrences);
                     listColumnNames.add(sColumn);
+                } else {
+                    listColumnNames.add(null);
                 }
             }
         }
@@ -2502,10 +2510,13 @@ public class AccessDatabaseMetaData
         /* evaluate the data types */
         for (int iSelectSublist = 0; iSelectSublist < qs.getSelectSublists()
                                                         .size(); iSelectSublist++) {
+            String sSelectColumnName = listSelectColumnNames.get(iSelectSublist);
+            if (sSelectColumnName == null)
+                continue;
             SelectSublist sel = qs.getSelectSublists()
                                   .get(iSelectSublist);
             iColumnIndex = addSelectColumn(sCatalog, sSchema, sTableName, sColumnNamePattern,
-                                           listSelectColumnNames.get(iSelectSublist), sel, ss, iColumnIndex, listColumns);
+                                           sSelectColumnName, sel, ss, iColumnIndex, listColumns);
         }
         return iColumnIndex;
     } /* addViewColumns

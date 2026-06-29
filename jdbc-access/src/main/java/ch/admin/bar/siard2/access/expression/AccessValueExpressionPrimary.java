@@ -49,7 +49,7 @@ public class AccessValueExpressionPrimary
         super.parse(ctx);
         QualifiedId qiRoutine = getRoutineName();
         if (qiRoutine.isSet()) {
-            if ("Nz".equalsIgnoreCase(qiRoutine.getName())) {
+            if ("Nz".equalsIgnoreCase(qiRoutine.getName()) && getSqlArguments().size() >= 2) {
                 /* case $1 is null then $2 else $1 */
                 SqlArgument sa1 = getSqlArguments().get(0);
                 SqlArgument sa2 = getSqlArguments().get(1);
@@ -62,7 +62,7 @@ public class AccessValueExpressionPrimary
                   .add(sa2.getValueExpression());
                 ce.setElseResult(sa1.getValueExpression());
                 setCaseExpression(ce);
-            } else if ("IIf".equalsIgnoreCase(qiRoutine.getName())) {
+            } else if ("IIf".equalsIgnoreCase(qiRoutine.getName()) && getSqlArguments().size() >= 3) {
                 /* case when $1 then $2 else $3 */
                 SqlArgument sa1 = getSqlArguments().get(0);
                 SqlArgument sa2 = getSqlArguments().get(1);

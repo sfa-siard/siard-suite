@@ -866,6 +866,10 @@ public class MetaDataFromDb extends MetaDataBase {
                 }
                 if (sQueryText != null) mv.setQueryOriginal(sQueryText);
                 getColumns(mv);
+                if (mv.getMetaColumns() == 0) {
+                    LOG.warn("View {} skipped: no resolvable columns found.", qiView.format());
+                    ms.removeMetaView(mv);
+                }
             } catch (SQLException se) {
                 System.err.println("View " + qiView.format() + " could not be archived (" + EU.getExceptionMessage(se) + ")!");
                 ms.removeMetaView(mv);
