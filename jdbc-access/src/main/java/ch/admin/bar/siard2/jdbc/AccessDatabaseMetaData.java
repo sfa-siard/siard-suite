@@ -1766,7 +1766,7 @@ public class AccessDatabaseMetaData
                                 row.put(sJDBC_TYPE_NAME, null);
                                 row.put(sJDBC_SELF_REFERENCING_COL_NAME, null);
                                 row.put(sJDBC_REF_GENERATION, null);
-                                row.put(BaseDatabaseMetaData._sQUERY_TEXT, AccessLiterals.normalizeQueryText(sq.toSQLString()));
+                                row.put(BaseDatabaseMetaData._sQUERY_TEXT, sq.toSQLString());
                                 listTables.add(row);
                             }
                         }
