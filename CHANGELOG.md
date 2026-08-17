@@ -1,6 +1,6 @@
 # CHANGELOG.md
 
-## unreleased
+## 2.2.167 (2026-08-17)
 
 * Feature;
   * Allow users to select database/ schema for postgresql connections
