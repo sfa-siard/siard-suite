@@ -1,5 +1,16 @@
 # CHANGELOG.md
 
+## unreleased
+
+* Maintenance:
+  * upgrade to gradle 9.7
+
+* Fix:
+  * the license files were not included in the distribution package 
+
+* Other
+  * added a code-review skill for agents
+ 
 ## 2.2.167 (2026-08-17)
 
 * Feature;
