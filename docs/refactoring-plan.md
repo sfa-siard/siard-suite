@@ -38,6 +38,29 @@ Classes like `EU`, `SU`, `DU`, `BU`, `FU`, `TZ` are cryptic single/two-letter ut
 
 ## Refactoring Plan — Ordered by Priority
 
+### Phase 0: Tooling & Dependency Upgrades (Highest Priority)
+
+**Step 0.1 — Upgrade Gradle**
+- Update the Gradle wrapper to the latest stable 8.x (or 9.x if available) release
+- Verify Kotlin DSL, Java toolchain, JavaFX, and testcontainers plugins still resolve cleanly
+- Address any deprecations introduced by the new Gradle version
+
+**Step 0.2 — Upgrade to the latest Java LTS**
+- Target **Java 21** as the immediate upgrade (mature JavaFX/MaterialFX/Gradle support)
+- Once validated, evaluate **Java 25** (the newest LTS, released September 2025) for the app and JavaFX modules
+- Update `sourceCompatibility` / `targetCompatibility` and CI/toolchain definitions
+- Re-run the full integration suite on the new Java version
+
+**Step 0.3 — Revert MaterialFX to the official library**
+- Remove the Java 8 MaterialFX port and switch back to the official upstream MaterialFX artifact
+- Verify compatibility with the chosen Java LTS and the upgraded JavaFX version
+- Update imports and any FXML/CSS references to match the official library
+
+**Step 0.4 — Upgrade dependencies**
+- Refresh all declared dependency versions in `libs.versions.toml` / `build.gradle.kts` files
+- Pay special attention to JavaFX, Testcontainers, JDBC drivers, JAXB, SLF4J, Lombok, and JUnit
+- Resolve any breaking API changes before Phase 1
+
 ### Phase 1: Foundation (Low Risk, High Value)
 
 **Step 1.1 — Enforce consistent formatting**
@@ -133,18 +156,22 @@ Classes like `EU`, `SU`, `DU`, `BU`, `FU`, `TZ` are cryptic single/two-letter ut
 
 | Order | Step | Risk | Effort | Value | Done |
 |-------|------|------|--------|-------|------|
-| 1 | 1.1 Formatting | Low | Small | High (baseline) | ✅ |
-| 2 | 1.3 Logging cleanup | Low | Medium | High | |
-| 3 | 2.1 Extract CLI config | Low | Medium | High | |
-| 4 | 2.2 Extract constructor logic | Medium | Medium | High | |
-| 5 | 4.1 Add unit tests | Low | Medium | High | |
-| 6 | 2.3 Break up MetaDataFromDb | Medium | Large | High | |
-| 7 | 2.4 Eliminate duplication | Low | Medium | Medium | |
-| 8 | 3.1 Eliminate downcasting | Medium | Medium | High | |
-| 9 | 1.2 Rename Hungarian notation | Low | Large (mechanical) | Medium | |
-| 10 | 3.2 Modernize collections | Medium | Medium | Medium | |
-| 11 | 3.3 Domain exceptions | Low | Small | Medium | |
-| 12 | 5.1–5.2 Utility cleanup | Low | Medium | Low–Medium | |
-| 13 | 6.1–6.3 Modernizations | Low | Small–Medium | Low | |
+| 1 | 0.1 Upgrade Gradle | Low | Small | High (unblocks) | |
+| 2 | 0.2 Upgrade Java LTS | Medium | Medium | High | |
+| 3 | 0.3 Revert MaterialFX | Medium | Small | Medium | |
+| 4 | 0.4 Upgrade dependencies | Medium | Medium | High | |
+| 5 | 1.1 Formatting | Low | Small | High (baseline) | ✅ |
+| 6 | 1.3 Logging cleanup | Low | Medium | High | |
+| 7 | 2.1 Extract CLI config | Low | Medium | High | |
+| 8 | 2.2 Extract constructor logic | Medium | Medium | High | |
+| 9 | 4.1 Add unit tests | Low | Medium | High | |
+| 10 | 2.3 Break up MetaDataFromDb | Medium | Large | High | |
+| 11 | 2.4 Eliminate duplication | Low | Medium | Medium | |
+| 12 | 3.1 Eliminate downcasting | Medium | Medium | High | |
+| 13 | 1.2 Rename Hungarian notation | Low | Large (mechanical) | Medium | |
+| 14 | 3.2 Modernize collections | Medium | Medium | Medium | |
+| 15 | 3.3 Domain exceptions | Low | Small | Medium | |
+| 16 | 5.1–5.2 Utility cleanup | Low | Medium | Low–Medium | |
+| 17 | 6.1–6.3 Modernizations | Low | Small–Medium | Low | |
 
 Each step is designed to be independently mergeable. The integration tests provide a safety net for the riskier structural changes in Phase 2–3. Always run the full integration test suite after each step.
