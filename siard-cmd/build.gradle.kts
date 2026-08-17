@@ -115,7 +115,6 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskPro
                 try {
                     project.providers.exec {
                         commandLine("docker", "container", "prune", "-f")
-                        isIgnoreExitValue = true
                     }.result.get()
                 } catch (e: Exception) {
                     logger.warn("Failed to clean up Docker containers: ${e.message}")
@@ -156,7 +155,6 @@ task<Test>("integrationTest") {
             try {
                 project.providers.exec {
                     commandLine("docker", "container", "prune", "-f")
-                    isIgnoreExitValue = true
                 }.result.get()
             } catch (e: Exception) {
                 logger.warn("Failed to clean up Docker containers: ${e.message}")

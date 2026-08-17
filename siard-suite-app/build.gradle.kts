@@ -12,11 +12,22 @@ plugins {
 description = "SIARD Suite Application"
 
 val mainClassName = "ch.admin.bar.siardsuite.Launcher"
-val applicationName = "SIARD-Suite"
 val xercesSaxParserFactory: String by extra
 
 application {
     mainClass.set(mainClassName)
+    applicationName = "SIARD-Suite"
+}
+
+distributions {
+    main {
+        contents {
+            from(layout.projectDirectory.dir("licenses")) {
+                into("licenses")
+            }
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
+    }
 }
 
 tasks.jar {
@@ -186,20 +197,16 @@ siardFromDb {
     dependsOn(siardToDb)
 }
 
+tasks.named<CreateStartScripts>("startScripts") {
+    dependsOn(siardFromDb)
+}
+
 tasks.distTar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    into("${applicationName}-${project.version}/licenses") {
-        from("licenses")
-    }
-    dependsOn(siardFromDb)
 }
 
 tasks.distZip {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    into("${applicationName}-${project.version}/licenses") {
-        from("licenses")
-    }
-    dependsOn(siardFromDb)
 }
 
 tasks.installDist {
