@@ -90,13 +90,15 @@ tasks.register<JavaExec>("generateJaxb") {
 
     // run three more times for the other packages
     doLast {
-        fun runXjc(pkg: String, xsd: String) = exec {
-            commandLine = listOf(
-                "java", "-cp", xjcConfiguration.asPath,
-                "com.sun.tools.xjc.XJCFacade",
-                "-encoding", "UTF-8", "-npa", "-d", dirSrc,
-                "-p", pkg, xsd
-            )
+        fun runXjc(pkg: String, xsd: String) {
+            project.providers.exec {
+                commandLine(
+                    "java", "-cp", xjcConfiguration.asPath,
+                    "com.sun.tools.xjc.XJCFacade",
+                    "-encoding", "UTF-8", "-npa", "-d", dirSrc,
+                    "-p", pkg, xsd
+                )
+            }.result.get()
         }
         runXjc("ch.admin.bar.siard2.api.generated.old10", "$dirRes/old10/metadata.xsd")
         runXjc("ch.admin.bar.siard2.api.generated.old21", "$dirRes/old21/metadata.xsd")
