@@ -75,33 +75,29 @@ tasks.register("createDirs") {
     }
 }
 
-// Task to generate JAXB classes from XSD files
-tasks.register<JavaExec>("generateJaxb") {
-    group       = "build"
-    description = "Generate JAXB classes from XSD files"
-
-    classpath   = xjcConfiguration
-    mainClass.set("com.sun.tools.xjc.XJCFacade")
-
-    // first schema
-    args("-encoding", "UTF-8", "-npa", "-d", dirSrc,
-        "-p", "ch.admin.bar.siard2.api.generated",
-        "$dirRes/metadata.xsd")
-
-    // run three more times for the other packages
-    doLast {
-        fun runXjc(pkg: String, xsd: String) = exec {
-            commandLine = listOf(
-                "java", "-cp", xjcConfiguration.asPath,
-                "com.sun.tools.xjc.XJCFacade",
-                "-encoding", "UTF-8", "-npa", "-d", dirSrc,
-                "-p", pkg, xsd
-            )
-        }
-        runXjc("ch.admin.bar.siard2.api.generated.old10", "$dirRes/old10/metadata.xsd")
-        runXjc("ch.admin.bar.siard2.api.generated.old21", "$dirRes/old21/metadata.xsd")
-        runXjc("ch.admin.bar.siard2.api.generated.table",  "$dirRes/table.xsd")
+// Helper to register an XJC code-generation task
+fun registerXjcTask(name: String, description: String, pkg: String, xsd: String) =
+    tasks.register<JavaExec>(name) {
+        group       = "build"
+        this.description = description
+        classpath   = xjcConfiguration
+        mainClass.set("com.sun.tools.xjc.XJCFacade")
+        args("-encoding", "UTF-8", "-npa", "-d", dirSrc,
+            "-p", pkg, xsd)
     }
+
+// Tasks to generate JAXB classes from XSD files
+val generateJaxb      = registerXjcTask("generateJaxb",      "Generate JAXB classes from metadata.xsd",
+    "ch.admin.bar.siard2.api.generated",       "$dirRes/metadata.xsd")
+val generateJaxbOld10 = registerXjcTask("generateJaxbOld10", "Generate JAXB classes from old10 metadata.xsd",
+    "ch.admin.bar.siard2.api.generated.old10", "$dirRes/old10/metadata.xsd")
+val generateJaxbOld21 = registerXjcTask("generateJaxbOld21", "Generate JAXB classes from old21 metadata.xsd",
+    "ch.admin.bar.siard2.api.generated.old21", "$dirRes/old21/metadata.xsd")
+val generateJaxbTable = registerXjcTask("generateJaxbTable", "Generate JAXB classes from table.xsd",
+    "ch.admin.bar.siard2.api.generated.table",  "$dirRes/table.xsd")
+
+generateJaxb.configure {
+    dependsOn(generateJaxbOld10, generateJaxbOld21, generateJaxbTable)
 }
 
 
