@@ -4,7 +4,7 @@ Version     : $Id: $
 Application : SIARD2
 Description : BaseSqlXml implements a wrapped SQLXML object.
               See https://docs.oracle.com/javase/7/docs/api/java/sql/SQLXML.html
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2016, Enter AG, Rüti ZH, Switzerland
 Created    : 30.03.2016, Hartwig Thomas

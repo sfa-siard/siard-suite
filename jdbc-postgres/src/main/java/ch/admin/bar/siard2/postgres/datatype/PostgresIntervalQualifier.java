@@ -3,7 +3,7 @@ PostgresIntervalQualifier implements the interval translation from ISO SQL to Po
 Application : SIARD2
 Description : PostgresIntervalQualifier implements the interval translation 
               from ISO:2008 SQL to Postgres. 
-Platform    : Java 17
+Platform    : Java 21
 ------------------------------------------------------------------------
 Copyright  : 2019, Swiss Federal Archives, Berne, Switzerland
 License    : CDDL 1.0

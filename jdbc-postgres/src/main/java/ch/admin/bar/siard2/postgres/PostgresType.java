@@ -3,7 +3,7 @@ PostgresType enum lists all native predefined Postgres data types we
 expect to encounter as types of columns in database tables.
 Application : SIARD2
 Description : PostgresType enum lists all native predefined Postgres data types.
-Platform    : Java 17
+Platform    : Java 21
 ------------------------------------------------------------------------
 Copyright  : 2019, Swiss Federal Archives, Berne, Switzerland
 License    : CDDL 1.0

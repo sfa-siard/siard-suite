@@ -3,7 +3,7 @@ BaseStruct implements a wrapped Struct
 Application : SIARD2
 Description : BaseStruct implements a wrapped Struct
               See https://javadoc.scijava.org/Java7/java/sql/Struct.html
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2019, Enter AG, Rüti ZH, Switzerland
 Created    : 04.10.2019, Hartwig Thomas

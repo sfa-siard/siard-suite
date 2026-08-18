@@ -22,8 +22,8 @@ This is a Gradle-based monorepo containing multiple modules:
 
 ### Prerequisites
 
-**Java 17 with JavaFX** is required. Download from:
-- [Azul Zulu JDK 17 with FX](https://www.azul.com/downloads/?version=java-17-lts&package=jdk-fx#zulu)
+**Java 21 with JavaFX** is required. Download from:
+- [Azul Zulu JDK 21 with FX](https://www.azul.com/downloads/?version=java-21-lts&package=jdk-fx#zulu)
 
 **For [asdf](https://asdf-vm.com/) users:**
 ```shell

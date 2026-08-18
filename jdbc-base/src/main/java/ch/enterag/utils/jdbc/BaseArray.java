@@ -3,7 +3,7 @@ BaseArray implements a wrapped Array.
 Application : SIARD2
 Description : BaseArray implements a wrapped Array.
               See https://docs.oracle.com/javase/7/docs/api/java/sql/Array.html
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2016, Enter AG, Rüti ZH, Switzerland
 Created    : 25.03.2016, Hartwig Thomas

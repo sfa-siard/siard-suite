@@ -44,9 +44,11 @@ public class HtmlExportTest {
 
         // Normalize line endings for cross-platform compatibility
         String normalizedGenerated = generatedHtml.replaceAll("\\r\\n|\\r", "\\n")
+                                                  .replaceAll("[\\u00a0\\u202f]", " ")
                                                   .trim()
                                                   .toLowerCase();
         String normalizedExpected = expectedHtml.replaceAll("\\r\\n|\\r", "\\n")
+                                                .replaceAll("[\\u00a0\\u202f]", " ")
                                                 .trim()
                                                 .toLowerCase();
 
@@ -73,9 +75,11 @@ public class HtmlExportTest {
         String generatedHtml = Files.readString(fileTable.toPath(), StandardCharsets.UTF_8);
         String expectedHtml = Files.readString(Paths.get("src/test/resources/export/TSIMPLE.html"), StandardCharsets.UTF_8);
 
-        // Normalize line endings for cross-platform compatibility
-        String normalizedGenerated = generatedHtml.replaceAll("\\r\\n|\\r", "\\n");
-        String normalizedExpected = expectedHtml.replaceAll("\\r\\n|\\r", "\\n");
+        // Normalize line endings and non-breaking spaces for cross-platform / cross-Java-version compatibility
+        String normalizedGenerated = generatedHtml.replaceAll("\\r\\n|\\r", "\\n")
+                                                    .replaceAll("[\\u00a0\\u202f]", " ");
+        String normalizedExpected = expectedHtml.replaceAll("\\r\\n|\\r", "\\n")
+                                                  .replaceAll("[\\u00a0\\u202f]", " ");
 
         assertEquals(normalizedExpected, normalizedGenerated, "Generated HTML should match expected content");
     }
@@ -100,9 +104,11 @@ public class HtmlExportTest {
         String generatedHtml = Files.readString(fileTable.toPath(), StandardCharsets.UTF_8);
         String expectedHtml = Files.readString(Paths.get("src/test/resources/export/TCOMPLEX.html"), StandardCharsets.UTF_8);
 
-        // Normalize line endings for cross-platform compatibility
-        String normalizedGenerated = generatedHtml.replaceAll("\\r\\n|\\r", "\\n");
-        String normalizedExpected = expectedHtml.replaceAll("\\r\\n|\\r", "\\n");
+        // Normalize line endings and non-breaking spaces for cross-platform / cross-Java-version compatibility
+        String normalizedGenerated = generatedHtml.replaceAll("\\r\\n|\\r", "\\n")
+                                                    .replaceAll("[\\u00a0\\u202f]", " ");
+        String normalizedExpected = expectedHtml.replaceAll("\\r\\n|\\r", "\\n")
+                                                  .replaceAll("[\\u00a0\\u202f]", " ");
 
         assertEquals(normalizedExpected, normalizedGenerated, "Generated HTML should match expected content");
     }

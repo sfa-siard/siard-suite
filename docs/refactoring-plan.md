@@ -4,7 +4,7 @@
 
 ### What's good
 - **Module structure** is reasonable: clear separation into `siard-api`, `siard-cmd`, `siard-suite-app`, `siard-utilities`, `sql-parser`, `zip64-file`, and per-DB JDBC modules
-- **Build tooling** is modern: Gradle Kotlin DSL, Java 17 toolchain, Testcontainers for integration tests
+- **Build tooling** is modern: Gradle Kotlin DSL, Java 21 toolchain, Testcontainers for integration tests
 - **siard-suite-app** already has a reasonably clean architecture with a `ServicesFacade`, `Navigator`, `Dialogs`, `Presenter` pattern, Lombok usage, and i18n support
 - **Integration test coverage** is extensive across multiple DB vendors
 
@@ -157,7 +157,7 @@ Classes like `EU`, `SU`, `DU`, `BU`, `FU`, `TZ` are cryptic single/two-letter ut
 | Order | Step | Risk | Effort | Value | Done |
 |-------|------|------|--------|-------|------|
 | 1 | 0.1 Upgrade Gradle | Low | Small | High (unblocks) | ✅ |
-| 2 | 0.2 Upgrade Java LTS | Medium | Medium | High | |
+| 2 | 0.2 Upgrade Java LTS | Medium | Medium | High | ✅ |
 | 3 | 0.3 Revert MaterialFX | Medium | Small | Medium | |
 | 4 | 0.4 Upgrade dependencies | Medium | Medium | High | |
 | 5 | 1.1 Formatting | Low | Small | High (baseline) | ✅ |

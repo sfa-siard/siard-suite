@@ -4,7 +4,7 @@ Version     : $Id: $
 Application : SIARD2
 Description : BaseConnection implements a wrapped Connection.
               See https://docs.oracle.com/javase/7/docs/api/java/sql/PreparedStatement.html
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2017, Enter AG, Rüti ZH, Switzerland
 Created    : 13.04.2017, Hartwig Thomas

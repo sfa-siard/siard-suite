@@ -2,7 +2,7 @@
 PostgresDataSource implements a wrapped PostgreSQL DataSource.
 Application : SIARD2
 Description : PostgresDataSource implements a wrapped PostgreSQL DataSource.
-Platform    : Java 17
+Platform    : Java 21
 ------------------------------------------------------------------------
 Copyright  : 2019, Swiss Federal Archives, Berne, Switzerland
 License    : CDDL 1.0
