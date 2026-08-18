@@ -67,8 +67,10 @@ public class CustomStepperSkin extends SkinBase<MFXStepper> {
         this.contentPane.getStyleClass()
                         .setAll("content-pane");
         BorderPane container = new BorderPane();
-        container.getStylesheets()
-                 .setAll(stepper.getUserAgentStylesheet());
+        if (stepper.getUserAgentStylesheet() != null) {
+            container.getStylesheets()
+                     .setAll(stepper.getUserAgentStylesheet());
+        }
         container.setTop(this.stepperBar);
         container.setCenter(this.contentPane);
         this.getChildren()
