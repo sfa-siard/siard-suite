@@ -3,7 +3,7 @@
 axion-release = "1.21.1"
 lombok-plugin = "8.14.2"
 lombok = "1.18.38"
-beryx-runtime = "1.12.7"
+beryx-runtime = "2.0.1"
 asciidoctor = "4.0.5"
 plantuml = "1.6.0"
 dependency-analysis = "3.6.1"
