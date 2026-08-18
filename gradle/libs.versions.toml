@@ -39,7 +39,7 @@ mockito = "5.19.0"
 
 # JavaFX
 javafx = "17.0.7"
-materialfx = "11.13.5"
+materialfx = "11.17.0"
 
 # Other
 jackcess = "2.1.12"
@@ -115,7 +115,7 @@ javafx-fxml-linux = { module = "org.openjfx:javafx-fxml", version.ref = "javafx"
 javafx-graphics-win = { module = "org.openjfx:javafx-graphics", version.ref = "javafx" }
 javafx-graphics-mac = { module = "org.openjfx:javafx-graphics", version.ref = "javafx" }
 javafx-graphics-linux = { module = "org.openjfx:javafx-graphics", version.ref = "javafx" }
-materialfx = { module = "org.glavo.materialfx:materialfx", version.ref = "materialfx" }
+materialfx = { module = "io.github.palexdev:materialfx", version.ref = "materialfx" }
 
 # Test Libraries
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-bom" }

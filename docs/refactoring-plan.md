@@ -158,7 +158,7 @@ Classes like `EU`, `SU`, `DU`, `BU`, `FU`, `TZ` are cryptic single/two-letter ut
 |-------|------|------|--------|-------|------|
 | 1 | 0.1 Upgrade Gradle | Low | Small | High (unblocks) | ✅ |
 | 2 | 0.2 Upgrade Java LTS | Medium | Medium | High | ✅ |
-| 3 | 0.3 Revert MaterialFX | Medium | Small | Medium | |
+| 3 | 0.3 Revert MaterialFX | Medium | Small | Medium | ✅ |
 | 4 | 0.4 Upgrade dependencies | Medium | Medium | High | |
 | 5 | 1.1 Formatting | Low | Small | High (baseline) | ✅ |
 | 6 | 1.3 Logging cleanup | Low | Medium | High | |
