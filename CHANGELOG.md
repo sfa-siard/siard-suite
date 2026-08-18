@@ -5,6 +5,7 @@
 * Maintenance:
   * upgrade to gradle 9.7
   * upgrade to java 21
+  * remove MaterialFX java 8 port and use the official package
 
 * Fix:
   * the license files were not included in the distribution package 
