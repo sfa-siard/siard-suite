@@ -4,6 +4,7 @@
 
 * Maintenance:
   * upgrade to gradle 9.7
+  * upgrade to java 21
 
 * Fix:
   * the license files were not included in the distribution package 
