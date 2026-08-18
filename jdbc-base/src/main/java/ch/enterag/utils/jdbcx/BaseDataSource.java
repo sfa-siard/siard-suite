@@ -4,7 +4,7 @@ Version     : $Id: $
 Application : SIARD2
 Description : BaseDataSource implements a wrapped DataSource.
               See https://docs.oracle.com/javase/7/docs/api/javax/sql/DataSource.html
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2016, Enter AG, Rüti ZH, Switzerland
 Created    : 08.03.2016, Hartwig Thomas

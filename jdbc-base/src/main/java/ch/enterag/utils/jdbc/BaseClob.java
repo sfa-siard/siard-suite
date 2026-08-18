@@ -3,7 +3,7 @@ BaseClob implements a wrapped Clob
 Application : SIARD2
 Description : BaseClob implements a wrapped Clob
               See https://docs.oracle.com/javase/7/docs/api/java/sql/Clob.html
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2019, Enter AG, Rüti ZH, Switzerland
 Created    : 02.09.2019, Hartwig Thomas

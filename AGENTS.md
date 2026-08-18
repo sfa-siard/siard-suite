@@ -33,7 +33,7 @@ This is a **Gradle multi-module monorepo**. All modules live in the same reposit
 
 ## Language & style
 
-- **Java 17** — use modern Java features (records, sealed classes, pattern matching, text blocks) where appropriate in new code
+- **Java 21** — use modern Java features (records, sealed classes, pattern matching, text blocks) where appropriate in new code
 - The codebase has **two distinct coding styles**:
     - **Legacy code** (mostly in `siard-cmd`, `siard-api`, most of `siard-utilities`, `jdbc-*`): C-style braces, Hungarian notation prefixes (`_s` for String, `_i` for int, `_b` for boolean, `_file` for File, etc.), verbose Javadoc block headers with `/*====*/` separators. **Preserve this style when editing legacy files.** The `IndentLogger` class in `siard-utilities` has been modernized and should follow the modern style.
     - **Modern code** (mostly in `siard-suite-app` and newer `siard-cmd` classes): Standard Java conventions, no Hungarian notation, clean formatting. **Use this style for new files, classes or methods.**

@@ -18,10 +18,10 @@ That's why it is recommended to perform the following steps, to make sure that t
 
 ## Test script
 
-Switch to use Java 17 with JavaFX via sdkman (or any other way of switching between Java versions): 
+Switch to use Java 21 with JavaFX via sdkman (or any other way of switching between Java versions): 
 
 ```bash
-sdk use java 17.0.10.fx-zulu
+sdk use java 21.0.2.fx-zulu
 ```
 
 Run a build and create native installers and packaged distributions: 

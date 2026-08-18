@@ -2,7 +2,7 @@
 PostgresDriver implements a wrapped Postgres Driver.
 Application : SIARD2
 Description : PostgresDriver implements a wrapped Postgres Driver.
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2019, Swiss Federal Archives, Berne, Switzerland
 License    : CDDL 1.0

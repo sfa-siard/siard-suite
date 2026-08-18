@@ -2,7 +2,7 @@
 PostgresLiterals extends SqlLiterals.
 Application : SIARD2
 Description : PostgresLiterals extends SqlLiterals. 
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2016, Enter AG, Rüti ZH, Switzerland
 Created    : 30.10.2016, Simon Jutz

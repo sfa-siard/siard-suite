@@ -2,7 +2,7 @@
 PostgresDatabaseMetaData implements wrapped Postgres DatabaseMetaData.
 Application : SIARD2
 Description : PostgresDatabaseMetaData implements wrapped Postgres DatabaseMetaData.
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2019, Swiss Federal Archives, Berne, Switzerland
 License    : CDDL 1.0

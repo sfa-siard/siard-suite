@@ -4,7 +4,7 @@
 
 ### What's good
 - **Module structure** is reasonable: clear separation into `siard-api`, `siard-cmd`, `siard-suite-app`, `siard-utilities`, `sql-parser`, `zip64-file`, and per-DB JDBC modules
-- **Build tooling** is modern: Gradle Kotlin DSL, Java 17 toolchain, Testcontainers for integration tests
+- **Build tooling** is modern: Gradle Kotlin DSL, Java 21 toolchain, Testcontainers for integration tests
 - **siard-suite-app** already has a reasonably clean architecture with a `ServicesFacade`, `Navigator`, `Dialogs`, `Presenter` pattern, Lombok usage, and i18n support
 - **Integration test coverage** is extensive across multiple DB vendors
 

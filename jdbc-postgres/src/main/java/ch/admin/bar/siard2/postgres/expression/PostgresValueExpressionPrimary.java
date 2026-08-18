@@ -3,7 +3,7 @@ PostgresValueExpressionPrimary overrides ValueExpressionPrimary of SQL parser.
 Application : SIARD2
 Description : PostgresValueExpressionPrimary overrides ValueExpressionPrimary 
               of SQL parser in order to format UDT literals for Postgres. 
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2019, Swiss Federal Archives, Berne, Switzerland
 License    : CDDL 1.0

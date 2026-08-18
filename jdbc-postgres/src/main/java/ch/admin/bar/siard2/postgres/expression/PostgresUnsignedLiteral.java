@@ -3,7 +3,7 @@ PostgresUnsignedLiteral overrides UnsignedLiteral of SQL parser.
 Application : SIARD2
 Description : PostgresUnsignedLiteral overrides UnsignedLiteral of SQL 
               parser and uses PostgresLiteral for formatting. 
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2019, Swiss Federal Archives, Berne, Switzerland
 License    : CDDL 1.0

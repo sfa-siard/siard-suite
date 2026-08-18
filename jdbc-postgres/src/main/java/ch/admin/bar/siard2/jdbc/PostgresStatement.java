@@ -2,7 +2,7 @@
 PostgresStatement implements a wrapped Postgres Statement.
 Application : SIARD2
 Description : PostgresStatement implements a wrapped Postgres Statement.
-Platform    : Java 17   
+Platform    : Java 21   
 ------------------------------------------------------------------------
 Copyright  : 2019, Swiss Federal Archives, Berne, Switzerland
 License    : CDDL 1.0
