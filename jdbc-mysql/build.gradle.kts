@@ -5,22 +5,20 @@ plugins {
 description = "MySQL JDBC Wrapper"
 
 dependencies {
-    implementation(libs.antlr4.runtime)
+    api(project(":jdbc-base"))
+    api(project(":sql-parser"))
+
     implementation(libs.mysql.connector)
     implementation(libs.jts.core)
-    implementation(project(":jdbc-base"))
     implementation(project(":siard-utilities"))
-    implementation(project(":sql-parser"))
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit4)
     testImplementation(libs.testcontainers)
     testImplementation(libs.testcontainers.mysql)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.vintage.engine)
-    testImplementation(libs.hamcrest.core)
     testImplementation(testFixtures(project(":jdbc-base")))
 
+    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
 }

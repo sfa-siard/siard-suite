@@ -37,45 +37,57 @@ sourceSets {
 
 dependencies {
     implementation(libs.tika.core)
+    implementation(libs.slf4j.api)
 
-    implementation(libs.commons.logging)
-    implementation(libs.logback.classic)
-    implementation(libs.mysql.connector)
-    implementation(libs.jaxb.runtime)
 
-    api(project(":siard-api"))
-    api(project(":sql-parser"))
-    api(project(":zip64-file"))
-    api(project(":siard-utilities"))
-    api(project(":jdbc-base"))
-    api(project(":jdbc-postgres"))
-    api(project(":jdbc-oracle"))
-    api(project(":jdbc-mssql"))
-    api(project(":jdbc-mysql"))
-    api(project(":jdbc-access"))
-    api(project(":jdbc-db2"))
+    implementation(project(":siard-api"))
+    implementation(project(":sql-parser"))
+    implementation(project(":siard-utilities"))
+    implementation(project(":jdbc-base"))
+    implementation(project(":jdbc-postgres"))
+    implementation(project(":jdbc-oracle"))
+    implementation(project(":jdbc-mssql"))
+    implementation(project(":jdbc-mysql"))
+    implementation(project(":jdbc-access"))
+    implementation(project(":jdbc-db2"))
+
+    runtimeOnly(libs.logback.classic)
+    runtimeOnly(libs.mysql.connector)
+    runtimeOnly(libs.jaxb.runtime)
 
     testImplementation(libs.junit4)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.jackson.dataformat.xml)
-    testImplementation(libs.jackson.datatype.jdk8)
     testImplementation(libs.mockito.core)
-
-    testImplementation(libs.testcontainers)
-    testImplementation(libs.testcontainers.mssql)
-    testImplementation(libs.testcontainers.postgresql)
-    testImplementation(libs.testcontainers.mysql)
-    testImplementation(libs.testcontainers.mariadb)
-    testImplementation(libs.mariadb.client)
-    testImplementation(libs.testcontainers.oracle)
-    testImplementation(libs.testcontainers.db2)
-
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.bouncycastle.bcpkix)
 
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.jackson.dataformat.xml)
+    testRuntimeOnly(libs.jackson.datatype.jdk8)
+    testRuntimeOnly(libs.testcontainers)
+    testRuntimeOnly(libs.testcontainers.mssql)
+    testRuntimeOnly(libs.testcontainers.postgresql)
+    testRuntimeOnly(libs.testcontainers.mysql)
+    testRuntimeOnly(libs.testcontainers.mariadb)
+    testRuntimeOnly(libs.mariadb.client)
+    testRuntimeOnly(libs.testcontainers.oracle)
+    testRuntimeOnly(libs.testcontainers.db2)
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.vintage.engine)
+    testRuntimeOnly(libs.bouncycastle.bcprov)
+
+    annotationProcessor(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
+
+    add("integrationTestAnnotationProcessor", libs.lombok)
+}
+
+dependencyAnalysis {
+    issues {
+        onUnusedDependencies {
+            exclude("org.bouncycastle:bcpkix-jdk18on")
+        }
+    }
 }
 
 tasks.withType(JavaExec::class) {

@@ -15,24 +15,31 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.antlr4.runtime)
+    api(project(":sql-parser"))
+    api(project(":jdbc-base"))
+    api(files("lib/ojdbc7.jar"))
+
     implementation(project(":siard-utilities"))
-    implementation(project(":sql-parser"))
-    implementation(libs.oracle.xdb)
-    implementation(libs.oracle.xmlparser)
-    implementation(project(":jdbc-base"))
-    implementation(fileTree("lib") { include("*.jar") })
+
+    runtimeOnly(libs.oracle.xdb)
+    runtimeOnly(libs.oracle.xmlparser)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit4)
-    testImplementation(libs.hamcrest.core)
     testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.vintage.engine)
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.junit.platform.launcher)
+
     testImplementation(libs.testcontainers)
     testImplementation(libs.testcontainers.oracle)
+    testImplementation(libs.testcontainers.jdbc)
     testImplementation(testFixtures(project(":jdbc-base")))
+
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.vintage.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
+
+    annotationProcessor(libs.lombok)
+
+    testAnnotationProcessor(libs.lombok)
 }
 
 tasks.test {

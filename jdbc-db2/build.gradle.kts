@@ -10,26 +10,26 @@ plugins {
 description = "DB2 JDBC Wrapper"
 
 dependencies {
+    api(project(":sql-parser"))
+    api(project(":jdbc-base"))
 
     implementation(fileTree(mapOf("dir" to "lib", "include" to listOf("*.jar"))))
-
-    implementation(libs.antlr4.runtime)
-    implementation(libs.json.simple)
-    implementation(libs.postgresql)
     implementation(project(":siard-utilities"))
-    implementation(project(":sql-parser"))
-    implementation(project(":jdbc-base"))
-    implementation(libs.db2.license)
+
+    runtimeOnly(libs.postgresql)
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.vintage.engine)
+    testImplementation(libs.junit4)
     testImplementation(testFixtures(project(":jdbc-base")))
 
+    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
-    testImplementation(libs.testcontainers.junit)
     testImplementation(libs.testcontainers.db2)
+
+    annotationProcessor(libs.lombok)
+
+    testAnnotationProcessor(libs.lombok)
 }
 
 tasks.test {

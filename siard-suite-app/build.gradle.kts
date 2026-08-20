@@ -44,15 +44,18 @@ tasks.jar {
 }
 
 dependencies {
-    implementation(project(":siard-cmd"))
+    compileOnly(libs.jetbrains.annotations)
 
+    implementation(project(":siard-cmd"))
     implementation(libs.mslinks)
     implementation(libs.tika.core)
-
     implementation(libs.materialfx)
     implementation(libs.logback.classic)
-    implementation(libs.jetbrains.annotations)
-
+    implementation(libs.logback.core)
+    implementation(libs.slf4j.api)
+    implementation(project(":siard-api"))
+    implementation(project(":siard-utilities"))
+    implementation(project(":sql-parser"))
     implementation(variantOf(libs.javafx.base.win) { classifier("win") })
     implementation(variantOf(libs.javafx.base.mac) { classifier("mac") })
     implementation(variantOf(libs.javafx.base.linux) { classifier("linux") })
@@ -67,12 +70,18 @@ dependencies {
     implementation(variantOf(libs.javafx.graphics.linux) { classifier("linux") })
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
-    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.assertj.core)
     testImplementation(libs.testfx.core)
     testImplementation(libs.testfx.junit5)
-    testImplementation(libs.testfx.monocle)
     testImplementation(libs.mockito.core)
+
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.testfx.monocle)
+
+    annotationProcessor(libs.lombok)
+
+    testAnnotationProcessor(libs.lombok)
 }
 
 tasks.withType<JavaExec> {
