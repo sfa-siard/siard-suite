@@ -75,11 +75,6 @@ dependencies {
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.bouncycastle.bcprov)
-
-    annotationProcessor(libs.lombok)
-    testAnnotationProcessor(libs.lombok)
-
-    add("integrationTestAnnotationProcessor", libs.lombok)
 }
 
 dependencyAnalysis {

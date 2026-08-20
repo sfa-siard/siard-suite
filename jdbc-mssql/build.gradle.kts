@@ -25,10 +25,6 @@ dependencies {
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.testcontainers)
-
-    annotationProcessor(libs.lombok)
-
-    testAnnotationProcessor(libs.lombok)
 }
 
 tasks.test {

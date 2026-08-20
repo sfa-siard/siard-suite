@@ -36,10 +36,6 @@ dependencies {
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
-
-    annotationProcessor(libs.lombok)
-
-    testAnnotationProcessor(libs.lombok)
 }
 
 tasks.test {

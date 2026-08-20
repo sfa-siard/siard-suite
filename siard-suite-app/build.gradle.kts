@@ -78,10 +78,6 @@ dependencies {
 
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.testfx.monocle)
-
-    annotationProcessor(libs.lombok)
-
-    testAnnotationProcessor(libs.lombok)
 }
 
 tasks.withType<JavaExec> {

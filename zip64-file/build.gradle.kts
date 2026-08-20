@@ -11,8 +11,6 @@ description = "Zip64 File Library"
 dependencies {
     api(project(":siard-utilities"))
     
-    annotationProcessor(libs.lombok)
-    
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)

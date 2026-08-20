@@ -12,8 +12,6 @@ dependencies {
     implementation(libs.tika.core)
     implementation(libs.slf4j.api)
 
-    annotationProcessor(libs.lombok)
-
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
