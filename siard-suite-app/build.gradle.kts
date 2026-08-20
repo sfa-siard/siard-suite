@@ -12,7 +12,7 @@ plugins {
 description = "SIARD Suite Application"
 
 val mainClassName = "ch.admin.bar.siardsuite.Launcher"
-val xercesSaxParserFactory: String by extra
+val xercesSaxParserFactory = extra["xercesSaxParserFactory"] as String
 
 application {
     mainClass.set(mainClassName)
@@ -185,21 +185,18 @@ tasks.processResources {
     }
 }
 
-val siardFromDb by tasks.registering(CreateStartScripts::class) {
-    applicationName = "siard-from-db"
-    mainClass.set("ch.admin.bar.siard2.cmd.SiardFromDb")
-    outputDir = file("build/scripts")
-    classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
-}
-
-val siardToDb by tasks.registering(CreateStartScripts::class) {
+val siardToDb = tasks.register<CreateStartScripts>("siardToDb") {
     applicationName = "siard-to-db"
     mainClass.set("ch.admin.bar.siard2.cmd.SiardToDb")
     outputDir = file("build/scripts")
     classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
 }
 
-siardFromDb {
+val siardFromDb = tasks.register<CreateStartScripts>("siardFromDb") {
+    applicationName = "siard-from-db"
+    mainClass.set("ch.admin.bar.siard2.cmd.SiardFromDb")
+    outputDir = file("build/scripts")
+    classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
     dependsOn(siardToDb)
 }
 
@@ -261,7 +258,7 @@ tasks.asciidoctorPdf {
     dependsOn(tasks.asciidoctor)
 }
 
-val copyDocumentation by tasks.registering(Copy::class) {
+val copyDocumentation = tasks.register<Copy>("copyDocumentation") {
     from(layout.buildDirectory.dir("docs/pdf"))
     into(layout.projectDirectory.dir("./src/main/resources/ch/admin/bar/siardsuite/doc"))
 }

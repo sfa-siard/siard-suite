@@ -75,11 +75,10 @@ tasks.register("createDirs") {
     }
 }
 
-// Helper to register an XJC code-generation task
-fun registerXjcTask(name: String, description: String, pkg: String, xsd: String) =
+fun registerXjcTask(name: String, desc: String, pkg: String, xsd: String) =
     tasks.register<JavaExec>(name) {
         group       = "build"
-        this.description = description
+        description = desc
         classpath   = xjcConfiguration
         mainClass.set("com.sun.tools.xjc.XJCFacade")
         args("-encoding", "UTF-8", "-npa", "-d", dirSrc,
