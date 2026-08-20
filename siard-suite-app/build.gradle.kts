@@ -77,6 +77,7 @@ dependencies {
     testImplementation(libs.mockito.core)
 
     testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.testfx.monocle)
 }
 
