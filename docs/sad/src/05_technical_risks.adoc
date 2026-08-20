@@ -1,8 +1,0 @@
-[[section-technical-risks]]
-== Risks and Technical Debts
-
-=== MaterialFX
-
-For compatibility with Java 8, Siard Suite has been using a MaterialFx dependency that was ported to Java 8: https://github.com/Glavo/MaterialFX-Java8.
-Now that SIARD software has been migrated to Java 17, this old dependency can be replaced with the official one: https://github.com/palexdev/MaterialFX. However, there are likely to be some breaking changes and the UI might have to be adapted.
-

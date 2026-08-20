@@ -47,7 +47,7 @@ dependencies {
 
 ## Documentation
 - [User Manual](https://github.com/sfa-siard/siard-suite/blob/main/docs/user-manual/en/user-manual.adoc)
-- [Software Architecture Document](https://github.com/sfa-siard/siard-suite/blob/main/docs/sad/sad.adoc)
+- [Software Architecture Document](https://github.com/sfa-siard/siard-suite/blob/main/docs/sad/software-architecture-documentation.md)
  
 ## Varia
 ### Registering a JDBC Wrapper

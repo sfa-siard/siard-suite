@@ -193,7 +193,7 @@ Documentation is written in [AsciiDoc](https://asciidoctor.org/) and bundled wit
 
 **Available Documentation:**
 - [User Manual](docs/user-manual/en/user-manual.adoc)
-- [Software Architecture Document](docs/sad/sad.adoc)
+- [Software Architecture Document](docs/sad/software-architecture-documentation.md)
 
 ## Declaration
 Contributions to the codebase have been made with the support of Windsurf. Windsurf is AI-powered code completion tool, that is trained exclusively on natural language and source code data with [permissive licenses](https://windsurf.com/blog/copilot-trains-on-gpl-codeium-does-not). 
