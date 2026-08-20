@@ -73,6 +73,7 @@ dependencies {
     testRuntimeOnly(libs.testcontainers.oracle)
     testRuntimeOnly(libs.testcontainers.db2)
     testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.bouncycastle.bcprov)
 }
