@@ -18,7 +18,6 @@ dependencies {
     testFixturesApi(libs.junit4)
 
     testFixturesImplementation(project(":siard-utilities"))
-    testFixturesImplementation(project(":sql-parser"))
     testFixturesImplementation(platform(libs.junit.bom))
 
     testFixturesRuntimeOnly(libs.junit.vintage.engine)
