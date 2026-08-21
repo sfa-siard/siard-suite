@@ -5,6 +5,13 @@ It adheres to new constraints and requirements from the Swiss Federal Archives.
 
 The documentation and architectural decisions in this document describe the **SIARD Suite Web Companion**, a browser-accessible addition to the existing desktop and command-line applications.
 
+See also:
+
+- [Web Companion Product Roadmap](../web-companion-plan.md) — phased delivery plan and customer-facing decisions.
+- [Web Companion Spike Plan](web-companion-spike-plan.md) — one-week backend framework selection spike.
+- [Refactoring Plan](../refactoring-plan.md) — improvements to the existing codebase that make Web Companion reuse easier.
+- [Architecture Decision Records](../decisions/README.md) — formal records of key design decisions.
+
 ## Table of Contents
 
 - [1. Introduction and Goals](#1-introduction-and-goals)
@@ -278,6 +285,22 @@ Each hub deployment uses its own Keycloak realm. Multi-realm or multi-tenant dep
     The artifact must default to local mode, refuse to run as root or admin, and fail safe rather than fall back to an open configuration.
 
 ## 7. Implementation Notes
+
+### Dependencies on Existing Code Refactoring
+
+The `siard-server` backend reuses the existing `siard-api`, JDBC wrappers, and
+parts of `siard-cmd`. Some refactorings described in
+[Refactoring Plan](../refactoring-plan.md) make this reuse easier:
+
+- Extracting config and orchestrator classes from `siard-cmd` lets the web
+  backend drive archive/restore logic without duplicating CLI argument parsing.
+- Eliminating `siard-api` interface-to-impl downcasting improves testability and
+  makes the core logic easier to compose in the web backend.
+- Introducing domain exceptions instead of `IOException` for business errors
+  gives the web backend clearer error handling and user-facing messages.
+
+These refactorings can proceed in parallel with the Web Companion work, but
+early alignment on the extracted APIs avoids rework.
 
 ### Backend Framework
 
