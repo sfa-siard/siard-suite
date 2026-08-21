@@ -173,7 +173,7 @@ The `SiardServer` module is built into two runtime artifacts:
 | Artifact | Role | Authentication | Persistence | Bind address |
 |---|---|---|---|---|
 | `siard-agent` | Local agent | None | In-memory | `127.0.0.1` only |
-| `siard-hub` | Central hub | OIDC/SAML SSO | PostgreSQL | Configured external interface |
+| `siard-hub` | Central hub | OIDC to Keycloak | PostgreSQL | Configured external interface |
 
 During the initial spike a single artifact with an explicit `--server.mode=local|hub` flag is acceptable. Before the first production release the build should produce the two artifacts from one codebase to avoid accidental misconfiguration.
 
@@ -181,7 +181,7 @@ During the initial spike a single artifact with an explicit `--server.mode=local
 
 ### Archive Job Flow
 
-1. The user opens the web frontend and authenticates (hub only).
+1. The user opens the web frontend and authenticates (hub only). On first login without an assigned SIARD role, the user sees a read-only "access pending" page.
 2. The user submits a database connection and archive options to `POST /api/v1/jobs/archive`.
 3. The server creates a persistent job, encrypts database credentials at rest, and queues the job.
 4. The executor runs the archive using the existing `siard-api` and JDBC wrappers directly in the same JVM.
@@ -200,15 +200,50 @@ During the initial spike a single artifact with an explicit `--server.mode=local
 ### Authentication and Authorization
 
 - **Local agent mode**: No authentication. The service binds to `127.0.0.1` only.
-- **Hub mode**: OIDC/SAML SSO via the SFA/BIT identity provider.
+- **Hub mode**: The hub authenticates users through **Keycloak** using OIDC. Keycloak is the primary user directory and may federate to external identity providers such as the SFA/BIT **EIAM** solution or other corporate IdPs. The hub itself does not talk directly to EIAM or other IdPs.
 
-Authorization is role-based. OIDC groups are mapped to internal roles:
+#### Roles
+
+Authorization is role-based. Keycloak users or groups are mapped to internal SIARD roles:
 
 - `ARCHIVE` — submit archive jobs.
 - `RESTORE` — submit restore jobs.
-- `ADMIN` — manage all jobs and users.
+- `ADMIN` — manage all jobs and users within the hub. Actual role assignment is done in Keycloak by a Keycloak administrator.
 
-Hub mode uses per-user file isolation by default. Shared project spaces are a future extension, not part of the MVP.
+#### User provisioning and first login
+
+1. Users authenticate through an upstream identity provider configured in Keycloak (e.g., EIAM) or have a Keycloak account created by an administrator.
+2. On first login, Keycloak auto-provisions the user account.
+3. An administrator assigns the SIARD role in Keycloak.
+4. Until a role is assigned, the user can log in but sees only a read-only "access pending" page.
+5. The hub polls Keycloak periodically (e.g., every 5 minutes) for new users and users without a SIARD role, and sends an email notification to configured administrators.
+6. The hub exposes a lightweight "pending users" admin page for convenience.
+
+#### User identity and lifecycle
+
+- The **Keycloak user ID** (UUID) is the stable identifier used internally for job ownership, file isolation, and audit logs.
+- Email and username are treated as display attributes and may change.
+- If a user is disabled or deleted in Keycloak, existing jobs and files remain attributed to the user ID for audit and provenance, but the user cannot submit new jobs or download results.
+
+#### Session handling
+
+- The React SPA uses the **authorization code flow with PKCE**.
+- The hub backend holds the refresh token in an `httpOnly` cookie.
+- Access tokens are short-lived and validated offline using Keycloak's JWKS endpoint.
+- Token lifetimes are configurable; suggested defaults are 15 minutes for access tokens and 8 hours for refresh tokens.
+- Logout uses front-channel logout (redirect to Keycloak) plus backchannel logout from Keycloak to the hub when the session is revoked.
+
+#### Frontend delivery
+
+The hub backend serves the SPA bundle, so the SPA and API are same-origin and no CORS is required. The local agent also serves its own frontend bundle.
+
+#### Multi-factor authentication
+
+MFA is not implemented in the hub. It is delegated to Keycloak and the upstream identity providers (e.g., EIAM) according to the deployer's security policy.
+
+#### Realm topology
+
+Each hub deployment uses its own Keycloak realm. Multi-realm or multi-tenant deployments are a future extension, not part of the MVP.
 
 ### Security Requirements
 
@@ -216,7 +251,7 @@ Hub mode uses per-user file isolation by default. Shared project spaces are a fu
    Local agent mode must bind to `127.0.0.1` only and refuse to start on a non-loopback interface. Hub mode must require an explicit configuration flag and external bind address.
 
 2. **CSRF and origin handling**  
-   Even on `localhost`, a malicious website could make requests to the local agent. The server should validate origins or only serve the web frontend from itself (same-origin).
+   The backend serves the SPA bundle, so the API and frontend are same-origin in both hub and local-agent modes. On `localhost`, the local agent must still validate origins to prevent malicious websites from reaching the agent.
 
 3. **Job result access control**  
    In hub mode, only the job owner or granted roles may query a job and download its SIARD file.
@@ -250,7 +285,7 @@ The backend framework is chosen after a focused spike comparing Quarkus and Spri
 
 - Container image build size and startup time.
 - Native-image feasibility for `siard-api` (JAXB) and JDBC drivers.
-- OIDC/SAML authentication integration.
+- OIDC authentication integration with Keycloak as the identity provider.
 - PostgreSQL persistence, migrations, and job state management.
 - Compatibility with the existing `siard-api` and JDBC wrappers.
 - Developer experience and build integration with the Gradle monorepo.
