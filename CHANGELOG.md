@@ -10,6 +10,9 @@
 * Fix:
   * the license files were not included in the distribution package 
 
+* Documentation:
+  * Convert Software Architecture Document to markdown [#178](https://github.com/sfa-siard/siard-suite/pull/178)
+
 * Other
   * added a code-review skill for agents
  
