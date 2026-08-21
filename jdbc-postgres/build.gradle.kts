@@ -9,21 +9,22 @@ plugins {
 description = "Postgres JDBC Wrapper"
 
 dependencies {
-    implementation(libs.antlr4.runtime)
-    implementation(libs.json.simple)
-    implementation(libs.postgresql)
+    api(project(":sql-parser"))
+    api(project(":jdbc-base"))
+    api(libs.postgresql)
+
     implementation(project(":siard-utilities"))
-    implementation(project(":sql-parser"))
-    implementation(project(":jdbc-base"))
+
+    testImplementation(libs.json.simple)
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.vintage.engine)
     testImplementation(libs.junit4)
-    testImplementation(libs.testcontainers)
     testImplementation(libs.testcontainers.postgresql)
+    testImplementation(testFixtures(project(":jdbc-base")))
+
+    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
-    testImplementation(testFixtures(project(":jdbc-base")))
+    testRuntimeOnly(libs.testcontainers)
 }
 
 tasks.test {

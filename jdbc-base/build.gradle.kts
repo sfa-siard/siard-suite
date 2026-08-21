@@ -11,16 +11,20 @@ plugins {
 description = "Base JDBC Wrapper"
 
 dependencies {
+    api(project(":sql-parser"))
+
     implementation(project(":siard-utilities"))
-    implementation(project(":sql-parser"))
+
+    testFixturesApi(libs.junit4)
 
     testFixturesImplementation(project(":siard-utilities"))
-    testFixturesImplementation(project(":sql-parser"))
     testFixturesImplementation(platform(libs.junit.bom))
-    testFixturesImplementation(libs.junit.jupiter.api)
-    testFixturesImplementation(libs.junit.vintage.engine)
+
+    testFixturesRuntimeOnly(libs.junit.vintage.engine)
     testFixturesRuntimeOnly(libs.junit.jupiter.engine)
     testFixturesRuntimeOnly(libs.junit.platform.launcher)
+
+    testFixturesAnnotationProcessor(libs.lombok)
 }
 
 tasks.test {

@@ -5,9 +5,10 @@ group = "ch.admin.bar"
 version = scmVersion.version
 val siardVersion = "2.2"
 val versionedProjectName = "${project.name}-${scmVersion.version}"
-val xercesSaxParserFactory: String by extra
+val xercesSaxParserFactory = extra["xercesSaxParserFactory"] as String
 
-val generatedResourcesDir = Files.createDirectories(layout.buildDirectory.dir("generated/resources").get().asFile.toPath())
+val generatedResourcesDir =
+    Files.createDirectories(layout.buildDirectory.dir("generated/resources").get().asFile.toPath())
 
 plugins {
     application
@@ -30,52 +31,53 @@ repositories {
 sourceSets {
     create("integrationTest") {
         java.srcDir("src/integrationTest/java")
-        compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
+        compileClasspath += sourceSets["main"].output + sourceSets["test"].compileClasspath
         runtimeClasspath += output + compileClasspath + sourceSets["test"].runtimeClasspath
     }
 }
 
 dependencies {
     implementation(libs.tika.core)
+    implementation(libs.slf4j.api)
 
-    implementation(libs.commons.logging)
-    implementation(libs.logback.classic)
-    implementation(libs.mysql.connector)
-    implementation(libs.jaxb.runtime)
 
-    api(project(":siard-api"))
-    api(project(":sql-parser"))
-    api(project(":zip64-file"))
-    api(project(":siard-utilities"))
-    api(project(":jdbc-base"))
-    api(project(":jdbc-postgres"))
-    api(project(":jdbc-oracle"))
-    api(project(":jdbc-mssql"))
-    api(project(":jdbc-mysql"))
-    api(project(":jdbc-access"))
-    api(project(":jdbc-db2"))
+    implementation(project(":siard-api"))
+    implementation(project(":sql-parser"))
+    implementation(project(":siard-utilities"))
+    implementation(project(":jdbc-base"))
+    implementation(project(":jdbc-postgres"))
+    implementation(project(":jdbc-oracle"))
+    implementation(project(":jdbc-mssql"))
+    implementation(project(":jdbc-mysql"))
+    implementation(project(":jdbc-access"))
+    implementation(project(":jdbc-db2"))
+
+    runtimeOnly(libs.logback.classic)
+    runtimeOnly(libs.mysql.connector)
+    runtimeOnly(libs.jaxb.runtime)
 
     testImplementation(libs.junit4)
     testImplementation(libs.assertj.core)
+    testImplementation(libs.mockito.core)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.bouncycastle.bcpkix)
+
     testImplementation(libs.jackson.dataformat.xml)
     testImplementation(libs.jackson.datatype.jdk8)
-    testImplementation(libs.mockito.core)
-
     testImplementation(libs.testcontainers)
     testImplementation(libs.testcontainers.mssql)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.testcontainers.mysql)
     testImplementation(libs.testcontainers.mariadb)
-    testImplementation(libs.mariadb.client)
     testImplementation(libs.testcontainers.oracle)
     testImplementation(libs.testcontainers.db2)
 
-    testImplementation(libs.bouncycastle.bcpkix)
-
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.mariadb.client)
     testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.vintage.engine)
+    testRuntimeOnly(libs.bouncycastle.bcprov)
 }
 
 tasks.withType(JavaExec::class) {
@@ -88,7 +90,7 @@ tasks.withType<Test> {
 
 // Helper function to create database-specific integration test tasks
 fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskProvider<Test> {
-    return tasks.register<Test>("integrationTest${dbName.capitalize()}") {
+    return tasks.register<Test>("integrationTest${dbName.replaceFirstChar { it.uppercase() }}") {
         description = "Runs the $dbName integration tests"
         group = "verification"
         testClassesDirs = sourceSets["integrationTest"].output.classesDirs
@@ -110,17 +112,22 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskPro
         }
 
         // Clean up Docker resources after each test class to prevent disk space exhaustion
-        afterTest(KotlinClosure2<TestDescriptor, TestResult, Unit>({ descriptor, result ->
-            if (descriptor.parent == null) {
-                try {
-                    project.providers.exec {
-                        commandLine("docker", "container", "prune", "-f")
-                    }.result.get()
-                } catch (e: Exception) {
-                    logger.warn("Failed to clean up Docker containers: ${e.message}")
+        addTestListener(object : TestListener {
+            override fun beforeSuite(suite: TestDescriptor) {}
+            override fun afterSuite(suite: TestDescriptor, result: TestResult) {
+                if (suite.className != null) {
+                    try {
+                        project.providers.exec {
+                            commandLine("docker", "container", "prune", "-f")
+                        }.result.get()
+                    } catch (e: Exception) {
+                        logger.warn("Failed to clean up Docker containers: ${e.message}")
+                    }
                 }
             }
-        }))
+            override fun beforeTest(testDescriptor: TestDescriptor) {}
+            override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {}
+        })
     }
 }
 
@@ -134,7 +141,7 @@ val integrationTestDb2 = createDbIntegrationTestTask("db2", "db2")
 val integrationTestMsaccess = createDbIntegrationTestTask("msaccess", "msaccess")
 val integrationTestUtils = createDbIntegrationTestTask("utils", "utils")
 
-task<Test>("integrationTest") {
+tasks.register<Test>("integrationTest") {
     description = "Runs all integration tests"
     group = "verification"
     testClassesDirs = sourceSets["integrationTest"].output.classesDirs
@@ -150,17 +157,22 @@ task<Test>("integrationTest") {
     }
 
     // Clean up Docker resources after each test class to prevent disk space exhaustion
-    afterTest(KotlinClosure2<TestDescriptor, TestResult, Unit>({ descriptor, result ->
-        if (descriptor.parent == null) {
-            try {
-                project.providers.exec {
-                    commandLine("docker", "container", "prune", "-f")
-                }.result.get()
-            } catch (e: Exception) {
-                logger.warn("Failed to clean up Docker containers: ${e.message}")
+    addTestListener(object : TestListener {
+        override fun beforeSuite(suite: TestDescriptor) {}
+        override fun afterSuite(suite: TestDescriptor, result: TestResult) {}
+        override fun beforeTest(testDescriptor: TestDescriptor) {}
+        override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {
+            if (testDescriptor.parent == null) {
+                try {
+                    project.providers.exec {
+                        commandLine("docker", "container", "prune", "-f")
+                    }.result.get()
+                } catch (e: Exception) {
+                    logger.warn("Failed to clean up Docker containers: ${e.message}")
+                }
             }
         }
-    }))
+    })
 
     // Depend on all database-specific test tasks
     dependsOn(
@@ -187,7 +199,7 @@ tasks.test {
     }
 }
 
-task("createVersionsPropertiesFile") {
+tasks.register("createVersionsPropertiesFile") {
     description = "Creates a properties file which contains all needed versions information"
     group = "build"
 
@@ -252,8 +264,9 @@ distributions {
     }
 }
 
-val createSiardToDbStartScript by tasks.registering(CreateStartScripts::class) {
+val createSiardToDbStartScript = tasks.register<CreateStartScripts>("createSiardToDbStartScript") {
     mainClass.set("ch.admin.bar.siard2.cmd.SiardToDb")
+    description = "Creates a start script for siard-to-db"
     applicationName = "siard-to-db"
     outputDir = layout.buildDirectory.dir("scripts").get().asFile
     classpath = files(tasks.named<Jar>("jar").get().archiveFile, configurations.runtimeClasspath.get())

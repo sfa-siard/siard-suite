@@ -9,23 +9,22 @@ plugins {
 description = "MS SQL Server JDBC Wrapper"
 
 dependencies {
+    api(project(":sql-parser"))
+    api(project(":jdbc-base"))
 
     implementation(libs.mssql.jdbc)
-    implementation(libs.antlr4.runtime)
     implementation(project(":siard-utilities"))
-    implementation(project(":sql-parser"))
-    implementation(project(":jdbc-base"))
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.vintage.engine)
     testImplementation(libs.junit4)
-    testImplementation(libs.testcontainers)
     testImplementation(libs.testcontainers.mssql)
-    testImplementation(libs.hamcrest.core)
+    testImplementation(libs.testcontainers.jdbc)
     testImplementation(testFixtures(project(":jdbc-base")))
+
+    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.testcontainers)
 }
 
 tasks.test {

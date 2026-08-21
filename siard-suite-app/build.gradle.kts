@@ -12,7 +12,7 @@ plugins {
 description = "SIARD Suite Application"
 
 val mainClassName = "ch.admin.bar.siardsuite.Launcher"
-val xercesSaxParserFactory: String by extra
+val xercesSaxParserFactory = extra["xercesSaxParserFactory"] as String
 
 application {
     mainClass.set(mainClassName)
@@ -44,15 +44,18 @@ tasks.jar {
 }
 
 dependencies {
-    implementation(project(":siard-cmd"))
+    compileOnly(libs.jetbrains.annotations)
 
+    implementation(project(":siard-cmd"))
     implementation(libs.mslinks)
     implementation(libs.tika.core)
-
     implementation(libs.materialfx)
     implementation(libs.logback.classic)
-    implementation(libs.jetbrains.annotations)
-
+    implementation(libs.logback.core)
+    implementation(libs.slf4j.api)
+    implementation(project(":siard-api"))
+    implementation(project(":siard-utilities"))
+    implementation(project(":sql-parser"))
     implementation(variantOf(libs.javafx.base.win) { classifier("win") })
     implementation(variantOf(libs.javafx.base.mac) { classifier("mac") })
     implementation(variantOf(libs.javafx.base.linux) { classifier("linux") })
@@ -67,12 +70,15 @@ dependencies {
     implementation(variantOf(libs.javafx.graphics.linux) { classifier("linux") })
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
-    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.assertj.core)
     testImplementation(libs.testfx.core)
     testImplementation(libs.testfx.junit5)
-    testImplementation(libs.testfx.monocle)
     testImplementation(libs.mockito.core)
+
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.testfx.monocle)
 }
 
 tasks.withType<JavaExec> {
@@ -179,21 +185,18 @@ tasks.processResources {
     }
 }
 
-val siardFromDb by tasks.registering(CreateStartScripts::class) {
-    applicationName = "siard-from-db"
-    mainClass.set("ch.admin.bar.siard2.cmd.SiardFromDb")
-    outputDir = file("build/scripts")
-    classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
-}
-
-val siardToDb by tasks.registering(CreateStartScripts::class) {
+val siardToDb = tasks.register<CreateStartScripts>("siardToDb") {
     applicationName = "siard-to-db"
     mainClass.set("ch.admin.bar.siard2.cmd.SiardToDb")
     outputDir = file("build/scripts")
     classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
 }
 
-siardFromDb {
+val siardFromDb = tasks.register<CreateStartScripts>("siardFromDb") {
+    applicationName = "siard-from-db"
+    mainClass.set("ch.admin.bar.siard2.cmd.SiardFromDb")
+    outputDir = file("build/scripts")
+    classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
     dependsOn(siardToDb)
 }
 
@@ -255,7 +258,7 @@ tasks.asciidoctorPdf {
     dependsOn(tasks.asciidoctor)
 }
 
-val copyDocumentation by tasks.registering(Copy::class) {
+val copyDocumentation = tasks.register<Copy>("copyDocumentation") {
     from(layout.buildDirectory.dir("docs/pdf"))
     into(layout.projectDirectory.dir("./src/main/resources/ch/admin/bar/siardsuite/doc"))
 }
