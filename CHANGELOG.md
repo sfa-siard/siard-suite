@@ -8,7 +8,8 @@
   * remove MaterialFX java 8 port and use the official package
 
 * Fix:
-  * the license files were not included in the distribution package 
+  * the license files were not included in the distribution package
+  * fix: dependency declarations after buildHealth analysis [#177](https://github.com/sfa-siard/siard-suite/pull/177)
 
 * Documentation:
   * Convert Software Architecture Document to markdown [#178](https://github.com/sfa-siard/siard-suite/pull/178)
