@@ -296,9 +296,14 @@ The frontend is a TypeScript/React single-page application built with Vite, TanS
 
 ### Persistence and Storage
 
-- **Job state**: PostgreSQL in hub mode; in-memory in local agent mode.
+- **Job state**: PostgreSQL in hub mode; SQLite file in local agent mode.
+- **Local agent SQLite file**: stored in the local agent's working directory by default. Configuring a custom path is a future extension, not part of the MVP.
+- **Job store abstraction**: a shared `JobStore` abstraction is used by both hub and local agent. The hub implementation uses PostgreSQL; the local agent implementation uses SQLite.
+- **Migrations**: Flyway is used for both PostgreSQL and SQLite with the same schema.
 - **Generated SIARD files**: pluggable storage interface. The spike uses the local filesystem; object storage can be added later.
 - **Database credentials**: encrypted at rest with a hub-managed key.
+- **Resume**: resuming interrupted archive/restore jobs is not supported by the underlying `siard-api` / `siard-cmd` and is out of scope for the MVP. Persistence is used for job history, status, and troubleshooting only.
+- **Local agent history retention**: job history is kept indefinitely in the SQLite file; the user can delete the working directory to reset it.
 
 ### API and Job Model
 

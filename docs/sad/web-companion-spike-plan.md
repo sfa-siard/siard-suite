@@ -35,13 +35,15 @@ In scope:
 - Container image build for each backend prototype.
 - Native-image feasibility check for at least one framework (time permitting).
 - OIDC authentication using a mock identity provider (e.g., Keycloak in Testcontainers).
-- PostgreSQL persistence for job state.
+- PostgreSQL persistence for hub job state; SQLite file persistence for local agent job state.
+- A shared `JobStore` abstraction with PostgreSQL and SQLite implementations.
 - One end-to-end archive job against an in-memory or containerized database.
 
 Out of scope:
 
 - Restore, browse, or export workflows.
 - Full external LOB ZIP packaging (validate concept only).
+- Resume or restart of interrupted archive/restore jobs (`siard-api`/`siard-cmd` does not support this).
 - Production-grade security hardening.
 - Multi-user isolation beyond basic ownership.
 - Real SFA/BIT identity provider integration.
@@ -49,7 +51,7 @@ Out of scope:
 
 ## Assumptions
 
-- The spike uses a local or Testcontainers PostgreSQL database.
+- The spike uses a local or Testcontainers PostgreSQL database for hub mode and an embedded SQLite file for local agent mode.
 - The archive target is a small, well-known schema such as the PostgreSQL
   `dvdrental` sample, a H2 in-memory database, or a simple custom schema.
 - The OIDC mock runs in Docker/Testcontainers and exposes standard endpoints.
@@ -66,6 +68,8 @@ Out of scope:
   - `GET /api/v1/jobs/{id}`
   - `GET /api/v1/jobs/{id}/events` (Server-Sent Events for progress)
   - `GET /api/v1/jobs/{id}/download`
+- [ ] Define a minimal `JobStore` abstraction with PostgreSQL and SQLite
+  implementations.
 - [ ] Set up a shared React frontend prototype that calls the contract.
 - [ ] Create a Testcontainers-based integration test harness that starts
   PostgreSQL and a mock OIDC provider.
@@ -75,7 +79,7 @@ Out of scope:
 - [ ] Bootstrap a Quarkus application in a new Gradle module
   (`siard-server-quarkus-spike`).
 - [ ] Add dependencies: REST extension, OIDC extension, Flyway or Hibernate
-  Panache, JDBC PostgreSQL driver.
+  Panache, JDBC PostgreSQL driver, JDBC SQLite driver.
 - [ ] Implement the four endpoints using the contract from Day 1.
 - [ ] Integrate `siard-api` to run a real archive job inside the JVM.
 - [ ] Write an integration test that archives a small database end-to-end.
@@ -85,7 +89,7 @@ Out of scope:
 - [ ] Bootstrap a Spring Boot application in a new Gradle module
   (`siard-server-spring-boot-spike`).
 - [ ] Add dependencies: Spring Web, Spring Security OAuth2 Resource Server,
-  Spring Data JPA, Flyway, PostgreSQL driver.
+  Spring Data JPA, Flyway, PostgreSQL driver, SQLite driver.
 - [ ] Implement the same four endpoints.
 - [ ] Integrate `siard-api` to run a real archive job inside the JVM.
 - [ ] Write an integration test that archives a small database end-to-end.
