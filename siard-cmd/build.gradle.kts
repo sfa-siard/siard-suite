@@ -31,7 +31,7 @@ repositories {
 sourceSets {
     create("integrationTest") {
         java.srcDir("src/integrationTest/java")
-        compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
+        compileClasspath += sourceSets["main"].output + sourceSets["test"].compileClasspath
         runtimeClasspath += output + compileClasspath + sourceSets["test"].runtimeClasspath
     }
 }
@@ -63,28 +63,21 @@ dependencies {
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.bouncycastle.bcpkix)
 
-    testRuntimeOnly(libs.jackson.dataformat.xml)
-    testRuntimeOnly(libs.jackson.datatype.jdk8)
-    testRuntimeOnly(libs.testcontainers)
-    testRuntimeOnly(libs.testcontainers.mssql)
-    testRuntimeOnly(libs.testcontainers.postgresql)
-    testRuntimeOnly(libs.testcontainers.mysql)
-    testRuntimeOnly(libs.testcontainers.mariadb)
+    testImplementation(libs.jackson.dataformat.xml)
+    testImplementation(libs.jackson.datatype.jdk8)
+    testImplementation(libs.testcontainers)
+    testImplementation(libs.testcontainers.mssql)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers.mysql)
+    testImplementation(libs.testcontainers.mariadb)
+    testImplementation(libs.testcontainers.oracle)
+    testImplementation(libs.testcontainers.db2)
+
     testRuntimeOnly(libs.mariadb.client)
-    testRuntimeOnly(libs.testcontainers.oracle)
-    testRuntimeOnly(libs.testcontainers.db2)
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.bouncycastle.bcprov)
-}
-
-dependencyAnalysis {
-    issues {
-        onUnusedDependencies {
-            exclude("org.bouncycastle:bcpkix-jdk18on")
-        }
-    }
 }
 
 tasks.withType(JavaExec::class) {
@@ -121,10 +114,8 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskPro
         // Clean up Docker resources after each test class to prevent disk space exhaustion
         addTestListener(object : TestListener {
             override fun beforeSuite(suite: TestDescriptor) {}
-            override fun afterSuite(suite: TestDescriptor, result: TestResult) {}
-            override fun beforeTest(testDescriptor: TestDescriptor) {}
-            override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {
-                if (testDescriptor.parent == null) {
+            override fun afterSuite(suite: TestDescriptor, result: TestResult) {
+                if (suite.className != null) {
                     try {
                         project.providers.exec {
                             commandLine("docker", "container", "prune", "-f")
@@ -134,6 +125,8 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskPro
                     }
                 }
             }
+            override fun beforeTest(testDescriptor: TestDescriptor) {}
+            override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {}
         })
     }
 }

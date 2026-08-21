@@ -16,7 +16,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "lib", "include" to listOf("*.jar"))))
     implementation(project(":siard-utilities"))
 
-    runtimeOnly(libs.postgresql)
+    runtimeOnly(libs.db2.license)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit4)
