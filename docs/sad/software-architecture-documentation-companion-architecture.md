@@ -100,9 +100,9 @@ graph LR
 
 The existing desktop and CLI applications continue to serve users who can run Java binaries or need direct access to databases.
 
-The **Web Companion Central Hub** is the primary delivery model for SFA staff. It is deployed and maintained by IT and accessed through a browser. It can archive databases that are reachable from the hub's network context.
+The **Web Companion Central Hub** is the intended primary delivery model for SFA staff once it is implemented. It will be deployed and maintained by IT and accessed through a browser. It can archive databases that are reachable from the hub's network context.
 
-The **Web Companion Local Agent** is a secondary delivery model for users or databases that cannot be reached from a central server. It runs on the user's machine or on a server in the target network and is controlled from the same browser-based frontend.
+The **Web Companion Local Agent** is the first deliverable. It is a secondary delivery model for users or databases that cannot be reached from a central server. It runs on the user's machine or on a server in the target network and is controlled from the same browser-based frontend.
 
 ### Technical Context
 
@@ -179,10 +179,10 @@ The `SiardServer` module is built into two runtime artifacts:
 
 | Artifact | Role | Authentication | Persistence | Bind address |
 |---|---|---|---|---|
-| `siard-agent` | Local agent | None | In-memory | `127.0.0.1` only |
+| `siard-agent` | Local agent | None | SQLite file | `127.0.0.1` only |
 | `siard-hub` | Central hub | OIDC to Keycloak | PostgreSQL | Configured external interface |
 
-During the initial spike a single artifact with an explicit `--server.mode=local|hub` flag is acceptable. Before the first production release the build should produce the two artifacts from one codebase to avoid accidental misconfiguration.
+The two artifacts are built from one codebase from the start. The hub artifact may initially contain only stub or minimal functionality while the central hub features are implemented, but the module and build split are in place from the beginning to avoid accidental misconfiguration.
 
 ## 5. Runtime View
 
@@ -320,13 +320,13 @@ The frontend is a TypeScript/React single-page application built with Vite, TanS
 ### Persistence and Storage
 
 - **Job state**: PostgreSQL in hub mode; SQLite file in local agent mode.
-- **Local agent SQLite file**: stored in the local agent's working directory by default. Configuring a custom path is a future extension, not part of the MVP.
+- **Local agent SQLite file**: defaults to a user-specific directory (`%LOCALAPPDATA%/siard-agent/jobs.db` on Windows, `$XDG_DATA_HOME/siard-agent/jobs.db` or `~/.local/share/siard-agent/jobs.db` on Linux). The path is configurable from the start.
 - **Job store abstraction**: a shared `JobStore` abstraction is used by both hub and local agent. The hub implementation uses PostgreSQL; the local agent implementation uses SQLite.
 - **Migrations**: Flyway is used for both PostgreSQL and SQLite with the same schema.
 - **Generated SIARD files**: pluggable storage interface. The spike uses the local filesystem; object storage can be added later.
 - **Database credentials**: encrypted at rest with a hub-managed key.
 - **Resume**: resuming interrupted archive/restore jobs is not supported by the underlying `siard-api` / `siard-cmd` and is out of scope for the MVP. Persistence is used for job history, status, and troubleshooting only.
-- **Local agent history retention**: job history is kept indefinitely in the SQLite file; the user can delete the working directory to reset it.
+- **Local agent history retention**: job history is kept indefinitely in the SQLite file; the user can delete the SQLite file or reconfigure its path to reset it.
 
 ### API and Job Model
 
@@ -362,7 +362,7 @@ SIARD archives can store large objects (LOBs) outside the `.siard` file in an ex
 | **GraalVM native image** | `siard-api` uses JAXB and JDBC drivers; native-image metadata may be non-trivial. Evaluate during the spike before deciding on native image delivery. |
 | **License compatibility** | CDDL-1.0 is compatible with Apache-2.0 dependencies, but verify distribution requirements when bundling new frameworks. |
 | **UI logic reuse** | Much of the business flow may currently live in JavaFX controllers and need to be reimplemented in the web frontend. |
-| **Security boundary** | Mixing local and hub modes in one artifact increases the risk of accidental exposure. Split into `siard-agent` and `siard-hub` artifacts before the first production release. |
+| **Security boundary** | Mixing local and hub modes in one artifact increases the risk of accidental exposure. `siard-agent` and `siard-hub` artifacts are produced from the start; the hub artifact may initially be minimal. |
 | **External LOB handling** | ZIP packaging adds user-facing complexity; clear UI guidance is required. |
 | **Credential storage** | Encrypt at rest; consider a secrets manager or short-lived credentials in later releases. |
 

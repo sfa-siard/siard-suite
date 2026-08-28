@@ -12,10 +12,11 @@ frameworks and comparing them against the project's constraints.
 
 The spike must also prove that the chosen architecture can:
 
-- Build a runnable container image.
+- Build a runnable local agent archive (zip with bundled JRE, start script, SQLite persistence, localhost-only, no auth).
+- Build a runnable container image for the hub.
 - Expose a REST API consumed by a web frontend.
 - Authenticate users via OIDC in hub mode.
-- Persist job state in PostgreSQL.
+- Persist job state in PostgreSQL for the hub and SQLite for the local agent.
 - Run an archive job through the existing `siard-api` and JDBC wrappers.
 - Produce a downloadable SIARD file or ZIP package (when external LOBs are used).
 
@@ -96,10 +97,12 @@ Out of scope:
 
 ### Day 4 — Container, native image, and operations comparison
 
+- [ ] Build a local agent archive for each prototype.
+  - Compare package size, startup time, and native-image feasibility if time permits.
 - [ ] Build a container image for each prototype.
   - Quarkus: compare JVM container and, if feasible, native container build.
   - Spring Boot: compare Dockerfile, Jib, and/or Buildpacks builds.
-- [ ] Measure startup time, image size, and memory footprint.
+- [ ] Measure startup time, image size, and memory footprint for both archive and container forms.
 - [ ] Document how each framework handles:
   - Configuration and profiles for `local` vs `hub` mode.
   - Health and metrics endpoints.
@@ -155,7 +158,7 @@ Each criterion is weighted by importance. Score each framework from 1 (poor) to
 
 | Risk | Mitigation |
 |---|---|
-| `siard-api` or JDBC drivers fail in a native image | Time-box native-image evaluation. If it fails, the hub can still run as a JVM container; native image becomes a local-agent-only future option. |
+| `siard-api` or JDBC drivers fail in a native image | Time-box native-image evaluation. If it fails, the hub can still run as a JVM container; native image is an optimization for the local agent only and can be deferred. |
 | OIDC mock differs from real SFA/BIT provider | Record the assumptions (group claim format, PKCE, scopes). Plan a validation task with the real provider as soon as possible. |
 | Container build is slow or produces huge images | Compare Jib, Buildpacks, and Quarkus extensions. Document the chosen build and why. |
 | Front-end integration reveals API design issues | Keep the API contract minimal. Iterate on SSE shape and error responses during the spike. |
@@ -166,6 +169,6 @@ Each criterion is weighted by importance. Score each framework from 1 (poor) to
 1. Merge or archive the spike branches.
 2. Create the real `siard-server` module using the chosen framework.
 3. Create the `siard-web` module with the React/Vite/TanStack Query stack.
-4. Implement the first slice: `POST /api/v1/jobs/archive` and `GET /api/v1/jobs/{id}`.
-5. Set up CI/CD to build the container image and run Testcontainers-based tests.
-6. Schedule a follow-up task to validate OIDC against the real identity provider.
+4. Implement the first slice for the local agent: `POST /api/v1/jobs/archive` and `GET /api/v1/jobs/{id}` with SQLite persistence, localhost-only binding, and no authentication.
+5. Set up CI/CD to build the local agent archive and run Testcontainers-based hub tests.
+6. Schedule follow-up tasks to build the central hub features and validate OIDC against the real identity provider.

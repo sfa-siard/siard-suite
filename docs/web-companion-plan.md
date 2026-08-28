@@ -20,13 +20,18 @@ managed end-user systems. They need a delivery model that:
   restricted networks.
 
 The Web Companion addresses this by adding a browser-accessible frontend and a
-headless backend. The existing desktop and CLI applications remain unchanged.
+headless backend. The **local agent** is the replacement for the JavaFX desktop
+application and is built first. The desktop application is phased out once the
+local agent reaches feature parity. The **CLI** remains supported for users who
+prefer scriptable or automation workflows.
 
 ## Goal
 
 Deliver a Web Companion that lets SFA staff and other users archive and restore
 relational databases through a browser, while reusing the existing SIARD core
-libraries (`siard-api`, JDBC wrappers, `siard-cmd`).
+libraries (`siard-api`, JDBC wrappers, `siard-cmd`). The **local agent** is the
+first product; as much as possible of its backend and frontend is reused for the
+**central hub** later.
 
 ## Relationship to other documents
 
@@ -38,14 +43,19 @@ libraries (`siard-api`, JDBC wrappers, `siard-cmd`).
 
 ## High-level delivery model
 
-- **Central Hub** — primary delivery model for SFA staff. Deployed and managed
-  by IT, accessed via browser, uses OIDC through Keycloak, persists job state in
-  PostgreSQL.
-- **Local Agent** — secondary model for databases or users that cannot be reached
-  from a central server. Runs on the user's machine or a nearby server, uses an
-  embedded SQLite database for job history, no authentication.
-- **Desktop / CLI** — unchanged; continues to serve users who can run Java
-  binaries or need direct database access.
+- **Local Agent** — the first deliverable and the long-term replacement for the
+  JavaFX desktop application. Runs on the user's machine or a nearby server, uses
+  an embedded SQLite database for job history, has no authentication, and binds to
+  `127.0.0.1`. Targets users or databases that cannot be reached from a central
+  server. The local agent is intended to reach feature parity with the desktop
+  app.
+- **Central Hub** — the intended primary delivery model for SFA staff once it is
+  implemented. Deployed and managed by IT, accessed via browser, uses OIDC through
+  Keycloak, persists job state in PostgreSQL. Reuses the same `siard-server` and
+  `siard-web` modules built for the local agent.
+- **Desktop (JavaFX)** — unchanged for now; no new features planned. Phased out
+  once the local agent reaches feature parity.
+- **CLI** — still valuable for certain workflows and will be supported long term.
 
 See the companion architecture document for the full architecture.
 
@@ -58,57 +68,66 @@ MVP.
 
 - Build minimal Quarkus and Spring Boot prototypes.
 - Run an end-to-end archive job through the existing `siard-api`.
-- Compare container builds, native-image feasibility, OIDC integration with
-  Keycloak, PostgreSQL persistence, and developer experience.
+- Compare local-agent packaging, container builds, native-image feasibility, and
+  developer experience.
+- Validate that the same backend can support hub features later (OIDC with
+  Keycloak, PostgreSQL persistence).
 - Choose the backend framework and record the decision in an ADR.
 
 Deliverable: chosen backend framework, spike branches, updated estimates for
 Phase 1.
 
-### Phase 1 — MVP Backend (4–6 weeks)
+### Phase 1 — MVP Local Agent (4–6 weeks)
 
-- Create the `siard-server` module with the chosen framework.
-- Implement archive-from-DB job flow (`POST /api/v1/jobs/archive`).
+- Create the `siard-server` module with the chosen framework, with `siard-agent`
+  and `siard-hub` source sets from the start. The first usable artifact is the
+  local agent.
+- Implement archive-from-DB job flow for the local agent (`POST
+  /api/v1/jobs/archive`).
 - Add job status, progress (SSE), and download endpoints.
-- Support hub mode with PostgreSQL and local-agent mode with SQLite using a
-  shared `JobStore` abstraction.
-- Integrate Keycloak OIDC authentication for the hub.
-- Implement per-user file isolation and basic resource limits.
+- Use SQLite persistence for job history through a shared `JobStore` abstraction.
+- No authentication, localhost-only binding, and a bundled JRE zip distribution.
+- Create the `siard-web` frontend module and serve the same SPA from the local
+  agent.
 
-Deliverable: a working backend that can archive a database and produce a
+Deliverable: a working local agent that can archive a database and produce a
 downloadable SIARD file.
 
-### Phase 2 — MVP Frontend (4–6 weeks)
+### Phase 2 — Feature parity and hardening (6–8 weeks)
 
-- Create the `siard-web` module as a React/Vite SPA.
-- DB connection form.
-- Job submission and real-time progress display.
-- SIARD download.
-- "Pending access" page for users without a SIARD role.
-- Admin "pending users" page.
-
-Deliverable: browser-based archive workflow.
-
-### Phase 3 — Feature parity and hardening (6–8 weeks)
-
-- Restore, browse, and export endpoints.
-- ZIP package upload/download for archives with external LOBs.
+- Restore, browse, and export endpoints in the local agent.
+- ZIP package for archives with external LOBs.
 - Cancellation, retries, and improved error reporting.
 - Frontend parity with the desktop application.
-- Persistent job store hardening (indexes, retention, cleanup).
+- SQLite hardening (indexes, retention, cleanup).
+- Start user acceptance testing against the desktop app and define the phase-out
+  criteria for JavaFX.
 
-Deliverable: core feature parity with desktop app for common workflows.
+Deliverable: local agent reaches core feature parity with the desktop app.
 
-### Phase 4 — Enterprise readiness (4–6 weeks)
+### Phase 3 — Central Hub (4–6 weeks)
 
-- Container image and deployment documentation for IT.
-- Audit logging and structured logging.
-- Metrics, health endpoints, and operator runbook.
-- CI/CD integration for container builds and frontend tests.
+- Add OIDC authentication and Keycloak integration.
+- Add PostgreSQL persistence for hub job state.
+- Implement per-user file isolation and resource limits.
+- Container image and IT deployment documentation.
+- Audit logging, metrics, health endpoints, and operator runbook.
+- CI/CD integration for local agent archive, container builds, and frontend
+  tests.
 - SBOM generation and dependency scanning.
-- Split production artifacts into `siard-agent` and `siard-hub`.
 
-Deliverable: production-ready hub for IT deployment.
+Deliverable: production-ready central hub for IT deployment.
+
+### Phase 4 — Desktop phase-out and enterprise readiness (2–4 weeks)
+
+- Deprecate the JavaFX desktop application once local agent feature parity is
+  confirmed.
+- Finalize end-user documentation and migration guide.
+- Enterprise hardening: structured logging, audit log retention, backup/restore
+  of hub persistence, disaster recovery runbook.
+
+Deliverable: desktop application declared end-of-life; Web Companion in full
+production use.
 
 ## Dependencies on existing-code refactoring
 
@@ -138,13 +157,15 @@ early alignment on the extracted APIs avoids rework.
    seven years for an archival context).
 5. **Frontend languages**: confirm German + English for the MVP; identify any
    required additional languages.
+6. **Desktop phase-out criteria**: confirm the feature-parity milestone and
+   timeline for deprecating the JavaFX desktop application.
 
 ## Risks
 
 | Risk | Mitigation |
 |---|---|
 | Backend framework choice is wrong for `siard-api` integration | Resolve with the Phase 0 spike before committing. |
-| `siard-api` native image is hard to build | Keep hub on JVM container; native image only for local-agent future consideration. |
+| `siard-api` native image is hard to build | Keep the local agent on a bundled JVM initially; native image is a later optimization. |
 | External LOB ZIP packaging confuses users | Provide clear UI guidance and validation. |
 | Refactoring `siard-cmd` delays Web Companion reuse | Extract small, stable APIs first; do not wait for full modernization. |
 | License compatibility with new frameworks | Verify CDDL-1.0 compatibility before adding dependencies; generate SBOMs. |
