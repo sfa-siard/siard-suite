@@ -9,21 +9,23 @@ import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseResultSetMetaDataTester;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.OracleContainer;
 
 import java.sql.*;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
 
-    @ClassRule
+    @Container
     public final static OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart");
 
     private static final String _sDBA_USER = "SYSTEM";
@@ -48,7 +50,7 @@ public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
     private static String _sSqlQuerySimple = getTableQuery(TestSqlDatabase.getQualifiedSimpleTable(), TestSqlDatabase._listCdSimple);
     private static String _sSqlQueryComplex = getTableQuery(TestSqlDatabase.getQualifiedComplexTable(), TestSqlDatabase._listCdComplex);
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             OracleDataSource dsOracle = new OracleDataSource();
@@ -92,7 +94,7 @@ public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         setResultSetMetaData(rsmd, rs);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             OracleDataSource dsOracle = new OracleDataSource();
@@ -110,7 +112,7 @@ public class OracleResultSetMetaDataTester extends BaseResultSetMetaDataTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong result set metadata class!", OracleResultSetMetaData.class, getResultSetMetaData().getClass());
+        assertEquals(OracleResultSetMetaData.class, getResultSetMetaData().getClass(), "Wrong result set metadata class!");
     }
 
     @Test

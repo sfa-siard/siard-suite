@@ -7,7 +7,7 @@ import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 public class MySqlKeysUpload {
 
@@ -39,8 +39,8 @@ public class MySqlKeysUpload {
         });
 
         // then
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         SiardArchiveAssertions.builder()
                               .expectedArchive(expectedArchive)

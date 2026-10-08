@@ -3,9 +3,9 @@ package ch.admin.bar.siard2.api;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaFieldTester {
     private static final File _fileSIARD_21_NEW = new File("src/test/resources/tmp/sql2008new.siard");
@@ -80,7 +80,7 @@ public class MetaFieldTester {
         mu2.setTypeName(_sTEST_UDTS_TYPE);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.copy(_fileSIARD_10_SOURCE.toPath(), _fileSIARD_10.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -97,21 +97,21 @@ public class MetaFieldTester {
             MetaView mv = ms.createMetaView(_sTEST_VIEW_NAME);
             _mcDistinct = mv.createMetaColumn(_sTEST_DISTINCT_COLUMN_NAME);
             _mcDistinct.setTypeName(_sTEST_DISTINCT_TYPE);
-            assertSame("DISTINCT type has no field meta data!", 0, _mcDistinct.getMetaFields());
+            assertSame(0, _mcDistinct.getMetaFields(), "DISTINCT type has no field meta data!");
             _mcRow = mv.createMetaColumn(_sTEST_UDTS_COLUMN_NAME);
             _mcRow.setTypeName(_sTEST_UDTS_TYPE);
-            assertSame("Invalid number of field meta data of ROW!", 3, _mcRow.getMetaFields());
+            assertSame(3, _mcRow.getMetaFields(), "Invalid number of field meta data of ROW!");
 
             Table table = schema.createTable(_sTEST_TABLE_NAME);
             MetaTable mt = table.getMetaTable();
             _mcArray = mt.createMetaColumn(_sTEST_ARRAY_COLUMN_NAME);
             _mcArray.setType("VARCHAR(256)");
             _mcArray.setCardinality(4);
-            assertSame("Invalid number of field meta data of array!", 0, _mcArray.getMetaFields());
+            assertSame(0, _mcArray.getMetaFields(), "Invalid number of field meta data of array!");
 
             _mcUdt = mt.createMetaColumn(_sTEST_UDTC_COLUMN_NAME);
             _mcUdt.setTypeName(_sTEST_UDTC_TYPE);
-            assertSame("Invalid number of field meta data of UDT!", 2, _mcUdt.getMetaFields());
+            assertSame(2, _mcUdt.getMetaFields(), "Invalid number of field meta data of UDT!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         } catch (URISyntaxException use) {
@@ -119,7 +119,7 @@ public class MetaFieldTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_mcDistinct.getParentMetaView());
@@ -138,35 +138,35 @@ public class MetaFieldTester {
     public void testGetMetaAttribute() {
         try {
             MetaField mf = _mcRow.getMetaField(0);
-            assertEquals("Invalid parent column!", _mcRow, mf.getParentMetaColumn());
+            assertEquals(_mcRow, mf.getParentMetaColumn(), "Invalid parent column!");
             MetaAttribute ma = mf.getMetaAttribute();
-            assertEquals("Invalid attribute name!", _sTEST_UDTS_ATTRIBUTE1_NAME, ma.getName());
-            assertEquals("Invalid field type!", "INT", ma.getType());
+            assertEquals(_sTEST_UDTS_ATTRIBUTE1_NAME, ma.getName(), "Invalid attribute name!");
+            assertEquals("INT", ma.getType(), "Invalid field type!");
 
             mf = _mcRow.getMetaField(1);
-            assertEquals("Invalid parent column!", _mcRow, mf.getParentMetaColumn());
+            assertEquals(_mcRow, mf.getParentMetaColumn(), "Invalid parent column!");
             ma = mf.getMetaAttribute();
-            assertEquals("Invalid attribute name!", _sTEST_UDTS_ATTRIBUTE2_NAME, ma.getName());
-            assertEquals("Invalid field type!", "CLOB", ma.getType());
+            assertEquals(_sTEST_UDTS_ATTRIBUTE2_NAME, ma.getName(), "Invalid attribute name!");
+            assertEquals("CLOB", ma.getType(), "Invalid field type!");
 
             mf = _mcRow.getMetaField(2);
-            assertEquals("Invalid parent column!", _mcRow, mf.getParentMetaColumn());
+            assertEquals(_mcRow, mf.getParentMetaColumn(), "Invalid parent column!");
             ma = mf.getMetaAttribute();
-            assertEquals("Invalid attribute name!", _sTEST_UDTS_ATTRIBUTE3_NAME, ma.getName());
-            assertEquals("Invalid field type!", "BLOB", ma.getType());
+            assertEquals(_sTEST_UDTS_ATTRIBUTE3_NAME, ma.getName(), "Invalid attribute name!");
+            assertEquals("BLOB", ma.getType(), "Invalid field type!");
 
             mf = _mcUdt.getMetaField(0);
-            assertEquals("Invalid parent column!", _mcUdt, mf.getParentMetaColumn());
+            assertEquals(_mcUdt, mf.getParentMetaColumn(), "Invalid parent column!");
             ma = mf.getMetaAttribute();
-            assertEquals("Invalid attribute name!", _sTEST_UDTC_ATTRIBUTE1_NAME, ma.getName());
-            assertEquals("Invalid field type!", "INT", ma.getType());
+            assertEquals(_sTEST_UDTC_ATTRIBUTE1_NAME, ma.getName(), "Invalid attribute name!");
+            assertEquals("INT", ma.getType(), "Invalid field type!");
 
             mf = _mcUdt.getMetaField(1);
-            assertEquals("Invalid parent column!", _mcUdt, mf.getParentMetaColumn());
+            assertEquals(_mcUdt, mf.getParentMetaColumn(), "Invalid parent column!");
             ma = mf.getMetaAttribute();
-            assertEquals("Invalid attribute name!", _sTEST_UDTC_ATTRIBUTE2_NAME, ma.getName());
-            assertNull("Invalid field type!", ma.getType());
-            assertEquals("Invalid field type name!", _sTEST_UDTS_TYPE, ma.getTypeName());
+            assertEquals(_sTEST_UDTC_ATTRIBUTE2_NAME, ma.getName(), "Invalid attribute name!");
+            assertNull(ma.getType(), "Invalid field type!");
+            assertEquals(_sTEST_UDTS_TYPE, ma.getTypeName(), "Invalid field type name!");
 
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -177,8 +177,8 @@ public class MetaFieldTester {
     public void testLobFolder() {
         try {
             MetaField mf = _mcRow.getMetaField(1);
-            assertNull("Views do not have stored LOBs!", mf.getLobFolder());
-            assertNull("Views do not have stored LOBs!", mf.getAbsoluteLobFolder());
+            assertNull(mf.getLobFolder(), "Views do not have stored LOBs!");
+            assertNull(mf.getAbsoluteLobFolder(), "Views do not have stored LOBs!");
             try {
                 mf.setLobFolder(new URI("lobs"));
                 fail("Views do not have stores LOBs and thus no LOB folders!");
@@ -189,13 +189,13 @@ public class MetaFieldTester {
             }
 
             mf = _mcUdt.getMetaField(0);
-            assertNull("Invalid default LOB folder!", mf.getLobFolder());
+            assertNull(mf.getLobFolder(), "Invalid default LOB folder!");
             System.out.println(mf.getAbsoluteLobFolder());
             try {
                 String sLobFolder = "lobsUdt/field1/";
                 mf.setLobFolder(new URI(sLobFolder));
-                assertEquals("", sLobFolder, mf.getLobFolder()
-                                               .toString());
+                assertEquals(sLobFolder, mf.getLobFolder()
+                                               .toString(), "");
                 System.out.println(mf.getAbsoluteLobFolder());
             } catch (URISyntaxException use) {
                 System.out.println(EU.getExceptionMessage(use));
@@ -209,10 +209,10 @@ public class MetaFieldTester {
     public void testMimeType() {
         try {
             MetaField mf = _mcRow.getMetaField(2);
-            assertNull("Wrong MIME type default!", mf.getMimeType());
+            assertNull(mf.getMimeType(), "Wrong MIME type default!");
             String sMimeType = "image/png";
             mf.setMimeType(sMimeType);
-            assertEquals("Invalid MIME type!", sMimeType, mf.getMimeType());
+            assertEquals(sMimeType, mf.getMimeType(), "Invalid MIME type!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -224,7 +224,7 @@ public class MetaFieldTester {
             MetaField mf = _mcRow.getMetaField(0);
             String sDescription = "Description";
             mf.setDescription(sDescription);
-            assertEquals("Invalid description!", sDescription, mf.getDescription());
+            assertEquals(sDescription, mf.getDescription(), "Invalid description!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -234,9 +234,9 @@ public class MetaFieldTester {
     public void testGetMetaFields() {
         try {
             MetaField mf = _mcRow.getMetaField(0);
-            assertEquals("Field or predefined type has no children fields!", 0, mf.getMetaFields());
+            assertEquals(0, mf.getMetaFields(), "Field or predefined type has no children fields!");
             mf = _mcUdt.getMetaField(1);
-            assertEquals("Fields of TEST_UDT_TYPE.TEST_UDT_ATTRIBUTE2 type must be 3", 3, mf.getMetaFields());
+            assertEquals(3, mf.getMetaFields(), "Fields of TEST_UDT_TYPE.TEST_UDT_ATTRIBUTE2 type must be 3");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -246,36 +246,36 @@ public class MetaFieldTester {
     public void testGetMetaField() {
         try {
             MetaField mf = _mcArray.getMetaField(1);
-            assertSame("Invalid number of field meta data of array!", 2, _mcArray.getMetaFields());
+            assertSame(2, _mcArray.getMetaFields(), "Invalid number of field meta data of array!");
 
             mf = _mcArray.getMetaField(_mcArray.getName() + "[1]");
-            assertSame("Invalid number of field meta data of array!", 2, _mcArray.getMetaFields());
+            assertSame(2, _mcArray.getMetaFields(), "Invalid number of field meta data of array!");
 
             mf = _mcArray.getMetaField(_mcArray.getName() + "[3]");
-            assertSame("Invalid number of field meta data of array!", 3, _mcArray.getMetaFields());
+            assertSame(3, _mcArray.getMetaFields(), "Invalid number of field meta data of array!");
 
             MetaField mfParent = _mcUdt.getMetaField(1);
 
             mf = mfParent.getMetaField(0);
-            assertNull("Parent is not a column!!", mf.getParentMetaColumn());
-            assertEquals("Invalid parent field!", mfParent, mf.getParentMetaField());
+            assertNull(mf.getParentMetaColumn(), "Parent is not a column!!");
+            assertEquals(mfParent, mf.getParentMetaField(), "Invalid parent field!");
             MetaAttribute ma = mf.getMetaAttribute();
-            assertEquals("Invalid attribute name!", _sTEST_UDTS_ATTRIBUTE1_NAME, ma.getName());
-            assertEquals("Invalid field type!", "INT", ma.getType());
+            assertEquals(_sTEST_UDTS_ATTRIBUTE1_NAME, ma.getName(), "Invalid attribute name!");
+            assertEquals("INT", ma.getType(), "Invalid field type!");
 
             mf = mfParent.getMetaField(1);
-            assertNull("Parent is not a column!!", mf.getParentMetaColumn());
-            assertEquals("Invalid parent field!", mfParent, mf.getParentMetaField());
+            assertNull(mf.getParentMetaColumn(), "Parent is not a column!!");
+            assertEquals(mfParent, mf.getParentMetaField(), "Invalid parent field!");
             ma = mf.getMetaAttribute();
-            assertEquals("Invalid attribute name!", _sTEST_UDTS_ATTRIBUTE2_NAME, ma.getName());
-            assertEquals("Invalid field type!", "CLOB", ma.getType());
+            assertEquals(_sTEST_UDTS_ATTRIBUTE2_NAME, ma.getName(), "Invalid attribute name!");
+            assertEquals("CLOB", ma.getType(), "Invalid field type!");
 
             mf = mfParent.getMetaField(2);
-            assertNull("Parent is not a column!!", mf.getParentMetaColumn());
-            assertEquals("Invalid parent field!", mfParent, mf.getParentMetaField());
+            assertNull(mf.getParentMetaColumn(), "Parent is not a column!!");
+            assertEquals(mfParent, mf.getParentMetaField(), "Invalid parent field!");
             ma = mf.getMetaAttribute();
-            assertEquals("Invalid attribute name!", _sTEST_UDTS_ATTRIBUTE3_NAME, ma.getName());
-            assertEquals("Invalid field type!", "BLOB", ma.getType());
+            assertEquals(_sTEST_UDTS_ATTRIBUTE3_NAME, ma.getName(), "Invalid attribute name!");
+            assertEquals("BLOB", ma.getType(), "Invalid field type!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }

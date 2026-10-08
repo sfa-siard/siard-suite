@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.expression;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TablePrimaryTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private TablePrimary _tp = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _tp = _sf.newTablePrimary();
     }
@@ -21,7 +21,7 @@ public class TablePrimaryTester {
         // ErrorListener.getInstance().suppressException();
         _tp.parse("T1");
         // System.out.println(_tp.format());
-        assertEquals("Plain table name not recognized!", "T1", _tp.format());
+        assertEquals("T1", _tp.format(), "Plain table name not recognized!");
     }
 
     @Test
@@ -29,7 +29,7 @@ public class TablePrimaryTester {
         // ErrorListener.getInstance().suppressException();
         _tp.parse("\"table\" T1");
         // System.out.println(_tp.format());
-        assertEquals("Plain alias not recognized!", "\"table\" AS T1", _tp.format());
+        assertEquals("\"table\" AS T1", _tp.format(), "Plain alias not recognized!");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class TablePrimaryTester {
         // ErrorListener.getInstance().suppressException();
         _tp.parse("(SELECT * FROM T)");
         // System.out.println(_tp.format());
-        assertEquals("Query not recognized!", "(SELECT *\r\nFROM T)", _tp.format());
+        assertEquals("(SELECT *\r\nFROM T)", _tp.format(), "Query not recognized!");
     }
 
     @Test
@@ -45,28 +45,28 @@ public class TablePrimaryTester {
         // ErrorListener.getInstance().suppressException();
         _tp.parse("(SELECT * FROM T) T1(A1, B1, C1)");
         // System.out.println(_tp.format());
-        assertEquals("Query not recognized!", "(SELECT *\r\nFROM T) AS T1(A1, B1, C1)", _tp.format());
+        assertEquals("(SELECT *\r\nFROM T) AS T1(A1, B1, C1)", _tp.format(), "Query not recognized!");
     }
 
     @Test
     public void testUnnest() {
         _tp.parse("UNNEST(array1) WITH ORDINALITY T1(A1, B1, C1)");
         // System.out.println(_tp.format());
-        assertEquals("UNNEST not recognized!", "UNNEST(ARRAY1) WITH ORDINALITY AS T1(A1, B1, C1)", _tp.format());
+        assertEquals("UNNEST(ARRAY1) WITH ORDINALITY AS T1(A1, B1, C1)", _tp.format(), "UNNEST not recognized!");
     }
 
     @Test
     public void testTable() {
         _tp.parse("TABLE(ms1) T1");
         System.out.println(_tp.format());
-        assertEquals("TABLE not recognized!", "TABLE(MS1) AS T1", _tp.format());
+        assertEquals("TABLE(MS1) AS T1", _tp.format(), "TABLE not recognized!");
     }
 
     @Test
     public void testOnly() {
         _tp.parse("ONLY(ms1) T1");
         System.out.println(_tp.format());
-        assertEquals("ONLY not recognized!", "ONLY(MS1) AS T1", _tp.format());
+        assertEquals("ONLY(MS1) AS T1", _tp.format(), "ONLY not recognized!");
     }
 
 }

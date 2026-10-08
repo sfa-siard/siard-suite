@@ -1,20 +1,22 @@
 package ch.admin.bar.siard2.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.sql.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class MsSqlDriverTest {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
-    @ClassRule
+    @Container
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
             .withPassword(SA_PASSWORD)
@@ -28,7 +30,7 @@ public class MsSqlDriverTest {
     private Driver _driver = null;
     private Connection _conn = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Class.forName(sDRIVER_CLASS);
@@ -46,7 +48,7 @@ public class MsSqlDriverTest {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if ((_conn != null) && (!_conn.isClosed()))
@@ -61,20 +63,20 @@ public class MsSqlDriverTest {
 
     @Test
     public void testWrapping() {
-        assertSame("Registration of driver wrapper failed!", MsSqlDriver.class, _driver.getClass());
-        assertSame("Choice of connection wrapper failed!", MsSqlConnection.class, _conn.getClass());
+        assertSame(MsSqlDriver.class, _driver.getClass(), "Registration of driver wrapper failed!");
+        assertSame(MsSqlConnection.class, _conn.getClass(), "Choice of connection wrapper failed!");
     }
 
     @Test
     public void testCompliant() {
-        assertSame("MSSQL driver not JDBC compliant!", true, _driver.jdbcCompliant());
+        assertSame(true, _driver.jdbcCompliant(), "MSSQL driver not JDBC compliant!");
     }
 
     @Test
     public void testAcceptsURL() {
         try {
-            assertSame("Valid MSSQL URL not accepted!", true, _driver.acceptsURL(_sDB_URL));
-            assertSame("Invalid MSSQL URL accepted!", false, _driver.acceptsURL(sINVALID_MSSQL_URL));
+            assertSame(true, _driver.acceptsURL(_sDB_URL), "Valid MSSQL URL not accepted!");
+            assertSame(false, _driver.acceptsURL(sINVALID_MSSQL_URL), "Invalid MSSQL URL accepted!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());

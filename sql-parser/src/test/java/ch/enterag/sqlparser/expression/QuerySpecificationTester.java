@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.expression;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class QuerySpecificationTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private QuerySpecification _qs = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _qs = _sf.newQuerySpecification();
     }
@@ -20,57 +20,57 @@ public class QuerySpecificationTester {
     public void testMinimum() {
         _qs.parse("select * from t");
         // System.out.println(_qs.format());
-        assertEquals("Minimum query not recognized!", "SELECT *\r\nFROM T", _qs.format());
+        assertEquals("SELECT *\r\nFROM T", _qs.format(), "Minimum query not recognized!");
     }
 
     @Test
     public void testSimpleSelect() {
         _qs.parse("select a1, b, c from t");
         // System.out.println(_qs.format());
-        assertEquals("Simple select not recognized!", "SELECT\r\n  A1,\r\n  B,\r\n  C\r\nFROM T", _qs.format());
+        assertEquals("SELECT\r\n  A1,\r\n  B,\r\n  C\r\nFROM T", _qs.format(), "Simple select not recognized!");
     }
 
     @Test
     public void testComplexSelect() {
         _qs.parse("select a1 as first, t1.*, t2.* as (c1, b3) from t");
         // System.out.println(_qs.format());
-        assertEquals("Complex select not recognized!", "SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM T", _qs.format());
+        assertEquals("SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM T", _qs.format(), "Complex select not recognized!");
     }
 
     @Test
     public void testFrom() {
         _qs.parse("select a1 as first, t1.*, t2.* as (c1, b3) from emp t1, (select * from t) as t2");
         // System.out.println(_qs.format());
-        assertEquals("FROM expression not recognized!", "SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM EMP AS T1, (SELECT *\r\nFROM T) AS T2", _qs.format());
+        assertEquals("SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM EMP AS T1, (SELECT *\r\nFROM T) AS T2", _qs.format(), "FROM expression not recognized!");
     }
 
     @Test
     public void testWhere() {
         _qs.parse("select a1 as first, t1.*, t2.* as (c1, b3) from emp t1, (select * from t) as t2 where T1.\"column\" > 'aa' and t2.id = t1.id");
         // System.out.println(_qs.format());
-        assertEquals("WHERE expression not recognized!", "SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM EMP AS T1, (SELECT *\r\nFROM T) AS T2\r\nWHERE T1.\"column\" > 'aa' AND T2.ID = T1.ID", _qs.format());
+        assertEquals("SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM EMP AS T1, (SELECT *\r\nFROM T) AS T2\r\nWHERE T1.\"column\" > 'aa' AND T2.ID = T1.ID", _qs.format(), "WHERE expression not recognized!");
     }
 
     @Test
     public void testGroup() {
         _qs.parse("select a1 as first, t1.*, t2.* as (c1, b3) from emp t1, (select * from t) as t2 where T1.\"column\" > 'aa' and t2.id = t1.id group by a1, a2, a3");
         // System.out.println(_qs.format());
-        assertEquals("GROUP expression not recognized!", "SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM EMP AS T1, (SELECT *\r\nFROM T) AS T2\r\nWHERE T1.\"column\" > 'aa' AND T2.ID = T1.ID\r\nGROUP BY A1, A2, A3", _qs.format());
+        assertEquals("SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM EMP AS T1, (SELECT *\r\nFROM T) AS T2\r\nWHERE T1.\"column\" > 'aa' AND T2.ID = T1.ID\r\nGROUP BY A1, A2, A3", _qs.format(), "GROUP expression not recognized!");
     }
 
     @Test
     public void testHaving() {
         _qs.parse("select a1 as first, t1.*, t2.* as (c1, b3) from emp t1, (select * from t) as t2 where T1.\"column\" > 'aa' and t2.id = t1.id group by a1, a2, a3 having t1.\"column\" is null");
         // System.out.println(_qs.format());
-        assertEquals("HAVING expression not recognized!", "SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM EMP AS T1, (SELECT *\r\nFROM T) AS T2\r\nWHERE T1.\"column\" > 'aa' AND T2.ID = T1.ID\r\nGROUP BY A1, A2, A3\r\nHAVING T1.\"column\" IS NULL", _qs.format());
+        assertEquals("SELECT\r\n  A1 AS FIRST,\r\n  T1.*,\r\n  T2.* AS (C1, B3)\r\nFROM EMP AS T1, (SELECT *\r\nFROM T) AS T2\r\nWHERE T1.\"column\" > 'aa' AND T2.ID = T1.ID\r\nGROUP BY A1, A2, A3\r\nHAVING T1.\"column\" IS NULL", _qs.format(), "HAVING expression not recognized!");
     }
 
     @Test
     public void testCount() {
         _qs.parse("SELECT COUNT(*) AS RECORDS FROM Cat1.Schem1.tab1");
-        assertTrue("COUNT(*) not detected!", _qs.isCount());
+        assertTrue(_qs.isCount(), "COUNT(*) not detected!");
         _qs.parse("SELECT COL1 AS RECORDS FROM Cat1.Schem1.tab1");
-        assertFalse("COUNT(*) reported!", _qs.isCount());
+        assertFalse(_qs.isCount(), "COUNT(*) reported!");
     }
 
     @Test

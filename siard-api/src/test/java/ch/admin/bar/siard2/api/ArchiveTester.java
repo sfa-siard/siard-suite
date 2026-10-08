@@ -5,9 +5,9 @@ import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siard2.api.primary.MetaDataXml;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.FU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ArchiveTester {
     private static final File _fileSIARD_10_SOURCE = new File("src/test/resources/testfiles/sql1999.siard");
@@ -47,7 +47,7 @@ public class ArchiveTester {
     private static final String _sDATA_ORIGIN_TIMESPAN = "Second half of 2016";
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         System.out.println("setUp");
         /* make sure, test file does not get clobbered by tests */
@@ -62,7 +62,7 @@ public class ArchiveTester {
             _fileMETADATA_XML.delete();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         System.gc();
         System.out.println("Free memory: " + Runtime.getRuntime()
@@ -78,7 +78,7 @@ public class ArchiveTester {
         archive.open(FILE_SIARD_10);
 
         // then
-        assertSame("Can modify primary data after open!", false, archive.canModifyPrimaryData());
+        assertSame(false, archive.canModifyPrimaryData(), "Can modify primary data after open!");
         MetaData md = archive.getMetaData();
         assertEquals(Archive.sMETA_DATA_VERSION_1_0, md.getVersion());
         assertEquals("SQL:1999 Standard Types", md.getDbName());
@@ -94,7 +94,7 @@ public class ArchiveTester {
         archive.open(FILE_SIARD_21);
 
         // then
-        assertSame("Can modify primary data after open!", false, archive.canModifyPrimaryData());
+        assertSame(false, archive.canModifyPrimaryData(), "Can modify primary data after open!");
         MetaData metaData = archive.getMetaData();
         assertEquals(Archive.sMETA_DATA_VERSION_2_1, metaData.getVersion());
         archive.close();
@@ -109,7 +109,7 @@ public class ArchiveTester {
         archive.open(FILE_SIARD_22);
 
         // then
-        assertSame("Can modify primary data after open!", false, archive.canModifyPrimaryData());
+        assertSame(false, archive.canModifyPrimaryData(), "Can modify primary data after open!");
         MetaData md = archive.getMetaData();
         assertEquals(Archive.sMETA_DATA_VERSION, md.getVersion());
         archive.close();
@@ -124,7 +124,7 @@ public class ArchiveTester {
         archive.open(FILE_SIARD_COMPLEX_22);
 
         // then
-        assertSame("Can modify primary data after open!", false, archive.canModifyPrimaryData());
+        assertSame(false, archive.canModifyPrimaryData(), "Can modify primary data after open!");
         MetaData md = archive.getMetaData();
         assertEquals(Archive.sMETA_DATA_VERSION, md.getVersion());
         assertEquals("(...)", md.getDbName());
@@ -140,7 +140,7 @@ public class ArchiveTester {
         archive.open(FILE_SIARD_COMPLEX_21);
 
         // then
-        assertSame("Can modify primary data after open!", false, archive.canModifyPrimaryData());
+        assertSame(false, archive.canModifyPrimaryData(), "Can modify primary data after open!");
         MetaData md = archive.getMetaData();
         assertEquals(Archive.sMETA_DATA_VERSION_2_1, md.getVersion());
         assertEquals("(...)", md.getDbName());
@@ -153,9 +153,9 @@ public class ArchiveTester {
         Archive archive = ArchiveImpl.newInstance();
         try {
             archive.create(_fileSIARD_21_NEW);
-            assertSame("Cannot modify primary data after create!", true, archive.canModifyPrimaryData());
+            assertSame(true, archive.canModifyPrimaryData(), "Cannot modify primary data after create!");
             MetaData md = archive.getMetaData();
-            assertEquals("Create failed!", Archive.sMETA_DATA_VERSION, md.getVersion());
+            assertEquals(Archive.sMETA_DATA_VERSION, md.getVersion(), "Create failed!");
             ((ArchiveImpl) archive).getZipFile()
                                    .close();
         } catch (IOException ie) {
@@ -188,7 +188,7 @@ public class ArchiveTester {
             archive.open(FILE_SIARD_10);
             File file = archive.getFile();
             archive.close();
-            assertEquals("Wrong file!", FILE_SIARD_10.getAbsolutePath(), file.getAbsolutePath());
+            assertEquals(FILE_SIARD_10.getAbsolutePath(), file.getAbsolutePath(), "Wrong file!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         } catch (Exception e) {
@@ -203,10 +203,10 @@ public class ArchiveTester {
         try {
             archive.create(_fileSIARD_21_NEW);
             int iMaxInlineSize = Archive.iDEFAULT_MAX_INLINE_SIZE;
-            assertEquals("MaxInlineSize has invalid default!", iMaxInlineSize, archive.getMaxInlineSize());
+            assertEquals(iMaxInlineSize, archive.getMaxInlineSize(), "MaxInlineSize has invalid default!");
             iMaxInlineSize = 10;
             archive.setMaxInlineSize(iMaxInlineSize);
-            assertEquals("MaxInlineSize could not be set!", iMaxInlineSize, archive.getMaxInlineSize());
+            assertEquals(iMaxInlineSize, archive.getMaxInlineSize(), "MaxInlineSize could not be set!");
             setMandatoryMetaData(archive);
             archive.close();
         } catch (IOException ie) {
@@ -223,10 +223,10 @@ public class ArchiveTester {
         try {
             archive.create(_fileSIARD_21_NEW);
             int iMaxLobsPerFolder = -1;
-            assertEquals("MaxLobsPerFolder has invalid default!", iMaxLobsPerFolder, archive.getMaxLobsPerFolder());
+            assertEquals(iMaxLobsPerFolder, archive.getMaxLobsPerFolder(), "MaxLobsPerFolder has invalid default!");
             iMaxLobsPerFolder = 10;
             archive.setMaxLobsPerFolder(iMaxLobsPerFolder);
-            assertEquals("MaxLobsPerFolder could not be set!", iMaxLobsPerFolder, archive.getMaxLobsPerFolder());
+            assertEquals(iMaxLobsPerFolder, archive.getMaxLobsPerFolder(), "MaxLobsPerFolder could not be set!");
             setMandatoryMetaData(archive);
             archive.close();
         } catch (IOException ie) {
@@ -245,7 +245,7 @@ public class ArchiveTester {
         archive.exportMetaDataSchema(fos);
         fos.close();
         archive.close();
-        assertTrue("Exported metadata.xsd is incorrect!", areFilesEqual(_fileMETADATA_XSD_ORIGIN, _fileMETADATA_XSD));
+        assertTrue(areFilesEqual(_fileMETADATA_XSD_ORIGIN, _fileMETADATA_XSD), "Exported metadata.xsd is incorrect!");
     }
 
     @Test
@@ -258,7 +258,7 @@ public class ArchiveTester {
             archive.exportGenericTableSchema(fos);
             fos.close();
             archive.close();
-            assertTrue("Exported table.xsd is incorrect!", areFilesEqual(_fileTABLE_XSD_ORIGIN, _fileTABLE_XSD));
+            assertTrue(areFilesEqual(_fileTABLE_XSD_ORIGIN, _fileTABLE_XSD), "Exported table.xsd is incorrect!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         } catch (Exception e) {
@@ -281,13 +281,13 @@ public class ArchiveTester {
             FileInputStream fis = new FileInputStream(_fileMETADATA_XML);
             SiardArchive sa = MetaDataXml.readSiard22Xml(fis);
             fis.close();
-            assertEquals("Dbname not exported correctly!", _sDBNAME, sa.getDbname());
-            assertEquals("Data owner not exported correctly!", _sDATA_OWNER, sa.getDataOwner());
-            assertEquals("Data origin timespan not exported correctly!", _sDATA_ORIGIN_TIMESPAN, sa.getDataOriginTimespan());
-            assertNotNull("Schemas entry was not exported!", sa.getSchemas());
-            assertEquals("Schemas not exported correctly!", 1, sa.getSchemas()
+            assertEquals(_sDBNAME, sa.getDbname(), "Dbname not exported correctly!");
+            assertEquals(_sDATA_OWNER, sa.getDataOwner(), "Data owner not exported correctly!");
+            assertEquals(_sDATA_ORIGIN_TIMESPAN, sa.getDataOriginTimespan(), "Data origin timespan not exported correctly!");
+            assertNotNull(sa.getSchemas(), "Schemas entry was not exported!");
+            assertEquals(1, sa.getSchemas()
                                                                  .getSchema()
-                                                                 .size());
+                                                                 .size(), "Schemas not exported correctly!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         } catch (Exception e) {
@@ -311,20 +311,20 @@ public class ArchiveTester {
             FileInputStream fis = new FileInputStream(_fileIMPORT_METADATA_XML);
             archive.importMetaDataTemplate(fis);
             fis.close();
-            assertTrue("Archive primary data cannot be changed!", archive.canModifyPrimaryData());
-            assertTrue("Meta data of archive have been changed!", archive.isMetaDataUnchanged());
-            assertFalse("New archive without primary data is valid!", archive.isValid());
+            assertTrue(archive.canModifyPrimaryData(), "Archive primary data cannot be changed!");
+            assertTrue(archive.isMetaDataUnchanged(), "Meta data of archive have been changed!");
+            assertFalse(archive.isValid(), "New archive without primary data is valid!");
             MetaData md = archive.getMetaData();
             md.setLobFolder(null);
-            assertEquals("DbName not set correctly!", "SIARD 2.2 Test Database", md.getDbName());
-            assertEquals("DataOwner not set correctly!", "Enter AG, Rüti ZH, Switzerland", md.getDataOwner());
-            assertEquals("DataOriginTimespan not set correctly!", "Second half of 2016", md.getDataOriginTimespan());
-            assertEquals("Wrong number of schemas!", 1, archive.getSchemas());
-            assertEquals("Wrong number of meta data schemas!", 1, md.getMetaSchemas());
+            assertEquals("SIARD 2.2 Test Database", md.getDbName(), "DbName not set correctly!");
+            assertEquals("Enter AG, Rüti ZH, Switzerland", md.getDataOwner(), "DataOwner not set correctly!");
+            assertEquals("Second half of 2016", md.getDataOriginTimespan(), "DataOriginTimespan not set correctly!");
+            assertEquals(1, archive.getSchemas(), "Wrong number of schemas!");
+            assertEquals(1, md.getMetaSchemas(), "Wrong number of meta data schemas!");
             MetaSchema ms = md.getMetaSchema(0);
             Schema schema = archive.getSchema(0);
-            assertEquals("Wrong number of meta data tables!", 2, ms.getMetaTables());
-            assertEquals("Wrong number of tables!", 2, schema.getTables());
+            assertEquals(2, ms.getMetaTables(), "Wrong number of meta data tables!");
+            assertEquals(2, schema.getTables(), "Wrong number of tables!");
             /***
              FileOutputStream fos = new FileOutputStream(_fileMETADATA_XML);
              archive.exportMetaData(fos);
@@ -344,13 +344,13 @@ public class ArchiveTester {
         try {
             Archive archive = ArchiveImpl.newInstance();
             archive.create(_fileSIARD_21_NEW);
-            assertTrue("New archive is not empty!", archive.isEmpty());
+            assertTrue(archive.isEmpty(), "New archive is not empty!");
             setMandatoryMetaData(archive);
             archive.close();
 
             archive = ArchiveImpl.newInstance();
             archive.open(FILE_SIARD_10);
-            assertFalse("Old archive is empty!", archive.isEmpty());
+            assertFalse(archive.isEmpty(), "Old archive is empty!");
             archive.close();
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -365,7 +365,7 @@ public class ArchiveTester {
         try {
             Archive archive = ArchiveImpl.newInstance();
             archive.create(_fileSIARD_21_NEW);
-            assertFalse("New archive is valid!", archive.isValid());
+            assertFalse(archive.isValid(), "New archive is valid!");
             setMandatoryMetaData(archive);
             archive.close();
         } catch (IOException ie) {
@@ -381,7 +381,7 @@ public class ArchiveTester {
         try {
             Archive archive = ArchiveImpl.newInstance();
             archive.open(FILE_SIARD_10);
-            assertTrue("Old archive is not valid!", archive.isValid());
+            assertTrue(archive.isValid(), "Old archive is not valid!");
             archive.close();
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -393,7 +393,7 @@ public class ArchiveTester {
     private Table createTable(Schema schema)
             throws IOException {
         Table tab = schema.createTable(_sTEST_TABLE_NAME);
-        assertSame("Table create failed!", schema, tab.getParentSchema());
+        assertSame(schema, tab.getParentSchema(), "Table create failed!");
 
         MetaColumn mc1 = tab.getMetaTable()
                             .createMetaColumn(_sTEST_COLUMN1_NAME);
@@ -413,7 +413,7 @@ public class ArchiveTester {
         try {
             Archive archive = ArchiveImpl.newInstance();
             archive.create(_fileSIARD_21_NEW);
-            assertFalse("New archive is valid!", archive.isValid());
+            assertFalse(archive.isValid(), "New archive is valid!");
             Schema schema = archive.createSchema(_sTEST_SCHEMA_NAME);
             Table tabNew = createTable(schema);
             tabNew.getMetaTable()
@@ -421,7 +421,7 @@ public class ArchiveTester {
             setMandatoryMetaData(archive);
             archive.close();
             archive.open(_fileSIARD_21_NEW);
-            assertFalse("New archive without primary data is valid!", archive.isValid());
+            assertFalse(archive.isValid(), "New archive without primary data is valid!");
             archive.close();
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -436,13 +436,13 @@ public class ArchiveTester {
         try {
             Archive archive = ArchiveImpl.newInstance();
             archive.create(_fileSIARD_21_NEW);
-            assertFalse("New archive is unchanged!", archive.isPrimaryDataUnchanged());
+            assertFalse(archive.isPrimaryDataUnchanged(), "New archive is unchanged!");
             setMandatoryMetaData(archive);
             archive.close();
 
             archive = ArchiveImpl.newInstance();
             archive.open(FILE_SIARD_10);
-            assertFalse("Old archive is unchanged!", archive.isPrimaryDataUnchanged());
+            assertFalse(archive.isPrimaryDataUnchanged(), "Old archive is unchanged!");
             archive.close();
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -460,13 +460,13 @@ public class ArchiveTester {
         try {
             Archive archive = ArchiveImpl.newInstance();
             archive.create(_fileSIARD_21_NEW);
-            assertEquals("New archive has schemas!", 0, archive.getSchemas());
+            assertEquals(0, archive.getSchemas(), "New archive has schemas!");
             setMandatoryMetaData(archive);
             archive.close();
 
             archive = ArchiveImpl.newInstance();
             archive.open(FILE_SIARD_10);
-            assertEquals("Old archive has wrong number of schemas!", 1, archive.getSchemas());
+            assertEquals(1, archive.getSchemas(), "Old archive has wrong number of schemas!");
             archive.close();
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -502,8 +502,8 @@ public class ArchiveTester {
             Archive archive = ArchiveImpl.newInstance();
             archive.open(FILE_SIARD_10);
             Schema schema = archive.getSchema(sName);
-            assertEquals("Schema not retrieved correctly!", sName, schema.getMetaSchema()
-                                                                         .getName());
+            assertEquals(sName, schema.getMetaSchema()
+                                                                         .getName(), "Schema not retrieved correctly!");
             archive.close();
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -534,8 +534,8 @@ public class ArchiveTester {
             archive = ArchiveImpl.newInstance();
             archive.create(_fileSIARD_21_NEW);
             Schema schema = archive.createSchema(sName);
-            assertEquals("Schema not created correctly!", sName, schema.getMetaSchema()
-                                                                       .getName());
+            assertEquals(sName, schema.getMetaSchema()
+                                                                       .getName(), "Schema not created correctly!");
             setMandatoryMetaData(archive);
             archive.close();
         } catch (IOException ie) {

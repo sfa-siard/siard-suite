@@ -7,17 +7,18 @@ import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseResultSetMetaDataTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Assertions;
 
-@Ignore
+@Disabled
 public class PostgresResultSetMetaDataTester
         extends BaseResultSetMetaDataTester {
     private static final PostgreSQLContainer<?> _pg = new PostgreSQLContainer<>("postgres:16-alpine")
@@ -49,7 +50,7 @@ public class PostgresResultSetMetaDataTester
     private static final String _sSqlQuerySimple = getTableQuery(TestSqlDatabase.getQualifiedSimpleTable(), TestSqlDatabase._listCdSimple);
     private static final String _sSqlQueryComplex = getTableQuery(TestSqlDatabase.getQualifiedComplexTable(), TestSqlDatabase._listCdComplex);
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             _pg.start();
@@ -76,7 +77,7 @@ public class PostgresResultSetMetaDataTester
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _pg.stop();
     }
@@ -108,7 +109,7 @@ public class PostgresResultSetMetaDataTester
         setResultSetMetaData(rsmd, rs);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             PostgresDataSource dsPostgres = new PostgresDataSource();
@@ -124,7 +125,7 @@ public class PostgresResultSetMetaDataTester
         }
     }
 
-    @After
+    @AfterEach
     @Override
     public void tearDown() {
         try {
@@ -142,7 +143,7 @@ public class PostgresResultSetMetaDataTester
 
     @Test
     public void testClass() {
-        assertEquals("Wrong result set metadata class!", PostgresResultSetMetaData.class, getResultSetMetaData().getClass());
+        assertEquals(PostgresResultSetMetaData.class, getResultSetMetaData().getClass(), "Wrong result set metadata class!");
     }
 
     @Test

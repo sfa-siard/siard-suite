@@ -11,15 +11,15 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.junit.rules.ExternalResource;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
 
 import static ch.admin.bar.siard2.cmd.utils.TestResourcesResolver.resolve;
 
@@ -29,9 +29,9 @@ import static ch.admin.bar.siard2.cmd.utils.TestResourcesResolver.resolve;
  * - Creating a temporary directory for downloading a new SIARD archive and exploring it.
  * In this case, use {@link #prepareEmpty()}.
  * <p>
- * Note: Annotate a {@link SiardArchivesHandler} instance always as {@link org.junit.Rule}
+ * Note: Annotate a {@link SiardArchivesHandler} instance always as {@link org.junit.jupiter.api.extension.RegisterExtension}
  */
-public class SiardArchivesHandler extends ExternalResource {
+public class SiardArchivesHandler implements BeforeEachCallback, AfterEachCallback {
 
     // jdbc-oracle's xmlparserv2 registers a SAXParserFactory that does not support the
     // external-general-entities feature required by Logback during XML configuration.
@@ -45,8 +45,9 @@ public class SiardArchivesHandler extends ExternalResource {
         }
     }
 
-    private final TemporaryFolder temporaryFolder = new TemporaryFolder();
     private final XmlMapper xmlMapper = new XmlMapper();
+
+    private Path temporaryFolder;
 
     private String testClassName;
     private String testName;
@@ -66,7 +67,7 @@ public class SiardArchivesHandler extends ExternalResource {
     @SneakyThrows
     public SiardArchiveExplorer prepareResource(String resource) {
         final File pathToArchive = resolve(resource);
-        final File pathToExtracted = temporaryFolder.newFolder();
+        final File pathToExtracted = Files.createTempDirectory(temporaryFolder, "extracted").toFile();
 
         return createExplorer(pathToArchive, pathToExtracted);
     }
@@ -78,31 +79,29 @@ public class SiardArchivesHandler extends ExternalResource {
      */
     @SneakyThrows
     public SiardArchiveExplorer prepareEmpty() {
-        final File pathToArchive = File.createTempFile("temp", ".siard", temporaryFolder.getRoot());
-        final File pathToExtracted = temporaryFolder.newFolder();
+        final File pathToArchive = Files.createTempFile(temporaryFolder, "temp", ".siard").toFile();
+        final File pathToExtracted = Files.createTempDirectory(temporaryFolder, "extracted").toFile();
 
         return createExplorer(pathToArchive, pathToExtracted);
     }
 
     @Override
-    protected void before() throws Throwable {
-        super.before();
-        temporaryFolder.create();
-    }
-
-    @NotNull
-    @Override
-    public Statement apply(@NotNull Statement base, @NotNull Description description) {
-        testClassName = description.getClassName();
-        testName = description.getMethodName();
-
-        return super.apply(base, description);
+    public void beforeEach(ExtensionContext context) throws IOException {
+        temporaryFolder = Files.createTempDirectory("siard-test");
+        testClassName = context.getRequiredTestClass().getName();
+        testName = context.getRequiredTestMethod().getName();
     }
 
     @Override
-    protected void after() {
-        super.after();
-        temporaryFolder.delete();
+    public void afterEach(ExtensionContext context) throws IOException {
+        if (temporaryFolder != null) {
+            try (val paths = Files.walk(temporaryFolder)) {
+                paths.sorted(Comparator.reverseOrder())
+                     .map(Path::toFile)
+                     .forEach(File::delete);
+            }
+            temporaryFolder = null;
+        }
     }
 
     private SiardArchiveExplorer createExplorer(final File pathToArchive, final File pathToExtracted) {

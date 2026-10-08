@@ -1,14 +1,14 @@
 package ch.enterag.utils.jdbc;
 
 import ch.enterag.utils.EU;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class BaseArrayTester {
     private Array _array = null;
@@ -68,7 +68,7 @@ public abstract class BaseArrayTester {
         _array = (BaseArray) array;
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if (_array != null)

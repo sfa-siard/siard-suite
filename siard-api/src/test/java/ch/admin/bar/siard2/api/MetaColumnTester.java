@@ -3,9 +3,9 @@ package ch.admin.bar.siard2.api;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Types;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaColumnTester {
     private static final File _fileSIARD_21_NEW = new File("src/test/resources/tmp/sql2008new.siard");
@@ -77,7 +77,7 @@ public class MetaColumnTester {
         mu2.setTypeName(_sTEST_UDTS_TYPE);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.copy(_fileSIARD_10_SOURCE.toPath(), _fileSIARD_10.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -89,7 +89,7 @@ public class MetaColumnTester {
             createTypes(ms);
             MetaView mv = ms.createMetaView(_sTEST_VIEW_NAME);
             _mcNew = mv.createMetaColumn(_sTEST_COLUMN_NAME);
-            assertSame("Invalid parent view!", mv, _mcNew.getParentMetaView());
+            assertSame(mv, _mcNew.getParentMetaView(), "Invalid parent view!");
 
             archive = ArchiveImpl.newInstance();
             archive.open(_fileSIARD_10);
@@ -97,13 +97,13 @@ public class MetaColumnTester {
             Table table = schema.getTable(0);
             MetaTable mt = table.getMetaTable();
             _mcOld = mt.getMetaColumn(6);
-            assertSame("Invalid parent table!", mt, _mcOld.getParentMetaTable());
+            assertSame(mt, _mcOld.getParentMetaTable(), "Invalid parent table!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_mcNew.getParentMetaView());
@@ -134,14 +134,14 @@ public class MetaColumnTester {
 
     @Test
     public void testName() {
-        assertEquals("Invalid new column name!", _sTEST_COLUMN_NAME, _mcNew.getName());
-        assertEquals("Invalid old column name!", "CCHARACTER_LARGE_OBJECT", _mcOld.getName());
+        assertEquals(_sTEST_COLUMN_NAME, _mcNew.getName(), "Invalid new column name!");
+        assertEquals("CCHARACTER_LARGE_OBJECT", _mcOld.getName(), "Invalid old column name!");
     }
 
     @Test
     public void testLobFolder() {
-        assertNull("Views do not have stored LOBs!", _mcNew.getLobFolder());
-        assertNull("Views do not have stored LOBs!", _mcNew.getAbsoluteLobFolder());
+        assertNull(_mcNew.getLobFolder(), "Views do not have stored LOBs!");
+        assertNull(_mcNew.getAbsoluteLobFolder(), "Views do not have stored LOBs!");
         try {
             _mcNew.setLobFolder(new URI("lobs"));
             fail("Views do not have stores LOBs and thus no LOB folders!");
@@ -151,8 +151,8 @@ public class MetaColumnTester {
             System.out.println(EU.getExceptionMessage(use));
         }
 
-        assertNull("Old table has no externally stored LOBs!", _mcOld.getLobFolder());
-        assertNull("Old table has no externally stored LOBs!", _mcOld.getAbsoluteLobFolder());
+        assertNull(_mcOld.getLobFolder(), "Old table has no externally stored LOBs!");
+        assertNull(_mcOld.getAbsoluteLobFolder(), "Old table has no externally stored LOBs!");
     }
 
     @Test
@@ -160,7 +160,7 @@ public class MetaColumnTester {
         try {
             String sType = "INT";
             _mcNew.setType(sType);
-            assertEquals("Wrong type!", sType, _mcNew.getType());
+            assertEquals(sType, _mcNew.getType(), "Wrong type!");
             try {
                 _mcNew.setType("GAGA");
                 fail("Invalid type GAGA accepted!");
@@ -169,7 +169,7 @@ public class MetaColumnTester {
             }
 
             sType = "CLOB";
-            assertEquals("Wrong type of old table!", sType, _mcOld.getType());
+            assertEquals(sType, _mcOld.getType(), "Wrong type of old table!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -180,78 +180,78 @@ public class MetaColumnTester {
         try {
             String sTypeOriginal = "TypeOriginal";
             _mcNew.setTypeOriginal(sTypeOriginal);
-            assertEquals("Invalid original type!", sTypeOriginal, _mcNew.getTypeOriginal());
+            assertEquals(sTypeOriginal, _mcNew.getTypeOriginal(), "Invalid original type!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
 
-        assertEquals("Invalid original type of old table!", "CHARACTER LARGE OBJECT", _mcOld.getTypeOriginal());
+        assertEquals("CHARACTER LARGE OBJECT", _mcOld.getTypeOriginal(), "Invalid original type of old table!");
     }
 
     @Test
     public void testNullable() {
-        assertTrue("Wrong nullable default!", _mcNew.isNullable());
+        assertTrue(_mcNew.isNullable(), "Wrong nullable default!");
         try {
             _mcNew.setNullable(false);
             fail("Nullability cannot be set for views!");
         } catch (IOException ie) {
             System.out.println(EU.getExceptionMessage(ie));
         }
-        assertTrue("Wrong nullable of old table!", _mcOld.isNullable());
+        assertTrue(_mcOld.isNullable(), "Wrong nullable of old table!");
     }
 
     @Test
     public void testMimeType() {
-        assertNull("Wrong MIME type default!", _mcNew.getMimeType());
+        assertNull(_mcNew.getMimeType(), "Wrong MIME type default!");
         String sMimeType = "image/png";
         try {
             _mcNew.setMimeType(sMimeType);
-            assertEquals("Invalid MIME type!", sMimeType, _mcNew.getMimeType());
+            assertEquals(sMimeType, _mcNew.getMimeType(), "Invalid MIME type!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-        assertNull("Old table has MIME type!", _mcOld.getMimeType());
+        assertNull(_mcOld.getMimeType(), "Old table has MIME type!");
     }
 
     @Test
     public void testTypeSchema() {
-        assertNull("Wrong type schema default!", _mcNew.getTypeSchema());
+        assertNull(_mcNew.getTypeSchema(), "Wrong type schema default!");
         String sTypeSchema = _sTEST_SCHEMA_NAME;
         try {
             _mcNew.setType("INTEGER");
             _mcNew.setTypeSchema(sTypeSchema);
-            assertEquals("Invalid type schema!", sTypeSchema, _mcNew.getTypeSchema());
-            assertNull("Predefined type was not removed!", _mcNew.getType());
+            assertEquals(sTypeSchema, _mcNew.getTypeSchema(), "Invalid type schema!");
+            assertNull(_mcNew.getType(), "Predefined type was not removed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-        assertNull("Old table has type schema!", _mcOld.getTypeSchema());
+        assertNull(_mcOld.getTypeSchema(), "Old table has type schema!");
     }
 
     @Test
     public void testTypeName() {
-        assertNull("Wrong type name default!", _mcNew.getTypeName());
+        assertNull(_mcNew.getTypeName(), "Wrong type name default!");
         String sTypeName = _sTEST_TYPE_NAME;
         try {
             _mcNew.setType("INTEGER");
             _mcNew.setTypeName(sTypeName);
-            assertEquals("Invalid type name!", sTypeName, _mcNew.getTypeName());
-            assertNull("Predefined type was not removed!", _mcNew.getType());
+            assertEquals(sTypeName, _mcNew.getTypeName(), "Invalid type name!");
+            assertNull(_mcNew.getType(), "Predefined type was not removed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
-        assertNull("Old table has type name!", _mcOld.getTypeName());
+        assertNull(_mcOld.getTypeName(), "Old table has type name!");
     }
 
     @Test
     public void testCardinality() {
         try {
-            assertEquals("Wrong cardinality default!", -1, _mcNew.getCardinality());
+            assertEquals(-1, _mcNew.getCardinality(), "Wrong cardinality default!");
             int iCardinality = 3;
             _mcNew.setCardinality(iCardinality);
-            assertEquals("Invalid cardinality!", iCardinality, _mcNew.getCardinality());
-            assertTrue("Invalid meta fields!", iCardinality >= _mcNew.getMetaFields());
-            assertEquals("Old table has cardinality!", -1, _mcOld.getCardinality());
+            assertEquals(iCardinality, _mcNew.getCardinality(), "Invalid cardinality!");
+            assertTrue(iCardinality >= _mcNew.getMetaFields(), "Invalid meta fields!");
+            assertEquals(-1, _mcOld.getCardinality(), "Old table has cardinality!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -261,16 +261,16 @@ public class MetaColumnTester {
     public void testDescription() {
         String sDescription = "Description";
         _mcNew.setDescription(sDescription);
-        assertEquals("Invalid description!", sDescription, _mcNew.getDescription());
+        assertEquals(sDescription, _mcNew.getDescription(), "Invalid description!");
     }
 
     @Test
     public void testGetMetaFields() {
         try {
-            assertEquals("Fields must initially be 0!", 0, _mcNew.getMetaFields());
-            assertEquals("Fields of old table must be 0!", 0, _mcOld.getMetaFields());
+            assertEquals(0, _mcNew.getMetaFields(), "Fields must initially be 0!");
+            assertEquals(0, _mcOld.getMetaFields(), "Fields of old table must be 0!");
             _mcNew.setTypeName(_sTEST_UDTS_TYPE);
-            assertEquals("Fields of ROW type must be 3", 3, _mcNew.getMetaFields());
+            assertEquals(3, _mcNew.getMetaFields(), "Fields of ROW type must be 3");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }

@@ -3,9 +3,9 @@ package ch.admin.bar.siard2.api;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.*;
 import ch.enterag.utils.test.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -22,7 +22,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Calendar;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TableRecordTester {
     private static final File _fileSIARD_10_SOURCE = new File("src/test/resources/testfiles/sql1999.siard");
@@ -155,7 +155,7 @@ public class TableRecordTester {
     private Table createSimpleTable(Schema schema)
             throws IOException {
         Table tab = schema.createTable(_sTEST_SIMPLE_TABLE_NAME);
-        assertSame("Table create failed!", schema, tab.getParentSchema());
+        assertSame(schema, tab.getParentSchema(), "Table create failed!");
 
         MetaColumn mc1 = tab.getMetaTable()
                             .createMetaColumn(_sTEST_COLUMN1_NAME);
@@ -266,7 +266,7 @@ public class TableRecordTester {
     private Table createComplexTable(Schema schema)
             throws IOException {
         Table tab = schema.createTable(_sTEST_COMPLEX_TABLE_NAME);
-        assertSame("Table create failed!", schema, tab.getParentSchema());
+        assertSame(schema, tab.getParentSchema(), "Table create failed!");
 
         MetaColumn mc1 = tab.getMetaTable()
                             .createMetaColumn(_sTEST_COLUMN14_NAME);
@@ -435,76 +435,76 @@ public class TableRecordTester {
         if (cell.getMetaColumn()
                 .isNullable()) {
             if ((iRecord + 4) % 25 == iCell)
-                assertTrue("NULL value not detected!", cell.isNull());
+                assertTrue(cell.isNull(), "NULL value not detected!");
         }
         if (!cell.isNull()) {
             switch (cell.getMetaColumn()
                         .getName()) {
                 case _sTEST_COLUMN1_NAME: // CHAR
-                    assertEquals("Invalid CHAR value!", TestUtils.getString(1), cell.getString());
+                    assertEquals(TestUtils.getString(1), cell.getString(), "Invalid CHAR value!");
                     break;
                 case _sTEST_COLUMN2_NAME: // VARCHAR(256)
-                    assertEquals("Invalid VARCHAR(256) value!", "ABC\u0014DEF\\GHI  JKL" + TestUtils.getString(128), cell.getString());
+                    assertEquals("ABC\u0014DEF\\GHI  JKL" + TestUtils.getString(128), cell.getString(), "Invalid VARCHAR(256) value!");
                     break;
                 case _sTEST_COLUMN3_NAME: // CLOB(4M)
-                    assertEquals("Invalid CLOB length!", 2000000L, cell.getCharLength());
-                    assertTrue("Invalid CLOB(4M) value!", TestUtils.equalReaders(new TestReader(2000000), cell.getReader()));
+                    assertEquals(2000000L, cell.getCharLength(), "Invalid CLOB length!");
+                    assertTrue(TestUtils.equalReaders(new TestReader(2000000), cell.getReader()), "Invalid CLOB(4M) value!");
                     break;
                 case _sTEST_COLUMN4_NAME: // NCHAR
-                    assertEquals("Invalid NCHAR value!", TestUtils.getNString(1), cell.getString());
+                    assertEquals(TestUtils.getNString(1), cell.getString(), "Invalid NCHAR value!");
                     break;
                 case _sTEST_COLUMN5_NAME: // NCHAR VARYING(256)
-                    assertEquals("Invalid NCHAR VARYING(256) value!", TestUtils.getNString(128), cell.getString());
+                    assertEquals(TestUtils.getNString(128), cell.getString(), "Invalid NCHAR VARYING(256) value!");
                     break;
                 case _sTEST_COLUMN6_NAME: // NCLOB(4G)
-                    assertEquals("Invalid NCLOB length!", 1000000L, cell.getCharLength());
-                    assertTrue("Invalid NCLOB(4G) value!", TestUtils.equalReaders(new TestNReader(1000000), cell.getReader()));
+                    assertEquals(1000000L, cell.getCharLength(), "Invalid NCLOB length!");
+                    assertTrue(TestUtils.equalReaders(new TestNReader(1000000), cell.getReader()), "Invalid NCLOB(4G) value!");
                     break;
                 case _sTEST_COLUMN7_NAME: // XML
-                    assertTrue("Invalid XML value!", TestUtils.equalReaders(new TestXmlReader(1000), cell.getReader()));
+                    assertTrue(TestUtils.equalReaders(new TestXmlReader(1000), cell.getReader()), "Invalid XML value!");
                     break;
                 case _sTEST_COLUMN8_NAME: // BINARY
-                    assertArrayEquals("Invalid BINARY value!", TestUtils.getBytes(1), cell.getBytes());
+                    assertArrayEquals(TestUtils.getBytes(1), cell.getBytes(), "Invalid BINARY value!");
                     break;
                 case _sTEST_COLUMN9_NAME: // VARBINARY
-                    assertArrayEquals("Invalid VARBINARY(128) value!", TestUtils.getBytes(128), cell.getBytes());
+                    assertArrayEquals(TestUtils.getBytes(128), cell.getBytes(), "Invalid VARBINARY(128) value!");
                     break;
                 case _sTEST_COLUMN10_NAME: // BLOB
-                    assertEquals("Invalid BLOB length!", 1000000L, cell.getByteLength());
-                    assertTrue("Invalid BLOB value!", TestUtils.equalInputStreams(cell.getInputStream(), new TestInputStream(1000000)));
+                    assertEquals(1000000L, cell.getByteLength(), "Invalid BLOB length!");
+                    assertTrue(TestUtils.equalInputStreams(cell.getInputStream(), new TestInputStream(1000000)), "Invalid BLOB value!");
                     break;
                 case _sTEST_COLUMN11_NAME: // NUMERIC(10,2)
                     BigDecimal bdNumeric = BigDecimal.valueOf((iRecord + 4) % 100)
                                                      .multiply(BigDecimal.valueOf(123456.09));
                     System.out.println(bdNumeric.toPlainString());
-                    assertEquals("Invalid NUMERIC(10,2) value!", bdNumeric, cell.getBigDecimal());
+                    assertEquals(bdNumeric, cell.getBigDecimal(), "Invalid NUMERIC(10,2) value!");
                     break;
                 case _sTEST_COLUMN12_NAME: // DECIMAL
                     BigDecimal bdDecimal = BigDecimal.valueOf((iRecord + 4) % 100)
                                                      .multiply(BigDecimal.valueOf(0.1234567890123456789));
                     System.out.println(bdDecimal.toPlainString());
-                    assertEquals("Invalid DECIMAL value!", bdDecimal, cell.getBigDecimal());
+                    assertEquals(bdDecimal, cell.getBigDecimal(), "Invalid DECIMAL value!");
                     break;
                 case _sTEST_COLUMN13_NAME: // SMALLINT
-                    assertEquals("Invalid SMALLINT value!", Integer.valueOf(12345), cell.getInt());
+                    assertEquals(Integer.valueOf(12345), cell.getInt(), "Invalid SMALLINT value!");
                     break;
                 case _sTEST_COLUMN14_NAME: // INTEGER
-                    assertEquals("Invalid INTEGER value!", Long.valueOf(1234567890L), cell.getLong());
+                    assertEquals(Long.valueOf(1234567890L), cell.getLong(), "Invalid INTEGER value!");
                     break;
                 case _sTEST_COLUMN15_NAME: // BIGINT
-                    assertEquals("Invalid BIGINT value!", BigInteger.valueOf(123456789012345678L), cell.getBigInteger());
+                    assertEquals(BigInteger.valueOf(123456789012345678L), cell.getBigInteger(), "Invalid BIGINT value!");
                     break;
                 case _sTEST_COLUMN16_NAME: // FLOAT(7)
-                    assertEquals("Invalid FLOAT(7) value!", Double.valueOf(0.3141592), cell.getDouble());
+                    assertEquals(Double.valueOf(0.3141592), cell.getDouble(), "Invalid FLOAT(7) value!");
                     break;
                 case _sTEST_COLUMN17_NAME: // REAL
-                    assertEquals("Invalid REAL value!", Float.valueOf(0.3141592f), cell.getFloat());
+                    assertEquals(Float.valueOf(0.3141592f), cell.getFloat(), "Invalid REAL value!");
                     break;
                 case _sTEST_COLUMN18_NAME: // DOUBLE PRECISION
-                    assertEquals("Invalid DOUBLE PRECISION value!", Double.valueOf(3.14159265359), cell.getDouble());
+                    assertEquals(Double.valueOf(3.14159265359), cell.getDouble(), "Invalid DOUBLE PRECISION value!");
                     break;
                 case _sTEST_COLUMN19_NAME: // BOOLEAN
-                    assertEquals("Invalid BOOLEAN value!", Boolean.valueOf(true), cell.getBoolean());
+                    assertEquals(Boolean.valueOf(true), cell.getBoolean(), "Invalid BOOLEAN value!");
                     break;
                 case _sTEST_COLUMN20_NAME: // DATE
                     // get date from now with 00:00:00 in local time zone
@@ -516,23 +516,23 @@ public class TableRecordTester {
                     Date date = new Date(cal.getTime()
                                             .getTime());
                     Date dateCell = cell.getDate();
-                    assertEquals("Invalid DATE value!", date, dateCell);
+                    assertEquals(date, dateCell, "Invalid DATE value!");
                     break;
                 case _sTEST_COLUMN21_NAME: // TIME(3)
                     long lTime = now.getTime() % lMillisPerDay;
                     Time time = new Time(lTime);
-                    assertEquals("Invalid TIME value!", time, cell.getTime());
+                    assertEquals(time, cell.getTime(), "Invalid TIME value!");
                     break;
                 case _sTEST_COLUMN22_NAME: // TIMESTAMP(9)
                     Timestamp ts = new Timestamp(now.getTime());
                     ts.setNanos(123456789);
-                    assertEquals("Invalid TIMESTAMP value!", ts, cell.getTimestamp());
+                    assertEquals(ts, cell.getTimestamp(), "Invalid TIMESTAMP value!");
                     break;
                 case _sTEST_COLUMN23_NAME: // INTERVAL YEAR(2) TO MONTH
                     try {
                         Duration duration = DatatypeFactory.newInstance()
                                                            .newDurationYearMonth(true, 7, 3);
-                        assertEquals("Invalid INTERVAL YEAR(2) TO MONTH value!", duration, cell.getDuration());
+                        assertEquals(duration, cell.getDuration(), "Invalid INTERVAL YEAR(2) TO MONTH value!");
                     } catch (DatatypeConfigurationException dce) {
                         fail(EU.getExceptionMessage(dce));
                     }
@@ -541,7 +541,7 @@ public class TableRecordTester {
                     try {
                         Duration duration = DatatypeFactory.newInstance()
                                                            .newDurationDayTime(true, 12345, 13, 15, 0);
-                        assertEquals("Invalid INTERVAL DAY TO MINUTE value!", duration, cell.getDuration());
+                        assertEquals(duration, cell.getDuration(), "Invalid INTERVAL DAY TO MINUTE value!");
                     } catch (DatatypeConfigurationException dce) {
                         fail(EU.getExceptionMessage(dce));
                     }
@@ -550,7 +550,7 @@ public class TableRecordTester {
                     try {
                         Duration duration = DatatypeFactory.newInstance()
                                                            .newDurationDayTime(1234567);
-                        assertEquals("Invalid INTERVAL SECOND(2,5) value!", duration, cell.getDuration());
+                        assertEquals(duration, cell.getDuration(), "Invalid INTERVAL SECOND(2,5) value!");
                     } catch (DatatypeConfigurationException dce) {
                         fail(EU.getExceptionMessage(dce));
                     }
@@ -644,56 +644,50 @@ public class TableRecordTester {
         switch (cell.getMetaColumn()
                     .getName()) {
             case _sTEST_COLUMN14_NAME: // INTEGER
-                assertEquals("Invalid INTEGER value!", Integer.valueOf(1234567890), cell.getInt());
+                assertEquals(Integer.valueOf(1234567890), cell.getInt(), "Invalid INTEGER value!");
                 break;
             case _sTEST_DISTINCT_COLUMN:
-                assertEquals("", Integer.valueOf(987654321), cell.getInt());
+                assertEquals(Integer.valueOf(987654321), cell.getInt(), "");
                 break;
             case _sTEST_UDT_SIMPLE_COLUMN:
-                assertEquals("Invalid number of attributes for " + _sTEST_UDT_SIMPLE_COLUMN + "!", 3, cell.getAttributes());
+                assertEquals(3, cell.getAttributes(), "Invalid number of attributes for " + _sTEST_UDT_SIMPLE_COLUMN + "!");
                 for (int iAttribute = 0; iAttribute < cell.getAttributes(); iAttribute++) {
                     Field field = cell.getAttribute(iAttribute);
                     switch (iAttribute) {
                         case 0: // _sTEST_UDT_SIMPLE_FIELD1_NAME INTEGER
-                            assertEquals("Invalid INTEGER value for field" + _sTEST_UDT_SIMPLE_FIELD1_NAME + "!",
-                                         Integer.valueOf(12345), field.getInt());
+                            assertEquals(Integer.valueOf(12345), field.getInt(), "Invalid INTEGER value for field" + _sTEST_UDT_SIMPLE_FIELD1_NAME + "!");
                             break;
                         case 1: // _sTEST_UDT_SIMPLE_FIELD2_NAME CLOB
-                            assertEquals("Invalid CLOB value for field " + _sTEST_UDT_SIMPLE_FIELD2_NAME + "!",
-                                         TestUtils.getString(20000), field.getString());
+                            assertEquals(TestUtils.getString(20000), field.getString(), "Invalid CLOB value for field " + _sTEST_UDT_SIMPLE_FIELD2_NAME + "!");
                             break;
                         case 2: // _sTEST_UDT_SIMPLE_FIELD3_NAME BLOB
-                            assertArrayEquals("Invalid BLOB value for field " + _sTEST_UDT_SIMPLE_FIELD3_NAME + "!", TestUtils.getBytes(2016), field.getBytes());
+                            assertArrayEquals(TestUtils.getBytes(2016), field.getBytes(), "Invalid BLOB value for field " + _sTEST_UDT_SIMPLE_FIELD3_NAME + "!");
                             break;
                     }
                 }
                 break;
             case _sTEST_ARRAY_COLUMN:
-                assertEquals("Invalid number of elements for " + _sTEST_ARRAY_COLUMN + "!", 4, cell.getElements());
+                assertEquals(4, cell.getElements(), "Invalid number of elements for " + _sTEST_ARRAY_COLUMN + "!");
                 for (int iElement = 0; iElement < cell.getElements(); iElement++) {
                     Field element = cell.getElement(iElement);
                     switch (iElement) {
                         case 0:
-                            assertEquals("Invalid array element(" + (iElement + 1) + ")!",
-                                         "element 1", element.getString());
+                            assertEquals("element 1", element.getString(), "Invalid array element(" + (iElement + 1) + ")!");
                             break;
                         case 1:
-                            assertTrue("array element(" + (iElement + 1) + ") is not NULL!",
-                                       element.isNull());
+                            assertTrue(element.isNull(), "array element(" + (iElement + 1) + ") is not NULL!");
                             break; // null
                         case 2:
-                            assertEquals("Invalid array element(" + (iElement + 1) + ")!",
-                                         "element 3", element.getString());
+                            assertEquals("element 3", element.getString(), "Invalid array element(" + (iElement + 1) + ")!");
                             break;
                         case 3:
-                            assertEquals("Invalid array element(" + (iElement + 1) + ")!",
-                                         "element 4", element.getString());
+                            assertEquals("element 4", element.getString(), "Invalid array element(" + (iElement + 1) + ")!");
                             break;
                     }
                 }
                 break;
             case _sTEST_UDT_COMPLEX_COLUMN:
-                assertEquals("Invalid number of attributes of " + _sTEST_UDT_COMPLEX_COLUMN + "!", 2, cell.getAttributes());
+                assertEquals(2, cell.getAttributes(), "Invalid number of attributes of " + _sTEST_UDT_COMPLEX_COLUMN + "!");
                 for (int iAttribute = 0; iAttribute < cell.getAttributes(); iAttribute++) {
                     Field attribute = cell.getAttribute(iAttribute);
                     String sName = attribute.getMetaField()
@@ -701,24 +695,21 @@ public class TableRecordTester {
                                             .getName();
                     switch (iAttribute) {
                         case 0:
-                            assertEquals("Invalid INTEGER value for UDT field " + sName + "!",
-                                         Integer.valueOf(-15), attribute.getInt());
+                            assertEquals(Integer.valueOf(-15), attribute.getInt(), "Invalid INTEGER value for UDT field " + sName + "!");
                             break;
                         case 1:
-                            assertEquals("Invalid number of UDT attributes " + sName + "!", 3, attribute.getAttributes());
+                            assertEquals(3, attribute.getAttributes(), "Invalid number of UDT attributes " + sName + "!");
                             for (int iSubAttribute = 0; iSubAttribute < attribute.getAttributes(); iSubAttribute++) {
                                 Field field = attribute.getAttribute(iSubAttribute);
                                 switch (iSubAttribute) {
                                     case 0: // _sTEST_UDT_SIMPLE_FIELD1_NAME INTEGER
-                                        assertEquals("Invalid INTEGER value for field " + _sTEST_UDT_SIMPLE_FIELD1_NAME + " of UDT field " + sName + "!",
-                                                     Integer.valueOf(-12345), field.getInt());
+                                        assertEquals(Integer.valueOf(-12345), field.getInt(), "Invalid INTEGER value for field " + _sTEST_UDT_SIMPLE_FIELD1_NAME + " of UDT field " + sName + "!");
                                         break;
                                     case 1: // _sTEST_UDT_SIMPLE_FIELD2_NAME CLOB
-                                        assertTrue("Invalid CLOB value for field " + _sTEST_UDT_SIMPLE_FIELD2_NAME + " of UDT field " + sName + "!",
-                                                   TestUtils.equalReaders(new TestReader(2345678), field.getReader()));
+                                        assertTrue(TestUtils.equalReaders(new TestReader(2345678), field.getReader()), "Invalid CLOB value for field " + _sTEST_UDT_SIMPLE_FIELD2_NAME + " of UDT field " + sName + "!");
                                         break;
                                     case 2: // _sTEST_UDT_SIMPLE_FIELD3_NAME BLOB
-                                        assertArrayEquals("Invalid BLOB value for field " + _sTEST_UDT_SIMPLE_FIELD3_NAME + " of UDT field " + sName + "!", TestUtils.getBytes(4567), field.getBytes());
+                                        assertArrayEquals(TestUtils.getBytes(4567), field.getBytes(), "Invalid BLOB value for field " + _sTEST_UDT_SIMPLE_FIELD3_NAME + " of UDT field " + sName + "!");
                                         break;
                                 }
                             }
@@ -729,7 +720,7 @@ public class TableRecordTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.copy(_fileSIARD_10_SOURCE.toPath(), _fileSIARD_10.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -760,7 +751,7 @@ public class TableRecordTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_tabSimpleNew.getParentSchema());
@@ -780,14 +771,14 @@ public class TableRecordTester {
         try {
             TableRecordDispenser rd = _tabOld.openTableRecords();
             TableRecord tableRecord = rd.get();
-            assertSame("Invalid record!", _tabOld, tableRecord.getParentTable());
-            assertEquals("Invalid cell count!", _tabOld.getMetaTable()
-                                                       .getMetaColumns(), tableRecord.getCells());
+            assertSame(_tabOld, tableRecord.getParentTable(), "Invalid record!");
+            assertEquals(_tabOld.getMetaTable()
+                                                       .getMetaColumns(), tableRecord.getCells(), "Invalid cell count!");
             for (int i = 0; i < tableRecord.getCells(); i++) {
                 Cell cell = tableRecord.getCell(i);
-                assertEquals("Invalid cell!", tableRecord, cell.getParentRecord());
-                assertSame("Invalid cell meta data!", _tabOld.getMetaTable()
-                                                             .getMetaColumn(i), cell.getMetaColumn());
+                assertEquals(tableRecord, cell.getParentRecord(), "Invalid cell!");
+                assertSame(_tabOld.getMetaTable()
+                                                             .getMetaColumn(i), cell.getMetaColumn(), "Invalid cell meta data!");
                 System.out.print(cell.getMetaColumn()
                                      .getName() + " (" + cell.getMetaColumn()
                                                              .getType() + "): ");
@@ -801,9 +792,9 @@ public class TableRecordTester {
             }
             for (int i = 0; i < tableRecord.getCells(); i++) {
                 Cell cell = tableRecord.getCell(i);
-                assertEquals("Invalid cell!", tableRecord, cell.getParentRecord());
-                assertSame("Invalid cell meta data!", _tabOld.getMetaTable()
-                                                             .getMetaColumn(i), cell.getMetaColumn());
+                assertEquals(tableRecord, cell.getParentRecord(), "Invalid cell!");
+                assertSame(_tabOld.getMetaTable()
+                                                             .getMetaColumn(i), cell.getMetaColumn(), "Invalid cell meta data!");
                 System.out.print(cell.getMetaColumn()
                                      .getName() + " (" + cell.getMetaColumn()
                                                              .getType() + "): ");
@@ -829,7 +820,7 @@ public class TableRecordTester {
                                 char[] cbuf = new char[80];
                                 int iRead = rdr.read(cbuf);
                                 rdr.close();
-                                assertEquals("could not read the first 80 characters!", 80, iRead);
+                                assertEquals(80, iRead, "could not read the first 80 characters!");
                                 sValue = new String(cbuf) + "... (" + lLength + ")";
                             }
                             break;
@@ -846,7 +837,7 @@ public class TableRecordTester {
                                 byte[] buf = new byte[40];
                                 int iRead = is.read(buf);
                                 is.close();
-                                assertEquals("could not read the first 40 bytes!", 40, iRead);
+                                assertEquals(40, iRead, "could not read the first 40 bytes!");
                                 sValue = BU.toHex(buf) + "... (" + lLength + ")";
                             }
                             break;
@@ -929,7 +920,7 @@ public class TableRecordTester {
 //        try 
 //        { 
 //          rr.close();
-//          assertEquals("Invalid number of rows!",1,_tabSimpleNew.getMetaTable().getRows());
+//          assertEquals(1, _tabSimpleNew.getMetaTable().getRows(), "Invalid number of rows!");
 //        }
 //        catch(IOException ie) {}
 //      }
@@ -974,8 +965,8 @@ public class TableRecordTester {
             }
             rr.put(tableRecord);
             rr.close();
-            assertEquals("Invalid number of rows!", 1, _tabComplexNew.getMetaTable()
-                                                                     .getRows());
+            assertEquals(1, _tabComplexNew.getMetaTable()
+                                                                     .getRows(), "Invalid number of rows!");
 
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -1025,8 +1016,8 @@ public class TableRecordTester {
             }
             rr.put(tableRecord);
             rr.close();
-            assertEquals("Invalid number of rows!", 1, _tabSimpleNew.getMetaTable()
-                                                                    .getRows());
+            assertEquals(1, _tabSimpleNew.getMetaTable()
+                                                                    .getRows(), "Invalid number of rows!");
 
             rr = _tabComplexNew.createTableRecords();
             tableRecord = rr.create();
@@ -1036,8 +1027,8 @@ public class TableRecordTester {
             }
             rr.put(tableRecord);
             rr.close();
-            assertEquals("Invalid number of rows!", 1, _tabComplexNew.getMetaTable()
-                                                                     .getRows());
+            assertEquals(1, _tabComplexNew.getMetaTable()
+                                                                     .getRows(), "Invalid number of rows!");
 
             setMandatoryMetaData(_tabSimpleNew.getParentSchema());
 
@@ -1061,7 +1052,7 @@ public class TableRecordTester {
                          .close();
             Archive archive = ArchiveImpl.newInstance();
             archive.open(file);
-            assertTrue("We now have a valid archive!", archive.isValid());
+            assertTrue(archive.isValid(), "We now have a valid archive!");
             archive.close();
 
             if (!_fileSIARD_21_SOURCE.exists()) {

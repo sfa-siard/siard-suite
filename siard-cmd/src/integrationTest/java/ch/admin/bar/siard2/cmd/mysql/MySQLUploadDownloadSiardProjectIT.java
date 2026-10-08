@@ -7,21 +7,24 @@ import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class MySQLUploadDownloadSiardProjectIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MySQLContainer<?> db = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_5_6))
             .withUsername("public")
             .withPassword("public")
@@ -51,8 +54,8 @@ public class MySQLUploadDownloadSiardProjectIT {
                 "-s:" + actualArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         SiardArchiveAssertions.builder()
                               .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?

@@ -1,8 +1,8 @@
 package ch.enterag.utils.jdbc;
 
 import ch.enterag.utils.EU;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
@@ -13,7 +13,7 @@ import java.sql.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class BasePreparedStatementTester {
     private static final String _sSQL_DDL = "CREATE TABLE TESTTABLE(ID INT, S VARCHAR(255))";
@@ -60,7 +60,7 @@ public abstract class BasePreparedStatementTester {
         System.out.flush();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             Connection conn = null;

@@ -11,10 +11,10 @@ import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
 import ch.enterag.utils.lang.Execute;
 import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
     private static final File fileTEST_EMPTY_DATABASE = new File("src/test/resources/testfiles/testempty.accdb");
@@ -38,7 +38,7 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
     private static final String sPASSWORD = "";
     private static final Pattern _patTYPE = Pattern.compile("^(.*?)(\\(\\s*((\\d+)(\\s*,\\s*(\\d+))?)\\s*\\))?$");
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException, IOException {
         FU.copy(fileTEST_EMPTY_DATABASE, fileTEST_ACCESS_DATABASE);
         /* The JDBC-ODBC bridge could still be used until JAVA 1.8 using
@@ -80,25 +80,25 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         setDatabaseMetaData(connAccess.getMetaData());
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         setUp(true);
     }
 
     @Test
     public void testClass() {
-        assertEquals("Wrong database meta data class!", AccessDatabaseMetaData.class, getDatabaseMetaData().getClass());
+        assertEquals(AccessDatabaseMetaData.class, getDatabaseMetaData().getClass(), "Wrong database meta data class!");
     }
 
     @Test
     public void testMatches() throws SQLException {
         BaseDatabaseMetaData bdmd = (BaseDatabaseMetaData) getDatabaseMetaData();
-        assertTrue("Underscore in name fails!", AccessDatabaseMetaData.matches(bdmd.toPattern("ZLA_LAND"), "ZLA_LAND"));
-        assertTrue("Percent in name fails!", AccessDatabaseMetaData.matches(bdmd.toPattern("ZLA%readme"), "ZLA%readme"));
-        assertTrue("Other special character in name fails!", AccessDatabaseMetaData.matches(bdmd.toPattern("ZLA.LAND"), "ZLA.LAND"));
-        assertTrue("Percent does not match all!", AccessDatabaseMetaData.matches("%", "ZLA_readme"));
-        assertTrue("Underscore does not match single letter!", AccessDatabaseMetaData.matches("ZLA_readme", "ZLAPreadme"));
-        assertTrue("Underscore does not match special character!", AccessDatabaseMetaData.matches("ZLA_readme", "ZLA.readme"));
+        assertTrue(AccessDatabaseMetaData.matches(bdmd.toPattern("ZLA_LAND"), "ZLA_LAND"), "Underscore in name fails!");
+        assertTrue(AccessDatabaseMetaData.matches(bdmd.toPattern("ZLA%readme"), "ZLA%readme"), "Percent in name fails!");
+        assertTrue(AccessDatabaseMetaData.matches(bdmd.toPattern("ZLA.LAND"), "ZLA.LAND"), "Other special character in name fails!");
+        assertTrue(AccessDatabaseMetaData.matches("%", "ZLA_readme"), "Percent does not match all!");
+        assertTrue(AccessDatabaseMetaData.matches("ZLA_readme", "ZLAPreadme"), "Underscore does not match single letter!");
+        assertTrue(AccessDatabaseMetaData.matches("ZLA_readme", "ZLA.readme"), "Underscore does not match special character!");
     }
 
     @SneakyThrows
@@ -139,46 +139,46 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             int iColumnSize = rs.getInt("COLUMN_SIZE");
             switch (sTypeName) {
                 case "BYTE":
-                    assertEquals("Invalid BYTE mapping!", Types.SMALLINT, iDataType);
+                    assertEquals(Types.SMALLINT, iDataType, "Invalid BYTE mapping!");
                     break;
                 case "INT":
-                    assertEquals("Invalid INT mapping!", Types.SMALLINT, iDataType);
+                    assertEquals(Types.SMALLINT, iDataType, "Invalid INT mapping!");
                     break;
                 case "LONG":
-                    assertEquals("Invalid LONG mapping!", Types.INTEGER, iDataType);
+                    assertEquals(Types.INTEGER, iDataType, "Invalid LONG mapping!");
                     break;
                 case "MONEY":
-                    assertEquals("Invalid MONEY mapping!", Types.DECIMAL, iDataType);
+                    assertEquals(Types.DECIMAL, iDataType, "Invalid MONEY mapping!");
                     break;
                 case "NUMERIC":
-                    assertEquals("Invalid NUMERIC mapping!", Types.NUMERIC, iDataType);
+                    assertEquals(Types.NUMERIC, iDataType, "Invalid NUMERIC mapping!");
                     break;
                 case "FLOAT":
-                    assertEquals("Invalid FLOAT mapping!", Types.REAL, iDataType);
+                    assertEquals(Types.REAL, iDataType, "Invalid FLOAT mapping!");
                     break;
                 case "DOUBLE":
-                    assertEquals("Invalid DOUBLE mapping!", Types.DOUBLE, iDataType);
+                    assertEquals(Types.DOUBLE, iDataType, "Invalid DOUBLE mapping!");
                     break;
                 case "SHORT_DATE_TIME":
-                    assertEquals("Invalid SHORT_DATE_TIME mapping!", Types.TIMESTAMP, iDataType);
+                    assertEquals(Types.TIMESTAMP, iDataType, "Invalid SHORT_DATE_TIME mapping!");
                     break;
                 case "TEXT":
-                    assertEquals("Invalid TEXT mapping!", Types.VARCHAR, iDataType);
+                    assertEquals(Types.VARCHAR, iDataType, "Invalid TEXT mapping!");
                     break;
                 case "MEMO":
-                    assertEquals("Invalid MEMO mapping!", Types.CLOB, iDataType);
+                    assertEquals(Types.CLOB, iDataType, "Invalid MEMO mapping!");
                     break;
                 case "BINARY":
-                    assertEquals("Invalid BINARY mapping!", Types.BINARY, iDataType);
+                    assertEquals(Types.BINARY, iDataType, "Invalid BINARY mapping!");
                     break;
                 case "GUID":
-                    assertEquals("Invalid GUID mapping!", Types.BINARY, iDataType);
+                    assertEquals(Types.BINARY, iDataType, "Invalid GUID mapping!");
                     break;
                 case "OLE":
-                    assertEquals("Invalid OLE mapping!", Types.BLOB, iDataType);
+                    assertEquals(Types.BLOB, iDataType, "Invalid OLE mapping!");
                     break;
                 case "BOOLEAN":
-                    assertEquals("Invalid BIT mapping!", Types.BOOLEAN, iDataType);
+                    assertEquals(Types.BOOLEAN, iDataType, "Invalid BIT mapping!");
                     break;
                 default:
                     fail("Unexpected type name " + sTypeName + "!");
@@ -196,7 +196,7 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                         if (iDataType == Types.TIMESTAMP) iPrecision = iColumnSize;
                         if ((iDataType == Types.DOUBLE) || (iDataType == Types.FLOAT) || (iDataType == Types.REAL))
                             iPrecision = iColumnSize; // the explicit number of bits is irrelevant, the size is always 8 bytes
-                        assertEquals("Explicit precision does not match!", iPrecision, iColumnSize);
+                        assertEquals(iPrecision, iColumnSize, "Explicit precision does not match!");
                     }
                 }
             }
@@ -223,53 +223,53 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             int iColumnSize = rs.getInt("COLUMN_SIZE");
             switch (sTypeName) {
                 case "BYTE":
-                    assertEquals("Invalid BYTE mapping!", Types.SMALLINT, iDataType);
+                    assertEquals(Types.SMALLINT, iDataType, "Invalid BYTE mapping!");
                     break;
                 case "INT":
-                    assertEquals("Invalid INT mapping!", Types.SMALLINT, iDataType);
+                    assertEquals(Types.SMALLINT, iDataType, "Invalid INT mapping!");
                     break;
                 case "LONG":
-                    assertEquals("Invalid LONG mapping!", Types.INTEGER, iDataType);
+                    assertEquals(Types.INTEGER, iDataType, "Invalid LONG mapping!");
                     break;
                 case "MONEY":
-                    assertEquals("Invalid MONEY mapping!", Types.DECIMAL, iDataType);
+                    assertEquals(Types.DECIMAL, iDataType, "Invalid MONEY mapping!");
                     break;
                 case "NUMERIC":
-                    assertEquals("Invalid NUMERIC mapping!", Types.NUMERIC, iDataType);
+                    assertEquals(Types.NUMERIC, iDataType, "Invalid NUMERIC mapping!");
                     break;
                 case "FLOAT":
-                    assertEquals("Invalid FLOAT mapping!", Types.REAL, iDataType);
+                    assertEquals(Types.REAL, iDataType, "Invalid FLOAT mapping!");
                     break;
                 case "DOUBLE":
-                    assertEquals("Invalid DOUBLE mapping!", Types.DOUBLE, iDataType);
+                    assertEquals(Types.DOUBLE, iDataType, "Invalid DOUBLE mapping!");
                     break;
                 case "SHORT_DATE_TIME":
-                    assertEquals("Invalid SHORT_DATE_TIME mapping!", Types.TIMESTAMP, iDataType);
+                    assertEquals(Types.TIMESTAMP, iDataType, "Invalid SHORT_DATE_TIME mapping!");
                     break;
                 case "TEXT":
-                    assertEquals("Invalid TEXT mapping!", Types.VARCHAR, iDataType);
+                    assertEquals(Types.VARCHAR, iDataType, "Invalid TEXT mapping!");
                     break;
                 case "MEMO":
-                    assertEquals("Invalid MEMO mapping!", Types.CLOB, iDataType);
+                    assertEquals(Types.CLOB, iDataType, "Invalid MEMO mapping!");
                     break;
                 case "BINARY":
-                    assertEquals("Invalid BINARY mapping!", Types.BINARY, iDataType);
+                    assertEquals(Types.BINARY, iDataType, "Invalid BINARY mapping!");
                     break;
                 case "GUID":
-                    assertEquals("Invalid GUID mapping!", Types.CHAR, iDataType);
+                    assertEquals(Types.CHAR, iDataType, "Invalid GUID mapping!");
                     break;
                 case "OLE":
-                    assertEquals("Invalid OLE mapping!", Types.BLOB, iDataType);
+                    assertEquals(Types.BLOB, iDataType, "Invalid OLE mapping!");
                     break;
                 case "BOOLEAN":
-                    assertEquals("Invalid BIT mapping!", Types.BOOLEAN, iDataType);
+                    assertEquals(Types.BOOLEAN, iDataType, "Invalid BIT mapping!");
                     break;
                 default:
                     fail("Unexpected type name " + sTypeName + "!");
             }
             TestColumnDefinition tcd = mapCd.get(sColumnName);
             String sType = tcd.getType();
-            if (sType.equals("GUID")) assertEquals("Invalid length for GUID string!", 38, iColumnSize);
+            if (sType.equals("GUID")) assertEquals(38, iColumnSize, "Invalid length for GUID string!");
             else {
                 // parse type
                 Matcher matcher = _patTYPE.matcher(sType);
@@ -281,7 +281,7 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                         if (iDataType == Types.TIMESTAMP) iPrecision = iColumnSize;
                         if ((iDataType == Types.DOUBLE) || (iDataType == Types.FLOAT) || (iDataType == Types.REAL))
                             iPrecision = iColumnSize; // the explicit number of bits is irrelevant, the size is always 8 bytes
-                        assertEquals("Explicit precision does not match!", iPrecision, iColumnSize);
+                        assertEquals(iPrecision, iColumnSize, "Explicit precision does not match!");
                     }
                 }
             }
@@ -308,52 +308,52 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             int iColumnSize = rs.getInt("COLUMN_SIZE");
             switch (sTypeName) {
                 case "BYTE":
-                    assertEquals("Invalid BYTE mapping!", Types.SMALLINT, iDataType);
+                    assertEquals(Types.SMALLINT, iDataType, "Invalid BYTE mapping!");
                     break;
                 case "INT":
-                    assertEquals("Invalid INT mapping!", Types.SMALLINT, iDataType);
+                    assertEquals(Types.SMALLINT, iDataType, "Invalid INT mapping!");
                     break;
                 case "LONG":
-                    assertEquals("Invalid LONG mapping!", Types.INTEGER, iDataType);
+                    assertEquals(Types.INTEGER, iDataType, "Invalid LONG mapping!");
                     break;
                 case "MONEY":
-                    assertEquals("Invalid MONEY mapping!", Types.DECIMAL, iDataType);
+                    assertEquals(Types.DECIMAL, iDataType, "Invalid MONEY mapping!");
                     break;
                 case "NUMERIC":
-                    assertEquals("Invalid NUMERIC mapping!", Types.NUMERIC, iDataType);
+                    assertEquals(Types.NUMERIC, iDataType, "Invalid NUMERIC mapping!");
                     break;
                 case "FLOAT":
-                    assertEquals("Invalid FLOAT mapping!", Types.REAL, iDataType);
+                    assertEquals(Types.REAL, iDataType, "Invalid FLOAT mapping!");
                     break;
                 case "DOUBLE":
-                    assertEquals("Invalid DOUBLE mapping!", Types.DOUBLE, iDataType);
+                    assertEquals(Types.DOUBLE, iDataType, "Invalid DOUBLE mapping!");
                     break;
                 case "SHORT_DATE_TIME":
-                    assertEquals("Invalid SHORT_DATE_TIME mapping!", Types.TIMESTAMP, iDataType);
+                    assertEquals(Types.TIMESTAMP, iDataType, "Invalid SHORT_DATE_TIME mapping!");
                     break;
                 case "TEXT":
-                    assertEquals("Invalid TEXT mapping!", Types.VARCHAR, iDataType);
+                    assertEquals(Types.VARCHAR, iDataType, "Invalid TEXT mapping!");
                     break;
                 case "MEMO":
-                    assertEquals("Invalid MEMO mapping!", Types.CLOB, iDataType);
+                    assertEquals(Types.CLOB, iDataType, "Invalid MEMO mapping!");
                     break;
                 case "BINARY":
-                    assertEquals("Invalid BINARY mapping!", Types.BINARY, iDataType);
+                    assertEquals(Types.BINARY, iDataType, "Invalid BINARY mapping!");
                     break;
                 case "GUID":
-                    assertEquals("Invalid GUID mapping!", Types.BINARY, iDataType);
+                    assertEquals(Types.BINARY, iDataType, "Invalid GUID mapping!");
                     break;
                 case "OLE":
-                    assertEquals("Invalid OLE mapping!", Types.BLOB, iDataType);
+                    assertEquals(Types.BLOB, iDataType, "Invalid OLE mapping!");
                     break;
                 case "BOOLEAN":
-                    assertEquals("Invalid BIT mapping!", Types.BOOLEAN, iDataType);
+                    assertEquals(Types.BOOLEAN, iDataType, "Invalid BIT mapping!");
                     break;
                 case "VARCHAR(2) ARRAY[4]":
-                    assertEquals("Invalid multivalued ARRAY mapping!", Types.ARRAY, iDataType);
+                    assertEquals(Types.ARRAY, iDataType, "Invalid multivalued ARRAY mapping!");
                     break;
                 case "BLOB ARRAY[127]":
-                    assertEquals("Invalid attachment ARRAY mapping!", Types.ARRAY, iDataType);
+                    assertEquals(Types.ARRAY, iDataType, "Invalid attachment ARRAY mapping!");
                     break;
                 default:
                     fail("Unexpected type name " + sTypeName + "!");
@@ -368,7 +368,7 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 if (sPrecision != null) {
                     if (iDataType == Types.TIMESTAMP) iColumnSize = iColumnSize - 20;
                     int iPrecision = Integer.parseInt(sPrecision);
-                    assertEquals("Explicit precision does not match!", iPrecision, iColumnSize);
+                    assertEquals(iPrecision, iColumnSize, "Explicit precision does not match!");
                 }
             }
         }
@@ -440,7 +440,7 @@ public class AccessDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
     @SneakyThrows
     @Test
-    @Ignore("uses files not available anymore")
+    @Disabled("uses files not available anymore")
     public void testGetImportedKeys() {
         File fileBugDatabase = new File("..\\Bugs\\445\\Empty.accdb");
         File fileAccessDatabase = new File("logs\\Empty.accdb");

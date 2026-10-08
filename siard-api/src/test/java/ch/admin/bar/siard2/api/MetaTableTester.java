@@ -5,9 +5,9 @@ import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siard2.api.primary.TableImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaTableTester {
     private static final File _fileSIARD_10_SOURCE = new File("src/test/resources/testfiles/sql1999.siard");
@@ -120,30 +120,30 @@ public class MetaTableTester {
     private void createComplexColumns()
             throws IOException {
         MetaColumn mc1 = _mtNew.createMetaColumn(_sTEST_COLUMN1_NAME);
-        assertEquals("Wrong parent meta table of simple column!", _mtNew, mc1.getParentMetaTable());
+        assertEquals(_mtNew, mc1.getParentMetaTable(), "Wrong parent meta table of simple column!");
         mc1.setType("INTEGER");
         mc1.setNullable(false);
 
         MetaColumn mc2 = _mtNew.createMetaColumn(_sTEST_DISTINCT_COLUMN);
-        assertEquals("Wrong parent meta table of distinct column!", _mtNew, mc2.getParentMetaTable());
+        assertEquals(_mtNew, mc2.getParentMetaTable(), "Wrong parent meta table of distinct column!");
         mc2.setTypeName(_sTEST_DISTINCT_TYPE);
 
         MetaColumn mc3 = _mtNew.createMetaColumn(_sTEST_UDTS_COLUMN);
-        assertEquals("Wrong parent meta table of row column!", _mtNew, mc3.getParentMetaTable());
+        assertEquals(_mtNew, mc3.getParentMetaTable(), "Wrong parent meta table of row column!");
         mc3.setTypeName(_sTEST_UDTS_TYPE);
 
         MetaColumn mc4 = _mtNew.createMetaColumn(_sTEST_ARRAY_COLUMN);
-        assertEquals("Wrong parent meta table of array column!", _mtNew, mc4.getParentMetaTable());
+        assertEquals(_mtNew, mc4.getParentMetaTable(), "Wrong parent meta table of array column!");
         mc4.setType("VARCHAR(256)");
         mc4.setCardinality(4);
         mc4.getMetaField(2); // 3 out of 4 array elements
 
         MetaColumn mc5 = _mtNew.createMetaColumn(_sTEST_UDTC_COLUMN);
-        assertEquals("Wrong parent meta table of udt column!", _mtNew, mc5.getParentMetaTable());
+        assertEquals(_mtNew, mc5.getParentMetaTable(), "Wrong parent meta table of udt column!");
         mc5.setTypeName(_sTEST_UDTC_TYPE);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.copy(_fileSIARD_10_SOURCE.toPath(), _fileSIARD_10.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -155,19 +155,19 @@ public class MetaTableTester {
             createTypes(schema.getMetaSchema());
             Table table = schema.createTable(_sTEST_TABLE_NAME);
             _mtNew = table.getMetaTable();
-            assertSame("MetaTable create failed!", table, _mtNew.getTable());
+            assertSame(table, _mtNew.getTable(), "MetaTable create failed!");
             archive = ArchiveImpl.newInstance();
             archive.open(_fileSIARD_10);
             schema = archive.getSchema(0);
             table = schema.getTable(0);
             _mtOld = table.getMetaTable();
-            assertSame("MetaTable open failed!", table, _mtOld.getTable());
+            assertSame(table, _mtOld.getTable(), "MetaTable open failed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_mtNew.getTable()
@@ -189,39 +189,39 @@ public class MetaTableTester {
 
     @Test
     public void testName() {
-        assertEquals("Invalid name of new table!", _sTEST_TABLE_NAME, _mtNew.getName());
-        assertEquals("Invalid name of old table!", "TABLETEST2", _mtOld.getName());
+        assertEquals(_sTEST_TABLE_NAME, _mtNew.getName(), "Invalid name of new table!");
+        assertEquals("TABLETEST2", _mtOld.getName(), "Invalid name of old table!");
     }
 
     @Test
     public void testFolder() {
-        assertEquals("Invalid folder name of new table!", TableImpl._sTABLE_FOLDER_PREFIX + "0", _mtNew.getFolder());
-        assertEquals("Invalid folder name of old table!", TableImpl._sTABLE_FOLDER_PREFIX + "0", _mtOld.getFolder());
+        assertEquals(TableImpl._sTABLE_FOLDER_PREFIX + "0", _mtNew.getFolder(), "Invalid folder name of new table!");
+        assertEquals(TableImpl._sTABLE_FOLDER_PREFIX + "0", _mtOld.getFolder(), "Invalid folder name of old table!");
     }
 
     @Test
     public void testDescription() {
         String sDescription = "Description";
         _mtNew.setDescription(sDescription);
-        assertEquals("Invalid Description!", sDescription, _mtNew.getDescription());
+        assertEquals(sDescription, _mtNew.getDescription(), "Invalid Description!");
         _mtOld.setDescription(sDescription);
-        assertEquals("Invalid Description!", sDescription, _mtOld.getDescription());
+        assertEquals(sDescription, _mtOld.getDescription(), "Invalid Description!");
     }
 
     @Test
     public void testRows() {
-        assertEquals("New table has zero rows!", 0, _mtNew.getRows());
-        assertEquals("Old table has one row!", 1, _mtOld.getRows());
+        assertEquals(0, _mtNew.getRows(), "New table has zero rows!");
+        assertEquals(1, _mtOld.getRows(), "Old table has one row!");
     }
 
     @Test
     public void testGetMetaColumns() {
         try {
-            assertEquals("New table column meta data!", 0, _mtNew.getMetaColumns());
+            assertEquals(0, _mtNew.getMetaColumns(), "New table column meta data!");
             createComplexColumns();
-            assertEquals("New table has wrong number of column meta data!", 5, _mtNew.getMetaColumns());
+            assertEquals(5, _mtNew.getMetaColumns(), "New table has wrong number of column meta data!");
             System.out.println(_mtOld.getMetaColumns());
-            assertEquals("Old table has wrong number of column meta data!", 30, _mtOld.getMetaColumns());
+            assertEquals(30, _mtOld.getMetaColumns(), "Old table has wrong number of column meta data!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -231,20 +231,20 @@ public class MetaTableTester {
     public void testGetMetaColumn_Int() {
         try {
             createComplexColumns(); // has already tested createMetaColumn() ...
-            assertNull("Column of type row must not have PreType!", _mtNew.getMetaColumn(2)
-                                                                          .getType());
-            assertEquals("Wrong column name of new column of type row retrieved!", _sTEST_UDTS_COLUMN, _mtNew.getMetaColumn(2)
-                                                                                                             .getName());
-            assertEquals("Wrong column type of new column of type row retrieved!", _sTEST_UDTS_TYPE, _mtNew.getMetaColumn(2)
-                                                                                                           .getTypeName());
+            assertNull(_mtNew.getMetaColumn(2)
+                                                                          .getType(), "Column of type row must not have PreType!");
+            assertEquals(_sTEST_UDTS_COLUMN, _mtNew.getMetaColumn(2)
+                                                                                                             .getName(), "Wrong column name of new column of type row retrieved!");
+            assertEquals(_sTEST_UDTS_TYPE, _mtNew.getMetaColumn(2)
+                                                                                                           .getTypeName(), "Wrong column type of new column of type row retrieved!");
             System.out.println(_mtOld.getMetaColumn(22)
                                      .getName());
-            assertEquals("Wrong column name of old table retrieved!", "CREAL", _mtOld.getMetaColumn(22)
-                                                                                     .getName());
+            assertEquals("CREAL", _mtOld.getMetaColumn(22)
+                                                                                     .getName(), "Wrong column name of old table retrieved!");
             System.out.println(_mtOld.getMetaColumn(22)
                                      .getType());
-            assertEquals("Wrong column type of old table retrievd!", "REAL", _mtOld.getMetaColumn(22)
-                                                                                   .getType());
+            assertEquals("REAL", _mtOld.getMetaColumn(22)
+                                                                                   .getType(), "Wrong column type of old table retrievd!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -254,14 +254,14 @@ public class MetaTableTester {
     public void testGetMetaColumn_String() {
         try {
             createComplexColumns(); // has already tested createMetaColumn() ...
-            assertEquals("Wrong column name of new column of type row retrieved!", _sTEST_UDTS_COLUMN, _mtNew.getMetaColumn(_sTEST_UDTS_COLUMN)
-                                                                                                             .getName());
-            assertEquals("Wrong column type of new column of type row retrieved!", _sTEST_UDTS_TYPE, _mtNew.getMetaColumn(_sTEST_UDTS_COLUMN)
-                                                                                                           .getTypeName());
-            assertEquals("Wrong column name of old table retrieved!", "CREAL", _mtOld.getMetaColumn("CREAL")
-                                                                                     .getName());
-            assertEquals("Wrong column type of old table retrievd!", "REAL", _mtOld.getMetaColumn("CREAL")
-                                                                                   .getType());
+            assertEquals(_sTEST_UDTS_COLUMN, _mtNew.getMetaColumn(_sTEST_UDTS_COLUMN)
+                                                                                                             .getName(), "Wrong column name of new column of type row retrieved!");
+            assertEquals(_sTEST_UDTS_TYPE, _mtNew.getMetaColumn(_sTEST_UDTS_COLUMN)
+                                                                                                           .getTypeName(), "Wrong column type of new column of type row retrieved!");
+            assertEquals("CREAL", _mtOld.getMetaColumn("CREAL")
+                                                                                     .getName(), "Wrong column name of old table retrieved!");
+            assertEquals("REAL", _mtOld.getMetaColumn("CREAL")
+                                                                                   .getType(), "Wrong column type of old table retrievd!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -270,31 +270,31 @@ public class MetaTableTester {
     @Test
     public void testPrimaryKey() {
         try {
-            assertNull("New table has primary key!", _mtNew.getMetaPrimaryKey());
+            assertNull(_mtNew.getMetaPrimaryKey(), "New table has primary key!");
             createComplexColumns();
             MetaUniqueKey mpk = _mtNew.createMetaPrimaryKey(_sTEST_PRIMARY_KEY_NAME);
-            assertSame("Error in primary key!", _mtNew, mpk.getParentMetaTable());
-            assertEquals("Wrong primary key name!", _sTEST_PRIMARY_KEY_NAME, mpk.getName());
-            assertEquals("Wrong number of primary key columns!", 0, mpk.getColumns());
-            assertFalse("Invalid primary key is valid!", mpk.isValid());
+            assertSame(_mtNew, mpk.getParentMetaTable(), "Error in primary key!");
+            assertEquals(_sTEST_PRIMARY_KEY_NAME, mpk.getName(), "Wrong primary key name!");
+            assertEquals(0, mpk.getColumns(), "Wrong number of primary key columns!");
+            assertFalse(mpk.isValid(), "Invalid primary key is valid!");
             String sDescription = "Description";
             mpk.setDescription(sDescription);
-            assertEquals("Wrong primary key description!", sDescription, mpk.getDescription());
+            assertEquals(sDescription, mpk.getDescription(), "Wrong primary key description!");
             mpk.addColumn(_sTEST_COLUMN1_NAME);
-            assertTrue("Valid primary key is invalid!", mpk.isValid());
-            assertEquals("Wrong number of primary key columns!", 1, mpk.getColumns());
-            assertEquals("Erroneous primary key column!", _sTEST_COLUMN1_NAME, mpk.getColumn(0));
+            assertTrue(mpk.isValid(), "Valid primary key is invalid!");
+            assertEquals(1, mpk.getColumns(), "Wrong number of primary key columns!");
+            assertEquals(_sTEST_COLUMN1_NAME, mpk.getColumn(0), "Erroneous primary key column!");
 
-            assertNotNull("Old table has no primary key!", _mtOld.getMetaPrimaryKey());
+            assertNotNull(_mtOld.getMetaPrimaryKey(), "Old table has no primary key!");
             mpk = _mtOld.getMetaPrimaryKey();
-            assertSame("Error in primary key!", _mtOld, mpk.getParentMetaTable());
-            assertEquals("Wrong primary key name!", "TABLETEST2PK", mpk.getName());
-            assertTrue("Valid primary key is invalid!", mpk.isValid());
-            assertEquals("Wrong number of primary key columns!", 2, mpk.getColumns());
-            assertEquals("Erroneous primary key column 0!", "CCHARACTER", mpk.getColumn(0));
-            assertEquals("Erroneous primary key column 1!", "CINTEGER", mpk.getColumn(1));
+            assertSame(_mtOld, mpk.getParentMetaTable(), "Error in primary key!");
+            assertEquals("TABLETEST2PK", mpk.getName(), "Wrong primary key name!");
+            assertTrue(mpk.isValid(), "Valid primary key is invalid!");
+            assertEquals(2, mpk.getColumns(), "Wrong number of primary key columns!");
+            assertEquals("CCHARACTER", mpk.getColumn(0), "Erroneous primary key column 0!");
+            assertEquals("CINTEGER", mpk.getColumn(1), "Erroneous primary key column 1!");
             mpk.setDescription(sDescription);
-            assertEquals("Wrong primary key description!", sDescription, mpk.getDescription());
+            assertEquals(sDescription, mpk.getDescription(), "Wrong primary key description!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -303,23 +303,23 @@ public class MetaTableTester {
     @Test
     public void testForeignKeys() {
         try {
-            assertEquals("New table already has foreign keys!", 0, _mtNew.getMetaForeignKeys());
+            assertEquals(0, _mtNew.getMetaForeignKeys(), "New table already has foreign keys!");
             createComplexColumns();
             MetaForeignKey mfk = _mtNew.createMetaForeignKey(_sTEST_FOREIGN_KEY_NAME);
-            assertSame("Error in foreign key!", _mtNew, mfk.getParentMetaTable());
-            assertEquals("Wrong foreign key name!", _sTEST_FOREIGN_KEY_NAME, mfk.getName());
-            assertEquals("Wrong number of foreign key references!", 0, mfk.getReferences());
-            assertFalse("Invalid foreign key is valid!", mfk.isValid());
+            assertSame(_mtNew, mfk.getParentMetaTable(), "Error in foreign key!");
+            assertEquals(_sTEST_FOREIGN_KEY_NAME, mfk.getName(), "Wrong foreign key name!");
+            assertEquals(0, mfk.getReferences(), "Wrong number of foreign key references!");
+            assertFalse(mfk.isValid(), "Invalid foreign key is valid!");
 
             String sReferencedTable = "TESTTABLEREFERENCED";
             mfk.setReferencedTable(sReferencedTable);
-            assertEquals("Wrong referenced table!", sReferencedTable, mfk.getReferencedTable());
-            assertEquals("Wrong referenced schema default!", _mtNew.getParentMetaSchema()
-                                                                   .getName(), mfk.getReferencedSchema());
+            assertEquals(sReferencedTable, mfk.getReferencedTable(), "Wrong referenced table!");
+            assertEquals(_mtNew.getParentMetaSchema()
+                                                                   .getName(), mfk.getReferencedSchema(), "Wrong referenced schema default!");
 
             String sReferencedSchema = "TESTSCHEMAREFERENCED";
             mfk.setReferencedSchema(sReferencedSchema);
-            assertEquals("Wrong referenced schema!", sReferencedSchema, mfk.getReferencedSchema());
+            assertEquals(sReferencedSchema, mfk.getReferencedSchema(), "Wrong referenced schema!");
 
             String sMatchType = "GAGA";
             try {
@@ -330,7 +330,7 @@ public class MetaTableTester {
             }
             sMatchType = "FULL";
             mfk.setMatchType(sMatchType);
-            assertEquals("Wrong match type!", sMatchType, mfk.getMatchType());
+            assertEquals(sMatchType, mfk.getMatchType(), "Wrong match type!");
 
             String sDeleteAction = "GAGA";
             try {
@@ -341,7 +341,7 @@ public class MetaTableTester {
             }
             sDeleteAction = "RESTRICT";
             mfk.setDeleteAction(sDeleteAction);
-            assertEquals("Wrong delete action!", sDeleteAction, mfk.getDeleteAction());
+            assertEquals(sDeleteAction, mfk.getDeleteAction(), "Wrong delete action!");
 
             String sUpdateAction = "GAGA";
             try {
@@ -352,20 +352,20 @@ public class MetaTableTester {
             }
             sUpdateAction = "CASCADE";
             mfk.setUpdateAction(sUpdateAction);
-            assertEquals("Wrong update action!", sUpdateAction, mfk.getUpdateAction());
+            assertEquals(sUpdateAction, mfk.getUpdateAction(), "Wrong update action!");
 
             String sDescription = "Description";
             mfk.setDescription(sDescription);
-            assertEquals("Wrong primary key description!", sDescription, mfk.getDescription());
+            assertEquals(sDescription, mfk.getDescription(), "Wrong primary key description!");
 
             String sReferenced = "TESTCOLUMNREFERENCED";
             mfk.addReference(_sTEST_COLUMN1_NAME, sReferenced);
-            assertTrue("Valid foreign key is invalid!", mfk.isValid());
-            assertEquals("Wrong number of foreign key references!", 1, mfk.getReferences());
-            assertEquals("Erroneous foreign key column!", _sTEST_COLUMN1_NAME, mfk.getColumn(0));
-            assertEquals("Erroneous foreign key referenced column!", sReferenced, mfk.getReferenced(0));
+            assertTrue(mfk.isValid(), "Valid foreign key is invalid!");
+            assertEquals(1, mfk.getReferences(), "Wrong number of foreign key references!");
+            assertEquals(_sTEST_COLUMN1_NAME, mfk.getColumn(0), "Erroneous foreign key column!");
+            assertEquals(sReferenced, mfk.getReferenced(0), "Erroneous foreign key referenced column!");
 
-            assertEquals("Old table has foreign keys!", 0, _mtOld.getMetaForeignKeys());
+            assertEquals(0, _mtOld.getMetaForeignKeys(), "Old table has foreign keys!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -374,22 +374,22 @@ public class MetaTableTester {
     @Test
     public void testUniqueKeys() {
         try {
-            assertEquals("New table already has candidate keys!", 0, _mtNew.getMetaCandidateKeys());
+            assertEquals(0, _mtNew.getMetaCandidateKeys(), "New table already has candidate keys!");
             createComplexColumns();
             MetaUniqueKey muk = _mtNew.createMetaCandidateKey(_sTEST_CANDIDATE_KEY_NAME);
-            assertSame("Error in unique key!", _mtNew, muk.getParentMetaTable());
-            assertEquals("Wrong unique key name!", _sTEST_CANDIDATE_KEY_NAME, muk.getName());
-            assertEquals("Wrong number of unique key columns!", 0, muk.getColumns());
-            assertFalse("Invalid unique key is valid!", muk.isValid());
+            assertSame(_mtNew, muk.getParentMetaTable(), "Error in unique key!");
+            assertEquals(_sTEST_CANDIDATE_KEY_NAME, muk.getName(), "Wrong unique key name!");
+            assertEquals(0, muk.getColumns(), "Wrong number of unique key columns!");
+            assertFalse(muk.isValid(), "Invalid unique key is valid!");
             String sDescription = "Description";
             muk.setDescription(sDescription);
-            assertEquals("Wrong unique key description!", sDescription, muk.getDescription());
+            assertEquals(sDescription, muk.getDescription(), "Wrong unique key description!");
             muk.addColumn(_sTEST_COLUMN1_NAME);
-            assertTrue("Valid unique key is invalid!", muk.isValid());
-            assertEquals("Wrong number of unique key columns!", 1, muk.getColumns());
-            assertEquals("Erroneous unique key column!", _sTEST_COLUMN1_NAME, muk.getColumn(0));
+            assertTrue(muk.isValid(), "Valid unique key is invalid!");
+            assertEquals(1, muk.getColumns(), "Wrong number of unique key columns!");
+            assertEquals(_sTEST_COLUMN1_NAME, muk.getColumn(0), "Erroneous unique key column!");
 
-            assertEquals("Old table has candidate keys!", 0, _mtOld.getMetaCandidateKeys());
+            assertEquals(0, _mtOld.getMetaCandidateKeys(), "Old table has candidate keys!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -398,20 +398,20 @@ public class MetaTableTester {
     @Test
     public void testCheckConstraints() {
         try {
-            assertEquals("New table already has check contraints!", 0, _mtNew.getMetaCheckConstraints());
+            assertEquals(0, _mtNew.getMetaCheckConstraints(), "New table already has check contraints!");
             MetaCheckConstraint mcc = _mtNew.createMetaCheckConstraint(_sTEST_CHECK_CONSTRAINT_NAME);
-            assertSame("Error in check constraint!", _mtNew, mcc.getParentMetaTable());
-            assertEquals("Wrong check constraint name!", _sTEST_CHECK_CONSTRAINT_NAME, mcc.getName());
+            assertSame(_mtNew, mcc.getParentMetaTable(), "Error in check constraint!");
+            assertEquals(_sTEST_CHECK_CONSTRAINT_NAME, mcc.getName(), "Wrong check constraint name!");
 
             String sCondition = "Condition";
             mcc.setCondition(sCondition);
-            assertEquals("Wrong check constraint condition!", sCondition, mcc.getCondition());
+            assertEquals(sCondition, mcc.getCondition(), "Wrong check constraint condition!");
 
             String sDescription = "Description";
             mcc.setDescription(sDescription);
-            assertEquals("Wrong check constraint description!", sDescription, mcc.getDescription());
+            assertEquals(sDescription, mcc.getDescription(), "Wrong check constraint description!");
 
-            assertEquals("Old table has check constraints!", 0, _mtOld.getMetaCheckConstraints());
+            assertEquals(0, _mtOld.getMetaCheckConstraints(), "Old table has check constraints!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -420,10 +420,10 @@ public class MetaTableTester {
     @Test
     public void testTriggers() {
         try {
-            assertEquals("New table already has triggers!", 0, _mtNew.getMetaTriggers());
+            assertEquals(0, _mtNew.getMetaTriggers(), "New table already has triggers!");
             MetaTrigger mt = _mtNew.createMetaTrigger(_sTEST_TRIGGER_NAME);
-            assertSame("Error in trigger!", _mtNew, mt.getParentMetaTable());
-            assertEquals("Wrong trigger name!", _sTEST_TRIGGER_NAME, mt.getName());
+            assertSame(_mtNew, mt.getParentMetaTable(), "Error in trigger!");
+            assertEquals(_sTEST_TRIGGER_NAME, mt.getName(), "Wrong trigger name!");
 
             String sActionTime = "GAGA";
             try {
@@ -434,25 +434,25 @@ public class MetaTableTester {
             }
             sActionTime = "BEFORE";
             mt.setActionTime(sActionTime);
-            assertEquals("Wrong action time!", sActionTime, mt.getActionTime());
+            assertEquals(sActionTime, mt.getActionTime(), "Wrong action time!");
 
             String sTriggerEvent = "UPDATE OF " + _sTEST_COLUMN1_NAME;
             mt.setTriggerEvent(sTriggerEvent);
-            assertEquals("Wrong trigger event!", sTriggerEvent, mt.getTriggerEvent());
+            assertEquals(sTriggerEvent, mt.getTriggerEvent(), "Wrong trigger event!");
 
             String sAliasList = "AliasList";
             mt.setAliasList(sAliasList);
-            assertEquals("Wrong alias list!", sAliasList, mt.getAliasList());
+            assertEquals(sAliasList, mt.getAliasList(), "Wrong alias list!");
 
             String sTriggeredAction = "TriggeredAction";
             mt.setTriggeredAction(sTriggeredAction);
-            assertEquals("Wrong triggered action!", sTriggeredAction, mt.getTriggeredAction());
+            assertEquals(sTriggeredAction, mt.getTriggeredAction(), "Wrong triggered action!");
 
             String sDescription = "Description";
             mt.setDescription(sDescription);
-            assertEquals("Wrong check constraint description!", sDescription, mt.getDescription());
+            assertEquals(sDescription, mt.getDescription(), "Wrong check constraint description!");
 
-            assertEquals("Old table has triggers!", 0, _mtOld.getMetaTriggers());
+            assertEquals(0, _mtOld.getMetaTriggers(), "Old table has triggers!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -479,7 +479,7 @@ public class MetaTableTester {
     @Test
     public void testGetColumnNames() {
         try {
-            assertEquals("New table column meta data!", 0, _mtNew.getMetaColumns());
+            assertEquals(0, _mtNew.getMetaColumns(), "New table column meta data!");
             createComplexColumns();
             checkColumnNames(true, true);
             System.out.println();
@@ -516,7 +516,7 @@ public class MetaTableTester {
     @Test
     public void testGetType() {
         try {
-            assertEquals("New table column meta data!", 0, _mtNew.getMetaColumns());
+            assertEquals(0, _mtNew.getMetaColumns(), "New table column meta data!");
             createComplexColumns();
             checkGetType(true, true);
             System.out.println();

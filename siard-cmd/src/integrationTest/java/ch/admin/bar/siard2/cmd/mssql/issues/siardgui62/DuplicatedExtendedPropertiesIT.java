@@ -7,26 +7,29 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedTableId;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.StringWrapper;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * See: https://github.com/sfa-siard/SiardGui/issues/62
  */
+@Testcontainers
 public class DuplicatedExtendedPropertiesIT {
 
     public final static String DUPLICATE_EXTENDED_PROPERTIES = "mssql/issues/siardgui62/duplicated-extended-properties.sql";
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MSSQLServerContainer db = new MSSQLServerContainer<>(DockerImageName.parse("mcr.microsoft.com/mssql/server:2017-CU12"))
             .acceptLicense()
             .withInitScript(DUPLICATE_EXTENDED_PROPERTIES);
@@ -43,7 +46,7 @@ public class DuplicatedExtendedPropertiesIT {
                 "-s:" + actualArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
         actualArchive.preserveArchive();
 
         val metadataTable = actualArchive.exploreMetadata()

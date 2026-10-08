@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.ddl;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DropTypeStatementTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private DropTypeStatement _dts = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _dts = _sf.newDropTypeStatement();
     }
@@ -20,7 +20,7 @@ public class DropTypeStatementTester {
     public void test() {
         _dts.parse("DROP TYPE cat.sch.\"typ\" cascade");
         // System.out.println(dts.format());
-        assertEquals("DROP TYPE statement not recognized!", "DROP TYPE CAT.SCH.\"typ\" CASCADE", _dts.format());
+        assertEquals("DROP TYPE CAT.SCH.\"typ\" CASCADE", _dts.format(), "DROP TYPE statement not recognized!");
     }
 
 }

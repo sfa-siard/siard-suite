@@ -49,9 +49,7 @@ public class EntryOutputStreamTest {
     @TempDir
     Path tempDir;
 
-    /* (non-Javadoc)
-     @see junit.framework.TestCase#setUp()
-     */
+    /* set up test fixture */
     @BeforeEach
     public void setUp() {
         File fileZip = tempDir.resolve("moderate.zip").toFile();

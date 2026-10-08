@@ -9,9 +9,9 @@ import ch.enterag.utils.FU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseResultSetMetaDataTester;
 import ch.enterag.utils.lang.Execute;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AccessResultSetMetaDataTester extends BaseResultSetMetaDataTester {
     private static final String _sNativeQuerySimple = getTableQuery(TestAccessDatabase.getQualifiedSimpleTable(), TestAccessDatabase._listCdSimple);
@@ -46,7 +46,7 @@ public class AccessResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         return sbSql.toString();
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException, IOException {
         FU.copy(fileTEST_EMPTY_DATABASE, fileTEST_ACCESS_DATABASE);
         /* The JDBC-ODBC bridge could still be used until JAVA 1.8 using
@@ -92,14 +92,14 @@ public class AccessResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         setResultSetMetaData(rsmd, rs);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         openResultSet(true, _sSqlQuerySimple);
     }
 
     @Test
     public void testClass() {
-        assertEquals("Wrong database meta data class!", AccessResultSetMetaData.class, getResultSetMetaData().getClass());
+        assertEquals(AccessResultSetMetaData.class, getResultSetMetaData().getClass(), "Wrong database meta data class!");
     }
 
     @Test

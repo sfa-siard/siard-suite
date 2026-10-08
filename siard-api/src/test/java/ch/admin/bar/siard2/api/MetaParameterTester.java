@@ -3,15 +3,15 @@ package ch.admin.bar.siard2.api;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaParameterTester {
     private static final File _fileSIARD_21_NEW = new File("src/test/resources/tmp/sql2008new.siard");
@@ -39,7 +39,7 @@ public class MetaParameterTester {
             _mpNew.setType("VARCHAR(256)");
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.deleteIfExists(_fileSIARD_21_NEW.toPath());
@@ -49,13 +49,13 @@ public class MetaParameterTester {
             MetaSchema ms = schema.getMetaSchema();
             MetaRoutine mr = ms.createMetaRoutine(_sTEST_ROUTINE_NAME);
             _mpNew = mr.createMetaParameter(_sTEST_PARAMETER_NAME);
-            assertSame("Invalid parent routine!", mr, _mpNew.getParentMetaRoutine());
+            assertSame(mr, _mpNew.getParentMetaRoutine(), "Invalid parent routine!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws IOException {
         setMandatoryMetaData(_mpNew.getParentMetaRoutine());
         _mpNew.getParentMetaRoutine()
@@ -68,15 +68,15 @@ public class MetaParameterTester {
 
     @Test
     public void testName() {
-        assertEquals("Invalid parameter name!", _sTEST_PARAMETER_NAME, _mpNew.getName());
+        assertEquals(_sTEST_PARAMETER_NAME, _mpNew.getName(), "Invalid parameter name!");
     }
 
     @Test
     public void testMode() {
-        assertEquals("Invalid default mode!", "IN", _mpNew.getMode());
+        assertEquals("IN", _mpNew.getMode(), "Invalid default mode!");
         try {
             _mpNew.setMode("inout");
-            assertEquals("Wrong mode!", "INOUT", _mpNew.getMode());
+            assertEquals("INOUT", _mpNew.getMode(), "Wrong mode!");
             try {
                 _mpNew.setMode("GAGA");
                 fail("Invalid mode GAGA accepted!");
@@ -93,7 +93,7 @@ public class MetaParameterTester {
         try {
             String sType = "INT";
             _mpNew.setType(sType);
-            assertEquals("Wrong type!", sType, _mpNew.getType());
+            assertEquals(sType, _mpNew.getType(), "Wrong type!");
             try {
                 _mpNew.setType("GAGA");
                 fail("Invalid type GAGA accepted!");
@@ -110,7 +110,7 @@ public class MetaParameterTester {
         try {
             String sTypeOriginal = "TypeOriginal";
             _mpNew.setTypeOriginal(sTypeOriginal);
-            assertEquals("Invalid original type!", sTypeOriginal, _mpNew.getTypeOriginal());
+            assertEquals(sTypeOriginal, _mpNew.getTypeOriginal(), "Invalid original type!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -118,13 +118,13 @@ public class MetaParameterTester {
 
     @Test
     public void testTypeSchema() {
-        assertNull("Wrong type schema default!", _mpNew.getTypeSchema());
+        assertNull(_mpNew.getTypeSchema(), "Wrong type schema default!");
         String sTypeSchema = _sTEST_SCHEMA_NAME;
         try {
             _mpNew.setType("INTEGER");
             _mpNew.setTypeSchema(sTypeSchema);
-            assertEquals("Invalid type schema!", sTypeSchema, _mpNew.getTypeSchema());
-            assertNull("Predefined type was not removed!", _mpNew.getType());
+            assertEquals(sTypeSchema, _mpNew.getTypeSchema(), "Invalid type schema!");
+            assertNull(_mpNew.getType(), "Predefined type was not removed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -132,13 +132,13 @@ public class MetaParameterTester {
 
     @Test
     public void testTypeName() {
-        assertNull("Wrong type name default!", _mpNew.getTypeName());
+        assertNull(_mpNew.getTypeName(), "Wrong type name default!");
         String sTypeName = _sTEST_TYPE_NAME;
         try {
             _mpNew.setType("INTEGER");
             _mpNew.setTypeName(sTypeName);
-            assertEquals("Invalid type name!", sTypeName, _mpNew.getTypeName());
-            assertNull("Predefined type was not removed!", _mpNew.getType());
+            assertEquals(sTypeName, _mpNew.getTypeName(), "Invalid type name!");
+            assertNull(_mpNew.getType(), "Predefined type was not removed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -146,12 +146,12 @@ public class MetaParameterTester {
 
     @Test
     public void testCardinality() {
-        assertEquals("Wrong cardinality default!", -1, _mpNew.getCardinality());
+        assertEquals(-1, _mpNew.getCardinality(), "Wrong cardinality default!");
         int iCardinality = 5;
         try {
             _mpNew.setType("INTEGER");
             _mpNew.setCardinality(iCardinality);
-            assertEquals("Invalid cardinality!", iCardinality, _mpNew.getCardinality());
+            assertEquals(iCardinality, _mpNew.getCardinality(), "Invalid cardinality!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -161,7 +161,7 @@ public class MetaParameterTester {
     public void testDescription() {
         String sDescription = "Description";
         _mpNew.setDescription(sDescription);
-        assertEquals("Invalid description!", sDescription, _mpNew.getDescription());
+        assertEquals(sDescription, _mpNew.getDescription(), "Invalid description!");
     }
 
 }

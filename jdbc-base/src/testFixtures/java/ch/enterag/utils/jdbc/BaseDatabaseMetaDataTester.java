@@ -2,14 +2,14 @@ package ch.enterag.utils.jdbc;
 
 import ch.enterag.utils.EU;
 import ch.enterag.utils.database.SqlTypes;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class BaseDatabaseMetaDataTester {
     private DatabaseMetaData _dmd = null;
@@ -86,7 +86,7 @@ public abstract class BaseDatabaseMetaDataTester {
         System.out.flush();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             Connection conn = _dmd.getConnection();

@@ -5,9 +5,8 @@ import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy;
 import org.testcontainers.images.builder.ImageFromDockerfile;
@@ -18,12 +17,16 @@ import java.sql.SQLException;
 import java.time.Duration;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class CaseSensitiveColumnNamesInPostgresIT {
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public PostgreSQLContainer<?> db = new PostgreSQLContainer<>(loadDockerfile())
             .waitingFor(new LogMessageWaitStrategy()
                                 // oops
@@ -48,7 +51,7 @@ public class CaseSensitiveColumnNamesInPostgresIT {
         });
 
         // then
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
         actualArchive.preserveArchive();
     }
 

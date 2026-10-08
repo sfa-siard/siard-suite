@@ -2,22 +2,24 @@ package ch.admin.bar.siard2.jdbc.legacy;
 
 import ch.admin.bar.siard2.jdbcx.OracleDataSource;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.OracleContainer;
 
 import java.sql.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class AnyDataTester {
     private Connection _conn;
 
-    @Rule
+    @Container
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart");
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         OracleDataSource dsOracle = new OracleDataSource();
         dsOracle.setUrl(db.getJdbcUrl());
@@ -36,7 +38,7 @@ public class AnyDataTester {
     }
 
     @Test
-    @Ignore("seems to depend on setup @enterag")
+    @Disabled("seems to depend on setup @enterag")
     public void testGetObject() throws SQLException {
         Statement stmt = _conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT USER_PROP FROM IFS_IN_TABLE");
@@ -47,7 +49,7 @@ public class AnyDataTester {
     }
 
     @Test
-    @Ignore("seems to depend on setup @enterag")
+    @Disabled("seems to depend on setup @enterag")
     public void testGetClob() throws SQLException {
         Statement stmt = _conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT USER_PROP FROM IFS_IN_TABLE");

@@ -5,7 +5,7 @@ import ch.admin.bar.siard2.mysql.TestBlobDatabase;
 import ch.admin.bar.siard2.mysql.TestMySqlDatabase;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.MountableFile;
 
@@ -18,7 +18,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Assertions;
 
 public class MySqlBlobTester {
     private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
@@ -38,7 +39,7 @@ public class MySqlBlobTester {
 
     private MySqlConnection _connMySql = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         listPngs.add("src/test/resources/png-1.png");
         listFlacs.add("src/test/resources/sample1.flac");
@@ -65,13 +66,13 @@ public class MySqlBlobTester {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _mysql.stop();
     }
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             MySqlDataSource dsMySql = new MySqlDataSource();
@@ -85,7 +86,7 @@ public class MySqlBlobTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if ((_connMySql != null) && (!_connMySql.isClosed())) {

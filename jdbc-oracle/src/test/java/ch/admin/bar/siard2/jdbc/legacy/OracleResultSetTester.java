@@ -12,7 +12,7 @@ import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.base.TestUtils;
 import ch.enterag.utils.jdbc.BaseResultSet;
 import ch.enterag.utils.jdbc.BaseResultSetTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.OracleContainer;
 
 import javax.xml.datatype.Duration;
@@ -26,12 +26,16 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class OracleResultSetTester extends BaseResultSetTester {
 
 
-    @ClassRule
+    @Container
     public final static OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart");
 
     private static final String _sDBA_USER = "SYSTEM";
@@ -168,7 +172,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
 
     public static List<TestColumnDefinition> _listCdNativeComplex = getListNativeComplex();
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         if (_lMsTotalStart == 0) _lMsTotalStart = System.currentTimeMillis();
         try {
@@ -196,7 +200,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _lMsTotal = System.currentTimeMillis() - _lMsTotalStart;
         System.out.println("Total: " + String.valueOf(_lMsTotal) + ", Connect: " + String.valueOf(_lMsConnect) + ", Execute: " + String.valueOf(_lMsExecute) + ", Test Database: " + String.valueOf(_lMsTestDatabase));
@@ -228,7 +232,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
         rs.next();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         OracleDataSource dsOracle;
 
@@ -249,7 +253,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             Statement stmt = null;
@@ -281,7 +285,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
         enter();
         try {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            assertEquals("Wrong result set class!", OracleResultSet.class, getResultSet().getClass());
+            assertEquals(OracleResultSet.class, getResultSet().getClass(), "Wrong result set class!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -326,7 +330,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CVARCHAR_255");
             String s = getResultSet().getString(tcd.getName());
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -340,7 +344,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CNVARCHAR_127");
             String s = getResultSet().getNString(tcd.getName());
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -355,7 +359,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CCLOB_2M");
             Clob clob = getResultSet().getClob(tcd.getName());
             String s = clob.getSubString(1l, (int) clob.length());
-            assertEquals("Invalid Clob!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid Clob!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -370,7 +374,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CNCLOB_1M");
             NClob nclob = getResultSet().getNClob(tcd.getName());
             String s = nclob.getSubString(1l, (int) nclob.length());
-            assertEquals("Invalid NClob!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid NClob!");
         } catch (SQLFeatureNotSupportedException fnse) {
             System.out.println("testNClob: " + EU.getExceptionMessage(fnse));
         } catch (SQLException se) {
@@ -388,7 +392,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             SQLXML sqlxml = getResultSet().getSQLXML(tcd.getName());
             String s = sqlxml.getString()
                              .replaceAll("\\n\\s*", "");
-            assertEquals("Invalid SQLXML!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid SQLXML!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -402,7 +406,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CVARBINARY_255");
             byte[] buf = getResultSet().getBytes(tcd.getName());
-            assertTrue("Invalid byte array!", Arrays.equals((byte[]) tcd.getValue(), buf));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid byte array!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -417,7 +421,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBLOB");
             Blob blob = getResultSet().getBlob(tcd.getName());
             byte[] buf = blob.getBytes(1l, (int) blob.length());
-            assertTrue("Invalid Blob!", Arrays.equals((byte[]) tcd.getValue(), buf));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid Blob!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -431,7 +435,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDECIMAL_15_5");
             BigDecimal bd = getResultSet().getBigDecimal(tcd.getName());
-            assertTrue("Invalid BigDecimal!", bd.compareTo((BigDecimal) tcd.getValue()) == 0);
+            assertTrue(bd.compareTo((BigDecimal) tcd.getValue()) == 0, "Invalid BigDecimal!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -446,7 +450,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDECIMAL_15_5");
             BigDecimal bd = getResultSet().getBigDecimal(tcd.getName(), 3);
-            assertEquals("Invalid BigDecimal!", ((BigDecimal) tcd.getValue()).setScale(3, RoundingMode.DOWN), bd);
+            assertEquals(((BigDecimal) tcd.getValue()).setScale(3, RoundingMode.DOWN), bd, "Invalid BigDecimal!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -460,7 +464,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBOOLEAN");
             byte by = getResultSet().getByte(tcd.getName());
-            assertEquals("Invalid byte!", ((Boolean) tcd.getValue()).booleanValue() ? (byte) 1 : (byte) 0, by);
+            assertEquals(((Boolean) tcd.getValue()).booleanValue() ? (byte) 1 : (byte) 0, by, "Invalid byte!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -474,7 +478,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CSMALLINT");
             short sh = getResultSet().getShort(tcd.getName());
-            assertEquals("Invalid short!", ((Short) tcd.getValue()).shortValue(), sh);
+            assertEquals(((Short) tcd.getValue()).shortValue(), sh, "Invalid short!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -488,7 +492,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CINTEGER");
             int i = getResultSet().getInt(tcd.getName());
-            assertEquals("Invalid int!", ((Integer) tcd.getValue()).intValue(), i);
+            assertEquals(((Integer) tcd.getValue()).intValue(), i, "Invalid int!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -502,7 +506,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBIGINT");
             long l = getResultSet().getLong(tcd.getName());
-            assertEquals("Invalid long!", ((Long) tcd.getValue()).longValue(), l);
+            assertEquals(((Long) tcd.getValue()).longValue(), l, "Invalid long!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -516,7 +520,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CREAL");
             float f = getResultSet().getFloat(tcd.getName());
-            assertEquals("Invalid float!", (Float) tcd.getValue(), Float.valueOf(f));
+            assertEquals((Float) tcd.getValue(), Float.valueOf(f), "Invalid float!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -530,7 +534,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDOUBLE");
             double d = getResultSet().getDouble(tcd.getName());
-            assertEquals("Invalid double!", (Double) tcd.getValue(), Double.valueOf(d));
+            assertEquals((Double) tcd.getValue(), Double.valueOf(d), "Invalid double!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -544,7 +548,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBOOLEAN");
             boolean b = getResultSet().getBoolean(tcd.getName());
-            assertEquals("Invalid boolean!", ((Boolean) tcd.getValue()).booleanValue(), b);
+            assertEquals(((Boolean) tcd.getValue()).booleanValue(), b, "Invalid boolean!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -558,7 +562,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDATE");
             Date date = getResultSet().getDate(tcd.getName());
-            assertEquals("Invalid Date!", (Date) tcd.getValue(), date);
+            assertEquals((Date) tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -573,7 +577,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDATE");
             Calendar cal = new GregorianCalendar();
             Date date = getResultSet().getDate(tcd.getName(), cal);
-            assertEquals("Invalid Date!", (Date) tcd.getValue(), date);
+            assertEquals((Date) tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -587,7 +591,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CTIME");
             Time time = getResultSet().getTime(tcd.getName());
-            assertEquals("Invalid Time!", (Time) tcd.getValue(), time);
+            assertEquals((Time) tcd.getValue(), time, "Invalid Time!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -602,7 +606,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CTIME");
             Calendar cal = new GregorianCalendar();
             Time time = getResultSet().getTime(tcd.getName(), cal);
-            assertEquals("Invalid Time!", (Time) tcd.getValue(), time);
+            assertEquals((Time) tcd.getValue(), time, "Invalid Time!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -616,7 +620,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CTIMESTAMP");
             Timestamp ts = getResultSet().getTimestamp(tcd.getName());
-            assertEquals("Invalid Timestamp!", (Timestamp) tcd.getValue(), ts);
+            assertEquals((Timestamp) tcd.getValue(), ts, "Invalid Timestamp!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -631,7 +635,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CTIMESTAMP");
             Calendar cal = new GregorianCalendar();
             Timestamp ts = getResultSet().getTimestamp(tcd.getName(), cal);
-            assertEquals("Invalid Timestamp!", (Timestamp) tcd.getValue(), ts);
+            assertEquals((Timestamp) tcd.getValue(), ts, "Invalid Timestamp!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -644,7 +648,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CINTERVAL_YEAR_3_MONTH");
             Duration duration = getBaseResultSet().getDuration(tcd.getName());
-            assertEquals("Invalid Duration!", (Interval) tcd.getValue(), Interval.fromDuration(duration));
+            assertEquals((Interval) tcd.getValue(), Interval.fromDuration(duration), "Invalid Duration!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -665,7 +669,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             if (is.read() != -1) fail("Invalid length of ASCII stream!");
             is.close();
             String s = new String(buf);
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -687,9 +691,9 @@ public class OracleResultSetTester extends BaseResultSetTester {
             for (int iRead = rdr.read(cbuf); (iRead != -1) && (iLength < cbuf.length); iRead = rdr.read(cbuf, iLength, cbuf.length - iLength))
                 iLength = iLength + iRead;
             rdr.close();
-            assertEquals("Invalid length of character stream!", cbuf.length, iLength);
+            assertEquals(cbuf.length, iLength, "Invalid length of character stream!");
             String s = new String(cbuf);
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -712,7 +716,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             if (rdr.read() != -1) fail("Invalid length of character stream!");
             rdr.close();
             String s = new String(cbuf);
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -733,7 +737,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             if (rdr.read() != -1) fail("Invalid length of character stream!");
             rdr.close();
             String s = new String(cbuf);
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -753,7 +757,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             is.read(buf);
             if (is.read() != -1) fail("Invalid length of binary stream!");
             is.close();
-            assertTrue("Invalid byte array!", Arrays.equals((byte[]) tcd.getValue(), buf));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid byte array!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -821,7 +825,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CINTERVAL_YEAR_3_MONTH");
             Object o = getResultSet().getObject(tcd.getName());
-            assertEquals("Invalid Interval!", ((Interval) tcd.getValue()).toDuration(), (Duration) o);
+            assertEquals(((Interval) tcd.getValue()).toDuration(), (Duration) o, "Invalid Interval!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -835,7 +839,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDATE");
             Date date = getResultSet().getObject(tcd.getName(), Date.class);
-            assertEquals("Invalid Date!", (Date) tcd.getValue(), date);
+            assertEquals((Date) tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -852,7 +856,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             map.put(tcd.getType(), tcd.getValue()
                                       .getClass());
             Object o = getResultSet().getObject(tcd.getName(), map);
-            assertEquals("Invalid Udt!", tcd.getValue(), o);
+            assertEquals(tcd.getValue(), o, "Invalid Udt!");
         } catch (SQLFeatureNotSupportedException snse) {
             System.out.println("testGetObject_Map: " + EU.getExceptionMessage(snse));
         } catch (SQLException se) {
@@ -874,21 +878,21 @@ public class OracleResultSetTester extends BaseResultSetTester {
                     if (o instanceof String) {
                         String s = (String) o;
                         s = s.substring(0, ((String) tcd.getValue()).length());
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+                        assertEquals(tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CVARCHAR_255") || tcd.getName()
                                                             .equals("CNVARCHAR_127")) {
                     if (o instanceof String) {
                         String s = (String) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+                        assertEquals(tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CCLOB_2M") || tcd.getName()
                                                         .equals("CNCLOB_1M")) {
                     if (o instanceof Clob) {
                         Clob clob = (Clob) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), clob.getSubString(1l, (int) clob.length()));
+                        assertEquals(tcd.getValue(), clob.getSubString(1l, (int) clob.length()), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Clob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CXML")) {
@@ -896,26 +900,26 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         SQLXML sqlxml = (SQLXML) o;
                         String s = sqlxml.getString()
                                          .trim();
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (String) tcd.getValue(), s);
+                        assertEquals((String) tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type SQLXML expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBINARY_5")) {
                     if (o instanceof byte[]) {
                         byte[] buf = (byte[]) o;
                         buf = Arrays.copyOf(buf, ((byte[]) tcd.getValue()).length);
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), buf));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type byte[] expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CVARBINARY_255")) {
                     if (o instanceof byte[]) {
                         byte[] buf = (byte[]) o;
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), buf));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type byte[] expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBLOB")) {
                     if (o instanceof Blob) {
                         Blob blob = (Blob) o;
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Blob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CDECIMAL_15_5") || tcd.getName()
@@ -925,11 +929,11 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         Object oExpected = tcd.getValue();
                         if (oExpected instanceof BigDecimal) {
                             BigDecimal bdExpected = (BigDecimal) o;
-                            assertEquals("Invalid value for " + tcd.getType() + "!", bdExpected, bd);
+                            assertEquals(bdExpected, bd, "Invalid value for " + tcd.getType() + "!");
                         } else if (oExpected instanceof BigInteger) {
                             BigInteger biExpected = (BigInteger) oExpected;
                             BigInteger bi = bd.toBigInteger();
-                            assertEquals("Invalid value for " + tcd.getType() + "!", biExpected, bi);
+                            assertEquals(biExpected, bi, "Invalid value for " + tcd.getType() + "!");
                         }
                     } else fail("Type BigDecimal expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -949,13 +953,13 @@ public class OracleResultSetTester extends BaseResultSetTester {
                             Long l = (Long) tcd.getValue();
                             bdExpected = BigDecimal.valueOf(l.longValue());
                         }
-                        assertEquals("Invalid value for " + tcd.getType() + "!", bdExpected, bd);
+                        assertEquals(bdExpected, bd, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type BigDecimal expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CREAL")) {
                     if (o instanceof Float) {
                         Float f = (Float) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Float) tcd.getValue(), f);
+                        assertEquals((Float) tcd.getValue(), f, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Float expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CDOUBLE") || tcd.getName()
@@ -969,40 +973,40 @@ public class OracleResultSetTester extends BaseResultSetTester {
                             dExpected = (Double) tcd.getValue();
                         }
                         Double d = (Double) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", dExpected, d, 0.00000000000001);
+                        assertEquals(dExpected, d, 0.00000000000001, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Double expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBOOLEAN")) {
                     if (o instanceof Short) {
                         Short sh = (Short) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Boolean) tcd.getValue(), Boolean.valueOf(sh != 0));
+                        assertEquals((Boolean) tcd.getValue(), Boolean.valueOf(sh != 0), "Invalid value for " + tcd.getType() + "!");
                     }
                 } else if (tcd.getName()
                               .equals("CDATE")) {
                     if (o instanceof Timestamp) {
                         Timestamp ts = (Timestamp) o;
                         Date date = new Date(ts.getTime());
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Date) tcd.getValue(), date);
+                        assertEquals((Date) tcd.getValue(), date, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Date expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CTIME")) {
                     if (o instanceof Timestamp) {
                         Timestamp ts = (Timestamp) o;
                         Time time = new Time(ts.getTime());
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Time) tcd.getValue(), time);
+                        assertEquals((Time) tcd.getValue(), time, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Time expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CTIMESTAMP")) {
                     if (o instanceof Timestamp) {
                         Timestamp ts = (Timestamp) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Timestamp) tcd.getValue(), ts);
+                        assertEquals((Timestamp) tcd.getValue(), ts, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Timestamp expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CINTERVAL_YEAR_3_MONTH") || tcd.getName()
                                                                       .equals("CINTERVAL_DAY_2_SECONDS_6")) {
                     if (o instanceof Duration) {
                         Duration duration = (Duration) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", ((Interval) tcd.getValue()).toDuration(), duration);
+                        assertEquals(((Interval) tcd.getValue()).toDuration(), duration, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Duration expected for " + tcd.getType() + "!");
                 } else fail("Unexpected column: " + tcd.getName() + "!");
             }
@@ -1025,7 +1029,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
                     if (o instanceof Struct) {
                         Struct struct = (Struct) o;
                         String s = "http://" + (String) struct.getAttributes()[0];
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+                        assertEquals(tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBFILE")) {
@@ -1045,13 +1049,13 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         } catch (IOException ie) {
                             fail(EU.getExceptionMessage(ie));
                         }
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals(buf, bufBlob));
+                        assertTrue(Arrays.equals(buf, bufBlob), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Blob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CRAW_255")) {
                     if (o instanceof byte[]) {
                         byte[] buf = (byte[]) o;
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), buf));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type byte[] expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CCHAR_50") || tcd.getName()
@@ -1059,7 +1063,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
                     if (o instanceof String) {
                         String s = (String) o;
                         s = s.substring(0, ((String) tcd.getValue()).length());
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+                        assertEquals(tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CVARCHAR2_255") || tcd.getName()
@@ -1067,14 +1071,14 @@ public class OracleResultSetTester extends BaseResultSetTester {
                                                                                              .equals("CLONG")) {
                     if (o instanceof String) {
                         String s = (String) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+                        assertEquals(tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CCLOB") || tcd.getName()
                                                      .equals("CNCLOB")) {
                     if (o instanceof Clob) {
                         Clob clob = (Clob) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), clob.getSubString(1l, (int) clob.length()));
+                        assertEquals(tcd.getValue(), clob.getSubString(1l, (int) clob.length()), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Clob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CXMLTYPE")) {
@@ -1082,14 +1086,14 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         SQLXML sqlxml = (SQLXML) o;
                         String s = sqlxml.getString();
                         s = s.replaceAll("\\n\\s*", "");
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (String) tcd.getValue(), s);
+                        assertEquals((String) tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type SQLXML expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBLOB")) {
                     if (o instanceof Blob) {
                         Blob blob = (Blob) o;
                         byte[] buf = (byte[]) tcd.getValue();
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals(buf, blob.getBytes(1l, (int) blob.length())));
+                        assertTrue(Arrays.equals(buf, blob.getBytes(1l, (int) blob.length())), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Blob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CSMALLINT") || tcd.getName()
@@ -1108,13 +1112,13 @@ public class OracleResultSetTester extends BaseResultSetTester {
                             Long l = (Long) tcd.getValue();
                             bdExpected = BigDecimal.valueOf(l.longValue());
                         }
-                        assertEquals("Invalid value for " + tcd.getType() + "!", bdExpected, bd);
+                        assertEquals(bdExpected, bd, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type BigDecimal expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CNUMBER_15_5")) {
                     if (o instanceof BigDecimal) {
                         BigDecimal bd = (BigDecimal) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (BigDecimal) tcd.getValue(), bd);
+                        assertEquals((BigDecimal) tcd.getValue(), bd, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type BigDecimal expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBOOLEAN")) {
@@ -1122,32 +1126,32 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         BigDecimal bd = (BigDecimal) o;
                         Boolean b = Boolean.TRUE;
                         if (bd.equals(BigDecimal.ZERO)) b = Boolean.FALSE;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Boolean) tcd.getValue(), b);
+                        assertEquals((Boolean) tcd.getValue(), b, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type BigDecimal expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CFLOAT")) {
                     if (o instanceof BigDecimal) {
                         BigDecimal bd = (BigDecimal) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Double) tcd.getValue(), Double.valueOf(bd.doubleValue()), 0.0000000000001E-17);
+                        assertEquals((Double) tcd.getValue(), Double.valueOf(bd.doubleValue()), 0.0000000000001E-17, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Double expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBINARY_FLOAT")) {
                     if (o instanceof Float) {
                         Float f = (Float) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Float) tcd.getValue(), f, 0.00000001E-17);
+                        assertEquals((Float) tcd.getValue(), f, 0.00000001E-17, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Float expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBINARY_DOUBLE")) {
                     if (o instanceof Double) {
                         Double d = (Double) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Double) tcd.getValue(), d, 0.0000000000001E-17);
+                        assertEquals((Double) tcd.getValue(), d, 0.0000000000001E-17, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Double expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CDATE")) {
                     if (o instanceof Timestamp) {
                         Timestamp ts = (Timestamp) o;
                         Date date = new Date(ts.getTime());
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Date) tcd.getValue(), date);
+                        assertEquals((Date) tcd.getValue(), date, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Date expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CTIMESTAMP") || tcd.getName()
@@ -1155,14 +1159,14 @@ public class OracleResultSetTester extends BaseResultSetTester {
                                                                                          .equals("CTIMESTAMP_LOCAL_TZ")) {
                     if (o instanceof Timestamp) {
                         Timestamp ts = (Timestamp) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Timestamp) tcd.getValue(), ts);
+                        assertEquals((Timestamp) tcd.getValue(), ts, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Timestamp expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CINTERVAL_YEAR_TO_MONTH") || tcd.getName()
                                                                        .equals("CINTERVAL_DAY_TO_SECOND")) {
                     if (o instanceof Duration) {
                         Duration duration = (Duration) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", ((Interval) tcd.getValue()).toDuration(), duration);
+                        assertEquals(((Interval) tcd.getValue()).toDuration(), duration, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Duration expected for " + tcd.getType() + "!");
                 } else fail("Unexpected column: " + tcd.getName() + "!");
             }
@@ -1199,18 +1203,18 @@ public class OracleResultSetTester extends BaseResultSetTester {
                     if (o instanceof byte[]) {
                         byte[] buf = (byte[]) o;
                         byte[] bufExpected = (byte[]) tad.getValue();
-                        assertTrue("Invalid value for " + tad.getType() + "!", Arrays.equals(bufExpected, buf));
-                    } else assertEquals("Invalid value for " + tad.getType() + "!", tad.getValue(), o);
+                        assertTrue(Arrays.equals(bufExpected, buf), "Invalid value for " + tad.getType() + "!");
+                    } else assertEquals(tad.getValue(), o, "Invalid value for " + tad.getType() + "!");
                 } else if ((o instanceof BigDecimal) && (tad.getValue() instanceof Integer)) {
                     BigDecimal bd = (BigDecimal) o;
-                    assertEquals("Invalid value for " + tad.getType() + "!", (Integer) tad.getValue(), Integer.valueOf(bd.intValueExact()));
+                    assertEquals((Integer) tad.getValue(), Integer.valueOf(bd.intValueExact()), "Invalid value for " + tad.getType() + "!");
                 } else if ((o instanceof Struct) && (tad.getValue() instanceof List<?>)) {
                     Struct structSub = (Struct) o;
                     QualifiedId qiTypeExpected = new QualifiedId(tad.getType());
                     QualifiedId qiType = new QualifiedId(structSub.getSQLTypeName());
-                    assertEquals("Invalid value for Struct!", qiTypeExpected, qiType);
+                    assertEquals(qiTypeExpected, qiType, "Invalid value for Struct!");
                     @SuppressWarnings("unchecked") List<TestColumnDefinition> listAdSub = (List<TestColumnDefinition>) tad.getValue();
-                    assertTrue("Invalid value for " + tad.getType() + "!", equalsStructValue(structSub, listAdSub));
+                    assertTrue(equalsStructValue(structSub, listAdSub), "Invalid value for " + tad.getType() + "!");
                 } else fail("Error: " + tad.getType() + ": " + tad.getValue()
                                                                   .getClass()
                                                                   .getName() + "/" + o.getClass()
@@ -1228,7 +1232,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
             for (int iElement = 0; iElement < listCd.size(); iElement++) {
                 TestColumnDefinition tcd = listCd.get(iElement);
                 Object o = ao[iElement];
-                if (o == null) assertTrue("Non-matching NULL-Value!", tcd.getValue() == null);
+                if (o == null) assertTrue(tcd.getValue() == null, "Non-matching NULL-Value!");
                 else {
                     if (o instanceof Clob) {
                         Clob clob = (Clob) o;
@@ -1251,18 +1255,18 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         if (o instanceof byte[]) {
                             byte[] buf = (byte[]) o;
                             byte[] bufExpected = (byte[]) tcd.getValue();
-                            assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals(bufExpected, buf));
-                        } else assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), o);
+                            assertTrue(Arrays.equals(bufExpected, buf), "Invalid value for " + tcd.getType() + "!");
+                        } else assertEquals(tcd.getValue(), o, "Invalid value for " + tcd.getType() + "!");
                     } else if ((o instanceof BigDecimal) && (tcd.getValue() instanceof Integer)) {
                         BigDecimal bd = (BigDecimal) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Integer) tcd.getValue(), Integer.valueOf(bd.intValueExact()));
+                        assertEquals((Integer) tcd.getValue(), Integer.valueOf(bd.intValueExact()), "Invalid value for " + tcd.getType() + "!");
                     } else if ((o instanceof Struct) && (tcd.getValue() instanceof List<?>)) {
                         Struct structSub = (Struct) o;
                         QualifiedId qiTypeExpected = new QualifiedId(tcd.getType());
                         QualifiedId qiType = new QualifiedId(structSub.getSQLTypeName());
-                        assertEquals("Invalid value for Struct!", qiTypeExpected, qiType);
+                        assertEquals(qiTypeExpected, qiType, "Invalid value for Struct!");
                         @SuppressWarnings("unchecked") List<TestColumnDefinition> listAdSub = (List<TestColumnDefinition>) tcd.getValue();
-                        assertTrue("Invalid value for " + tcd.getType() + "!", equalsStructValue(structSub, listAdSub));
+                        assertTrue(equalsStructValue(structSub, listAdSub), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Error: " + tcd.getType() + ": " + tcd.getValue()
                                                                       .getClass()
                                                                       .getName() + "/" + o.getClass()
@@ -1285,14 +1289,14 @@ public class OracleResultSetTester extends BaseResultSetTester {
                        .equals("CID")) {
                     if (o instanceof BigDecimal) {
                         BigDecimal bd = (BigDecimal) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Integer) tcd.getValue(), Integer.valueOf(bd.intValueExact()));
+                        assertEquals((Integer) tcd.getValue(), Integer.valueOf(bd.intValueExact()), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Integer expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CDISTINCT")) {
                     if (o instanceof String) {
                         String s = (String) o;
                         s = s.substring(0, ((String) tcd.getValue()).length());
-                        assertEquals("Invalid type for " + tcd.getType() + "!", (String) tcd.getValue(), s);
+                        assertEquals((String) tcd.getValue(), s, "Invalid type for " + tcd.getType() + "!");
                     } else fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CUDT")) {
@@ -1300,9 +1304,9 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         Struct struct = (Struct) o;
                         QualifiedId qiTypeExpected = new QualifiedId(tcd.getType());
                         QualifiedId qiType = new QualifiedId(struct.getSQLTypeName());
-                        assertEquals("Invalid value for Struct!", qiTypeExpected, qiType);
+                        assertEquals(qiTypeExpected, qiType, "Invalid value for Struct!");
                         @SuppressWarnings("unchecked") List<TestColumnDefinition> listAdComplex = (List<TestColumnDefinition>) tcd.getValue();
-                        assertTrue("Invalid value for " + tcd.getType() + "!", equalsStructValue(struct, listAdComplex));
+                        assertTrue(equalsStructValue(struct, listAdComplex), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Stuct expected for " + tcd.getType() + "!");
                 } else fail("Unexpected column: " + tcd.getName() + "!");
             }
@@ -1325,7 +1329,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
                        .equals("CID")) {
                     if (o instanceof BigDecimal) {
                         BigDecimal bd = (BigDecimal) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Integer) tcd.getValue(), Integer.valueOf(bd.intValueExact()));
+                        assertEquals((Integer) tcd.getValue(), Integer.valueOf(bd.intValueExact()), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Integer expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CUDT_OBJECT") || tcd.getName()
@@ -1335,9 +1339,9 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         // System.out.println(((oracle.sql.STRUCT)struct).dump());
                         QualifiedId qiTypeExpected = new QualifiedId(tcd.getType());
                         QualifiedId qiType = new QualifiedId(struct.getSQLTypeName());
-                        assertEquals("Invalid value for Struct!", qiTypeExpected, qiType);
+                        assertEquals(qiTypeExpected, qiType, "Invalid value for Struct!");
                         @SuppressWarnings("unchecked") List<TestColumnDefinition> listAdComplex = (List<TestColumnDefinition>) tcd.getValue();
-                        assertTrue("Invalid value for " + tcd.getType() + "!", equalsStructValue(struct, listAdComplex));
+                        assertTrue(equalsStructValue(struct, listAdComplex), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Stuct expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CUDT_VARRAY")) {
@@ -1345,9 +1349,9 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         Array array = (Array) o;
                         String sBaseType = array.getBaseTypeName();
                         @SuppressWarnings("unchecked") List<TestColumnDefinition> listCdArray = (List<TestColumnDefinition>) tcd.getValue();
-                        assertEquals("Invalid ARRAY type!", listCdArray.get(0)
-                                                                       .getType(), sBaseType);
-                        assertTrue("Invalid value for " + tcd.getType() + "!", equalsArrayValue(array, listCdArray));
+                        assertEquals(listCdArray.get(0)
+                                                                       .getType(), sBaseType, "Invalid ARRAY type!");
+                        assertTrue(equalsArrayValue(array, listCdArray), "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Stuct expected for " + tcd.getType() + "!");
                 } else fail("Unexpected column: " + tcd.getName() + "!");
             }
@@ -2127,62 +2131,62 @@ public class OracleResultSetTester extends BaseResultSetTester {
             while ((getResultSet().getInt(tcd.getName()) != ((Integer) tcd.getValue()).intValue()) && getResultSet().next()) {
             }
             tcd = findColumnDefinition(_listCdSimple, "CCHAR_5");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (String) tcd.getValue(), (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()));
+            assertEquals((String) tcd.getValue(), (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CVARCHAR_255");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (String) tcd.getValue(), getResultSet().getString(tcd.getName()));
+            assertEquals((String) tcd.getValue(), getResultSet().getString(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CCLOB_2M");
             clob = getResultSet().getClob(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!", (String) tcd.getValue(), clob.getSubString(1l, (int) clob.length()));
+            assertEquals((String) tcd.getValue(), clob.getSubString(1l, (int) clob.length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNCHAR_5");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (String) tcd.getValue(), (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()));
+            assertEquals((String) tcd.getValue(), (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNVARCHAR_127");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (String) tcd.getValue(), getResultSet().getString(tcd.getName()));
+            assertEquals((String) tcd.getValue(), getResultSet().getString(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNCLOB_1M");
             nclob = getResultSet().getNClob(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!", (String) tcd.getValue(), nclob.getSubString(1l, (int) nclob.length()));
+            assertEquals((String) tcd.getValue(), nclob.getSubString(1l, (int) nclob.length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CXML");
             sqlxml = getResultSet().getSQLXML(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!", (String) tcd.getValue(), sqlxml.getString()
-                                                                                                   .replaceAll("\\n\\s*", ""));
+            assertEquals((String) tcd.getValue(), sqlxml.getString()
+                                                                                                   .replaceAll("\\n\\s*", ""), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBINARY_5");
-            assertTrue("Insert of " + tcd.getType() + " failed!", Arrays.equals((byte[]) tcd.getValue(), Arrays.copyOf(getResultSet().getBytes(tcd.getName()), ((byte[]) tcd.getValue()).length)));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), Arrays.copyOf(getResultSet().getBytes(tcd.getName()), ((byte[]) tcd.getValue()).length)), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CVARBINARY_255");
-            assertTrue("Insert of " + tcd.getType() + " failed!", Arrays.equals((byte[]) tcd.getValue(), getResultSet().getBytes(tcd.getName())));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), getResultSet().getBytes(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBLOB");
             blob = getResultSet().getBlob(tcd.getName());
-            assertTrue("Insert of " + tcd.getType() + " failed!", Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNUMERIC_31");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (BigInteger) tcd.getValue(), getResultSet().getBigDecimal(tcd.getName())
-                                                                                                               .toBigInteger());
+            assertEquals((BigInteger) tcd.getValue(), getResultSet().getBigDecimal(tcd.getName())
+                                                                                                               .toBigInteger(), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDECIMAL_15_5");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (BigDecimal) tcd.getValue(), getResultSet().getBigDecimal(tcd.getName()));
+            assertEquals((BigDecimal) tcd.getValue(), getResultSet().getBigDecimal(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CSMALLINT");
-            assertEquals("Insert of " + tcd.getType() + " failed!", ((Short) tcd.getValue()).shortValue(), getResultSet().getShort(tcd.getName()));
+            assertEquals(((Short) tcd.getValue()).shortValue(), getResultSet().getShort(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTEGER");
-            assertEquals("Insert of " + tcd.getType() + " failed!", ((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()));
+            assertEquals(((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBIGINT");
-            assertEquals("Insert of " + tcd.getType() + " failed!", ((Long) tcd.getValue()).longValue(), getResultSet().getLong(tcd.getName()));
+            assertEquals(((Long) tcd.getValue()).longValue(), getResultSet().getLong(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CFLOAT_10");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (Float) tcd.getValue(), Float.valueOf(getResultSet().getFloat(tcd.getName())));
+            assertEquals((Float) tcd.getValue(), Float.valueOf(getResultSet().getFloat(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CREAL");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (Float) tcd.getValue(), Float.valueOf(getResultSet().getFloat(tcd.getName())));
+            assertEquals((Float) tcd.getValue(), Float.valueOf(getResultSet().getFloat(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDOUBLE");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (Double) tcd.getValue(), Double.valueOf(getResultSet().getDouble(tcd.getName())));
+            assertEquals((Double) tcd.getValue(), Double.valueOf(getResultSet().getDouble(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBOOLEAN");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (Boolean) tcd.getValue(), Boolean.valueOf(getResultSet().getBoolean(tcd.getName())));
+            assertEquals((Boolean) tcd.getValue(), Boolean.valueOf(getResultSet().getBoolean(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDATE");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (Date) tcd.getValue(), getResultSet().getDate(tcd.getName()));
+            assertEquals((Date) tcd.getValue(), getResultSet().getDate(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CTIME");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (Time) tcd.getValue(), getResultSet().getTime(tcd.getName()));
+            assertEquals((Time) tcd.getValue(), getResultSet().getTime(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CTIMESTAMP");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (Timestamp) tcd.getValue(), getResultSet().getTimestamp(tcd.getName()));
+            assertEquals((Timestamp) tcd.getValue(), getResultSet().getTimestamp(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTERVAL_YEAR_3_MONTH");
-            assertEquals("Insert of " + tcd.getType() + " failed!", (Interval) tcd.getValue(), Interval.fromDuration(((BaseResultSet) getResultSet()).getDuration(tcd.getName())));
+            assertEquals((Interval) tcd.getValue(), Interval.fromDuration(((BaseResultSet) getResultSet()).getDuration(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTERVAL_DAY_2_SECONDS_6");
             Date dateZero = new Date(0l);
-            assertEquals("Insert of " + tcd.getType() + " failed!", ((Interval) tcd.getValue()).toDuration()
+            assertEquals(((Interval) tcd.getValue()).toDuration()
                                                                                                .getTimeInMillis(dateZero) / 1000, ((BaseResultSet) getResultSet()).getDuration(tcd.getName())
-                                                                                                                                                                  .getTimeInMillis(dateZero) / 1000);
+                                                                                                                                                                  .getTimeInMillis(dateZero) / 1000, "Insert of " + tcd.getType() + " failed!");
             // restore the database
             tearDown();
             setUpClass();
@@ -2237,11 +2241,11 @@ public class OracleResultSetTester extends BaseResultSetTester {
             }
 
             tcd = findColumnDefinition(_listCdComplex, "CID");
-            assertEquals("Insert of " + tcd.getType() + " failed!", ((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()));
+            assertEquals(((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdComplex, "CUDT");
             struct = (Struct) getResultSet().getObject(tcd.getName());
-            assertTrue("Insert of " + tcd.getType() + " failed!", equalsStructValue(struct, _listAdComplex));
+            assertTrue(equalsStructValue(struct, _listAdComplex), "Insert of " + tcd.getType() + " failed!");
             // restore the database
             tearDown();
             setUpClass();
@@ -2302,21 +2306,20 @@ public class OracleResultSetTester extends BaseResultSetTester {
             }
 
             tcd = findColumnDefinition(_listCdNativeComplex, "CID");
-            assertEquals("Insert of " + tcd.getType() + " failed!", ((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()));
+            assertEquals(((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdNativeComplex, "CUDT_VARRAY");
             array = (Array) getResultSet().getObject(tcd.getName());
-            assertTrue("Insert of " + tcd.getType() + " failed!", equalsArrayValue(array, _listCdArray));
+            assertTrue(equalsArrayValue(array, _listCdArray), "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdNativeComplex, "CUDT_OBJECT");
             struct = (Struct) getResultSet().getObject(tcd.getName());
-            assertTrue("Insert of " + tcd.getType() + " failed!", equalsStructValue(struct, _listAdObject));
+            assertTrue(equalsStructValue(struct, _listAdObject), "Insert of " + tcd.getType() + " failed!");
 
             /***
              tcd = findColumnDefinition(_listCdNativeComplex,"CUDT_COMPLEX");
              struct = (Struct)getResultSet().getObject(tcd.getName());
-             assertTrue("Insert of "+tcd.getType()+" failed!",
-             equalsStructValue(struct, _listAdNativeComplex));
+             assertTrue(equalsStructValue(struct, _listAdNativeComplex), "Insert of "+tcd.getType()+" failed!");
              ***/
             // restore the database
             tearDown();
@@ -2737,7 +2740,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
         enter();
         try {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            assertEquals("Invalid result set type!", ResultSet.TYPE_FORWARD_ONLY, getResultSet().getType());
+            assertEquals(ResultSet.TYPE_FORWARD_ONLY, getResultSet().getType(), "Invalid result set type!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -2751,7 +2754,7 @@ public class OracleResultSetTester extends BaseResultSetTester {
         enter();
         try {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            assertEquals("Invalid result set concurrency!", ResultSet.CONCUR_READ_ONLY, getResultSet().getConcurrency());
+            assertEquals(ResultSet.CONCUR_READ_ONLY, getResultSet().getConcurrency(), "Invalid result set concurrency!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {

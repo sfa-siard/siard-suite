@@ -7,10 +7,10 @@ import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.MountableFile;
 
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
     private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
@@ -43,7 +43,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
     private MySqlDatabaseMetaData _dmdMySql = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             _mysql.start();
@@ -75,7 +75,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         try {
             MySqlDataSource dsMySql = new MySqlDataSource();
@@ -95,7 +95,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         try {
             MySqlDataSource dsMySql = new MySqlDataSource();
@@ -113,7 +113,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong result set meta class!", MySqlDatabaseMetaData.class, _dmdMySql.getClass());
+        assertEquals(MySqlDatabaseMetaData.class, _dmdMySql.getClass(), "Wrong result set meta class!");
     }
 
     @Test
@@ -169,144 +169,144 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
                     switch (sBaseTypeName) {
                         case "char":
-                            assertEquals("Invalid char mapping!", Types.CHAR, iDataType);
+                            assertEquals(Types.CHAR, iDataType, "Invalid char mapping!");
                             break;
                         case "varchar":
-                            assertEquals("Invalid varchar mapping!", Types.VARCHAR, iDataType);
+                            assertEquals(Types.VARCHAR, iDataType, "Invalid varchar mapping!");
                             break;
                         case "text":
-                            assertEquals("Invalid text mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid text mapping!");
                             break;
                         case "tinytext":
-                            assertEquals("Invalid tinytext mapping!", Types.VARCHAR, iDataType);
+                            assertEquals(Types.VARCHAR, iDataType, "Invalid tinytext mapping!");
                             break;
                         case "mediumtext":
-                            assertEquals("Invalid mediumtext mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid mediumtext mapping!");
                             break;
                         case "longtext":
-                            assertEquals("Invalid longtext mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid longtext mapping!");
                             break;
                         case "binary":
-                            assertEquals("Invalid binary mapping!", Types.BINARY, iDataType);
+                            assertEquals(Types.BINARY, iDataType, "Invalid binary mapping!");
                             break;
                         case "varbinary":
-                            assertEquals("Invalid varbinary mapping!", Types.VARBINARY, iDataType);
+                            assertEquals(Types.VARBINARY, iDataType, "Invalid varbinary mapping!");
                             break;
                         case "blob":
-                            assertEquals("Invalid blob mapping!", Types.BLOB, iDataType);
+                            assertEquals(Types.BLOB, iDataType, "Invalid blob mapping!");
                             break;
                         case "tinyblob":
-                            assertEquals("Invalid tinyblob mapping!", Types.VARBINARY, iDataType);
+                            assertEquals(Types.VARBINARY, iDataType, "Invalid tinyblob mapping!");
                             break;
                         case "mediumblob":
-                            assertEquals("Invalid mediumblob mapping!", Types.BLOB, iDataType);
+                            assertEquals(Types.BLOB, iDataType, "Invalid mediumblob mapping!");
                             break;
                         case "longblob":
-                            assertEquals("Invalid longblob mapping!", Types.BLOB, iDataType);
+                            assertEquals(Types.BLOB, iDataType, "Invalid longblob mapping!");
                             break;
                         case "int":
-                            assertEquals("Invalid int mapping!", Types.INTEGER, iDataType);
+                            assertEquals(Types.INTEGER, iDataType, "Invalid int mapping!");
                             break;
                         case "int unsigned":
-                            assertEquals("Invalid int unsigned mapping!", Types.BIGINT, iDataType);
+                            assertEquals(Types.BIGINT, iDataType, "Invalid int unsigned mapping!");
                             break;
                         case "tinyint":
-                            assertEquals("Invalid tinyint mapping!", Types.SMALLINT, iDataType);
+                            assertEquals(Types.SMALLINT, iDataType, "Invalid tinyint mapping!");
                             break;
                         case "tinyint unsigned":
-                            assertEquals("Invalid tinyint unsigned mapping!", Types.SMALLINT, iDataType);
+                            assertEquals(Types.SMALLINT, iDataType, "Invalid tinyint unsigned mapping!");
                             break;
                         case "smallint":
-                            assertEquals("Invalid smallint mapping!", Types.SMALLINT, iDataType);
+                            assertEquals(Types.SMALLINT, iDataType, "Invalid smallint mapping!");
                             break;
                         case "smallint unsigned":
-                            assertEquals("Invalid smallint unsigned mapping!", Types.INTEGER, iDataType);
+                            assertEquals(Types.INTEGER, iDataType, "Invalid smallint unsigned mapping!");
                             break;
                         case "mediumint":
-                            assertEquals("Invalid mediumint mapping!", Types.INTEGER, iDataType);
+                            assertEquals(Types.INTEGER, iDataType, "Invalid mediumint mapping!");
                             break;
                         case "mediumint unsigned":
-                            assertEquals("Invalid mediumint unsigned mapping!", Types.BIGINT, iDataType);
+                            assertEquals(Types.BIGINT, iDataType, "Invalid mediumint unsigned mapping!");
                             break;
                         case "bigint":
-                            assertEquals("Invalid bigint mapping!", Types.BIGINT, iDataType);
+                            assertEquals(Types.BIGINT, iDataType, "Invalid bigint mapping!");
                             break;
                         case "bigint unsigned":
-                            assertEquals("Invalid bigint unsigned mapping!", Types.BIGINT, iDataType);
+                            assertEquals(Types.BIGINT, iDataType, "Invalid bigint unsigned mapping!");
                             break;
                         case "decimal":
-                            assertEquals("Invalid decimal mapping!", Types.DECIMAL, iDataType);
+                            assertEquals(Types.DECIMAL, iDataType, "Invalid decimal mapping!");
                             break;
                         case "numeric":
-                            assertEquals("Invalid numeric mapping!", Types.DECIMAL, iDataType);
+                            assertEquals(Types.DECIMAL, iDataType, "Invalid numeric mapping!");
                             break;
                         case "real":
-                            assertEquals("Invalid real mapping!", Types.REAL, iDataType);
+                            assertEquals(Types.REAL, iDataType, "Invalid real mapping!");
                             break;
                         case "float":
-                            assertEquals("Invalid float mapping!", Types.FLOAT, iDataType);
+                            assertEquals(Types.FLOAT, iDataType, "Invalid float mapping!");
                             break;
                         case "double":
-                            assertEquals("Invalid double mapping!", Types.DOUBLE, iDataType);
+                            assertEquals(Types.DOUBLE, iDataType, "Invalid double mapping!");
                             break;
                         case "bit":
                             if (sTypeName.equalsIgnoreCase("bit(1)")) {
-                                assertEquals("Invalid bit mapping!", Types.BOOLEAN, iDataType);
+                                assertEquals(Types.BOOLEAN, iDataType, "Invalid bit mapping!");
                             } else {
-                                assertEquals("Invalid multibit mapping!", Types.BINARY, iDataType);
+                                assertEquals(Types.BINARY, iDataType, "Invalid multibit mapping!");
                             }
                             break;
                         case "bool":
-                            assertEquals("Invalid bool mapping!", Types.BOOLEAN, iDataType);
+                            assertEquals(Types.BOOLEAN, iDataType, "Invalid bool mapping!");
                             break;
                         case "date":
-                            assertEquals("Invalid date mapping!", Types.DATE, iDataType);
+                            assertEquals(Types.DATE, iDataType, "Invalid date mapping!");
                             break;
                         case "time":
-                            assertEquals("Invalid time mapping!", Types.TIME, iDataType);
+                            assertEquals(Types.TIME, iDataType, "Invalid time mapping!");
                             break;
                         case "timestamp":
-                            assertEquals("Invalid timestamp mapping!", Types.TIMESTAMP, iDataType);
+                            assertEquals(Types.TIMESTAMP, iDataType, "Invalid timestamp mapping!");
                             break;
                         case "datetime":
-                            assertEquals("Invalid datetime mapping!", Types.TIMESTAMP, iDataType);
+                            assertEquals(Types.TIMESTAMP, iDataType, "Invalid datetime mapping!");
                             break;
                         case "year":
-                            assertEquals("Invalid year mapping!", Types.SMALLINT, iDataType);
+                            assertEquals(Types.SMALLINT, iDataType, "Invalid year mapping!");
                             break;
                         case "geometry":
-                            assertEquals("Invalid geometry mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid geometry mapping!");
                             break;
                         case "point":
-                            assertEquals("Invalid point mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid point mapping!");
                             break;
                         case "linestring":
-                            assertEquals("Invalid linestring mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid linestring mapping!");
                             break;
                         case "polygon":
-                            assertEquals("Invalid polygon mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid polygon mapping!");
                             break;
                         case "multipoint":
-                            assertEquals("Invalid multipoint mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid multipoint mapping!");
                             break;
                         case "multilinestring":
-                            assertEquals("Invalid multilinestring mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid multilinestring mapping!");
                             break;
                         case "multipolygon":
-                            assertEquals("Invalid multipolygon mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid multipolygon mapping!");
                             break;
                         case "geometrycollection":
-                            assertEquals("Invalid geometrycollection mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid geometrycollection mapping!");
                             break;
                         // new with mysql 8.0
                         case "geomcollection":
-                            assertEquals("Invalid geometrycollection mapping!", Types.CLOB, iDataType);
+                            assertEquals(Types.CLOB, iDataType, "Invalid geometrycollection mapping!");
                             break;
                         case "enum":
-                            assertEquals("Invalid enum mapping!", Types.VARCHAR, iDataType);
+                            assertEquals(Types.VARCHAR, iDataType, "Invalid enum mapping!");
                             break;
                         case "set":
-                            assertEquals("Invalid set mapping!", Types.VARCHAR, iDataType);
+                            assertEquals(Types.VARCHAR, iDataType, "Invalid set mapping!");
                             break;
                         default:
                             fail("Invalid type " + sTypeName + "!");
@@ -330,10 +330,10 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                                         (iDataType == Types.TIMESTAMP) ||
                                         (iDataType == Types.TIME) ||
                                         (sTypeName.startsWith("datetimeoffset"))) {
-                                    assertTrue("Explicit precision too large!", (iPrecision <= lColumnSize));
+                                    assertTrue((iPrecision <= lColumnSize), "Explicit precision too large!");
                                     lColumnSize = iPrecision;
                                 }
-                                assertEquals("Explicit precision does not match!", iPrecision, lColumnSize);
+                                assertEquals(iPrecision, lColumnSize, "Explicit precision does not match!");
                             }
                         }
                     }
@@ -555,9 +555,9 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
      if (rs.next())
      {
      String sNullable = rs.getString("IS_NULLABLE");
-     assertEquals("Wrong ISO nullability!","YES",sNullable);
+     assertEquals("YES", sNullable, "Wrong ISO nullability!");
      int iNullable = rs.getInt("NULLABLE");
-     assertEquals("Wrong nullability!",DatabaseMetaData.columnNullable,iNullable);
+     assertEquals(DatabaseMetaData.columnNullable, iNullable, "Wrong nullability!");
      }
      else
      fail("Column ead_id in table resource in catalog archivespace not found!");

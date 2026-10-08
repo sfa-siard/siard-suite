@@ -1,13 +1,14 @@
 package ch.admin.bar.siard2.jdbc;
 
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.sql.*;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
 
 public class PostgresDriverTester {
     private static final PostgreSQLContainer<?> _pg = new PostgreSQLContainer<>("postgres:16-alpine")
@@ -25,7 +26,7 @@ public class PostgresDriverTester {
     private Driver _driver = null;
     private Connection _conn = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         _pg.start();
         _sDB_URL = PostgresDriver.getUrl(_pg.getHost() + ":" + _pg.getFirstMappedPort() + "/" + _pg.getDatabaseName());
@@ -34,12 +35,12 @@ public class PostgresDriverTester {
         sTEST_POSTGRES_URL = "jdbc:postgresql://" + _pg.getHost() + ":" + _pg.getFirstMappedPort();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _pg.stop();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Class.forName(sDRIVER_CLASS);
@@ -56,7 +57,7 @@ public class PostgresDriverTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if ((_conn != null) && (!_conn.isClosed()))
@@ -71,20 +72,20 @@ public class PostgresDriverTester {
 
     @Test
     public void testWrapping() {
-        assertSame("Registration of driver wrapper failed!", PostgresDriver.class, _driver.getClass());
-        assertSame("Choice of connection wrapper failed!", PostgresConnection.class, _conn.getClass());
+        assertSame(PostgresDriver.class, _driver.getClass(), "Registration of driver wrapper failed!");
+        assertSame(PostgresConnection.class, _conn.getClass(), "Choice of connection wrapper failed!");
     }
 
     @Test
     public void testCompliant() {
-        assertSame("Postgres driver is suddenly JDBC compliant!", false, _driver.jdbcCompliant());
+        assertSame(false, _driver.jdbcCompliant(), "Postgres driver is suddenly JDBC compliant!");
     }
 
     @Test
     public void testAcceptsURL() {
         try {
-            assertSame("Valid Postgres URL not accepted!", true, _driver.acceptsURL(_sDB_URL));
-            assertSame("Invalid Postgres URL accepted!", false, _driver.acceptsURL(sINVALID_POSTGRES_URL));
+            assertSame(true, _driver.acceptsURL(_sDB_URL), "Valid Postgres URL not accepted!");
+            assertSame(false, _driver.acceptsURL(sINVALID_POSTGRES_URL), "Invalid Postgres URL accepted!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
@@ -96,6 +97,6 @@ public class PostgresDriverTester {
         int iMajorVersion = _driver.getMajorVersion();
         int iMinorVersion = _driver.getMinorVersion();
         String sVersion = iMajorVersion + "." + iMinorVersion;
-        assertEquals("Wrong Postgres version " + sVersion + " found!", "42.7", sVersion);
+        assertEquals("42.7", sVersion, "Wrong Postgres version " + sVersion + " found!");
     }
 }

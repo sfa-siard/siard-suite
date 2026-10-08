@@ -8,9 +8,7 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -26,13 +24,18 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Testcontainers
 public class MySqlFileTypesIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MySQLContainer<?> db = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_5_6))
             .withUsername("public")
             .withPassword("public")
@@ -54,7 +57,7 @@ public class MySqlFileTypesIT {
                 "-s:" + siardArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
 
         siardArchive.preserveArchive();
         val metadataExplorer = siardArchive.exploreMetadata();

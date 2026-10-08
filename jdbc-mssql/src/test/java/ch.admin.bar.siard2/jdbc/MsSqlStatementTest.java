@@ -10,21 +10,23 @@ import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 import ch.enterag.utils.jdbc.BaseStatementTester;
 import com.microsoft.sqlserver.jdbc.SQLServerStatement;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.sql.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class MsSqlStatementTest extends BaseStatementTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
-    @ClassRule
+    @Container
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
             .withPassword(SA_PASSWORD)
@@ -77,7 +79,7 @@ public class MsSqlStatementTest extends BaseStatementTester {
         }
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             _sDB_URL = mssqlContainer.getJdbcUrl();
@@ -98,7 +100,7 @@ public class MsSqlStatementTest extends BaseStatementTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MsSqlDataSource dsMsSql = new MsSqlDataSource();
         dsMsSql.setUrl(_sDB_URL);
@@ -130,13 +132,13 @@ public class MsSqlStatementTest extends BaseStatementTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong statement class!", MsSqlStatement.class, _stmtMsSql.getClass());
+        assertEquals(MsSqlStatement.class, _stmtMsSql.getClass(), "Wrong statement class!");
         try {
             ResultSet rs = getUnwrapped().executeQuery("SELECT DB_NAME() AS DbName");
             if (rs.next()) {
                 String sDbName = rs.getString("DbName");
                 // Testcontainers uses 'master' as the default database
-                assertNotNull("Database name should not be null", sDbName);
+                assertNotNull(sDbName, "Database name should not be null");
             }
             rs.close();
         } catch (SQLException se) {

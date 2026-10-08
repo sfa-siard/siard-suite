@@ -2,17 +2,17 @@ package ch.enterag.sqlparser.ddl;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class ColumnDefinitionTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private ColumnDefinition _cd = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _cd = _sf.newColumnDefinition();
     }
@@ -21,21 +21,21 @@ public class ColumnDefinitionTester {
     public void testSimple() {
         _cd.parse("id INT");
         // System.out.println(_cd.format());
-        assertEquals("Simple column definition not recognized!", "ID INT", _cd.format());
+        assertEquals("ID INT", _cd.format(), "Simple column definition not recognized!");
     }
 
     @Test
     public void testComplex() {
         _cd.parse("complex_column ROW (field1 INT, field2 DOUBLE PRECISION, \"field3\" char(4)) ARRAY[5]");
         // System.out.println(_cd.format());
-        assertEquals("DEFAULT column definition not recognized!", "COMPLEX_COLUMN ROW(FIELD1 INT, FIELD2 DOUBLE PRECISION, \"field3\" CHAR(4)) ARRAY[5]", _cd.format());
+        assertEquals("COMPLEX_COLUMN ROW(FIELD1 INT, FIELD2 DOUBLE PRECISION, \"field3\" CHAR(4)) ARRAY[5]", _cd.format(), "DEFAULT column definition not recognized!");
     }
 
     @Test
     public void testDefault() {
         _cd.parse("a_col varchar(255) default 'def'");
         // System.out.println(_cd.format());
-        assertEquals("DEFAULT column definition not recognized!", "A_COL VARCHAR(255) DEFAULT 'def'", _cd.format());
+        assertEquals("A_COL VARCHAR(255) DEFAULT 'def'", _cd.format(), "DEFAULT column definition not recognized!");
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ColumnDefinitionTester {
         _cd.parse("a_col varchar(255) default current_user");
         // cd.listTokens();
         // System.out.println(_cd.format());
-        assertEquals("DEFAULT column definition not recognized!", "A_COL VARCHAR(255) DEFAULT CURRENT_USER", _cd.format());
+        assertEquals("A_COL VARCHAR(255) DEFAULT CURRENT_USER", _cd.format(), "DEFAULT column definition not recognized!");
     }
 
     @Test
@@ -62,14 +62,14 @@ public class ColumnDefinitionTester {
     public void testGenerated() {
         _cd.parse("a_col varchar(255) default 'def' generated always as ('aa' || col1) constraint \"const01\" not null");
         System.out.println(_cd.format());
-        assertEquals("GENERATED ALWAYS AS column definition not recognized!", "A_COL VARCHAR(255) DEFAULT 'def' GENERATED ALWAYS AS('aa' || COL1) CONSTRAINT \"const01\" NOT NULL", _cd.format());
+        assertEquals("A_COL VARCHAR(255) DEFAULT 'def' GENERATED ALWAYS AS('aa' || COL1) CONSTRAINT \"const01\" NOT NULL", _cd.format(), "GENERATED ALWAYS AS column definition not recognized!");
     }
 
     @Test
     public void testNotNull() {
         _cd.parse("a_col varchar(255) default 'def' not null");
         // System.out.println(_cd.format());
-        assertEquals("Not null column definition not recognized!", "A_COL VARCHAR(255) DEFAULT 'def' NOT NULL", _cd.format());
+        assertEquals("A_COL VARCHAR(255) DEFAULT 'def' NOT NULL", _cd.format(), "Not null column definition not recognized!");
     }
 
 }

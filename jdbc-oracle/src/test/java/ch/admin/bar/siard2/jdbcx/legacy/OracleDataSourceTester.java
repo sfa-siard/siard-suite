@@ -1,19 +1,23 @@
 package ch.admin.bar.siard2.jdbcx.legacy;
 
 import ch.admin.bar.siard2.jdbcx.OracleDataSource;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.OracleContainer;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class OracleDataSourceTester {
 
-    @ClassRule
+    @Container
     public final static OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart");
 
     private static final String _sDB_USER = "SYSTEM";
@@ -22,7 +26,7 @@ public class OracleDataSourceTester {
     private OracleDataSource _dsOracle = null;
     private Connection _conn = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             _dsOracle = new OracleDataSource();
@@ -32,7 +36,7 @@ public class OracleDataSourceTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if ((_conn != null) && (!_conn.isClosed()))
@@ -59,9 +63,9 @@ public class OracleDataSourceTester {
     @Test
     public void testWrapper() {
         try {
-            Assert.assertSame("Invalid wrapper!", true, _dsOracle.isWrapperFor(DataSource.class));
+            Assertions.assertSame(true, _dsOracle.isWrapperFor(DataSource.class), "Invalid wrapper!");
             DataSource dsWrapped = _dsOracle.unwrap(DataSource.class);
-            assertSame("Invalid wrapped class!", oracle.jdbc.pool.OracleDataSource.class, dsWrapped.getClass());
+            assertSame(oracle.jdbc.pool.OracleDataSource.class, dsWrapped.getClass(), "Invalid wrapped class!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
@@ -73,7 +77,7 @@ public class OracleDataSourceTester {
     public void testLoginTimeout() {
         try {
             int iLoginTimeout = _dsOracle.getLoginTimeout();
-            assertSame("Unexpected login timeout " + String.valueOf(iLoginTimeout) + "!", 0, iLoginTimeout);
+            assertSame(0, iLoginTimeout, "Unexpected login timeout " + String.valueOf(iLoginTimeout) + "!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());

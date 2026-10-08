@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AnalyzeDatabase {
     private static final String _sACCESS_DATABASE = "src/test/resources/testfiles/testaccess.accdb";
@@ -151,19 +151,19 @@ public class AnalyzeDatabase {
             switch (dt) {
                 case BINARY:
                     byte[] buf = row.getBytes(sColumn);
-                    assertArrayEquals("Invalid BINARY value!", (byte[]) oValue, buf);
+                    assertArrayEquals((byte[]) oValue, buf, "Invalid BINARY value!");
                     break;
                 case BOOLEAN:
                     Boolean bool = row.getBoolean(sColumn);
-                    assertEquals("Invalid BOOLEAN value!", oValue, bool);
+                    assertEquals(oValue, bool, "Invalid BOOLEAN value!");
                     break;
                 case BYTE:
                     Byte by = row.getByte(sColumn);
-                    assertEquals("Invalid BYTE value!", oValue, by);
+                    assertEquals(oValue, by, "Invalid BYTE value!");
                     break;
                 case COMPLEX_TYPE:
                     ComplexValueForeignKey cvfk = row.getForeignKey(sColumn);
-                    assertEquals("Invalid COMPLEX value!", oValue, cvfk);
+                    assertEquals(oValue, cvfk, "Invalid COMPLEX value!");
                     switch (cvfk.getComplexType()) {
                         case ATTACHMENT:
                             for (Iterator<Attachment> iterAttachment = cvfk.getAttachments()
@@ -190,7 +190,7 @@ public class AnalyzeDatabase {
                                                                              .iterator(); iterSingleValue.hasNext(); ) {
                                 SingleValue sv = iterSingleValue.next();
                                 String sSingle = (String) sv.get();
-                                assertTrue("Invalid MULTI_VALUE value!", setExpected.contains(sSingle));
+                                assertTrue(setExpected.contains(sSingle), "Invalid MULTI_VALUE value!");
                             }
                             break;
                         case VERSION_HISTORY:
@@ -201,35 +201,35 @@ public class AnalyzeDatabase {
                     break;
                 case DOUBLE:
                     Double d = row.getDouble(sColumn);
-                    assertEquals("Invalid DOUBLE value!", oValue, d);
+                    assertEquals(oValue, d, "Invalid DOUBLE value!");
                     break;
                 case FLOAT:
                     Float f = row.getFloat(sColumn);
-                    assertEquals("Invalid FLOAT value!", oValue, f);
+                    assertEquals(oValue, f, "Invalid FLOAT value!");
                     break;
                 case GUID:
                     String sGuid = row.getString(sColumn);
-                    assertEquals("Invalid GUID value!", oValue, sGuid);
+                    assertEquals(oValue, sGuid, "Invalid GUID value!");
                     break;
                 case INT:
                     Short sh = row.getShort(sColumn);
-                    assertEquals("Invalid INT value!", oValue, sh);
+                    assertEquals(oValue, sh, "Invalid INT value!");
                     break;
                 case LONG:
                     Integer i = row.getInt(sColumn);
-                    assertEquals("Invalid LONG value!", oValue, i);
+                    assertEquals(oValue, i, "Invalid LONG value!");
                     break;
                 case MEMO:
                     String sMemo = row.getString(sColumn);
-                    assertEquals("Invalid MEMO value!", oValue, sMemo);
+                    assertEquals(oValue, sMemo, "Invalid MEMO value!");
                     break;
                 case MONEY:
                     BigDecimal bdMoney = row.getBigDecimal(sColumn);
-                    assertEquals("Invalid MONEY value!", oValue, bdMoney);
+                    assertEquals(oValue, bdMoney, "Invalid MONEY value!");
                     break;
                 case NUMERIC:
                     BigDecimal bdNumeric = row.getBigDecimal(sColumn);
-                    assertEquals("Invalid NUMERIC value!", oValue, bdNumeric);
+                    assertEquals(oValue, bdNumeric, "Invalid NUMERIC value!");
                     break;
                 case OLE:
                     OleBlob blob = row.getBlob(sColumn);
@@ -251,16 +251,16 @@ public class AnalyzeDatabase {
                     } else if (content.getType() == OleBlob.ContentType.UNKNOWN) {
                         int iLength = (int) blob.length();
                         byte[] bufOle = blob.getBytes(1L, iLength);
-                        assertArrayEquals("Invalid OLE value!", (byte[]) oValue, bufOle);
+                        assertArrayEquals((byte[]) oValue, bufOle, "Invalid OLE value!");
                     }
                     break;
                 case SHORT_DATE_TIME:
                     Date date = row.getDate(sColumn);
-                    assertEquals("Invalid DATE value!", oValue, date);
+                    assertEquals(oValue, date, "Invalid DATE value!");
                     break;
                 case TEXT:
                     String sText = row.getString(sColumn);
-                    assertEquals("Invalid TEXT value!", oValue, sText);
+                    assertEquals(oValue, sText, "Invalid TEXT value!");
                     break;
                 default:
                     throw new SQLException("Invalid data type " + dt + " encountered!");

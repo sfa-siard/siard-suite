@@ -5,7 +5,7 @@ import lombok.Singular;
 import lombok.Value;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 import java.util.stream.Collectors;

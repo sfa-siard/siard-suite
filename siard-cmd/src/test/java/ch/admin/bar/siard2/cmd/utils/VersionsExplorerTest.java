@@ -1,8 +1,8 @@
 package ch.admin.bar.siard2.cmd.utils;
 
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class VersionsExplorerTest {
 
@@ -14,7 +14,7 @@ public class VersionsExplorerTest {
         String siardVersion = VersionsExplorer.INSTANCE.getSiardVersion();
 
         // then
-        Assert.assertNotNull(siardVersion);
+        Assertions.assertNotNull(siardVersion);
     }
 
     @Test
@@ -25,6 +25,6 @@ public class VersionsExplorerTest {
         String appVersion = VersionsExplorer.INSTANCE.getAppVersion();
 
         // then
-        Assert.assertNotNull(appVersion);
+        Assertions.assertNotNull(appVersion);
     }
 }

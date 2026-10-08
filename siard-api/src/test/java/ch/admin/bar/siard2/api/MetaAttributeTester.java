@@ -4,16 +4,16 @@ import ch.admin.bar.siard2.api.generated.CategoryType;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaAttributeTester {
     private static final File _fileSIARD_21_NEW = new File("src/test/resources/tmp/sql2008new.siard");
@@ -41,7 +41,7 @@ public class MetaAttributeTester {
             _maNew.setType("VARCHAR(256)");
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         Files.deleteIfExists(_fileSIARD_21_NEW.toPath());
         Archive archive = ArchiveImpl.newInstance();
@@ -54,10 +54,10 @@ public class MetaAttributeTester {
         mt = ms.createMetaType(_sTEST_TYPE_NAME);
         mt.setCategory(CategoryType.UDT.value());
         _maNew = mt.createMetaAttribute(_sTEST_ATTRIBUTE_NAME);
-        assertSame("Invalid parent type!", mt, _maNew.getParentMetaType());
+        assertSame(mt, _maNew.getParentMetaType(), "Invalid parent type!");
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws IOException {
         setMandatoryMetaData(_maNew.getParentMetaType());
         FileOutputStream fosXml = new FileOutputStream("src/test/resources/tmp/table_complex.xml");
@@ -77,7 +77,7 @@ public class MetaAttributeTester {
 
     @Test
     public void testName() {
-        assertEquals("Invalid attribute name!", _sTEST_ATTRIBUTE_NAME, _maNew.getName());
+        assertEquals(_sTEST_ATTRIBUTE_NAME, _maNew.getName(), "Invalid attribute name!");
     }
 
     @Test
@@ -85,7 +85,7 @@ public class MetaAttributeTester {
         try {
             String sType = "INT";
             _maNew.setType(sType);
-            assertEquals("Wrong type!", sType, _maNew.getType());
+            assertEquals(sType, _maNew.getType(), "Wrong type!");
             try {
                 _maNew.setType("GAGA");
                 fail("Invalid type GAGA accepted!");
@@ -102,7 +102,7 @@ public class MetaAttributeTester {
         try {
             String sTypeOriginal = "TypeOriginal";
             _maNew.setTypeOriginal(sTypeOriginal);
-            assertEquals("Invalid original type!", sTypeOriginal, _maNew.getTypeOriginal());
+            assertEquals(sTypeOriginal, _maNew.getTypeOriginal(), "Invalid original type!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -110,13 +110,13 @@ public class MetaAttributeTester {
 
     @Test
     public void testTypeSchema() {
-        assertNull("Wrong type schema default!", _maNew.getTypeSchema());
+        assertNull(_maNew.getTypeSchema(), "Wrong type schema default!");
         String sTypeSchema = _sTEST_SCHEMA_NAME;
         try {
             _maNew.setType("INTEGER");
             _maNew.setTypeSchema(sTypeSchema);
-            assertEquals("Invalid type schema!", sTypeSchema, _maNew.getTypeSchema());
-            assertNull("Predefined type was not removed!", _maNew.getType());
+            assertEquals(sTypeSchema, _maNew.getTypeSchema(), "Invalid type schema!");
+            assertNull(_maNew.getType(), "Predefined type was not removed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -124,13 +124,13 @@ public class MetaAttributeTester {
 
     @Test
     public void testTypeName() {
-        assertNull("Wrong type name default!", _maNew.getTypeName());
+        assertNull(_maNew.getTypeName(), "Wrong type name default!");
         String sTypeName = _sTEST_ATTRIBUTE_TYPE_NAME;
         try {
             _maNew.setType("INTEGER");
             _maNew.setTypeName(sTypeName);
-            assertEquals("Invalid type name!", sTypeName, _maNew.getTypeName());
-            assertNull("Predefined type was not removed!", _maNew.getType());
+            assertEquals(sTypeName, _maNew.getTypeName(), "Invalid type name!");
+            assertNull(_maNew.getType(), "Predefined type was not removed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -138,12 +138,12 @@ public class MetaAttributeTester {
 
     @Test
     public void testCardinality() {
-        assertEquals("Wrong cardinality default!", -1, _maNew.getCardinality());
+        assertEquals(-1, _maNew.getCardinality(), "Wrong cardinality default!");
         int iCardinality = 3;
         try {
             _maNew.setType("VARCHAR(256)");
             _maNew.setCardinality(iCardinality);
-            assertEquals("Invalid cardinality!", iCardinality, _maNew.getCardinality());
+            assertEquals(iCardinality, _maNew.getCardinality(), "Invalid cardinality!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -153,7 +153,7 @@ public class MetaAttributeTester {
     public void testDescription() {
         String sDescription = "Description";
         _maNew.setDescription(sDescription);
-        assertEquals("Invalid description!", sDescription, _maNew.getDescription());
+        assertEquals(sDescription, _maNew.getDescription(), "Invalid description!");
     }
 
 }

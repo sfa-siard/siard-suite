@@ -1,19 +1,21 @@
 package ch.admin.bar.siard2.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.Db2Container;
 
 import java.sql.*;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class Db2DriverTester {
 
-    @ClassRule
+    @Container
     public static Db2Container db2 = new Db2Container("ibmcom/db2:11.5.7.0").acceptLicense();
 
 
@@ -24,7 +26,7 @@ public class Db2DriverTester {
     private Driver _driver = null;
     private Connection _conn = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Class.forName(sDRIVER_CLASS);
@@ -41,7 +43,7 @@ public class Db2DriverTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if ((_conn != null) && (!_conn.isClosed()))
@@ -56,20 +58,20 @@ public class Db2DriverTester {
 
     @Test
     public void testWrapping() {
-        assertSame("Registration of driver wrapper failed!", Db2Driver.class, _driver.getClass());
-        assertSame("Choice of connection wrapper failed!", Db2Connection.class, _conn.getClass());
+        assertSame(Db2Driver.class, _driver.getClass(), "Registration of driver wrapper failed!");
+        assertSame(Db2Connection.class, _conn.getClass(), "Choice of connection wrapper failed!");
     }
 
     @Test
     public void testCompliant() {
-        assertSame("DB/2 driver not JDBC compliant!", true, _driver.jdbcCompliant());
+        assertSame(true, _driver.jdbcCompliant(), "DB/2 driver not JDBC compliant!");
     }
 
     @Test
     public void testAcceptsURL() {
         try {
-            assertSame("Valid DB/2 URL not accepted!", true, _driver.acceptsURL(db2.getJdbcUrl()));
-            assertSame("Invalid DB/2 URL accepted!", false, _driver.acceptsURL(sINVALID_ORACLE_URL));
+            assertSame(true, _driver.acceptsURL(db2.getJdbcUrl()), "Valid DB/2 URL not accepted!");
+            assertSame(false, _driver.acceptsURL(sINVALID_ORACLE_URL), "Invalid DB/2 URL accepted!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
@@ -81,7 +83,7 @@ public class Db2DriverTester {
         int iMajorVersion = _driver.getMajorVersion();
         int iMinorVersion = _driver.getMinorVersion();
         String sVersion = String.valueOf(iMajorVersion) + "." + String.valueOf(iMinorVersion);
-        assertEquals("Wrong DB/2 version " + sVersion + " found!", "4.31", sVersion);
+        assertEquals("4.31", sVersion, "Wrong DB/2 version " + sVersion + " found!");
     }
 
     @Test
@@ -90,7 +92,7 @@ public class Db2DriverTester {
             DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(db2.getJdbcUrl(), new Properties());
             for (DriverPropertyInfo dpi : apropInfo)
                 System.out.println(dpi.name + ": " + dpi.value + " (" + String.valueOf(dpi.description) + ")");
-            assertSame("Unexpected driver properties!", 2, apropInfo.length);
+            assertSame(2, apropInfo.length, "Unexpected driver properties!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());

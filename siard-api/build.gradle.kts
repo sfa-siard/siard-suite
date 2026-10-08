@@ -48,8 +48,8 @@ dependencies {
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
-    testImplementation(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.hamcrest)
     testImplementation(libs.mockito.junit.jupiter)
 
     xjcConfiguration(libs.jaxb.xjc)

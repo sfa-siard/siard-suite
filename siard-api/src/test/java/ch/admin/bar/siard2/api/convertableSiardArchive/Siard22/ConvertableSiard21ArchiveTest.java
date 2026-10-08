@@ -3,7 +3,7 @@ package ch.admin.bar.siard2.api.convertableSiardArchive.Siard22;
 import ch.admin.bar.siard2.api.convertableSiardArchive.Siard21.ConvertableSiard21Archive;
 import ch.admin.bar.siard2.api.generated.SiardArchive;
 import ch.admin.bar.siard2.api.generated.old21.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -13,7 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ConvertableSiard21ArchiveTest {
 

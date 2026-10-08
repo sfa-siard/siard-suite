@@ -6,17 +6,17 @@ import ch.admin.bar.siard2.jdbcx.Db2DataSource;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.ConnectionProperties;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@Ignore("was not part of the original TestSuite")
+@Disabled("was not part of the original TestSuite")
 public class Db2ComplexColumnsTester extends BaseDatabaseMetaDataTester {
     private static final ConnectionProperties _cp = new ConnectionProperties();
     private static final String _sDB_URL = "jdbc:db2://" + _cp.getHost() + ":" + _cp.getPort() + "/" + _cp.getCatalog();
@@ -27,7 +27,7 @@ public class Db2ComplexColumnsTester extends BaseDatabaseMetaDataTester {
 
     private Db2DatabaseMetaData _dmdDb2 = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             Db2DataSource dsDb2 = new Db2DataSource();
@@ -44,7 +44,7 @@ public class Db2ComplexColumnsTester extends BaseDatabaseMetaDataTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Db2DataSource dsDb2 = new Db2DataSource();

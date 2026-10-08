@@ -7,7 +7,7 @@ import ch.admin.bar.siard2.oracle.legacy.TestSqlDatabase;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.jdbc.BaseConnectionTester;
 import lombok.SneakyThrows;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.OracleContainer;
 
 import java.sql.Array;
@@ -15,19 +15,23 @@ import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Savepoint;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class OracleConnectionTester extends BaseConnectionTester {
     private static final String _sDB_USER = "test";
     private static final String _sDB_PASSWORD = "test";
 
     private OracleConnection _connOracle = null;
 
-    @ClassRule
+    @Container
     public final static OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart");
 
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException {
         OracleDataSource dsOracle = new OracleDataSource();
         dsOracle.setUrl(db.getJdbcUrl());
@@ -42,7 +46,7 @@ public class OracleConnectionTester extends BaseConnectionTester {
         connOracle.close();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         OracleDataSource dsOracle = new OracleDataSource();
         dsOracle.setUrl(db.getJdbcUrl());
@@ -55,7 +59,7 @@ public class OracleConnectionTester extends BaseConnectionTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong connection class!", OracleConnection.class, _connOracle.getClass());
+        assertEquals(OracleConnection.class, _connOracle.getClass(), "Wrong connection class!");
     }
 
     @Test
@@ -100,7 +104,7 @@ public class OracleConnectionTester extends BaseConnectionTester {
 
     @Test
     @SneakyThrows
-    @Ignore("somehow stopped working after the try catch was removed")
+    @Disabled("somehow stopped working after the try catch was removed")
     public void testReleaseSavePoint() {
         _connOracle.setAutoCommit(false);
         Savepoint sp = _connOracle.setSavepoint();

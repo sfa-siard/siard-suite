@@ -1,7 +1,7 @@
 package ch.admin.bar.siard2.api.primary;
 
 import ch.enterag.utils.EU;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URI;
@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class FileUriTester {
 

@@ -7,21 +7,24 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
 import lombok.val;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.Db2Container;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class Db2DataTypeMappingIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public Db2Container db = new Db2Container(DockerImageName.parse("ibmcom/db2:11.5.8.0"))
             .acceptLicense()
             .withInitScript(SqlScripts.Db2.SIARDSUITE_163_DATATYPE_MAPPING);
@@ -38,7 +41,7 @@ public class Db2DataTypeMappingIT {
                 "-s:" + siardArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
 
         val metadataExplorer = siardArchive.exploreMetadata();
         val softly = new SoftAssertions();

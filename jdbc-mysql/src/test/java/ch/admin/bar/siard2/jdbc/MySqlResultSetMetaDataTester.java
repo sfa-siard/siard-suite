@@ -7,15 +7,16 @@ import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseResultSetMetaDataTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.MountableFile;
 
 import java.sql.*;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Assertions;
 
 public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
     private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
@@ -48,7 +49,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
     private static String _sSqlQuerySimple = getTableQuery(TestSqlDatabase.getQualifiedSimpleTable(), TestSqlDatabase._listCdSimple);
     private static String _sSqlQueryComplex = getTableQuery(TestSqlDatabase.getQualifiedComplexTable(), TestSqlDatabase._listCdComplex);
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException {
         _mysql.start();
         _sDB_URL = MySqlDriver.getUrl(_mysql.getHost() + ":" + _mysql.getFirstMappedPort() + "/" + _mysql.getDatabaseName(), true);
@@ -69,7 +70,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         connMySql.close();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _mysql.stop();
     }
@@ -101,7 +102,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         setResultSetMetaData(rsmd, rs);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             MySqlDataSource dsMySql = new MySqlDataSource();
@@ -117,7 +118,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             closeResultSet();
@@ -133,7 +134,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong result set metadata class!", MySqlResultSetMetaData.class, getResultSetMetaData().getClass());
+        assertEquals(MySqlResultSetMetaData.class, getResultSetMetaData().getClass(), "Wrong result set metadata class!");
     }
 
     @Test

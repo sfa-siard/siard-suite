@@ -8,22 +8,25 @@ import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.OracleContainer;
 import org.testcontainers.utility.MountableFile;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class OracleUploadDownloadSiardProjectIT {
 
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES)
@@ -53,8 +56,8 @@ public class OracleUploadDownloadSiardProjectIT {
         });
 
         // then
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
 
         SiardArchiveAssertions.builder()
                               .expectedArchive(expectedArchive)

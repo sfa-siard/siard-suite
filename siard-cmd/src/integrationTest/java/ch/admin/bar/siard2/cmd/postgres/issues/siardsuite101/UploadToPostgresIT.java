@@ -4,22 +4,25 @@ import ch.admin.bar.siard2.cmd.SiardToDb;
 import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class UploadToPostgresIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public PostgreSQLContainer<?> db = new PostgreSQLContainer<>(DockerImageName.parse("postgres:16.3"));
 
     @Test
@@ -34,7 +37,7 @@ public class UploadToPostgresIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -49,7 +52,7 @@ public class UploadToPostgresIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -64,7 +67,7 @@ public class UploadToPostgresIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -79,10 +82,10 @@ public class UploadToPostgresIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void uploadMsAccess() throws IOException, SQLException {
         val expectedArchive = siardArchivesHandler.prepareResource(SiardProjectExamples.MS_ACCESS_NATIONS);
@@ -95,7 +98,7 @@ public class UploadToPostgresIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -110,6 +113,6 @@ public class UploadToPostgresIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 }

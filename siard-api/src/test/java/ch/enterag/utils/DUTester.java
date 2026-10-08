@@ -1,15 +1,15 @@
 package ch.enterag.utils;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@Ignore("was never exectuted with Ant - did probably not work before the gradle migration")
+@Disabled("was never exectuted with Ant - did probably not work before the gradle migration")
 public class DUTester {
     private static final DU _du = DU.getInstance("en", "dd.MM.yyyy");
 
@@ -21,9 +21,9 @@ public class DUTester {
         System.out.println(date1.getTime());
         String s2 = _du.toXsDate(date1);
         System.out.println(s2);
-        assertEquals("Date were not equal!", s1, s2);
+        assertEquals(s1, s2, "Date were not equal!");
         java.sql.Date date2 = _du.fromXsDate(s2);
-        assertEquals("Dates were not equal!", date1, date2);
+        assertEquals(date1, date2, "Dates were not equal!");
     }
 
     @Test
@@ -35,9 +35,9 @@ public class DUTester {
             System.out.println(time1.getTime());
             String s2 = _du.toXsTime(time1);
             System.out.println(s2);
-            // assertEquals("Times were not equal!",s1,s2);
+            // assertEquals(s1, s2, "Times were not equal!");
             java.sql.Time time2 = _du.fromXsTime(s2);
-            assertEquals("Times were not equal!", time1, time2);
+            assertEquals(time1, time2, "Times were not equal!");
         } catch (ParseException pe) {
             fail(EU.getExceptionMessage(pe));
         }
@@ -52,9 +52,9 @@ public class DUTester {
             System.out.println(ts1.getTime() + "/" + ts1.getNanos());
             String s2 = _du.toXsDateTime(ts1);
             System.out.println(s2);
-            assertEquals("Timestamps were not equal!", s1, s2);
+            assertEquals(s1, s2, "Timestamps were not equal!");
             java.sql.Timestamp ts2 = _du.fromXsDateTime(s2);
-            assertEquals("Timestamps were not equal!", ts1, ts2);
+            assertEquals(ts1, ts2, "Timestamps were not equal!");
         } catch (ParseException pe) {
             fail(EU.getExceptionMessage(pe));
         }

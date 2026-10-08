@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.ddl;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ColumnConstraintDefinitionTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private ColumnConstraintDefinition _ccd = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _ccd = _sf.newColumnConstraintDefinition();
     }
@@ -20,14 +20,14 @@ public class ColumnConstraintDefinitionTester {
     public void testNotNull() {
         _ccd.parse("constraint nnc not null");
         // System.out.println(_ccd.format());
-        assertEquals("NOT NULL constraint not recognized!", "CONSTRAINT NNC NOT NULL", _ccd.format());
+        assertEquals("CONSTRAINT NNC NOT NULL", _ccd.format(), "NOT NULL constraint not recognized!");
     }
 
     @Test
     public void testDeferred() {
         _ccd.parse("constraint nnc not null initially deferred");
         // System.out.println(_ccd.format());
-        assertEquals("Deferred NOT NULL constraint not recognized!", "CONSTRAINT NNC NOT NULL INITIALLY DEFERRED", _ccd.format());
+        assertEquals("CONSTRAINT NNC NOT NULL INITIALLY DEFERRED", _ccd.format(), "Deferred NOT NULL constraint not recognized!");
 
     }
 
@@ -35,34 +35,34 @@ public class ColumnConstraintDefinitionTester {
     public void testUnique() {
         _ccd.parse("UNIQUE VALUE");
         // System.out.println(_ccd.format());
-        assertEquals("UNIQUE constraint not recognized!", "UNIQUE", _ccd.format());
+        assertEquals("UNIQUE", _ccd.format(), "UNIQUE constraint not recognized!");
     }
 
     @Test
     public void testPrimaryKey() {
         _ccd.parse("CONSTRAINT \"Schema\".\"pkC\" PRIMARY KEY");
         // System.out.println(_ccd.format());
-        assertEquals("PRIMARY KEY constraint not recognized!", "CONSTRAINT \"Schema\".\"pkC\" PRIMARY KEY", _ccd.format());
+        assertEquals("CONSTRAINT \"Schema\".\"pkC\" PRIMARY KEY", _ccd.format(), "PRIMARY KEY constraint not recognized!");
     }
 
     @Test
     public void testReferences() {
         _ccd.parse("references cat.\"schem\".\"tabRef\"(colRef)");
         // System.out.println(_ccd.format());
-        assertEquals("REFERENCES constraint not recognized!", "REFERENCES CAT.\"schem\".\"tabRef\"(COLREF)", _ccd.format());
+        assertEquals("REFERENCES CAT.\"schem\".\"tabRef\"(COLREF)", _ccd.format(), "REFERENCES constraint not recognized!");
     }
 
     @Test
     public void testReferencesWithOptions() {
         _ccd.parse("references tabRef(colRef) match simple on update set default on delete no action");
         // System.out.println(_ccd.format());
-        assertEquals("REFERENCES constraint with options not recognized!", "REFERENCES TABREF(COLREF) MATCH SIMPLE ON DELETE NO ACTION ON UPDATE SET DEFAULT", _ccd.format());
+        assertEquals("REFERENCES TABREF(COLREF) MATCH SIMPLE ON DELETE NO ACTION ON UPDATE SET DEFAULT", _ccd.format(), "REFERENCES constraint with options not recognized!");
     }
 
     @Test
     public void testCheck() {
         _ccd.parse("check(col1='aa' and col2 = col3)");
         // System.out.println(_ccd.format());
-        assertEquals("CHECK constraint not recognized!", "CHECK(COL1 = 'aa' AND COL2 = COL3)", _ccd.format());
+        assertEquals("CHECK(COL1 = 'aa' AND COL2 = COL3)", _ccd.format(), "CHECK constraint not recognized!");
     }
 }

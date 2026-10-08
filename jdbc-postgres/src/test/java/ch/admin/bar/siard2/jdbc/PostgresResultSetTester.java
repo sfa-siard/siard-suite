@@ -17,7 +17,7 @@ import ch.enterag.utils.database.SqlTypes;
 import ch.enterag.utils.jdbc.BaseResultSet;
 import ch.enterag.utils.jdbc.BaseResultSetTester;
 import org.json.simple.JSONValue;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.postgresql.PGConnection;
 import org.postgresql.geometric.*;
 import org.postgresql.largeobject.LargeObject;
@@ -36,9 +36,10 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
 
-@Ignore
+@Disabled
 public class PostgresResultSetTester
         extends BaseResultSetTester {
     private static final PostgreSQLContainer<?> _pg = new PostgreSQLContainer<>("postgres:16-alpine")
@@ -70,7 +71,7 @@ public class PostgresResultSetTester
     private static final String _sSqlQuerySimple = getTableQuery(TestSqlDatabase.getQualifiedSimpleTable(), TestSqlDatabase._listCdSimple);
     private static final String _sSqlQueryComplex = getTableQuery(TestSqlDatabase.getQualifiedComplexTable(), TestSqlDatabase._listCdComplex);
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClassDb() {
         _pg.start();
         _sDB_URL = PostgresDriver.getUrl(_pg.getHost() + ":" + _pg.getFirstMappedPort() + "/" + _pg.getDatabaseName());
@@ -80,7 +81,7 @@ public class PostgresResultSetTester
         _sDBA_PASSWORD = _pg.getPassword();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClassDb() {
         _pg.stop();
     }
@@ -177,7 +178,7 @@ public class PostgresResultSetTester
 
     private static final int iBUFSIZ = 8192;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             PostgresDataSource dsPostgres = new PostgresDataSource();
@@ -226,7 +227,7 @@ public class PostgresResultSetTester
         rs.next();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             PostgresDataSource dsPostgres = new PostgresDataSource();
@@ -255,7 +256,7 @@ public class PostgresResultSetTester
     @Test
     public void testClass() {
         enter();
-        assertEquals("Wrong result set class!", PostgresResultSet.class, getResultSet().getClass());
+        assertEquals(PostgresResultSet.class, getResultSet().getClass(), "Wrong result set class!");
     }
 
     @Test
@@ -405,7 +406,7 @@ public class PostgresResultSetTester
             String s = getResultSet().getString(tcd.getName());
             String sEx = (String) tcd.getValue();
             sEx = sEx + SU.repeat(s.length() - sEx.length(), ' ');
-            assertEquals("Invalid string!", sEx, s);
+            assertEquals(sEx, s, "Invalid string!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -434,7 +435,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CNCHAR_5");
             String s = getResultSet().getNString(tcd.getName());
-            assertEquals("Invalid national string!", tcd.getValue(), s);
+            assertEquals(tcd.getValue(), s, "Invalid national string!");
 
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
@@ -464,7 +465,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBOOLEAN");
             boolean b = getResultSet().getBoolean(tcd.getName());
-            assertEquals("Invalid boolean!", ((Boolean) tcd.getValue()).booleanValue(), b);
+            assertEquals(((Boolean) tcd.getValue()).booleanValue(), b, "Invalid boolean!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -489,7 +490,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CSMALLINT_BYTE");
             byte by = getResultSet().getByte(tcd.getName());
-            assertEquals("Invalid bytes!", ((Short) tcd.getValue()).byteValue(), by);
+            assertEquals(((Short) tcd.getValue()).byteValue(), by, "Invalid bytes!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -518,7 +519,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CSMALLINT");
             short sh = getResultSet().getShort(tcd.getName());
-            assertEquals("Invalid short!", ((Short) tcd.getValue()).shortValue(), sh);
+            assertEquals(((Short) tcd.getValue()).shortValue(), sh, "Invalid short!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -543,7 +544,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CINTEGER");
             int i = getResultSet().getInt(tcd.getName());
-            assertEquals("Invalid int!", ((Integer) tcd.getValue()).intValue(), i);
+            assertEquals(((Integer) tcd.getValue()).intValue(), i, "Invalid int!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -568,7 +569,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBIGINT");
             long l = getResultSet().getLong(tcd.getName());
-            assertEquals("Invalid long!", ((Long) tcd.getValue()).longValue(), l);
+            assertEquals(((Long) tcd.getValue()).longValue(), l, "Invalid long!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -593,7 +594,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CREAL");
             float f = getResultSet().getFloat(tcd.getName());
-            assertEquals("Invalid float!", tcd.getValue(), Float.valueOf(f));
+            assertEquals(tcd.getValue(), Float.valueOf(f), "Invalid float!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -618,7 +619,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDOUBLE");
             double d = getResultSet().getDouble(tcd.getName());
-            assertEquals("Invalid double!", tcd.getValue(), Double.valueOf(d));
+            assertEquals(tcd.getValue(), Double.valueOf(d), "Invalid double!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -645,12 +646,12 @@ public class PostgresResultSetTester
              openResultSet(_sNativeQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
              TestColumnDefinition tcd = findColumnDefinition(TestPostgresDatabase._listCdSimple,"CMONEY");
              BigDecimal bd = getResultSet().getBigDecimal(tcd.getName());
-             assertTrue("Invalid BigDecimal!",bd.compareTo((BigDecimal)tcd.getValue()) == 0);
+             assertTrue(bd.compareTo((BigDecimal)tcd.getValue()) == 0, "Invalid BigDecimal!");
              **/
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBIGINT");
             BigDecimal bd = getResultSet().getBigDecimal(tcd.getName());
-            assertEquals("Invalid BigDecimal!", new BigDecimal(((Long) tcd.getValue()).longValue()), bd);
+            assertEquals(new BigDecimal(((Long) tcd.getValue()).longValue()), bd, "Invalid BigDecimal!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -676,7 +677,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDECIMAL_15_5");
             BigDecimal bd = getResultSet().getBigDecimal(tcd.getName(), 5);
-            assertEquals("Invalid BigDecimal!", ((BigDecimal) tcd.getValue()).setScale(5, RoundingMode.DOWN), bd);
+            assertEquals(((BigDecimal) tcd.getValue()).setScale(5, RoundingMode.DOWN), bd, "Invalid BigDecimal!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -689,7 +690,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CVARBINARY_255");
             byte[] buf = getResultSet().getBytes(tcd.getName());
-            assertArrayEquals("Invalid byte array!", (byte[]) tcd.getValue(), buf);
+            assertArrayEquals((byte[]) tcd.getValue(), buf, "Invalid byte array!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -714,7 +715,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDATE");
             Date date = getResultSet().getDate(tcd.getName());
-            assertEquals("Invalid Date!", tcd.getValue(), date);
+            assertEquals(tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -740,7 +741,7 @@ public class PostgresResultSetTester
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDATE");
             Calendar cal = new GregorianCalendar();
             Date date = getResultSet().getDate(tcd.getName(), cal);
-            assertEquals("Invalid Date!", tcd.getValue(), date);
+            assertEquals(tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -753,7 +754,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CTIME");
             Time time = getResultSet().getTime(tcd.getName());
-            assertEquals("Invalid Time!", tcd.getValue(), time);
+            assertEquals(tcd.getValue(), time, "Invalid Time!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -780,7 +781,7 @@ public class PostgresResultSetTester
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CTIME");
             Calendar cal = new GregorianCalendar();
             Time time = getResultSet().getTime(tcd.getName(), cal);
-            assertEquals("Invalid Time!", tcd.getValue(), time);
+            assertEquals(tcd.getValue(), time, "Invalid Time!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -800,7 +801,7 @@ public class PostgresResultSetTester
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CTIMESTAMP");
             Timestamp ts = getResultSet().getTimestamp(tcd.getName());
             Timestamp tsEx = (Timestamp) tcd.getValue();
-            assertEquals("Invalid Timestamp!", truncateToMicros(tsEx), ts);
+            assertEquals(truncateToMicros(tsEx), ts, "Invalid Timestamp!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -826,7 +827,7 @@ public class PostgresResultSetTester
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CTIMESTAMP");
             Calendar cal = new GregorianCalendar();
             Timestamp ts = getResultSet().getTimestamp(tcd.getName(), cal);
-            assertEquals("Invalid Timestamp!", tcd.getValue(), ts);
+            assertEquals(tcd.getValue(), ts, "Invalid Timestamp!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -839,7 +840,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CINTERVAL_YEAR_3_MONTH");
             Duration duration = getBaseResultSet().getDuration(tcd.getName());
-            assertEquals("Invalid Duration!", tcd.getValue(), Interval.fromDuration(duration));
+            assertEquals(tcd.getValue(), Interval.fromDuration(duration), "Invalid Duration!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -874,7 +875,7 @@ public class PostgresResultSetTester
                 fail("Invalid length of ASCII stream!");
             is.close();
             String s = new String(buf);
-            assertEquals("Invalid String!", tcd.getValue(), s);
+            assertEquals(tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -938,9 +939,9 @@ public class PostgresResultSetTester
             for (int iRead = rdr.read(cbuf); (iRead != -1) && (iLength < cbuf.length); iRead = rdr.read(cbuf, iLength, cbuf.length - iLength))
                 iLength = iLength + iRead;
             rdr.close();
-            assertEquals("Invalid length of character stream!", cbuf.length, iLength);
+            assertEquals(cbuf.length, iLength, "Invalid length of character stream!");
             String s = new String(cbuf);
-            assertEquals("Invalid String!", tcd.getValue(), s);
+            assertEquals(tcd.getValue(), s, "Invalid String!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -963,7 +964,7 @@ public class PostgresResultSetTester
                 fail("Invalid length of character stream!");
             rdr.close();
             String s = new String(cbuf);
-            assertEquals("Invalid String!", tcd.getValue(), s);
+            assertEquals(tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -1028,7 +1029,7 @@ public class PostgresResultSetTester
                 fail("Invalid length of character stream!");
             rdr.close();
             String s = new String(cbuf);
-            assertEquals("Invalid String!", tcd.getValue(), s);
+            assertEquals(tcd.getValue(), s, "Invalid String!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             System.out.println(EU.getExceptionMessage(sfnse));
         } catch (SQLException se) {
@@ -1093,7 +1094,7 @@ public class PostgresResultSetTester
             if (is.read() != -1)
                 fail("Invalid length of binary stream!");
             is.close();
-            assertArrayEquals("Invalid byte array!", (byte[]) tcd.getValue(), buf);
+            assertArrayEquals((byte[]) tcd.getValue(), buf, "Invalid byte array!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -1154,13 +1155,13 @@ public class PostgresResultSetTester
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBIGINT");
             Object o = getResultSet().getObject(tcd.getName());
-            assertEquals("Invalid BIGINT!", tcd.getValue(), o);
+            assertEquals(tcd.getValue(), o, "Invalid BIGINT!");
             /**
              TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdComplex,"CDISTINCT");
              @SuppressWarnings("unchecked") List<TestColumnDefinition> list = (List<TestColumnDefinition>)tcd.getValue();
              TestColumnDefinition tcdValue = list.get(0);
              Object o = getResultSet().getObject(tcd.getName());
-             assertEquals("Invalid DISTINCT!",(String)tcdValue.getValue(),(String)o);
+             assertEquals((String)tcdValue.getValue(), (String)o, "Invalid DISTINCT!");
              **/
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
@@ -1229,7 +1230,7 @@ public class PostgresResultSetTester
         try {
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CDATE");
             Date date = getResultSet().getObject(tcd.getName(), Date.class);
-            assertEquals("Invalid Date!", tcd.getValue(), date);
+            assertEquals(tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -1255,7 +1256,7 @@ public class PostgresResultSetTester
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CBLOB");
             Blob blob = getResultSet().getBlob(tcd.getName());
             byte[] buffer = blob.getBytes(1L, (int) blob.length());
-            assertArrayEquals("Invalid Blob!", (byte[]) tcd.getValue(), buffer);
+            assertArrayEquals((byte[]) tcd.getValue(), buffer, "Invalid Blob!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -1326,7 +1327,7 @@ public class PostgresResultSetTester
             sw.close();
             String s = sw.toString();
             String sEx = (String) tcd.getValue();
-            assertEquals("Invalid Clob!", sEx, s);
+            assertEquals(sEx, s, "Invalid Clob!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -1390,7 +1391,7 @@ public class PostgresResultSetTester
             TestColumnDefinition tcd = findColumnDefinition(TestSqlDatabase._listCdSimple, "CNCLOB_1M");
             NClob nclob = getResultSet().getNClob(tcd.getName());
             String s = nclob.getSubString(1L, (int) nclob.length());
-            assertEquals("Invalid NClob!", tcd.getValue(), s);
+            assertEquals(tcd.getValue(), s, "Invalid NClob!");
         } catch (SQLFeatureNotSupportedException fnse) {
             System.out.println("testNClob: " + EU.getExceptionMessage(fnse));
         } catch (SQLException se) {
@@ -1455,7 +1456,7 @@ public class PostgresResultSetTester
             SQLXML sqlxml = getResultSet().getSQLXML(tcd.getName());
             String s = sqlxml.getString()
                              .replaceAll("\\n\\s*", "");
-            assertEquals("Invalid SQLXML!", tcd.getValue(), s);
+            assertEquals(tcd.getValue(), s, "Invalid SQLXML!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -1647,7 +1648,7 @@ public class PostgresResultSetTester
                 sbExpected.append("'");
             }
         }
-        assertEquals("Invalid value for " + PostgresType.TSVECTOR.getKeyword() + "!", sbExpected.toString(), s);
+        assertEquals(sbExpected.toString(), s, "Invalid value for " + PostgresType.TSVECTOR.getKeyword() + "!");
     }
 
     private void checkTsQuery(String s, String sExpected) {
@@ -1676,56 +1677,56 @@ public class PostgresResultSetTester
                 }
             }
         }
-        assertEquals("Invalid value for " + PostgresType.TSQUERY.getKeyword() + "!", sbExpected.toString(), s);
+        assertEquals(sbExpected.toString(), s, "Invalid value for " + PostgresType.TSQUERY.getKeyword() + "!");
     }
 
     private void checkPoint(String s, String sExpected)
             throws SQLException {
         PGpoint pp = new PGpoint(s);
         PGpoint ppExpected = new PGpoint(sExpected);
-        assertEquals("Invalid value for " + PostgresType.POINT.getKeyword() + "!", ppExpected, pp);
+        assertEquals(ppExpected, pp, "Invalid value for " + PostgresType.POINT.getKeyword() + "!");
     }
 
     private void checkLine(String s, String sExpected)
             throws SQLException {
         PGline pl = new PGline(s);
         PGline plExpected = new PGline(sExpected);
-        assertEquals("Invalid value for " + PostgresType.LINE.getKeyword() + "!", plExpected, pl);
+        assertEquals(plExpected, pl, "Invalid value for " + PostgresType.LINE.getKeyword() + "!");
     }
 
     private void checkLseg(String s, String sExpected)
             throws SQLException {
         PGlseg pl = new PGlseg(s);
         PGlseg plExpected = new PGlseg(sExpected);
-        assertEquals("Invalid value for " + PostgresType.LSEG.getKeyword() + "!", plExpected, pl);
+        assertEquals(plExpected, pl, "Invalid value for " + PostgresType.LSEG.getKeyword() + "!");
     }
 
     private void checkBox(String s, String sExpected)
             throws SQLException {
         PGbox pb = new PGbox(s);
         PGbox pbExpected = new PGbox(sExpected.substring(1, sExpected.length() - 1));
-        assertEquals("Invalid value for " + PostgresType.BOX.getKeyword() + "!", pbExpected, pb);
+        assertEquals(pbExpected, pb, "Invalid value for " + PostgresType.BOX.getKeyword() + "!");
     }
 
     private void checkPath(String s, String sExpected)
             throws SQLException {
         PGpath pp = new PGpath(s);
         PGpath ppExpected = new PGpath(sExpected);
-        assertEquals("Invalid value for " + PostgresType.PATH.getKeyword() + "!", ppExpected, pp);
+        assertEquals(ppExpected, pp, "Invalid value for " + PostgresType.PATH.getKeyword() + "!");
     }
 
     private void checkPolygon(String s, String sExpected)
             throws SQLException {
         PGpolygon pp = new PGpolygon(s);
         PGpolygon ppExpected = new PGpolygon(sExpected);
-        assertEquals("Invalid value for " + PostgresType.POLYGON.getKeyword() + "!", ppExpected, pp);
+        assertEquals(ppExpected, pp, "Invalid value for " + PostgresType.POLYGON.getKeyword() + "!");
     }
 
     private void checkCircle(String s, String sExpected)
             throws SQLException {
         PGcircle pc = new PGcircle(s);
         PGcircle pcExpected = new PGcircle(sExpected);
-        assertEquals("Invalid value for " + PostgresType.CIRCLE.getKeyword() + "!", pcExpected, pc);
+        assertEquals(pcExpected, pc, "Invalid value for " + PostgresType.CIRCLE.getKeyword() + "!");
     }
 
     private void checkString(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
@@ -1737,7 +1738,7 @@ public class PostgresResultSetTester
                     (pt == PostgresType.JSON)) {
                 Object oj = JSONValue.parse(s);
                 Object ojExpected = JSONValue.parse(sExpected);
-                assertEquals("Invalid value for " + tcd.getType() + "!", ojExpected, oj);
+                assertEquals(ojExpected, oj, "Invalid value for " + tcd.getType() + "!");
             } else if (pt == PostgresType.TSVECTOR)
                 checkTsVector(s, sExpected);
             else if (pt == PostgresType.TSQUERY)
@@ -1762,7 +1763,7 @@ public class PostgresResultSetTester
                     System.out.println("expected: " + sExpected);
                     System.out.println("found: " + s);
                 }
-                assertEquals("Invalid value for " + sTypeName + "!", sExpected, s);
+                assertEquals(sExpected, s, "Invalid value for " + sTypeName + "!");
             }
         } else
             fail("Type String expected for " + sDataType + "!");
@@ -1771,7 +1772,7 @@ public class PostgresResultSetTester
     private void checkClob(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof Clob clob) {
-            assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), clob.getSubString(1L, (int) clob.length()));
+            assertEquals(tcd.getValue(), clob.getSubString(1L, (int) clob.length()), "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Clob expected for " + sDataType + "!");
     }
@@ -1779,7 +1780,7 @@ public class PostgresResultSetTester
     private void checkSqlXml(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof SQLXML sqlxml) {
-            assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), sqlxml.getString());
+            assertEquals(tcd.getValue(), sqlxml.getString(), "Invalid value for " + sTypeName + "!");
         } else
             fail("Type SQLXML expected for " + sDataType + "!");
     }
@@ -1800,7 +1801,7 @@ public class PostgresResultSetTester
                     bufExpected = PostgresLiterals.parseMacAddr(sExpected);
             } else
                 bufExpected = (byte[]) tcd.getValue();
-            assertArrayEquals("Invalid value for " + sTypeName + "!", bufExpected, buf);
+            assertArrayEquals(bufExpected, buf, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type byte[] expected for " + sDataType + "!");
     }
@@ -1808,7 +1809,7 @@ public class PostgresResultSetTester
     private void checkBlob(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof Blob blob) {
-            assertArrayEquals("Invalid value for " + sTypeName + "!", (byte[]) tcd.getValue(), blob.getBytes(1L, (int) blob.length()));
+            assertArrayEquals((byte[]) tcd.getValue(), blob.getBytes(1L, (int) blob.length()), "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Blob expected for " + "!");
     }
@@ -1822,7 +1823,7 @@ public class PostgresResultSetTester
                 bdExpected = new BigDecimal(biExpected);
             } else
                 bdExpected = (BigDecimal) oExpected;
-            assertEquals("Invalid value for " + sTypeName + "!", bdExpected, bd);
+            assertEquals(bdExpected, bd, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type BigDecimal expected for " + "!");
     }
@@ -1830,7 +1831,7 @@ public class PostgresResultSetTester
     private void checkShort(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof Short sh) {
-            assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), sh);
+            assertEquals(tcd.getValue(), sh, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Short expected for " + sDataType + "!");
     }
@@ -1838,7 +1839,7 @@ public class PostgresResultSetTester
     private void checkInteger(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof Integer i) {
-            assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), i);
+            assertEquals(tcd.getValue(), i, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Integer expected for " + sDataType + "!");
     }
@@ -1853,7 +1854,7 @@ public class PostgresResultSetTester
         byte[] buf = new byte[lo.size()];
         lo.read(buf, 0, buf.length);
         lo.close();
-        assertArrayEquals("Invalid value for " + PostgresType.OID.getKeyword() + "!", bufExpected, buf);
+        assertArrayEquals(bufExpected, buf, "Invalid value for " + PostgresType.OID.getKeyword() + "!");
     }
 
     private void checkLong(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
@@ -1862,7 +1863,7 @@ public class PostgresResultSetTester
             if (sTypeName.equals(PostgresType.OID.getKeyword()))
                 checkOid(l, (byte[]) tcd.getValue());
             else
-                assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), l);
+                assertEquals(tcd.getValue(), l, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Long expected for " + sDataType + "!");
     }
@@ -1878,7 +1879,7 @@ public class PostgresResultSetTester
                 dExpected = Double.valueOf(f.doubleValue());
             } else
                 dExpected = (Double) o;
-            assertEquals("Invalid value for " + sTypeName + "!", dExpected, d);
+            assertEquals(dExpected, d, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Double expected for " + sDataType + "!");
     }
@@ -1886,7 +1887,7 @@ public class PostgresResultSetTester
     private void checkFloat(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof Float f) {
-            assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), f);
+            assertEquals(tcd.getValue(), f, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Float expected for " + sDataType + "!");
     }
@@ -1894,7 +1895,7 @@ public class PostgresResultSetTester
     private void checkBoolean(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof Boolean b) {
-            assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), b);
+            assertEquals(tcd.getValue(), b, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Boolean expected for " + sDataType + "!");
     }
@@ -1902,7 +1903,7 @@ public class PostgresResultSetTester
     private void checkDate(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof Date d) {
-            assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), d);
+            assertEquals(tcd.getValue(), d, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Date expected for " + sDataType + "!");
     }
@@ -1910,7 +1911,7 @@ public class PostgresResultSetTester
     private void checkTime(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
             throws SQLException {
         if (o instanceof Time t) {
-            assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), t);
+            assertEquals(tcd.getValue(), t, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Time expected for " + sDataType + "!");
     }
@@ -1920,7 +1921,7 @@ public class PostgresResultSetTester
         if (o instanceof Timestamp ts) {
             Timestamp tsExpected = (Timestamp) tcd.getValue();
             tsExpected = truncateToMicros(tsExpected);
-            assertEquals("Invalid value for " + sTypeName + "!", tsExpected, ts);
+            assertEquals(tsExpected, ts, "Invalid value for " + sTypeName + "!");
         } else
             fail("Type Timestamp expected for " + sDataType + "!");
     }
@@ -1933,7 +1934,7 @@ public class PostgresResultSetTester
         lNanoSeconds = (lNanoSeconds + 500000) / 1000000;
         lNanoSeconds = 1000000 * lNanoSeconds;
         ivExpected.setNanoSeconds(lNanoSeconds);
-        assertEquals("Invalid value for " + PostgresType.INTERVAL.getKeyword() + "!", ivExpected, iv);
+        assertEquals(ivExpected, iv, "Invalid value for " + PostgresType.INTERVAL.getKeyword() + "!");
     }
 
     private void checkDuration(Object o, TestColumnDefinition tcd, String sTypeName, String sDataType)
@@ -2038,7 +2039,7 @@ public class PostgresResultSetTester
             List<TestColumnDefinition> listElements = (List<TestColumnDefinition>) tcd.getValue();
             if (listElements.size() == 1) {
                 tcd = listElements.get(0);
-                assertEquals("Invalid value for " + sTypeName + "!", tcd.getValue(), o);
+                assertEquals(tcd.getValue(), o, "Invalid value for " + sTypeName + "!");
             } else
                 fail("List with 1 element expected for DISTINCT values!");
         } else
@@ -2353,109 +2354,65 @@ public class PostgresResultSetTester
             }
 
             tcd = findColumnDefinition(_listCdSimple, "CINTEGER");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Integer) tcd.getValue()).intValue(),
-                         getResultSet().getInt(tcd.getName()));
+            assertEquals(((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CCHAR_5");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()));
+            assertEquals(tcd.getValue(), (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CVARCHAR_255");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         getResultSet().getString(tcd.getName()));
+            assertEquals(tcd.getValue(), getResultSet().getString(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNCHAR_5");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()));
+            assertEquals(tcd.getValue(), (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNVARCHAR_127");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         getResultSet().getString(tcd.getName()));
+            assertEquals(tcd.getValue(), getResultSet().getString(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CCLOB_2M");
             clob = getResultSet().getClob(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         clob.getSubString(1L, (int) clob.length()));
+            assertEquals(tcd.getValue(), clob.getSubString(1L, (int) clob.length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNCLOB_1M");
             nclob = getResultSet().getNClob(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         nclob.getSubString(1L, (int) nclob.length()));
+            assertEquals(tcd.getValue(), nclob.getSubString(1L, (int) nclob.length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CXML");
             sqlxml = getResultSet().getSQLXML(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         sqlxml.getString()
-                               .replaceAll("\\n\\s*", ""));
+            assertEquals(tcd.getValue(), sqlxml.getString()
+                               .replaceAll("\\n\\s*", ""), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBINARY_5");
-            assertArrayEquals("Insert of " + tcd.getType() + " failed!", (byte[]) tcd.getValue(), Arrays.copyOf(
+            assertArrayEquals((byte[]) tcd.getValue(), Arrays.copyOf(
                     getResultSet().getBytes(tcd.getName()),
-                    ((byte[]) tcd.getValue()).length));
+                    ((byte[]) tcd.getValue()).length), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CVARBINARY_255");
-            assertArrayEquals("Insert of " + tcd.getType() + " failed!", (byte[]) tcd.getValue(), getResultSet().getBytes(tcd.getName()));
+            assertArrayEquals((byte[]) tcd.getValue(), getResultSet().getBytes(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBLOB");
             blob = getResultSet().getBlob(tcd.getName());
-            assertArrayEquals("Insert of " + tcd.getType() + " failed!", (byte[]) tcd.getValue(), blob.getBytes(1L, (int) blob.length()));
+            assertArrayEquals((byte[]) tcd.getValue(), blob.getBytes(1L, (int) blob.length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNUMERIC_31");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         getResultSet().getBigDecimal(tcd.getName()));
+            assertEquals(tcd.getValue(), getResultSet().getBigDecimal(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDECIMAL_15_5");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         getResultSet().getBigDecimal(tcd.getName()));
+            assertEquals(tcd.getValue(), getResultSet().getBigDecimal(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CSMALLINT");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Short) tcd.getValue()).shortValue(),
-                         getResultSet().getShort(tcd.getName()));
+            assertEquals(((Short) tcd.getValue()).shortValue(), getResultSet().getShort(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTEGER");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Integer) tcd.getValue()).intValue(),
-                         getResultSet().getInt(tcd.getName()));
+            assertEquals(((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBIGINT");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         new BigDecimal(((Long) tcd.getValue()).longValue()),
-                         getResultSet().getBigDecimal(tcd.getName()));
+            assertEquals(new BigDecimal(((Long) tcd.getValue()).longValue()), getResultSet().getBigDecimal(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CFLOAT_10");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         Float.valueOf(getResultSet().getFloat(tcd.getName())));
+            assertEquals(tcd.getValue(), Float.valueOf(getResultSet().getFloat(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CREAL");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         Float.valueOf(getResultSet().getFloat(tcd.getName())));
+            assertEquals(tcd.getValue(), Float.valueOf(getResultSet().getFloat(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDOUBLE");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         Double.valueOf(getResultSet().getDouble(tcd.getName())));
+            assertEquals(tcd.getValue(), Double.valueOf(getResultSet().getDouble(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBOOLEAN");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         Boolean.valueOf(getResultSet().getBoolean(tcd.getName())));
+            assertEquals(tcd.getValue(), Boolean.valueOf(getResultSet().getBoolean(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDATE");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         getResultSet().getDate(tcd.getName()));
+            assertEquals(tcd.getValue(), getResultSet().getDate(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CTIME");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         getResultSet().getTime(tcd.getName()));
+            assertEquals(tcd.getValue(), getResultSet().getTime(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CTIMESTAMP");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         truncateToMicros((Timestamp) tcd.getValue()),
-                         getResultSet().getTimestamp(tcd.getName()));
+            assertEquals(truncateToMicros((Timestamp) tcd.getValue()), getResultSet().getTimestamp(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTERVAL_YEAR_3_MONTH");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         Interval.fromDuration(((BaseResultSet) getResultSet()).getDuration(tcd.getName())));
+            assertEquals(tcd.getValue(), Interval.fromDuration(((BaseResultSet) getResultSet()).getDuration(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTERVAL_DAY_2_SECONDS_6");
             Date dateZero = new Date(0L);
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Interval) tcd.getValue()).toDuration()
-                                                    .getTimeInMillis(dateZero) / 1000,
-                         ((BaseResultSet) getResultSet()).getDuration(tcd.getName())
-                                                         .getTimeInMillis(dateZero) / 1000);
+            assertEquals(((Interval) tcd.getValue()).toDuration()
+                                                    .getTimeInMillis(dateZero) / 1000, ((BaseResultSet) getResultSet()).getDuration(tcd.getName())
+                                                         .getTimeInMillis(dateZero) / 1000, "Insert of " + tcd.getType() + " failed!");
             // restore the database
             tearDown();
             setUpClass();
@@ -2534,28 +2491,28 @@ public class PostgresResultSetTester
                         o = s.substring(0, sExpected.length());
                     } else if (o instanceof byte[] buf) {
                         byte[] bufExpected = (byte[]) tad.getValue();
-                        assertArrayEquals("Invalid value for " + tad.getType() + "!", bufExpected, buf);
+                        assertArrayEquals(bufExpected, buf, "Invalid value for " + tad.getType() + "!");
                     } else if (o instanceof Timestamp ts) {
                         Timestamp tsExpected = truncateToMicros((Timestamp) tad.getValue());
-                        assertEquals("Invalid value for " + tad.getType() + "!", tsExpected, ts);
+                        assertEquals(tsExpected, ts, "Invalid value for " + tad.getType() + "!");
                     } else
-                        assertEquals("Invalid value for " + tad.getType() + "!", tad.getValue(), o);
+                        assertEquals(tad.getValue(), o, "Invalid value for " + tad.getType() + "!");
                 } else if ((o instanceof Duration duration) && (tad.getValue() instanceof Interval ivExpected)) {
                     Duration durationExpected = ivExpected.toDuration();
-                    assertEquals("Invalid value for " + tad.getType() + "!", durationExpected, duration);
+                    assertEquals(durationExpected, duration, "Invalid value for " + tad.getType() + "!");
                 } else if ((o instanceof Double d) && (tad.getValue() instanceof Float fExpected)) {
                     Double dExpected = Double.valueOf(fExpected.doubleValue());
-                    assertEquals("Invalid value for " + tad.getType() + "!", dExpected, d);
+                    assertEquals(dExpected, d, "Invalid value for " + tad.getType() + "!");
                 } else if ((o instanceof BigDecimal bd) && (tad.getValue() instanceof Integer)) {
-                    assertEquals("Invalid value for " + tad.getType() + "!", tad.getValue(), Integer.valueOf(bd.intValueExact()));
+                    assertEquals(tad.getValue(), Integer.valueOf(bd.intValueExact()), "Invalid value for " + tad.getType() + "!");
                 } else if ((o instanceof Struct structSub) && (tad.getValue() instanceof List<?>)) {
                     PostgresQualifiedId pqiTypeExpected = new PostgresQualifiedId(tad.getType());
                     QualifiedId qiTypeExpected = new QualifiedId(pqiTypeExpected.format());
                     QualifiedId qiType = new QualifiedId(structSub.getSQLTypeName());
-                    assertEquals("Invalid value for Struct!", qiTypeExpected, qiType);
+                    assertEquals(qiTypeExpected, qiType, "Invalid value for Struct!");
                     @SuppressWarnings("unchecked")
                     List<TestColumnDefinition> listAdSub = (List<TestColumnDefinition>) tad.getValue();
-                    assertTrue("Invalid value for " + tad.getType() + "!", equalsStructValue(structSub, listAdSub));
+                    assertTrue(equalsStructValue(structSub, listAdSub), "Invalid value for " + tad.getType() + "!");
                 } else
                     fail("Error: " + tad.getType() + ": " + tad.getValue()
                                                                .getClass()
@@ -2575,7 +2532,7 @@ public class PostgresResultSetTester
             for (int iElement = 0; iElement < listCd.size(); iElement++) {
                 Object oElement = aoElements[iElement];
                 TestColumnDefinition tcdElement = listCd.get(iElement);
-                assertEquals("Invalid value for " + tcdElement.getType() + "!", tcdElement.getValue(), oElement);
+                assertEquals(tcdElement.getValue(), oElement, "Invalid value for " + tcdElement.getType() + "!");
             }
         } else
             fail("Array has unexpected length!");
@@ -2698,29 +2655,23 @@ public class PostgresResultSetTester
             }
 
             tcd = findColumnDefinition(_listCdComplex, "CID");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Integer) tcd.getValue()).intValue(),
-                         getResultSet().getInt(tcd.getName()));
+            assertEquals(((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdComplex, "COMPLETE");
             struct = (Struct) getResultSet().getObject(tcd.getName());
-            assertTrue("Insert of " + tcd.getType() + " failed!",
-                       equalsStructValue(struct, _listCdSimple));
+            assertTrue(equalsStructValue(struct, _listCdSimple), "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdComplex, "CUDT");
             struct = (Struct) getResultSet().getObject(tcd.getName());
-            assertTrue("Insert of " + tcd.getType() + " failed!",
-                       equalsStructValue(struct, _listAdComplex));
+            assertTrue(equalsStructValue(struct, _listAdComplex), "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdComplex, "CDISTINCT");
             Object o = getResultSet().getObject(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcdBase.getValue(), o);
+            assertEquals(tcdBase.getValue(), o, "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdComplex, "CARRAY");
             array = (Array) getResultSet().getObject(tcd.getName());
-            assertTrue("Insert of " + tcd.getType() + " failed!",
-                       equalsArrayValue(array, _listCdArray));
+            assertTrue(equalsArrayValue(array, _listCdArray), "Insert of " + tcd.getType() + " failed!");
 
             // restore the database
             tearDown();

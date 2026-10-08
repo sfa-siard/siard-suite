@@ -1,14 +1,14 @@
 package ch.admin.bar.siard2.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.sql.*;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AccessDriverTester {
     // private static final File fileTEST_EMPTY_DATABASE = new File(_cp.getInstance()+"/"+_cp.getCatalog());
@@ -22,14 +22,14 @@ public class AccessDriverTester {
     private Driver _driver = null;
     private Connection _conn = null;
 
-    @Before
+    @BeforeEach
     public void setUp() throws ClassNotFoundException, SQLException {
         Class.forName(_sDRIVER_CLASS);
         _driver = DriverManager.getDriver(_sDB_URL);
         _conn = DriverManager.getConnection(_sDB_URL, _sDB_USER, _sDB_PASSWORD);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws SQLException {
         if ((_conn != null) && (!_conn.isClosed())) _conn.close();
         else fail("Connection cannot be closed!");
@@ -37,19 +37,19 @@ public class AccessDriverTester {
 
     @Test
     public void testWrapping() {
-        assertSame("Registration of driver wrapper failed!", AccessDriver.class, _driver.getClass());
-        assertSame("Choice of connection wrapper failed!", AccessConnection.class, _conn.getClass());
+        assertSame(AccessDriver.class, _driver.getClass(), "Registration of driver wrapper failed!");
+        assertSame(AccessConnection.class, _conn.getClass(), "Choice of connection wrapper failed!");
     }
 
     @Test
     public void testCompliant() {
-        assertSame("Access driver not JDBC compliant!", true, _driver.jdbcCompliant());
+        assertSame(true, _driver.jdbcCompliant(), "Access driver not JDBC compliant!");
     }
 
     @Test
     public void testAcceptsURL() throws SQLException {
-        assertSame("Valid Access URL not accepted!", true, _driver.acceptsURL(_sDB_URL));
-        assertSame("Invalid Access URL accepted!", false, _driver.acceptsURL(_sINVALID_ACCESS_URL));
+        assertSame(true, _driver.acceptsURL(_sDB_URL), "Valid Access URL not accepted!");
+        assertSame(false, _driver.acceptsURL(_sINVALID_ACCESS_URL), "Invalid Access URL accepted!");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class AccessDriverTester {
         int iMajorVersion = _driver.getMajorVersion();
         int iMinorVersion = _driver.getMinorVersion();
         String sVersion = iMajorVersion + "." + iMinorVersion;
-        assertEquals("Wrong Access Driver version " + sVersion + " found!", AccessDriver.sVERSION, sVersion);
+        assertEquals(AccessDriver.sVERSION, sVersion, "Wrong Access Driver version " + sVersion + " found!");
     }
 
     @Test
@@ -69,7 +69,7 @@ public class AccessDriverTester {
         DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(_sDB_URL, props);
         for (DriverPropertyInfo dpi : apropInfo)
             System.out.println(dpi.name + ": " + dpi.value + " (" + dpi.description + ")");
-        assertSame("Unexpected driver properties!", 3, apropInfo.length);
+        assertSame(3, apropInfo.length, "Unexpected driver properties!");
     }
 
 }

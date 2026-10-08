@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.datatype;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FieldDefinitionTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private FieldDefinition _fd = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _fd = _sf.newFieldDefinition();
     }
@@ -20,7 +20,7 @@ public class FieldDefinitionTester {
     @Test
     public void testFieldDefinition() {
         _fd.parse("\"SomeField\" INTEGER REFERENCES ARE CHECKED");
-        assertEquals("Field definition not recognized!", "\"SomeField\" INT REFERENCES ARE CHECKED", _fd.format());
+        assertEquals("\"SomeField\" INT REFERENCES ARE CHECKED", _fd.format(), "Field definition not recognized!");
     }
 
 }

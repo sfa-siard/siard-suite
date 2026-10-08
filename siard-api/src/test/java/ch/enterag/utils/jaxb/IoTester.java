@@ -4,8 +4,8 @@ import ch.admin.bar.siard2.api.Archive;
 import ch.admin.bar.siard2.api.generated.*;
 import ch.admin.bar.siard2.api.primary.MetaDataXml;
 import ch.enterag.utils.EU;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -16,11 +16,11 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.util.GregorianCalendar;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 // These test are not working - and they are not part of the ch.admin.bar.siard2.api._SiardApiTestSuite that is run when the ant test target is run!
 // TODO: check what these tests should actually do. Then make these test work or delete them!
-@Ignore
+@Disabled
 public class IoTester {
     @Test
     public void testRead2008() throws IOException, JAXBException {

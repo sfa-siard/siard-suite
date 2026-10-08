@@ -7,16 +7,17 @@ import ch.enterag.utils.FU;
 import ch.enterag.utils.jdbc.BaseConnectionTester;
 import ch.enterag.utils.lang.Execute;
 import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AccessConnectionTester extends BaseConnectionTester {
     private static final File fileTEST_EMPTY_DATABASE = new File("src/test/resources/testfiles/testempty.accdb");
@@ -26,7 +27,7 @@ public class AccessConnectionTester extends BaseConnectionTester {
     private static final String sUSER = "Admin";
     private static final String sPASSWORD = "";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws IOException, SQLException {
         FU.copy(fileTEST_EMPTY_DATABASE, fileTEST_ACCESS_DATABASE);
         /* The JDBC-ODBC bridge could still be used until JAVA 8 using
@@ -51,7 +52,7 @@ public class AccessConnectionTester extends BaseConnectionTester {
         connAccess.close();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         AccessDataSource dsAccess = new AccessDataSource();
         dsAccess.setDatabaseName(fileTEST_SQL_DATABASE.getAbsolutePath());
@@ -66,14 +67,14 @@ public class AccessConnectionTester extends BaseConnectionTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong connection class!", AccessConnection.class, getConnection().getClass());
+        assertEquals(AccessConnection.class, getConnection().getClass(), "Wrong connection class!");
     }
 
     @SneakyThrows
     @Override
-    @Test(expected = SQLException.class)
+    @Test
     public void testPrepareCall() {
-        getConnection().prepareCall(_sSQL);
+        assertThrows(SQLException.class, () -> getConnection().prepareCall(_sSQL));
     }
 
     @SneakyThrows

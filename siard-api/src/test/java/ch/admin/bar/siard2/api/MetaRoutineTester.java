@@ -3,15 +3,15 @@ package ch.admin.bar.siard2.api;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaRoutineTester {
     private static final File _fileSIARD_21_NEW = new File("src/test/resources/tmp/sql2008new.siard");
@@ -34,7 +34,7 @@ public class MetaRoutineTester {
             md.setDataOriginTimespan(_sDATA_ORIGIN_TIMESPAN);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.deleteIfExists(_fileSIARD_21_NEW.toPath());
@@ -43,13 +43,13 @@ public class MetaRoutineTester {
             Schema schema = archive.createSchema(_sTEST_SCHEMA_NAME);
             MetaSchema ms = schema.getMetaSchema();
             _mrNew = ms.createMetaRoutine(_sTEST_ROUTINE_NAME);
-            assertSame("Invalid MetaSchema!", ms, _mrNew.getParentMetaSchema());
+            assertSame(ms, _mrNew.getParentMetaSchema(), "Invalid MetaSchema!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_mrNew.getParentMetaSchema());
@@ -64,14 +64,14 @@ public class MetaRoutineTester {
 
     @Test
     public void testName() {
-        assertEquals("Invalid routine name!", _sTEST_ROUTINE_NAME, _mrNew.getName());
+        assertEquals(_sTEST_ROUTINE_NAME, _mrNew.getName(), "Invalid routine name!");
     }
 
     @Test
     public void testBody() {
         String sBody = "Body";
         _mrNew.setBody(sBody);
-        assertEquals("", sBody, _mrNew.getBody());
+        assertEquals(sBody, _mrNew.getBody(), "");
     }
 
     @Test
@@ -79,7 +79,7 @@ public class MetaRoutineTester {
         try {
             String sSource = "Source";
             _mrNew.setSource(sSource);
-            assertEquals("", sSource, _mrNew.getSource());
+            assertEquals(sSource, _mrNew.getSource(), "");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -89,7 +89,7 @@ public class MetaRoutineTester {
     public void testDescription() {
         String sDescription = "Description";
         _mrNew.setDescription(sDescription);
-        assertEquals("Invalid description!", sDescription, _mrNew.getDescription());
+        assertEquals(sDescription, _mrNew.getDescription(), "Invalid description!");
     }
 
     @Test
@@ -97,7 +97,7 @@ public class MetaRoutineTester {
         try {
             String sCharacteristic = "Characteristic";
             _mrNew.setCharacteristic(sCharacteristic);
-            assertEquals("Wrong characteristic!", sCharacteristic, _mrNew.getCharacteristic());
+            assertEquals(sCharacteristic, _mrNew.getCharacteristic(), "Wrong characteristic!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -108,7 +108,7 @@ public class MetaRoutineTester {
         try {
             String sReturnType = "ReturnType";
             _mrNew.setReturnType(sReturnType);
-            assertEquals("Wrong return type!", sReturnType, _mrNew.getReturnType());
+            assertEquals(sReturnType, _mrNew.getReturnType(), "Wrong return type!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -116,16 +116,16 @@ public class MetaRoutineTester {
 
     @Test
     public void testGetMetaParameters() {
-        assertEquals("Parameters must initially be 0!", 0, _mrNew.getMetaParameters());
+        assertEquals(0, _mrNew.getMetaParameters(), "Parameters must initially be 0!");
         try {
             Archive archive = ArchiveImpl.newInstance();
             archive.open(_fileSIARD_SAMPLE);
             MetaData md = archive.getMetaData();
             MetaSchema ms = md.getMetaSchema(0);
-            assertEquals("Wrong number of meta routines!", 2, ms.getMetaRoutines());
+            assertEquals(2, ms.getMetaRoutines(), "Wrong number of meta routines!");
             MetaRoutine mr = ms.getMetaRoutine(1);
-            assertEquals("Wrong routine!", "compare", mr.getName());
-            assertEquals("Wrong number of meta parameters!", 2, mr.getMetaParameters());
+            assertEquals("compare", mr.getName(), "Wrong routine!");
+            assertEquals(2, mr.getMetaParameters(), "Wrong number of meta parameters!");
             archive.close();
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
@@ -136,11 +136,11 @@ public class MetaRoutineTester {
     public void testCreateMetaParameter() {
         try {
             _mrNew.createMetaParameter(_sTEST_PARAMETER_NAME);
-            assertEquals("Invalid number of parameters!", 1, _mrNew.getMetaParameters());
+            assertEquals(1, _mrNew.getMetaParameters(), "Invalid number of parameters!");
             MetaParameter mp = _mrNew.getMetaParameter(0);
-            assertEquals("Invalid name!", _sTEST_PARAMETER_NAME, mp.getName());
+            assertEquals(_sTEST_PARAMETER_NAME, mp.getName(), "Invalid name!");
             mp = _mrNew.getMetaParameter(_sTEST_PARAMETER_NAME);
-            assertEquals("Invalid name!", _sTEST_PARAMETER_NAME, mp.getName());
+            assertEquals(_sTEST_PARAMETER_NAME, mp.getName(), "Invalid name!");
             mp.setType("VARCHAR(256)");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));

@@ -7,21 +7,25 @@ import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseResultSetMetaDataTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.sql.*;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class MsSqlResultSetMetaDataTest
         extends BaseResultSetMetaDataTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
-    @ClassRule
+    @Container
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
             .withPassword(SA_PASSWORD)
@@ -49,7 +53,7 @@ public class MsSqlResultSetMetaDataTest
     private static String _sSqlQuerySimple = getTableQuery(TestSqlDatabase.getQualifiedSimpleTable(), TestSqlDatabase._listCdSimple);
     private static String _sSqlQueryComplex = getTableQuery(TestSqlDatabase.getQualifiedComplexTable(), TestSqlDatabase._listCdComplex);
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             _sDB_URL = mssqlContainer.getJdbcUrl();
@@ -97,7 +101,7 @@ public class MsSqlResultSetMetaDataTest
         setResultSetMetaData(rsmd, rs);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             MsSqlDataSource dsMsSql = new MsSqlDataSource();
@@ -112,7 +116,7 @@ public class MsSqlResultSetMetaDataTest
         }
     }
 
-    @After
+    @AfterEach
     @Override
     public void tearDown() {
         try {
@@ -130,7 +134,7 @@ public class MsSqlResultSetMetaDataTest
 
     @Test
     public void testClass() {
-        assertEquals("Wrong result set metadata class!", MsSqlResultSetMetaData.class, getResultSetMetaData().getClass());
+        assertEquals(MsSqlResultSetMetaData.class, getResultSetMetaData().getClass(), "Wrong result set metadata class!");
     }
 
     @Test

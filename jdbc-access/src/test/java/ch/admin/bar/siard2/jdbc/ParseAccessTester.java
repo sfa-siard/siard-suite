@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.jdbc;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ParseAccessTester {
     @Test

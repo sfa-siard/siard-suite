@@ -1,12 +1,12 @@
 package ch.admin.bar.siard2.api.primary;
 
 import ch.admin.bar.siard2.api.generated.SiardArchive;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaDataXmlTest {
     private static final String TESTFILES_METADATA_DIR = "src/test/resources/testfiles/metadata/";
@@ -64,7 +64,7 @@ public class MetaDataXmlTest {
         SiardArchive sa = MetaDataXml.readSiard22Xml(fis);
 
         // then
-        assertNull("should not have loaded a siard archive instance for metadata v 1.0", sa);
+        assertNull(sa, "should not have loaded a siard archive instance for metadata v 1.0");
     }
 
     @Test
@@ -76,7 +76,7 @@ public class MetaDataXmlTest {
         SiardArchive sa = MetaDataXml.readSiard21Xml(fis);
 
         // then
-        assertNull("should not have loaded a siard archive instance for metadata v 1.0", sa);
+        assertNull(sa, "should not have loaded a siard archive instance for metadata v 1.0");
     }
 
     @Test
@@ -88,7 +88,7 @@ public class MetaDataXmlTest {
         SiardArchive sa = MetaDataXml.readSiard21Xml(fis);
 
         // then
-        assertNull("should not have loaded a siard archive instance for metadata v 2.2", sa);
+        assertNull(sa, "should not have loaded a siard archive instance for metadata v 2.2");
     }
 
 
@@ -101,7 +101,7 @@ public class MetaDataXmlTest {
         SiardArchive sa = MetaDataXml.readSiard22Xml(fis);
 
         // then
-        assertNull("should not have loaded a siard archive instance for metadata v 2.1", sa);
+        assertNull(sa, "should not have loaded a siard archive instance for metadata v 2.1");
     }
 
     @Test
@@ -114,7 +114,7 @@ public class MetaDataXmlTest {
 
 
         // then
-        assertNull("should not have loaded a siard archive instance for metadata v 2.1", sa);
+        assertNull(sa, "should not have loaded a siard archive instance for metadata v 2.1");
     }
 
     @Test
@@ -127,7 +127,7 @@ public class MetaDataXmlTest {
 
 
         // then
-        assertNull("should not have loaded a siard archive instance for metadata v 2.2", sa);
+        assertNull(sa, "should not have loaded a siard archive instance for metadata v 2.2");
     }
 
     private void assertIsSiard22Archive(SiardArchive sa) {

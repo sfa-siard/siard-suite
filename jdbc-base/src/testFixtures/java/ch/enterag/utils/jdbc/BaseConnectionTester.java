@@ -1,14 +1,14 @@
 package ch.enterag.utils.jdbc;
 
 import ch.enterag.utils.EU;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class BaseConnectionTester {
     protected static final String _sSQL = "SELECT * FROM INFORMATION_SCHEMA.TABLES";
@@ -41,7 +41,7 @@ public abstract class BaseConnectionTester {
         System.out.flush();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if ((_conn != null) && (!_conn.isClosed())) {
@@ -147,7 +147,7 @@ public abstract class BaseConnectionTester {
     public void testIsClosed() {
         enter();
         try {
-            assertSame("Connection is closed!", false, _conn.isClosed());
+            assertSame(false, _conn.isClosed(), "Connection is closed!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -524,7 +524,7 @@ public abstract class BaseConnectionTester {
         enter();
         try {
             int iTimeoutSec = 30;
-            assertSame("Connection is not valid!", true, _conn.isValid(iTimeoutSec));
+            assertSame(true, _conn.isValid(iTimeoutSec), "Connection is not valid!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
