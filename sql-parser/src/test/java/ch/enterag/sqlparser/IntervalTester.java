@@ -1,14 +1,14 @@
 package ch.enterag.sqlparser;
 
 import ch.enterag.utils.EU;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class IntervalTester {
 
@@ -22,7 +22,7 @@ public class IntervalTester {
             Interval iv = Interval.fromDuration(duration1);
             System.out.println(iv.toString());
             Duration duration2 = iv.toDuration();
-            assertEquals("Invalid duration!", duration1, duration2);
+            assertEquals(duration1, duration2, "Invalid duration!");
         } catch (DatatypeConfigurationException dcfe) {
             fail(EU.getExceptionMessage(dcfe));
         }

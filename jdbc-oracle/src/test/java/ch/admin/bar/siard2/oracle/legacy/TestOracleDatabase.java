@@ -18,7 +18,7 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TestOracleDatabase {
     private static final OracleConnectionProperties _ocp = new OracleConnectionProperties();
@@ -202,10 +202,10 @@ public class TestOracleDatabase {
         String sSql = "CREATE USER " + sTestUser + " IDENTIFIED BY " + sTestPassword + " QUOTA UNLIMITED ON USERS";
         Statement stmt = conn.createStatement();
         int iResult = stmt.executeUpdate(sSql);
-        assertSame("User creation failed!", 0, iResult);
+        assertSame(0, iResult, "User creation failed!");
         sSql = "GRANT CONNECT, RESOURCE TO " + sTestUser;
         iResult = stmt.executeUpdate(sSql);
-        assertSame("User grant failed!", 0, iResult);
+        assertSame(0, iResult, "User grant failed!");
         stmt.close();
         if (!conn.getAutoCommit()) conn.commit();
     }
@@ -215,7 +215,7 @@ public class TestOracleDatabase {
                              .unwrap(Statement.class);
         String sSql = "DROP USER " + sTestUser + " CASCADE";
         int iResult = stmt.executeUpdate(sSql);
-        assertSame("User drop failed!", 0, iResult);
+        assertSame(0, iResult, "User drop failed!");
         stmt.close();
         if (!conn.getAutoCommit()) conn.commit();
     }

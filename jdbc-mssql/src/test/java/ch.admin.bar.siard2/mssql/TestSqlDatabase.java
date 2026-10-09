@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSqlDatabase {
     public static final String _sTEST_SCHEMA = "TESTSQLSCHEMA";
@@ -241,7 +241,7 @@ public class TestSqlDatabase {
     private void createType(QualifiedId qiType, List<TestColumnDefinition> listAd)
             throws SQLException {
         CreateTypeStatement cts = _sf.newCreateTypeStatement();
-        assertEquals("", 1, listAd.size()); // MSSQL only supports DISTINCT types
+        assertEquals(1, listAd.size(), ""); // MSSQL only supports DISTINCT types
         TestColumnDefinition tcd = listAd.get(0);
         PredefinedType ptBase = _sf.newPredefinedType();
         ptBase.parse(tcd.getType());

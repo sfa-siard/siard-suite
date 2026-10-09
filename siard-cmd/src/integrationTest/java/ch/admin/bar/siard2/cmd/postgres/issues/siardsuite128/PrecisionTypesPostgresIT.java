@@ -7,21 +7,24 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Testcontainers
 public class PrecisionTypesPostgresIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public PostgreSQLContainer<?> db = new PostgreSQLContainer<>(DockerImageName.parse("postgres:13"))
             .withInitScript(SqlScripts.Postgres.SIARDSUITE_128_PRECISION_TYPES);
 
@@ -40,7 +43,7 @@ public class PrecisionTypesPostgresIT {
         });
 
         // then
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+        assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 

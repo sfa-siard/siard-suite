@@ -6,21 +6,23 @@ import ch.admin.bar.siard2.mssql.TestSqlDatabase;
 import ch.enterag.utils.jdbc.BaseConnectionTester;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.sql.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class MSSQLConnectionTest extends BaseConnectionTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
-    @ClassRule
+    @Container
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE).acceptLicense()
                                                                                                   .withPassword(SA_PASSWORD)
                                                                                                   .withUrlParam("trustServerCertificate", "true");
@@ -31,7 +33,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
 
     private MsSqlConnection msSqlConnection = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException {
         DB_URL = mssqlContainer.getJdbcUrl();
         DB_USER = mssqlContainer.getUsername();
@@ -48,7 +50,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
         connMsSql.close();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         MsSqlDataSource dataSource = new MsSqlDataSource();
         dataSource.setUrl(DB_URL);
@@ -61,16 +63,15 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong connection class!", MsSqlConnection.class, msSqlConnection.getClass());
+        assertEquals(MsSqlConnection.class, msSqlConnection.getClass(), "Wrong connection class!");
     }
 
 
-    @Test(expected = SQLFeatureNotSupportedException.class)
+    @Test
     @Override
-    @SneakyThrows
     public void testCreateArrayOf() {
-        Array array = msSqlConnection.createArrayOf("VARCHAR(256)", new String[]{"a", "b", "c"});
-        array.free();
+        assertThrows(SQLFeatureNotSupportedException.class,
+                     () -> msSqlConnection.createArrayOf("VARCHAR(256)", new String[]{"a", "b", "c"}));
     }
 
 
@@ -79,7 +80,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
     @SneakyThrows
     public void testCreateStatement() {
         Statement stmt = msSqlConnection.createStatement();
-        assertEquals("Wrong statement class!", MsSqlStatement.class, stmt.getClass());
+        assertEquals(MsSqlStatement.class, stmt.getClass(), "Wrong statement class!");
     }
 
     @Test
@@ -87,7 +88,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
     @SneakyThrows
     public void testGetMetadata() {
         DatabaseMetaData dmd = msSqlConnection.getMetaData();
-        assertEquals("Wrong metadata class!", MsSqlDatabaseMetaData.class, dmd.getClass());
+        assertEquals(MsSqlDatabaseMetaData.class, dmd.getClass(), "Wrong metadata class!");
     }
 
     @Test
@@ -112,7 +113,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
         try {
             rs = stmt.executeQuery("SELECT COUNT(*) FROM test_rollback");
             rs.next();
-            assertEquals("Table should be empty after rollback", 0, rs.getInt(1));
+            assertEquals(0, rs.getInt(1), "Table should be empty after rollback");
             rs.close();
         } catch (SQLException e) {
             // Table doesn't exist after rollback - this is expected and correct
@@ -125,7 +126,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
     @SneakyThrows
     public void testSetSavepoint() {
         Savepoint sp = msSqlConnection.setSavepoint();
-        assertNotNull("Savepoint should not be null", sp);
+        assertNotNull(sp, "Savepoint should not be null");
     }
 
     @Test
@@ -133,8 +134,8 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
     @SneakyThrows
     public void testSetSavepoint_String() {
         Savepoint sp = msSqlConnection.setSavepoint("TEST_SAVEPOINT");
-        assertNotNull("Savepoint should not be null", sp);
-        assertEquals("Savepoint name should match", "TEST_SAVEPOINT", sp.getSavepointName());
+        assertNotNull(sp, "Savepoint should not be null");
+        assertEquals("TEST_SAVEPOINT", sp.getSavepointName(), "Savepoint name should match");
     }
 
     @Test
@@ -147,7 +148,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
 
         // Create savepoint after first insert
         Savepoint sp = msSqlConnection.setSavepoint();
-        assertNotNull("Savepoint should not be null", sp);
+        assertNotNull(sp, "Savepoint should not be null");
 
         // Insert more data
         stmt.execute("INSERT INTO test_sp_rollback VALUES (2)");
@@ -157,7 +158,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
 
         ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM test_sp_rollback");
         rs.next();
-        assertEquals("Should have 1 row after rollback to savepoint", 1, rs.getInt(1));
+        assertEquals(1, rs.getInt(1), "Should have 1 row after rollback to savepoint");
         rs.close();
 
         // Clean up
@@ -165,12 +166,14 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
         stmt.close();
     }
 
-    @Test(expected = SQLFeatureNotSupportedException.class)
+    @Test
     @Override
-    @SneakyThrows
     public void testReleaseSavePoint() {
-        Savepoint sp = msSqlConnection.setSavepoint();
-        msSqlConnection.releaseSavepoint(sp);
+        assertThrows(SQLFeatureNotSupportedException.class,
+                     () -> {
+                         Savepoint sp = msSqlConnection.setSavepoint();
+                         msSqlConnection.releaseSavepoint(sp);
+                     });
     }
 
     @Test
@@ -178,8 +181,8 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
     @SneakyThrows
     public void testPrepareStatement_String_AInt() {
         PreparedStatement pstmt = msSqlConnection.prepareStatement(_sSQL, new int[]{1});
-        assertNotNull("PreparedStatement should not be null", pstmt);
-        assertTrue("Should be instance of PreparedStatement", pstmt instanceof PreparedStatement);
+        assertNotNull(pstmt, "PreparedStatement should not be null");
+        assertTrue(pstmt instanceof PreparedStatement, "Should be instance of PreparedStatement");
         pstmt.close();
     }
 
@@ -188,8 +191,8 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
     @SneakyThrows
     public void testPrepareStatement_String_AString() {
         PreparedStatement pstmt = msSqlConnection.prepareStatement(_sSQL, new String[]{"COL_A"});
-        assertNotNull("PreparedStatement should not be null", pstmt);
-        assertTrue("Should be instance of PreparedStatement", pstmt instanceof PreparedStatement);
+        assertNotNull(pstmt, "PreparedStatement should not be null");
+        assertTrue(pstmt instanceof PreparedStatement, "Should be instance of PreparedStatement");
         pstmt.close();
     }
 
@@ -201,7 +204,7 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
         String originalCatalog = msSqlConnection.getCatalog();
 
         msSqlConnection.setCatalog("master");
-        assertEquals("Catalog should be set to master", "master", msSqlConnection.getCatalog());
+        assertEquals("master", msSqlConnection.getCatalog(), "Catalog should be set to master");
 
         // Restore original catalog
         if (originalCatalog != null) {
@@ -209,10 +212,10 @@ public class MSSQLConnectionTest extends BaseConnectionTester {
         }
     }
 
-    @Test(expected = SQLServerException.class)
+    @Test
     @Override
-    @SneakyThrows
     public void testCreateStruct() {
-        msSqlConnection.createStruct("TEST_SCHEMA.TEST_STRUCT_TYPE", new String[]{"a", "b", "c"});
+        assertThrows(SQLServerException.class,
+                     () -> msSqlConnection.createStruct("TEST_SCHEMA.TEST_STRUCT_TYPE", new String[]{"a", "b", "c"}));
     }
 }

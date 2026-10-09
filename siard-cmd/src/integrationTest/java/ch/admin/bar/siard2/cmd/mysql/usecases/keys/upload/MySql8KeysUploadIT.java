@@ -2,19 +2,22 @@ package ch.admin.bar.siard2.cmd.mysql.usecases.keys.upload;
 
 import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class MySql8KeysUploadIT {
 
     public final static String SIARD_ARCHIVE_MYSQL_8 = "mysql/usecases/keys/upload/simple-teams-example_mysql8.siard";
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MySQLContainer<?> db = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_8_0))
             .withUsername("root")
             .withPassword("test")

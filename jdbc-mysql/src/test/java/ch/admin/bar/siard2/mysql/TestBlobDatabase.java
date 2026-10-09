@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TestBlobDatabase {
     public static final String _sTEST_SCHEMA = "TESTBLOBSCHEMA";
@@ -235,7 +235,7 @@ public class TestBlobDatabase {
             pstmt.setBinaryStream(iLob + 1, isBlob);
         }
         int iResult = pstmt.executeUpdate();
-        assertSame("Insert failed!", 1, iResult);
+        assertSame(1, iResult, "Insert failed!");
         pstmt.close();
         _conn.commit();
     }

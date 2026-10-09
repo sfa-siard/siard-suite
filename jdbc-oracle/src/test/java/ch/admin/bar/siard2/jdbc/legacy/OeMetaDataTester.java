@@ -4,19 +4,19 @@ import ch.admin.bar.siard2.jdbc.OracleConnection;
 import ch.admin.bar.siard2.jdbc.OracleDriver;
 import ch.admin.bar.siard2.jdbcx.OracleDataSource;
 import ch.enterag.utils.EU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@Ignore("seems to depend on setup @enterag")
+@Disabled("seems to depend on setup @enterag")
 public class OeMetaDataTester {
     private static final String _sDB_URL = OracleDriver.getUrl("vmw10.enterag.ch:1521:orcl");
     private static final String _sDB_USER = "OE";
@@ -24,7 +24,7 @@ public class OeMetaDataTester {
 
     private DatabaseMetaData _dmd = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             OracleDataSource dsOracle = new OracleDataSource();
@@ -40,7 +40,7 @@ public class OeMetaDataTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             Connection conn = _dmd.getConnection();

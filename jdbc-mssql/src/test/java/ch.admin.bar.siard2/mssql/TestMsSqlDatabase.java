@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TestMsSqlDatabase {
     public static final String _sTEST_SCHEMA = "TESTMSSQLSCHEMA";
@@ -426,7 +426,7 @@ public class TestMsSqlDatabase {
                                                               .getName() + "!");
         }
         int iResult = pstmt.executeUpdate();
-        assertSame("Insert failed!", 1, iResult);
+        assertSame(1, iResult, "Insert failed!");
         pstmt.close();
         _conn.commit();
     }

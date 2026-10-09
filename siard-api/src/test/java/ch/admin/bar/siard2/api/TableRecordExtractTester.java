@@ -4,15 +4,15 @@ import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
 import ch.enterag.utils.test.TestUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TableRecordExtractTester {
     private static final File _fileSAKILA = new File("src/test/resources/testfiles/sfdbsakila.siard");
@@ -48,7 +48,7 @@ public class TableRecordExtractTester {
     private Table createTable(Schema schema)
             throws IOException {
         Table tab = schema.createTable(_sTEST_TABLE_NAME);
-        assertSame("Table create failed!", schema, tab.getParentSchema());
+        assertSame(schema, tab.getParentSchema(), "Table create failed!");
 
         MetaColumn mc1 = tab.getMetaTable()
                             .createMetaColumn(_sTEST_COLUMN1_NAME);
@@ -84,7 +84,7 @@ public class TableRecordExtractTester {
         rr.close();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.deleteIfExists(_fileSIARD_21_NEW.toPath());

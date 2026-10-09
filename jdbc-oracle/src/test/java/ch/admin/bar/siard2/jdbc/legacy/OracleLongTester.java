@@ -6,25 +6,27 @@ import ch.admin.bar.siard2.jdbc.OracleResultSet;
 import ch.admin.bar.siard2.jdbcx.OracleDataSource;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
 import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.OracleContainer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class OracleLongTester extends BaseDatabaseMetaDataTester {
 
     private static OracleDatabaseMetaData _dmdOracle = null;
 
-    @ClassRule
+    @Container
     public final static OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart");
 
-    @Before
+    @BeforeEach
     public void beforeClass() throws SQLException {
         OracleDataSource dsOracle = new OracleDataSource();
         dsOracle.setUrl(db.getJdbcUrl());
@@ -55,7 +57,7 @@ public class OracleLongTester extends BaseDatabaseMetaDataTester {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testAllViews() throws SQLException {
         String sSql = "SELECT * FROM ALL_VIEWS";
         listLengths(sSql, "TEXT");
@@ -76,7 +78,7 @@ public class OracleLongTester extends BaseDatabaseMetaDataTester {
 
     @SneakyThrows
     @Override
-    @Ignore
+    @Disabled
     public void testGetAttributes() {
         // print(this._dmdOracle.getAttributes(null, null, "%", "%"));
     }

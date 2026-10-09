@@ -8,9 +8,9 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.utils.*;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
 
 import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MySqlKeysDownload {
 
@@ -100,7 +100,7 @@ public class MySqlKeysDownload {
         });
 
         // then
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         actualArchive.preserveArchive();
 

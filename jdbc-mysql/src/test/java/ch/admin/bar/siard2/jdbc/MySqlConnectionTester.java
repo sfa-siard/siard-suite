@@ -5,10 +5,10 @@ import ch.admin.bar.siard2.mysql.TestMySqlDatabase;
 import ch.admin.bar.siard2.mysql.TestSqlDatabase;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jdbc.BaseConnectionTester;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.MountableFile;
 
@@ -16,8 +16,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class MySqlConnectionTester extends BaseConnectionTester {
     private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
@@ -35,7 +35,7 @@ public class MySqlConnectionTester extends BaseConnectionTester {
 
     private MySqlConnection _connMySql = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             _mysql.start();
@@ -63,12 +63,12 @@ public class MySqlConnectionTester extends BaseConnectionTester {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _mysql.stop();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             MySqlDataSource dsMySql = new MySqlDataSource();
@@ -85,7 +85,7 @@ public class MySqlConnectionTester extends BaseConnectionTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong connection class!", MySqlConnection.class, _connMySql.getClass());
+        assertEquals(MySqlConnection.class, _connMySql.getClass(), "Wrong connection class!");
     }
 
     @Test
@@ -94,7 +94,7 @@ public class MySqlConnectionTester extends BaseConnectionTester {
         enter();
         try {
             DatabaseMetaData dmd = _connMySql.getMetaData();
-            assertEquals("Wrong metadata class!", MySqlDatabaseMetaData.class, dmd.getClass());
+            assertEquals(MySqlDatabaseMetaData.class, dmd.getClass(), "Wrong metadata class!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             System.out.println(EU.getExceptionMessage(sfnse));
         } catch (SQLException se) {

@@ -4,22 +4,25 @@ import ch.admin.bar.siard2.cmd.SiardFromDb;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class MariaDBDownloadNationsIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MariaDBContainer<?> downloadDb = new MariaDBContainer<>(DockerImageName.parse("mariadb:11.8.2"))
             .withCopyFileToContainer(MountableFile.forClasspathResource(SqlScripts.MySQL.JDBCMYSQL_4),
                                      "/docker-entrypoint-initdb.d/");
@@ -41,6 +44,6 @@ public class MariaDBDownloadNationsIT {
         });
 
         // then
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
     }
 }

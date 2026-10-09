@@ -3,16 +3,16 @@ package ch.admin.bar.siard2.api;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SchemaTester {
     private static final File _fileSIARD_10_SOURCE = new File("src/test/resources/testfiles/sql1999.siard");
@@ -69,7 +69,7 @@ public class SchemaTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.copy(_fileSIARD_10_SOURCE.toPath(), _fileSIARD_10.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -78,17 +78,17 @@ public class SchemaTester {
             Archive archive = ArchiveImpl.newInstance();
             archive.create(_fileSIARD_21_NEW);
             _schNew = archive.createSchema(_sTEST_SCHEMA_NAME);
-            assertSame("Schema create failed!", archive, _schNew.getParentArchive());
+            assertSame(archive, _schNew.getParentArchive(), "Schema create failed!");
             archive = ArchiveImpl.newInstance();
             archive.open(_fileSIARD_10);
             _schOld = archive.getSchema(0);
-            assertSame("Schema open failed!", archive, _schOld.getParentArchive());
+            assertSame(archive, _schOld.getParentArchive(), "Schema open failed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_schNew.getParentArchive()
@@ -107,28 +107,28 @@ public class SchemaTester {
     @Test
     public void testGetMetaSchema() {
         MetaSchema ms = _schNew.getMetaSchema();
-        assertSame("MetaSchema represents wrong schema!", _schNew, ms.getSchema());
+        assertSame(_schNew, ms.getSchema(), "MetaSchema represents wrong schema!");
         ms = _schOld.getMetaSchema();
-        assertSame("MetaSchema represents wrong schema!", _schOld, ms.getSchema());
+        assertSame(_schOld, ms.getSchema(), "MetaSchema represents wrong schema!");
     }
 
     @Test
     public void testIsValid() {
-        assertFalse("New schema is not valid (no tables)!", _schNew.isValid());
-        assertTrue("Old schema must be valid!", _schOld.isValid());
+        assertFalse(_schNew.isValid(), "New schema is not valid (no tables)!");
+        assertTrue(_schOld.isValid(), "Old schema must be valid!");
     }
 
     @Test
     public void testIsEmpty() {
-        assertTrue("New schema must be empty (no tables)!", _schNew.isEmpty());
-        assertFalse("Old schema is not empty!", _schOld.isEmpty());
+        assertTrue(_schNew.isEmpty(), "New schema must be empty (no tables)!");
+        assertFalse(_schOld.isEmpty(), "Old schema is not empty!");
 
     }
 
     @Test
     public void testGetTables() {
-        assertEquals("New schema has tables!", 0, _schNew.getTables());
-        assertEquals("Old schema has wrong number of tables!", 1, _schOld.getTables());
+        assertEquals(0, _schNew.getTables(), "New schema has tables!");
+        assertEquals(1, _schOld.getTables(), "Old schema has wrong number of tables!");
     }
 
     @Test
@@ -144,8 +144,8 @@ public class SchemaTester {
     public void testGetTable_String() {
         String sName = "TABLETEST2";
         Table table = _schOld.getTable(sName);
-        assertEquals("Table not retrieved correctly!", sName, table.getMetaTable()
-                                                                   .getName());
+        assertEquals(sName, table.getMetaTable()
+                                                                   .getName(), "Table not retrieved correctly!");
     }
 
     @Test
@@ -154,8 +154,8 @@ public class SchemaTester {
             String sName = "TESTTABLE";
             Table table = _schNew.createTable(sName);
             /* TODO: add creating a column to the table, when that has been tested! */
-            assertEquals("Table not created correctly!", sName, table.getMetaTable()
-                                                                     .getName());
+            assertEquals(sName, table.getMetaTable()
+                                                                     .getName(), "Table not created correctly!");
             try {
                 table = _schOld.createTable(sName);
                 fail("Table cannot be created in old archive!");

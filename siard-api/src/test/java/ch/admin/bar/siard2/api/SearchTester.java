@@ -4,14 +4,14 @@ import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.admin.bar.siard2.api.primary.SearchImpl;
 import ch.enterag.utils.DU;
 import ch.enterag.utils.EU;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class SearchTester {
     private static final File _fileSAKILA = new File("src/test/resources/testfiles/sfdbsakila.siard");

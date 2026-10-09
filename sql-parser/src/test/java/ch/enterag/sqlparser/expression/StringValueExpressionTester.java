@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.expression;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StringValueExpressionTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private StringValueExpression _sve = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _sve = _sf.newStringValueExpression();
     }
@@ -21,7 +21,7 @@ public class StringValueExpressionTester {
         // ErrorListener.getInstance().suppressException();
         _sve.parse("'a ''character'' string with ''quotes'''");
         // System.out.println(_sve.format());
-        assertEquals("Literal string with quotes not recognized!", "'a ''character'' string with ''quotes'''", _sve.format());
+        assertEquals("'a ''character'' string with ''quotes'''", _sve.format(), "Literal string with quotes not recognized!");
     }
 
     @Test
@@ -29,7 +29,7 @@ public class StringValueExpressionTester {
         // ErrorListener.getInstance().suppressException();
         _sve.parse("tab.col || 'a ''character'' string with ''quotes'''");
         // System.out.println(_sve.format());
-        assertEquals("Concatenation not recognized!", "TAB.COL || 'a ''character'' string with ''quotes'''", _sve.format());
+        assertEquals("TAB.COL || 'a ''character'' string with ''quotes'''", _sve.format(), "Concatenation not recognized!");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class StringValueExpressionTester {
         // ErrorListener.getInstance().suppressException();
         _sve.parse("SUBSTRING(tab.\"column\" FROM 1 FOR 12)");
         // System.out.println(_sve.format());
-        assertEquals("Function not recognized!", "SUBSTRING(TAB.\"column\" FROM 1 FOR 12)", _sve.format());
+        assertEquals("SUBSTRING(TAB.\"column\" FROM 1 FOR 12)", _sve.format(), "Function not recognized!");
     }
 
 }

@@ -1,11 +1,11 @@
 package ch.enterag.sqlparser;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class SqlTester {
 
@@ -13,7 +13,7 @@ public class SqlTester {
     public void testParseId() {
         /* regular */
         try {
-            assertEquals("Regular identifiers must be upper case!", "ASCHEMA", SqlLiterals.parseId("ASchema"));
+            assertEquals("ASCHEMA", SqlLiterals.parseId("ASchema"), "Regular identifiers must be upper case!");
         } catch (ParseException pe) {
             fail(pe.getClass()
                    .getName() + " [" + String.valueOf(pe.getErrorOffset()) + "]: " + pe.getMessage());
@@ -38,7 +38,7 @@ public class SqlTester {
         }
         /* delimited */
         try {
-            assertEquals("Delimited identifer must be normalized just as is!", "ASchema", SqlLiterals.parseId("\"ASchema\""));
+            assertEquals("ASchema", SqlLiterals.parseId("\"ASchema\""), "Delimited identifer must be normalized just as is!");
         } catch (ParseException pe) {
             fail(pe.getClass()
                    .getName() + " [" + String.valueOf(pe.getErrorOffset()) + "]: " + pe.getMessage());
@@ -53,7 +53,7 @@ public class SqlTester {
         }
         /* delimited with doubled quotes */
         try {
-            assertEquals("Double quotes must be resolved!", "a\"quote", SqlLiterals.parseId("\"a\"\"quote\""));
+            assertEquals("a\"quote", SqlLiterals.parseId("\"a\"\"quote\""), "Double quotes must be resolved!");
         } catch (ParseException pe) {
             fail(pe.getClass()
                    .getName() + " [" + String.valueOf(pe.getErrorOffset()) + "]: " + pe.getMessage());
@@ -68,7 +68,7 @@ public class SqlTester {
         }
         /* delimited key word */
         try {
-            assertEquals("Keywords must be delimited", "DROP", SqlLiterals.parseId("\"DROP\""));
+            assertEquals("DROP", SqlLiterals.parseId("\"DROP\""), "Keywords must be delimited");
         } catch (ParseException pe) {
             fail(pe.getClass()
                    .getName() + " [" + String.valueOf(pe.getErrorOffset()) + "]: " + pe.getMessage());
@@ -77,12 +77,12 @@ public class SqlTester {
 
     @Test
     public void testFormatId() {
-        assertEquals("Plain uppercase identifiers must not be changed!", "ASCHEMA", SqlLiterals.formatId("ASCHEMA"));
-        assertEquals("Umlauts are letters too!!", "ÄSCHEMA", SqlLiterals.formatId("ÄSCHEMA"));
-        assertEquals("Lowercase stuff must be quoted!", "\"ASchema\"", SqlLiterals.formatId("ASchema"));
-        assertEquals("Special characters must also be quoted", "\"ASCH#MA\"", SqlLiterals.formatId("ASCH#MA"));
-        assertEquals("Underscore counts as alphabetic", "ASCH_MA", SqlLiterals.formatId("ASCH_MA"));
-        assertEquals("Quotes must be doubled in quotes!", "\"ASCH\"\"EMA\"", SqlLiterals.formatId("ASCH\"EMA"));
+        assertEquals("ASCHEMA", SqlLiterals.formatId("ASCHEMA"), "Plain uppercase identifiers must not be changed!");
+        assertEquals("ÄSCHEMA", SqlLiterals.formatId("ÄSCHEMA"), "Umlauts are letters too!!");
+        assertEquals("\"ASchema\"", SqlLiterals.formatId("ASchema"), "Lowercase stuff must be quoted!");
+        assertEquals("\"ASCH#MA\"", SqlLiterals.formatId("ASCH#MA"), "Special characters must also be quoted");
+        assertEquals("ASCH_MA", SqlLiterals.formatId("ASCH_MA"), "Underscore counts as alphabetic");
+        assertEquals("\"ASCH\"\"EMA\"", SqlLiterals.formatId("ASCH\"EMA"), "Quotes must be doubled in quotes!");
         try {
             SqlLiterals.formatId("A2345678901234567890123456789012345678901234567890" + /* 50 */
                                          "12345678901234567890123456789012345678901234567890" + /* 100 */

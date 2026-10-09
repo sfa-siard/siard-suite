@@ -3,10 +3,9 @@ package ch.admin.bar.siard2.jdbc.legacy;
 import ch.admin.bar.siard2.jdbc.OracleConnection;
 import ch.admin.bar.siard2.jdbcx.OracleDataSource;
 import ch.enterag.utils.database.SqlTypes;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.OracleContainer;
 
 import java.math.BigDecimal;
@@ -15,15 +14,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class OracleDatabaseMetaDataBugTester {
     private static final String _sDB_USER = "SYSTEM";
     private static final String _sDB_PASSWORD = "test";
     private static final String _sTABLE_BUG = "BUGSIMONE";
 
 
-    @ClassRule
+    @Container
     public final static OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart");
 
     private OracleConnection _connOracle = null;
@@ -53,7 +55,7 @@ public class OracleDatabaseMetaDataBugTester {
             throw new SQLException(sSql + " failed!");
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException {
         OracleDataSource dsOracle = new OracleDataSource();
         dsOracle.setUrl(db.getJdbcUrl());
@@ -107,7 +109,7 @@ public class OracleDatabaseMetaDataBugTester {
             fail("Invalid meta data result set");
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         OracleDataSource dsOracle = new OracleDataSource();
         dsOracle.setUrl(db.getJdbcUrl());

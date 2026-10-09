@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.expression;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ArrayValueExpressionTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private ArrayValueExpression _ave = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _ave = _sf.newArrayValueExpression();
     }
@@ -20,14 +20,14 @@ public class ArrayValueExpressionTester {
     public void testLiteral() {
         _ave.parse("t.COL");
         // System.out.println(_ave.format());
-        assertEquals("Array value literal not recognized!", "T.COL", _ave.format());
+        assertEquals("T.COL", _ave.format(), "Array value literal not recognized!");
     }
 
     @Test
     public void testConcatenation() {
         _ave.parse("t.COL || \"a\"");
         // System.out.println(_ave.format());
-        assertEquals("Array value concatenation not recognized!", "T.COL || \"a\"", _ave.format());
+        assertEquals("T.COL || \"a\"", _ave.format(), "Array value concatenation not recognized!");
     }
 
 }

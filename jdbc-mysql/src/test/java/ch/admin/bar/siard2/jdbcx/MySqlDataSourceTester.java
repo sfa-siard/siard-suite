@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.jdbcx;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.MountableFile;
 
@@ -8,8 +8,9 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Assertions;
 
 public class MySqlDataSourceTester {
     private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
@@ -22,7 +23,7 @@ public class MySqlDataSourceTester {
     private static String _sDB_USER;
     private static String _sDB_PASSWORD;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         _mysql.start();
         _sDB_URL = "jdbc:mysql://" + _mysql.getHost() + ":" + _mysql.getFirstMappedPort();
@@ -30,7 +31,7 @@ public class MySqlDataSourceTester {
         _sDB_PASSWORD = _mysql.getPassword();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _mysql.stop();
     }
@@ -38,12 +39,12 @@ public class MySqlDataSourceTester {
     private MySqlDataSource _dsMySql = null;
     private Connection _conn = null;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         _dsMySql = new MySqlDataSource();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         if ((_conn != null) && (!_conn.isClosed())) {
             _conn.close();
@@ -53,9 +54,9 @@ public class MySqlDataSourceTester {
     @Test
     public void testWrapper() {
         try {
-            Assert.assertSame("Invalid wrapper!", true, _dsMySql.isWrapperFor(DataSource.class));
+            Assertions.assertSame(true, _dsMySql.isWrapperFor(DataSource.class), "Invalid wrapper!");
             DataSource dsWrapped = _dsMySql.unwrap(DataSource.class);
-            assertSame("Invalid wrapper class!", com.mysql.cj.jdbc.MysqlDataSource.class, dsWrapped.getClass());
+            assertSame(com.mysql.cj.jdbc.MysqlDataSource.class, dsWrapped.getClass(), "Invalid wrapper class!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
@@ -80,7 +81,7 @@ public class MySqlDataSourceTester {
     public void testLoginTimeout() {
         try {
             int iLoginTimeout = _dsMySql.getLoginTimeout();
-            assertSame("Unexpected login timeout " + String.valueOf(iLoginTimeout) + "!", iLoginTimeout, 0);
+            assertSame(iLoginTimeout, 0, "Unexpected login timeout " + String.valueOf(iLoginTimeout) + "!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());

@@ -13,16 +13,17 @@ import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 import ch.enterag.utils.jdbc.BaseStatementTester;
 import ch.enterag.utils.lang.Execute;
 import lombok.SneakyThrows;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class AccessStatementTester extends BaseStatementTester {
     private static final File fileTEST_EMPTY_DATABASE = new File("src/test/resources/testfiles/testempty.accdb");
@@ -32,7 +33,7 @@ public class AccessStatementTester extends BaseStatementTester {
     private static final String sUSER = "Admin";
     private static final String sPASSWORD = "";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             FU.copy(fileTEST_EMPTY_DATABASE, fileTEST_ACCESS_DATABASE);
@@ -85,7 +86,7 @@ public class AccessStatementTester extends BaseStatementTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         setUp(false);
     }
@@ -93,14 +94,14 @@ public class AccessStatementTester extends BaseStatementTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong statement class!", AccessStatement.class, getStatement().getClass());
+        assertEquals(AccessStatement.class, getStatement().getClass(), "Wrong statement class!");
     }
 
     @SneakyThrows
     @Override
-    @Test(expected = SQLException.class)
+    @Test
     public void testGetMoreResults() {
-        getStatement().getMoreResults();
+        assertThrows(SQLException.class, () -> getStatement().getMoreResults());
     }
 
     @SneakyThrows
@@ -110,7 +111,7 @@ public class AccessStatementTester extends BaseStatementTester {
         String sSql = "CREATE SCHEMA TESTSCHEMA";
         Statement stmt = getStatement();
         int iResult = stmt.executeUpdate(sSql);
-        assertEquals("Invalid result!", 0, iResult);
+        assertEquals(0, iResult, "Invalid result!");
         /***/
         tearDown();
         setUpClass();
@@ -145,7 +146,7 @@ public class AccessStatementTester extends BaseStatementTester {
                 "  PRIMARY KEY(\"id\"))";
         Statement stmt = getStatement();
         int iResult = stmt.executeUpdate(sSql);
-        assertEquals("Invalid result!", 0, iResult);
+        assertEquals(0, iResult, "Invalid result!");
         /***/
         tearDown();
         setUpClass();
@@ -238,7 +239,7 @@ public class AccessStatementTester extends BaseStatementTester {
      {
      long l = rs.getLong("RECORDS");
      System.out.println("Records: "+String.valueOf(l));
-     assertEquals("Invalid record count for empty table!",1354764l,l);
+     assertEquals(1354764l, l, "Invalid record count for empty table!");
      }
      else
      fail("No number of records determined!");
@@ -272,7 +273,7 @@ public class AccessStatementTester extends BaseStatementTester {
      {
      long l = rs.getLong("RECORDS");
      System.out.println("Records: "+String.valueOf(l));
-     assertEquals("Invalid record count for empty table!",0l,l);
+     assertEquals(0l, l, "Invalid record count for empty table!");
      }
      else
      fail("No number of records determined!");

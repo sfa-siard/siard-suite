@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":siard-utilities"))
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.vintage.engine)
+    testImplementation(libs.junit.platform.suite)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
 }

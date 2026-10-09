@@ -19,10 +19,10 @@ dependencies {
     runtimeOnly(libs.db2.license)
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit4)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.testcontainers.junit)
     testImplementation(testFixtures(project(":jdbc-base")))
 
-    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.testcontainers.db2)

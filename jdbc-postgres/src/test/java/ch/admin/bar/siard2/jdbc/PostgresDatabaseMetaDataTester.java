@@ -11,7 +11,7 @@ import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.database.SqlTypes;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.IOException;
@@ -19,9 +19,10 @@ import java.sql.*;
 import java.text.ParseException;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
 
-@Ignore
+@Disabled
 public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
     private static final PostgreSQLContainer<?> _pg = new PostgreSQLContainer<>("postgres:16-alpine")
             .withDatabaseName("postgres")
@@ -106,7 +107,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             fail("Invalid meta data result set");
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException, IOException {
         _pg.start();
         _sDB_URL = PostgresDriver.getUrl(_pg.getHost() + ":" + _pg.getFirstMappedPort() + "/" + _pg.getDatabaseName());
@@ -127,12 +128,12 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         connPostgres.close();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _pg.stop();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             PostgresDataSource dsPostgres = new PostgresDataSource();
@@ -151,7 +152,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong database meta data class!", PostgresDatabaseMetaData.class, getDatabaseMetaData().getClass());
+        assertEquals(PostgresDatabaseMetaData.class, getDatabaseMetaData().getClass(), "Wrong database meta data class!");
     }
 
     @Override
@@ -206,7 +207,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 setTestTables.remove(pqiTable);
             }
             rs.close();
-            assertTrue("Some test tables not found!", setTestTables.isEmpty());
+            assertTrue(setTestTables.isEmpty(), "Some test tables not found!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -227,7 +228,7 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 setTestViews.remove(pqiView);
             }
             rs.close();
-            assertTrue("Some test views not found!", setTestViews.isEmpty());
+            assertTrue(setTestViews.isEmpty(), "Some test views not found!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -626,17 +627,17 @@ public class PostgresDatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                                 iRadix = 2;
                         }
                     }
-                    assertEquals("Unexpected data type for " + sColumnName, iType, iDataType);
-                    assertEquals("Unexpected type name for " + sColumnName, sType, sTypeName);
-                    assertEquals("Unexpected column size for " + sColumnName, iPrecision, iColumnSize);
-                    assertEquals("Unexpected decimal digits for " + sColumnName, iScale, iDecimalDigits);
-                    assertEquals("Unexpected radix for " + sColumnName, iRadix, iNumPrecRadix);
-                    assertEquals("Unexpected nullable for " + sColumnName, iNulls, iNullable);
-                    assertEquals("Unexpected length for " + sColumnName, iPrecision, iCharOctetLength);
+                    assertEquals(iType, iDataType, "Unexpected data type for " + sColumnName);
+                    assertEquals(sType, sTypeName, "Unexpected type name for " + sColumnName);
+                    assertEquals(iPrecision, iColumnSize, "Unexpected column size for " + sColumnName);
+                    assertEquals(iScale, iDecimalDigits, "Unexpected decimal digits for " + sColumnName);
+                    assertEquals(iRadix, iNumPrecRadix, "Unexpected radix for " + sColumnName);
+                    assertEquals(iNulls, iNullable, "Unexpected nullable for " + sColumnName);
+                    assertEquals(iPrecision, iCharOctetLength, "Unexpected length for " + sColumnName);
                     iPosition = iPosition + 1;
-                    assertEquals("Unexpected ordinal_position for " + sColumnName, iPosition, iOrdinalPosition);
-                    assertEquals("Unexpected is_nullable for " + sColumnName, sNullable, sIsNullable);
-                    assertEquals("Unexpected is_autoincrement for " + sColumnName, sAutoIncrement, sIsAutoIncrement);
+                    assertEquals(iPosition, iOrdinalPosition, "Unexpected ordinal_position for " + sColumnName);
+                    assertEquals(sNullable, sIsNullable, "Unexpected is_nullable for " + sColumnName);
+                    assertEquals(sAutoIncrement, sIsAutoIncrement, "Unexpected is_autoincrement for " + sColumnName);
                 }
                 rsColumns.close();
                 print(getDatabaseMetaData().getColumns(pqiTableView.getCatalog(), pqiTableView.getSchema(), pqiTableView.getName(), "%"));

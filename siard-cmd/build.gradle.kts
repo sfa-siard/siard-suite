@@ -56,7 +56,6 @@ dependencies {
     runtimeOnly(libs.mysql.connector)
     runtimeOnly(libs.jaxb.runtime)
 
-    testImplementation(libs.junit4)
     testImplementation(libs.assertj.core)
     testImplementation(libs.mockito.core)
     testImplementation(platform(libs.junit.bom))
@@ -72,11 +71,11 @@ dependencies {
     testImplementation(libs.testcontainers.mariadb)
     testImplementation(libs.testcontainers.oracle)
     testImplementation(libs.testcontainers.db2)
+    testImplementation(libs.testcontainers.junit)
 
     testRuntimeOnly(libs.mariadb.client)
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.bouncycastle.bcprov)
 }
 
@@ -96,9 +95,7 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskPro
         testClassesDirs = sourceSets["integrationTest"].output.classesDirs
         classpath = sourceSets["integrationTest"].runtimeClasspath
         mustRunAfter(tasks["test"])
-        useJUnitPlatform {
-            includeEngines("junit-jupiter", "junit-vintage")
-        }
+        useJUnitPlatform()
 
         filter {
             includeTestsMatching("ch.admin.bar.siard2.cmd.$packagePattern.*")

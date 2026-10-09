@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TestMySqlDatabase {
     public static final String _sTEST_SCHEMA = "TESTMYSQLSCHEMA";
@@ -348,7 +348,7 @@ public class TestMySqlDatabase {
                                                               .getName() + "!");
         }
         int iResult = pstmt.executeUpdate();
-        assertSame("Insert failed!", 1, iResult);
+        assertSame(1, iResult, "Insert failed!");
         pstmt.close();
         _conn.commit();
     }

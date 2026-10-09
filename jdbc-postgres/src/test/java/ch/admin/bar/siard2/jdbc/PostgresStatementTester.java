@@ -5,16 +5,17 @@ import ch.admin.bar.siard2.postgres.TestPostgresDatabase;
 import ch.admin.bar.siard2.postgres.TestSqlDatabase;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jdbc.BaseStatementTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Assertions;
 
-@Ignore
+@Disabled
 public class PostgresStatementTester extends BaseStatementTester {
     private static final PostgreSQLContainer<?> _pg = new PostgreSQLContainer<>("postgres:16-alpine")
             .withDatabaseName("postgres")
@@ -27,12 +28,12 @@ public class PostgresStatementTester extends BaseStatementTester {
     private static String _sDBA_USER;
     private static String _sDBA_PASSWORD;
 
-    @AfterClass
+    @AfterAll
     public static void stopContainer() {
         _pg.stop();
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         _pg.start();
         _sDB_URL = PostgresDriver.getUrl(_pg.getHost() + ":" + _pg.getFirstMappedPort() + "/" + _pg.getDatabaseName());
@@ -59,7 +60,7 @@ public class PostgresStatementTester extends BaseStatementTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             PostgresDataSource dsPostgres = new PostgresDataSource();
@@ -78,7 +79,7 @@ public class PostgresStatementTester extends BaseStatementTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong statement class!", PostgresStatement.class, getStatement().getClass());
+        assertEquals(PostgresStatement.class, getStatement().getClass(), "Wrong statement class!");
     }
 
 }

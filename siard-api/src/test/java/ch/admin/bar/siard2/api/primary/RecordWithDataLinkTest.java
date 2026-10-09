@@ -3,14 +3,14 @@ package ch.admin.bar.siard2.api.primary;
 import ch.admin.bar.siard2.api.*;
 import ch.enterag.utils.test.TestReader;
 import ch.enterag.utils.test.TestUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 // tests opening table records/ rows for sample archive with data link in format 2.2
 public class RecordWithDataLinkTest {
@@ -22,13 +22,13 @@ public class RecordWithDataLinkTest {
 
     Archive archive;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         archive = ArchiveImpl.newInstance();
         archive.open(ARCHIVE);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         archive.close();
     }
@@ -130,8 +130,8 @@ public class RecordWithDataLinkTest {
                                      .getString());
         assertEquals("`abcdefghijklmnopqrstuvwxyz{|}~\u007F ¡¢£¤¥¦§¨©ª«¬\u00AD®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ", tableRecord.getCell(4)
                                                                                                                                                                               .getString());
-        assertTrue("", tableRecord.getCell(5)
-                                  .isNull());
+        assertTrue(tableRecord.getCell(5)
+                                  .isNull(), "");
         assertEquals(36, tableRecord.getCell(6)
                                     .getCharLength());
         assertEquals("content/schema0/table0/lob6/record1.xml", tableRecord.getCell(6)
@@ -159,16 +159,16 @@ public class RecordWithDataLinkTest {
                                              .getString());
         assertEquals("3.14159265359", tableRecord.getCell(17)
                                                  .getString());
-        assertTrue("", tableRecord.getCell(18)
-                                  .isNull());
+        assertTrue(tableRecord.getCell(18)
+                                  .isNull(), "");
         assertEquals("2022-06-01", tableRecord.getCell(19)
                                               .getString());
         assertEquals("09:45:02.071Z", tableRecord.getCell(20)
                                                  .getString());
         assertEquals("2022-06-01T09:45:02.123456789Z", tableRecord.getCell(21)
                                                                   .getString());
-        assertTrue("", tableRecord.getCell(22)
-                                  .isNull());
+        assertTrue(tableRecord.getCell(22)
+                                  .isNull(), "");
         assertEquals("-P34DT0H0M0S", tableRecord.getCell(23)
                                                 .getString());
         assertEquals("P0DT0H0M23.456S", tableRecord.getCell(24)

@@ -9,29 +9,32 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Testcontainers
 public class BitTypesIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MySQLContainer<?> emptyDb = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_5_6))
             .withUsername("root")
             .withPassword("public")
             .withDatabaseName("public")
             .withConfigurationOverride("mysql/config/with-blobs");
 
-    @Rule
+    @Container
     public MySQLContainer<?> db = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_5_6))
             .withUsername("root")
             .withPassword("public")
@@ -40,7 +43,7 @@ public class BitTypesIT {
             .withConfigurationOverride("mysql/config/with-blobs");
 
     //This test fails using the archive provided in the issue because typeOriginal BIT was converted to BIT(1)
-    @Ignore
+    @Disabled
     @Test
     public void uploadSubmittedArchive_expectNoExceptions() throws SQLException, IOException {
         val submittedArchive = siardArchivesHandler.prepareResource("mysql/issues/siardgui29/submitted-bit-types.siard");
@@ -52,7 +55,7 @@ public class BitTypesIT {
                 "-p:" + emptyDb.getPassword(),
                 "-s:" + submittedArchive.getPathToArchiveFile()
         });
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -67,7 +70,7 @@ public class BitTypesIT {
                 "-s:" + siardArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+        assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 

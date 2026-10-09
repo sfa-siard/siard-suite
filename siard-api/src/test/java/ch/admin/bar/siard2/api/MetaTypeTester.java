@@ -3,15 +3,15 @@ package ch.admin.bar.siard2.api;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaTypeTester {
     private static final File _fileSIARD_21_NEW = new File("src/test/resources/tmp/sql2008new.siard");
@@ -35,7 +35,7 @@ public class MetaTypeTester {
             md.setDataOriginTimespan(_sDATA_ORIGIN_TIMESPAN);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.deleteIfExists(_fileSIARD_21_NEW.toPath());
@@ -44,13 +44,13 @@ public class MetaTypeTester {
             Schema schema = archive.createSchema(_sTEST_SCHEMA_NAME);
             MetaSchema ms = schema.getMetaSchema();
             _mtNew = ms.createMetaType(_sTEST_TYPE_NAME);
-            assertSame("Invalid MetaSchema!", ms, _mtNew.getParentMetaSchema());
+            assertSame(ms, _mtNew.getParentMetaSchema(), "Invalid MetaSchema!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_mtNew.getParentMetaSchema());
@@ -65,13 +65,13 @@ public class MetaTypeTester {
 
     @Test
     public void testName() {
-        assertEquals("Invalid routine name!", _sTEST_TYPE_NAME, _mtNew.getName());
+        assertEquals(_sTEST_TYPE_NAME, _mtNew.getName(), "Invalid routine name!");
     }
 
     @Test
     public void testCategory() {
         String sCategory = "distinct";
-        assertEquals("Invalid default category!", sCategory, _mtNew.getCategory());
+        assertEquals(sCategory, _mtNew.getCategory(), "Invalid default category!");
         try {
             try {
                 _mtNew.setCategory("gaga");
@@ -79,13 +79,13 @@ public class MetaTypeTester {
             } catch (IllegalArgumentException iae) {
                 System.out.println(EU.getExceptionMessage(iae));
             }
-            assertEquals("Wrong row category!", sCategory, _mtNew.getCategory());
+            assertEquals(sCategory, _mtNew.getCategory(), "Wrong row category!");
             sCategory = "udt";
             _mtNew.setCategory(sCategory);
-            assertEquals("Wrong udt category!", sCategory, _mtNew.getCategory());
+            assertEquals(sCategory, _mtNew.getCategory(), "Wrong udt category!");
             sCategory = "distinct";
             _mtNew.setCategory(sCategory);
-            assertEquals("Wrong distinct category!", sCategory, _mtNew.getCategory());
+            assertEquals(sCategory, _mtNew.getCategory(), "Wrong distinct category!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -95,7 +95,7 @@ public class MetaTypeTester {
     public void testUnderSchema() {
         try {
             _mtNew.setUnderSchema(_sTEST_UNDER_SCHEMA);
-            assertEquals("Wrong under schema!", _sTEST_UNDER_SCHEMA, _mtNew.getUnderSchema());
+            assertEquals(_sTEST_UNDER_SCHEMA, _mtNew.getUnderSchema(), "Wrong under schema!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -105,7 +105,7 @@ public class MetaTypeTester {
     public void testUnderType() {
         try {
             _mtNew.setUnderType(_sTEST_UNDER_TYPE);
-            assertEquals("Wrong under type!", _sTEST_UNDER_TYPE, _mtNew.getUnderType());
+            assertEquals(_sTEST_UNDER_TYPE, _mtNew.getUnderType(), "Wrong under type!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -113,10 +113,10 @@ public class MetaTypeTester {
 
     @Test
     public void testInstantiable() {
-        assertTrue("Invalid default instantiability", _mtNew.isInstantiable());
+        assertTrue(_mtNew.isInstantiable(), "Invalid default instantiability");
         try {
             _mtNew.setInstantiable(false);
-            assertFalse("Wrong instantiability!", _mtNew.isInstantiable());
+            assertFalse(_mtNew.isInstantiable(), "Wrong instantiability!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -124,10 +124,10 @@ public class MetaTypeTester {
 
     @Test
     public void testFinal() {
-        assertTrue("Invalid default finality", _mtNew.isFinal());
+        assertTrue(_mtNew.isFinal(), "Invalid default finality");
         try {
             _mtNew.setFinal(false);
-            assertFalse("Wrong finality!", _mtNew.isFinal());
+            assertFalse(_mtNew.isFinal(), "Wrong finality!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
@@ -159,12 +159,12 @@ public class MetaTypeTester {
     public void testDescription() {
         String sDescription = "Description";
         _mtNew.setDescription(sDescription);
-        assertEquals("Invalid description!", sDescription, _mtNew.getDescription());
+        assertEquals(sDescription, _mtNew.getDescription(), "Invalid description!");
     }
 
     @Test
     public void testGetMetaAttributes() {
-        assertEquals("Attributes must initially be 0!", 0, _mtNew.getMetaAttributes());
+        assertEquals(0, _mtNew.getMetaAttributes(), "Attributes must initially be 0!");
     }
 
     @Test
@@ -178,11 +178,11 @@ public class MetaTypeTester {
         try {
             _mtNew.setCategory("udt");
             _mtNew.createMetaAttribute(_sTEST_ATTRIBUTE_NAME);
-            assertEquals("Invalid number of attributes!", 1, _mtNew.getMetaAttributes());
+            assertEquals(1, _mtNew.getMetaAttributes(), "Invalid number of attributes!");
             MetaAttribute ma = _mtNew.getMetaAttribute(0);
-            assertEquals("Invalid name!", _sTEST_ATTRIBUTE_NAME, ma.getName());
+            assertEquals(_sTEST_ATTRIBUTE_NAME, ma.getName(), "Invalid name!");
             ma = _mtNew.getMetaAttribute(_sTEST_ATTRIBUTE_NAME);
-            assertEquals("Invalid name!", _sTEST_ATTRIBUTE_NAME, ma.getName());
+            assertEquals(_sTEST_ATTRIBUTE_NAME, ma.getName(), "Invalid name!");
             ma.setType("VARCHAR(256)");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));

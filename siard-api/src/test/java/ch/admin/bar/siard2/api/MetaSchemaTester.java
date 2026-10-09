@@ -5,16 +5,16 @@ import ch.admin.bar.siard2.api.primary.SchemaImpl;
 import ch.admin.bar.siard2.api.primary.TableImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaSchemaTester {
     private static final File _fileSIARD_10_SOURCE = new File("src/test/resources/testfiles/sql1999.siard");
@@ -64,7 +64,7 @@ public class MetaSchemaTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.copy(_fileSIARD_10_SOURCE.toPath(), _fileSIARD_10.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -84,7 +84,7 @@ public class MetaSchemaTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_msNew);
@@ -102,30 +102,30 @@ public class MetaSchemaTester {
 
     @Test
     public void testName() {
-        assertEquals("Invalid name of new schema!", _sTEST_SCHEMA_NAME, _msNew.getName());
-        assertEquals("Invalid name of old schema!", "SIARDSCHEMA", _msOld.getName());
+        assertEquals(_sTEST_SCHEMA_NAME, _msNew.getName(), "Invalid name of new schema!");
+        assertEquals("SIARDSCHEMA", _msOld.getName(), "Invalid name of old schema!");
     }
 
     @Test
     public void testFolder() {
-        assertEquals("Invalid folder name of new schema!", SchemaImpl._sSCHEMA_FOLDER_PREFIX + "0", _msNew.getFolder());
-        assertEquals("Invalid folder name of old schema!", SchemaImpl._sSCHEMA_FOLDER_PREFIX + "0", _msOld.getFolder());
+        assertEquals(SchemaImpl._sSCHEMA_FOLDER_PREFIX + "0", _msNew.getFolder(), "Invalid folder name of new schema!");
+        assertEquals(SchemaImpl._sSCHEMA_FOLDER_PREFIX + "0", _msOld.getFolder(), "Invalid folder name of old schema!");
     }
 
     @Test
     public void testDescription() {
         String sDescription = "Description";
         _msNew.setDescription(sDescription);
-        assertEquals("Invalid Description!", sDescription, _msNew.getDescription());
+        assertEquals(sDescription, _msNew.getDescription(), "Invalid Description!");
         _msOld.setDescription(sDescription);
-        assertEquals("Invalid Description!", sDescription, _msOld.getDescription());
+        assertEquals(sDescription, _msOld.getDescription(), "Invalid Description!");
     }
 
     @Test
     public void testGetMetaTables() {
-        assertEquals("New schema has table meta data!", 0, _msNew.getMetaTables());
+        assertEquals(0, _msNew.getMetaTables(), "New schema has table meta data!");
         System.out.println(_msOld.getMetaTables());
-        assertEquals("Old schema has wrong number of table meta data!", 1, _msOld.getMetaTables());
+        assertEquals(1, _msOld.getMetaTables(), "Old schema has wrong number of table meta data!");
     }
 
     @Test
@@ -133,7 +133,7 @@ public class MetaSchemaTester {
         for (int iTable = 0; iTable < _msOld.getMetaTables(); iTable++) {
             MetaTable mt = _msOld.getMetaTable(iTable);
             System.out.println(mt.getName());
-            assertEquals("Invalid table folder!", TableImpl._sTABLE_FOLDER_PREFIX + iTable, mt.getFolder());
+            assertEquals(TableImpl._sTABLE_FOLDER_PREFIX + iTable, mt.getFolder(), "Invalid table folder!");
         }
     }
 
@@ -141,14 +141,14 @@ public class MetaSchemaTester {
     public void testGetMetaTable_String() {
         String sName = "TABLETEST2";
         MetaTable mt = _msOld.getMetaTable(sName);
-        assertEquals("Invalid table name!", sName, mt.getName());
+        assertEquals(sName, mt.getName(), "Invalid table name!");
     }
 
     @Test
     public void testGetMetaViews() {
-        assertEquals("New archive has view meta data!", 0, _msNew.getMetaViews());
+        assertEquals(0, _msNew.getMetaViews(), "New archive has view meta data!");
         System.out.println(_msOld.getMetaViews());
-        assertEquals("Old archive has wrong number of view meta data!", 0, _msOld.getMetaViews());
+        assertEquals(0, _msOld.getMetaViews(), "Old archive has wrong number of view meta data!");
     }
 
     @Test
@@ -158,13 +158,13 @@ public class MetaSchemaTester {
             MetaView mv = _msNew.createMetaView(sName);
             MetaColumn mc = mv.createMetaColumn("MVCOLUMN");
             mc.setType("INTEGER");
-            assertEquals("Wrong number of view meta data!", 1, _msNew.getMetaViews());
+            assertEquals(1, _msNew.getMetaViews(), "Wrong number of view meta data!");
             mv = _msNew.getMetaView(0);
-            assertEquals("Wrong view name", sName, mv.getName());
-            assertSame("Invalid parent meta data of view meta data!", _msNew, mv.getParentMetaSchema());
+            assertEquals(sName, mv.getName(), "Wrong view name");
+            assertSame(_msNew, mv.getParentMetaSchema(), "Invalid parent meta data of view meta data!");
             mv = _msNew.getMetaView(sName);
-            assertEquals("Wrong view name", sName, mv.getName());
-            assertSame("Invalid parent meta data of view meta data!", _msNew, mv.getParentMetaSchema());
+            assertEquals(sName, mv.getName(), "Wrong view name");
+            assertSame(_msNew, mv.getParentMetaSchema(), "Invalid parent meta data of view meta data!");
             try {
                 _msOld.createMetaView(sName);
                 fail("Views of old metadata could be changed!");
@@ -178,9 +178,9 @@ public class MetaSchemaTester {
 
     @Test
     public void testGetMetaRoutines() {
-        assertEquals("New archive has routine meta data!", 0, _msNew.getMetaRoutines());
+        assertEquals(0, _msNew.getMetaRoutines(), "New archive has routine meta data!");
         System.out.println(_msOld.getMetaRoutines());
-        assertEquals("Old archive has wrong number of routine meta data!", 0, _msOld.getMetaRoutines());
+        assertEquals(0, _msOld.getMetaRoutines(), "Old archive has wrong number of routine meta data!");
     }
 
     @Test
@@ -188,13 +188,13 @@ public class MetaSchemaTester {
         try {
             String sSpecificName = "METAROUTINE";
             _msNew.createMetaRoutine(sSpecificName);
-            assertEquals("Wrong number of routine meta data!", 1, _msNew.getMetaRoutines());
+            assertEquals(1, _msNew.getMetaRoutines(), "Wrong number of routine meta data!");
             MetaRoutine mr = _msNew.getMetaRoutine(0);
-            assertEquals("Wrong routine name", sSpecificName, mr.getName());
-            assertSame("Invalid parent meta data of routine meta data!", _msNew, mr.getParentMetaSchema());
+            assertEquals(sSpecificName, mr.getName(), "Wrong routine name");
+            assertSame(_msNew, mr.getParentMetaSchema(), "Invalid parent meta data of routine meta data!");
             mr = _msNew.getMetaRoutine(sSpecificName);
-            assertEquals("Wrong routine name", sSpecificName, mr.getName());
-            assertSame("Invalid parent meta data of routine meta data!", _msNew, mr.getParentMetaSchema());
+            assertEquals(sSpecificName, mr.getName(), "Wrong routine name");
+            assertSame(_msNew, mr.getParentMetaSchema(), "Invalid parent meta data of routine meta data!");
             try {
                 _msOld.createMetaRoutine(sSpecificName);
                 fail("Routines of old metadata could be changed!");
@@ -208,9 +208,9 @@ public class MetaSchemaTester {
 
     @Test
     public void testGetMetaTypes() {
-        assertEquals("New archive has type meta data!", 0, _msNew.getMetaTypes());
+        assertEquals(0, _msNew.getMetaTypes(), "New archive has type meta data!");
         System.out.println(_msOld.getMetaTypes());
-        assertEquals("Old archive has wrong number of type meta data!", 0, _msOld.getMetaTypes());
+        assertEquals(0, _msOld.getMetaTypes(), "Old archive has wrong number of type meta data!");
     }
 
     @Test
@@ -218,13 +218,13 @@ public class MetaSchemaTester {
         try {
             String sName = "METATYPE";
             _msNew.createMetaType(sName);
-            assertEquals("Wrong number of type meta data!", 1, _msNew.getMetaTypes());
+            assertEquals(1, _msNew.getMetaTypes(), "Wrong number of type meta data!");
             MetaType mt = _msNew.getMetaType(0);
-            assertEquals("Wrong routine name", sName, mt.getName());
-            assertSame("Invalid parent meta data of type meta data!", _msNew, mt.getParentMetaSchema());
+            assertEquals(sName, mt.getName(), "Wrong routine name");
+            assertSame(_msNew, mt.getParentMetaSchema(), "Invalid parent meta data of type meta data!");
             mt = _msNew.getMetaType(sName);
-            assertEquals("Wrong routine name", sName, mt.getName());
-            assertSame("Invalid parent meta data of type meta data!", _msNew, mt.getParentMetaSchema());
+            assertEquals(sName, mt.getName(), "Wrong routine name");
+            assertSame(_msNew, mt.getParentMetaSchema(), "Invalid parent meta data of type meta data!");
             try {
                 _msOld.createMetaType(sName);
                 fail("Types of old metadata could be changed!");

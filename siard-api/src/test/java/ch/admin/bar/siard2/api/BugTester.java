@@ -2,17 +2,17 @@ package ch.admin.bar.siard2.api;
 
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@Ignore("file is not available in repository")
+@Disabled("file is not available in repository")
 public class BugTester {
     private static final File _fileBUG49 = new File("..\\Bugs\\479\\dvd_rental.siard");
 
@@ -29,9 +29,9 @@ public class BugTester {
             MetaColumn mc = cell.getMetaColumn();
             System.out.println("Cardinality: " + mc.getCardinality());
             System.out.println("Fields: " + mc.getMetaFields());
-            assertEquals("", 4, cell.getElements());
+            assertEquals(4, cell.getElements(), "");
             List<Value> listValues = tableRecord.getValues(false, false);
-            assertEquals("", 16, listValues.size());
+            assertEquals(16, listValues.size(), "");
             rd.close();
             archive.close();
         } catch (IOException ie) {

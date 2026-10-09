@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.ddl;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DropTriggerStatementTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private DropTriggerStatement _dts = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _dts = _sf.newDropTriggerStatement();
     }
@@ -20,7 +20,7 @@ public class DropTriggerStatementTester {
     public void test() {
         _dts.parse("DROP TRIGGER cat.sch.tg");
         // System.out.println(_dts.format());
-        assertEquals("DROP TRIGGER statement not recognized!", "DROP TRIGGER CAT.SCH.TG", _dts.format());
+        assertEquals("DROP TRIGGER CAT.SCH.TG", _dts.format(), "DROP TRIGGER statement not recognized!");
     }
 
 }

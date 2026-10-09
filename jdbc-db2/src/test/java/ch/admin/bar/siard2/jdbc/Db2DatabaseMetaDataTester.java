@@ -9,10 +9,9 @@ import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.database.SqlTypes;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.Db2Container;
 
 import java.sql.*;
@@ -22,12 +21,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
-    @ClassRule
+    @Container
     public static Db2Container db2 = new Db2Container("ibmcom/db2:11.5.7.0").acceptLicense();
 
     private static final String TESTUSER = "TESTUSER";
@@ -35,7 +37,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
     private Db2DatabaseMetaData _dmdDb2 = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             Db2DataSource dsDb2 = new Db2DataSource();
@@ -52,7 +54,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         Db2DataSource dsDb2 = new Db2DataSource();
         dsDb2.setUrl(db2.getJdbcUrl());
@@ -66,7 +68,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong database meta data class!", Db2DatabaseMetaData.class, _dmdDb2.getClass());
+        assertEquals(Db2DatabaseMetaData.class, _dmdDb2.getClass(), "Wrong database meta data class!");
     }
 
     @Test
@@ -110,67 +112,67 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 int iColumnSize = rs.getInt("COLUMN_SIZE");
                 switch (sTypeName) {
                     case "CHAR":
-                        assertEquals("Invalid CHAR mapping!", iDataType, Types.CHAR);
+                        assertEquals(iDataType, Types.CHAR, "Invalid CHAR mapping!");
                         break;
                     case "VARCHAR":
-                        assertEquals("Invalid VARCHAR mapping!", iDataType, Types.VARCHAR);
+                        assertEquals(iDataType, Types.VARCHAR, "Invalid VARCHAR mapping!");
                         break;
                     case "CLOB":
-                        assertEquals("Invalid CLOB mapping!", iDataType, Types.CLOB);
+                        assertEquals(iDataType, Types.CLOB, "Invalid CLOB mapping!");
                         break;
                     case "GRAPHIC":
-                        assertEquals("Invalid GRAPHIC mapping!", iDataType, Types.NCHAR);
+                        assertEquals(iDataType, Types.NCHAR, "Invalid GRAPHIC mapping!");
                         break;
                     case "VARGRAPHIC":
-                        assertEquals("Invalid VARGRAPHIC mapping!", iDataType, Types.NVARCHAR);
+                        assertEquals(iDataType, Types.NVARCHAR, "Invalid VARGRAPHIC mapping!");
                         break;
                     case "DBCLOB":
-                        assertEquals("Invalid DBCLOB mapping!", iDataType, Types.NCLOB);
+                        assertEquals(iDataType, Types.NCLOB, "Invalid DBCLOB mapping!");
                         break;
                     case "CHAR () FOR BIT DATA":
-                        assertEquals("Invalid CHAR() FOR BIT DATA mapping!", iDataType, Types.BINARY);
+                        assertEquals(iDataType, Types.BINARY, "Invalid CHAR() FOR BIT DATA mapping!");
                         break;
                     case "BINARY":
-                        assertEquals("Invalid BINARY mapping!", iDataType, Types.BINARY);
+                        assertEquals(iDataType, Types.BINARY, "Invalid BINARY mapping!");
                         break;
                     case "VARBINARY":
-                        assertEquals("Invalid VARBINARY mapping!", iDataType, Types.VARBINARY);
+                        assertEquals(iDataType, Types.VARBINARY, "Invalid VARBINARY mapping!");
                         break;
                     case "BLOB":
-                        assertEquals("Invalid BLOB mapping!", iDataType, Types.BLOB);
+                        assertEquals(iDataType, Types.BLOB, "Invalid BLOB mapping!");
                         break;
                     case "SMALLINT":
-                        assertEquals("Invalid SMALLINT mapping!", iDataType, Types.SMALLINT);
+                        assertEquals(iDataType, Types.SMALLINT, "Invalid SMALLINT mapping!");
                         break;
                     case "INTEGER":
-                        assertEquals("Invalid INTEGER mapping!", iDataType, Types.INTEGER);
+                        assertEquals(iDataType, Types.INTEGER, "Invalid INTEGER mapping!");
                         break;
                     case "BIGINT":
-                        assertEquals("Invalid BIGINT mapping!", iDataType, Types.BIGINT);
+                        assertEquals(iDataType, Types.BIGINT, "Invalid BIGINT mapping!");
                         break;
                     case "DECIMAL":
-                        assertEquals("Invalid DECIMAL mapping!", iDataType, Types.DECIMAL);
+                        assertEquals(iDataType, Types.DECIMAL, "Invalid DECIMAL mapping!");
                         break;
                     case "DECFLOAT":
-                        assertEquals("Invalid DECFLOAT mapping!", iDataType, Types.DECIMAL);
+                        assertEquals(iDataType, Types.DECIMAL, "Invalid DECFLOAT mapping!");
                         break;
                     case "REAL":
-                        assertEquals("Invalid REAL mapping!", iDataType, Types.REAL);
+                        assertEquals(iDataType, Types.REAL, "Invalid REAL mapping!");
                         break;
                     case "DOUBLE":
-                        assertEquals("Invalid DOUBLE mapping!", iDataType, Types.DOUBLE);
+                        assertEquals(iDataType, Types.DOUBLE, "Invalid DOUBLE mapping!");
                         break;
                     case "DATE":
-                        assertEquals("Invalid DATE mapping!", iDataType, Types.DATE);
+                        assertEquals(iDataType, Types.DATE, "Invalid DATE mapping!");
                         break;
                     case "TIME":
-                        assertEquals("Invalid TIME mapping!", iDataType, Types.TIME);
+                        assertEquals(iDataType, Types.TIME, "Invalid TIME mapping!");
                         break;
                     case "TIMESTAMP":
-                        assertEquals("Invalid TIMESTAMP mapping!", iDataType, Types.TIMESTAMP);
+                        assertEquals(iDataType, Types.TIMESTAMP, "Invalid TIMESTAMP mapping!");
                         break;
                     case "XML":
-                        assertEquals("Invalid XML mapping!", iDataType, Types.SQLXML);
+                        assertEquals(iDataType, Types.SQLXML, "Invalid XML mapping!");
                         break;
                     default:
                         fail("Unexpected type name " + sTypeName + "!");
@@ -185,7 +187,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                     if (sPrecision != null) {
                         if (iDataType == Types.TIMESTAMP) iColumnSize = iColumnSize - 20;
                         int iPrecision = Integer.parseInt(sPrecision);
-                        assertEquals("Explicit precision does not match!", iPrecision, iColumnSize);
+                        assertEquals(iPrecision, iColumnSize, "Explicit precision does not match!");
                     }
                 }
             }
@@ -217,76 +219,76 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 int iColumnSize = rs.getInt("COLUMN_SIZE");
                 switch (sTypeName) {
                     case "CHAR":
-                        assertEquals("Invalid CHAR mapping!", iDataType, Types.CHAR);
+                        assertEquals(iDataType, Types.CHAR, "Invalid CHAR mapping!");
                         break;
                     case "VARCHAR":
-                        assertEquals("Invalid VARCHAR mapping!", iDataType, Types.VARCHAR);
+                        assertEquals(iDataType, Types.VARCHAR, "Invalid VARCHAR mapping!");
                         break;
                     case "CLOB":
-                        assertEquals("Invalid CLOB mapping!", iDataType, Types.CLOB);
+                        assertEquals(iDataType, Types.CLOB, "Invalid CLOB mapping!");
                         break;
                     case "GRAPHIC":
-                        assertEquals("Invalid GRAPHIC mapping!", iDataType, Types.NCHAR);
+                        assertEquals(iDataType, Types.NCHAR, "Invalid GRAPHIC mapping!");
                         break;
                     case "VARGRAPHIC":
-                        assertEquals("Invalid VARGRAPHIC mapping!", iDataType, Types.NVARCHAR);
+                        assertEquals(iDataType, Types.NVARCHAR, "Invalid VARGRAPHIC mapping!");
                         break;
                     case "DBCLOB":
-                        assertEquals("Invalid DBCLOB mapping!", iDataType, Types.NCLOB);
+                        assertEquals(iDataType, Types.NCLOB, "Invalid DBCLOB mapping!");
                         break;
                     case "CHAR () FOR BIT DATA":
-                        assertEquals("Invalid CHAR() FOR BIT DATA mapping!", iDataType, Types.BINARY);
+                        assertEquals(iDataType, Types.BINARY, "Invalid CHAR() FOR BIT DATA mapping!");
                         break;
                     case "BINARY":
-                        assertEquals("Invalid BINARY mapping!", iDataType, Types.BINARY);
+                        assertEquals(iDataType, Types.BINARY, "Invalid BINARY mapping!");
                         break;
                     case "VARBINARY":
-                        assertEquals("Invalid VARCHAR FOR BIT DATA mapping!", iDataType, Types.VARBINARY);
+                        assertEquals(iDataType, Types.VARBINARY, "Invalid VARCHAR FOR BIT DATA mapping!");
                         break;
                     case "BLOB":
-                        assertEquals("Invalid BLOB mapping!", iDataType, Types.BLOB);
+                        assertEquals(iDataType, Types.BLOB, "Invalid BLOB mapping!");
                         break;
                     case "SMALLINT":
-                        assertEquals("Invalid SMALLINT mapping!", iDataType, Types.SMALLINT);
+                        assertEquals(iDataType, Types.SMALLINT, "Invalid SMALLINT mapping!");
                         break;
                     case "INTEGER":
-                        assertEquals("Invalid INTEGER mapping!", iDataType, Types.INTEGER);
+                        assertEquals(iDataType, Types.INTEGER, "Invalid INTEGER mapping!");
                         break;
                     case "BIGINT":
-                        assertEquals("Invalid BIGINT mapping!", iDataType, Types.BIGINT);
+                        assertEquals(iDataType, Types.BIGINT, "Invalid BIGINT mapping!");
                         break;
                     case "DECIMAL":
-                        assertEquals("Invalid DECIMAL mapping!", iDataType, Types.DECIMAL);
+                        assertEquals(iDataType, Types.DECIMAL, "Invalid DECIMAL mapping!");
                         break;
                     case "DECFLOAT":
-                        assertEquals("Invalid DECFLOAT mapping!", iDataType, Types.DECIMAL);
+                        assertEquals(iDataType, Types.DECIMAL, "Invalid DECFLOAT mapping!");
                         break;
                     case "REAL":
-                        assertEquals("Invalid REAL mapping!", iDataType, Types.REAL);
+                        assertEquals(iDataType, Types.REAL, "Invalid REAL mapping!");
                         break;
                     case "DOUBLE":
-                        assertEquals("Invalid DOUBLE mapping!", iDataType, Types.DOUBLE);
+                        assertEquals(iDataType, Types.DOUBLE, "Invalid DOUBLE mapping!");
                         break;
                     case "DATE":
-                        assertEquals("Invalid DATE mapping!", iDataType, Types.DATE);
+                        assertEquals(iDataType, Types.DATE, "Invalid DATE mapping!");
                         break;
                     case "TIME":
-                        assertEquals("Invalid TIME mapping!", iDataType, Types.TIME);
+                        assertEquals(iDataType, Types.TIME, "Invalid TIME mapping!");
                         break;
                     case "TIMESTAMP":
-                        assertEquals("Invalid TIMESTAMP mapping!", iDataType, Types.TIMESTAMP);
+                        assertEquals(iDataType, Types.TIMESTAMP, "Invalid TIMESTAMP mapping!");
                         break;
                     case "XML":
-                        assertEquals("Invalid XML mapping!", iDataType, Types.SQLXML);
+                        assertEquals(iDataType, Types.SQLXML, "Invalid XML mapping!");
                         break;
                     case "INTERVAL YEAR TO MONTH":
-                        assertEquals("Invalid INTERVAL mapping!", iDataType, Types.OTHER);
+                        assertEquals(iDataType, Types.OTHER, "Invalid INTERVAL mapping!");
                         break;
                     case "INTERVAL DAY TO SECOND":
-                        assertEquals("Invalid INTERVAL mapping!", iDataType, Types.OTHER);
+                        assertEquals(iDataType, Types.OTHER, "Invalid INTERVAL mapping!");
                         break;
                     default:
-                        assertEquals("Invalid DISTINCT mapping!", iDataType, Types.DISTINCT);
+                        assertEquals(iDataType, Types.DISTINCT, "Invalid DISTINCT mapping!");
                         break;
                 }
                 TestColumnDefinition tcd = mapCd.get(sColumnName);
@@ -301,7 +303,7 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                         if (iDataType == Types.TIMESTAMP) iColumnSize = iColumnSize - 20;
                         else if ((iDataType == Types.REAL) && (iColumnSize > iPrecision)) iColumnSize = iPrecision;
                         else if (iDataType == Types.OTHER) iColumnSize = iPrecision;
-                        assertEquals("Explicit precision does not match!", iPrecision, iColumnSize);
+                        assertEquals(iPrecision, iColumnSize, "Explicit precision does not match!");
                     }
                 }
             }
@@ -334,67 +336,67 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 if ((iDataType != Types.DISTINCT) && (iDataType != Types.STRUCT)) {
                     switch (sTypeName) {
                         case "CHAR":
-                            assertEquals("Invalid CHAR mapping!", iDataType, Types.CHAR);
+                            assertEquals(iDataType, Types.CHAR, "Invalid CHAR mapping!");
                             break;
                         case "VARCHAR":
-                            assertEquals("Invalid VARCHAR mapping!", iDataType, Types.VARCHAR);
+                            assertEquals(iDataType, Types.VARCHAR, "Invalid VARCHAR mapping!");
                             break;
                         case "CLOB":
-                            assertEquals("Invalid CLOB mapping!", iDataType, Types.CLOB);
+                            assertEquals(iDataType, Types.CLOB, "Invalid CLOB mapping!");
                             break;
                         case "GRAPHIC":
-                            assertEquals("Invalid GRAPHIC mapping!", iDataType, Types.NCHAR);
+                            assertEquals(iDataType, Types.NCHAR, "Invalid GRAPHIC mapping!");
                             break;
                         case "VARGRAPHIC":
-                            assertEquals("Invalid VARGRAPHIC mapping!", iDataType, Types.NVARCHAR);
+                            assertEquals(iDataType, Types.NVARCHAR, "Invalid VARGRAPHIC mapping!");
                             break;
                         case "DBCLOB":
-                            assertEquals("Invalid DBCLOB mapping!", iDataType, Types.NCLOB);
+                            assertEquals(iDataType, Types.NCLOB, "Invalid DBCLOB mapping!");
                             break;
                         case "CHAR () FOR BIT DATA":
-                            assertEquals("Invalid CHAR() FOR BIT DATA mapping!", iDataType, Types.BINARY);
+                            assertEquals(iDataType, Types.BINARY, "Invalid CHAR() FOR BIT DATA mapping!");
                             break;
                         case "BINARY":
-                            assertEquals("Invalid BINARY mapping!", iDataType, Types.BINARY);
+                            assertEquals(iDataType, Types.BINARY, "Invalid BINARY mapping!");
                             break;
                         case "VARCHAR () FOR BIT DATA":
-                            assertEquals("Invalid VARCHAR FOR BIT DATA mapping!", iDataType, Types.VARBINARY);
+                            assertEquals(iDataType, Types.VARBINARY, "Invalid VARCHAR FOR BIT DATA mapping!");
                             break;
                         case "BLOB":
-                            assertEquals("Invalid BLOB mapping!", iDataType, Types.BLOB);
+                            assertEquals(iDataType, Types.BLOB, "Invalid BLOB mapping!");
                             break;
                         case "SMALLINT":
-                            assertEquals("Invalid SMALLINT mapping!", iDataType, Types.SMALLINT);
+                            assertEquals(iDataType, Types.SMALLINT, "Invalid SMALLINT mapping!");
                             break;
                         case "INTEGER":
-                            assertEquals("Invalid INTEGER mapping!", iDataType, Types.INTEGER);
+                            assertEquals(iDataType, Types.INTEGER, "Invalid INTEGER mapping!");
                             break;
                         case "BIGINT":
-                            assertEquals("Invalid BIGINT mapping!", iDataType, Types.BIGINT);
+                            assertEquals(iDataType, Types.BIGINT, "Invalid BIGINT mapping!");
                             break;
                         case "DECIMAL":
-                            assertEquals("Invalid DECIMAL mapping!", iDataType, Types.DECIMAL);
+                            assertEquals(iDataType, Types.DECIMAL, "Invalid DECIMAL mapping!");
                             break;
                         case "DECFLOAT":
-                            assertEquals("Invalid DECFLOAT mapping!", iDataType, Types.FLOAT);
+                            assertEquals(iDataType, Types.FLOAT, "Invalid DECFLOAT mapping!");
                             break;
                         case "REAL":
-                            assertEquals("Invalid REAL mapping!", iDataType, Types.REAL);
+                            assertEquals(iDataType, Types.REAL, "Invalid REAL mapping!");
                             break;
                         case "DOUBLE":
-                            assertEquals("Invalid DOUBLE mapping!", iDataType, Types.DOUBLE);
+                            assertEquals(iDataType, Types.DOUBLE, "Invalid DOUBLE mapping!");
                             break;
                         case "DATE":
-                            assertEquals("Invalid DATE mapping!", iDataType, Types.DATE);
+                            assertEquals(iDataType, Types.DATE, "Invalid DATE mapping!");
                             break;
                         case "TIME":
-                            assertEquals("Invalid TIME mapping!", iDataType, Types.TIME);
+                            assertEquals(iDataType, Types.TIME, "Invalid TIME mapping!");
                             break;
                         case "TIMESTAMP":
-                            assertEquals("Invalid TIMESTAMP mapping!", iDataType, Types.TIMESTAMP);
+                            assertEquals(iDataType, Types.TIMESTAMP, "Invalid TIMESTAMP mapping!");
                             break;
                         case "XML":
-                            assertEquals("Invalid XML mapping!", iDataType, Types.SQLXML);
+                            assertEquals(iDataType, Types.SQLXML, "Invalid XML mapping!");
                             break;
                         default:
                             try {
@@ -402,8 +404,8 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                                 if (qiType.getName()
                                           .equals(Db2PredefinedType.sYEAR_MONTH_DISTINCT_TYPE) || qiType.getName()
                                                                                                         .equals(Db2PredefinedType.sDAY_SECOND_DISTINCT_TYPE))
-                                    assertEquals("Invalid INTERVAL mapping!", iDataType, Types.OTHER);
-                                else assertEquals("Invalid DISTINCT mapping!", iDataType, Types.DISTINCT);
+                                    assertEquals(iDataType, Types.OTHER, "Invalid INTERVAL mapping!");
+                                else assertEquals(iDataType, Types.DISTINCT, "Invalid DISTINCT mapping!");
                             } catch (ParseException pe) {
                                 throw new SQLException("Type \"" + sTypeName + "\" could not be parsed!", pe);
                             }
@@ -421,14 +423,14 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                             if (iDataType == Types.TIMESTAMP) iColumnSize = iColumnSize - 20;
                             else if ((iDataType == Types.REAL) && (iColumnSize > iPrecision)) iColumnSize = iPrecision;
                             else if (iDataType == Types.OTHER) iColumnSize = iPrecision;
-                            assertEquals("Explicit precision does not match!", iPrecision, iColumnSize);
+                            assertEquals(iPrecision, iColumnSize, "Explicit precision does not match!");
                         }
                     }
                 } else {
                     TestColumnDefinition tcd = mapCd.get(sColumnName);
                     try {
                         QualifiedId qiTypeName = new QualifiedId(sTypeName);
-                        assertEquals("Invalid UDT type!", tcd.getType(), qiTypeName.format());
+                        assertEquals(tcd.getType(), qiTypeName.format(), "Invalid UDT type!");
                     } catch (ParseException pe) {
                         fail(EU.getExceptionMessage(pe));
                     }
@@ -463,67 +465,67 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 if ((iDataType != Types.DISTINCT) && (iDataType != Types.STRUCT)) {
                     switch (sTypeName) {
                         case "CHAR":
-                            assertEquals("Invalid CHAR mapping!", iDataType, Types.CHAR);
+                            assertEquals(iDataType, Types.CHAR, "Invalid CHAR mapping!");
                             break;
                         case "VARCHAR":
-                            assertEquals("Invalid VARCHAR mapping!", iDataType, Types.VARCHAR);
+                            assertEquals(iDataType, Types.VARCHAR, "Invalid VARCHAR mapping!");
                             break;
                         case "CLOB":
-                            assertEquals("Invalid CLOB mapping!", iDataType, Types.CLOB);
+                            assertEquals(iDataType, Types.CLOB, "Invalid CLOB mapping!");
                             break;
                         case "GRAPHIC":
-                            assertEquals("Invalid GRAPHIC mapping!", iDataType, Types.NCHAR);
+                            assertEquals(iDataType, Types.NCHAR, "Invalid GRAPHIC mapping!");
                             break;
                         case "VARGRAPHIC":
-                            assertEquals("Invalid VARGRAPHIC mapping!", iDataType, Types.NVARCHAR);
+                            assertEquals(iDataType, Types.NVARCHAR, "Invalid VARGRAPHIC mapping!");
                             break;
                         case "DBCLOB":
-                            assertEquals("Invalid DBCLOB mapping!", iDataType, Types.NCLOB);
+                            assertEquals(iDataType, Types.NCLOB, "Invalid DBCLOB mapping!");
                             break;
                         case "CHAR () FOR BIT DATA":
-                            assertEquals("Invalid CHAR() FOR BIT DATA mapping!", iDataType, Types.BINARY);
+                            assertEquals(iDataType, Types.BINARY, "Invalid CHAR() FOR BIT DATA mapping!");
                             break;
                         case "BINARY":
-                            assertEquals("Invalid BINARY mapping!", iDataType, Types.BINARY);
+                            assertEquals(iDataType, Types.BINARY, "Invalid BINARY mapping!");
                             break;
                         case "VARCHAR () FOR BIT DATA":
-                            assertEquals("Invalid VARCHAR FOR BIT DATA mapping!", iDataType, Types.VARBINARY);
+                            assertEquals(iDataType, Types.VARBINARY, "Invalid VARCHAR FOR BIT DATA mapping!");
                             break;
                         case "BLOB":
-                            assertEquals("Invalid BLOB mapping!", iDataType, Types.BLOB);
+                            assertEquals(iDataType, Types.BLOB, "Invalid BLOB mapping!");
                             break;
                         case "SMALLINT":
-                            assertEquals("Invalid SMALLINT mapping!", iDataType, Types.SMALLINT);
+                            assertEquals(iDataType, Types.SMALLINT, "Invalid SMALLINT mapping!");
                             break;
                         case "INTEGER":
-                            assertEquals("Invalid INTEGER mapping!", iDataType, Types.INTEGER);
+                            assertEquals(iDataType, Types.INTEGER, "Invalid INTEGER mapping!");
                             break;
                         case "BIGINT":
-                            assertEquals("Invalid BIGINT mapping!", iDataType, Types.BIGINT);
+                            assertEquals(iDataType, Types.BIGINT, "Invalid BIGINT mapping!");
                             break;
                         case "DECIMAL":
-                            assertEquals("Invalid DECIMAL mapping!", iDataType, Types.DECIMAL);
+                            assertEquals(iDataType, Types.DECIMAL, "Invalid DECIMAL mapping!");
                             break;
                         case "DECFLOAT":
-                            assertEquals("Invalid DECFLOAT mapping!", iDataType, Types.FLOAT);
+                            assertEquals(iDataType, Types.FLOAT, "Invalid DECFLOAT mapping!");
                             break;
                         case "REAL":
-                            assertEquals("Invalid REAL mapping!", iDataType, Types.REAL);
+                            assertEquals(iDataType, Types.REAL, "Invalid REAL mapping!");
                             break;
                         case "DOUBLE":
-                            assertEquals("Invalid DOUBLE mapping!", iDataType, Types.DOUBLE);
+                            assertEquals(iDataType, Types.DOUBLE, "Invalid DOUBLE mapping!");
                             break;
                         case "DATE":
-                            assertEquals("Invalid DATE mapping!", iDataType, Types.DATE);
+                            assertEquals(iDataType, Types.DATE, "Invalid DATE mapping!");
                             break;
                         case "TIME":
-                            assertEquals("Invalid TIME mapping!", iDataType, Types.TIME);
+                            assertEquals(iDataType, Types.TIME, "Invalid TIME mapping!");
                             break;
                         case "TIMESTAMP":
-                            assertEquals("Invalid TIMESTAMP mapping!", iDataType, Types.TIMESTAMP);
+                            assertEquals(iDataType, Types.TIMESTAMP, "Invalid TIMESTAMP mapping!");
                             break;
                         case "XML":
-                            assertEquals("Invalid XML mapping!", iDataType, Types.SQLXML);
+                            assertEquals(iDataType, Types.SQLXML, "Invalid XML mapping!");
                             break;
                         default:
                             try {
@@ -531,8 +533,8 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                                 if (qiType.getName()
                                           .equals(Db2PredefinedType.sYEAR_MONTH_DISTINCT_TYPE) || qiType.getName()
                                                                                                         .equals(Db2PredefinedType.sDAY_SECOND_DISTINCT_TYPE))
-                                    assertEquals("Invalid INTERVAL mapping!", iDataType, Types.OTHER);
-                                else assertEquals("Invalid DISTINCT mapping!", iDataType, Types.DISTINCT);
+                                    assertEquals(iDataType, Types.OTHER, "Invalid INTERVAL mapping!");
+                                else assertEquals(iDataType, Types.DISTINCT, "Invalid DISTINCT mapping!");
                             } catch (ParseException pe) {
                                 throw new SQLException("Type \"" + sTypeName + "\" could not be parsed!", pe);
                             }
@@ -550,14 +552,14 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                             if (iDataType == Types.TIMESTAMP) iColumnSize = iColumnSize - 20;
                             else if ((iDataType == Types.REAL) && (iColumnSize > iPrecision)) iColumnSize = iPrecision;
                             else if (iDataType == Types.OTHER) iColumnSize = iPrecision;
-                            assertEquals("Explicit precision does not match!", iPrecision, iColumnSize);
+                            assertEquals(iPrecision, iColumnSize, "Explicit precision does not match!");
                         }
                     }
                 } else {
                     TestColumnDefinition tcd = mapCd.get(sColumnName);
                     try {
                         QualifiedId qiTypeName = new QualifiedId(sTypeName);
-                        assertEquals("Invalid UDT type!", tcd.getType(), qiTypeName.format());
+                        assertEquals(tcd.getType(), qiTypeName.format(), "Invalid UDT type!");
                     } catch (ParseException pe) {
                         fail(EU.getExceptionMessage(pe));
                     }
@@ -722,14 +724,14 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             ResultSet rs = _dmdDb2.getAttributes(qiStructType.getCatalog(), qiStructType.getSchema(), qiStructType.getName(), "%");
             while (rs.next()) {
                 String sCatalog = rs.getString("TYPE_CAT");
-                assertEquals("Wrong catalog!", TestDb2Database.getQualifiedStructType()
-                                                              .getCatalog(), sCatalog);
+                assertEquals(TestDb2Database.getQualifiedStructType()
+                                                              .getCatalog(), sCatalog, "Wrong catalog!");
                 String sSchema = rs.getString("TYPE_SCHEM");
-                assertEquals("Wrong schema!", TestDb2Database.getQualifiedStructType()
-                                                             .getSchema(), sSchema);
+                assertEquals(TestDb2Database.getQualifiedStructType()
+                                                             .getSchema(), sSchema, "Wrong schema!");
                 String sTypeName = rs.getString("TYPE_NAME");
-                assertEquals("Wrong type!", TestDb2Database.getQualifiedStructType()
-                                                           .getName(), sTypeName);
+                assertEquals(TestDb2Database.getQualifiedStructType()
+                                                           .getName(), sTypeName, "Wrong type!");
                 String sAttrName = rs.getString("ATTR_NAME");
                 int iDataType = rs.getInt("DATA_TYPE");
                 String sAttrTypeName = rs.getString("ATTR_TYPE_NAME");
@@ -737,67 +739,67 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 if ((iDataType != Types.DISTINCT) && (iDataType != Types.STRUCT)) {
                     switch (sAttrTypeName) {
                         case "CHAR":
-                            assertEquals("Invalid CHAR mapping!", iDataType, Types.CHAR);
+                            assertEquals(iDataType, Types.CHAR, "Invalid CHAR mapping!");
                             break;
                         case "VARCHAR":
-                            assertEquals("Invalid VARCHAR mapping!", iDataType, Types.VARCHAR);
+                            assertEquals(iDataType, Types.VARCHAR, "Invalid VARCHAR mapping!");
                             break;
                         case "CLOB":
-                            assertEquals("Invalid CLOB mapping!", iDataType, Types.CLOB);
+                            assertEquals(iDataType, Types.CLOB, "Invalid CLOB mapping!");
                             break;
                         case "GRAPHIC":
-                            assertEquals("Invalid GRAPHIC mapping!", iDataType, Types.NCHAR);
+                            assertEquals(iDataType, Types.NCHAR, "Invalid GRAPHIC mapping!");
                             break;
                         case "VARGRAPHIC":
-                            assertEquals("Invalid VARGRAPHIC mapping!", iDataType, Types.NVARCHAR);
+                            assertEquals(iDataType, Types.NVARCHAR, "Invalid VARGRAPHIC mapping!");
                             break;
                         case "DBCLOB":
-                            assertEquals("Invalid DBCLOB mapping!", iDataType, Types.NCLOB);
+                            assertEquals(iDataType, Types.NCLOB, "Invalid DBCLOB mapping!");
                             break;
                         case "CHAR () FOR BIT DATA":
-                            assertEquals("Invalid CHAR() FOR BIT DATA mapping!", iDataType, Types.BINARY);
+                            assertEquals(iDataType, Types.BINARY, "Invalid CHAR() FOR BIT DATA mapping!");
                             break;
                         case "BINARY":
-                            assertEquals("Invalid BINARY mapping!", iDataType, Types.BINARY);
+                            assertEquals(iDataType, Types.BINARY, "Invalid BINARY mapping!");
                             break;
                         case "VARCHAR () FOR BIT DATA":
-                            assertEquals("Invalid VARCHAR FOR BIT DATA mapping!", iDataType, Types.VARBINARY);
+                            assertEquals(iDataType, Types.VARBINARY, "Invalid VARCHAR FOR BIT DATA mapping!");
                             break;
                         case "BLOB":
-                            assertEquals("Invalid BLOB mapping!", iDataType, Types.BLOB);
+                            assertEquals(iDataType, Types.BLOB, "Invalid BLOB mapping!");
                             break;
                         case "SMALLINT":
-                            assertEquals("Invalid SMALLINT mapping!", iDataType, Types.SMALLINT);
+                            assertEquals(iDataType, Types.SMALLINT, "Invalid SMALLINT mapping!");
                             break;
                         case "INTEGER":
-                            assertEquals("Invalid INTEGER mapping!", iDataType, Types.INTEGER);
+                            assertEquals(iDataType, Types.INTEGER, "Invalid INTEGER mapping!");
                             break;
                         case "BIGINT":
-                            assertEquals("Invalid BIGINT mapping!", iDataType, Types.BIGINT);
+                            assertEquals(iDataType, Types.BIGINT, "Invalid BIGINT mapping!");
                             break;
                         case "DECIMAL":
-                            assertEquals("Invalid DECIMAL mapping!", iDataType, Types.DECIMAL);
+                            assertEquals(iDataType, Types.DECIMAL, "Invalid DECIMAL mapping!");
                             break;
                         case "DECFLOAT":
-                            assertEquals("Invalid DECFLOAT mapping!", iDataType, Types.FLOAT);
+                            assertEquals(iDataType, Types.FLOAT, "Invalid DECFLOAT mapping!");
                             break;
                         case "REAL":
-                            assertEquals("Invalid REAL mapping!", iDataType, Types.REAL);
+                            assertEquals(iDataType, Types.REAL, "Invalid REAL mapping!");
                             break;
                         case "DOUBLE":
-                            assertEquals("Invalid DOUBLE mapping!", iDataType, Types.DOUBLE);
+                            assertEquals(iDataType, Types.DOUBLE, "Invalid DOUBLE mapping!");
                             break;
                         case "DATE":
-                            assertEquals("Invalid DATE mapping!", iDataType, Types.DATE);
+                            assertEquals(iDataType, Types.DATE, "Invalid DATE mapping!");
                             break;
                         case "TIME":
-                            assertEquals("Invalid TIME mapping!", iDataType, Types.TIME);
+                            assertEquals(iDataType, Types.TIME, "Invalid TIME mapping!");
                             break;
                         case "TIMESTAMP":
-                            assertEquals("Invalid TIMESTAMP mapping!", iDataType, Types.TIMESTAMP);
+                            assertEquals(iDataType, Types.TIMESTAMP, "Invalid TIMESTAMP mapping!");
                             break;
                         case "XML":
-                            assertEquals("Invalid XML mapping!", iDataType, Types.SQLXML);
+                            assertEquals(iDataType, Types.SQLXML, "Invalid XML mapping!");
                             break;
                         default:
                             try {
@@ -805,8 +807,8 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                                 if (qiType.getName()
                                           .equals(Db2PredefinedType.sYEAR_MONTH_DISTINCT_TYPE) || qiType.getName()
                                                                                                         .equals(Db2PredefinedType.sDAY_SECOND_DISTINCT_TYPE))
-                                    assertEquals("Invalid INTERVAL mapping!", iDataType, Types.OTHER);
-                                else assertEquals("Invalid DISTINCT mapping!", iDataType, Types.DISTINCT);
+                                    assertEquals(iDataType, Types.OTHER, "Invalid INTERVAL mapping!");
+                                else assertEquals(iDataType, Types.DISTINCT, "Invalid DISTINCT mapping!");
                             } catch (ParseException pe) {
                                 throw new SQLException("Type \"" + sTypeName + "\" could not be parsed!", pe);
                             }
@@ -821,14 +823,14 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                         String sPrecision = matcher.group(4);
                         if (sPrecision != null) {
                             int iPrecision = Integer.parseInt(sPrecision);
-                            assertEquals("Explicit precision does not match!", iPrecision, iAttrSize);
+                            assertEquals(iPrecision, iAttrSize, "Explicit precision does not match!");
                         }
                     }
                 } else {
                     TestColumnDefinition tad = mapAd.get(sAttrName);
                     try {
                         QualifiedId qiTypeName = new QualifiedId(sAttrTypeName);
-                        assertEquals("Invalid UDT type!", tad.getType(), qiTypeName.format());
+                        assertEquals(tad.getType(), qiTypeName.format(), "Invalid UDT type!");
                     } catch (ParseException pe) {
                         fail(EU.getExceptionMessage(pe));
                     }
@@ -855,14 +857,14 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
             ResultSet rs = _dmdDb2.getAttributes(qiStructType.getCatalog(), qiStructType.getSchema(), qiStructType.getName(), "%");
             while (rs.next()) {
                 String sCatalog = rs.getString("TYPE_CAT");
-                assertEquals("Wrong catalog!", TestSqlDatabase.getQualifiedComplexType()
-                                                              .getCatalog(), sCatalog);
+                assertEquals(TestSqlDatabase.getQualifiedComplexType()
+                                                              .getCatalog(), sCatalog, "Wrong catalog!");
                 String sSchema = rs.getString("TYPE_SCHEM");
-                assertEquals("Wrong schema!", TestSqlDatabase.getQualifiedComplexType()
-                                                             .getSchema(), sSchema);
+                assertEquals(TestSqlDatabase.getQualifiedComplexType()
+                                                             .getSchema(), sSchema, "Wrong schema!");
                 String sTypeName = rs.getString("TYPE_NAME");
-                assertEquals("Wrong type!", TestSqlDatabase.getQualifiedComplexType()
-                                                           .getName(), sTypeName);
+                assertEquals(TestSqlDatabase.getQualifiedComplexType()
+                                                           .getName(), sTypeName, "Wrong type!");
                 String sAttrName = rs.getString("ATTR_NAME");
                 int iDataType = rs.getInt("DATA_TYPE");
                 String sAttrTypeName = rs.getString("ATTR_TYPE_NAME");
@@ -870,67 +872,67 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                 if ((iDataType != Types.DISTINCT) && (iDataType != Types.STRUCT)) {
                     switch (sAttrTypeName) {
                         case "CHAR":
-                            assertEquals("Invalid CHAR mapping!", iDataType, Types.CHAR);
+                            assertEquals(iDataType, Types.CHAR, "Invalid CHAR mapping!");
                             break;
                         case "VARCHAR":
-                            assertEquals("Invalid VARCHAR mapping!", iDataType, Types.VARCHAR);
+                            assertEquals(iDataType, Types.VARCHAR, "Invalid VARCHAR mapping!");
                             break;
                         case "CLOB":
-                            assertEquals("Invalid CLOB mapping!", iDataType, Types.CLOB);
+                            assertEquals(iDataType, Types.CLOB, "Invalid CLOB mapping!");
                             break;
                         case "GRAPHIC":
-                            assertEquals("Invalid GRAPHIC mapping!", iDataType, Types.NCHAR);
+                            assertEquals(iDataType, Types.NCHAR, "Invalid GRAPHIC mapping!");
                             break;
                         case "VARGRAPHIC":
-                            assertEquals("Invalid VARGRAPHIC mapping!", iDataType, Types.NVARCHAR);
+                            assertEquals(iDataType, Types.NVARCHAR, "Invalid VARGRAPHIC mapping!");
                             break;
                         case "DBCLOB":
-                            assertEquals("Invalid DBCLOB mapping!", iDataType, Types.NCLOB);
+                            assertEquals(iDataType, Types.NCLOB, "Invalid DBCLOB mapping!");
                             break;
                         case "CHAR () FOR BIT DATA":
-                            assertEquals("Invalid CHAR() FOR BIT DATA mapping!", iDataType, Types.BINARY);
+                            assertEquals(iDataType, Types.BINARY, "Invalid CHAR() FOR BIT DATA mapping!");
                             break;
                         case "BINARY":
-                            assertEquals("Invalid BINARY mapping!", iDataType, Types.BINARY);
+                            assertEquals(iDataType, Types.BINARY, "Invalid BINARY mapping!");
                             break;
                         case "VARCHAR () FOR BIT DATA":
-                            assertEquals("Invalid VARCHAR FOR BIT DATA mapping!", iDataType, Types.VARBINARY);
+                            assertEquals(iDataType, Types.VARBINARY, "Invalid VARCHAR FOR BIT DATA mapping!");
                             break;
                         case "BLOB":
-                            assertEquals("Invalid BLOB mapping!", iDataType, Types.BLOB);
+                            assertEquals(iDataType, Types.BLOB, "Invalid BLOB mapping!");
                             break;
                         case "SMALLINT":
-                            assertEquals("Invalid SMALLINT mapping!", iDataType, Types.SMALLINT);
+                            assertEquals(iDataType, Types.SMALLINT, "Invalid SMALLINT mapping!");
                             break;
                         case "INTEGER":
-                            assertEquals("Invalid INTEGER mapping!", iDataType, Types.INTEGER);
+                            assertEquals(iDataType, Types.INTEGER, "Invalid INTEGER mapping!");
                             break;
                         case "BIGINT":
-                            assertEquals("Invalid BIGINT mapping!", iDataType, Types.BIGINT);
+                            assertEquals(iDataType, Types.BIGINT, "Invalid BIGINT mapping!");
                             break;
                         case "DECIMAL":
-                            assertEquals("Invalid DECIMAL mapping!", iDataType, Types.DECIMAL);
+                            assertEquals(iDataType, Types.DECIMAL, "Invalid DECIMAL mapping!");
                             break;
                         case "DECFLOAT":
-                            assertEquals("Invalid DECFLOAT mapping!", iDataType, Types.FLOAT);
+                            assertEquals(iDataType, Types.FLOAT, "Invalid DECFLOAT mapping!");
                             break;
                         case "REAL":
-                            assertEquals("Invalid REAL mapping!", iDataType, Types.REAL);
+                            assertEquals(iDataType, Types.REAL, "Invalid REAL mapping!");
                             break;
                         case "DOUBLE":
-                            assertEquals("Invalid DOUBLE mapping!", iDataType, Types.DOUBLE);
+                            assertEquals(iDataType, Types.DOUBLE, "Invalid DOUBLE mapping!");
                             break;
                         case "DATE":
-                            assertEquals("Invalid DATE mapping!", iDataType, Types.DATE);
+                            assertEquals(iDataType, Types.DATE, "Invalid DATE mapping!");
                             break;
                         case "TIME":
-                            assertEquals("Invalid TIME mapping!", iDataType, Types.TIME);
+                            assertEquals(iDataType, Types.TIME, "Invalid TIME mapping!");
                             break;
                         case "TIMESTAMP":
-                            assertEquals("Invalid TIMESTAMP mapping!", iDataType, Types.TIMESTAMP);
+                            assertEquals(iDataType, Types.TIMESTAMP, "Invalid TIMESTAMP mapping!");
                             break;
                         case "XML":
-                            assertEquals("Invalid XML mapping!", iDataType, Types.SQLXML);
+                            assertEquals(iDataType, Types.SQLXML, "Invalid XML mapping!");
                             break;
                         default:
                             try {
@@ -938,8 +940,8 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                                 if (qiType.getName()
                                           .equals(Db2PredefinedType.sYEAR_MONTH_DISTINCT_TYPE) || qiType.getName()
                                                                                                         .equals(Db2PredefinedType.sDAY_SECOND_DISTINCT_TYPE))
-                                    assertEquals("Invalid INTERVAL mapping!", iDataType, Types.OTHER);
-                                else assertEquals("Invalid DISTINCT mapping!", iDataType, Types.DISTINCT);
+                                    assertEquals(iDataType, Types.OTHER, "Invalid INTERVAL mapping!");
+                                else assertEquals(iDataType, Types.DISTINCT, "Invalid DISTINCT mapping!");
                             } catch (ParseException pe) {
                                 throw new SQLException("Type \"" + sTypeName + "\" could not be parsed!", pe);
                             }
@@ -954,14 +956,14 @@ public class Db2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester {
                         String sPrecision = matcher.group(4);
                         if (sPrecision != null) {
                             int iPrecision = Integer.parseInt(sPrecision);
-                            assertEquals("Explicit precision does not match!", iPrecision, iAttrSize);
+                            assertEquals(iPrecision, iAttrSize, "Explicit precision does not match!");
                         }
                     }
                 } else {
                     TestColumnDefinition tad = mapAd.get(sAttrName);
                     try {
                         QualifiedId qiTypeName = new QualifiedId(sAttrTypeName);
-                        assertEquals("Invalid UDT type!", tad.getType(), qiTypeName.format());
+                        assertEquals(tad.getType(), qiTypeName.format(), "Invalid UDT type!");
                     } catch (ParseException pe) {
                         fail(EU.getExceptionMessage(pe));
                     }

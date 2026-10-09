@@ -7,9 +7,8 @@ import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
 import ch.admin.bar.siard2.cmd.utils.ssl.SelfSignedCert;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.builder.Transferable;
@@ -18,7 +17,11 @@ import org.testcontainers.utility.MountableFile;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Duration;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class MsSqlUploadDownloadSiardProjectUsingSSLIT {
 
     /**
@@ -27,12 +30,12 @@ public class MsSqlUploadDownloadSiardProjectUsingSSLIT {
     public final static String SIMPLE_TEAMS_EXAMPLE = "mssql/simple-teams-example_mssql.siard";
 
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
     private final SelfSignedCert cert = SelfSignedCert.generate("localhost", Duration.ofDays(1));
 
-    @Rule
+    @Container
     public final MSSQLServerContainer<?> db = new MSSQLServerContainer<>("mcr.microsoft.com/mssql/server:2022-latest")
             .acceptLicense()
             .withCopyToContainer(Transferable.of(cert.getCertificatePem(), 0644), "/var/opt/mssql/mssql.pem")
@@ -65,8 +68,8 @@ public class MsSqlUploadDownloadSiardProjectUsingSSLIT {
         });
 
         // then
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
 
         SiardArchiveAssertions.builder()
                               .expectedArchive(expectedArchive)

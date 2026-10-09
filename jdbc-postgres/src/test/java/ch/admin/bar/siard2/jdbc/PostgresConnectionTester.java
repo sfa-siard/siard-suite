@@ -3,18 +3,18 @@ package ch.admin.bar.siard2.jdbc;
 import ch.admin.bar.siard2.jdbcx.PostgresDataSource;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jdbc.BaseConnectionTester;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.sql.Array;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PostgresConnectionTester extends BaseConnectionTester {
     private static final PostgreSQLContainer<?> _pg = new PostgreSQLContainer<>("postgres:16-alpine")
@@ -26,7 +26,7 @@ public class PostgresConnectionTester extends BaseConnectionTester {
     private static String _sDB_USER;
     private static String _sDB_PASSWORD;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         _pg.start();
         _sDB_URL = PostgresDriver.getUrl(_pg.getHost() + ":" + _pg.getFirstMappedPort() + "/" + _pg.getDatabaseName());
@@ -34,12 +34,12 @@ public class PostgresConnectionTester extends BaseConnectionTester {
         _sDB_PASSWORD = _pg.getPassword();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _pg.stop();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             PostgresDataSource dsPostgres = new PostgresDataSource();
@@ -56,7 +56,7 @@ public class PostgresConnectionTester extends BaseConnectionTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong connection class!", PostgresConnection.class, getConnection().getClass());
+        assertEquals(PostgresConnection.class, getConnection().getClass(), "Wrong connection class!");
     }
 
     @Override

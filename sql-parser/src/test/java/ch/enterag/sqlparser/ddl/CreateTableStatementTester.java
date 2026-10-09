@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.ddl;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreateTableStatementTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private CreateTableStatement _cts = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _cts = _sf.newCreateTableStatement();
     }
@@ -24,7 +24,7 @@ public class CreateTableStatementTester {
                 "  ID INT,\r\n" +
                 "  CH CHAR(5)\r\n" +
                 ")";
-        assertEquals("Simple create table statement not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Simple create table statement not recognized!");
     }
 
     @Test
@@ -45,7 +45,7 @@ public class CreateTableStatementTester {
                 "  PRIMARY KEY(ID, MYDATE),\r\n" +
                 "  FOREIGN KEY(ID) REFERENCES OTHER(\"idOther\")\r\n" +
                 ")";
-        assertEquals("Normal create table statement not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Normal create table statement not recognized!");
     }
 
     @Test
@@ -60,7 +60,7 @@ public class CreateTableStatementTester {
                 "  PRIMARY KEY(ID, MYDATE),\r\n" +
                 "  FOREIGN KEY(ID) REFERENCES OTHER(\"idOther\")\r\n" +
                 ")";
-        assertEquals("Complex create table statement not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Complex create table statement not recognized!");
     }
 
     @Test
@@ -70,6 +70,6 @@ public class CreateTableStatementTester {
         System.out.println(_cts.format());
         String sExpected = "CREATE TABLE \"cat\".SCH.TESTQUERY(A1, B1, C1) AS(SELECT *\r\n" +
                 "FROM TESTTABLE) WITH NO DATA";
-        assertEquals("Complex table statement from query not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Complex table statement from query not recognized!");
     }
 }

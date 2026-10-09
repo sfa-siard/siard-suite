@@ -5,18 +5,18 @@ import ch.enterag.utils.EU;
 import ch.enterag.utils.base.ConnectionProperties;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 // should probably test some obscure bug - but there is no documentation about that and how the db should be set up...
-@Ignore
+@Disabled
 public class MsSqlDbMetaDataBugTest extends BaseDatabaseMetaDataTester {
     private static final ConnectionProperties _cp = new ConnectionProperties();
     private static final String _sDB_URL = MsSqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort() + ";databaseName=bugdb");
@@ -24,7 +24,7 @@ public class MsSqlDbMetaDataBugTest extends BaseDatabaseMetaDataTester {
     private static final String _sDB_PASSWORD = "bugloginpwd";
     private MsSqlDatabaseMetaData _dmdMsSql = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             MsSqlDataSource dsMsSql = new MsSqlDataSource();

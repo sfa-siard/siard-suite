@@ -3,27 +3,29 @@ package ch.admin.bar.siard2.issues;
 import ch.admin.bar.siard2.jdbc.MsSqlConnection;
 import ch.admin.bar.siard2.jdbc.MsSqlDatabaseMetaData;
 import ch.admin.bar.siard2.jdbcx.MsSqlDataSource;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 // Tests to reproduce https://github.com/sfa-siard/SiardGui/issues/50
+@Testcontainers
 public class MultipleExtendedPropertiesOnTableTest {
 
     private MsSqlDatabaseMetaData metaData;
 
-    @Rule
+    @Container
     public MSSQLServerContainer mssqlserver = (MSSQLServerContainer) new MSSQLServerContainer()
             .acceptLicense()
             .withInitScript("scripts/mssql/multiple-extended-properties.sql");
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         MsSqlDataSource dataSource = new MsSqlDataSource(mssqlserver.getJdbcUrl(), mssqlserver.getUsername(), mssqlserver.getPassword());
         MsSqlConnection connection = (MsSqlConnection) dataSource.getConnection();

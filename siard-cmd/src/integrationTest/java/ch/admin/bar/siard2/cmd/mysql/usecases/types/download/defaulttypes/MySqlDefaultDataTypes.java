@@ -12,7 +12,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 public class MySqlDefaultDataTypes {
@@ -79,7 +79,7 @@ public class MySqlDefaultDataTypes {
         });
 
         // then
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         actualArchive.preserveArchive();
 

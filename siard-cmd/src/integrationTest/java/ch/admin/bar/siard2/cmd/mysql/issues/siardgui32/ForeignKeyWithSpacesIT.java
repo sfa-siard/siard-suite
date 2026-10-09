@@ -10,28 +10,31 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedForeignKeyId;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Testcontainers
 public class ForeignKeyWithSpacesIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MySQLContainer<?> emptyDb = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_5_6))
             .withUsername("root")
             .withPassword("public")
             .withDatabaseName("public")
             .withConfigurationOverride("mysql/config/with-blobs");
 
-    @Rule
+    @Container
     public MySQLContainer<?> db = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_5_6))
             .withUsername("root")
             .withPassword("public")
@@ -52,7 +55,7 @@ public class ForeignKeyWithSpacesIT {
                 "-s:" + submittedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -68,7 +71,7 @@ public class ForeignKeyWithSpacesIT {
                 "-s:" + siardArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 

@@ -11,7 +11,7 @@ import ch.enterag.utils.jdbc.BaseDatabaseMetaDataTester;
 import ch.enterag.utils.jdbc.MetadataResultSetWrapper;
 import com.microsoft.sqlserver.jdbc.SQLServerResultSet;
 import lombok.SneakyThrows;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.sql.ResultSet;
@@ -24,13 +24,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
-    @ClassRule
+    @Container
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE).acceptLicense()
                                                                                                   .withPassword(SA_PASSWORD)
                                                                                                   .withUrlParam("trustServerCertificate", "true");
@@ -45,7 +49,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     private static QualifiedId HIERARCHY_TYPE;
     private MsSqlDatabaseMetaData metadata = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException {
         DB_URL = mssqlContainer.getJdbcUrl();
         DB_USER = mssqlContainer.getUsername();
@@ -68,7 +72,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
         connection.close();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         MsSqlDataSource dataSource = new MsSqlDataSource();
         dataSource.setUrl(DB_URL);
@@ -81,7 +85,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong database meta data class!", MsSqlDatabaseMetaData.class, metadata.getClass());
+        assertEquals(MsSqlDatabaseMetaData.class, metadata.getClass(), "Wrong database meta data class!");
     }
 
     @Test
@@ -127,168 +131,168 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
                 }
                 switch (baseTypeName) {
                     case "CHAR":
-                        assertEquals("Invalid CHAR mapping!", Types.CHAR, dataType);
+                        assertEquals(Types.CHAR, dataType, "Invalid CHAR mapping!");
                         break;
                     case "char":
-                        assertEquals("Invalid char mapping!", Types.CHAR, dataType);
+                        assertEquals(Types.CHAR, dataType, "Invalid char mapping!");
                         break;
                     case "VARCHAR":
-                        assertEquals("Invalid VARCHAR mapping!", Types.VARCHAR, dataType);
+                        assertEquals(Types.VARCHAR, dataType, "Invalid VARCHAR mapping!");
                         break;
                     case "varchar":
-                        assertEquals("Invalid varchar mapping!", Types.VARCHAR, dataType);
+                        assertEquals(Types.VARCHAR, dataType, "Invalid varchar mapping!");
                         break;
                     case "uniqueidentifier":
-                        assertEquals("Invalid UUID mapping!", Types.CHAR, dataType);
+                        assertEquals(Types.CHAR, dataType, "Invalid UUID mapping!");
                         break;
                     case "CLOB":
-                        assertEquals("Invalid CLOB mapping!", Types.CLOB, dataType);
+                        assertEquals(Types.CLOB, dataType, "Invalid CLOB mapping!");
                         break;
                     case "text":
-                        assertEquals("Invalid text mapping!", Types.CLOB, dataType);
+                        assertEquals(Types.CLOB, dataType, "Invalid text mapping!");
                         break;
                     case "NCHAR":
-                        assertEquals("Invalid NCHAR mapping!", Types.NCHAR, dataType);
+                        assertEquals(Types.NCHAR, dataType, "Invalid NCHAR mapping!");
                         break;
                     case "nchar":
-                        assertEquals("Invalid nchar mapping!", Types.NCHAR, dataType);
+                        assertEquals(Types.NCHAR, dataType, "Invalid nchar mapping!");
                         break;
                     case "NCHAR VARYING":
-                        assertEquals("Invalid NCHAR VARYING mapping!", Types.NVARCHAR, dataType);
+                        assertEquals(Types.NVARCHAR, dataType, "Invalid NCHAR VARYING mapping!");
                         break;
                     case "nvarchar":
-                        assertEquals("Invalid nvarchar mapping!", Types.NVARCHAR, dataType);
+                        assertEquals(Types.NVARCHAR, dataType, "Invalid nvarchar mapping!");
                         break;
                     case "NCLOB":
-                        assertEquals("Invalid NCLOB mapping!", Types.NCLOB, dataType);
+                        assertEquals(Types.NCLOB, dataType, "Invalid NCLOB mapping!");
                         break;
                     case "ntext":
-                        assertEquals("Invalid ntext mapping!", Types.NCLOB, dataType);
+                        assertEquals(Types.NCLOB, dataType, "Invalid ntext mapping!");
                         break;
                     case "XML":
-                        assertEquals("Invalid XML mapping!", Types.SQLXML, dataType);
+                        assertEquals(Types.SQLXML, dataType, "Invalid XML mapping!");
                         break;
                     case "xml":
-                        assertEquals("Invalid xml mapping!", Types.SQLXML, dataType);
+                        assertEquals(Types.SQLXML, dataType, "Invalid xml mapping!");
                         break;
                     case "BINARY":
-                        assertEquals("Invalid BINARY mapping!", Types.BINARY, dataType);
+                        assertEquals(Types.BINARY, dataType, "Invalid BINARY mapping!");
                         break;
                     case "binary":
-                        assertEquals("Invalid binary mapping!", Types.BINARY, dataType);
+                        assertEquals(Types.BINARY, dataType, "Invalid binary mapping!");
                         break;
                     case "timestamp":
-                        assertEquals("Invalid timestamp mapping!", Types.BINARY, dataType);
+                        assertEquals(Types.BINARY, dataType, "Invalid timestamp mapping!");
                         break;
                     case "VARBINARY":
-                        assertEquals("Invalid VARBINARY mapping!", Types.VARBINARY, dataType);
+                        assertEquals(Types.VARBINARY, dataType, "Invalid VARBINARY mapping!");
                         break;
                     case "varbinary":
-                        assertEquals("Invalid varbinary mapping!", Types.VARBINARY, dataType);
+                        assertEquals(Types.VARBINARY, dataType, "Invalid varbinary mapping!");
                         break;
                     case "BLOB":
-                        assertEquals("Invalid BLOB mapping!", Types.BLOB, dataType);
+                        assertEquals(Types.BLOB, dataType, "Invalid BLOB mapping!");
                         break;
                     case "image":
-                        assertEquals("Invalid image mapping!", Types.BLOB, dataType);
+                        assertEquals(Types.BLOB, dataType, "Invalid image mapping!");
                         break;
                     case "tinyint":
-                        assertEquals("Invalid tinyint mapping!", Types.SMALLINT, dataType);
+                        assertEquals(Types.SMALLINT, dataType, "Invalid tinyint mapping!");
                         break;
                     case "SMALLINT":
-                        assertEquals("Invalid SMALLINT mapping!", Types.SMALLINT, dataType);
+                        assertEquals(Types.SMALLINT, dataType, "Invalid SMALLINT mapping!");
                         break;
                     case "smallint":
-                        assertEquals("Invalid smallint mapping!", Types.SMALLINT, dataType);
+                        assertEquals(Types.SMALLINT, dataType, "Invalid smallint mapping!");
                         break;
                     case "INTEGER":
-                        assertEquals("Invalid INTEGER mapping!", Types.INTEGER, dataType);
+                        assertEquals(Types.INTEGER, dataType, "Invalid INTEGER mapping!");
                         break;
                     case "int":
-                        assertEquals("Invalid INTEGER mapping!", Types.INTEGER, dataType);
+                        assertEquals(Types.INTEGER, dataType, "Invalid INTEGER mapping!");
                         break;
                     case "BIGINT":
-                        assertEquals("Invalid BIGINT mapping!", Types.BIGINT, dataType);
+                        assertEquals(Types.BIGINT, dataType, "Invalid BIGINT mapping!");
                         break;
                     case "bigint":
-                        assertEquals("Invalid bigint mapping!", Types.BIGINT, dataType);
+                        assertEquals(Types.BIGINT, dataType, "Invalid bigint mapping!");
                         break;
                     case "DECIMAL":
-                        assertEquals("Invalid DECIMAL mapping!", Types.DECIMAL, dataType);
+                        assertEquals(Types.DECIMAL, dataType, "Invalid DECIMAL mapping!");
                         break;
                     case "decimal":
-                        assertEquals("Invalid decimal mapping!", Types.DECIMAL, dataType);
+                        assertEquals(Types.DECIMAL, dataType, "Invalid decimal mapping!");
                         break;
                     case "NUMERIC":
-                        assertEquals("Invalid NUMERIC mapping!", Types.NUMERIC, dataType);
+                        assertEquals(Types.NUMERIC, dataType, "Invalid NUMERIC mapping!");
                         break;
                     case "numeric":
-                        assertEquals("Invalid numeric mapping!", Types.NUMERIC, dataType);
+                        assertEquals(Types.NUMERIC, dataType, "Invalid numeric mapping!");
                         break;
                     case "smallmoney":
-                        assertEquals("Invalid smallmoney mapping!", Types.DECIMAL, dataType);
+                        assertEquals(Types.DECIMAL, dataType, "Invalid smallmoney mapping!");
                         break;
                     case "money":
-                        assertEquals("Invalid money mapping!", Types.DECIMAL, dataType);
+                        assertEquals(Types.DECIMAL, dataType, "Invalid money mapping!");
                         break;
                     case "REAL":
-                        assertEquals("Invalid REAL mapping!", Types.REAL, dataType);
+                        assertEquals(Types.REAL, dataType, "Invalid REAL mapping!");
                         break;
                     case "real":
-                        assertEquals("Invalid real mapping!", Types.REAL, dataType);
+                        assertEquals(Types.REAL, dataType, "Invalid real mapping!");
                         break;
                     case "DOUBLE":
-                        assertEquals("Invalid DOUBLE mapping!", Types.DOUBLE, dataType);
+                        assertEquals(Types.DOUBLE, dataType, "Invalid DOUBLE mapping!");
                         break;
                     case "float":
-                        assertEquals("Invalid float mapping!", Types.DOUBLE, dataType);
+                        assertEquals(Types.DOUBLE, dataType, "Invalid float mapping!");
                         break;
                     case "BOOLEAN":
-                        assertEquals("Invalid BOOLEAN mapping!", Types.BOOLEAN, dataType);
+                        assertEquals(Types.BOOLEAN, dataType, "Invalid BOOLEAN mapping!");
                         break;
                     case "bit":
-                        assertEquals("Invalid bit mapping!", Types.BOOLEAN, dataType);
+                        assertEquals(Types.BOOLEAN, dataType, "Invalid bit mapping!");
                         break;
                     case "DATE":
-                        assertEquals("Invalid DATE mapping!", Types.DATE, dataType);
+                        assertEquals(Types.DATE, dataType, "Invalid DATE mapping!");
                         break;
                     case "date":
-                        assertEquals("Invalid date mapping!", Types.DATE, dataType);
+                        assertEquals(Types.DATE, dataType, "Invalid date mapping!");
                         break;
                     case "TIME":
-                        assertEquals("Invalid TIME mapping!", Types.TIME, dataType);
+                        assertEquals(Types.TIME, dataType, "Invalid TIME mapping!");
                         break;
                     case "time":
-                        assertEquals("Invalid time mapping!", Types.TIME, dataType);
+                        assertEquals(Types.TIME, dataType, "Invalid time mapping!");
                         break;
                     case "TIMESTAMP":
-                        assertEquals("Invalid TIMESTAMP mapping!", Types.TIMESTAMP, dataType);
+                        assertEquals(Types.TIMESTAMP, dataType, "Invalid TIMESTAMP mapping!");
                         break;
                     case "smalldatetime":
-                        assertEquals("Invalid smalldatetime mapping!", Types.TIMESTAMP, dataType);
+                        assertEquals(Types.TIMESTAMP, dataType, "Invalid smalldatetime mapping!");
                         break;
                     case "datetime":
-                        assertEquals("Invalid datetime mapping!", Types.TIMESTAMP, dataType);
+                        assertEquals(Types.TIMESTAMP, dataType, "Invalid datetime mapping!");
                         break;
                     case "datetime2":
-                        assertEquals("Invalid datetime2 mapping!", Types.TIMESTAMP, dataType);
+                        assertEquals(Types.TIMESTAMP, dataType, "Invalid datetime2 mapping!");
                         break;
                     case "datetimeoffset":
-                        assertEquals("Invalid datetimeoffset mapping!", Types.VARCHAR, dataType);
+                        assertEquals(Types.VARCHAR, dataType, "Invalid datetimeoffset mapping!");
                         break;
                     case "sql_variant":
-                        assertEquals("Invalid sql_variant mapping!", Types.VARBINARY, dataType);
+                        assertEquals(Types.VARBINARY, dataType, "Invalid sql_variant mapping!");
                         break;
                     default:
                         QualifiedId id = new QualifiedId(typeName);
                         if (id.getCatalog() == null) id.setCatalog(catalogName);
                         if (id.getSchema() == null) id.setSchema(schemaName);
                         if (id.equals(GEOMETRY_TYPE) || id.equals(GEOGRAPHY_TYPE))
-                            assertEquals("Invalid geo type mapping!", Types.VARCHAR, dataType);
+                            assertEquals(Types.VARCHAR, dataType, "Invalid geo type mapping!");
                         else if (id.equals(HIERARCHY_TYPE)) {
-                            assertEquals("Invalid hierarchyid type mapping!", Types.VARCHAR, dataType);
-                            assertTrue("Invalid length of hierarchyid type mapping!", columnSize < 4000);
-                        } else assertEquals("Invalid UDT mapping!", Types.DISTINCT, dataType);
+                            assertEquals(Types.VARCHAR, dataType, "Invalid hierarchyid type mapping!");
+                            assertTrue(columnSize < 4000, "Invalid length of hierarchyid type mapping!");
+                        } else assertEquals(Types.DISTINCT, dataType, "Invalid UDT mapping!");
                         break;
                 }
                 TestColumnDefinition tcd = columnDefinitionsMap.get(columnName);
@@ -302,10 +306,10 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
                         if (precision != null) {
                             int iPrecision = Integer.parseInt(precision);
                             if ((dataType == Types.DOUBLE) || (dataType == Types.REAL) || (dataType == Types.TIMESTAMP) || (dataType == Types.TIME)) {
-                                assertTrue("Explicit precision too large!", (iPrecision <= columnSize));
+                                assertTrue((iPrecision <= columnSize), "Explicit precision too large!");
                                 columnSize = iPrecision;
                             } else if (typeName.startsWith("datetimeoffset")) iPrecision = 64;
-                            assertEquals("Explicit precision does not match!", iPrecision, columnSize);
+                            assertEquals(iPrecision, columnSize, "Explicit precision does not match!");
                         }
                     }
                 }
@@ -361,7 +365,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testSupportsResultSetConcurrency() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -375,7 +379,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testOwnUpdatesAreVisible() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -402,7 +406,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testOwnInsertsAreVisible() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -414,7 +418,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testOthersUpdatesAreVisible() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -426,7 +430,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testOthersDeletesAreVisible() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -438,7 +442,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testOthersInsertsAreVisible() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -450,7 +454,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testUpdatesAreDetected() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -462,7 +466,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testDeletesAreDetected() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -474,7 +478,7 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
     @SneakyThrows
     @Test
     @Override
-    @Ignore
+    @Disabled
     public void testInsertsAreDetected() {
         List<Integer> listTypes = SqlTypes.getAllTypes();
         for (Integer listType : listTypes) {
@@ -596,24 +600,24 @@ public class MsSqlDatabaseMetaDataTest extends BaseDatabaseMetaDataTester {
 
             MetadataResultSetWrapper wrapper = MetadataResultSetWrapper.forType(rs);
             QualifiedId actual = wrapper.toQualifiedId();
-            assertEquals("Unexpected catalog", DB_CATALOG.toLowerCase(), actual.getCatalog()
-                                                                               .toLowerCase());
-            assertEquals("Unexpected schema", qualifiedId.getSchema(), actual.getSchema());
-            assertEquals("Unexpected type", qualifiedId.getName(), actual.getName());
+            assertEquals(DB_CATALOG.toLowerCase(), actual.getCatalog()
+                                                                               .toLowerCase(), "Unexpected catalog");
+            assertEquals(qualifiedId.getSchema(), actual.getSchema(), "Unexpected schema");
+            assertEquals(qualifiedId.getName(), actual.getName(), "Unexpected type");
 
             String className = rs.getString("CLASSNAME");
             int dataType = rs.getInt("DATA_TYPE");
             int baseType = rs.getInt("BASE_TYPE");
 
-            assertNull("CLASS_NAME should be null for DISTINCT types", className);
+            assertNull(className, "CLASS_NAME should be null for DISTINCT types");
             if (expectedDataType != null) {
-                assertEquals("Unexpected DATA_TYPE", expectedDataType.intValue(), dataType);
+                assertEquals(expectedDataType.intValue(), dataType, "Unexpected DATA_TYPE");
             }
             if (expectedBaseType != null) {
-                assertEquals("Unexpected BASE_TYPE", expectedBaseType.intValue(), baseType);
+                assertEquals(expectedBaseType.intValue(), baseType, "Unexpected BASE_TYPE");
             }
         }
         rs.close();
-        assertTrue("Expected to find at least one UDT row", foundRow);
+        assertTrue(foundRow, "Expected to find at least one UDT row");
     }
 }

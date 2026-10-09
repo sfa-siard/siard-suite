@@ -4,19 +4,19 @@ import ch.admin.bar.siard2.jdbcx.Db2DataSource;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.ConnectionProperties;
 import ch.enterag.utils.database.SqlTypes;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@Ignore("was not part of the TestSuite")
+@Disabled("was not part of the TestSuite")
 public class TransFormTester {
     private static final ConnectionProperties _cp = new ConnectionProperties();
     private static final String _sDB_URL = "jdbc:db2://" + _cp.getHost() + ":" + _cp.getPort() + "/" + _cp.getCatalog();
@@ -27,7 +27,7 @@ public class TransFormTester {
 
     private Db2Connection _connDb2 = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Db2DataSource dsDb2 = new Db2DataSource();
@@ -40,7 +40,7 @@ public class TransFormTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             _connDb2.commit();

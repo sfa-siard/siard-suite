@@ -1,7 +1,7 @@
 package ch.enterag.utils.lang;
 
 import ch.enterag.utils.EU;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileReader;
 import java.io.IOException;

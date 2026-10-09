@@ -7,16 +7,19 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.header.Metadata;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.*;
 import lombok.val;
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MSSQLServerContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Testcontainers
 public class MsSqlDownloadSiardProjectIT {
 
     /**
@@ -89,10 +92,10 @@ public class MsSqlDownloadSiardProjectIT {
                                                                                                .build();
 
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MSSQLServerContainer<?> db = new MSSQLServerContainer<>(DockerImageName.parse("mcr.microsoft.com/mssql/server:2017-CU12"))
             .acceptLicense()
             .withInitScript(CREATE_SIMPLE_TEAMS_EXAMPLE);
@@ -112,7 +115,7 @@ public class MsSqlDownloadSiardProjectIT {
         });
 
         // then
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         actualArchive.preserveArchive();
 

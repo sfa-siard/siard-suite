@@ -6,17 +6,21 @@ import ch.admin.bar.siard2.jdbcx.Db2DataSource;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseResultSetMetaDataTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.Db2Container;
 
 import java.sql.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
 
-    @ClassRule
+    @Container
     public static Db2Container db2 = new Db2Container("ibmcom/db2:11.5.7.0").acceptLicense();
 
 
@@ -73,7 +77,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         _sSqlQueryComplex = sbSql.toString();
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException {
         Db2DataSource dsDb2 = new Db2DataSource();
         dsDb2.setUrl(db2.getJdbcUrl());
@@ -112,7 +116,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
     }
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         Db2DataSource dsDb2 = new Db2DataSource();
         dsDb2.setUrl(db2.getJdbcUrl());
@@ -123,7 +127,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
         openResultSet(conn, _sNativeQuerySimple);
     }
 
-    @After
+    @AfterEach
     @Override
     public void tearDown() {
         try {
@@ -141,7 +145,7 @@ public class Db2ResultSetMetaDataTester extends BaseResultSetMetaDataTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong database meta data class!", Db2ResultSetMetaData.class, getResultSetMetaData().getClass());
+        assertEquals(Db2ResultSetMetaData.class, getResultSetMetaData().getClass(), "Wrong database meta data class!");
     }
 
     @Test

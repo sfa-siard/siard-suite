@@ -7,20 +7,20 @@ import ch.enterag.sqlparser.SqlStatement;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.expression.enums.Sign;
 import ch.enterag.sqlparser.identifier.IdChain;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SqlStatementTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private SqlStatement _ss = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _ss = _sf.newSqlStatement();
     }
@@ -175,21 +175,21 @@ public class SqlStatementTester {
         tp2.setColumnType("ACOL", dtSmallInt);
         tp2.setColumnType("CCOL", dtVarchar);
 
-        assertEquals("Wrong first SELECT type!", "SMALLINT", ss1.getDataType(_ss)
-                                                                .format());
-        assertEquals("Wrong second SELECT type!", "VARCHAR(259)", ss2.getDataType(_ss)
-                                                                     .format());
-        assertEquals("Wrong third SELECT type!", "SMALLINT", ss3.getDataType(_ss)
-                                                                .format());
-        assertEquals("Wrong WHERE condition!", "BOOLEAN", qs.getWhereCondition()
+        assertEquals("SMALLINT", ss1.getDataType(_ss)
+                                                                .format(), "Wrong first SELECT type!");
+        assertEquals("VARCHAR(259)", ss2.getDataType(_ss)
+                                                                     .format(), "Wrong second SELECT type!");
+        assertEquals("SMALLINT", ss3.getDataType(_ss)
+                                                                .format(), "Wrong third SELECT type!");
+        assertEquals("BOOLEAN", qs.getWhereCondition()
                                                             .getDataType(_ss)
-                                                            .format());
+                                                            .format(), "Wrong WHERE condition!");
 
-        assertEquals("Wrong first SELECT column!", BigDecimal.valueOf(34), ss1.evaluate(_ss));
-        assertEquals("Wrong second SELECT column!", "abcAText", ss2.evaluate(_ss));
-        assertEquals("Wrong third SELECT column!", BigDecimal.valueOf(-18), ss3.evaluate(_ss));
-        assertEquals("Wrong WHERE condition!", Boolean.TRUE, qs.getWhereCondition()
-                                                               .evaluate(_ss, true));
+        assertEquals(BigDecimal.valueOf(34), ss1.evaluate(_ss), "Wrong first SELECT column!");
+        assertEquals("abcAText", ss2.evaluate(_ss), "Wrong second SELECT column!");
+        assertEquals(BigDecimal.valueOf(-18), ss3.evaluate(_ss), "Wrong third SELECT column!");
+        assertEquals(Boolean.TRUE, qs.getWhereCondition()
+                                                               .evaluate(_ss, true), "Wrong WHERE condition!");
 
         System.out.println("1: " + String.valueOf(ss1.evaluate(_ss) + " " + ss1.getDataType(_ss)
                                                                                .format())); // 34

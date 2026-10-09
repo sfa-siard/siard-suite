@@ -134,9 +134,7 @@ public class EntryInputStreamTest {
         }
     }
 
-    /* (non-Javadoc)
-     @see junit.framework.TestCase#setUp()
-     */
+    /* set up test fixture */
     @BeforeEach
     public void setUp() throws Exception {
         File fileTemp = tempDir.toFile();

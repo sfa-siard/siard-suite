@@ -7,17 +7,17 @@ import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseStatementTester;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.MountableFile;
 
 import java.sql.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class MySqlStatementTester extends BaseStatementTester {
     private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
@@ -76,7 +76,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         }
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             _mysql.start();
@@ -102,12 +102,12 @@ public class MySqlStatementTester extends BaseStatementTester {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _mysql.stop();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             MySqlDataSource dsMySql = new MySqlDataSource();
@@ -126,7 +126,7 @@ public class MySqlStatementTester extends BaseStatementTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong statement class!", MySqlStatement.class, _stmtMySql.getClass());
+        assertEquals(MySqlStatement.class, _stmtMySql.getClass(), "Wrong statement class!");
     }
 
     @Test
@@ -279,7 +279,7 @@ public class MySqlStatementTester extends BaseStatementTester {
         }
         try {
             int iResult = _stmtMySql.executeUpdate("CREATE TABLE TESTTABLE(ID INTEGER, CVARCHAR VARCHAR(255))");
-            assertEquals("CREATE TABLE failed!", 0, iResult);
+            assertEquals(0, iResult, "CREATE TABLE failed!");
             Statement stmt = _stmtMySql.getConnection()
                                        .createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE, ResultSet.HOLD_CURSORS_OVER_COMMIT);
             ResultSet rs = stmt.executeQuery("SELECT ID, CVARCHAR FROM TESTTABLE");

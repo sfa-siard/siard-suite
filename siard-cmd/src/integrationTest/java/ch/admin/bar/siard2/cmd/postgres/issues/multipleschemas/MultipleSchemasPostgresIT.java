@@ -7,9 +7,8 @@ import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedTableId;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedViewId;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -17,20 +16,24 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 // Reproduces the issue where a restricted user can only access a view schema (views_schema)
 // but SIARD tries to access all schemas (including data schemas s1, s2) and fails.
 // The test connects as a restricted user (siard_user) that only has access to views_schema
 // and uses the --schema option to export only that schema.
+@Testcontainers
 public class MultipleSchemasPostgresIT {
 
     private static final String SIARD_USER = "siard_user";
     private static final String SIARD_PASSWORD = "siard_password";
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public PostgreSQLContainer<?> db = new PostgreSQLContainer<>(DockerImageName.parse("postgres:13"))
             .withInitScript(SqlScripts.Postgres.MULTIPLE_SCHEMAS);
 
@@ -51,7 +54,7 @@ public class MultipleSchemasPostgresIT {
         });
 
         // then
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
 
         val metadataExplorer = actualArchive.exploreMetadata();
 

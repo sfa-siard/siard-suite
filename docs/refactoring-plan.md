@@ -61,6 +61,17 @@ Classes like `EU`, `SU`, `DU`, `BU`, `FU`, `TZ` are cryptic single/two-letter ut
 - Pay special attention to JavaFX, Testcontainers, JDBC drivers, JAXB, SLF4J, Lombok, and JUnit
 - Resolve any breaking API changes before Phase 1
 
+**Step 0.4a — Migrate all tests from JUnit 4 to JUnit 5**
+- `siard-api`, `siard-cmd`, `sql-parser`, `zip64-file`, `jdbc-base`, and all `jdbc-*` modules still run JUnit 4 tests via the vintage engine (`junit:junit:4.13.2`, `junit-vintage-engine`)
+- Migrate module by module: `jdbc-base` first (its `testFixtures` expose JUnit 4 to all `jdbc-*` modules), then `jdbc-*`, `zip64-file`, `siard-api`, `sql-parser`, `siard-cmd` (`siard-utilities` and `siard-suite-app` are already on JUnit 5)
+- Mechanical replacements: `@Before`→`@BeforeEach`, `@After`→`@AfterEach`, `@BeforeClass`→`@BeforeAll`, `@AfterClass`→`@AfterAll`, `@Ignore`→`@Disabled`, `org.junit.Assert`→`org.junit.jupiter.api.Assertions` (note: assertion *message* argument moves from first to last position)
+- `@Test(expected = X.class)` → `assertThrows(X.class, () -> ...)`
+- Testcontainers `@Rule`/`@ClassRule` fields → `@Container` on a `@Testcontainers`-annotated class (requires `org.testcontainers:junit-jupiter`)
+- `TemporaryFolder` rules → `@TempDir`; `SiardArchivesHandler` (`ExternalResource`) → JUnit 5 extension (`BeforeEachCallback`/`AfterEachCallback`) used via `@RegisterExtension`
+- JUnit 4 `@RunWith(Suite.class)` suites in `sql-parser` → `junit-platform-suite` `@Suite`/`@SelectClasses`
+- Afterwards remove `junit:junit` and `junit-vintage-engine` from all build files and `libs.versions.toml`
+- Run each module's tests after migration to verify
+
 ### Phase 1: Foundation (Low Risk, High Value)
 
 **Step 1.1 — Enforce consistent formatting**
@@ -145,7 +156,7 @@ Classes like `EU`, `SU`, `DU`, `BU`, `FU`, `TZ` are cryptic single/two-letter ut
 - Type hierarchies that are closed → sealed interfaces
 
 **Step 6.2 — Migrate remaining JUnit 4 tests to JUnit 5**
-- `siard-cmd` still uses `junit:junit:4.13.2` alongside JUnit 5. Unify.
+- Covered by step 0.4a (pulled forward — removes `junit:junit:4.13.2` and the vintage engine project-wide).
 
 **Step 6.3 — Consider a proper CLI framework**
 - Replace the hand-rolled `Arguments` class with picocli or JCommander for `SiardFromDb` / `SiardToDb` — would give argument parsing, validation, help generation, and shell completion for free.
@@ -160,6 +171,7 @@ Classes like `EU`, `SU`, `DU`, `BU`, `FU`, `TZ` are cryptic single/two-letter ut
 | 2 | 0.2 Upgrade Java LTS | Medium | Medium | High | ✅ |
 | 3 | 0.3 Revert MaterialFX | Medium | Small | Medium | ✅ |
 | 4 | 0.4 Upgrade dependencies | Medium | Medium | High | |
+| 4a | 0.4a Migrate JUnit 4 → 5 | Low | Medium (mechanical) | Medium | ✅ |
 | 5 | 1.1 Formatting | Low | Small | High (baseline) | ✅ |
 | 6 | 1.3 Logging cleanup | Low | Medium | High | |
 | 7 | 2.1 Extract CLI config | Low | Medium | High | |

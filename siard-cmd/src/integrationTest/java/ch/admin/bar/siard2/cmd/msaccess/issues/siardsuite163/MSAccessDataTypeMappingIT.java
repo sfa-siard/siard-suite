@@ -8,12 +8,12 @@ import ch.admin.bar.siard2.cmd.utils.siard.utils.MetadataExplorer;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
 import lombok.val;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 public class MSAccessDataTypeMappingIT {
 
@@ -21,7 +21,7 @@ public class MSAccessDataTypeMappingIT {
     private static final String TABLE_COMPLEX = "TABLETEST";
     private static final String TABLE_SIMPLE = "TACCESSSIMPLE";
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
     @Test
@@ -38,7 +38,7 @@ public class MSAccessDataTypeMappingIT {
                 "-s:" + siardArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
 
         val metadataExplorer = siardArchive.exploreMetadata();
         val softly = new SoftAssertions();

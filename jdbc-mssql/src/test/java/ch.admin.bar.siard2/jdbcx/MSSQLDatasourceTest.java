@@ -1,19 +1,23 @@
 package ch.admin.bar.siard2.jdbcx;
 
 import lombok.SneakyThrows;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class MSSQLDatasourceTest {
     private static final String MSSQL_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
     private static final String SA_PASSWORD = "YourStrong!Passw0rd";
 
-    @ClassRule
+    @Container
     public static MSSQLServerContainer<?> mssqlContainer = new MSSQLServerContainer<>(MSSQL_IMAGE)
             .acceptLicense()
             .withPassword(SA_PASSWORD)
@@ -26,19 +30,19 @@ public class MSSQLDatasourceTest {
     private MsSqlDataSource dataSource = null;
     private Connection connection = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         DB_URL = mssqlContainer.getJdbcUrl();
         DB_USER = mssqlContainer.getUsername();
         DB_PASSWORD = mssqlContainer.getPassword();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         dataSource = new MsSqlDataSource();
     }
 
-    @After
+    @AfterEach
     @SneakyThrows
     public void tearDown() {
         if ((connection != null) && (!connection.isClosed()))
@@ -48,9 +52,9 @@ public class MSSQLDatasourceTest {
     @Test
     @SneakyThrows
     public void testWrapper() {
-        Assert.assertSame("Invalid wrapper!", true, dataSource.isWrapperFor(DataSource.class));
+        Assertions.assertSame(true, dataSource.isWrapperFor(DataSource.class), "Invalid wrapper!");
         DataSource dsWrapped = dataSource.unwrap(DataSource.class);
-        assertSame("Invalid wrapped class!", com.microsoft.sqlserver.jdbc.SQLServerDataSource.class, dsWrapped.getClass());
+        assertSame(com.microsoft.sqlserver.jdbc.SQLServerDataSource.class, dsWrapped.getClass(), "Invalid wrapped class!");
     }
 
     @Test

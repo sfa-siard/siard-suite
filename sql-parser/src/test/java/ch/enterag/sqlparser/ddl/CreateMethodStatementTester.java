@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.ddl;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreateMethodStatementTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private CreateMethodStatement _cms = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _cms = _sf.newCreateMethodStatement();
     }
@@ -24,7 +24,7 @@ public class CreateMethodStatementTester {
         _cms.parse(sStatement);
         // System.out.println(_cms.format());
         String sExpected = "CREATE INSTANCE METHOD LENGTH_INTERVAL(\r\n)\r\nRETURNS INTERVAL HOUR(2) TO MINUTE FOR MOVIE\r\nRETURN SELECT COUNT ( ID ) FROM TAB WHERE ID < IDLIMIT ; END";
-        assertEquals("Create method statement not recognized!", sExpected, _cms.format());
+        assertEquals(sExpected, _cms.format(), "Create method statement not recognized!");
     }
 
 }

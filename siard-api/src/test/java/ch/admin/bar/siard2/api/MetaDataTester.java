@@ -7,9 +7,9 @@ import ch.enterag.utils.DU;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.FU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaDataTester {
     private static final File _fileSIARD_10_SOURCE = new File("src/test/resources/testfiles/sql1999.siard");
@@ -69,7 +69,7 @@ public class MetaDataTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             Files.copy(_fileSIARD_10_SOURCE.toPath(), _fileSIARD_10.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -86,7 +86,7 @@ public class MetaDataTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_mdNew);
@@ -102,62 +102,62 @@ public class MetaDataTester {
 
     @Test
     public void testVersion() {
-        assertEquals("Wrong version!", Archive.sMETA_DATA_VERSION, _mdNew.getVersion());
-        assertEquals("Wrong version!", Archive.sMETA_DATA_VERSION_1_0, _mdOld.getVersion());
+        assertEquals(Archive.sMETA_DATA_VERSION, _mdNew.getVersion(), "Wrong version!");
+        assertEquals(Archive.sMETA_DATA_VERSION_1_0, _mdOld.getVersion(), "Wrong version!");
     }
 
     @Test
     public void testDbname() {
         String sDbname = "Dbname";
         _mdNew.setDbName(sDbname);
-        assertEquals("Invalid Dbname!", sDbname, _mdNew.getDbName());
+        assertEquals(sDbname, _mdNew.getDbName(), "Invalid Dbname!");
         _mdOld.setDbName(sDbname);
-        assertEquals("Invalid Dbname!", sDbname, _mdOld.getDbName());
+        assertEquals(sDbname, _mdOld.getDbName(), "Invalid Dbname!");
     }
 
     @Test
     public void testDescription() {
         String sDescription = "Description";
         _mdNew.setDescription(sDescription);
-        assertEquals("Invalid Description!", sDescription, _mdNew.getDescription());
+        assertEquals(sDescription, _mdNew.getDescription(), "Invalid Description!");
         _mdOld.setDescription(sDescription);
-        assertEquals("Invalid Description!", sDescription, _mdOld.getDescription());
+        assertEquals(sDescription, _mdOld.getDescription(), "Invalid Description!");
     }
 
     @Test
     public void testArchiver() {
         String sArchiver = "Archiver";
         _mdNew.setArchiver(sArchiver);
-        assertEquals("Invalid Archiver!", sArchiver, _mdNew.getArchiver());
+        assertEquals(sArchiver, _mdNew.getArchiver(), "Invalid Archiver!");
         _mdOld.setArchiver(sArchiver);
-        assertEquals("Invalid Archiver!", sArchiver, _mdOld.getArchiver());
+        assertEquals(sArchiver, _mdOld.getArchiver(), "Invalid Archiver!");
     }
 
     @Test
     public void testArchiverContact() {
         String sArchiverContact = "ArchiverContact";
         _mdNew.setArchiverContact(sArchiverContact);
-        assertEquals("Invalid ArchiverContact!", sArchiverContact, _mdNew.getArchiverContact());
+        assertEquals(sArchiverContact, _mdNew.getArchiverContact(), "Invalid ArchiverContact!");
         _mdOld.setArchiverContact(sArchiverContact);
-        assertEquals("Invalid ArchiverContact!", sArchiverContact, _mdOld.getArchiverContact());
+        assertEquals(sArchiverContact, _mdOld.getArchiverContact(), "Invalid ArchiverContact!");
     }
 
     @Test
     public void testDataOwner() {
         String sDataOwner = "DataOwner";
         _mdNew.setDataOwner(sDataOwner);
-        assertEquals("Invalid DataOwner!", sDataOwner, _mdNew.getDataOwner());
+        assertEquals(sDataOwner, _mdNew.getDataOwner(), "Invalid DataOwner!");
         _mdOld.setDataOwner(sDataOwner);
-        assertEquals("Invalid DataOwner!", sDataOwner, _mdOld.getDataOwner());
+        assertEquals(sDataOwner, _mdOld.getDataOwner(), "Invalid DataOwner!");
     }
 
     @Test
     public void testDataOriginTimespan() {
         String sDataOriginTimespan = "DataOriginTimespan";
         _mdNew.setDataOriginTimespan(sDataOriginTimespan);
-        assertEquals("Invalid DataOriginTimespan!", sDataOriginTimespan, _mdNew.getDataOriginTimespan());
+        assertEquals(sDataOriginTimespan, _mdNew.getDataOriginTimespan(), "Invalid DataOriginTimespan!");
         _mdOld.setDataOriginTimespan(sDataOriginTimespan);
-        assertEquals("Invalid DataOriginTimespan!", sDataOriginTimespan, _mdOld.getDataOriginTimespan());
+        assertEquals(sDataOriginTimespan, _mdOld.getDataOriginTimespan(), "Invalid DataOriginTimespan!");
     }
 
     @Test
@@ -165,9 +165,9 @@ public class MetaDataTester {
         try {
             URI uriLobFolder = new URI(_fileLOBS_FOLDER.toURI() + "/");
             _mdNew.setLobFolder(uriLobFolder);
-            assertEquals("Invalid LobFolder!", uriLobFolder, _mdNew.getLobFolder());
+            assertEquals(uriLobFolder, _mdNew.getLobFolder(), "Invalid LobFolder!");
             File file = FU.fromUri(_mdNew.getAbsoluteLobFolder());
-            assertEquals("Wrong absolute folder!", _fileLOBS_FOLDER.getAbsolutePath(), file.getAbsolutePath());
+            assertEquals(_fileLOBS_FOLDER.getAbsolutePath(), file.getAbsolutePath(), "Wrong absolute folder!");
             try {
                 _mdOld.setLobFolder(uriLobFolder);
                 fail("LobFolder of old metadata could be changed!");
@@ -186,7 +186,7 @@ public class MetaDataTester {
         try {
             String sProducerApplication = "ProducerApplication";
             _mdNew.setProducerApplication(sProducerApplication);
-            assertEquals("Invalid ProducerApplication!", sProducerApplication, _mdNew.getProducerApplication());
+            assertEquals(sProducerApplication, _mdNew.getProducerApplication(), "Invalid ProducerApplication!");
             try {
                 _mdOld.setProducerApplication(sProducerApplication);
                 fail("ProducerApplication of old metadata could be changed!");
@@ -203,15 +203,15 @@ public class MetaDataTester {
         GregorianCalendar gc = new GregorianCalendar();
         String sToday = _du.fromGregorianCalendar(gc);
         gc = (GregorianCalendar) _mdNew.getArchivalDate();
-        assertEquals("Archival date not stored as UTC!", "GMT+00:00", gc.getTimeZone()
-                                                                        .getDisplayName());
-        assertEquals("Wrong date!", sToday, _du.fromGregorianCalendar(gc));
+        assertEquals("GMT+00:00", gc.getTimeZone()
+                                                                        .getDisplayName(), "Archival date not stored as UTC!");
+        assertEquals(sToday, _du.fromGregorianCalendar(gc), "Wrong date!");
     }
 
     @Test
     public void testMessageDigest() {
         List<MessageDigestType> listDigest = _mdNew.getMessageDigest();
-        assertEquals("New archive has message digest!", 0, listDigest.size());
+        assertEquals(0, listDigest.size(), "New archive has message digest!");
         listDigest = _mdOld.getMessageDigest();
         for (int iDigest = 0; iDigest < listDigest.size(); iDigest++) {
             MessageDigestType md = listDigest.get(iDigest);
@@ -225,7 +225,7 @@ public class MetaDataTester {
         try {
             String sClientMachine = "ClientMachine";
             _mdNew.setClientMachine(sClientMachine);
-            assertEquals("Invalid ClientMachine!", sClientMachine, _mdNew.getClientMachine());
+            assertEquals(sClientMachine, _mdNew.getClientMachine(), "Invalid ClientMachine!");
             try {
                 _mdOld.setClientMachine(sClientMachine);
                 fail("ClientMachine of old metadata could be changed!");
@@ -242,7 +242,7 @@ public class MetaDataTester {
         try {
             String sDatabaseProduct = "DatabaseProduct";
             _mdNew.setDatabaseProduct(sDatabaseProduct);
-            assertEquals("Invalid DatabaseProduct!", sDatabaseProduct, _mdNew.getDatabaseProduct());
+            assertEquals(sDatabaseProduct, _mdNew.getDatabaseProduct(), "Invalid DatabaseProduct!");
             try {
                 _mdOld.setDatabaseProduct(sDatabaseProduct);
                 fail("DatabaseProduct of old metadata could be changed!");
@@ -259,7 +259,7 @@ public class MetaDataTester {
         try {
             String sConnection = "Connection";
             _mdNew.setConnection(sConnection);
-            assertEquals("Invalid Connection!", sConnection, _mdNew.getConnection());
+            assertEquals(sConnection, _mdNew.getConnection(), "Invalid Connection!");
             try {
                 _mdOld.setConnection(sConnection);
                 fail("Connection of old metadata could be changed!");
@@ -276,7 +276,7 @@ public class MetaDataTester {
         try {
             String sDatabaseUser = "DatabaseUser";
             _mdNew.setDatabaseUser(sDatabaseUser);
-            assertEquals("Invalid DatabaseUser!", sDatabaseUser, _mdNew.getDatabaseUser());
+            assertEquals(sDatabaseUser, _mdNew.getDatabaseUser(), "Invalid DatabaseUser!");
             try {
                 _mdOld.setDatabaseUser(sDatabaseUser);
                 fail("DatabaseUser of old metadata could be changed!");
@@ -290,15 +290,15 @@ public class MetaDataTester {
 
     @Test
     public void testGetMetaSchemas() {
-        assertEquals("New archive has schema meta data!", 0, _mdNew.getMetaSchemas());
-        assertEquals("Old archive has wrong number of schema meta data!", 1, _mdOld.getMetaSchemas());
+        assertEquals(0, _mdNew.getMetaSchemas(), "New archive has schema meta data!");
+        assertEquals(1, _mdOld.getMetaSchemas(), "Old archive has wrong number of schema meta data!");
     }
 
     @Test
     public void testGetMetaSchema_Int() {
         for (int iSchema = 0; iSchema < _mdOld.getMetaSchemas(); iSchema++) {
             MetaSchema ms = _mdOld.getMetaSchema(iSchema);
-            assertEquals("Invalid schema folder!", SchemaImpl._sSCHEMA_FOLDER_PREFIX + iSchema, ms.getFolder());
+            assertEquals(SchemaImpl._sSCHEMA_FOLDER_PREFIX + iSchema, ms.getFolder(), "Invalid schema folder!");
 
         }
     }
@@ -308,23 +308,23 @@ public class MetaDataTester {
         String sName = "SIARDSCHEMA";
         String sDescription = "Description";
         MetaSchema ms = _mdOld.getMetaSchema(sName);
-        assertEquals("Invalid schema name!", sName, ms.getName());
+        assertEquals(sName, ms.getName(), "Invalid schema name!");
         ms.setDescription(sDescription);
-        assertEquals("Wrong schema description!", sDescription, ms.getDescription());
+        assertEquals(sDescription, ms.getDescription(), "Wrong schema description!");
     }
 
     @Test
     public void testGetMetaUsers() {
-        assertEquals("New archive has user meta data!", 0, _mdNew.getMetaUsers());
+        assertEquals(0, _mdNew.getMetaUsers(), "New archive has user meta data!");
         System.out.println(_mdOld.getMetaUsers());
-        assertEquals("Old archive has wrong number of user meta data!", 2, _mdOld.getMetaUsers());
+        assertEquals(2, _mdOld.getMetaUsers(), "Old archive has wrong number of user meta data!");
     }
 
     @Test
     public void testGetMetaUser_Int() {
         for (int iUser = 0; iUser < _mdOld.getMetaUsers(); iUser++) {
             MetaUser mu = _mdOld.getMetaUser(iUser);
-            assertSame("Invalid parent meta data of user meta data!", _mdOld, mu.getParentMetaData());
+            assertSame(_mdOld, mu.getParentMetaData(), "Invalid parent meta data of user meta data!");
             System.out.println(mu.getName());
         }
     }
@@ -334,9 +334,9 @@ public class MetaDataTester {
         String sName = "SIARDUSER";
         String sDescription = "Description";
         MetaUser mu = _mdOld.getMetaUser(sName);
-        assertEquals("Wrong user name!", sName, mu.getName());
+        assertEquals(sName, mu.getName(), "Wrong user name!");
         mu.setDescription(sDescription);
-        assertEquals("Wrong user description!", sDescription, mu.getDescription());
+        assertEquals(sDescription, mu.getDescription(), "Wrong user description!");
     }
 
     @Test
@@ -344,10 +344,10 @@ public class MetaDataTester {
         try {
             String sName = "METAUSER";
             _mdNew.createMetaUser(sName);
-            assertEquals("Wrong number of user meta data!", 1, _mdNew.getMetaUsers());
+            assertEquals(1, _mdNew.getMetaUsers(), "Wrong number of user meta data!");
             MetaUser mu = _mdNew.getMetaUser(0);
-            assertEquals("Wrong user name", sName, mu.getName());
-            assertSame("Invalid parent meta data of user meta data!", _mdNew, mu.getParentMetaData());
+            assertEquals(sName, mu.getName(), "Wrong user name");
+            assertSame(_mdNew, mu.getParentMetaData(), "Invalid parent meta data of user meta data!");
             try {
                 _mdOld.createMetaUser(sName);
                 fail("Users of old metadata could be changed!");
@@ -361,16 +361,16 @@ public class MetaDataTester {
 
     @Test
     public void testGetMetaRoles() {
-        assertEquals("New archive has role meta data!", 0, _mdNew.getMetaRoles());
+        assertEquals(0, _mdNew.getMetaRoles(), "New archive has role meta data!");
         System.out.println(_mdOld.getMetaRoles());
-        assertEquals("Old archive has wrong number of role meta data!", 1, _mdOld.getMetaRoles());
+        assertEquals(1, _mdOld.getMetaRoles(), "Old archive has wrong number of role meta data!");
     }
 
     @Test
     public void testGetMetaRole_Int() {
         for (int iRole = 0; iRole < _mdOld.getMetaRoles(); iRole++) {
             MetaRole mr = _mdOld.getMetaRole(iRole);
-            assertSame("Invalid parent meta data of role meta data!", _mdOld, mr.getParentMetaData());
+            assertSame(_mdOld, mr.getParentMetaData(), "Invalid parent meta data of role meta data!");
             System.out.println(mr.getName() + "/" + mr.getAdmin() + ".");
         }
     }
@@ -380,10 +380,10 @@ public class MetaDataTester {
         String sName = "public";
         String sDescription = "Description";
         MetaRole mr = _mdOld.getMetaRole(sName);
-        assertEquals("Wrong role name!", sName, mr.getName());
-        assertEquals("", "", mr.getAdmin());
+        assertEquals(sName, mr.getName(), "Wrong role name!");
+        assertEquals("", mr.getAdmin(), "");
         mr.setDescription(sDescription);
-        assertEquals("Wrong role description!", sDescription, mr.getDescription());
+        assertEquals(sDescription, mr.getDescription(), "Wrong role description!");
     }
 
     @Test
@@ -392,11 +392,11 @@ public class MetaDataTester {
             String sName = "METAROLE";
             String sAdmin = "ROLEADMIN";
             _mdNew.createMetaRole(sName, sAdmin);
-            assertEquals("Wrong number of role meta data!", 1, _mdNew.getMetaRoles());
+            assertEquals(1, _mdNew.getMetaRoles(), "Wrong number of role meta data!");
             MetaRole mr = _mdNew.getMetaRole(0);
-            assertEquals("Wrong role name", sName, mr.getName());
-            assertEquals("Wrong role admin", sAdmin, mr.getAdmin());
-            assertSame("Invalid parent meta data of role meta data!", _mdNew, mr.getParentMetaData());
+            assertEquals(sName, mr.getName(), "Wrong role name");
+            assertEquals(sAdmin, mr.getAdmin(), "Wrong role admin");
+            assertSame(_mdNew, mr.getParentMetaData(), "Invalid parent meta data of role meta data!");
             try {
                 _mdOld.createMetaRole(sName, sAdmin);
                 fail("Roles of old metadata could be changed!");
@@ -410,16 +410,16 @@ public class MetaDataTester {
 
     @Test
     public void testGetMetaPrivileges() {
-        assertEquals("New archive has privilege meta data!", 0, _mdNew.getMetaPrivileges());
+        assertEquals(0, _mdNew.getMetaPrivileges(), "New archive has privilege meta data!");
         System.out.println(_mdOld.getMetaPrivileges());
-        assertEquals("Old archive has wrong number of privilege meta data!", 5, _mdOld.getMetaPrivileges());
+        assertEquals(5, _mdOld.getMetaPrivileges(), "Old archive has wrong number of privilege meta data!");
     }
 
     @Test
     public void testGetMetaPrivilege_Int() {
         for (int iPrivilege = 0; iPrivilege < _mdOld.getMetaPrivileges(); iPrivilege++) {
             MetaPrivilege mp = _mdOld.getMetaPrivilege(iPrivilege);
-            assertSame("Invalid parent meta data of privilege meta data!", _mdOld, mp.getParentMetaData());
+            assertSame(_mdOld, mp.getParentMetaData(), "Invalid parent meta data of privilege meta data!");
             System.out.println(mp.getType() + "/" + mp.getObject() + "/" + mp.getGrantor() + "/" + mp.getGrantee());
         }
     }
@@ -432,13 +432,13 @@ public class MetaDataTester {
         String sGrantee = "SIARDUSER";
         String sDescription = "Description";
         MetaPrivilege mp = _mdOld.getMetaPrivilege(sType, sObject, sGrantor, sGrantee);
-        assertEquals("Wrong privilege type!", sType, mp.getType());
-        assertEquals("Wrong privilege object!", sObject, mp.getObject());
-        assertEquals("Wrong privilege grantor!", sGrantor, mp.getGrantor());
-        assertEquals("Wrong privilege grantee!", sGrantee, mp.getGrantee());
+        assertEquals(sType, mp.getType(), "Wrong privilege type!");
+        assertEquals(sObject, mp.getObject(), "Wrong privilege object!");
+        assertEquals(sGrantor, mp.getGrantor(), "Wrong privilege grantor!");
+        assertEquals(sGrantee, mp.getGrantee(), "Wrong privilege grantee!");
         System.out.println(mp.getOption());
         mp.setDescription(sDescription);
-        assertEquals("Wrong privilege description!", sDescription, mp.getDescription());
+        assertEquals(sDescription, mp.getDescription(), "Wrong privilege description!");
     }
 
     @Test
@@ -449,15 +449,15 @@ public class MetaDataTester {
             String sGrantor = "PRIVGRANTOR";
             String sGrantee = "PRIVGRANTEE";
             _mdNew.createMetaPrivilege(sType, sObject, sGrantor, sGrantee);
-            assertEquals("Wrong number of privilege meta data!", 1, _mdNew.getMetaPrivileges());
+            assertEquals(1, _mdNew.getMetaPrivileges(), "Wrong number of privilege meta data!");
             MetaPrivilege mp = _mdNew.getMetaPrivilege(0);
-            assertEquals("Wrong privilege type", sType, mp.getType());
-            assertEquals("Wrong privilege object", sObject, mp.getObject());
-            assertEquals("Wrong privilege grantor", sGrantor, mp.getGrantor());
-            assertEquals("Wrong privilege grantee", sGrantee, mp.getGrantee());
-            assertSame("Invalid parent meta data of privilege meta data!", _mdNew, mp.getParentMetaData());
+            assertEquals(sType, mp.getType(), "Wrong privilege type");
+            assertEquals(sObject, mp.getObject(), "Wrong privilege object");
+            assertEquals(sGrantor, mp.getGrantor(), "Wrong privilege grantor");
+            assertEquals(sGrantee, mp.getGrantee(), "Wrong privilege grantee");
+            assertSame(_mdNew, mp.getParentMetaData(), "Invalid parent meta data of privilege meta data!");
             mp.setOption("GRANT");
-            assertEquals("Invalid option!", "GRANT", mp.getOption());
+            assertEquals("GRANT", mp.getOption(), "Invalid option!");
             try {
                 _mdOld.createMetaPrivilege(sType, sObject, sGrantor, sGrantee);
                 fail("Privileges of old metadata could be changed!");
@@ -471,7 +471,7 @@ public class MetaDataTester {
 
     @Test
     public void testIsValid() {
-        assertFalse("New meta data have no schema and thus are not valid!", _mdNew.isValid());
-        assertTrue("Old meta data should be valid!", _mdOld.isValid());
+        assertFalse(_mdNew.isValid(), "New meta data have no schema and thus are not valid!");
+        assertTrue(_mdOld.isValid(), "Old meta data should be valid!");
     }
 }

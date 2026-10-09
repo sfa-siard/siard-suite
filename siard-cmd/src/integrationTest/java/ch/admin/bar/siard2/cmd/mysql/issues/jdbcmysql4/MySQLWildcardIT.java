@@ -5,28 +5,31 @@ import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class MySQLWildcardIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MySQLContainer<?> downloadDbMySql8 = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_8_4))
             .withUsername("root")
             .withPassword("public")
             .withInitScript(SqlScripts.MySQL.JDBCMYSQL_4_WILDCARD)
             .withConfigurationOverride("mysql/config/mysql-version-support");
 
-    @Rule
+    @Container
     public MySQLContainer<?> downloadDbMySql5 = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_5_7))
             .withUsername("root")
             .withPassword("public")
@@ -45,7 +48,7 @@ public class MySQLWildcardIT {
                 "-s:" + createdArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
     }
 
     @Test
@@ -60,6 +63,6 @@ public class MySQLWildcardIT {
                 "-s:" + createdArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
     }
 }

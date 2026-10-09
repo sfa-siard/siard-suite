@@ -25,16 +25,15 @@ dependencies {
     runtimeOnly(libs.oracle.xmlparser)
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit4)
     testImplementation(libs.junit.jupiter.api)
 
     testImplementation(libs.testcontainers)
     testImplementation(libs.testcontainers.oracle)
+    testImplementation(libs.testcontainers.junit)
     testImplementation(libs.testcontainers.jdbc)
     testImplementation(testFixtures(project(":jdbc-base")))
 
     testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 

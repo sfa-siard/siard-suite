@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.ddl;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreateViewStatementTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private CreateViewStatement _cvs = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _cvs = _sf.newCreateViewStatement();
     }
@@ -26,7 +26,7 @@ public class CreateViewStatementTester {
                 "  TS\r\n" +
                 "FROM TAB\r\n" +
                 "WHERE COL < 45";
-        assertEquals("CREATE VIEW statement not recognized!", sExpected, _cvs.format());
+        assertEquals(sExpected, _cvs.format(), "CREATE VIEW statement not recognized!");
     }
 
     @Test
@@ -34,7 +34,7 @@ public class CreateViewStatementTester {
         _cvs.parse("CREATE recursive view \"schema\".vw of vtype under ttab (ref is id derived, ref is ts user generated, acol with options scope sch.tab1) as select id, ts, s, n from sch.tab where col < 45 with local check option");
         // System.out.println(_cvs.format());
         String sExpected = "CREATE RECURSIVE VIEW \"schema\".VW OF VTYPE UNDER TTAB( REF IS ID DERIVED, REF IS TS USER GENERATED, ACOL WITH OPTIONS SCOPE SCH.TAB1) AS SELECT\r\n  ID,\r\n  TS,\r\n  S,\r\n  N\r\nFROM SCH.TAB\r\nWHERE COL < 45 WITH LOCAL CHECK OPTION";
-        assertEquals("CREATE VIEW statement not recognized!", sExpected, _cvs.format());
+        assertEquals(sExpected, _cvs.format(), "CREATE VIEW statement not recognized!");
     }
 
 }

@@ -1,15 +1,16 @@
 package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.PostgresConnection;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Assertions;
 
 public class PostgresDataSourceTester {
     // see https://jdbc.postgresql.org/documentation/head/connect.html
@@ -22,7 +23,7 @@ public class PostgresDataSourceTester {
     private static String _sDB_USER;
     private static String _sDB_PASSWORD;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         _pg.start();
         _sDB_URL = "jdbc:postgresql://" + _pg.getHost() + ":" + _pg.getFirstMappedPort() + "/" + _pg.getDatabaseName();
@@ -30,7 +31,7 @@ public class PostgresDataSourceTester {
         _sDB_PASSWORD = _pg.getPassword();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _pg.stop();
     }
@@ -38,12 +39,12 @@ public class PostgresDataSourceTester {
     private PostgresDataSource _dsPostgres = null;
     private Connection _conn = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _dsPostgres = new PostgresDataSource();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if ((_conn != null) && (!_conn.isClosed()))
@@ -57,9 +58,9 @@ public class PostgresDataSourceTester {
     @Test
     public void testWrapper() {
         try {
-            Assert.assertSame("Invalid wrapper!", true, _dsPostgres.isWrapperFor(DataSource.class));
+            Assertions.assertSame(true, _dsPostgres.isWrapperFor(DataSource.class), "Invalid wrapper!");
             DataSource dsWrapped = _dsPostgres.unwrap(DataSource.class);
-            assertSame("Invalid wrapped class!", org.postgresql.ds.PGSimpleDataSource.class, dsWrapped.getClass());
+            assertSame(org.postgresql.ds.PGSimpleDataSource.class, dsWrapped.getClass(), "Invalid wrapped class!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());

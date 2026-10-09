@@ -5,21 +5,24 @@ import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import lombok.val;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
+@Testcontainers
 public class UploadToMySQLIT {
 
-    @Rule
+    @RegisterExtension
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
-    @Rule
+    @Container
     public MySQLContainer<?> db = new MySQLContainer<>(DockerImageName.parse(SupportedDbVersions.MY_SQL_5_6))
             .withUsername("root")
             .withPassword("test")
@@ -38,7 +41,7 @@ public class UploadToMySQLIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -53,7 +56,7 @@ public class UploadToMySQLIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -68,7 +71,7 @@ public class UploadToMySQLIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -83,7 +86,7 @@ public class UploadToMySQLIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -98,7 +101,7 @@ public class UploadToMySQLIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 
     @Test
@@ -113,6 +116,6 @@ public class UploadToMySQLIT {
                 "-s:" + expectedArchive.getPathToArchiveFile()
         });
 
-        Assert.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
     }
 }

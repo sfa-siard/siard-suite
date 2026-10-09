@@ -8,20 +8,22 @@ import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
 import ch.enterag.utils.jdbc.BaseStatementTester;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.Db2Container;
 
 import java.sql.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 public class Db2StatementTester extends BaseStatementTester {
 
-    @ClassRule
+    @Container
     public static Db2Container db2 = new Db2Container("ibmcom/db2:11.5.7.0").acceptLicense();
 
     private static final String TESTUSER = "TESTUSER";
@@ -56,7 +58,7 @@ public class Db2StatementTester extends BaseStatementTester {
         }
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws SQLException {
         Db2DataSource dsDb2 = new Db2DataSource();
         dsDb2.setUrl(db2.getJdbcUrl());
@@ -70,7 +72,7 @@ public class Db2StatementTester extends BaseStatementTester {
         connDb2.close();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws SQLException {
         Db2DataSource dsDb2 = new Db2DataSource();
         dsDb2.setUrl(db2.getJdbcUrl());
@@ -105,7 +107,7 @@ public class Db2StatementTester extends BaseStatementTester {
 
     @Test
     public void testClass() {
-        assertEquals("Wrong statement class!", Db2Statement.class, _stmtDb2.getClass());
+        assertEquals(Db2Statement.class, _stmtDb2.getClass(), "Wrong statement class!");
     }
 
 

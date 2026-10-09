@@ -5,19 +5,19 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.SqlStatement;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.datatype.PredefinedType;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SelectSublistTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private SelectSublist _ss = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _ss = _sf.newSelectSublist();
     }
@@ -27,28 +27,28 @@ public class SelectSublistTester {
         // ErrorListener.getInstance().suppressException();
         _ss.parse("a1");
         // System.out.println(_ss.format());
-        assertEquals("Plain column name not recognized!", "A1", _ss.format());
+        assertEquals("A1", _ss.format(), "Plain column name not recognized!");
     }
 
     @Test
     public void testPlainAlias() {
         _ss.parse("a1 as b");
         // System.out.println(_ss.format());
-        assertEquals("Alias column not recognized!", "A1 AS B", _ss.format());
+        assertEquals("A1 AS B", _ss.format(), "Alias column not recognized!");
     }
 
     @Test
     public void testPlainQualifiedAsterisk() {
         _ss.parse("t1.*");
         // System.out.println(_ss.format());
-        assertEquals("Qualified asterisk not recognized!", "T1.*", _ss.format());
+        assertEquals("T1.*", _ss.format(), "Qualified asterisk not recognized!");
     }
 
     @Test
     public void testPlainQualifiedAsteriskWithAliases() {
         _ss.parse("t1.* as (a1,a2,a3)");
         System.out.println(_ss.format());
-        assertEquals("Qualified asterisk not recognized!", "T1.* AS (A1, A2, A3)", _ss.format());
+        assertEquals("T1.* AS (A1, A2, A3)", _ss.format(), "Qualified asterisk not recognized!");
     }
 
     @Test

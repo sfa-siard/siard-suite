@@ -1,24 +1,28 @@
 package ch.admin.bar.siard2.jdbcx;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.Db2Container;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class Db2DataSourceTester {
 
-    @ClassRule
+    @Container
     public static Db2Container db2 = new Db2Container("ibmcom/db2:11.5.7.0").acceptLicense();
 
     private Db2DataSource _dsDb2 = null;
     private Connection _conn = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             _dsDb2 = new Db2DataSource();
@@ -28,7 +32,7 @@ public class Db2DataSourceTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if ((_conn != null) && (!_conn.isClosed())) _conn.close();
@@ -41,9 +45,9 @@ public class Db2DataSourceTester {
     @Test
     public void testWrapper() {
         try {
-            Assert.assertSame("Invalid wrapper!", true, _dsDb2.isWrapperFor(DataSource.class));
+            Assertions.assertSame(true, _dsDb2.isWrapperFor(DataSource.class), "Invalid wrapper!");
             DataSource dsWrapped = _dsDb2.unwrap(DataSource.class);
-            assertSame("Invalid wrapped class!", com.ibm.db2.jcc.DB2SimpleDataSource.class, dsWrapped.getClass());
+            assertSame(com.ibm.db2.jcc.DB2SimpleDataSource.class, dsWrapped.getClass(), "Invalid wrapped class!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());
@@ -54,7 +58,7 @@ public class Db2DataSourceTester {
     public void testLoginTimeout() {
         try {
             int iLoginTimeout = _dsDb2.getLoginTimeout();
-            assertSame("Unexpected login timeout " + String.valueOf(iLoginTimeout) + "!", 0, iLoginTimeout);
+            assertSame(0, iLoginTimeout, "Unexpected login timeout " + String.valueOf(iLoginTimeout) + "!");
         } catch (SQLException se) {
             fail(se.getClass()
                    .getName() + ": " + se.getMessage());

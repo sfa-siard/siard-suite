@@ -9,18 +9,22 @@ import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.jdbc.BaseStatementTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.OracleContainer;
 
 import java.sql.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.Assertions;
 
+@Testcontainers
 public class OracleStatementTester extends BaseStatementTester {
 
 
-    @ClassRule
+    @Container
     public final static OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart");
 
     private static final String _sDBA_USER = "SYSTEM";
@@ -46,7 +50,7 @@ public class OracleStatementTester extends BaseStatementTester {
         }
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             OracleDataSource dsOracle = new OracleDataSource();
@@ -70,7 +74,7 @@ public class OracleStatementTester extends BaseStatementTester {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             OracleDataSource dsOracle = new OracleDataSource();
@@ -87,14 +91,14 @@ public class OracleStatementTester extends BaseStatementTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDown();
     }
 
     @Test
     public void testClass() {
-        assertEquals("Wrong statement class!", OracleStatement.class, _stmtOracle.getClass());
+        assertEquals(OracleStatement.class, _stmtOracle.getClass(), "Wrong statement class!");
     }
 
     @Test
@@ -117,7 +121,7 @@ public class OracleStatementTester extends BaseStatementTester {
     }
 
     @Test
-    @Ignore("What is this buguser?")
+    @Disabled("What is this buguser?")
     public void testExecuteBug() {
         enter();
         String sSqlCreate = "CREATE TABLE MACHIN(EVENT_ID BIGINT,\r\n" + "ATTR_LIST VARCHAR(255) ARRAY[2147483647])";
@@ -132,7 +136,7 @@ public class OracleStatementTester extends BaseStatementTester {
             // stmtOracle = stmtOracle.unwrap(Statement.class);
             try {
                 int iResult = stmtOracle.executeUpdate(sSqlCreate);
-                assertEquals("Table creation failed!", 0, iResult);
+                assertEquals(0, iResult, "Table creation failed!");
             } catch (SQLException se) {
                 fail(EU.getExceptionMessage(se));
             }
@@ -315,7 +319,7 @@ public class OracleStatementTester extends BaseStatementTester {
     }
 
     @Test
-    @Ignore("What is this buguser?")
+    @Disabled("What is this buguser?")
     public void testDownloadLongRaw() {
         // prepare bug table
         String sSqlCreate = "CREATE TABLE \"AKTIONSKNOPF\" \r\n" + " (        \"NUMMER\" NUMBER, \r\n" + "      \"KLVERSION\" NUMBER(*,0), \r\n" + "      \"LAUFNUMMER\" NUMBER(*,0), \r\n" + "      \"SORTIERUNG\" NUMBER(*,0), \r\n" + "      \"BEZEICHNUNG\" VARCHAR2(64 BYTE), \r\n" + "      \"MITKNOPF\" NUMBER(*,0), \r\n" + "      \"MODUL\" VARCHAR2(13 BYTE), \r\n" + "      \"EXTRADATEN\" LONG RAW, \r\n" + "      \"KOMMENTAR\" VARCHAR2(2000 BYTE) \r\n" + " )";
@@ -336,9 +340,9 @@ public class OracleStatementTester extends BaseStatementTester {
                 System.out.println(EU.getExceptionMessage(se));
             }
             int iResult = stmtOracle.executeUpdate(sSqlCreate);
-            assertEquals("Table creation failed!", 0, iResult);
+            assertEquals(0, iResult, "Table creation failed!");
             iResult = stmtOracle.executeUpdate(sSqlInsert);
-            assertEquals("Insert into table failed!", 1, iResult);
+            assertEquals(1, iResult, "Insert into table failed!");
             try {
                 stmtOracle.executeUpdate("DELETE FROM AKTIONSKNOPF");
                 stmtOracle.executeUpdate("DROP TABLE AKTIONSKNOPF CASCADE CONSTRAINTS");

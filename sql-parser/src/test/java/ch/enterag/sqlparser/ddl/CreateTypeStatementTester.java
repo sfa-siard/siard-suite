@@ -2,16 +2,16 @@ package ch.enterag.sqlparser.ddl;
 
 import ch.enterag.sqlparser.BaseSqlFactory;
 import ch.enterag.sqlparser.SqlFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreateTypeStatementTester {
     private SqlFactory _sf = new BaseSqlFactory();
     private CreateTypeStatement _cts = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         _cts = _sf.newCreateTypeStatement();
     }
@@ -20,7 +20,7 @@ public class CreateTypeStatementTester {
     public void testDistinct() {
         _cts.parse("create type shoe_size as integer final");
         // System.out.println(_cts.format());
-        assertEquals("Distinct type statement not recognized!", "CREATE TYPE SHOE_SIZE AS INT FINAL", _cts.format());
+        assertEquals("CREATE TYPE SHOE_SIZE AS INT FINAL", _cts.format(), "Distinct type statement not recognized!");
     }
 
     @Test
@@ -45,7 +45,7 @@ public class CreateTypeStatementTester {
                 "  STATE CHAR(2),\r\n" +
                 "  ZIP_CODE ROW(BASE CHAR(5), PLUS4 CHAR(4))\r\n" +
                 ") NOT FINAL";
-        assertEquals("Attributes definition not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Attributes definition not recognized!");
 
     }
 
@@ -71,7 +71,7 @@ public class CreateTypeStatementTester {
                 "  \"state\" CHAR(2),\r\n" +
                 "  ZIP_CODE ROW(BASE CHAR(5), PLUS4 CHAR(4))\r\n" +
                 ") NOT FINAL";
-        assertEquals("Default not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Default not recognized!");
     }
 
     @Test
@@ -92,7 +92,7 @@ public class CreateTypeStatementTester {
                         "  RUNS INT\r\n" +
                         ") NOT FINAL\r\n" +
                         "METHOD LENGTH_INTERVAL() RETURNS INTERVAL HOUR(2) TO MINUTE";
-        assertEquals("Method specification not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Method specification not recognized!");
     }
 
     @Test
@@ -113,7 +113,7 @@ public class CreateTypeStatementTester {
                 ") NOT FINAL\r\n" +
                 "METHOD X_COORD() RETURNS REAL,\r\n" +
                 "METHOD Y_COORD() RETURNS REAL";
-        assertEquals("Method specifications not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Method specifications not recognized!");
     }
 
     @Test
@@ -131,7 +131,7 @@ public class CreateTypeStatementTester {
                 "  RENTAL_PRICE DEC(5, 2),\r\n" +
                 "  EXTRA_FEATURES FEATURE_DESC ARRAY[10]\r\n" +
                 ") INSTANTIABLE NOT FINAL";
-        assertEquals("Subtype specifications not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Subtype specifications not recognized!");
     }
 
     @Test
@@ -150,6 +150,6 @@ public class CreateTypeStatementTester {
                 "  DESCRIPTION VARCHAR(500),\r\n" +
                 "  RUNS INT\r\n" +
                 ") INSTANTIABLE NOT FINAL REF IS SYSTEM GENERATED";
-        assertEquals("Table-valued specifications not recognized!", sExpected, _cts.format());
+        assertEquals(sExpected, _cts.format(), "Table-valued specifications not recognized!");
     }
 }

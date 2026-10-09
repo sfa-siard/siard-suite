@@ -1,12 +1,12 @@
 package ch.admin.bar.siard2.jdbcx;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class JdbcUrlTester {
 
@@ -30,7 +30,7 @@ public class JdbcUrlTester {
             if (sPort != null)
                 iPort = Integer.parseInt(sPort);
             String sDatabase = matcher.group(8);
-            assertEquals("Parsing error!", sUrl, "jdbc:db2://" + sHost + ":" + String.valueOf(iPort) + "/" + sDatabase);
+            assertEquals(sUrl, "jdbc:db2://" + sHost + ":" + String.valueOf(iPort) + "/" + sDatabase, "Parsing error!");
         } else
             fail("Does not match!");
     }

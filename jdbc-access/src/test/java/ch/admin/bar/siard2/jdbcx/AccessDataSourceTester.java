@@ -3,14 +3,15 @@ package ch.admin.bar.siard2.jdbcx;
 import ch.admin.bar.siard2.jdbc.AccessConnection;
 import ch.enterag.utils.FU;
 import lombok.SneakyThrows;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import javax.sql.DataSource;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
 
 public class AccessDataSourceTester {
     private static final File fileTEST_DATABASE = new File("src/test/resources/testfiles/TestDataSource.accdb");
@@ -20,15 +21,15 @@ public class AccessDataSourceTester {
     private static final String sUSER = "Admin";
     private AccessDataSource _ds = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() throws Exception {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         boolean bCopied = false;
         if (fileBACKUP_DATABASE.exists())
@@ -45,73 +46,73 @@ public class AccessDataSourceTester {
         _ds.setUser(sUSER);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
     }
 
     @Test
     public void testGetDatabaseName() {
         System.out.println("\nGetDatabaseName");
-        assertEquals("Invalid database name!", fileTEST_DATABASE.getAbsolutePath(), _ds.getDatabaseName());
+        assertEquals(fileTEST_DATABASE.getAbsolutePath(), _ds.getDatabaseName(), "Invalid database name!");
     }
 
     @Test
     public void testGetUrl() {
         System.out.println("\nGetUrl");
-        assertEquals("Invalid URL!", "jdbc:access:" + fileTEST_DATABASE.getAbsolutePath(), _ds.getUrl());
+        assertEquals("jdbc:access:" + fileTEST_DATABASE.getAbsolutePath(), _ds.getUrl(), "Invalid URL!");
     }
 
     @Test
     public void testGetDescription() {
         System.out.println("\nGetDescription");
-        assertEquals("Wrong description!", sDESCRIPTION, _ds.getDescription());
+        assertEquals(sDESCRIPTION, _ds.getDescription(), "Wrong description!");
     }
 
     @Test
     public void testGetUser() {
         System.out.println("\nGetUser");
-        assertEquals("Invalid user!", sUSER, _ds.getUser());
+        assertEquals(sUSER, _ds.getUser(), "Invalid user!");
         System.out.println("User: " + _ds.getUser());
     }
 
     @Test
     public void testGetReadOnly() {
         System.out.println("\nGetReadOnly");
-        assertEquals("Invalid read-only value!", bREAD_ONLY, _ds.getReadOnly());
+        assertEquals(bREAD_ONLY, _ds.getReadOnly(), "Invalid read-only value!");
     }
 
     @SneakyThrows
     @Test
     public void testIsWrapperFor() {
         System.out.println("\nIsWrapperFor");
-        assertTrue("IsWrapperFor failed!", _ds.isWrapperFor(DataSource.class));
-        assertFalse("IsWrapperFor did not fail!", _ds.isWrapperFor(Connection.class));
+        assertTrue(_ds.isWrapperFor(DataSource.class), "IsWrapperFor failed!");
+        assertFalse(_ds.isWrapperFor(Connection.class), "IsWrapperFor did not fail!");
     }
 
     @SneakyThrows
-    @Test(expected = SQLException.class)
+    @Test
     public void testUnwrap() {
         DataSource ds = _ds.unwrap(DataSource.class);
-        assertNotNull("Unwrap failed!", ds);
-        Connection conn = _ds.unwrap(Connection.class);
+        assertNotNull(ds, "Unwrap failed!");
+        assertThrows(SQLException.class, () -> _ds.unwrap(Connection.class));
     }
 
     @Test
     public void testGetLoginTimeout() throws SQLException {
-        assertEquals("Invalid login timeout!", 0, _ds.getLoginTimeout());
+        assertEquals(0, _ds.getLoginTimeout(), "Invalid login timeout!");
     }
 
     @Test
     public void testGetConnection() throws SQLException {
         Connection conn = _ds.getConnection();
-        assertEquals("Invalid class!", AccessConnection.class, conn.getClass());
+        assertEquals(AccessConnection.class, conn.getClass(), "Invalid class!");
         conn.close();
     }
 
     @Test
     public void testGetConnectionStringString() throws SQLException {
         Connection conn = _ds.getConnection(sUSER, "");
-        assertEquals("Invalid class!", AccessConnection.class, conn.getClass());
+        assertEquals(AccessConnection.class, conn.getClass(), "Invalid class!");
         conn.close();
     }
 

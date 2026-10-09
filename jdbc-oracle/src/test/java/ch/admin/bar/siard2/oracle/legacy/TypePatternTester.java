@@ -1,11 +1,11 @@
 package ch.admin.bar.siard2.oracle.legacy;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TypePatternTester {
     private static Pattern _patTypeText = Pattern.compile("^TYPE.*VARRAY\\s*\\((\\d+)\\)\\s+OF\\s+(.*?)\\s*;?\\s*$", Pattern.CASE_INSENSITIVE + Pattern.DOTALL);

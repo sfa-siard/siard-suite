@@ -13,12 +13,11 @@ dependencies {
     implementation(project(":siard-utilities"))
 
     testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit4)
+    testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.testcontainers)
     testImplementation(libs.testcontainers.mysql)
     testImplementation(testFixtures(project(":jdbc-base")))
 
-    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
 }

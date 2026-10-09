@@ -15,12 +15,11 @@ dependencies {
 
     implementation(project(":siard-utilities"))
 
-    testFixturesApi(libs.junit4)
+    testFixturesApi(libs.junit.jupiter.api)
 
     testFixturesImplementation(project(":siard-utilities"))
     testFixturesImplementation(platform(libs.junit.bom))
 
-    testFixturesRuntimeOnly(libs.junit.vintage.engine)
     testFixturesRuntimeOnly(libs.junit.jupiter.engine)
     testFixturesRuntimeOnly(libs.junit.platform.launcher)
 

@@ -4,15 +4,15 @@ import ch.admin.bar.siard2.api.primary.ArchiveImpl;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.FU;
 import ch.enterag.utils.SU;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TableTester {
     private static final File _fileSIARD_10_SOURCE = new File("src/test/resources/testfiles/sql1999.siard");
@@ -113,7 +113,7 @@ public class TableTester {
         mu2.setTypeName(_sTEST_UDTS_TYPE);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             FU.copy(_fileSIARD_10_SOURCE, _fileSIARD_10);
@@ -125,18 +125,18 @@ public class TableTester {
             Schema schema = archive.createSchema(_sTEST_SCHEMA_NAME);
             createTypes(schema.getMetaSchema());
             _tabNew = schema.createTable(_sTEST_TABLE_NAME);
-            assertSame("Table create failed!", schema, _tabNew.getParentSchema());
+            assertSame(schema, _tabNew.getParentSchema(), "Table create failed!");
             archive = ArchiveImpl.newInstance();
             archive.open(_fileSIARD_10);
             schema = archive.getSchema(0);
             _tabOld = schema.getTable(0);
-            assertSame("Table open failed!", schema, _tabOld.getParentSchema());
+            assertSame(schema, _tabOld.getParentSchema(), "Table open failed!");
         } catch (IOException ie) {
             fail(EU.getExceptionMessage(ie));
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             setMandatoryMetaData(_tabNew.getParentSchema());
@@ -154,21 +154,21 @@ public class TableTester {
     @Test
     public void testGetMetaTable() {
         MetaTable mt = _tabNew.getMetaTable();
-        assertSame("MetaTable represents wrong table!", _tabNew, mt.getTable());
+        assertSame(_tabNew, mt.getTable(), "MetaTable represents wrong table!");
         mt = _tabOld.getMetaTable();
-        assertSame("MetaTable represents wrong table!", _tabOld, mt.getTable());
+        assertSame(_tabOld, mt.getTable(), "MetaTable represents wrong table!");
     }
 
     @Test
     public void testIsValid() {
-        assertFalse("New table is not valid (no columns/rows)!", _tabNew.isValid());
-        assertTrue("Old table must be valid!", _tabOld.isValid());
+        assertFalse(_tabNew.isValid(), "New table is not valid (no columns/rows)!");
+        assertTrue(_tabOld.isValid(), "Old table must be valid!");
     }
 
     @Test
     public void testIsEmpty() {
-        assertTrue("New table must be empty (no columns/rows)!", _tabNew.isEmpty());
-        assertFalse("Old table is not empty!", _tabOld.isEmpty());
+        assertTrue(_tabNew.isEmpty(), "New table must be empty (no columns/rows)!");
+        assertFalse(_tabOld.isEmpty(), "Old table is not empty!");
     }
 
     @Test

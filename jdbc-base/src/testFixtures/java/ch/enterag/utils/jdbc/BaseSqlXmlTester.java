@@ -1,8 +1,8 @@
 package ch.enterag.utils.jdbc;
 
 import ch.enterag.utils.EU;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLXML;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class BaseSqlXmlTester {
     private SQLXML _sqlxml = null;
@@ -39,7 +39,7 @@ public abstract class BaseSqlXmlTester {
         _sqlxml = (BaseSqlXml) sqlxml;
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             if (_sqlxml != null)

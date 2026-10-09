@@ -8,8 +8,8 @@ import ch.enterag.utils.SU;
 import ch.enterag.utils.jaxb.Io;
 import ch.enterag.utils.jaxb.XMLStreamFactory;
 import ch.enterag.utils.xml.XU;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.*;
 
 import javax.xml.XMLConstants;
@@ -31,9 +31,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@Ignore("these test were not part of the ch.admin.bar.siard2.api._SiardApiTestSuite that is run when the ant test target is run! The specified files never existed in the repository")
+@Disabled("these test were not part of the ch.admin.bar.siard2.api._SiardApiTestSuite that is run when the ant test target is run! The specified files never existed in the repository")
 public class XmlStreamingTester {
     private final ObjectFactory _of = new ObjectFactory();
 

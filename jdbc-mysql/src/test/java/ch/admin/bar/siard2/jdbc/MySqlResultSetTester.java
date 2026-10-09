@@ -12,7 +12,7 @@ import ch.enterag.utils.base.TestColumnDefinition;
 import ch.enterag.utils.base.TestUtils;
 import ch.enterag.utils.jdbc.BaseResultSet;
 import ch.enterag.utils.jdbc.BaseResultSetTester;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.MountableFile;
 
@@ -26,7 +26,8 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
 
 public class MySqlResultSetTester extends BaseResultSetTester {
     private static final MySQLContainer<?> _mysql = new MySQLContainer<>("mysql:8.0")
@@ -105,7 +106,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
     public static List<TestColumnDefinition> _listCdComplex = getListCdComplex();
 
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         System.out.println("Creating test databases");
         if (_lMsTotalStart == 0)
@@ -138,7 +139,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         _lMsTotal = System.currentTimeMillis() - _lMsTotalStart;
         System.out.println("Total: " + String.valueOf(_lMsTotal) + ", Connect: " + String.valueOf(_lMsConnect) + ", Execute: " + String.valueOf(_lMsExecute) + ", Test Database: " + String.valueOf(_lMsTestDatabase));
@@ -170,15 +171,15 @@ public class MySqlResultSetTester extends BaseResultSetTester {
         long lMsExecuteStart = System.currentTimeMillis();
         ResultSet rs = stmt.executeQuery(sQuery);
         // it is always TYPE_FORWARD_ONLY
-        // assertEquals("Invalid result set type!",iType,rs.getType());
-        assertEquals("Invalid result set concurrency!", iConcurrency, rs.getConcurrency());
-        // assertEquals("Invalid result set holdability",ResultSet.CLOSE_CURSORS_AT_COMMIT,rs.getHoldability());
+        // assertEquals(iType, rs.getType(), "Invalid result set type!");
+        assertEquals(iConcurrency, rs.getConcurrency(), "Invalid result set concurrency!");
+        // assertEquals(ResultSet.CLOSE_CURSORS_AT_COMMIT, rs.getHoldability(), "Invalid result set holdability");
         _lMsExecute = _lMsExecute + System.currentTimeMillis() - lMsExecuteStart;
         setResultSet(rs);
         rs.next();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
             MySqlDataSource dsMySql = new MySqlDataSource();
@@ -195,7 +196,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         try {
             closeResultSet();
@@ -222,7 +223,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
     public void testClass() {
         try {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            assertEquals("Wrong result set class!", MySqlResultSet.class, getResultSet().getClass());
+            assertEquals(MySqlResultSet.class, getResultSet().getClass(), "Wrong result set class!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -265,7 +266,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CVARCHAR_255");
             String s = getResultSet().getString(tcd.getName());
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -279,7 +280,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CNVARCHAR_127");
             String s = getResultSet().getNString(tcd.getName());
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -294,7 +295,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     TestSqlDatabase._listCdSimple, "CCLOB_2M");
             Clob clob = getResultSet().getClob(tcd.getName());
             String s = clob.getSubString(1l, (int) clob.length());
-            assertEquals("Invalid Clob!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid Clob!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -309,7 +310,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     TestSqlDatabase._listCdSimple, "CNCLOB_1M");
             NClob nclob = getResultSet().getNClob(tcd.getName());
             String s = nclob.getSubString(1l, (int) nclob.length());
-            assertEquals("Invalid NClob!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid NClob!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -324,7 +325,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     TestSqlDatabase._listCdSimple, "CXML");
             SQLXML sqlxml = getResultSet().getSQLXML(tcd.getName());
             String s = sqlxml.getString();
-            assertEquals("Invalid SQLXML!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid SQLXML!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -338,7 +339,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CVARBINARY_255");
             byte[] buf = getResultSet().getBytes(tcd.getName());
-            assertTrue("Invalid byte array!", Arrays.equals((byte[]) tcd.getValue(), buf));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid byte array!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -353,7 +354,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     TestSqlDatabase._listCdSimple, "CBLOB");
             Blob blob = getResultSet().getBlob(tcd.getName());
             byte[] buf = blob.getBytes(1l, (int) blob.length());
-            assertTrue("Invalid Blob!", Arrays.equals((byte[]) tcd.getValue(), buf));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid Blob!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -367,7 +368,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CDECIMAL_15_5");
             BigDecimal bd = getResultSet().getBigDecimal(tcd.getName());
-            assertEquals("Invalid BigDecimal!", (BigDecimal) tcd.getValue(), bd);
+            assertEquals((BigDecimal) tcd.getValue(), bd, "Invalid BigDecimal!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -382,7 +383,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CDECIMAL_15_5");
             BigDecimal bd = getResultSet().getBigDecimal(tcd.getName(), 3);
-            assertEquals("Invalid BigDecimal!", ((BigDecimal) tcd.getValue()).setScale(3, RoundingMode.DOWN), bd);
+            assertEquals(((BigDecimal) tcd.getValue()).setScale(3, RoundingMode.DOWN), bd, "Invalid BigDecimal!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -396,7 +397,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CBOOLEAN");
             byte by = getResultSet().getByte(tcd.getName());
-            assertEquals("Invalid byte!", ((Boolean) tcd.getValue()).booleanValue() ? (byte) 1 : (byte) 0, by);
+            assertEquals(((Boolean) tcd.getValue()).booleanValue() ? (byte) 1 : (byte) 0, by, "Invalid byte!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -410,7 +411,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CSMALLINT");
             short sh = getResultSet().getShort(tcd.getName());
-            assertEquals("Invalid short!", ((Short) tcd.getValue()).shortValue(), sh);
+            assertEquals(((Short) tcd.getValue()).shortValue(), sh, "Invalid short!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -424,7 +425,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CINTEGER");
             int i = getResultSet().getInt(tcd.getName());
-            assertEquals("Invalid int!", ((Integer) tcd.getValue()).intValue(), i);
+            assertEquals(((Integer) tcd.getValue()).intValue(), i, "Invalid int!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -438,7 +439,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CBIGINT");
             long l = getResultSet().getLong(tcd.getName());
-            assertEquals("Invalid long!", ((Long) tcd.getValue()).longValue(), l);
+            assertEquals(((Long) tcd.getValue()).longValue(), l, "Invalid long!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -452,7 +453,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CREAL");
             float f = getResultSet().getFloat(tcd.getName());
-            assertEquals("Invalid float!", (Float) tcd.getValue(), Float.valueOf(f), 0.00001);
+            assertEquals((Float) tcd.getValue(), Float.valueOf(f), 0.00001, "Invalid float!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -466,7 +467,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CDOUBLE");
             double d = getResultSet().getDouble(tcd.getName());
-            assertEquals("Invalid double!", (Double) tcd.getValue(), Double.valueOf(d));
+            assertEquals((Double) tcd.getValue(), Double.valueOf(d), "Invalid double!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -480,7 +481,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CBOOLEAN");
             boolean b = getResultSet().getBoolean(tcd.getName());
-            assertEquals("Invalid boolean!", ((Boolean) tcd.getValue()).booleanValue(), b);
+            assertEquals(((Boolean) tcd.getValue()).booleanValue(), b, "Invalid boolean!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -494,7 +495,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CDATE");
             Date date = getResultSet().getDate(tcd.getName());
-            assertEquals("Invalid Date!", (Date) tcd.getValue(), date);
+            assertEquals((Date) tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -509,7 +510,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     TestSqlDatabase._listCdSimple, "CDATE");
             Calendar cal = new GregorianCalendar();
             Date date = getResultSet().getDate(tcd.getName(), cal);
-            assertEquals("Invalid Date!", (Date) tcd.getValue(), date);
+            assertEquals((Date) tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -523,7 +524,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CTIME");
             Time time = getResultSet().getTime(tcd.getName());
-            assertEquals("Invalid Time!", (Time) tcd.getValue(), time);
+            assertEquals((Time) tcd.getValue(), time, "Invalid Time!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -538,7 +539,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     TestSqlDatabase._listCdSimple, "CTIME");
             Calendar cal = new GregorianCalendar();
             Time time = getResultSet().getTime(tcd.getName(), cal);
-            assertEquals("Invalid Time!", (Time) tcd.getValue(), time);
+            assertEquals((Time) tcd.getValue(), time, "Invalid Time!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -557,7 +558,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             Timestamp tsExpected = (Timestamp) tcd.getValue();
             /* only 6 fractional seconds digits in MySQL */
             tsExpected.setNanos(1000 * ((tsExpected.getNanos() + 499) / 1000));
-            assertEquals("Invalid Timestamp!", tsExpected, ts);
+            assertEquals(tsExpected, ts, "Invalid Timestamp!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -575,7 +576,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             Timestamp tsExpected = (Timestamp) tcd.getValue();
             /* only 6 fractional seconds digits in MySQL */
             tsExpected.setNanos(1000 * ((tsExpected.getNanos() + 499) / 1000));
-            assertEquals("Invalid Timestamp!", tsExpected, ts);
+            assertEquals(tsExpected, ts, "Invalid Timestamp!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -589,7 +590,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CINTERVAL_YEAR_3_MONTH");
             Duration duration = getBaseResultSet().getDuration(tcd.getName());
-            assertEquals("Invalid Duration!", (Interval) tcd.getValue(), Interval.fromDuration(duration));
+            assertEquals((Interval) tcd.getValue(), Interval.fromDuration(duration), "Invalid Duration!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -611,7 +612,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                 fail("Invalid length of ASCII stream!");
             is.close();
             String s = new String(buf);
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -634,7 +635,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                 fail("Invalid length of character stream!");
             rdr.close();
             String s = new String(cbuf);
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -658,7 +659,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                 fail("Invalid length of character stream!");
             rdr.close();
             String s = new String(cbuf);
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -680,7 +681,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                 fail("Invalid length of character stream!");
             rdr.close();
             String s = new String(cbuf);
-            assertEquals("Invalid String!", (String) tcd.getValue(), s);
+            assertEquals((String) tcd.getValue(), s, "Invalid String!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -701,7 +702,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             if (is.read() != -1)
                 fail("Invalid length of binary stream!");
             is.close();
-            assertTrue("Invalid byte array!", Arrays.equals((byte[]) tcd.getValue(), buf));
+            assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid byte array!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } catch (IOException ie) {
@@ -767,7 +768,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     TestSqlDatabase._listCdSimple, "CINTERVAL_YEAR_3_MONTH");
             Object o = getResultSet().getObject(tcd.getName());
             Interval iv = SqlLiterals.deserialize((byte[]) o, Interval.class);
-            assertEquals("Invalid Interval!", (Interval) tcd.getValue(), iv);
+            assertEquals((Interval) tcd.getValue(), iv, "Invalid Interval!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -782,7 +783,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             TestColumnDefinition tcd = findColumnDefinition(
                     TestSqlDatabase._listCdSimple, "CDATE");
             Date date = getResultSet().getObject(tcd.getName(), Date.class);
-            assertEquals("Invalid Date!", (Date) tcd.getValue(), date);
+            assertEquals((Date) tcd.getValue(), date, "Invalid Date!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         }
@@ -799,7 +800,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             map.put(tcd.getType(), tcd.getValue()
                                       .getClass());
             Object o = getResultSet().getObject(tcd.getName(), map);
-            assertEquals("Invalid CID!", tcd.getValue(), o);
+            assertEquals(tcd.getValue(), o, "Invalid CID!");
         } catch (SQLFeatureNotSupportedException snse) {
             System.out.println(EU.getExceptionMessage(snse));
         } catch (SQLException se) {
@@ -821,7 +822,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     if (o instanceof String) {
                         String s = (String) o;
                         s = s.substring(0, ((String) tcd.getValue()).length());
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+                        assertEquals(tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -830,7 +831,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CNVARCHAR_127")) {
                     if (o instanceof String) {
                         String s = (String) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), s);
+                        assertEquals(tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -841,7 +842,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CXML")) {
                     if (o instanceof Clob) {
                         Clob clob = (Clob) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), clob.getSubString(1l, (int) clob.length()));
+                        assertEquals(tcd.getValue(), clob.getSubString(1l, (int) clob.length()), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Clob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -849,21 +850,21 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     if (o instanceof byte[]) {
                         byte[] buf = (byte[]) o;
                         buf = Arrays.copyOf(buf, ((byte[]) tcd.getValue()).length);
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), buf));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type byte[] expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CVARBINARY_255")) {
                     if (o instanceof byte[]) {
                         byte[] buf = (byte[]) o;
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), buf));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), buf), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type byte[] expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBLOB")) {
                     if (o instanceof Blob) {
                         Blob blob = (Blob) o;
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Blob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -875,11 +876,11 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                         Object oExpected = tcd.getValue();
                         if (oExpected instanceof BigDecimal) {
                             BigDecimal bdExpected = (BigDecimal) o;
-                            assertEquals("Invalid value for " + tcd.getType() + "!", bdExpected, bd);
+                            assertEquals(bdExpected, bd, "Invalid value for " + tcd.getType() + "!");
                         } else if (oExpected instanceof BigInteger) {
                             BigInteger biExpected = (BigInteger) oExpected;
                             BigInteger bi = bd.toBigInteger();
-                            assertEquals("Invalid value for " + tcd.getType() + "!", biExpected, bi);
+                            assertEquals(biExpected, bi, "Invalid value for " + tcd.getType() + "!");
                         }
                     } else
                         fail("Type BigDecimal expected for " + tcd.getType() + "!");
@@ -887,21 +888,21 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                               .equals("CSMALLINT")) {
                     if (o instanceof Short) {
                         Short sh = (Short) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Short) tcd.getValue(), sh);
+                        assertEquals((Short) tcd.getValue(), sh, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Short expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CINTEGER")) {
                     if (o instanceof Integer) {
                         Integer i = (Integer) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Integer) tcd.getValue(), i);
+                        assertEquals((Integer) tcd.getValue(), i, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Integer expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBIGINT")) {
                     if (o instanceof Long) {
                         Long l = (Long) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Long) tcd.getValue(), l);
+                        assertEquals((Long) tcd.getValue(), l, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Long expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -910,34 +911,34 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CFLOAT_10")) {
                     if (o instanceof Float) {
                         Float f = (Float) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Float) tcd.getValue(), f, 0.00001f);
+                        assertEquals((Float) tcd.getValue(), f, 0.00001f, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Float expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CDOUBLE")) {
                     if (o instanceof Double) {
                         Double d = (Double) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Double) tcd.getValue(), d);
+                        assertEquals((Double) tcd.getValue(), d, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Double expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBOOLEAN")) {
                     if (o instanceof Short) {
                         Short sh = (Short) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Boolean) tcd.getValue(), Boolean.valueOf(sh != 0));
+                        assertEquals((Boolean) tcd.getValue(), Boolean.valueOf(sh != 0), "Invalid value for " + tcd.getType() + "!");
                     }
                 } else if (tcd.getName()
                               .equals("CDATE")) {
                     if (o instanceof Date) {
                         Date date = (Date) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Date) tcd.getValue(), date);
+                        assertEquals((Date) tcd.getValue(), date, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Date expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CTIME")) {
                     if (o instanceof Time) {
                         Time time = (Time) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Time) tcd.getValue(), time);
+                        assertEquals((Time) tcd.getValue(), time, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Time expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -947,7 +948,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                         Timestamp tsExpected = (Timestamp) tcd.getValue();
                         /* only 6 significant decimals */
                         tsExpected.setNanos(1000 * ((tsExpected.getNanos() + 499) / 1000));
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Timestamp) tcd.getValue(), ts);
+                        assertEquals((Timestamp) tcd.getValue(), ts, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Timestamp expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -957,7 +958,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     if (o instanceof byte[]) {
                         byte[] buf = (byte[]) o;
                         Interval iv = SqlLiterals.deserialize(buf, Interval.class);
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Interval) tcd.getValue(), iv);
+                        assertEquals((Interval) tcd.getValue(), iv, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type byte[] expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -993,7 +994,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CSMALLINT_U")) {
                     if (o instanceof Integer) {
                         Integer i = (Integer) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Integer) tcd.getValue(), i);
+                        assertEquals((Integer) tcd.getValue(), i, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Integer expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1004,14 +1005,14 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CINTEGER_U")) {
                     if (o instanceof Long) {
                         Long l = (Long) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Long) tcd.getValue(), l);
+                        assertEquals((Long) tcd.getValue(), l, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Long expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CBIGINT_U")) {
                     if (o instanceof BigInteger) {
                         BigInteger bi = (BigInteger) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (BigInteger) tcd.getValue(), bi);
+                        assertEquals((BigInteger) tcd.getValue(), bi, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type BigInteger expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1022,7 +1023,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CTINYINT")) {
                     if (o instanceof Short) {
                         Short sh = (Short) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Short) tcd.getValue(), sh);
+                        assertEquals((Short) tcd.getValue(), sh, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Short expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1031,7 +1032,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CDECIMAL_15_5")) {
                     if (o instanceof BigDecimal) {
                         BigDecimal bd = (BigDecimal) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (BigDecimal) tcd.getValue(), bd);
+                        assertEquals((BigDecimal) tcd.getValue(), bd, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type BigDecimal expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1040,14 +1041,14 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CREAL_9_7")) {
                     if (o instanceof Float) {
                         Float f = (Float) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Float) tcd.getValue(), f, 0.000001f);
+                        assertEquals((Float) tcd.getValue(), f, 0.000001f, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Float expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CDOUBLE_16_14")) {
                     if (o instanceof Double) {
                         Double d = (Double) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Double) tcd.getValue(), d, 0.0000000001);
+                        assertEquals((Double) tcd.getValue(), d, 0.0000000001, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Double expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1056,7 +1057,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CBOOL")) {
                     if (o instanceof Boolean) {
                         Boolean b = (Boolean) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Boolean) tcd.getValue(), b);
+                        assertEquals((Boolean) tcd.getValue(), b, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Boolean expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1065,14 +1066,14 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CYEAR")) {
                     if (o instanceof Date) {
                         Date date = (Date) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", tcd.getValue(), date);
+                        assertEquals(tcd.getValue(), date, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Date expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CTIME")) {
                     if (o instanceof Time) {
                         Time time = (Time) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Time) tcd.getValue(), time);
+                        assertEquals((Time) tcd.getValue(), time, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Time expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1081,7 +1082,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CDATETIME")) {
                     if (o instanceof Timestamp) {
                         Timestamp ts = (Timestamp) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Timestamp) tcd.getValue(), ts);
+                        assertEquals((Timestamp) tcd.getValue(), ts, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Timestamp expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1096,7 +1097,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CNCHAR_50")) {
                     if (o instanceof String) {
                         String s = (String) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (String) tcd.getValue(), s);
+                        assertEquals((String) tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1109,7 +1110,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CLONG_VARCHAR")) {
                     if (o instanceof Clob) {
                         Clob clob = (Clob) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (String) tcd.getValue(), clob.getSubString(1l, (int) clob.length()));
+                        assertEquals((String) tcd.getValue(), clob.getSubString(1l, (int) clob.length()), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Clob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1122,8 +1123,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                         byte[] buf = (byte[]) o;
                         byte[] bufExpected = (byte[]) tcd.getValue();
                         buf = Arrays.copyOf(buf, bufExpected.length);
-                        assertTrue("Invalid value for " + tcd.getType() + "!",
-                                   Arrays.equals(bufExpected, buf));
+                        assertTrue(Arrays.equals(bufExpected, buf), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type byte[] expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1136,8 +1136,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CLONG_VARBINARY")) {
                     if (o instanceof Blob) {
                         Blob blob = (Blob) o;
-                        assertTrue("Invalid value for " + tcd.getType() + "!",
-                                   Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Blob expected for " + tcd.getType() + "!");
                 } else
@@ -1159,21 +1158,21 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                        .equals("CID")) {
                     if (o instanceof Integer) {
                         Integer i = (Integer) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Integer) tcd.getValue(), i);
+                        assertEquals((Integer) tcd.getValue(), i, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Integer expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CPNG")) {
                     if (o instanceof Blob) {
                         Blob blob = (Blob) o;
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Blob expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
                               .equals("CFLAC")) {
                     if (o instanceof Blob) {
                         Blob blob = (Blob) o;
-                        assertTrue("Invalid value for " + tcd.getType() + "!", Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())));
+                        assertTrue(Arrays.equals((byte[]) tcd.getValue(), blob.getBytes(1l, (int) blob.length())), "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Blob expected for " + tcd.getType() + "!");
                 } else
@@ -1195,7 +1194,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                        .equals("CID")) {
                     if (o instanceof Integer) {
                         Integer i = (Integer) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (Integer) tcd.getValue(), i);
+                        assertEquals((Integer) tcd.getValue(), i, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type Integer expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1218,7 +1217,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                            .equals("CSET")) {
                     if (o instanceof String) {
                         String s = (String) o;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", (String) tcd.getValue(), s);
+                        assertEquals((String) tcd.getValue(), s, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type String expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
@@ -1237,7 +1236,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                             sExpected = sExpected + "(" + as[i].trim() + ")";
                         }
                         sExpected = sExpected + sSuffix;
-                        assertEquals("Invalid value for " + tcd.getType() + "!", sExpected, s);
+                        assertEquals(sExpected, s, "Invalid value for " + tcd.getType() + "!");
                     } else
                         fail("Type String expected for " + tcd.getType() + "!");
                 } else
@@ -2060,116 +2059,71 @@ public class MySqlResultSetTester extends BaseResultSetTester {
                     getResultSet().next()) {
             }
             tcd = findColumnDefinition(_listCdSimple, "CCHAR_5");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (String) tcd.getValue(),
-                         (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()));
+            assertEquals((String) tcd.getValue(), (getResultSet().getString(tcd.getName())).substring(0, ((String) tcd.getValue()).length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CVARCHAR_255");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (String) tcd.getValue(),
-                         getResultSet().getString(tcd.getName()));
+            assertEquals((String) tcd.getValue(), getResultSet().getString(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CCLOB_2M");
             clob = getResultSet().getClob(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (String) tcd.getValue(),
-                         clob.getSubString(1l, (int) clob.length()));
+            assertEquals((String) tcd.getValue(), clob.getSubString(1l, (int) clob.length()), "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdSimple, "CNCHAR_5");
             final String resultSetValue = getResultSet().getString(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tcd.getValue(),
-                         resultSetValue);
+            assertEquals(tcd.getValue(), resultSetValue, "Insert of " + tcd.getType() + " failed!");
 
             tcd = findColumnDefinition(_listCdSimple, "CNVARCHAR_127");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (String) tcd.getValue(),
-                         getResultSet().getString(tcd.getName()));
+            assertEquals((String) tcd.getValue(), getResultSet().getString(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNCLOB_1M");
             nclob = getResultSet().getNClob(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (String) tcd.getValue(),
-                         nclob.getSubString(1l, (int) nclob.length()));
+            assertEquals((String) tcd.getValue(), nclob.getSubString(1l, (int) nclob.length()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CXML");
             sqlxml = getResultSet().getSQLXML(tcd.getName());
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (String) tcd.getValue(),
-                         sqlxml.getString());
+            assertEquals((String) tcd.getValue(), sqlxml.getString(), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBINARY_5");
-            assertTrue("Insert of " + tcd.getType() + " failed!",
-                       Arrays.equals(
+            assertTrue(Arrays.equals(
                                (byte[]) tcd.getValue(),
                                Arrays.copyOf(
                                        getResultSet().getBytes(tcd.getName()),
-                                       ((byte[]) tcd.getValue()).length)));
+                                       ((byte[]) tcd.getValue()).length)), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CVARBINARY_255");
-            assertTrue("Insert of " + tcd.getType() + " failed!",
-                       Arrays.equals(
+            assertTrue(Arrays.equals(
                                (byte[]) tcd.getValue(),
-                               getResultSet().getBytes(tcd.getName())));
+                               getResultSet().getBytes(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBLOB");
             blob = getResultSet().getBlob(tcd.getName());
-            assertTrue("Insert of " + tcd.getType() + " failed!",
-                       Arrays.equals(
+            assertTrue(Arrays.equals(
                                (byte[]) tcd.getValue(),
-                               blob.getBytes(1l, (int) blob.length())));
+                               blob.getBytes(1l, (int) blob.length())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CNUMERIC_31");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (BigInteger) tcd.getValue(),
-                         getResultSet().getBigDecimal(tcd.getName())
-                                       .toBigInteger());
+            assertEquals((BigInteger) tcd.getValue(), getResultSet().getBigDecimal(tcd.getName())
+                                       .toBigInteger(), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDECIMAL_15_5");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (BigDecimal) tcd.getValue(),
-                         getResultSet().getBigDecimal(tcd.getName()));
+            assertEquals((BigDecimal) tcd.getValue(), getResultSet().getBigDecimal(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CSMALLINT");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Short) tcd.getValue()).shortValue(),
-                         getResultSet().getShort(tcd.getName()));
+            assertEquals(((Short) tcd.getValue()).shortValue(), getResultSet().getShort(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTEGER");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Integer) tcd.getValue()).intValue(),
-                         getResultSet().getInt(tcd.getName()));
+            assertEquals(((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBIGINT");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Long) tcd.getValue()).longValue(),
-                         getResultSet().getLong(tcd.getName()));
+            assertEquals(((Long) tcd.getValue()).longValue(), getResultSet().getLong(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CFLOAT_10");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (Float) tcd.getValue(),
-                         Float.valueOf(getResultSet().getFloat(tcd.getName())), 0.00001);
+            assertEquals((Float) tcd.getValue(), Float.valueOf(getResultSet().getFloat(tcd.getName())), 0.00001, "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CREAL");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (Float) tcd.getValue(),
-                         Float.valueOf(getResultSet().getFloat(tcd.getName())), 0.00001);
+            assertEquals((Float) tcd.getValue(), Float.valueOf(getResultSet().getFloat(tcd.getName())), 0.00001, "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDOUBLE");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (Double) tcd.getValue(),
-                         Double.valueOf(getResultSet().getDouble(tcd.getName())));
+            assertEquals((Double) tcd.getValue(), Double.valueOf(getResultSet().getDouble(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CBOOLEAN");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (Boolean) tcd.getValue(),
-                         Boolean.valueOf(getResultSet().getBoolean(tcd.getName())));
+            assertEquals((Boolean) tcd.getValue(), Boolean.valueOf(getResultSet().getBoolean(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CDATE");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (Date) tcd.getValue(),
-                         getResultSet().getDate(tcd.getName()));
+            assertEquals((Date) tcd.getValue(), getResultSet().getDate(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CTIME");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (Time) tcd.getValue(),
-                         getResultSet().getTime(tcd.getName()));
+            assertEquals((Time) tcd.getValue(), getResultSet().getTime(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CTIMESTAMP");
             Timestamp tsExpected = (Timestamp) tcd.getValue();
             tsExpected.setNanos(1000 * ((tsExpected.getNanos() + 499) / 1000));
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         tsExpected,
-                         getResultSet().getTimestamp(tcd.getName()));
+            assertEquals(tsExpected, getResultSet().getTimestamp(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTERVAL_YEAR_3_MONTH");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         (Interval) tcd.getValue(),
-                         Interval.fromDuration(((BaseResultSet) getResultSet()).getDuration(tcd.getName())));
+            assertEquals((Interval) tcd.getValue(), Interval.fromDuration(((BaseResultSet) getResultSet()).getDuration(tcd.getName())), "Insert of " + tcd.getType() + " failed!");
             tcd = findColumnDefinition(_listCdSimple, "CINTERVAL_DAY_2_SECONDS_6");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Interval) tcd.getValue()).toDuration(),
-                         ((BaseResultSet) getResultSet()).getDuration(tcd.getName()));
+            assertEquals(((Interval) tcd.getValue()).toDuration(), ((BaseResultSet) getResultSet()).getDuration(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
         } catch (SQLException se) {
             fail(EU.getExceptionMessage(se));
         } finally {
@@ -2208,9 +2162,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
             }
 
             tcd = findColumnDefinition(_listCdComplex, "CID");
-            assertEquals("Insert of " + tcd.getType() + " failed!",
-                         ((Integer) tcd.getValue()).intValue(),
-                         getResultSet().getInt(tcd.getName()));
+            assertEquals(((Integer) tcd.getValue()).intValue(), getResultSet().getInt(tcd.getName()), "Insert of " + tcd.getType() + " failed!");
             // restore the database
             tearDown();
             setUpClass();
@@ -2539,7 +2491,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
         enter();
         try {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            assertEquals("Invalid result set type!", ResultSet.TYPE_FORWARD_ONLY, getResultSet().getType());
+            assertEquals(ResultSet.TYPE_FORWARD_ONLY, getResultSet().getType(), "Invalid result set type!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
@@ -2553,7 +2505,7 @@ public class MySqlResultSetTester extends BaseResultSetTester {
         enter();
         try {
             openResultSet(_sSqlQuerySimple, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            assertEquals("Invalid result set concurrency!", ResultSet.CONCUR_READ_ONLY, getResultSet().getConcurrency());
+            assertEquals(ResultSet.CONCUR_READ_ONLY, getResultSet().getConcurrency(), "Invalid result set concurrency!");
         } catch (SQLFeatureNotSupportedException sfnse) {
             printExceptionMessage(sfnse);
         } catch (SQLException se) {
