@@ -4,7 +4,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
 public class SetClause
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SetClause.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -148,12 +146,10 @@ public class SetClause
             List<SetTarget> listSetTargets,
             AssignedRow as
     ) {
-        _il.enter();
         setSetTarget(st);
         setUpdateSource(us);
         setSetTargets(listSetTargets);
         setAssignedRow(as);
-        _il.exit();
     }
 
 

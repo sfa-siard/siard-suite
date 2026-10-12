@@ -128,7 +128,7 @@ public class SiardConnection extends Properties {
                 fw.close();
             }
         } catch (IOException ie) {
-            System.err.println(EU.getExceptionMessage(ie));
+            LOG.error(EU.getExceptionMessage(ie));
         }
     }
 

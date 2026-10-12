@@ -21,6 +21,8 @@ import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.ddl.enums.Multiplier;
 import ch.enterag.utils.DU;
 import ch.enterag.utils.SU;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ch.enterag.utils.xml.XU;
 
 import java.io.IOException;
@@ -33,6 +35,8 @@ import java.math.BigInteger;
 public class MetaAttributeImpl
         extends MetaSearchImpl
         implements MetaAttribute {
+    private static final Logger log = LoggerFactory.getLogger(MetaAttributeImpl.class);
+
     private static final long lKILO = 1024;
     private static final long lMEGA = lKILO * lKILO;
     private static final long lGIGA = lKILO * lMEGA;
@@ -345,7 +349,7 @@ public class MetaAttributeImpl
         if (getTypeName() != null) {
             Schema schema = getArchiveImpl().getSchema(getTypeSchema());
             if (schema == null)
-                System.err.println("Schema null found in MetaAttribute!");
+                log.error("Schema null found in MetaAttribute!");
             mt = schema.getMetaSchema()
                        .getMetaType(getTypeName());
         }

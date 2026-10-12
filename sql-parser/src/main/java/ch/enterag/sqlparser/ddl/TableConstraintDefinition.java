@@ -9,12 +9,10 @@ import ch.enterag.sqlparser.expression.BooleanValueExpression;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdList;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class TableConstraintDefinition
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(TableConstraintDefinition.class.getName());
 
     private class TcdVisitor extends EnhancedSqlBaseVisitor<TableConstraintDefinition> {
         @Override
@@ -280,8 +278,6 @@ public class TableConstraintDefinition
             BooleanValueExpression bve,
             Deferrability def, ConstraintCheckTime cct
     ) {
-        _il.enter(qConstraint, type, idlColumns, qReferencedTable, idlReferencedColumns,
-                  match, raDelete, raUpdate, bve, def, cct);
         setConstraint(qConstraint);
         setType(type);
         setColumns(idlColumns);
@@ -293,7 +289,6 @@ public class TableConstraintDefinition
         setBooleanValueExpression(bve);
         setDeferrability(def);
         setConstraintCheckTime(cct);
-        _il.exit();
     }
 
 
@@ -305,11 +300,9 @@ public class TableConstraintDefinition
             QualifiedId qConstraint,
             IdList idlColumns
     ) {
-        _il.enter(qConstraint, idlColumns);
         setConstraint(qConstraint);
         setType(TableConstraintType.PRIMARY_KEY);
         setColumns(idlColumns);
-        _il.exit();
     }
 
 

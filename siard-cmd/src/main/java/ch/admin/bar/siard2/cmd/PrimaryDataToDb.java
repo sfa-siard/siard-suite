@@ -184,12 +184,12 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             try {
                 addCandidateKeys(_conn, mt);
             } catch (SQLException se) {
-                System.err.println(EU.getExceptionMessage(se));
+                LOG.warn(EU.getExceptionMessage(se));
             }
             try {
                 addForeignKeys(_conn, mt);
             } catch (SQLException se) {
-                System.err.println(EU.getExceptionMessage(se));
+                LOG.warn(EU.getExceptionMessage(se));
             }
         }
     }

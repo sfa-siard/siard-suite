@@ -18,7 +18,8 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jaxb.Io;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBException;
 import java.io.InputStream;
@@ -34,7 +35,7 @@ public class MetaDataXml {
     /**
      * logger
      */
-    private static final IndentLogger _il = IndentLogger.getIndentLogger(MetaDataXml.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MetaDataXml.class);
     public static final String sSIARD10_XSD_RESOURCE = "/res/old10/metadata.xsd";
     public static final String sSIARD21_XSD_RESOURCE = "/res/old21/metadata.xsd";
     private static final ObjectFactory _of = new ObjectFactory();
@@ -580,8 +581,7 @@ public class MetaDataXml {
             URL urlXsd = Archive.class.getResource(Archive.sSIARD2_META_DATA_XSD_RESOURCE);
             sa = Io.readJaxbObject(SiardArchive.class, isXml, urlXsd);
         } catch (JAXBException je) {
-            _il.exception(je);
-            System.err.println(EU.getExceptionMessage(je));
+            log.error(EU.getExceptionMessage(je), je);
         }
         return sa;
     }
@@ -595,8 +595,7 @@ public class MetaDataXml {
             siardArchive = ((ConvertableSiard21Archive) sa).accept(new Siard21ToSiard22Transformer());
 
         } catch (JAXBException je) {
-            _il.exception(je);
-            System.err.println(EU.getExceptionMessage(je));
+            log.error(EU.getExceptionMessage(je), je);
         }
         return siardArchive;
     }
@@ -618,8 +617,7 @@ public class MetaDataXml {
             if (saOld10 != null)
                 sa = convertArchive(saOld10);
         } catch (JAXBException je) {
-            _il.exception(je);
-            System.err.println(EU.getExceptionMessage(je));
+            log.error(EU.getExceptionMessage(je), je);
         }
         return sa;
     }

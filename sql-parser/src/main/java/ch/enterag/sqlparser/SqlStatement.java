@@ -11,7 +11,6 @@ import ch.enterag.sqlparser.expression.QuerySpecification;
 import ch.enterag.sqlparser.expression.TablePrimary;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdChain;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -23,7 +22,6 @@ import java.util.Map;
 public class SqlStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SqlStatement.class.getName());
     private static final int _iMAX_USER_NAME_LENGTH = 64;
     private static final int _iBUFSIZ = 8192;
 
@@ -377,11 +375,9 @@ public class SqlStatement
             DmlStatement dmls,
             QuerySpecification qs
     ) {
-        _il.enter();
         setDdlStatement(ddls);
         setDmlStatement(dmls);
         setQuerySpecification(qs);
-        _il.exit();
     }
 
 

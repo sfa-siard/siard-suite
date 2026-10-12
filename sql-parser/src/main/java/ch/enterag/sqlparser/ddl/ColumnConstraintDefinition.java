@@ -9,12 +9,10 @@ import ch.enterag.sqlparser.expression.BooleanValueExpression;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class ColumnConstraintDefinition
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(ColumnConstraintDefinition.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -261,8 +259,6 @@ public class ColumnConstraintDefinition
             BooleanValueExpression bve,
             Deferrability def, ConstraintCheckTime cct
     ) {
-        _il.enter(qConstraint, type, qReferencedTable, idReferencedColumn,
-                  match, raDelete, raUpdate, bve, def, cct);
         setConstraint(qConstraint);
         setType(type);
         setReferencedTable(qReferencedTable);
@@ -273,7 +269,6 @@ public class ColumnConstraintDefinition
         setBooleanValueExpression(bve);
         setDeferrability(def);
         setConstraintCheckTime(cct);
-        _il.exit();
     }
 
 

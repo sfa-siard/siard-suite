@@ -9,12 +9,10 @@ import ch.enterag.sqlparser.ddl.enums.ViewElementType;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class ViewElement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(ViewElement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -150,12 +148,10 @@ public class ViewElement
             Identifier idColumnName,
             ReferenceGeneration rg
     ) {
-        _il.enter(type, qTableName, idColumnName);
         setType(type);
         setTableName(qTableName);
         setColumnName(idColumnName);
         setReferenceGeneration(rg);
-        _il.exit();
     }
 
 

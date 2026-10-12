@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.expression.enums.NullOrdering;
 import ch.enterag.sqlparser.expression.enums.OrderingSpecification;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class SortSpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SortSpecification.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -118,11 +116,9 @@ public class SortSpecification
             OrderingSpecification os,
             NullOrdering no
     ) {
-        _il.enter();
         setValueExpression(ve);
         setOrderingSpecification(os);
         setNullOrdering(no);
-        _il.exit();
     }
 
 

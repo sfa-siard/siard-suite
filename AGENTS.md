@@ -34,10 +34,11 @@ This is a **Gradle multi-module monorepo**. All modules live in the same reposit
 ## Language & style
 
 - **Java 21** — use modern Java features (records, sealed classes, pattern matching, text blocks) where appropriate in new code
-- The codebase has **two distinct coding styles**:
-    - **Legacy code** (mostly in `siard-cmd`, `siard-api`, most of `siard-utilities`, `jdbc-*`): C-style braces, Hungarian notation prefixes (`_s` for String, `_i` for int, `_b` for boolean, `_file` for File, etc.), verbose Javadoc block headers with `/*====*/` separators. **Preserve this style when editing legacy files.** The `IndentLogger` class in `siard-utilities` has been modernized and should follow the modern style.
-    - **Modern code** (mostly in `siard-suite-app` and newer `siard-cmd` classes): Standard Java conventions, no Hungarian notation, clean formatting. **Use this style for new files, classes or methods.**
-- When modifying an existing file, class or method, **always match the surrounding code style** — do not reformat or modernise legacy code without explicit intent. 
+- The codebase is in transition from a **legacy style** to a **modern style**:
+    - **Legacy style** (mostly in `siard-cmd`, `siard-api`, most of `siard-utilities`, `jdbc-*`): C-style braces, Hungarian notation prefixes (`_s` for String, `_i` for int, `_b` for boolean, `_file` for File, etc.), verbose Javadoc block headers with `/*====*/` separators.
+    - **Modern style** (mostly in `siard-suite-app` and newer `siard-cmd` classes): Standard Java conventions, no Hungarian notation, clean formatting, SLF4J logging.
+- **New code always uses the modern style** — even inside legacy files. New files, classes, methods and fields get plain names, standard conventions and SLF4J logging, regardless of surrounding code. Mixed style within a file is expected during the transition.
+- When touching legacy code, keep edits minimal and leave the surrounding legacy-style code as it is — do not reformat or modernise code you are not changing.
 
 ## Approach
 

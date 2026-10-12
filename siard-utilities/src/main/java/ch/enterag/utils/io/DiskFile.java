@@ -10,6 +10,9 @@ Created    : 27.02.2008, Hartwig Thomas
 
 package ch.enterag.utils.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,6 +25,8 @@ import java.security.NoSuchAlgorithmException;
  @author Hartwig Thomas
  */
 public class DiskFile extends RandomAccessFile {
+    private static final Logger log = LoggerFactory.getLogger(DiskFile.class);
+
     /** read mode */
     private static final String sMODE_READ = "r";
     /** read/write mode */
@@ -139,7 +144,7 @@ public class DiskFile extends RandomAccessFile {
             }
             bufDigest = md.digest();
         } catch (NoSuchAlgorithmException nsae) {
-            System.err.println(nsae.getClass()
+            log.error(nsae.getClass()
                                    .getName() + ": " + nsae.getMessage());
         }
         seek(lFilePointer);

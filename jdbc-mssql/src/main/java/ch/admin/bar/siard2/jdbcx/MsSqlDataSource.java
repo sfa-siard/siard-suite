@@ -12,7 +12,8 @@ package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.MsSqlConnection;
 import ch.enterag.utils.jdbcx.BaseDataSource;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
 import javax.sql.DataSource;
@@ -27,7 +28,7 @@ public class MsSqlDataSource
         extends BaseDataSource
         implements DataSource {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MsSqlDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MsSqlDataSource.class);
 
 
     /** constructor */
@@ -81,7 +82,7 @@ public class MsSqlDataSource
         try {
             ssds = (SQLServerDataSource) unwrap(DataSource.class);
         } catch (SQLException se) {
-            _il.exception(se);
+            log.error("Exception logged", se);
         }
         return ssds;
     }

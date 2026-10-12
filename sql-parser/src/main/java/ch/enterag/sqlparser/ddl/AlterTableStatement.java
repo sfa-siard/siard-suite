@@ -8,12 +8,10 @@ import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class AlterTableStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(AlterTableStatement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -207,7 +205,6 @@ public class AlterTableStatement
             TableConstraintDefinition tcd,
             QualifiedId qConstraintName,
             DropBehavior db) {
-        _il.enter(qTableName, cd, idColumnName, aca, tcd, db);
         setTableName(qTableName);
         setColumnDefinition(cd);
         setColumnName(idColumnName);
@@ -215,7 +212,6 @@ public class AlterTableStatement
         setTableConstraintDefinition(tcd);
         setConstraintName(qConstraintName);
         setDropBehavior(db);
-        _il.exit();
     }
 
 

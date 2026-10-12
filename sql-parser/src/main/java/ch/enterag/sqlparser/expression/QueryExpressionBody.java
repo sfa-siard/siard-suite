@@ -9,7 +9,6 @@ import ch.enterag.sqlparser.expression.enums.SetQuantifier;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 public class QueryExpressionBody
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(QueryExpressionBody.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -270,7 +268,6 @@ public class QueryExpressionBody
             QualifiedId qiTableName,
             List<TableRowValueExpression> listTrve
     ) {
-        _il.enter();
         setQueryOperator(qo);
         setQueryExpressionBody(qeb);
         setSecondQueryExpressionBody(qeb2);
@@ -281,7 +278,6 @@ public class QueryExpressionBody
         setQuerySpecification(qs);
         setTableName(qiTableName);
         setTableRowValueExpressions(listTrve);
-        _il.exit();
     }
 
 

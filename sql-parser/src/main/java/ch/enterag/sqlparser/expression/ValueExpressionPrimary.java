@@ -10,7 +10,8 @@ import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdChain;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 public class ValueExpressionPrimary
         extends SqlBase {
     /** logger */
-    protected static IndentLogger _il = IndentLogger.getIndentLogger(ValueExpressionPrimary.class.getName());
+    protected static final Logger log = LoggerFactory.getLogger(ValueExpressionPrimary.class);
 
 
     /** visitor initializes fields from parse tree.
@@ -955,7 +956,6 @@ public class ValueExpressionPrimary
             QualifiedId qiSequenceName,
             ValueExpressionPrimary vep
     ) {
-        _il.enter();
         setUnsignedLit(ul);
         setGeneralValueSpecification(gvs);
         setAggregateFunc(af);
@@ -989,7 +989,6 @@ public class ValueExpressionPrimary
         setMultisetValueExpression(mve);
         setSequenceName(qiSequenceName);
         setValueExpressionPrimary(vep);
-        _il.exit();
     }
 
 
@@ -999,9 +998,7 @@ public class ValueExpressionPrimary
     public void initUnsignedLiteral(
             UnsignedLiteral ul
     ) {
-        _il.enter();
         setUnsignedLit(ul);
-        _il.exit();
     }
 
 
@@ -1011,10 +1008,8 @@ public class ValueExpressionPrimary
     public void initArrayValueConstructor(
             List<ValueExpression> listArrayValueComponents
     ) {
-        _il.enter();
         setArrayValueConstructor(true);
         setCollectionValueComponents(listArrayValueComponents);
-        _il.exit();
     }
 
 
@@ -1026,11 +1021,9 @@ public class ValueExpressionPrimary
             QualifiedId qiUdt,
             List<SqlArgument> listAttributeValues
     ) {
-        _il.enter();
         setNew(true);
         setRoutineName(qiUdt);
         setSqlArguments(listAttributeValues);
-        _il.exit();
     }
 
 
@@ -1040,9 +1033,7 @@ public class ValueExpressionPrimary
     public void initGeneralValueSpecification(
             GeneralValueSpecification gvs
     ) {
-        _il.enter();
         setGeneralValueSpecification(gvs);
-        _il.exit();
     }
 
 

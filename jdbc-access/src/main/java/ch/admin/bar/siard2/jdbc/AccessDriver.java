@@ -9,7 +9,9 @@ Created    : 04.11.2016, Hartwig Thomas
 ======================================================================*/
 package ch.admin.bar.siard2.jdbc;
 
+import ch.enterag.utils.EU;
 import ch.enterag.utils.jdbc.BaseDriver;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -22,6 +24,8 @@ import java.util.logging.Logger;
  * @author Hartwig Thomas
  */
 public class AccessDriver extends BaseDriver implements Driver {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(AccessDriver.class);
+
     /** driver version */
     public static final String sVERSION = "1.0";
     /** protocol sub scheme for Access JDBC URL */
@@ -82,7 +86,7 @@ public class AccessDriver extends BaseDriver implements Driver {
         try {
             DriverManager.registerDriver(new AccessDriver());
         } catch (SQLException se) {
-            System.err.println("Registering of " + AccessDriver.class.getName() + " with DriverManager failed!");
+            log.error("Registering of " + AccessDriver.class.getName() + " with DriverManager failed: " + EU.getExceptionMessage(se));
         }
     }
 

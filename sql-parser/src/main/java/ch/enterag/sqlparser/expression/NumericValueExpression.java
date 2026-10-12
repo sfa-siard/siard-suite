@@ -10,14 +10,12 @@ import ch.enterag.sqlparser.expression.enums.AdditiveOperator;
 import ch.enterag.sqlparser.expression.enums.MultiplicativeOperator;
 import ch.enterag.sqlparser.expression.enums.Sign;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.math.BigDecimal;
 
 public class NumericValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(NumericValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -542,7 +540,6 @@ public class NumericValueExpression
             Sign sign,
             ValueExpressionPrimary vep,
             NumericValueFunction nvf) {
-        _il.enter(ao, mo, nve1, nve2, sign, vep, nvf);
         setAdditiveOperator(ao);
         setMultiplicativeOperator(mo);
         setFirstOperand(nve1);
@@ -551,7 +548,6 @@ public class NumericValueExpression
         setSign(sign);
         setValueExpressionPrimary(vep);
         setNumericValueFunction(nvf);
-        _il.exit();
     }
 
 

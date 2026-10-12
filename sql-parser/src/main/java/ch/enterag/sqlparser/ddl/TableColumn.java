@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class TableColumn
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(TableColumn.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -95,10 +93,8 @@ public class TableColumn
     public void initialize(
             Identifier idColumnName,
             DataType dt) {
-        _il.enter(idColumnName, dt);
         setColumnName(idColumnName);
         setDataType(dt);
-        _il.exit();
     }
 
 

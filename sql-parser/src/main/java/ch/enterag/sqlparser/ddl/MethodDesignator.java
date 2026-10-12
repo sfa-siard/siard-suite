@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.ddl.enums.MethodType;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 public class MethodDesignator
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MethodDesignator.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -138,11 +136,9 @@ public class MethodDesignator
             MethodType mt,
             Identifier idMethod,
             List<DataType> listDataTypes) {
-        _il.enter(mt, idMethod, listDataTypes);
         setMethodType(mt);
         setMethodName(idMethod);
         setDataTypes(listDataTypes);
-        _il.exit();
     }
 
 

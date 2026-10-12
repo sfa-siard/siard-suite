@@ -5,6 +5,9 @@ Created    : 12.12.2014, Hartwig Thomas
 */
 package ch.enterag.utils.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.sql.Types;
 import java.util.*;
@@ -15,6 +18,8 @@ import java.util.*;
  * @author Hartwig Thomas
  */
 public abstract class SqlTypes {
+    private static final Logger log = LoggerFactory.getLogger(SqlTypes.class);
+
     /**
      * Used for values of SQL Types that do not have a corresponding name.
      */
@@ -38,7 +43,7 @@ public abstract class SqlTypes {
             try {
                 mapTypeNames.put(field.getInt(null), field.getName());
             } catch (IllegalAccessException e) {
-                System.err.println("Failed to access field: " + field.getName());
+                log.warn("Failed to access field: " + field.getName());
             }
         }
     }

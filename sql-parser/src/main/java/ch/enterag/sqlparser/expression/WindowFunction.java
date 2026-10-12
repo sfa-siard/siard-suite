@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.expression.enums.RankFunction;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class WindowFunction
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(WindowFunction.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -163,13 +161,11 @@ public class WindowFunction
             AggregateFunction af,
             Identifier idWindowName,
             WindowSpecification ws) {
-        _il.enter(rf, String.valueOf(bRowNumber), af, idWindowName, ws);
         setRankFunction(rf);
         setRowNumber(bRowNumber);
         setAggregateFunction(af);
         setWindowName(idWindowName);
         setWindowSpecification(ws);
-        _il.exit();
     }
 
 

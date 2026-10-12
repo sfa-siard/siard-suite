@@ -12,7 +12,8 @@ package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.Db2Connection;
 import ch.enterag.utils.jdbcx.BaseDataSource;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.ibm.db2.jcc.DB2SimpleDataSource;
 
 import javax.sql.DataSource;
@@ -29,7 +30,7 @@ public class Db2DataSource
         extends BaseDataSource
         implements DataSource {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(Db2DataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(Db2DataSource.class);
     // see: http://www.ibm.com/support/knowledgecenter/SSEPGG_9.7.0/com.ibm.db2.luw.apdv.java.doc/src/tpc/imjcc_r0052342.html
     private static Pattern _patUrl = Pattern.compile("^jdbc:((db2:)|(db2j:net:)|(ids:))//(.*?)(:(\\d*))?/(.*)$");
 
@@ -92,7 +93,7 @@ public class Db2DataSource
         try {
             dsds = (DB2SimpleDataSource) unwrap(DataSource.class);
         } catch (SQLException se) {
-            _il.exception(se);
+            log.error("Exception logged", se);
         }
         return dsds;
     }

@@ -13,12 +13,10 @@ import ch.enterag.sqlparser.expression.enums.MultiplicativeOperator;
 import ch.enterag.sqlparser.expression.enums.NumericFunction;
 import ch.enterag.sqlparser.expression.enums.Sign;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class IntervalValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(IntervalValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -401,7 +399,6 @@ public class IntervalValueExpression
             ValueExpressionPrimary vep,
             IntervalQualifier iq,
             IntervalValueExpression iveAbsArgument) {
-        _il.enter(ao, mo, ive1, ive2, dve1, dve2, nveFactor, vep, iq, iveAbsArgument);
         setAdditiveOperator(ao);
         setMultiplicativeOperator(mo);
         setFirstOperand(ive1);
@@ -413,7 +410,6 @@ public class IntervalValueExpression
         setValueExpressionPrimary(vep);
         setIntervalQualifier(iq);
         setAbsArgument(iveAbsArgument);
-        _il.exit();
     }
 
 

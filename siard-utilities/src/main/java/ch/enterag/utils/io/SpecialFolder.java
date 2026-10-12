@@ -13,6 +13,8 @@ package ch.enterag.utils.io;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
 import ch.enterag.utils.lang.Threads;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +31,8 @@ import java.nio.file.Paths;
  @author Hartwig Thomas
  */
 public abstract class SpecialFolder {
+    private static final Logger log = LoggerFactory.getLogger(SpecialFolder.class);
+
     private static final String sJAVA_SETTINGS_DIRECTORY = ".java";
     private static final String sDATA_DIRECTORY = "data";
     private static final String sAPPLICATIONS_DIRECTORY = "applications";
@@ -38,13 +42,13 @@ public abstract class SpecialFolder {
     /** returns the JAR file which contains the given class or the
      * root folder for the class.
      * @param sClassName path of class in the format /package/Class.class
-     * @param bReport true, if success must be reported on System.out.
+     * @param bReport true, if resolution steps should be logged.
      * @return File for Jar containing class or for folder containing
      *         the class, if class is not in a Jar.
      */
     public static File getJarFromClass(String sClassName, boolean bReport) {
         if (bReport)
-            System.out.println("getJarFromClass(" + sClassName + ")");
+            log.debug("getJarFromClass(" + sClassName + ")");
         File fileJar = new File(".");
         try {
             // Class<?> cls = Class.forName(sClassName.substring(0,sClassName.length()-".class".length()).replace('/', '.'));
@@ -52,14 +56,14 @@ public abstract class SpecialFolder {
             URL url = SpecialFolder.class.getResource(sClassName);
             if (url == null) {
                 if (bReport)
-                    System.err.println("Class " + sClassName + " not found!");
+                    log.error("Class " + sClassName + " not found!");
             } else if (url.getProtocol()
                           .equals("jar")) {
                 if (bReport)
-                    System.out.println("URL: " + url.toString());
+                    log.debug("URL: " + url);
                 String sJar = URLDecoder.decode(url.getPath(), SU.sUTF8_CHARSET_NAME);
                 if (bReport)
-                    System.out.println("JAR: " + sJar);
+                    log.debug("JAR: " + sJar);
                 int iExclamation = sJar.indexOf('!');
                 if (iExclamation < 0)
                     iExclamation = sJar.length();
@@ -69,9 +73,9 @@ public abstract class SpecialFolder {
                     sJar = sJar.substring(1);
                 fileJar = new File(sJar);
                 if (bReport)
-                    System.out.println("fileJar: " + fileJar.getAbsolutePath());
+                    log.debug("fileJar: " + fileJar.getAbsolutePath());
             } else {
-                System.err.println("Not in a JAR!");
+                log.error("Not in a JAR!");
                 if (url.getProtocol()
                        .equals("file")) {
                     String sFile = URLDecoder.decode(url.getPath(), SU.sUTF8_CHARSET_NAME);
@@ -83,7 +87,7 @@ public abstract class SpecialFolder {
                 }
             }
         } catch (UnsupportedEncodingException uee) {
-            System.err.println(EU.getExceptionMessage(uee));
+            log.error(EU.getExceptionMessage(uee));
         }
         // catch(ClassNotFoundException cnfe) { System.err.println(EU.getExceptionMessage(cnfe)); }
         return fileJar;
@@ -93,7 +97,7 @@ public abstract class SpecialFolder {
     /** returns the JAR file which contains the given class or the root
      * folder for the class.
      * @param classAnchor class in the format /package/Class.class
-     * @param bReport true, if success must be reported on System.out.
+     * @param bReport true, if resolution steps should be logged.
      * @return File for Jar containing class or folder containing
      *         the class, if class is not in a Jar.
      */
@@ -200,7 +204,7 @@ public abstract class SpecialFolder {
         try {
             Files.deleteIfExists(pathUserAppHome);
         } catch (IOException ie) {
-            System.err.println(ie.getClass()
+            log.error(ie.getClass()
                                  .getName() + ": " + ie.getMessage());
         }
     }
@@ -239,7 +243,7 @@ public abstract class SpecialFolder {
         try {
             Files.deleteIfExists(pathUserLocalHome);
         } catch (IOException ie) {
-            System.err.println(ie.getClass()
+            log.error(ie.getClass()
                                  .getName() + ": " + ie.getMessage());
         }
     }

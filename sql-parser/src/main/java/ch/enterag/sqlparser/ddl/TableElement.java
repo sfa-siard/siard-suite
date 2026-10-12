@@ -11,12 +11,10 @@ import ch.enterag.sqlparser.ddl.enums.TableElementType;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class TableElement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(TableElement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -292,7 +290,6 @@ public class TableElement
             String sDefaultOption,
             ColumnConstraintDefinition ccd
     ) {
-        _il.enter(type, cd, tcd, qTableName, io, dop, idColumnName, sDefaultOption, ccd);
         setType(type);
         setColumnDefinition(cd);
         setTableConstraintDefinition(tcd);
@@ -303,7 +300,6 @@ public class TableElement
         setReferenceGeneration(rg);
         setDefaultOption(sDefaultOption);
         setColumnConstraintDefinition(ccd);
-        _il.exit();
     }
 
 
@@ -311,10 +307,8 @@ public class TableElement
      * @param cd column definition (type = COLUMN_DEFINITION) or null.
      */
     public void initColumnDefinition(ColumnDefinition cd) {
-        _il.enter();
         setType(TableElementType.COLUMN_DEFINITION);
         setColumnDefinition(cd);
-        _il.exit();
     }
 
 
@@ -322,10 +316,8 @@ public class TableElement
      * @param tcd table constraint definition (type = TABLE_CONSTRAINT_DEFINITION) or null.
      */
     public void initTableConstraintDefinition(TableConstraintDefinition tcd) {
-        _il.enter();
         setType(TableElementType.TABLE_CONSTRAINT_DEFINITION);
         setTableConstraintDefinition(tcd);
-        _il.exit();
     }
 
 

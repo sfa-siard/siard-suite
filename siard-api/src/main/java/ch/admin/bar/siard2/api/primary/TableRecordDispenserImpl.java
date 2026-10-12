@@ -14,6 +14,8 @@ import ch.admin.bar.siard2.api.TableRecordDispenser;
 import ch.admin.bar.siard2.api.generated.table.RecordType;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jaxb.XMLStreamFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,6 +36,8 @@ import java.util.List;
  */
 public class TableRecordDispenserImpl
         implements TableRecordDispenser, AutoCloseable {
+    private static final Logger log = LoggerFactory.getLogger(TableRecordDispenserImpl.class);
+
     private static final ch.admin.bar.siard2.api.generated.table.ObjectFactory _OF_TABLE = new ch.admin.bar.siard2.api.generated.table.ObjectFactory();
     private Table _table = null;
     private CountingInputStream _isXml = null;
@@ -191,7 +195,7 @@ public class TableRecordDispenserImpl
                                     .equals(xsr.getLocalName()))
                             listElementsStack.remove(elParent);
                         else
-                            System.err.println("Unexpected END ELEMENT!");
+                            log.error("Unexpected END ELEMENT!");
                         break;
                     case XMLStreamConstants.CHARACTERS:
                         Text text = doc.createTextNode(xsr.getText());

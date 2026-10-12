@@ -10,12 +10,10 @@ import ch.enterag.sqlparser.ddl.enums.ReferentialAction;
 import ch.enterag.sqlparser.expression.ValueExpression;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class ColumnDefinition
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(ColumnDefinition.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -206,14 +204,12 @@ public class ColumnDefinition
             ReferentialAction raDelete,
             String sDefaultOption,
             ColumnConstraintDefinition ccd) {
-        _il.enter(idColumnName, dt, rsc, sDefaultOption, ccd);
         setColumnName(idColumnName);
         setDataType(dt);
         setReferenceScopeCheck(rsc);
         setDeleteAction(raDelete);
         setDefaultOption(sDefaultOption);
         setColumnConstraintDefinition(ccd);
-        _il.exit();
     }
 
 
@@ -224,10 +220,8 @@ public class ColumnDefinition
     public void initNameType(
             Identifier idColumnName,
             DataType dt) {
-        _il.enter(idColumnName, dt);
         setColumnName(idColumnName);
         setDataType(dt);
-        _il.exit();
     }
 
 

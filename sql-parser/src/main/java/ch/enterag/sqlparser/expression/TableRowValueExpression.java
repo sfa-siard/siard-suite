@@ -4,12 +4,10 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class TableRowValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(TableRowValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -140,12 +138,10 @@ public class TableRowValueExpression
             BooleanValueExpression bve,
             RowValueExpression rve,
             ValueExpressionPrimary vep) {
-        _il.enter(cve, bve, rve);
         setCommonValueExpression(cve);
         setBooleanValueExpression(bve);
         setRowValueExpression(rve);
         setValueExpressionPrimary(vep);
-        _il.exit();
     }
 
 

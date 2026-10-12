@@ -5,7 +5,6 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
 public class AssignedRow
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(AssignedRow.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -132,9 +130,7 @@ public class AssignedRow
      */
     public void initUpdateSource(
             UpdateSource us) {
-        _il.enter();
         setUpdateSource(us);
-        _il.exit();
     }
 
 
@@ -147,11 +143,9 @@ public class AssignedRow
             List<UpdateSource> listUpdateSources,
             boolean bRowExpression,
             UpdateSource us) {
-        _il.enter();
         setUpdateSources(listUpdateSources);
         setRowExpression(bRowExpression);
         setUpdateSource(us);
-        _il.exit();
     }
 
 

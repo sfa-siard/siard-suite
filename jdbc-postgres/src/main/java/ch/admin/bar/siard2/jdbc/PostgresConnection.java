@@ -14,7 +14,6 @@ import ch.admin.bar.siard2.postgres.PostgresType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jdbc.BaseConnection;
-import ch.enterag.utils.logging.IndentLogger;
 import org.postgresql.jdbc.PgArray;
 import org.postgresql.jdbc.PgConnection;
 import org.postgresql.largeobject.LargeObjectManager;
@@ -29,7 +28,6 @@ public class PostgresConnection
         extends BaseConnection
         implements Connection {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(PostgresConnection.class.getName());
     /*** meta data */
     private DatabaseMetaData _dmd = null;
 

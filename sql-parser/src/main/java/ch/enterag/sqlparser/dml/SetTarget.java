@@ -5,7 +5,6 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
 public class SetTarget
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SetTarget.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -127,11 +125,9 @@ public class SetTarget
             UpdateTarget ut,
             List<UpdateTarget> listUpdateTargets,
             Identifier idMethodName) {
-        _il.enter();
         setUpdateTarget(ut);
         setUpdateTargets(listUpdateTargets);
         setMethodName(idMethodName);
-        _il.exit();
     }
 
 

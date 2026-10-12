@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.expression.enums.MultisetOperator;
 import ch.enterag.sqlparser.expression.enums.SetQuantifier;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class MultisetValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MultisetValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -158,13 +156,11 @@ public class MultisetValueExpression
             SetQuantifier sq,
             ValueExpressionPrimary vep,
             MultisetValueExpression mveSetArgument) {
-        _il.enter(mve, mo, sq, vep, mveSetArgument);
         setMultisetValueExpression(mve);
         setMultisetOperator(mo);
         setSetQuantifier(sq);
         setValueExpressionPrimary(vep);
         setSetArgument(mveSetArgument);
-        _il.exit();
     }
 
 

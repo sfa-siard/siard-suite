@@ -10,6 +10,9 @@ Created    : 22.10.2015, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
@@ -27,6 +30,8 @@ import java.util.Map;
  * @author Hartwig
  */
 public class DU {
+    private static final Logger log = LoggerFactory.getLogger(DU.class);
+
     private static final String _sZ = "Z";
     private static final SimpleDateFormat _sdfXS_DATE = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat _sdfXS_TIME = new SimpleDateFormat("HH:mm:ss");
@@ -52,7 +57,7 @@ public class DU {
             tsMAXIMUM_SQL = new java.sql.Timestamp(dateMaximum.getTime());
             tsMAXIMUM_SQL.setNanos(999999999);
         } catch (ParseException pe) {
-            System.err.println(pe.getClass()
+            log.error(pe.getClass()
                                  .getName() + ": " + pe.getMessage());
         }
     }
@@ -309,7 +314,7 @@ public class DU {
                 xgc = DatatypeFactory.newInstance()
                                      .newXMLGregorianCalendar(gc);
             } catch (DatatypeConfigurationException dtce) {
-                System.err.println(dtce.getClass()
+                log.error(dtce.getClass()
                                        .getName() + ": " + dtce.getMessage());
             }
         }
@@ -330,7 +335,7 @@ public class DU {
                 xgc = DatatypeFactory.newInstance()
                                      .newXMLGregorianCalendar(gc);
             } catch (DatatypeConfigurationException dtce) {
-                System.err.println(dtce.getClass()
+                log.error(dtce.getClass()
                                        .getName() + ": " + dtce.getMessage());
             }
         }
@@ -351,7 +356,7 @@ public class DU {
                 xgc = DatatypeFactory.newInstance()
                                      .newXMLGregorianCalendar(gc);
             } catch (DatatypeConfigurationException dtce) {
-                System.err.println(dtce.getClass()
+                log.error(dtce.getClass()
                                        .getName() + ": " + dtce.getMessage());
             }
         }
@@ -365,11 +370,11 @@ public class DU {
      */
     public String toXsDate(java.sql.Date date) {
         if (date.after(dateMAXIMUM_SQL)) {
-            System.err.println("Converted illegal date " + _sdf.format(date) + " to " + _sdf.format(dateMAXIMUM_SQL));
+            log.warn("Converted illegal date " + _sdf.format(date) + " to " + _sdf.format(dateMAXIMUM_SQL));
             date = dateMAXIMUM_SQL;
         }
         if (date.before(dateMINIMUM_SQL)) {
-            System.err.println("Converted illegal date " + _sdf.format(date) + " to " + _sdf.format(dateMINIMUM_SQL));
+            log.warn("Converted illegal date " + _sdf.format(date) + " to " + _sdf.format(dateMINIMUM_SQL));
             date = dateMINIMUM_SQL;
         }
         String s = _sdfXS_DATE.format(date);
@@ -389,11 +394,11 @@ public class DU {
         Date date = _sdfXS_DATE.parse(s);
         d = new java.sql.Date(date.getTime());
         if (d.after(dateMAXIMUM_SQL)) {
-            System.err.println("Converted illegal date " + _sdf.format(d) + " to " + _sdf.format(dateMAXIMUM_SQL));
+            log.warn("Converted illegal date " + _sdf.format(d) + " to " + _sdf.format(dateMAXIMUM_SQL));
             d = dateMAXIMUM_SQL;
         }
         if (d.before(dateMINIMUM_SQL)) {
-            System.err.println("Converted illegal date " + _sdf.format(d) + " to " + _sdf.format(dateMINIMUM_SQL));
+            log.warn("Converted illegal date " + _sdf.format(d) + " to " + _sdf.format(dateMINIMUM_SQL));
             d = dateMINIMUM_SQL;
         }
         return d;
@@ -458,11 +463,11 @@ public class DU {
      */
     public String toXsDateTime(java.sql.Timestamp ts) {
         if (ts.after(tsMAXIMUM_SQL)) {
-            System.err.println("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMAXIMUM_SQL));
+            log.warn("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMAXIMUM_SQL));
             ts = tsMAXIMUM_SQL;
         }
         if (ts.before(tsMINIMUM_SQL)) {
-            System.err.println("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMINIMUM_SQL));
+            log.warn("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMINIMUM_SQL));
             ts = tsMINIMUM_SQL;
         }
         StringBuilder sbDateTime = new StringBuilder();
@@ -509,11 +514,11 @@ public class DU {
         ts = new java.sql.Timestamp(date.getTime());
         ts.setNanos(iNanos);
         if (ts.after(tsMAXIMUM_SQL)) {
-            System.err.println("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMAXIMUM_SQL));
+            log.warn("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMAXIMUM_SQL));
             ts = tsMAXIMUM_SQL;
         }
         if (ts.before(tsMINIMUM_SQL)) {
-            System.err.println("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMINIMUM_SQL));
+            log.warn("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMINIMUM_SQL));
             ts = tsMINIMUM_SQL;
         }
         return ts;

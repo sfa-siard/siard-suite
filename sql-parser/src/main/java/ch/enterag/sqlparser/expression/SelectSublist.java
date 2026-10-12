@@ -9,7 +9,6 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdChain;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 public class SelectSublist
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SelectSublist.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -206,12 +204,9 @@ public class SelectSublist
             IdChain icAsteriskQualifier,
             boolean bAsterisk,
             List<Identifier> listColumnNames) {
-        _il.enter(ve, icAsteriskQualifier,
-                  String.valueOf(bAsterisk), listColumnNames);
         setValueExpression(ve);
         setAsteriskQualifier(icAsteriskQualifier);
         setColumnNames(listColumnNames);
-        _il.exit();
     }
 
 

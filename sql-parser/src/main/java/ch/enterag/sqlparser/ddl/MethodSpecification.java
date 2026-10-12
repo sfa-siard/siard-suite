@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.ddl.enums.*;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class MethodSpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MethodSpecification.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -246,9 +244,6 @@ public class MethodSpecification
             Deterministic deterministic,
             DataAccess da,
             NullCallClause ncc) {
-        _il.enter(String.valueOf(bOverriding), pms,
-                  String.valueOf(bSelfAsResult), String.valueOf(bSelfAsLocator),
-                  ln, ps, deterministic, da, ncc);
         setOverriding(bOverriding);
         setPartialMethodSpecification(pms);
         setSelfAsResult(bSelfAsResult);
@@ -258,7 +253,6 @@ public class MethodSpecification
         setDeterministic(deterministic);
         setDataAccess(da);
         setNullCallClause(ncc);
-        _il.exit();
     }
 
 

@@ -4,12 +4,10 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class ArrayValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(ArrayValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -125,12 +123,10 @@ public class ArrayValueExpression
             ArrayValueExpression ave1,
             ArrayValueExpression ave2,
             ValueExpressionPrimary vep) {
-        _il.enter(String.valueOf(bConcatenation), ave1, ave2, vep);
         setConcatenation(bConcatenation);
         setFirstOperand(ave1);
         setSecondOperand(ave2);
         setValueExpressionPrimary(vep);
-        _il.exit();
     }
 
 

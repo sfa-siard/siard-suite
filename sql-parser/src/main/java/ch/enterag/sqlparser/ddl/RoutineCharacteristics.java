@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.ddl.enums.*;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class RoutineCharacteristics
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(RoutineCharacteristics.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -160,13 +158,11 @@ public class RoutineCharacteristics
             Deterministic deterministic,
             DataAccess da,
             NullCallClause ncc) {
-        _il.enter(ln, ps, deterministic, da, ncc);
         setLanguageName(ln);
         setParameterStyle(ps);
         setDeterministic(deterministic);
         setDataAccess(da);
         setNullCallClause(ncc);
-        _il.exit();
     }
 
 

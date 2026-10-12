@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class DropTriggerStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(DropTriggerStatement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -76,9 +74,7 @@ public class DropTriggerStatement
      * @param qiTriggerName name of trigger to be dropped (not null).
      */
     public void initialize(QualifiedId qiTriggerName) {
-        _il.enter();
         setTriggerName(qiTriggerName);
-        _il.exit();
     }
 
 

@@ -11,7 +11,6 @@ Created    : 04.11.2016, Hartwig Thomas
 package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.utils.jdbc.BaseDriver;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -26,7 +25,6 @@ public class Db2Driver
         extends BaseDriver
         implements Driver {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(Db2Driver.class.getName());
     /** protocol sub scheme for DB/2 JDBC URL */
     public static final String sDB2_SCHEME = "db2";
     /** URL prefix for DB/2 JDBC URL */
@@ -62,11 +60,9 @@ public class Db2Driver
     /** {@inheritDoc}*/
     @Override
     public boolean acceptsURL(String url) throws SQLException {
-        _il.enter(url);
         boolean bAccepts = url.startsWith("jdbc:db2:") ||
                 url.startsWith("jdbc:db2j:net:") ||
                 url.startsWith("jdbc:ids:");
-        _il.exit(bAccepts);
         return bAccepts;
     }
 
@@ -77,11 +73,9 @@ public class Db2Driver
     @Override
     public Connection connect(String url, Properties info)
             throws SQLException {
-        _il.enter(url, info);
         Connection conn = super.connect(url, info);
         if (conn != null)
             conn = new Db2Connection(super.connect(url, info));
-        _il.exit(conn);
         return conn;
     }
 

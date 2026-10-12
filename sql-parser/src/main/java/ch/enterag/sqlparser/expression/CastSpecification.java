@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class CastSpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CastSpecification.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -150,13 +148,11 @@ public class CastSpecification
             boolean bEmptyArrayCast,
             boolean bEmptyMultisetCast,
             DataType dt) {
-        _il.enter();
         setCastOperand(veCastOperand);
         setNullCast(bNullCast);
         setEmptyArrayCast(bEmptyArrayCast);
         setEmptyMultisetCast(bEmptyMultisetCast);
         setDataType(dt);
-        _il.exit();
     }
 
 

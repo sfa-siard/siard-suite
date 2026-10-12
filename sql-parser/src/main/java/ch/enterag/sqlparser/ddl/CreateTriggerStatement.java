@@ -13,7 +13,6 @@ import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdList;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,6 @@ import java.util.List;
 public class CreateTriggerStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CreateTriggerStatement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -284,7 +282,6 @@ public class CreateTriggerStatement
             BooleanValueExpression bve,
             boolean bAtomicBody,
             RoutineBody rb) {
-        _il.enter();
         setTriggerName(qiTriggerName);
         setTriggerActionTime(tat);
         setTriggerEvent(te);
@@ -296,7 +293,6 @@ public class CreateTriggerStatement
         setBooleanValueExpression(bve);
         setAtomicBody(bAtomicBody);
         setRoutineBody(rb);
-        _il.exit();
     }
 
 

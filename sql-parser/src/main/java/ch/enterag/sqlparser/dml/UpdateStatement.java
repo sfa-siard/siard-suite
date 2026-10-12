@@ -8,7 +8,6 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.expression.BooleanValueExpression;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.Map;
 public class UpdateStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(UpdateStatement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -227,11 +225,9 @@ public class UpdateStatement
             QualifiedId qiTableName,
             List<SetClause> listSetClauses,
             BooleanValueExpression bve) {
-        _il.enter();
         setTableName(qiTableName);
         setSetClauses(listSetClauses);
         setBooleanValueExpression(bve);
-        _il.exit();
     }
 
 

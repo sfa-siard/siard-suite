@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.expression.enums.BooleanLiteral;
 import ch.enterag.sqlparser.expression.enums.Sign;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -18,7 +17,6 @@ import java.text.ParseException;
 public class Literal
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(Literal.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -285,8 +283,6 @@ public class Literal
             Timestamp ts,
             BooleanLiteral bl
     ) {
-        _il.enter(sign, dApproximate, bdExact, sCharacterString, sNationalCharacterString,
-                  sBitString, bufBytes, date, time, ts, bl);
         setSign(sign);
         setApproximate(dApproximate);
         setExact(bdExact);
@@ -298,7 +294,6 @@ public class Literal
         setTime(time);
         setTimestamp(ts);
         setBooleanLiteral(bl);
-        _il.exit();
     }
 
 

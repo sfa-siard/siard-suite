@@ -9,7 +9,6 @@ import ch.enterag.sqlparser.ddl.enums.MethodType;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 public class PartialMethodSpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(PartialMethodSpecification.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -280,11 +278,6 @@ public class PartialMethodSpecification
             DataType dtResultCast,
             List<TableColumn> listTableColumns,
             QualifiedId qSpecificMethodName) {
-        _il.enter(mt, idMethodName, listSqlParameterDeclarations,
-                  String.valueOf(bReturnsType), dtReturnsType,
-                  String.valueOf(bResultCast), dtResultCast,
-                  listTableColumns,
-                  qSpecificMethodName);
         setMethodType(mt);
         setMethodName(idMethodName);
         setSqlParameterDeclarations(listSqlParameterDeclarations);
@@ -294,7 +287,6 @@ public class PartialMethodSpecification
         setResultCast(dtResultCast);
         setTableColumns(listTableColumns);
         setSpecificMethodName(qSpecificMethodName);
-        _il.exit();
     }
 
 

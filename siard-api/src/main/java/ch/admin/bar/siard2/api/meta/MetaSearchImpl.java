@@ -10,7 +10,8 @@ package ch.admin.bar.siard2.api.meta;
 
 import ch.admin.bar.siard2.api.MetaSearch;
 import ch.enterag.utils.DU;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -24,7 +25,7 @@ public abstract class MetaSearchImpl
     /**
      * logger
      */
-    private static final IndentLogger _il = IndentLogger.getIndentLogger(MetaSearch.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MetaSearch.class);
 
     /**
      * find string
@@ -107,7 +108,6 @@ public abstract class MetaSearchImpl
     @Override
     public void find(String sFindString, boolean bMatchCase)
             throws IOException {
-        _il.enter(sFindString, String.valueOf(bMatchCase), getClass().getName());
         _iFoundElement = 0;
         _iFoundOffset = -1;
         _bMatchCase = bMatchCase;
@@ -121,7 +121,6 @@ public abstract class MetaSearchImpl
             if (amsSubMeta[iSubMeta] != null)
                 amsSubMeta[iSubMeta].find(_sFindString, _bMatchCase);
         }
-        _il.exit();
     }
 
     /**
@@ -131,11 +130,9 @@ public abstract class MetaSearchImpl
     @Override
     public MetaSearch findNext(DU du)
             throws IOException {
-        _il.enter(this.getClass()
-                      .getName());
         MetaSearch msFind = null;
         if (_sFindString != null) {
-            _il.event("Find string: " + _sFindString);
+            log.debug("Find string: " + _sFindString);
             /* skip previous find */
             _iFoundOffset++;
 
@@ -150,7 +147,7 @@ public abstract class MetaSearchImpl
                         iPos = sElement.toLowerCase()
                                        .indexOf(_sFindString, _iFoundOffset);
                     if (iPos >= 0) {
-                        _il.event("Found in \"" + sElement + "\" " + _iFoundElement + " at position " + iPos);
+                        log.debug("Found in \"" + sElement + "\" " + _iFoundElement + " at position " + iPos);
                         msFind = this;
                         _iFoundOffset = iPos;
                     } else {
@@ -175,9 +172,8 @@ public abstract class MetaSearchImpl
             if (msFind == null)
                 _sFindString = null;
             else
-                _il.event("Element: " + _iFoundElement + " / Offset: " + _iFoundOffset);
+                log.debug("Element: " + _iFoundElement + " / Offset: " + _iFoundOffset);
         }
-        _il.exit(String.valueOf(msFind));
         return msFind;
     }
 

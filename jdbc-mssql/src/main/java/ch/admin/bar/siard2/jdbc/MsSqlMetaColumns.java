@@ -12,7 +12,6 @@ package ch.admin.bar.siard2.jdbc;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.database.SqlTypes;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -29,7 +28,6 @@ import java.util.Map;
 public class MsSqlMetaColumns
         extends MsSqlResultSet {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MsSqlMetaColumns.class.getName());
 
     private static final String sIDENTITY_SUFFIX = "identity";
     private static Map<String, PreType> mapNAME_MSSQL_TO_ISO = new HashMap<String, PreType>();
@@ -101,7 +99,6 @@ public class MsSqlMetaColumns
     static int getDataType(int iType, String sTypeName,
                            Connection conn, String sCatalogName, String sSchemaName)
             throws SQLException {
-        _il.enter(SqlTypes.getTypeName(iType), sTypeName);
         if (sTypeName.startsWith("\"") && sTypeName.endsWith("\""))
             sTypeName = sTypeName.substring(1, sTypeName.length() - 1);
         if (sTypeName.equals("xml"))
@@ -128,7 +125,6 @@ public class MsSqlMetaColumns
                 rs.close();
             }
         }
-        _il.exit(SqlTypes.getTypeName(iType));
         return iType;
     }
 

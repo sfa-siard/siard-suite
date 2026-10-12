@@ -5,12 +5,10 @@ import ch.enterag.sqlparser.SqlStatement;
 import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class RowValuePredicand
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(RowValuePredicand.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -141,10 +139,8 @@ public class RowValuePredicand
     public void initialize(
             RowValueExpression rve,
             CommonValueExpression cve) {
-        _il.enter(rve, cve);
         setRowValueExpression(rve);
         setCommonValueExpression(cve);
-        _il.exit();
     }
 
 

@@ -16,7 +16,8 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.database.SqlTypes;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -37,7 +38,7 @@ public class OracleMetaColumns
     /**
      * logger
      */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(OracleMetaColumns.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(OracleMetaColumns.class);
     private static Pattern _patVarrayText =
             Pattern.compile("^TYPE.*VARRAY\\s*\\((\\d+)\\)\\s+OF\\s+(.*?)\\s*;?\\s*$",
                             Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
@@ -147,7 +148,6 @@ public class OracleMetaColumns
     static int getDataType(int iType, String sTypeName, long lColumnSize, int iDecimals,
                            Connection conn, String sCatalogName, String sSchemaName)
             throws SQLException {
-        _il.enter(SqlTypes.getTypeName(iType));
         if (iType != Types.ARRAY) {
             QualifiedId qiTypeName = parseTypeName(sTypeName);
             String baseTypeName = getBaseTypeName(qiTypeName.getName());
@@ -160,7 +160,6 @@ public class OracleMetaColumns
             else
                 iType = Types.STRUCT;
         }
-        _il.exit(SqlTypes.getTypeName(iType));
         return iType;
     }
 
@@ -188,7 +187,6 @@ public class OracleMetaColumns
 
     static String getFullArrayTypeName(Connection conn, QualifiedId qiVarray)
             throws SQLException {
-        _il.enter(conn, qiVarray);
         String sTypeName = null;
         String sSql = "SELECT TEXT FROM ALL_SOURCE WHERE OWNER = " +
                 SqlLiterals.formatStringLiteral(qiVarray.getSchema()) +
@@ -196,7 +194,7 @@ public class OracleMetaColumns
                 SqlLiterals.formatStringLiteral(qiVarray.getName());
         Statement ostmt = conn.createStatement();
         String sText = "";
-        _il.event("Unwrapped query: " + sSql);
+        log.debug("Unwrapped query: " + sSql);
         ResultSet rs = ostmt.executeQuery(sSql);
         while (rs.next())
             sText = sText + rs.getString("TEXT");
@@ -235,14 +233,12 @@ public class OracleMetaColumns
         } else
             throw new SQLException("Pattern match for base type of VARRAY failed!");
         sTypeName = sBaseType + " ARRAY[" + sNumber + "]";
-        _il.exit(sTypeName);
         return sTypeName;
     }
 
     static String getTypeName(String sTypeName, int iDataType, int iColumnSize, int iDecimals,
                               Connection conn, String sCatalogName, String sSchemaName)
             throws SQLException {
-        _il.enter(sTypeName);
         if (sTypeName != null) {
             QualifiedId qiTypeName = parseTypeName(sTypeName);
             PredefinedType preType = getPredefinedType(qiTypeName.getName(), iColumnSize, iDecimals);
@@ -273,7 +269,6 @@ public class OracleMetaColumns
                 }
             }
         }
-        _il.exit(sTypeName);
         return sTypeName;
     }
 

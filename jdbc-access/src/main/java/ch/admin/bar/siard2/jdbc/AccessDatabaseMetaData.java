@@ -23,6 +23,8 @@ import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.healthmarketscience.jackcess.*;
 import com.healthmarketscience.jackcess.query.Query;
 import com.healthmarketscience.jackcess.query.SelectQuery;
@@ -42,6 +44,8 @@ import java.util.regex.Pattern;
 public class AccessDatabaseMetaData
         extends BaseDatabaseMetaData
         implements DatabaseMetaData {
+    private static final Logger log = LoggerFactory.getLogger(AccessDatabaseMetaData.class);
+
     /** data type column */
     public static final String sJDBC_DATA_TYPE = "DATA_TYPE";
     /** column size column */
@@ -2413,7 +2417,7 @@ public class AccessDatabaseMetaData
                 try {
                     idcColumn.parseAdd(SqlLiterals.formatId(sColumn));
                 } catch (ParseException pe) {
-                    System.err.println("Column name " + sColumn + " could not be parsed (" + EU.getExceptionMessage(pe) + ")!");
+                    log.error("Column name " + sColumn + " could not be parsed (" + EU.getExceptionMessage(pe) + ")!");
                 }
             } else {
                 ValueExpression ve = sel.getValueExpression();

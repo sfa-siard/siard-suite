@@ -12,7 +12,8 @@ package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.MySqlConnection;
 import ch.enterag.utils.jdbcx.BaseDataSource;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import javax.sql.DataSource;
@@ -26,7 +27,7 @@ import java.sql.SQLException;
  */
 public class MySqlDataSource extends BaseDataSource implements DataSource {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MySqlDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MySqlDataSource.class);
 
     /**
      * @param dsWrapped DataSource to be wrapped
@@ -81,7 +82,7 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
         try {
             msds = (MysqlDataSource) unwrap(DataSource.class);
         } catch (SQLException se) {
-            _il.exception(se);
+            log.error("Exception logged", se);
         }
         return msds;
     }

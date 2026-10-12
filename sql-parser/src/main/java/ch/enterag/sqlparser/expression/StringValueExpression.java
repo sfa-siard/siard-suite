@@ -8,12 +8,10 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.ddl.enums.Multiplier;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class StringValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(StringValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -363,13 +361,11 @@ public class StringValueExpression
             StringValueExpression sve2,
             ValueExpressionPrimary vep,
             StringValueFunction svf) {
-        _il.enter(String.valueOf(bConcatenation), sve1, sve2, vep, svf);
         setConcatenation(bConcatenation);
         setFirstOperand(sve1);
         setSecondOperand(sve2);
         setValueExpressionPrimary(vep);
         setStringValueFunction(svf);
-        _il.exit();
     }
 
 

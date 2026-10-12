@@ -10,7 +10,6 @@ import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdChain;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.List;
 public class QuerySpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(QuerySpecification.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -508,7 +506,6 @@ public class QuerySpecification
             List<Identifier> listWindowNames,
             List<WindowSpecification> listWindowSpecifications
     ) {
-        _il.enter();
         setSetQuantifier(sq);
         setAsterisk(bAsterisk);
         setSelectSublists(listSelectSublists);
@@ -520,7 +517,6 @@ public class QuerySpecification
         setHavingCondition(bveHaving);
         setWindowNames(listWindowNames);
         setWindowSpecifications(listWindowSpecifications);
-        _il.exit();
     }
 
 
@@ -536,12 +532,10 @@ public class QuerySpecification
             List<TableReference> listTableReferences,
             BooleanValueExpression bveWhere
     ) {
-        _il.enter();
         setAsterisk(bAsterisk);
         setSelectSublists(listSelectSublists);
         setTableReferences(listTableReferences);
         setWhereCondition(bveWhere);
-        _il.exit();
     }
 
 

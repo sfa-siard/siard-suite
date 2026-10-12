@@ -1297,7 +1297,7 @@ public abstract class ValueImpl
     }
 
     private void dumpElement(Element el, String sIndent) {
-        System.out.print("\r\n" + sIndent + el.getTagName() + ":");
+        logger.fine(sIndent + el.getTagName() + ":");
         int iElements = 0;
         for (int i = 0; i < el.getChildNodes()
                               .getLength(); i++) {
@@ -1310,14 +1310,14 @@ public abstract class ValueImpl
             }
         }
         if (iElements == 0)
-            System.out.println(" " + el.getTextContent());
+            logger.fine(" " + el.getTextContent());
     }
 
     public void dumpDom() {
         if (_elValue != null)
             dumpElement(_elValue, "");
         else
-            System.out.println("null");
+            logger.fine("null");
     }
 
 

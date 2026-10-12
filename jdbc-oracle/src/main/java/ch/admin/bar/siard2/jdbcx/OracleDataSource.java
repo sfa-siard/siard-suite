@@ -12,7 +12,8 @@ package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.OracleConnection;
 import ch.enterag.utils.jdbcx.BaseDataSource;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -25,7 +26,7 @@ public class OracleDataSource
         extends BaseDataSource
         implements DataSource {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(OracleDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(OracleDataSource.class);
 
     static {
         System.setProperty("oracle.jdbc.getObjectReturnsXMLType", "false");
@@ -70,7 +71,7 @@ public class OracleDataSource
         try {
             ssds = (oracle.jdbc.pool.OracleDataSource) unwrap(DataSource.class);
         } catch (SQLException se) {
-            _il.exception(se);
+            log.error("Exception logged", se);
         }
         return ssds;
     }

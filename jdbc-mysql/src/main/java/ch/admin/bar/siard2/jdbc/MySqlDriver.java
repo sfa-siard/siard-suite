@@ -11,7 +11,6 @@ Created    : 26.10.2016, Simon Jutz
 package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.utils.jdbc.BaseDriver;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -24,7 +23,6 @@ import java.util.Properties;
  * @author Simon Jutz
  */
 public class MySqlDriver extends BaseDriver implements Driver {
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MySqlDriver.class.getName());
     /** protocol sub scheme for MsSQL JDBC URL */
     public static final String sMYSQL_SCHEME = "mysql";
     /** URL prefix for MySQL JDBC URL */
@@ -65,7 +63,6 @@ public class MySqlDriver extends BaseDriver implements Driver {
      * @return the appropriately wrapped Connection
      */
     public Connection connect(String url, Properties info) throws SQLException {
-        _il.enter(url, info);
         /* add/change properties */
         if (info == null)
             info = new Properties();
@@ -80,7 +77,6 @@ public class MySqlDriver extends BaseDriver implements Driver {
         Connection conn = super.connect(url, info);
         if (conn != null)
             conn = new MySqlConnection(conn);
-        _il.exit(conn);
         return conn;
     }
 
@@ -90,9 +86,7 @@ public class MySqlDriver extends BaseDriver implements Driver {
      */
     @Override
     public boolean acceptsURL(String url) {
-        _il.enter(url);
         boolean bAccepts = url.startsWith("jdbc:mysql:");
-        _il.exit(bAccepts);
         return bAccepts;
     }
 

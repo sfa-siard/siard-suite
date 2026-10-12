@@ -10,7 +10,6 @@ import ch.enterag.sqlparser.expression.enums.WindowFrameUnits;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdChain;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.List;
 public class WindowSpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(WindowSpecification.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -311,9 +309,6 @@ public class WindowSpecification
             WindowFrameBound wfb1,
             WindowFrameBound wfb2,
             WindowFrameExclusion wfe) {
-        _il.enter(idWindowName, listPartitionColumns, listSortSpecifications,
-                  wfu, String.valueOf(bCurrentRow), String.valueOf(bUnbounded),
-                  ul, gvs, wfb1, wfb2, wfe);
         setWindowName(idWindowName);
         setPartitionColumns(listPartitionColumns);
         setSortSpecifications(listSortSpecifications);
@@ -324,7 +319,6 @@ public class WindowSpecification
         setBound1(wfb1);
         setBound2(wfb2);
         setWindowFrameExclusion(wfe);
-        _il.exit();
     }
 
 

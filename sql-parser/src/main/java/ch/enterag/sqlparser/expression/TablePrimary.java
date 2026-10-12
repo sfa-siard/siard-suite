@@ -8,7 +8,6 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.Map;
 public class TablePrimary
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(TablePrimary.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -406,7 +404,6 @@ public class TablePrimary
             MultisetValueExpression mve,
             boolean bTable,
             boolean bOnly) {
-        _il.enter();
         setTableName(qiTableName);
         setCorrelationName(idCorrelationName);
         setAliasColumnNames(listAliasColumnNames);
@@ -419,7 +416,6 @@ public class TablePrimary
         setMultisetValueExpression(mve);
         setTable(bTable);
         setOnly(bOnly);
-        _il.exit();
     }
 
 
@@ -430,10 +426,8 @@ public class TablePrimary
     public void initialize(
             QualifiedId qiTableName,
             Identifier idCorrelationName) {
-        _il.enter();
         setTableName(qiTableName);
         setCorrelationName(idCorrelationName);
-        _il.exit();
     }
 
 
@@ -441,9 +435,7 @@ public class TablePrimary
      * @param qiTableName table name.
      */
     public void initialize(QualifiedId qiTableName) {
-        _il.enter();
         setTableName(qiTableName);
-        _il.exit();
     }
 
 

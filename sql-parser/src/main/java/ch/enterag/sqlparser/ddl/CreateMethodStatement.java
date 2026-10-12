@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.ddl.enums.MethodType;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 public class CreateMethodStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CreateMethodStatement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -215,7 +213,6 @@ public class CreateMethodStatement
             RoutineCharacteristics rcs,
             RoutineBody rb
     ) {
-        _il.enter();
         setMethodType(mt);
         setMethodName(qiMethodName);
         setParameters(listParameters);
@@ -223,7 +220,6 @@ public class CreateMethodStatement
         setForTypeName(qiForTypeName);
         setRoutineCharacteristics(rcs);
         setRoutineBody(rb);
-        _il.exit();
     }
 
 

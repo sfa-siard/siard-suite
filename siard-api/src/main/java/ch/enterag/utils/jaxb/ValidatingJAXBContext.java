@@ -9,7 +9,8 @@ Created    : 29.05.2012, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jaxb;
 
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -29,7 +30,7 @@ import java.net.URL;
  * @author Hartwig
  */
 public class ValidatingJAXBContext extends JAXBContext {
-    private static final IndentLogger m_il = IndentLogger.getIndentLogger(ValidatingJAXBContext.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ValidatingJAXBContext.class);
     private JAXBContext m_jc = null;
     private URL m_urlSchema = null;
 
@@ -47,17 +48,15 @@ public class ValidatingJAXBContext extends JAXBContext {
         @Override
         public boolean handleEvent(ValidationEvent ve) {
             boolean bContinue = false;
-            m_il.enter(ve);
             if ((ve.getSeverity() == ValidationEvent.ERROR) ||
                     (ve.getSeverity() == ValidationEvent.FATAL_ERROR)) {
                 ValidationEventLocator vel = ve.getLocator();
-                m_il.severe("XML validation for " + vel.getURL() +
+                log.error("XML validation for " + vel.getURL() +
                                     " failed at line " + vel.getLineNumber() +
                                     " and column " + vel.getColumnNumber() +
                                     " with message " + ve.getMessage());
             } else
                 bContinue = true;
-            m_il.exit(String.valueOf(bContinue));
             return bContinue;
         }
 
@@ -110,10 +109,9 @@ public class ValidatingJAXBContext extends JAXBContext {
     @Override
     public Unmarshaller createUnmarshaller()
             throws JAXBException {
-        m_il.enter();
         Unmarshaller u = m_jc.createUnmarshaller();
         if (m_urlSchema != null) {
-            m_il.event("Creating validating Unmarshaller ...");
+            log.debug("Creating validating Unmarshaller ...");
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             try {
                 InputStream is = m_urlSchema.openStream();
@@ -128,7 +126,6 @@ public class ValidatingJAXBContext extends JAXBContext {
             }
         }
         u.setEventHandler(new ContextValidationEventHandler());
-        m_il.exit(u);
         return u;
     }
 
@@ -140,10 +137,9 @@ public class ValidatingJAXBContext extends JAXBContext {
     @Override
     public Marshaller createMarshaller()
             throws JAXBException {
-        m_il.enter();
         Marshaller m = m_jc.createMarshaller();
         if (m_urlSchema != null) {
-            m_il.event("Creating validating Unmarshaller ...");
+            log.debug("Creating validating Unmarshaller ...");
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             try {
                 InputStream is = m_urlSchema.openStream();
@@ -159,7 +155,6 @@ public class ValidatingJAXBContext extends JAXBContext {
         }
         m.setEventHandler(new ContextValidationEventHandler());
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        m_il.exit(m);
         return m;
     }
 

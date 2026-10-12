@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.SchemaId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class CreateSchemaStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CreateSchemaStatement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -96,10 +94,8 @@ public class CreateSchemaStatement
      * @param idAuthorizationName user or role name.
      */
     public void initialize(SchemaId sidSchemaName, Identifier idAuthorizationName) {
-        _il.enter(sidSchemaName, idAuthorizationName);
         setSchemaName(sidSchemaName);
         setAuthorizationName(idAuthorizationName);
-        _il.exit();
     }
 
 

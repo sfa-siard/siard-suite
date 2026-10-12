@@ -64,7 +64,7 @@ public class SiardApplication extends Application {
             try {
                 tray.add(trayIcon);
             } catch (AWTException e) {
-                System.out.println("TrayIcon could not be added.");
+                log.warn("TrayIcon could not be added.");
             }
         }
 

@@ -10,7 +10,6 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.expression.enums.*;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -22,7 +21,6 @@ import java.util.List;
 public class AggregateFunction
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(AggregateFunction.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -575,9 +573,6 @@ public class AggregateFunction
             NumericValueExpression nve,
             List<SortSpecification> listWithinGroupSortSpecifications
     ) {
-        _il.enter(String.valueOf(bCountFunction), sf, sq, bsf,
-                  nveDependent, nveIndependent, rf, listRankArguments, idf, nve,
-                  listWithinGroupSortSpecifications);
         setCountFunction(bCountFunction);
         setSetFunction(sf);
         setSetQuantifier(sq);
@@ -589,7 +584,6 @@ public class AggregateFunction
         setInverseDistributionFunction(idf);
         setNumericValueExpression(nve);
         setWithinGroupSortSpecifications(listWithinGroupSortSpecifications);
-        _il.exit();
     }
 
 

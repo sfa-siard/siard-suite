@@ -5,7 +5,8 @@ package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class OracleArray
         implements Array {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(OracleArray.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(OracleArray.class);
     private oracle.sql.ARRAY _oarray = null;
     private long _lMaxLength = -1;
     private QualifiedId _qiVarray = null;
@@ -99,7 +100,6 @@ public class OracleArray
      */
     public static QualifiedId findOrCreateVarray(oracle.jdbc.OracleConnection conn, String sBaseType, int iLength)
             throws SQLException {
-        _il.enter(sBaseType, String.valueOf(iLength));
         QualifiedId qiVarray = null;
         /* search for a data type with this base type and this length */
         String sSql = "SELECT\r\n" +
@@ -117,7 +117,7 @@ public class OracleArray
                 " AND S.TEXT LIKE 'TYPE%VARRAY(%)%OF%'";
 
         Statement stmt = conn.createStatement();
-        _il.event("Query: " + sSql);
+        log.debug("Query: " + sSql);
         ResultSet rs = stmt.executeQuery(sSql);
         while ((qiVarray == null) && rs.next()) {
             String sSchema = rs.getString("OWNER");
@@ -150,7 +150,7 @@ public class OracleArray
             sbSql.append(") OF ");
             sbSql.append(sBaseType);
             stmt = conn.createStatement();
-            _il.event("Query: " + sbSql.toString());
+            log.debug("Query: " + sbSql.toString());
             int iReturn = stmt.executeUpdate(sbSql.toString());
             if (iReturn != 0)
                 throw new IllegalArgumentException("CREATE TYPE failed!");
@@ -163,7 +163,6 @@ public class OracleArray
             if (iReturn != 0)
                 throw new IllegalArgumentException("GRANT EXECUTE ON TYPE TO PUBLIC failed!");
         }
-        _il.exit(qiVarray);
         return qiVarray;
     }
 

@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.expression.enums.WindowFrameOrder;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class WindowFrameBound
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(WindowFrameBound.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -159,14 +157,11 @@ public class WindowFrameBound
             UnsignedLiteral ul,
             GeneralValueSpecification gv,
             WindowFrameOrder wfo) {
-        _il.enter(String.valueOf(bCurrentRow), String.valueOf(bUnbounded),
-                  ul, gv, wfo);
         setCurrentRow(bCurrentRow);
         setUnbounded(bUnbounded);
         setUnsignedLiteral(ul);
         setGeneralValueSpecification(gv);
         setWindowFrameOrder(wfo);
-        _il.exit();
     }
 
 

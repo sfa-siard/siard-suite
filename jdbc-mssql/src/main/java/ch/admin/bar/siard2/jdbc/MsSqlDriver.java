@@ -11,7 +11,6 @@ Created    : 01.06.2016, Hartwig Thomas
 package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.utils.jdbc.BaseDriver;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -26,7 +25,6 @@ public class MsSqlDriver
         extends BaseDriver
         implements Driver {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MsSqlDriver.class.getName());
     /** protocol sub scheme for SQL Server JDBC URL */
     public static final String sSQLSERVER_SCHEME = "sqlserver";
     /** URL prefix for SQL Server JDBC URL */
@@ -62,9 +60,7 @@ public class MsSqlDriver
     /** {@inheritDoc}*/
     @Override
     public boolean acceptsURL(String url) throws SQLException {
-        _il.enter(url);
         boolean bAccepts = url.startsWith(sSQLSERVER_URL_PREFIX);
-        _il.exit(bAccepts);
         return bAccepts;
     }
 
@@ -75,11 +71,9 @@ public class MsSqlDriver
     @Override
     public Connection connect(String url, Properties info)
             throws SQLException {
-        _il.enter(url, info);
         Connection conn = super.connect(url, info);
         if (conn != null)
             conn = new MsSqlConnection(super.connect(url, info));
-        _il.exit(conn);
         return conn;
     }
 

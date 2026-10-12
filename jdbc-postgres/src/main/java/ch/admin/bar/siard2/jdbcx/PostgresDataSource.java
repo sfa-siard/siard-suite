@@ -12,7 +12,8 @@ package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.PostgresConnection;
 import ch.enterag.utils.jdbcx.BaseDataSource;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
@@ -27,7 +28,7 @@ public class PostgresDataSource
         extends BaseDataSource
         implements DataSource {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(PostgresDataSource.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(PostgresDataSource.class);
 
 
     /** constructor */
@@ -89,7 +90,7 @@ public class PostgresDataSource
         try {
             psds = (PGSimpleDataSource) unwrap(DataSource.class);
         } catch (SQLException se) {
-            _il.exception(se);
+            log.error("Exception logged", se);
         }
         return psds;
     }

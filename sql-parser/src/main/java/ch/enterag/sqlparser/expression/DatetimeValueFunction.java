@@ -8,7 +8,6 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.expression.enums.DatetimeFunction;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -18,7 +17,6 @@ import java.util.GregorianCalendar;
 public class DatetimeValueFunction
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(DatetimeValueFunction.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -179,10 +177,8 @@ public class DatetimeValueFunction
     public void initialize(
             DatetimeFunction df,
             int iSecondsDecimals) {
-        _il.enter(df, String.valueOf(iSecondsDecimals));
         setDatetimeFunction(df);
         setSecondsDecimals(iSecondsDecimals);
-        _il.exit();
     }
 
 

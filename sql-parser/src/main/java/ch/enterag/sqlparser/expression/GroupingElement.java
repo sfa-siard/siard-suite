@@ -6,7 +6,6 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdChain;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 public class GroupingElement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(GroupingElement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -186,12 +184,10 @@ public class GroupingElement
             boolean bCube,
             boolean bGroupingSets,
             List<GroupingElement> listGroupingElements) {
-        _il.enter();
         setOrdinaryGroupingSets(listOrdinaryGroupingSets);
         setRollup(bRollup);
         setCube(bCube);
         setGroupingElements(listGroupingElements);
-        _il.exit();
     }
 
 

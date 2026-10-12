@@ -10,7 +10,6 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.datatype.enums.IntervalField;
 import ch.enterag.sqlparser.expression.enums.BooleanLiteral;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -21,7 +20,6 @@ import java.text.ParseException;
 public class UnsignedLiteral
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(UnsignedLiteral.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -416,9 +414,7 @@ public class UnsignedLiteral
      * @param sCharacterString character string value.
      */
     public void initCharacterString(String sCharacterString) {
-        _il.enter(sCharacterString);
         setCharacterString(sCharacterString);
-        _il.exit();
     }
 
 
@@ -426,9 +422,7 @@ public class UnsignedLiteral
      * @param sNationalCharacterString character string value.
      */
     public void initNationalCharacterString(String sNationalCharacterString) {
-        _il.enter(sNationalCharacterString);
         setNationalCharacterString(sNationalCharacterString);
-        _il.exit();
     }
 
 
@@ -436,9 +430,7 @@ public class UnsignedLiteral
      * @param sBitString bit string value.
      */
     public void initBitString(String sBitString) {
-        _il.enter(sBitString);
         setBitString(sBitString);
-        _il.exit();
     }
 
 
@@ -446,9 +438,7 @@ public class UnsignedLiteral
      * @param bufBytes bytes value.
      */
     public void initBytes(byte[] bufBytes) {
-        _il.enter(bufBytes);
         setBytes(bufBytes);
-        _il.exit();
     }
 
 
@@ -456,9 +446,7 @@ public class UnsignedLiteral
      * @param bdExact exact numeric value.
      */
     public void initBigDecimal(BigDecimal bdExact) {
-        _il.enter(bdExact);
         setExact(bdExact);
-        _il.exit();
     }
 
 
@@ -466,10 +454,8 @@ public class UnsignedLiteral
      * @param lExact exact long numeric value.
      */
     public void initLong(Long lExact) {
-        _il.enter(String.valueOf(lExact));
         BigDecimal bd = BigDecimal.valueOf(lExact);
         setExact(bd);
-        _il.exit();
     }
 
 
@@ -477,10 +463,8 @@ public class UnsignedLiteral
      * @param iExact exact numeric int value.
      */
     public void initInteger(int iExact) {
-        _il.enter(String.valueOf(iExact));
         BigDecimal bd = BigDecimal.valueOf(iExact);
         setExact(bd);
-        _il.exit();
     }
 
 
@@ -488,9 +472,7 @@ public class UnsignedLiteral
      * @param dApproximate approximate numeric value.
      */
     public void initDouble(Double dApproximate) {
-        _il.enter(dApproximate);
         setApproximate(dApproximate);
-        _il.exit();
     }
 
 
@@ -498,9 +480,7 @@ public class UnsignedLiteral
      * @param bl boolean literal value.
      */
     public void initBoolean(BooleanLiteral bl) {
-        _il.enter(bl);
         setBooleanLiteral(bl);
-        _il.exit();
     }
 
 
@@ -508,9 +488,7 @@ public class UnsignedLiteral
      * @param date date value.
      */
     public void initDate(Date date) {
-        _il.enter(date);
         setDate(date);
-        _il.exit();
     }
 
 
@@ -518,9 +496,7 @@ public class UnsignedLiteral
      * @param time time value.
      */
     public void initTime(Time time) {
-        _il.enter(time);
         setTime(time);
-        _il.exit();
     }
 
 
@@ -528,9 +504,7 @@ public class UnsignedLiteral
      * @param ts timestamp value.
      */
     public void initTimestamp(Timestamp ts) {
-        _il.enter(ts);
         setTimestamp(ts);
-        _il.exit();
     }
 
 
@@ -538,9 +512,7 @@ public class UnsignedLiteral
      * @param iv interval value.
      */
     public void initInterval(Interval iv) {
-        _il.enter(iv);
         setInterval(iv);
-        _il.exit();
     }
 
 
@@ -571,8 +543,6 @@ public class UnsignedLiteral
             Interval iv,
             BooleanLiteral bl
     ) {
-        _il.enter(dApproximate, bdExact, sCharacterString, sNationalCharacterString,
-                  sBitString, bufBytes, date, time, ts, bl);
         setApproximate(dApproximate);
         setExact(bdExact);
         setCharacterString(sCharacterString);
@@ -584,7 +554,6 @@ public class UnsignedLiteral
         setTimestamp(ts);
         setInterval(iv);
         setBooleanLiteral(bl);
-        _il.exit();
     }
 
 

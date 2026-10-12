@@ -12,7 +12,6 @@ Created    : 16.06.2016, Simon Jutz
 package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.utils.jdbc.BaseDriver;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -31,7 +30,6 @@ public class OracleDriver
     }
 
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(OracleDriver.class.getName());
     /** protocol sub scheme for Oracle JDBC URL */
     public static final String sORACLE_SCHEME = "oracle";
     /** URL prefix for Oracle JDBC URL */
@@ -69,9 +67,7 @@ public class OracleDriver
     /** {@inheritDoc}*/
     @Override
     public boolean acceptsURL(String url) throws SQLException {
-        _il.enter(url);
         boolean bAccepts = url.startsWith("jdbc:oracle:");
-        _il.exit(bAccepts);
         return bAccepts;
     }
 
@@ -82,11 +78,9 @@ public class OracleDriver
     @Override
     public Connection connect(String url, Properties info)
             throws SQLException {
-        _il.enter(url, info);
         Connection conn = super.connect(url, info);
         if (conn != null)
             conn = new OracleConnection(conn);
-        _il.exit(conn);
         return conn;
     }
 

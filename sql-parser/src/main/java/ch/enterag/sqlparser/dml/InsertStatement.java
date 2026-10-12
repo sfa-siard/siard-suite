@@ -9,7 +9,6 @@ import ch.enterag.sqlparser.expression.QueryExpression;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdList;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 public class InsertStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(InsertStatement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -202,14 +200,12 @@ public class InsertStatement
             QueryExpression qe,
             OverrideClause oc,
             boolean bFromDefault) {
-        _il.enter();
         setTableName(qiTableName);
         setColumnNames(ilColumnNames);
         setValues(listValues);
         setQueryExpression(qe);
         setOverrideClause(oc);
         setFromDefault(bFromDefault);
-        _il.exit();
     }
 
 

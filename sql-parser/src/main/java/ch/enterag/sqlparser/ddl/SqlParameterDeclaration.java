@@ -8,12 +8,10 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.ddl.enums.ParameterMode;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class SqlParameterDeclaration
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SqlParameterDeclaration.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -145,10 +143,8 @@ public class SqlParameterDeclaration
     public void initialize(
             ParameterMode pm,
             Identifier idParameterName) {
-        _il.enter(pm, idParameterName);
         setParameterMode(pm);
         setParameterName(idParameterName);
-        _il.exit();
     }
 
 

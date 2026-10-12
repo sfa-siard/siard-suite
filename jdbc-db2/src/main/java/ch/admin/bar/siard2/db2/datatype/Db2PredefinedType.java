@@ -149,7 +149,7 @@ public class Db2PredefinedType
                             stmt.close();
                         }
                     } catch (SQLException se) {
-                        _il.exception(se);
+                        log.error("Exception logged", se);
                     }
                     break;
                 default: // all other types do not need embellishments
