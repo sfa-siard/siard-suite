@@ -35,9 +35,7 @@ import java.util.regex.Pattern;
  */
 public class OracleMetaColumns
         extends OracleResultSet {
-    /**
-     * logger
-     */
+
     private static final Logger log = LoggerFactory.getLogger(OracleMetaColumns.class);
     private static Pattern _patVarrayText =
             Pattern.compile("^TYPE.*VARRAY\\s*\\((\\d+)\\)\\s+OF\\s+(.*?)\\s*;?\\s*$",

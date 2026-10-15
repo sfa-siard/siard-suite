@@ -28,9 +28,7 @@ import java.sql.SQLFeatureNotSupportedException;
  */
 public abstract class BaseDataSource
         implements DataSource {
-    /**
-     * logger
-     */
+
     private static final Logger log = LoggerFactory.getLogger(BaseDataSource.class);
     /**
      * wrapped DataSource implementation

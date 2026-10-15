@@ -32,9 +32,7 @@ import java.net.URL;
  *
  */
 public class MetaDataXml {
-    /**
-     * logger
-     */
+
     private static final Logger log = LoggerFactory.getLogger(MetaDataXml.class);
     public static final String sSIARD10_XSD_RESOURCE = "/res/old10/metadata.xsd";
     public static final String sSIARD21_XSD_RESOURCE = "/res/old21/metadata.xsd";

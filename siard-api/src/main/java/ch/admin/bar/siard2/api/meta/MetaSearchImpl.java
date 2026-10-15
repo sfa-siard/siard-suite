@@ -22,9 +22,7 @@ import java.io.IOException;
  */
 public abstract class MetaSearchImpl
         implements MetaSearch {
-    /**
-     * logger
-     */
+
     private static final Logger log = LoggerFactory.getLogger(MetaSearch.class);
 
     /**

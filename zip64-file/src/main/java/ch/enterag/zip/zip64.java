@@ -106,9 +106,7 @@ public class zip64 {
     private static final NumberFormat SIZE_FORMAT = new DecimalFormat("#,##0", new DecimalFormatSymbols());
 
     /* members */
-    /**
-     * Logger
-     */
+
     private static final Logger log = LoggerFactory.getLogger(zip64.class);
     /**
      * return code of process

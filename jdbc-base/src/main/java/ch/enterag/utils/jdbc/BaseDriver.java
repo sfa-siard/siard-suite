@@ -28,9 +28,7 @@ import java.util.Properties;
  */
 public abstract class BaseDriver
         implements Driver {
-    /**
-     * logger
-     */
+
     private static final Logger log = LoggerFactory.getLogger(BaseDriver.class);
     /**
      * protocol scheme for JDBC URL

@@ -26,9 +26,7 @@ import java.util.*;
 public class OracleDatabaseMetaData
         extends BaseDatabaseMetaData
         implements DatabaseMetaData {
-    /**
-     * logger
-     */
+
     private static final Logger log = LoggerFactory.getLogger(OracleDatabaseMetaData.class);
     private static final String sTABLE = "TABLE";
     private static final String sVIEW = "VIEW";
