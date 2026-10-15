@@ -13,8 +13,7 @@ package ch.admin.bar.siard2.jdbc;
 import ch.enterag.sqlparser.Interval;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.jdbc.BaseResultSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import oracle.jdbc.driver.OracleSQLException;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -32,12 +31,10 @@ import java.util.Map;
 /** OracleResultSet implements a wrapped Oracle ResultSet.
  * @author Simon Jutz
  */
+@Slf4j
 public class OracleResultSet
         extends BaseResultSet
         implements ResultSet {
-    /** logger */
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(OracleResultSet.class);
     private static final int iBUFSIZ = 8192;
     protected Connection _conn = null;
     private Statement _stmt = null;

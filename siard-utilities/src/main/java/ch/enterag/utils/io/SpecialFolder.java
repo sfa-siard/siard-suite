@@ -13,8 +13,7 @@ package ch.enterag.utils.io;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
 import ch.enterag.utils.lang.Threads;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,8 +29,8 @@ import java.nio.file.Paths;
  implements a number of special folders.
  @author Hartwig Thomas
  */
+@Slf4j
 public abstract class SpecialFolder {
-    private static final Logger log = LoggerFactory.getLogger(SpecialFolder.class);
 
     private static final String sJAVA_SETTINGS_DIRECTORY = ".java";
     private static final String sDATA_DIRECTORY = "data";

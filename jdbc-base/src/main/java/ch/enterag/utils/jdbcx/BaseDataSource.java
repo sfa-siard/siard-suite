@@ -11,14 +11,14 @@ Created    : 08.03.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbcx;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
 
 /**
  * BaseDataSource implements a wrapped DataSource and serves as a base
@@ -26,10 +26,10 @@ import java.sql.SQLFeatureNotSupportedException;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class BaseDataSource
         implements DataSource {
 
-    private static final Logger log = LoggerFactory.getLogger(BaseDataSource.class);
     /**
      * wrapped DataSource implementation
      */
@@ -103,9 +103,9 @@ public abstract class BaseDataSource
      * {@inheritDoc}
      */
     @Override
-    public java.util.logging.Logger getParentLogger()
+    public Logger getParentLogger()
             throws SQLFeatureNotSupportedException {
-        java.util.logging.Logger loggerParent = null;
+        Logger loggerParent = null;
         /* throws AbstractMethodError if dsWrapped was compiled under 1.6 */
         try {
             loggerParent = _dsWrapped.getParentLogger();
@@ -115,7 +115,7 @@ public abstract class BaseDataSource
             log.error("Error logged", e);
         }
         if (loggerParent == null)
-            loggerParent = java.util.logging.Logger.getLogger(log.getName())
+            loggerParent = Logger.getLogger(log.getName())
                                  .getParent();
         return loggerParent;
     }

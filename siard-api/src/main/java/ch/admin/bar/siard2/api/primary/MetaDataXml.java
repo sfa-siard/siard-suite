@@ -18,8 +18,7 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jaxb.Io;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.xml.bind.JAXBException;
 import java.io.InputStream;
@@ -31,9 +30,9 @@ import java.net.URL;
  * MetaDataXml implements reading and writing of SIARD metadata XML data.
  *
  */
+@Slf4j
 public class MetaDataXml {
 
-    private static final Logger log = LoggerFactory.getLogger(MetaDataXml.class);
     public static final String sSIARD10_XSD_RESOURCE = "/res/old10/metadata.xsd";
     public static final String sSIARD21_XSD_RESOURCE = "/res/old21/metadata.xsd";
     private static final ObjectFactory _of = new ObjectFactory();

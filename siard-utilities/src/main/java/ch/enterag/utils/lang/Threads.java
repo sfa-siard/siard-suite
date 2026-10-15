@@ -10,15 +10,14 @@ Created    : 23.06.2017, Hartwig Thomas, Enter AG, Rüti ZH
 package ch.enterag.utils.lang;
 
 import ch.enterag.utils.EU;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 
 /** Threads implements utilities for detecting the main thread/class.
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class Threads {
-    private static final Logger log = LoggerFactory.getLogger(Threads.class);
 
 
     /** get the main thread as the thread with the smallest ID.

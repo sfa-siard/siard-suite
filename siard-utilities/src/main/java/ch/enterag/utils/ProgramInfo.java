@@ -9,8 +9,7 @@ Created    : November 2005, Hartwig Thomas
 
 package ch.enterag.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
@@ -18,6 +17,7 @@ import java.util.*;
 /** ProgramInfo is the container of program info.
  @author Hartwig Thomas, Katja Reinhardt
  */
+@Slf4j
 public class ProgramInfo {
     private static final String sSPECIFIED_BY = "Specified by : ";
     private static final String sDEVELOPED_BY = "Developed by : ";
@@ -28,8 +28,6 @@ public class ProgramInfo {
 	
     /** the only instance of this class */
     protected static ProgramInfo _info = null;
-    /** logger */
-    private static final Logger log = LoggerFactory.getLogger(ProgramInfo.class);
 
     /** Application name */
     private String _sApplication = null;

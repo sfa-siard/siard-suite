@@ -12,8 +12,7 @@ package ch.enterag.zip;
 
 import ch.enterag.utils.SU;
 import ch.enterag.utils.cli.Arguments;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.EntryOutputStream;
 import ch.enterag.utils.zip.FileEntry;
@@ -31,6 +30,7 @@ import java.util.List;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public class zip64 {
     /* banner */
     /**
@@ -107,7 +107,6 @@ public class zip64 {
 
     /* members */
 
-    private static final Logger log = LoggerFactory.getLogger(zip64.class);
     /**
      * return code of process
      */

@@ -17,6 +17,8 @@ import ch.enterag.utils.SU;
 import ch.enterag.utils.jdbc.BaseResultSet;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKBReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -39,6 +41,7 @@ import java.time.LocalDateTime;
 public class MySqlResultSet
         extends BaseResultSet
         implements ResultSet {
+    private static final Logger log = LoggerFactory.getLogger(MySqlResultSet.class);
     private MySqlConnection _conn = null;
     private QualifiedId _qiTable = null;
     private String _sPrimaryColumn = null;
@@ -546,7 +549,7 @@ public class MySqlResultSet
             }
             os.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failed to read input stream", e);
         }
         return os.toByteArray();
     }
@@ -568,7 +571,7 @@ public class MySqlResultSet
                 }
             } while (c > 0);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failed to read reader", e);
         }
         return builder.toString();
     }

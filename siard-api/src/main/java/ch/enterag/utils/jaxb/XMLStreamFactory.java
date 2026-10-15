@@ -9,8 +9,7 @@ Created    : 12.01.2012, Hartwig Thomas
 package ch.enterag.utils.jaxb;
 
 import ch.enterag.utils.SU;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
@@ -32,8 +31,8 @@ import java.net.URL;
  * that we need.
  *
  */
+@Slf4j
 public abstract class XMLStreamFactory {
-    private static final Logger log = LoggerFactory.getLogger(XMLStreamFactory.class);
 
     /**
      * returns a customized XMLStreamReader.

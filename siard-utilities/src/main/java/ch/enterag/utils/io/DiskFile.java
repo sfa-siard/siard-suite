@@ -10,8 +10,7 @@ Created    : 27.02.2008, Hartwig Thomas
 
 package ch.enterag.utils.io;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,8 +23,8 @@ import java.security.NoSuchAlgorithmException;
 /** DiskFile implements a number of useful methods for RandomAccessFile.
  @author Hartwig Thomas
  */
+@Slf4j
 public class DiskFile extends RandomAccessFile {
-    private static final Logger log = LoggerFactory.getLogger(DiskFile.class);
 
     /** read mode */
     private static final String sMODE_READ = "r";

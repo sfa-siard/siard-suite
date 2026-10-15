@@ -23,8 +23,7 @@ import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import com.healthmarketscience.jackcess.*;
 import com.healthmarketscience.jackcess.query.Query;
 import com.healthmarketscience.jackcess.query.SelectQuery;
@@ -41,10 +40,10 @@ import java.util.regex.Pattern;
  * for MS Access.
  * @author Hartwig Thomas
  */
+@Slf4j
 public class AccessDatabaseMetaData
         extends BaseDatabaseMetaData
         implements DatabaseMetaData {
-    private static final Logger log = LoggerFactory.getLogger(AccessDatabaseMetaData.class);
 
     /** data type column */
     public static final String sJDBC_DATA_TYPE = "DATA_TYPE";

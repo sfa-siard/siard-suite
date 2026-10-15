@@ -9,8 +9,7 @@ Created    : 29.05.2012, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jaxb;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -29,8 +28,8 @@ import java.net.URL;
  *
  * @author Hartwig
  */
+@Slf4j
 public class ValidatingJAXBContext extends JAXBContext {
-    private static final Logger log = LoggerFactory.getLogger(ValidatingJAXBContext.class);
     private JAXBContext m_jc = null;
     private URL m_urlSchema = null;
 

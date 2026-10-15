@@ -12,8 +12,7 @@ package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.util.*;
@@ -23,11 +22,11 @@ import java.util.*;
  *
  * @author Simon Jutz
  */
+@Slf4j
 public class OracleDatabaseMetaData
         extends BaseDatabaseMetaData
         implements DatabaseMetaData {
 
-    private static final Logger log = LoggerFactory.getLogger(OracleDatabaseMetaData.class);
     private static final String sTABLE = "TABLE";
     private static final String sVIEW = "VIEW";
     private static final String sSYNONYM = "SYNONYM";

@@ -10,8 +10,7 @@ Created    : 22.10.2015, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -29,8 +28,8 @@ import java.util.Map;
 /** Utility for handling date strings.
  * @author Hartwig
  */
+@Slf4j
 public class DU {
-    private static final Logger log = LoggerFactory.getLogger(DU.class);
 
     private static final String _sZ = "Z";
     private static final SimpleDateFormat _sdfXS_DATE = new SimpleDateFormat("yyyy-MM-dd");
@@ -547,8 +546,7 @@ public class DU {
             duration = DatatypeFactory.newInstance()
                                       .newDuration(s);
         } catch (DatatypeConfigurationException dtce) {
-            System.err.println(dtce.getClass()
-                                   .getName() + ": " + dtce.getMessage());
+            log.error("Failed to create DatatypeFactory", dtce);
         }
         return duration;
     }

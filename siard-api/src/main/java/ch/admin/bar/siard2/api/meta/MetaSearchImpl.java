@@ -10,8 +10,7 @@ package ch.admin.bar.siard2.api.meta;
 
 import ch.admin.bar.siard2.api.MetaSearch;
 import ch.enterag.utils.DU;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -20,10 +19,10 @@ import java.io.IOException;
  * MetaSearchImpl implements the interface MetaSearch.
  *
  */
+@Slf4j
 public abstract class MetaSearchImpl
         implements MetaSearch {
 
-    private static final Logger log = LoggerFactory.getLogger(MetaSearch.class);
 
     /**
      * find string

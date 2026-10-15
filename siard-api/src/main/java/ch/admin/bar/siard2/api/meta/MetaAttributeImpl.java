@@ -21,8 +21,7 @@ import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.ddl.enums.Multiplier;
 import ch.enterag.utils.DU;
 import ch.enterag.utils.SU;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ch.enterag.utils.xml.XU;
 
 import java.io.IOException;
@@ -32,10 +31,10 @@ import java.math.BigInteger;
  * MetaAttributeImpl implements the interface MetaAttribute.
  *
  */
+@Slf4j
 public class MetaAttributeImpl
         extends MetaSearchImpl
         implements MetaAttribute {
-    private static final Logger log = LoggerFactory.getLogger(MetaAttributeImpl.class);
 
     private static final long lKILO = 1024;
     private static final long lMEGA = lKILO * lKILO;

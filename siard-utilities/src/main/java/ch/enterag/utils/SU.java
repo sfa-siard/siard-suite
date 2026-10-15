@@ -6,8 +6,7 @@ Created    : 15.02.2008, Hartwig Thomas
 
 package ch.enterag.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -18,8 +17,8 @@ import java.nio.charset.UnsupportedCharsetException;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class SU {
-    private static final Logger log = LoggerFactory.getLogger(SU.class);
 
     public static final String sUTF8_CHARSET_NAME = "UTF-8";
 

@@ -16,8 +16,7 @@ import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.SU;
 import ch.enterag.utils.database.SqlTypes;
 import ch.enterag.utils.jdbc.BaseResultSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.xml.datatype.Duration;
 import java.io.*;
@@ -35,12 +34,10 @@ import java.util.List;
 /** Db2ResultSet implements a wrapped DB/2 ResultSet.
  * @author Hartwig Thomas
  */
+@Slf4j
 public class Db2ResultSet
         extends BaseResultSet
         implements ResultSet {
-    /** logger */
-    @SuppressWarnings("unused")
-    private static final Logger log = LoggerFactory.getLogger(Db2ResultSet.class);
     private static final int iMAX_INLINE_LENGTH = 164;
     private static final long _lMILLIS_PER_DAY = 1000l * 60l * 60l * 24l;
     private ResultSetMetaData _rsmd = null;

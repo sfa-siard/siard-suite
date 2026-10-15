@@ -10,8 +10,7 @@ Created    : 09.05.2012, Hartwig Thomas
 package ch.enterag.utils.configuration;
 
 import ch.enterag.utils.io.SpecialFolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,8 +24,8 @@ import java.util.jar.Manifest;
  *
  * @author Hartwig
  */
+@Slf4j
 public class ManifestAttributes extends Manifest {
-    private static final Logger log = LoggerFactory.getLogger(ManifestAttributes.class);
     private static final String sMANIFEST_RESOURCE = "/META-INF/MANIFEST.MF";
 
     /**

@@ -11,8 +11,7 @@ Created    : 08.03.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
@@ -20,16 +19,17 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * BaseDriver implements a wrapped Driver.
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class BaseDriver
         implements Driver {
 
-    private static final Logger log = LoggerFactory.getLogger(BaseDriver.class);
     /**
      * protocol scheme for JDBC URL
      */
@@ -196,16 +196,16 @@ public abstract class BaseDriver
      * {@inheritDoc}
      */
     @Override
-    public java.util.logging.Logger getParentLogger()
+    public Logger getParentLogger()
             throws SQLFeatureNotSupportedException {
-        java.util.logging.Logger loggerParent = null;
+        Logger loggerParent = null;
         try {
             loggerParent = _driverWrapped.getParentLogger();
         } catch (AbstractMethodError ame) {
             throwUndefinedMethod(ame);
         }
         if (loggerParent == null)
-            loggerParent = java.util.logging.Logger.getLogger(log.getName())
+            loggerParent = Logger.getLogger(log.getName())
                                  .getParent();
         return loggerParent;
     }

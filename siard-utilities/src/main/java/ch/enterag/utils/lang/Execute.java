@@ -9,8 +9,7 @@ Created    : 27.11.2007, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.lang;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -20,9 +19,8 @@ import java.util.List;
 /** Execute implements execution of an external command.
  @author Hartwig Thomas
  */
+@Slf4j
 public class Execute {
-    /** logger */
-    private static final Logger log = LoggerFactory.getLogger(Execute.class);
     /** stdOut result of last execute */
     private String _sStdOut = null;
 

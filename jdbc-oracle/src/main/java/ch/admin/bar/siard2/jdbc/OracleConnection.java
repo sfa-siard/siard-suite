@@ -13,8 +13,7 @@ package ch.admin.bar.siard2.jdbc;
 import ch.admin.bar.siard2.oracle.OracleSqlFactory;
 import ch.enterag.sqlparser.SqlStatement;
 import ch.enterag.utils.jdbc.BaseConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import oracle.jdbc.driver.OracleSQLException;
 
 import java.io.*;
@@ -29,9 +28,8 @@ import java.util.concurrent.Executor;
  *
  * @author Simon Jutz
  */
+@Slf4j
 public class OracleConnection extends BaseConnection implements Connection {
-    /** logger */
-    private static final Logger log = LoggerFactory.getLogger(OracleConnection.class);
     private static final int iBUFFER_SIZE = 8192;
 
 

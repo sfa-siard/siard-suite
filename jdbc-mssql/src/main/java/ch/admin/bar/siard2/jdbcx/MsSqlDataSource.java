@@ -12,8 +12,7 @@ package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.MsSqlConnection;
 import ch.enterag.utils.jdbcx.BaseDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
 import javax.sql.DataSource;
@@ -24,11 +23,10 @@ import java.sql.SQLException;
 /** MsSqlDataSource implements a wrapped MSSQL DataSource.
  * @author Hartwig Thomas
  */
+@Slf4j
 public class MsSqlDataSource
         extends BaseDataSource
         implements DataSource {
-    /** logger */
-    private static final Logger log = LoggerFactory.getLogger(MsSqlDataSource.class);
 
 
     /** constructor */

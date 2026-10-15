@@ -5,8 +5,7 @@ package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -14,10 +13,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
+@Slf4j
 public class OracleArray
         implements Array {
-    /** logger */
-    private static final Logger log = LoggerFactory.getLogger(OracleArray.class);
     private oracle.sql.ARRAY _oarray = null;
     private long _lMaxLength = -1;
     private QualifiedId _qiVarray = null;

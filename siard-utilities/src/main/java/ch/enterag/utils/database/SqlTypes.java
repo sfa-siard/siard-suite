@@ -5,8 +5,7 @@ Created    : 12.12.2014, Hartwig Thomas
 */
 package ch.enterag.utils.database;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.sql.Types;
@@ -17,8 +16,8 @@ import java.util.*;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class SqlTypes {
-    private static final Logger log = LoggerFactory.getLogger(SqlTypes.class);
 
     /**
      * Used for values of SQL Types that do not have a corresponding name.

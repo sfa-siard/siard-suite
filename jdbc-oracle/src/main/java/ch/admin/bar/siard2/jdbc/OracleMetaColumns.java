@@ -16,8 +16,7 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.database.SqlTypes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -33,10 +32,10 @@ import java.util.regex.Pattern;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public class OracleMetaColumns
         extends OracleResultSet {
 
-    private static final Logger log = LoggerFactory.getLogger(OracleMetaColumns.class);
     private static Pattern _patVarrayText =
             Pattern.compile("^TYPE.*VARRAY\\s*\\((\\d+)\\)\\s+OF\\s+(.*?)\\s*;?\\s*$",
                             Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
