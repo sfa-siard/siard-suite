@@ -11,20 +11,20 @@ package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.utils.EU;
 import ch.enterag.utils.jdbc.BaseDriver;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 
 /** AccessDriver implements a wrapped Jackcess Driver for MS Access.
  * @author Hartwig Thomas
  */
 public class AccessDriver extends BaseDriver implements Driver {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(AccessDriver.class);
+    private static final Logger log = LoggerFactory.getLogger(AccessDriver.class);
 
     /** driver version */
     public static final String sVERSION = "1.0";
@@ -179,7 +179,7 @@ public class AccessDriver extends BaseDriver implements Driver {
 
     /** {@link Driver} for JDK 1.7 */
     @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
         throw new SQLFeatureNotSupportedException("ParentLogger not supported!");
     }
 
