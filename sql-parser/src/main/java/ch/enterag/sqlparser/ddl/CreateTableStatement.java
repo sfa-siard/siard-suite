@@ -11,7 +11,6 @@ import ch.enterag.sqlparser.expression.QueryExpression;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdList;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
 public class CreateTableStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CreateTableStatement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -269,8 +267,6 @@ public class CreateTableStatement
             IdList ilColumnNames,
             QueryExpression qe,
             WithOrWithoutData wowd) {
-        _il.enter(ts, qTableName, listElements, qUdtName, qSuperTable, ca,
-                  ilColumnNames, qe, wowd);
         setTableScope(ts);
         setTableName(qTableName);
         setTableElements(listElements);
@@ -280,7 +276,6 @@ public class CreateTableStatement
         setColumnNames(ilColumnNames);
         setQueryExpression(qe);
         setWithOrWithoutData(wowd);
-        _il.exit();
     }
 
 
@@ -295,12 +290,10 @@ public class CreateTableStatement
             QualifiedId qTableName,
             List<TableElement> listElements,
             CommitAction ca) {
-        _il.enter(ts, qTableName, listElements, ca);
         setTableScope(ts);
         setTableName(qTableName);
         setTableElements(listElements);
         setCommitAction(ca);
-        _il.exit();
     }
 
 

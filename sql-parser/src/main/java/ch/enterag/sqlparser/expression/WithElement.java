@@ -8,7 +8,6 @@ import ch.enterag.sqlparser.expression.enums.CycleFunction;
 import ch.enterag.sqlparser.expression.enums.SearchFunction;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.List;
 public class WithElement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(WithElement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -283,7 +281,6 @@ public class WithElement
             List<Identifier> listCycleColumnNames,
             ValueExpression ve,
             Identifier idCycleColumnName) {
-        _il.enter();
         setQueryName(idQueryName);
         setColumnNames(listColumnNames);
         setQueryExpression(qe);
@@ -294,7 +291,6 @@ public class WithElement
         setCycleColumnNames(listCycleColumnNames);
         setValueExpression(ve);
         setCycleColumnName(idCycleColumnName);
-        _il.exit();
     }
 
 

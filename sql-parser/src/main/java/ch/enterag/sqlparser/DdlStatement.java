@@ -4,12 +4,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.ddl.*;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class DdlStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(DdlStatement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -436,7 +434,6 @@ public class DdlStatement
             CreateTriggerStatement ctrs,
             DropTriggerStatement dtrs
     ) {
-        _il.enter();
         setCreateSchemaStatement(css);
         setDropSchemaStatement(dss);
         setCreateTableStatement(cts);
@@ -455,7 +452,6 @@ public class DdlStatement
         setDropProcedureStatement(dps);
         setCreateTriggerStatement(ctrs);
         setDropTriggerStatement(dtrs);
-        _il.exit();
     }
 
 

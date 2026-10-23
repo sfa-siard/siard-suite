@@ -10,12 +10,10 @@ import ch.enterag.sqlparser.expression.enums.GeneralValue;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.ColonId;
 import ch.enterag.sqlparser.identifier.IdChain;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class GeneralValueSpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(GeneralValueSpecification.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -181,12 +179,10 @@ public class GeneralValueSpecification
             IdChain idcColumnOrParameter,
             GeneralValue gv
     ) {
-        _il.enter(cidVariable, cidIndicator, idcColumnOrParameter, gv);
         setVariable(cidVariable);
         setIndicator(cidIndicator);
         setColumnOrParameter(idcColumnOrParameter);
         setGeneralValue(gv);
-        _il.exit();
     }
 
 

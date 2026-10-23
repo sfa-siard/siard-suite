@@ -16,7 +16,7 @@ import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.SU;
 import ch.enterag.utils.database.SqlTypes;
 import ch.enterag.utils.jdbc.BaseResultSet;
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.xml.datatype.Duration;
 import java.io.*;
@@ -34,12 +34,10 @@ import java.util.List;
 /** Db2ResultSet implements a wrapped DB/2 ResultSet.
  * @author Hartwig Thomas
  */
+@Slf4j
 public class Db2ResultSet
         extends BaseResultSet
         implements ResultSet {
-    /** logger */
-    @SuppressWarnings("unused")
-    private static IndentLogger _il = IndentLogger.getIndentLogger(Db2ResultSet.class.getName());
     private static final int iMAX_INLINE_LENGTH = 164;
     private static final long _lMILLIS_PER_DAY = 1000l * 60l * 60l * 24l;
     private ResultSetMetaData _rsmd = null;
@@ -512,7 +510,7 @@ public class Db2ResultSet
                 s = s + "CLOSE_CURSORS_OVER_COMMIT";
                 break;
         }
-        System.out.println(s);
+        log.debug(s);
     }
 
 

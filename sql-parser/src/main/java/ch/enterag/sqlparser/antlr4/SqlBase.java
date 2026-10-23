@@ -4,7 +4,8 @@ import ch.enterag.sqlparser.SqlFactory;
 import ch.enterag.sqlparser.generated.SqlBaseVisitor;
 import ch.enterag.sqlparser.generated.SqlLexer;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -21,7 +22,7 @@ import java.io.IOException;
 
 public abstract class SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SqlBase.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(SqlBase.class);
 
     /** visitor lists the parse tree.
      */
@@ -53,7 +54,7 @@ public abstract class SqlBase {
 
         @Override
         public SqlBase visitErrorNode(ErrorNode node) {
-            System.out.println("ERROR: " + node.toString());
+            log.error("ERROR: " + node);
             return SqlBase.this;
         }
 
@@ -66,7 +67,7 @@ public abstract class SqlBase {
                 sName = SqlParser.VOCABULARY.getLiteralName(iType);
             if (sName == null)
                 sName = SqlParser.VOCABULARY.getDisplayName(iType);
-            System.out.println(_sIndent + token.getText() + " " + sName);
+            log.debug(_sIndent + token.getText() + " " + sName);
             return SqlBase.this;
         }
     }
@@ -139,7 +140,7 @@ public abstract class SqlBase {
     private static void listTokens(CommonTokenStream cts) {
         for (int i = 0; i < cts.getNumberOfOnChannelTokens(); i++) {
             Token token = cts.get(i);
-            System.out.println(String.valueOf(i) + ": " + token.getText() + " " + SqlParser.VOCABULARY.getSymbolicName(token.getType()));
+            log.debug(String.valueOf(i) + ": " + token.getText() + " " + SqlParser.VOCABULARY.getSymbolicName(token.getType()));
         }
     }
 
@@ -172,7 +173,7 @@ public abstract class SqlBase {
             sp.getInterpreter()
               .setPredictionMode(PredictionMode.SLL);
         } catch (IOException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         }
         return sp;
     }
@@ -193,7 +194,7 @@ public abstract class SqlBase {
             sp.getInterpreter()
               .setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
         } catch (IOException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         }
         return sp;
     }

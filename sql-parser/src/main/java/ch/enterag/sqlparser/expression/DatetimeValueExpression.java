@@ -10,7 +10,6 @@ import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.datatype.IntervalQualifier;
 import ch.enterag.sqlparser.expression.enums.AdditiveOperator;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -21,7 +20,6 @@ import java.util.GregorianCalendar;
 public class DatetimeValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(DatetimeValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -384,9 +382,6 @@ public class DatetimeValueExpression
             ValueExpressionPrimary vepInterval,
             IntervalQualifier iq,
             IntervalValueExpression iveAbsArgument) {
-        _il.enter(String.valueOf(bAddition), String.valueOf(bSubtraction),
-                  dve, ive, vep, dvf, String.valueOf(bLocalTimeZone),
-                  vepInterval, iq, iveAbsArgument);
         setAddition(bAddition);
         setSubtraction(bSubtraction);
         setDatetimeOperand(dve);
@@ -396,7 +391,6 @@ public class DatetimeValueExpression
         setInterval(vepInterval);
         setIntervalQualifier(iq);
         setAbsArgument(iveAbsArgument);
-        _il.exit();
     }
 
 

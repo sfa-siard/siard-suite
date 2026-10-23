@@ -19,7 +19,6 @@ import ch.enterag.sqlparser.expression.QuerySpecification;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.jdbc.BaseConnection;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
-import ch.enterag.utils.logging.IndentLogger;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.*;
@@ -32,7 +31,6 @@ public class MsSqlConnection
         extends BaseConnection
         implements Connection {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MsSqlConnection.class.getName());
     private QualifiedId _qiTableDropCascade = null;
 
     public QualifiedId getTableDropCascade() {
@@ -103,7 +101,6 @@ public class MsSqlConnection
     @Override
     public String nativeSQL(String sql)
             throws SQLException {
-        _il.enter(sql);
         BaseDatabaseMetaData dmd = (BaseDatabaseMetaData) getMetaData();
         MsSqlSqlFactory sf = new MsSqlSqlFactory();
         SqlStatement ss = sf.newSqlStatement();
@@ -134,7 +131,6 @@ public class MsSqlConnection
             }
         }
         sql = ss.format();
-        _il.exit(sql);
         return sql;
     }
 

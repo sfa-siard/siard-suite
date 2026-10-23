@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class AlterColumnAction
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(AlterColumnAction.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -146,12 +144,10 @@ public class AlterColumnAction
             boolean bDropDefault,
             QualifiedId qScopeTable,
             DropBehavior dbScope) {
-        _il.enter(sDefaultOption, String.valueOf(bDropDefault), qScopeTable, dbScope);
         setDefaultOption(sDefaultOption);
         setDropDefault(bDropDefault);
         setScopeTable(qScopeTable);
         setScopeDropBehavior(dbScope);
-        _il.exit();
     }
 
 

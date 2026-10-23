@@ -21,6 +21,7 @@ import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.ddl.enums.Multiplier;
 import ch.enterag.utils.DU;
 import ch.enterag.utils.SU;
+import lombok.extern.slf4j.Slf4j;
 import ch.enterag.utils.xml.XU;
 
 import java.io.IOException;
@@ -30,9 +31,11 @@ import java.math.BigInteger;
  * MetaAttributeImpl implements the interface MetaAttribute.
  *
  */
+@Slf4j
 public class MetaAttributeImpl
         extends MetaSearchImpl
         implements MetaAttribute {
+
     private static final long lKILO = 1024;
     private static final long lMEGA = lKILO * lKILO;
     private static final long lGIGA = lKILO * lMEGA;
@@ -345,7 +348,7 @@ public class MetaAttributeImpl
         if (getTypeName() != null) {
             Schema schema = getArchiveImpl().getSchema(getTypeSchema());
             if (schema == null)
-                System.err.println("Schema null found in MetaAttribute!");
+                log.error("Schema null found in MetaAttribute!");
             mt = schema.getMetaSchema()
                        .getMetaType(getTypeName());
         }

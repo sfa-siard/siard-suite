@@ -8,14 +8,15 @@ import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.ddl.enums.Multiplier;
 import ch.enterag.sqlparser.ddl.enums.WithOrWithoutTimeZone;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Types;
 
 public class PredefinedType
         extends SqlBase {
     /** logger */
-    protected static IndentLogger _il = IndentLogger.getIndentLogger(PredefinedType.class.getName());
+    protected static final Logger log = LoggerFactory.getLogger(PredefinedType.class);
 
 
     /** visitor initializes fields from parse tree.
@@ -640,9 +641,6 @@ public class PredefinedType
             PreType pretype, int iLength, Multiplier multiplier,
             int iPrecision, int iScale, int iSecondsDecimals,
             WithOrWithoutTimeZone wowtz, IntervalQualifier iq) {
-        _il.enter(pretype, String.valueOf(iLength), multiplier,
-                  String.valueOf(iPrecision), String.valueOf(iScale), String.valueOf(iSecondsDecimals),
-                  wowtz, iq);
         setType(pretype);
         setLength(iLength);
         setMultiplier(multiplier);
@@ -651,7 +649,6 @@ public class PredefinedType
         setSecondsDecimals(iSecondsDecimals);
         setWithOrWithoutTimeZone(wowtz);
         setIntervalQualifier(iq);
-        _il.exit();
     }
 
 

@@ -12,7 +12,6 @@ package ch.admin.bar.siard2.jdbc;
 import ch.enterag.sqlparser.Interval;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.jdbc.BaseResultSet;
-import ch.enterag.utils.logging.IndentLogger;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import javax.xml.datatype.Duration;
@@ -35,7 +34,6 @@ public class MsSqlResultSet
         implements ResultSet {
     /** logger */
     @SuppressWarnings("unused")
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MsSqlResultSet.class.getName());
     protected MsSqlConnection _conn = null;
 
 

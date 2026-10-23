@@ -9,7 +9,7 @@ Created    : November 2005, Hartwig Thomas
 
 package ch.enterag.utils;
 
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
@@ -17,6 +17,7 @@ import java.util.*;
 /** ProgramInfo is the container of program info.
  @author Hartwig Thomas, Katja Reinhardt
  */
+@Slf4j
 public class ProgramInfo {
     private static final String sSPECIFIED_BY = "Specified by : ";
     private static final String sDEVELOPED_BY = "Developed by : ";
@@ -27,8 +28,6 @@ public class ProgramInfo {
 	
     /** the only instance of this class */
     protected static ProgramInfo _info = null;
-    /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(ProgramInfo.class.getName());
 
     /** Application name */
     private String _sApplication = null;
@@ -391,10 +390,10 @@ public class ProgramInfo {
     private void logList(String sLabel, List<String> list) {
         int iItem = 0;
         if (iItem < list.size()) {
-            _il.info(sLabel + list.get(iItem));
+            log.info(sLabel + list.get(iItem));
             String sIndent = SU.repeat(sLabel.length(), ' ');
             for (iItem++; iItem < list.size(); iItem++)
-                _il.info(sIndent + list.get(iItem));
+                log.info(sIndent + list.get(iItem));
         }
     }
 
@@ -406,10 +405,10 @@ public class ProgramInfo {
         if (iItem < map.size()) {
             String[] asLanguage = map.keySet()
                                      .toArray(new String[]{});
-            _il.info(sLabel + map.get(asLanguage[iItem]) + " (" + asLanguage[iItem] + ")");
+            log.info(sLabel + map.get(asLanguage[iItem]) + " (" + asLanguage[iItem] + ")");
             String sIndent = SU.repeat(sLabel.length(), ' ');
             for (iItem++; iItem < asLanguage.length; iItem++)
-                _il.info(sIndent + map.get(asLanguage[iItem]) + " (" + asLanguage[iItem] + ")");
+                log.info(sIndent + map.get(asLanguage[iItem]) + " (" + asLanguage[iItem] + ")");
         }
     }
 
@@ -420,26 +419,26 @@ public class ProgramInfo {
         String sDescription = "";
         if (getDescription() != null)
             sDescription = " - " + getDescription();
-        _il.info(getProgram() + " " + getVersion() + sDescription);
-        _il.info(getApplication() + " " + getAppVersion() + ": " + getCopyright());
+        log.info(getProgram() + " " + getVersion() + sDescription);
+        log.info(getApplication() + " " + getAppVersion() + ": " + getCopyright());
         logList(sSPECIFIED_BY, _listSpecifiers);
         logList(sDEVELOPED_BY, _listDevelopers);
         logList(sTESTED_BY, _listTesters);
         logList(sMANAGED_BY, _listManagers);
         logMap(sTRANSLATED_BY, _mapTranslators);
-        _il.info(sJAVA + "Version " + getJavaVersion() + " (" + getJavaArchitecture() + ")");
+        log.info(sJAVA + "Version " + getJavaVersion() + " (" + getJavaArchitecture() + ")");
         StringBuilder sbOs = new StringBuilder(getOs());
         while (sbOs.length() < sJAVA.length() - 2)
             sbOs.append(" ");
         sbOs.append(": ");
-        _il.info(sbOs.toString() + "Version " + getOsVersion() + " (" + getOsArchitecture() + ")");
+        log.info(sbOs.toString() + "Version " + getOsVersion() + " (" + getOsArchitecture() + ")");
     }
 
 
     /** logs program termination information.
      */
     public void logTermination() {
-        _il.info(getProgram() + " " + getVersion() + " terminates.");
+        log.info(getProgram() + " " + getVersion() + " terminates.");
     }
   
 

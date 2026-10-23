@@ -12,7 +12,7 @@ package ch.enterag.zip;
 
 import ch.enterag.utils.SU;
 import ch.enterag.utils.cli.Arguments;
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.EntryOutputStream;
 import ch.enterag.utils.zip.FileEntry;
@@ -30,6 +30,7 @@ import java.util.List;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public class zip64 {
     /* banner */
     /**
@@ -105,10 +106,7 @@ public class zip64 {
     private static final NumberFormat SIZE_FORMAT = new DecimalFormat("#,##0", new DecimalFormatSymbols());
 
     /* members */
-    /**
-     * Logger
-     */
-    private static IndentLogger m_il = IndentLogger.getIndentLogger(zip64.class.getName());
+
     /**
      * return code of process
      */
@@ -180,7 +178,7 @@ public class zip64 {
         String sMessage = e.getClass()
                            .getName() + ": " + e.getMessage();
         System.err.println(sMessage);
-        m_il.warning(sMessage);
+        log.warn(sMessage);
     }
 
     /**
@@ -191,7 +189,7 @@ public class zip64 {
     private void displayMessage(String sMessage) {
         if (!m_bQuiet)
             System.out.println(sMessage);
-        // m_il.info(sMessage);
+        // log.info(sMessage);
     }
 
     /**
@@ -215,7 +213,6 @@ public class zip64 {
      * @param sFileName name of file to be added.
      */
     private void addFile(String sFileName) {
-        m_il.enter(sFileName);
         sFileName = sFileName.trim();
         if (File.separatorChar != '/')
             sFileName = sFileName.replace(File.separatorChar, '/');
@@ -241,9 +238,8 @@ public class zip64 {
         }
         sbPattern.append('$');
         /* add the pattern to the list of files */
-        m_il.event("Pattern: " + sbPattern);
+        log.debug("Pattern: " + sbPattern);
         m_listFiles.add(sbPattern.toString());
-        m_il.exit();
     }
 
     /**
@@ -367,7 +363,6 @@ public class zip64 {
     private void addRelativeFileNames(File fileRoot, File fileFolder,
                                       List<String> listRelative)
             throws IOException {
-        m_il.enter(fileRoot, fileFolder);
         String[] asEntry = fileFolder.list();
         if (asEntry != null) {
             for (String s : asEntry) {
@@ -382,7 +377,7 @@ public class zip64 {
                 if (fileEntry.isDirectory()) {
                     if (!sRelative.endsWith("/"))
                         sRelative = sRelative + "/";
-                    m_il.event("Folder entry: " + sRelative);
+                    log.debug("Folder entry: " + sRelative);
                     listRelative.add(sRelative);
                     String sFolder = fileEntry.getAbsolutePath();
                     if (sFolder.endsWith("."))
@@ -391,13 +386,12 @@ public class zip64 {
                         sFolder = sFolder + File.separator + ".";
                     addRelativeFileNames(fileRoot, new File(sFolder), listRelative);
                 } else {
-                    m_il.event("File entry: " + sRelative);
+                    log.debug("File entry: " + sRelative);
                     listRelative.add(sRelative);
                 }
             }
         } else
             throw new IOException("Folder \"" + fileFolder.getAbsolutePath() + "\" cannot be accessed!");
-        m_il.exit();
     }
 
     /**
@@ -410,10 +404,8 @@ public class zip64 {
      */
     private List<String> getRelativeFileNames(File fileZipRoot)
             throws IOException {
-        m_il.enter(fileZipRoot);
         List<String> listRelative = new ArrayList<>();
         addRelativeFileNames(fileZipRoot, fileZipRoot, listRelative);
-        m_il.exit();
         return listRelative;
     }
 

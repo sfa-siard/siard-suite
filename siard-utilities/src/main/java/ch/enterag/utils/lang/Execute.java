@@ -9,7 +9,7 @@ Created    : 27.11.2007, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.lang;
 
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,9 +19,8 @@ import java.util.List;
 /** Execute implements execution of an external command.
  @author Hartwig Thomas
  */
+@Slf4j
 public class Execute {
-    /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(Execute.class.getName());
     /** stdOut result of last execute */
     private String _sStdOut = null;
 
@@ -79,7 +78,6 @@ public class Execute {
      * @return true, if sVersion1 is less than sVersion2.
      */
     public static boolean ltVersion(String sVersion1, String sVersion2) {
-        _il.enter(sVersion1, sVersion2);
         boolean bEqual = true;
         boolean bLess = false;
         List<String> listVersion1 = splitVersion(sVersion1);
@@ -103,7 +101,6 @@ public class Execute {
                     bEqual = false;
             }
         }
-        _il.exit(Boolean.valueOf(bLess));
         return bLess;
     }
 
@@ -170,7 +167,7 @@ public class Execute {
      */
     private void redirectInput(Reader rdr, OutputStream os)
             throws IOException {
-        _il.event("stdin redirected");
+        log.debug("stdin redirected");
         OutputStreamWriter oswr = new OutputStreamWriter(os);
         for (int i = rdr.read(); i != -1; i = rdr.read())
             oswr.write(i);
@@ -183,22 +180,20 @@ public class Execute {
      @return return code from command.
      */
     private int run(String sCommand) {
-        _il.enter(sCommand);
         int iReturn = -1;
         try {
             Process proc = Runtime.getRuntime()
                                   .exec(sCommand);
             _sStdOut = captureOutput(proc.getInputStream());
-            _il.event("stdout: " + _sStdOut.toString());
+            log.debug("stdout: " + _sStdOut.toString());
             _sStdErr = captureOutput(proc.getErrorStream());
-            _il.event("stderr: " + _sStdErr.toString());
+            log.debug("stderr: " + _sStdErr.toString());
             iReturn = proc.waitFor();
         } catch (IOException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         } catch (InterruptedException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         }
-        _il.exit(String.valueOf(iReturn));
         return iReturn;
     }
 
@@ -220,23 +215,21 @@ public class Execute {
      @return return code from command.
      */
     private int run(String sCommand, Reader rdrInput) {
-        _il.enter(sCommand, rdrInput);
         int iReturn = -1;
         try {
             Process proc = Runtime.getRuntime()
                                   .exec(sCommand);
             redirectInput(rdrInput, proc.getOutputStream());
             _sStdOut = captureOutput(proc.getInputStream());
-            _il.event("stdout: " + _sStdOut.toString());
+            log.debug("stdout: " + _sStdOut.toString());
             _sStdErr = captureOutput(proc.getErrorStream());
-            _il.event("stderr: " + _sStdErr.toString());
+            log.debug("stderr: " + _sStdErr.toString());
             iReturn = proc.waitFor();
         } catch (InterruptedException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         } catch (IOException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         }
-        _il.exit(String.valueOf(iReturn));
         return iReturn;
     }
 
@@ -258,22 +251,20 @@ public class Execute {
      @return return code from command.
      */
     private int run(String[] asCommand) {
-        _il.enter((Object[]) asCommand);
         int iReturn = -1;
         try {
             Process proc = Runtime.getRuntime()
                                   .exec(asCommand);
             _sStdOut = captureOutput(proc.getInputStream());
-            _il.event("stdout: " + _sStdOut.toString());
+            log.debug("stdout: " + _sStdOut.toString());
             _sStdErr = captureOutput(proc.getErrorStream());
-            _il.event("stderr: " + _sStdErr.toString());
+            log.debug("stderr: " + _sStdErr.toString());
             iReturn = proc.waitFor();
         } catch (InterruptedException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         } catch (IOException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         }
-        _il.exit(String.valueOf(iReturn));
         return iReturn;
     }
 
@@ -295,22 +286,20 @@ public class Execute {
      @return return code from command.
      */
     private int run(String[] asCommand, File fileWorkingDirectory) {
-        _il.enter((Object[]) asCommand);
         int iReturn = -1;
         try {
             Process proc = Runtime.getRuntime()
                                   .exec(asCommand, null, fileWorkingDirectory);
             _sStdOut = captureOutput(proc.getInputStream());
-            _il.event("stdout: " + _sStdOut.toString());
+            log.debug("stdout: " + _sStdOut.toString());
             _sStdErr = captureOutput(proc.getErrorStream());
-            _il.event("stderr: " + _sStdErr.toString());
+            log.debug("stderr: " + _sStdErr.toString());
             iReturn = proc.waitFor();
         } catch (InterruptedException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         } catch (IOException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         }
-        _il.exit(String.valueOf(iReturn));
         return iReturn;
     }
 
@@ -334,23 +323,21 @@ public class Execute {
      @return return code from command.
      */
     private int run(String[] asCommand, File fileWorkingDirectory, Reader rdrInput) {
-        _il.enter((Object[]) asCommand);
         int iReturn = -1;
         try {
             Process proc = Runtime.getRuntime()
                                   .exec(asCommand, null, fileWorkingDirectory);
             redirectInput(rdrInput, proc.getOutputStream());
             _sStdOut = captureOutput(proc.getInputStream());
-            _il.event("stdout: " + _sStdOut.toString());
+            log.debug("stdout: " + _sStdOut.toString());
             _sStdErr = captureOutput(proc.getErrorStream());
-            _il.event("stderr: " + _sStdErr.toString());
+            log.debug("stderr: " + _sStdErr.toString());
             iReturn = proc.waitFor();
         } catch (InterruptedException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         } catch (IOException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         }
-        _il.exit(String.valueOf(iReturn));
         return iReturn;
     }
 
@@ -374,23 +361,21 @@ public class Execute {
      @return return code from command.
      */
     private int run(String[] asCommand, Reader rdrInput) {
-        _il.enter((Object[]) asCommand, rdrInput);
         int iReturn = -1;
         try {
             Process proc = Runtime.getRuntime()
                                   .exec(asCommand);
             redirectInput(rdrInput, proc.getOutputStream());
             _sStdOut = captureOutput(proc.getInputStream());
-            _il.event("stdout: " + _sStdOut.toString());
+            log.debug("stdout: " + _sStdOut.toString());
             _sStdErr = captureOutput(proc.getErrorStream());
-            _il.event("stderr: " + _sStdErr.toString());
+            log.debug("stderr: " + _sStdErr.toString());
             iReturn = proc.waitFor();
         } catch (InterruptedException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         } catch (IOException ie) {
-            _il.exception(ie);
+            log.error("Exception logged", ie);
         }
-        _il.exit(String.valueOf(iReturn));
         return iReturn;
     }
 

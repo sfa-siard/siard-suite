@@ -64,7 +64,7 @@ public class Db2ValueExpressionPrimary
                 sExpression = getRoutineName().format() + sLEFT_PAREN + sRIGHT_PAREN +
                         formatSqlArguments();
             } catch (SQLException se) {
-                _il.exception(se);
+                log.error("Exception logged", se);
             }
         } else
             sExpression = super.format();

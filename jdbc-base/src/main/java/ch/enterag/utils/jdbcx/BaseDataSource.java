@@ -11,7 +11,7 @@ Created    : 08.03.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbcx;
 
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -26,12 +26,10 @@ import java.util.logging.Logger;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class BaseDataSource
         implements DataSource {
-    /**
-     * logger
-     */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(BaseDataSource.class.getName());
+
     /**
      * wrapped DataSource implementation
      */
@@ -112,12 +110,13 @@ public abstract class BaseDataSource
         try {
             loggerParent = _dsWrapped.getParentLogger();
         } catch (Exception e) {
-            _il.exception(e);
+            log.error("Exception logged", e);
         } catch (Error e) {
-            _il.error(e);
+            log.error("Error logged", e);
         }
         if (loggerParent == null)
-            loggerParent = _il.getParent();
+            loggerParent = Logger.getLogger(log.getName())
+                                 .getParent();
         return loggerParent;
     }
 

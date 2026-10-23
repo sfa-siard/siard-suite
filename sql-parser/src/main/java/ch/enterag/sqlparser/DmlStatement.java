@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.dml.DeleteStatement;
 import ch.enterag.sqlparser.dml.InsertStatement;
 import ch.enterag.sqlparser.dml.UpdateStatement;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class DmlStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(DmlStatement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -123,11 +121,9 @@ public class DmlStatement
             DeleteStatement ds,
             UpdateStatement us
     ) {
-        _il.enter();
         setInsertStatement(is);
         setDeleteStatement(ds);
         setUpdateStatement(us);
-        _il.exit();
     }
 
 

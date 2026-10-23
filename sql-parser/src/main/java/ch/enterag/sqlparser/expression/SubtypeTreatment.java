@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class SubtypeTreatment
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SubtypeTreatment.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -118,11 +116,9 @@ public class SubtypeTreatment
             ValueExpression ve,
             QualifiedId qiUdtName,
             QualifiedId qiScopeTable) {
-        _il.enter(ve, qiUdtName, qiScopeTable);
         setValueExpression(ve);
         setUdtName(qiUdtName);
         setScopeTable(qiScopeTable);
-        _il.exit();
     }
 
 

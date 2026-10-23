@@ -13,7 +13,7 @@ package ch.admin.bar.siard2.jdbc;
 import ch.admin.bar.siard2.oracle.OracleSqlFactory;
 import ch.enterag.sqlparser.SqlStatement;
 import ch.enterag.utils.jdbc.BaseConnection;
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 import oracle.jdbc.driver.OracleSQLException;
 
 import java.io.*;
@@ -28,9 +28,8 @@ import java.util.concurrent.Executor;
  *
  * @author Simon Jutz
  */
+@Slf4j
 public class OracleConnection extends BaseConnection implements Connection {
-    /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(OracleConnection.class.getName());
     private static final int iBUFFER_SIZE = 8192;
 
 
@@ -59,13 +58,11 @@ public class OracleConnection extends BaseConnection implements Connection {
     public OracleConnection(Connection connWrapped) throws SQLException {
         super(connWrapped);
         if (connWrapped != null) {
-            _il.enter(connWrapped);
             Statement stmt = super.createStatement();
             String sSql = "ALTER SESSION SET NLS_LENGTH_SEMANTICS=CHAR";
-            _il.event("Unwrapped DML: " + sSql);
+            log.debug("Unwrapped DML: " + sSql);
             stmt.executeUpdate(sSql);
             stmt.close();
-            _il.exit();
         }
     }
 
@@ -99,13 +96,11 @@ public class OracleConnection extends BaseConnection implements Connection {
     /** {@inheritDoc} */
     @Override
     public String nativeSQL(String sql) throws SQLException {
-        _il.enter(sql);
         OracleSqlFactory osf = new OracleSqlFactory();
         osf.setConnection(this);
         SqlStatement ss = osf.newSqlStatement();
         ss.parse(sql);
         sql = ss.format();
-        _il.exit(sql);
         return sql;
     }
 

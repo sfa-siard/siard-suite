@@ -5,7 +5,6 @@ import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.text.ParseException;
@@ -15,7 +14,6 @@ import java.util.List;
 public class RoutineBody
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(RoutineBody.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -100,9 +98,7 @@ public class RoutineBody
      * @param listTokens tokenized routine body.
      */
     public void initialize(List<String> listTokens) {
-        _il.enter();
         setTokens(listTokens);
-        _il.exit();
     }
 
 

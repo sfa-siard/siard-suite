@@ -13,7 +13,6 @@ package ch.admin.bar.siard2.jdbc;
 import ch.admin.bar.siard2.db2.Db2SqlFactory;
 import ch.enterag.sqlparser.SqlStatement;
 import ch.enterag.utils.jdbc.BaseConnection;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.*;
 
@@ -25,7 +24,6 @@ public class Db2Connection
         extends BaseConnection
         implements Connection {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(Db2Connection.class.getName());
 
 
     /** constructor
@@ -40,13 +38,11 @@ public class Db2Connection
     @Override
     public String nativeSQL(String sql)
             throws SQLException {
-        _il.enter(sql);
         Db2SqlFactory sf = new Db2SqlFactory();
         sf.setConnection(this);
         SqlStatement ss = sf.newSqlStatement();
         ss.parse(sql);
         sql = ss.format();
-        _il.exit(sql);
         return sql;
     }
 

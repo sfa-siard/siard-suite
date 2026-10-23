@@ -71,7 +71,7 @@ public class StepsChainBuilder {
                     return hooksCaller.nextView(step.getViewLoader()
                                                     .load(casted, navigator, servicesFacade));
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    log.error("Failed to load view for step {}", stepIndex, ex);
                     throw ex;
                 }
             };

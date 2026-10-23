@@ -12,7 +12,7 @@ package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.OracleConnection;
 import ch.enterag.utils.jdbcx.BaseDataSource;
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -21,11 +21,10 @@ import java.sql.SQLException;
 /** OracleDataSource implements a wrapped Oracle DataSource.
  * @author Simon Jutz
  */
+@Slf4j
 public class OracleDataSource
         extends BaseDataSource
         implements DataSource {
-    /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(OracleDataSource.class.getName());
 
     static {
         System.setProperty("oracle.jdbc.getObjectReturnsXMLType", "false");
@@ -70,7 +69,7 @@ public class OracleDataSource
         try {
             ssds = (oracle.jdbc.pool.OracleDataSource) unwrap(DataSource.class);
         } catch (SQLException se) {
-            _il.exception(se);
+            log.error("Exception logged", se);
         }
         return ssds;
     }

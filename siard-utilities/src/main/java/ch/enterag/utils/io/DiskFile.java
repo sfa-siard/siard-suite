@@ -10,6 +10,8 @@ Created    : 27.02.2008, Hartwig Thomas
 
 package ch.enterag.utils.io;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,7 +23,9 @@ import java.security.NoSuchAlgorithmException;
 /** DiskFile implements a number of useful methods for RandomAccessFile.
  @author Hartwig Thomas
  */
+@Slf4j
 public class DiskFile extends RandomAccessFile {
+
     /** read mode */
     private static final String sMODE_READ = "r";
     /** read/write mode */
@@ -139,7 +143,7 @@ public class DiskFile extends RandomAccessFile {
             }
             bufDigest = md.digest();
         } catch (NoSuchAlgorithmException nsae) {
-            System.err.println(nsae.getClass()
+            log.error(nsae.getClass()
                                    .getName() + ": " + nsae.getMessage());
         }
         seek(lFilePointer);

@@ -14,7 +14,6 @@ import ch.admin.bar.siard2.postgres.PostgresLiterals;
 import ch.admin.bar.siard2.postgres.PostgresType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.*;
 
@@ -30,7 +29,6 @@ public class PostgresDatabaseMetaData
     public static final String sRANGE_SIGNATURE = "range_signature";
 
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(PostgresDatabaseMetaData.class.getName());
     private static int iMAX_VAR_SIZE = 10 * 1024 * 1024;
     Connection _conn = null;
 
@@ -439,7 +437,6 @@ public class PostgresDatabaseMetaData
     public ResultSet getAttributes(String catalog, String schemaPattern,
                                    String typeNamePattern, String attributeNamePattern)
             throws SQLException {
-        _il.enter(catalog, schemaPattern, typeNamePattern, attributeNamePattern);
         String sPgTypeParent = "pt";
         String sPgNamespaceTypeParent = "npt";
         String sPgClass = "c";

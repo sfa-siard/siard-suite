@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.ColonId;
 import ch.enterag.sqlparser.identifier.IdChain;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class TargetSpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(TargetSpecification.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -186,16 +184,12 @@ public class TargetSpecification
             IdChain icTargetArrayRef,
             SimpleValueSpecification svs,
             boolean bQuestionMark) {
-        _il.enter(ciVariableName, ciIndicatorVariable,
-                  icSqlParameterOrColumnReference, icTargetArrayRef, svs,
-                  String.valueOf(bQuestionMark));
         setVariableName(ciVariableName);
         setIndicatorVariable(ciIndicatorVariable);
         setSqlParameterOrColumnReference(icSqlParameterOrColumnReference);
         setTargetArrayReference(icTargetArrayRef);
         setSimpleValueSpecification(svs);
         setQuestionMark(bQuestionMark);
-        _il.exit();
     }
 
 

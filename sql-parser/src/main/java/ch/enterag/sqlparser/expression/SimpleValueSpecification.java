@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.ColonId;
 import ch.enterag.sqlparser.identifier.IdChain;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class SimpleValueSpecification
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SimpleValueSpecification.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -143,12 +141,10 @@ public class SimpleValueSpecification
             ColonId ciVariableName,
             ColonId ciIndicatorVariable,
             IdChain icSqlParameter) {
-        _il.enter(literal, ciVariableName, ciIndicatorVariable, icSqlParameter);
         setLiteral(literal);
         setVariableName(ciVariableName);
         setIndicatorVariable(ciIndicatorVariable);
         setSqlParameterSpecification(icSqlParameter);
-        _il.exit();
     }
 
 

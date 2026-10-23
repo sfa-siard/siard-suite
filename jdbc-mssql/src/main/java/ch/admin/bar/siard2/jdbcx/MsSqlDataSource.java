@@ -12,7 +12,7 @@ package ch.admin.bar.siard2.jdbcx;
 
 import ch.admin.bar.siard2.jdbc.MsSqlConnection;
 import ch.enterag.utils.jdbcx.BaseDataSource;
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
 import javax.sql.DataSource;
@@ -23,11 +23,10 @@ import java.sql.SQLException;
 /** MsSqlDataSource implements a wrapped MSSQL DataSource.
  * @author Hartwig Thomas
  */
+@Slf4j
 public class MsSqlDataSource
         extends BaseDataSource
         implements DataSource {
-    /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MsSqlDataSource.class.getName());
 
 
     /** constructor */
@@ -81,7 +80,7 @@ public class MsSqlDataSource
         try {
             ssds = (SQLServerDataSource) unwrap(DataSource.class);
         } catch (SQLException se) {
-            _il.exception(se);
+            log.error("Exception logged", se);
         }
         return ssds;
     }

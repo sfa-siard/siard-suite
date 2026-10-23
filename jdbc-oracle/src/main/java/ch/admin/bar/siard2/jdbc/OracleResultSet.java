@@ -13,7 +13,7 @@ package ch.admin.bar.siard2.jdbc;
 import ch.enterag.sqlparser.Interval;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.jdbc.BaseResultSet;
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 import oracle.jdbc.driver.OracleSQLException;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -31,12 +31,10 @@ import java.util.Map;
 /** OracleResultSet implements a wrapped Oracle ResultSet.
  * @author Simon Jutz
  */
+@Slf4j
 public class OracleResultSet
         extends BaseResultSet
         implements ResultSet {
-    /** logger */
-    @SuppressWarnings("unused")
-    private static IndentLogger _il = IndentLogger.getIndentLogger(OracleResultSet.class.getName());
     private static final int iBUFSIZ = 8192;
     protected Connection _conn = null;
     private Statement _stmt = null;
@@ -207,7 +205,7 @@ public class OracleResultSet
                     o = ivym;
                 }
             } else {
-                System.err.println("Oracle INTERVALs can not be negative! NULL stored instead.");
+                log.warn("Oracle INTERVALs can not be negative! NULL stored instead.");
                 o = null;
             }
         }

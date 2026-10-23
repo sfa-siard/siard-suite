@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class CommonValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CommonValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -314,7 +312,6 @@ public class CommonValueExpression
             ArrayValueExpression ave,
             MultisetValueExpression mve,
             ValueExpressionPrimary vep) {
-        _il.enter(nve, sve, dve, ive, ave, mve, vep);
         setNumericValueExpression(nve);
         setStringValueExpression(sve);
         setDatetimeValueExpression(dve);
@@ -322,7 +319,6 @@ public class CommonValueExpression
         setArrayValueExpression(ave);
         setMultisetValueExpression(mve);
         setValueExpressionPrimary(vep);
-        _il.exit();
     }
 
 

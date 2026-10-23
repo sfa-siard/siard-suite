@@ -9,7 +9,6 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.expression.enums.StringFunction;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -17,7 +16,6 @@ import java.util.Arrays;
 public class StringValueFunction
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(StringValueFunction.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -326,7 +324,6 @@ public class StringValueFunction
             StringValueExpression svePattern,
             String sEscapeLetter,
             ValueExpressionPrimary vepSpecific) {
-        _il.enter(sf, sve, nveStart, nveLength, svePattern, sEscapeLetter, vepSpecific);
         setStringFunction(sf);
         setStringValueExpression(sve);
         setStartPosition(nveStart);
@@ -334,7 +331,6 @@ public class StringValueFunction
         setPattern(svePattern);
         setEscapeLetter(sEscapeLetter);
         setUdtValueSpecific(vepSpecific);
-        _il.exit();
     }
 
 

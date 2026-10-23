@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.enums.IntervalField;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class IntervalQualifier
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(IntervalQualifier.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -161,12 +159,10 @@ public class IntervalQualifier
             IntervalField endField,
             int iPrecision,
             int iSecondsDecimals) {
-        _il.enter(startField, endField, String.valueOf(iPrecision), String.valueOf(iSecondsDecimals));
         setStartField(startField);
         setEndField(endField);
         setPrecision(iPrecision);
         setSecondsDecimals(iSecondsDecimals);
-        _il.exit();
     }
 
 

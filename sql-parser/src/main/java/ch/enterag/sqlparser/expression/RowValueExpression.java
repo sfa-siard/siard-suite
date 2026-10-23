@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 public class RowValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(RowValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -217,9 +215,7 @@ public class RowValueExpression
      * @param vep value expression primary.
      */
     public void initValue(ValueExpressionPrimary vep) {
-        _il.enter(vep);
         setValueExpressionPrimary(vep);
-        _il.exit();
     }
 
 
@@ -234,12 +230,10 @@ public class RowValueExpression
             List<ValueExpression> listVe,
             boolean bRow,
             QueryExpression qe) {
-        _il.enter(vep, listVe, String.valueOf(bRow), qe);
         setValueExpressionPrimary(vep);
         setValueExpressions(listVe);
         setRow(bRow);
         setQueryExpression(qe);
-        _il.exit();
     }
 
 

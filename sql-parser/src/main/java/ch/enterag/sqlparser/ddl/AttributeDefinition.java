@@ -9,12 +9,10 @@ import ch.enterag.sqlparser.ddl.enums.ReferenceScopeCheck;
 import ch.enterag.sqlparser.ddl.enums.ReferentialAction;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class AttributeDefinition
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(AttributeDefinition.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -161,13 +159,11 @@ public class AttributeDefinition
             ReferenceScopeCheck rsc,
             ReferentialAction raDelete,
             String sDefaultOption) {
-        _il.enter(idAttributeName, dt, rsc, sDefaultOption);
         setAttributeName(idAttributeName);
         setDataType(dt);
         setReferenceScopeCheck(rsc);
         setDeleteAction(raDelete);
         setDefaultOption(sDefaultOption);
-        _il.exit();
     }
 
 
@@ -178,10 +174,8 @@ public class AttributeDefinition
     public void initNameType(
             Identifier idAttributeName,
             DataType dt) {
-        _il.enter(idAttributeName, dt);
         setAttributeName(idAttributeName);
         setDataType(dt);
-        _il.exit();
     }
 
 

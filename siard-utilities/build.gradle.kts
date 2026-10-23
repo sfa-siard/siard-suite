@@ -10,7 +10,7 @@ description = "SIARD Utilities"
 
 dependencies {
     implementation(libs.tika.core)
-    implementation(libs.slf4j.api)
+    api(libs.slf4j.api)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)

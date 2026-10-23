@@ -22,7 +22,8 @@ import ch.enterag.sqlparser.expression.TableReference;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.jdbc.BaseConnection;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
-import ch.enterag.utils.logging.IndentLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.concurrent.Executor;
@@ -34,7 +35,7 @@ import java.util.concurrent.Executor;
  */
 public class MySqlConnection extends BaseConnection implements Connection {
     // logger
-    private static IndentLogger _il = IndentLogger.getIndentLogger(MySqlConnection.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(MySqlConnection.class);
     private QualifiedId _qiTableDropCascade = null;
 
     public QualifiedId getTableDropCascade() {
@@ -73,7 +74,6 @@ public class MySqlConnection extends BaseConnection implements Connection {
      */
     @Override
     public String nativeSQL(String sql) {
-        _il.enter(sql);
         SqlFactory sf = new MySqlSqlFactory();
         SqlStatement ss = sf.newSqlStatement();
         ss.parse(sql);
@@ -111,14 +111,13 @@ public class MySqlConnection extends BaseConnection implements Connection {
                                 _qiTableWithoutPrimaryKey = qiTable;
                             rs.close();
                         } catch (SQLException se) {
-                            _il.exception(se);
+                            log.error("Exception logged", se);
                         }
                     }
                 }
             }
         }
         sql = ss.format();
-        _il.exit(sql);
         return sql;
     }
 

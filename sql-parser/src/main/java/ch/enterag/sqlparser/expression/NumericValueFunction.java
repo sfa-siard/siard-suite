@@ -13,7 +13,6 @@ import ch.enterag.sqlparser.expression.enums.TimeZoneField;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.utils.BU;
 import ch.enterag.utils.SU;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,7 +20,6 @@ import java.math.RoundingMode;
 public class NumericValueFunction
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(NumericValueFunction.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -670,9 +668,6 @@ public class NumericValueFunction
             NumericValueExpression nveWidthBucketBound1,
             NumericValueExpression nveWidthBucketBound2,
             NumericValueExpression nveWidthBucketCount) {
-        _il.enter(nf, sve1, sve2, df, tzf, dve, ive, sve, ave, mve, nve, nve2,
-                  nveWidthBucketOperand, nveWidthBucketBound1, nveWidthBucketBound2,
-                  nveWidthBucketCount);
         setNumericFunction(nf);
         setFirstStringValueExpression(sve1);
         setSecondStringValueExpression(sve2);
@@ -689,7 +684,6 @@ public class NumericValueFunction
         setWidthBucketBound1(nveWidthBucketBound1);
         setWidthBucketBound2(nveWidthBucketBound2);
         setWidthBucketCount(nveWidthBucketCount);
-        _il.exit();
     }
 
 

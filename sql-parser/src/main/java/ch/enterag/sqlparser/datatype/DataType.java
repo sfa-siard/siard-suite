@@ -6,7 +6,6 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 public class DataType
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(DataType.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -337,7 +335,6 @@ public class DataType
                            QualifiedId qScopeTable,
                            DataType dtCollection,
                            int iLength) {
-        _il.enter(type, pt, qUdtName, listFieldDefinitions, qScopeTable, dtCollection, String.valueOf(iLength));
         setType(type);
         setPredefinedType(pt);
         setUdtName(qUdtName);
@@ -345,7 +342,6 @@ public class DataType
         setScopeTable(qScopeTable);
         setDataType(dtCollection);
         setLength(iLength);
-        _il.exit();
     }
 
 

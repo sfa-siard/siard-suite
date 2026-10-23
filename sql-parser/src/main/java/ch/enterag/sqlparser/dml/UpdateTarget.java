@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.expression.SimpleValueSpecification;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class UpdateTarget
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(UpdateTarget.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -98,10 +96,8 @@ public class UpdateTarget
     public void initialize(
             Identifier idColumnName,
             SimpleValueSpecification svs) {
-        _il.enter();
         setColumnName(idColumnName);
         setSimpleValueSpecification(svs);
-        _il.exit();
     }
 
 

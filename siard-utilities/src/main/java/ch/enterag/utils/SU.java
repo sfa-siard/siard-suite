@@ -6,6 +6,8 @@ Created    : 15.02.2008, Hartwig Thomas
 
 package ch.enterag.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
@@ -15,7 +17,9 @@ import java.nio.charset.UnsupportedCharsetException;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class SU {
+
     public static final String sUTF8_CHARSET_NAME = "UTF-8";
 
     /**
@@ -125,7 +129,7 @@ public abstract class SU {
             Charset charset = Charset.forName(encoding);
             return new String(buf, charset);
         } catch (UnsupportedCharsetException e) {
-            System.err.println(e.getClass()
+            log.error(e.getClass()
                                 .getName() + ": " + e.getMessage());
             return "Unsupported encoding";
         }

@@ -8,12 +8,10 @@ import ch.enterag.sqlparser.ddl.enums.ReferenceScopeCheck;
 import ch.enterag.sqlparser.ddl.enums.ReferentialAction;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class FieldDefinition
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(FieldDefinition.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -133,12 +131,10 @@ public class FieldDefinition
      * @param raDelete ON DELETE action (or null).
      */
     public void initialize(Identifier idFieldName, DataType dt, ReferenceScopeCheck rc, ReferentialAction raDelete) {
-        _il.enter(idFieldName, dt, rc, raDelete);
         setFieldName(idFieldName);
         setDataType(dt);
         setReferenceScopeCheck(rc);
         setDeleteAction(raDelete);
-        _il.exit();
     }
 
 

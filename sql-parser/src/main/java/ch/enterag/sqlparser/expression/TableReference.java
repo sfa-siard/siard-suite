@@ -9,14 +9,12 @@ import ch.enterag.sqlparser.expression.enums.JoinType;
 import ch.enterag.sqlparser.expression.enums.SampleMethod;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.List;
 
 public class TableReference
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(TableReference.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -280,7 +278,6 @@ public class TableReference
             List<Identifier> listJoinColumnNames,
             SampleMethod sm,
             NumericValueExpression nve) {
-        _il.enter();
         setTablePrimary(tp);
         setJoinOperator(jo);
         setTableReference(tr);
@@ -290,7 +287,6 @@ public class TableReference
         setJoinColumnNames(listJoinColumnNames);
         setSampleMethod(sm);
         setNumericValueExpression(nve);
-        _il.exit();
     }
 
 

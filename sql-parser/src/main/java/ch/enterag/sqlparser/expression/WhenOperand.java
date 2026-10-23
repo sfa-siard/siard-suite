@@ -11,7 +11,6 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.expression.enums.*;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import java.util.List;
 public class WhenOperand
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(WhenOperand.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -592,9 +590,6 @@ public class WhenOperand
             List<QualifiedId> listUdtNames,
             List<Boolean> listExclusives
     ) {
-        _il.enter(co, String.valueOf(bNot), bc, rve, rve2, rve3, so, listRve,
-                  qe, sve, sEscapeLetter, nc, q, bUnique, mt, mve, sc,
-                  listUdtNames, listExclusives);
         setCompOp(co);
         setNot(bNot);
         setBooleanCondition(bc);
@@ -614,7 +609,6 @@ public class WhenOperand
         setSetCondition(sc);
         setUdtNames(listUdtNames);
         setExclusives(listExclusives);
-        _il.exit();
     }
 
 

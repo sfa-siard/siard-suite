@@ -11,7 +11,7 @@ Created    : 08.03.2016, Hartwig Thomas
 ======================================================================*/
 package ch.enterag.utils.jdbc;
 
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
@@ -26,12 +26,10 @@ import java.util.logging.Logger;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class BaseDriver
         implements Driver {
-    /**
-     * logger
-     */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(BaseDriver.class.getName());
+
     /**
      * protocol scheme for JDBC URL
      */
@@ -79,17 +77,17 @@ public abstract class BaseDriver
     }
 
     public static void listRegisteredDrivers() {
-        System.out.println("DriverManager:");
+        log.debug("DriverManager:");
         for (Enumeration<Driver> enumDriver = DriverManager.getDrivers();
              enumDriver.hasMoreElements(); ) {
             Driver driver = enumDriver.nextElement();
-            System.out.println("  " + driver.getClass()
+            log.debug("  " + driver.getClass()
                                             .getName());
         }
-        System.out.println("DriverMapping:");
+        log.debug("DriverMapping:");
         for (String sDriver : _mapWrappedDrivers.keySet()) {
             Driver driverMapped = _mapWrappedDrivers.get(sDriver);
-            System.out.println("  " + sDriver + ": " + driverMapped.getClass()
+            log.debug("  " + sDriver + ": " + driverMapped.getClass()
                                                                    .getName());
         }
     }
@@ -145,13 +143,11 @@ public abstract class BaseDriver
     @Override
     public Connection connect(String url, Properties info)
             throws SQLException {
-        _il.enter(url, info);
         Connection conn = null; // must return null, if the driver is not appropriate
         if (acceptsURL("jdbc:" + getJdbcDriver(url) + ":anything")) {
             _driverWrapped = _mapWrappedDrivers.get(getJdbcDriver(url));
             conn = _driverWrapped.connect(url, info);
         }
-        _il.exit(conn);
         return conn;
     }
 
@@ -160,8 +156,6 @@ public abstract class BaseDriver
      */
     @Override
     public boolean acceptsURL(String url) throws SQLException {
-        _il.enter(url);
-        _il.exit(String.valueOf(false));
         throw new IllegalArgumentException("acceptsURL must be overridden!");
     }
 
@@ -211,7 +205,8 @@ public abstract class BaseDriver
             throwUndefinedMethod(ame);
         }
         if (loggerParent == null)
-            loggerParent = _il.getParent();
+            loggerParent = Logger.getLogger(log.getName())
+                                 .getParent();
         return loggerParent;
     }
 }

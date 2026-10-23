@@ -10,21 +10,20 @@ Created    : 23.06.2017, Hartwig Thomas, Enter AG, Rüti ZH
 package ch.enterag.utils.lang;
 
 import ch.enterag.utils.EU;
-import ch.enterag.utils.logging.IndentLogger;
+import lombok.extern.slf4j.Slf4j;
 
 
 /** Threads implements utilities for detecting the main thread/class.
  * @author Hartwig Thomas
  */
+@Slf4j
 public abstract class Threads {
-    private static IndentLogger _il = IndentLogger.getIndentLogger(Threads.class.getName());
 
 
     /** get the main thread as the thread with the smallest ID.
      * @return main thread.
      */
     public static Thread getMainThread() {
-        _il.enter();
         Thread threadMain = null;
         int iActive = Thread.activeCount();
         Thread[] athread = new Thread[2 * iActive];
@@ -40,7 +39,6 @@ public abstract class Threads {
                 }
             }
         }
-        _il.exit(threadMain.getName());
         return threadMain;
     }
 
@@ -65,7 +63,7 @@ public abstract class Threads {
                 try {
                     clsMain = Class.forName(sClassName);
                 } catch (ClassNotFoundException cnfe) {
-                    System.err.println(EU.getExceptionMessage(cnfe));
+                    log.error(EU.getExceptionMessage(cnfe));
                 }
             }
         }

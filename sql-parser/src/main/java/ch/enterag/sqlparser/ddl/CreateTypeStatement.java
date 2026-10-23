@@ -11,7 +11,6 @@ import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.IdList;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
 public class CreateTypeStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CreateTypeStatement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -405,11 +403,6 @@ public class CreateTypeStatement
             Identifier idCastToSource,
             List<MethodSpecification> listMethodSpecifications
     ) {
-        _il.enter(qTypeName, qSuperType, pdtDistinctBaseType, listAttributeDefinitions,
-                  instantiability, finality,
-                  pdtRefUsing, ilRefFromAttributes, String.valueOf(bRefSystemGenerated),
-                  idCastToRef, idCastToType, idCastToDistinct, idCastToSource,
-                  listMethodSpecifications);
         setTypeName(qTypeName);
         setSuperType(qSuperType);
         setDistinctBaseType(pdtDistinctBaseType);
@@ -423,7 +416,6 @@ public class CreateTypeStatement
         setCastToDistinct(idCastToDistinct);
         setCastToSource(idCastToSource);
         setMethodSpecifications(listMethodSpecifications);
-        _il.exit();
     }
 
 
@@ -435,10 +427,8 @@ public class CreateTypeStatement
             QualifiedId qTypeName,
             PredefinedType pdtDistinctBaseType
     ) {
-        _il.enter(qTypeName, pdtDistinctBaseType);
         setTypeName(qTypeName);
         setDistinctBaseType(pdtDistinctBaseType);
-        _il.exit();
     }
 
 
@@ -449,10 +439,8 @@ public class CreateTypeStatement
     public void initAttributes(
             QualifiedId qTypeName,
             List<AttributeDefinition> listAttributeDefinitions) {
-        _il.enter(qTypeName, listAttributeDefinitions);
         setTypeName(qTypeName);
         setAttributeDefinitions(listAttributeDefinitions);
-        _il.exit();
     }
 
 

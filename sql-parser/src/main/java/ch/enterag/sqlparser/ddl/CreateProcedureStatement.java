@@ -6,7 +6,6 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 public class CreateProcedureStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CreateProcedureStatement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -154,12 +152,10 @@ public class CreateProcedureStatement
             List<SqlParameterDeclaration> listParameters,
             RoutineCharacteristics rc,
             RoutineBody rb) {
-        _il.enter();
         setProcedureName(qiProcedureName);
         setParameters(listParameters);
         setRoutineCharacteristics(rc);
         setRoutineBody(rb);
-        _il.exit();
     }
 
 

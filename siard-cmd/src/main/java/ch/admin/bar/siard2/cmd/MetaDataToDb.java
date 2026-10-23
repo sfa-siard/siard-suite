@@ -362,7 +362,7 @@ public class MetaDataToDb
             stmt.executeUpdate(sqlStatement);
             stmt.close();
         } catch (Exception ex) {
-            System.out.println("Failed SQL statement:\n" + sqlStatement);
+            LOG.error("Failed SQL statement:\n{}", sqlStatement);
             throw ex;
         }
 
@@ -467,7 +467,7 @@ public class MetaDataToDb
                     LOG.info("Table '{}.{}' successfully dropped", qiTable.getSchema(), qiTable.getName());
                 }
             } catch (SQLException se) {
-                System.out.println("  Could not drop " + tm.getMappedTableName() + " " + EU.getExceptionMessage(se));
+                LOG.warn("Could not drop {} {}", tm.getMappedTableName(), EU.getExceptionMessage(se));
             }
         }
     }

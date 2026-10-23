@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.Identifier;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class AlterTypeStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(AlterTypeStatement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -167,13 +165,11 @@ public class AlterTypeStatement
             Identifier idAttributeName,
             MethodSpecification ms,
             MethodDesignator md) {
-        _il.enter(qTypeName, ad, idAttributeName, ms, md);
         setTypeName(qTypeName);
         setAttributeDefinition(ad);
         setAttributeName(idAttributeName);
         setMethodSpecification(ms);
         setMethodDesignator(md);
-        _il.exit();
     }
 
 

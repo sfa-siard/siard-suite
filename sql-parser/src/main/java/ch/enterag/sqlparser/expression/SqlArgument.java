@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class SqlArgument
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(SqlArgument.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -186,11 +184,9 @@ public class SqlArgument
             ValueExpression ve,
             QualifiedId qiUdtName,
             TargetSpecification ts) {
-        _il.enter(ve, qiUdtName, ts);
         setValueExpression(ve);
         setUdtName(qiUdtName);
         setTargetSpecification(ts);
-        _il.exit();
     }
 
 

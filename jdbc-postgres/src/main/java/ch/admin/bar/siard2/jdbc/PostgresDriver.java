@@ -11,7 +11,6 @@ Created    : 25.07.2019, Hartwig Thomas, Enter AG, Rüti ZH, Switzerland
 package ch.admin.bar.siard2.jdbc;
 
 import ch.enterag.utils.jdbc.BaseDriver;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -26,7 +25,6 @@ public class PostgresDriver
         extends BaseDriver
         implements Driver {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(PostgresDriver.class.getName());
     /** protocol sub scheme for Postgres JDBC URL */
     public static final String sPOSTGRES_SCHEME = "postgresql";
     /** URL prefix for Postgres JDBC URL */
@@ -62,9 +60,7 @@ public class PostgresDriver
     /** {@inheritDoc}*/
     @Override
     public boolean acceptsURL(String url) throws SQLException {
-        _il.enter(url);
         boolean bAccepts = url.startsWith(sPOSTGRES_URL_PREFIX);
-        _il.exit(bAccepts);
         return bAccepts;
     }
 
@@ -75,14 +71,12 @@ public class PostgresDriver
     @Override
     public Connection connect(String url, Properties info)
             throws SQLException {
-        _il.enter(url, info);
         Connection conn = super.connect(url, info);
         if (conn != null) {
             if (conn instanceof PostgresConnection)
                 throw new SQLException("PostgresDriver.connect() returned a wrapped connection!");
             conn = new PostgresConnection(conn);
         }
-        _il.exit(conn);
         return conn;
     }
 

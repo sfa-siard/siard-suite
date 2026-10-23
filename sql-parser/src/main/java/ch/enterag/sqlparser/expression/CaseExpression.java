@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 public class CaseExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CaseExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -368,10 +366,6 @@ public class CaseExpression
             List<BooleanValueExpression> listBooleanValueExpressions,
             List<ValueExpression> listWhenResults,
             ValueExpression veElseResult) {
-        _il.enter(String.valueOf(bNullIf), ve1, ve2,
-                  String.valueOf(bCoalesce), listValueExpressions,
-                  String.valueOf(bOverlaps), rvp, listWhenOperands,
-                  listBooleanValueExpressions, listWhenResults, veElseResult);
         setNullIf(bNullIf);
         setFirstValueExpression(ve1);
         setSecondValueExpression(ve2);
@@ -383,7 +377,6 @@ public class CaseExpression
         setBooleanValueExpressions(listBooleanValueExpressions);
         setWhenResults(listWhenResults);
         setElseResult(veElseResult);
-        _il.exit();
     }
 
 

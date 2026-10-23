@@ -10,12 +10,10 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.expression.enums.BooleanLiteral;
 import ch.enterag.sqlparser.expression.enums.BooleanOperator;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class BooleanValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(BooleanValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -280,14 +278,12 @@ public class BooleanValueExpression
             BooleanValueExpression bve2,
             BooleanPrimary bp,
             BooleanLiteral bl) {
-        _il.enter(bNot, bo, bve, bve2, bp, bl);
         setNot(bNot);
         setBooleanOperator(bo);
         setBooleanValueExpression(bve);
         setSecondBooleanValueExpression(bve2);
         setBooleanPrimary(bp);
         setBooleanLiteral(bl);
-        _il.exit();
     }
 
 

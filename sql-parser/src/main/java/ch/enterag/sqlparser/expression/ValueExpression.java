@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class ValueExpression
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(ValueExpression.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -192,11 +190,9 @@ public class ValueExpression
             CommonValueExpression cve,
             BooleanValueExpression bve,
             RowValueExpression rve) {
-        _il.enter(cve, bve, rve);
         setCommonValueExpression(cve);
         setBooleanValueExpression(bve);
         setRowValueExpression(rve);
-        _il.exit();
     }
 
 

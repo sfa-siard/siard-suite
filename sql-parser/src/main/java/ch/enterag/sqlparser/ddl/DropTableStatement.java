@@ -7,12 +7,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class DropTableStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(DropTableStatement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -94,10 +92,8 @@ public class DropTableStatement
      * @param db drop behavior (not null!).
      */
     public void initialize(QualifiedId qTableName, DropBehavior db) {
-        _il.enter(qTableName, db);
         setTableName(qTableName);
         setDropBehavior(db);
-        _il.exit();
     }
 
 

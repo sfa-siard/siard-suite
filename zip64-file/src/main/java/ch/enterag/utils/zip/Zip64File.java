@@ -15,6 +15,7 @@ package ch.enterag.utils.zip;
 import ch.enterag.utils.BU;
 import ch.enterag.utils.SU;
 import ch.enterag.utils.io.DiskFile;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +30,9 @@ import java.util.zip.ZipException;
  *
  * @author Hartwig Thomas
  */
+@Slf4j
 public class Zip64File {
+
     /**
      * buffer size for I/O
      */
@@ -1165,7 +1168,7 @@ public class Zip64File {
         try {
             feGlobal = (FileEntry) feGlobal.clone();
         } catch (CloneNotSupportedException cnse) {
-            System.err.println(cnse.getMessage());
+            log.error(cnse.getMessage());
         }
         EntryInputStream eis = openEntryInputStream(feGlobal.getName());
         FileEntry feLocal = eis.getFileEntryLocal();
@@ -1173,7 +1176,7 @@ public class Zip64File {
         try {
             feLocal = (FileEntry) feLocal.clone();
         } catch (CloneNotSupportedException cnse) {
-            System.err.println(cnse.getMessage());
+            log.error(cnse.getMessage());
         }
         lSize = eis.getFilePointer() - feGlobal.getOffset(); /* header size */
         m_df.seek(eis.getFilePointer() + feGlobal.getCompressedSize());

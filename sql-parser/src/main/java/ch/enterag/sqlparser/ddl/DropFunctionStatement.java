@@ -7,7 +7,6 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.ddl.enums.DropBehavior;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 public class DropFunctionStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(DropFunctionStatement.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -166,13 +164,11 @@ public class DropFunctionStatement
             List<SqlParameterDeclaration> listParameters,
             DropBehavior db
     ) {
-        _il.enter();
         setSpecific(bSpecific);
         setFunctionName(qiFunctionName);
         setParameterList(bParameterList);
         setParameters(listParameters);
         setDropBehavior(db);
-        _il.exit();
     }
 
 

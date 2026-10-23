@@ -6,7 +6,6 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.datatype.DataType;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 public class ReturnsClause
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(ReturnsClause.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -177,13 +175,11 @@ public class ReturnsClause
             DataType dtCast,
             boolean bCastAsLocator,
             List<TableColumn> listTableColumns) {
-        _il.enter();
         setDataType(dt);
         setAsLocator(bAsLocator);
         setCastDataType(dtCast);
         setCastAsLocator(bCastAsLocator);
         setTableColumns(listTableColumns);
-        _il.exit();
     }
 
 

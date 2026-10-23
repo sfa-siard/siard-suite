@@ -6,12 +6,10 @@ import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.dml.enums.SpecialValue;
 import ch.enterag.sqlparser.expression.ValueExpression;
 import ch.enterag.sqlparser.generated.SqlParser;
-import ch.enterag.utils.logging.IndentLogger;
 
 public class UpdateSource
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(UpdateSource.class.getName());
 
 
     /** visitor initializes fields from parse tree.
@@ -100,10 +98,8 @@ public class UpdateSource
     public void initialize(
             ValueExpression ve,
             SpecialValue sv) {
-        _il.enter();
         setValueExpression(ve);
         setSpecialValue(sv);
-        _il.exit();
     }
 
 

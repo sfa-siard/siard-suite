@@ -12,7 +12,6 @@ package ch.admin.bar.siard2.jdbc;
 import ch.admin.bar.siard2.db2.datatype.Db2PredefinedType;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.database.SqlTypes;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +27,6 @@ import java.text.ParseException;
 public class Db2MetaColumns
         extends Db2ResultSet {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(Db2MetaColumns.class.getName());
 
     private int _iDataType = -1;
     private int _iTypeName = -1;
@@ -38,7 +36,6 @@ public class Db2MetaColumns
 
     static int getDataType(int iDataType, String sTypeName)
             throws SQLException {
-        _il.enter(SqlTypes.getTypeName(iDataType), sTypeName);
         if (sTypeName.equals("GRAPHIC"))
             iDataType = Types.NCHAR;
         else if (sTypeName.equals("VARGRAPHIC"))
@@ -67,7 +64,6 @@ public class Db2MetaColumns
                 throw new SQLException("Type name \"" + sTypeName + "\" could not be parsed!", pe);
             }
         }
-        _il.exit(SqlTypes.getTypeName(iDataType));
         return iDataType;
     }
 
@@ -93,7 +89,6 @@ public class Db2MetaColumns
 
     static long getColumnSize(long lColumnSize, String sTypeName)
             throws SQLException {
-        _il.enter(String.valueOf(lColumnSize), sTypeName);
         if ((lColumnSize > 0) &&
                 (lColumnSize < 0x00000000FFFFFFFFl)) {
             if (sTypeName.equals("GRAPHIC") ||
@@ -103,7 +98,6 @@ public class Db2MetaColumns
                 lColumnSize = lColumnSize / 2;
         } else
             lColumnSize = -1;
-        _il.exit(String.valueOf(lColumnSize));
         return lColumnSize;
     }
 

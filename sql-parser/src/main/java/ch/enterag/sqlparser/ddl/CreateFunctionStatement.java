@@ -6,7 +6,6 @@ import ch.enterag.sqlparser.antlr4.EnhancedSqlBaseVisitor;
 import ch.enterag.sqlparser.antlr4.SqlBase;
 import ch.enterag.sqlparser.generated.SqlParser;
 import ch.enterag.sqlparser.identifier.QualifiedId;
-import ch.enterag.utils.logging.IndentLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 public class CreateFunctionStatement
         extends SqlBase {
     /** logger */
-    private static IndentLogger _il = IndentLogger.getIndentLogger(CreateFunctionStatement.class.getName());
 
     /** visitor initializes fields from parse tree.
      */
@@ -190,13 +188,11 @@ public class CreateFunctionStatement
             ReturnsClause rc,
             RoutineCharacteristics rcs,
             RoutineBody rb) {
-        _il.enter();
         setFunctionName(qiFunctionName);
         setParameters(listParameters);
         setReturnsClause(rc);
         setRoutineCharacteristics(rcs);
         setRoutineBody(rb);
-        _il.exit();
     }
 
 
