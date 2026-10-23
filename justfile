@@ -48,3 +48,10 @@ current-version:
 [group('Releasing')]
 release:
     ./gradlew release
+
+
+alias um := user-manual-pdf
+[doc("Create User Manual PDF")]
+[group('Documentation')]
+user-manual-pdf:
+    ./gradlew :siard-suite-app:asciidoctorPdf
