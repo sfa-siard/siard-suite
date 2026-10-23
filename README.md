@@ -1,5 +1,10 @@
 # SIARD Suite 2.2
 
+[![Build](https://github.com/sfa-siard/siard-suite/actions/workflows/build.yml/badge.svg)](https://github.com/sfa-siard/siard-suite/actions/workflows/build.yml)
+[![Integration Tests](https://github.com/sfa-siard/siard-suite/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/sfa-siard/siard-suite/actions/workflows/integration-tests.yml)
+[![License: CDDL-1.0](https://img.shields.io/badge/License-CDDL--1.0-blue.svg)](LICENSE.txt)
+[![GitHub release](https://img.shields.io/github/v/release/sfa-siard/siard-suite)](https://github.com/sfa-siard/siard-suite/releases)
+
 ## About
 
 SIARD Suite is a comprehensive toolset for archiving relational databases in the SIARD (Software-Independent Archival of Relational Databases) format. The suite ensures long-term preservation and accessibility of database contents, independent of the original database management system.
@@ -17,22 +22,31 @@ This is a Gradle-based monorepo containing multiple modules:
 - `siard-api` - Core API for reading/writing SIARD files
 - `jdbc-*` - Database-specific JDBC wrappers
 - Supporting libraries and utilities
+## Declaration
+
+Contributions to the codebase have been and will be made with the support of AI-assisted
+coding tools. All contributions are reviewed by human maintainers before
+merging, and contributors remain responsible for the code they submit.
+
+When AI tools meaningfully contribute to a change, this is should be disclosed via a
+`Co-Authored-By:` or `Assisted-By:` trailer in the commit message.
+
 
 ## Developer Setup
 
-### Prerequisites
-
-**Java 21 with JavaFX** is required. Download from:
+Java 21 with JavaFX is required. Download it here:
 - [Azul Zulu JDK 21 with FX](https://www.azul.com/downloads/?version=java-21-lts&package=jdk-fx#zulu)
 
-**For [asdf](https://asdf-vm.com/) users:**
+- or use [mise](https://mise.jdx.dev/):
 ```shell
-asdf install
+mise install
 ```
 
-**Docker** is required for running integration tests (uses [Testcontainers](https://www.testcontainers.org/)).
+[Docker](https://docs.docker.com/engine/install/) is required for running integration tests because they use [Testcontainers](https://www.testcontainers.org/)).
 
 ### Running the Application
+
+Note: There is a [justfile](./justfile) that provides convenient aliases for common tasks.
 
 **GUI Application:**
 ```shell
@@ -55,16 +69,7 @@ Then run the CLI tools:
 ./siard-cmd/build/install/siard-cmd/bin/siard-to-db <arguments>
 ```
 
-##  Code Formatting & Git Blame
 
-We recently performed a bulk reformatting of the entire Java codebase to standardize our style. To avoid seeing "style-only" changes when using git blame, we use a .git-blame-ignore-revs file.
-This file contains the commit hashes of the formatting commits. Github will automatically use this file and does not show the formatting commits in the blame.
-
-To ignore these formatting commits in your local terminal or IDE, run the following command once in the project root:
-
-```bash
-git config blame.ignoreRevsFile .git-blame-ignore-revs
-```
 
 ### Building the Project
 
@@ -195,9 +200,15 @@ Documentation is written in [AsciiDoc](https://asciidoctor.org/) and bundled wit
 - [User Manual](docs/user-manual/en/user-manual.adoc)
 - [Software Architecture Document](docs/sad/software-architecture-documentation.md)
 
-## Declaration
-Contributions to the codebase have been made with the support of Windsurf. Windsurf is AI-powered code completion tool, that is trained exclusively on natural language and source code data with [permissive licenses](https://windsurf.com/blog/copilot-trains-on-gpl-codeium-does-not). 
 
 
+##  Code Formatting & Git Blame
 
+We recently performed a bulk reformatting of the entire Java codebase to standardize our style. To avoid seeing "style-only" changes when using git blame, we use a .git-blame-ignore-revs file.
+This file contains the commit hashes of the formatting commits. Github will automatically use this file and does not show the formatting commits in the blame.
 
+To ignore these formatting commits in your local terminal or IDE, run the following command once in the project root:
+
+```bash
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
