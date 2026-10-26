@@ -13,7 +13,7 @@ description = "Base JDBC Wrapper"
 dependencies {
     api(project(":sql-parser"))
 
-    implementation(project(":siard-utilities"))
+    implementation(libs.slf4j.api)
 
     testFixturesApi(libs.junit.jupiter.api)
 

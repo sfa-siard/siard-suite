@@ -63,8 +63,6 @@ dependencies {
     implementation(project(":jdbc-db2"))
 
     runtimeOnly(libs.logback.classic)
-    runtimeOnly(libs.mysql.connector)
-    runtimeOnly(libs.jaxb.runtime)
 
     testImplementation(libs.assertj.core)
     testImplementation(libs.mockito.core)
@@ -75,10 +73,15 @@ dependencies {
     testRuntimeOnly(libs.junit.jupiter.engine)
 
     "integrationTestImplementation"(libs.bouncycastle.bcpkix)
+    "integrationTestImplementation"(libs.bouncycastle.bcprov)
 
+    "integrationTestImplementation"(libs.jackson.annotations)
+    "integrationTestImplementation"(libs.jackson.core)
+    "integrationTestImplementation"(libs.jackson.databind)
     "integrationTestImplementation"(libs.jackson.dataformat.xml)
     "integrationTestImplementation"(libs.jackson.datatype.jdk8)
     "integrationTestImplementation"(libs.testcontainers)
+    "integrationTestImplementation"(libs.testcontainers.jdbc)
     "integrationTestImplementation"(libs.testcontainers.mssql)
     "integrationTestImplementation"(libs.testcontainers.postgresql)
     "integrationTestImplementation"(libs.testcontainers.mysql)
@@ -88,7 +91,6 @@ dependencies {
     "integrationTestImplementation"(libs.testcontainers.junit)
 
     "integrationTestRuntimeOnly"(libs.mariadb.client)
-    "integrationTestRuntimeOnly"(libs.bouncycastle.bcprov)
 }
 
 tasks.withType(JavaExec::class) {

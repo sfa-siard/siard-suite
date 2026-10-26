@@ -2,39 +2,46 @@
 
 Based on the [arc42](https://arc42.org) template for documentation of software and system architecture, by Dr. Peter Hruschka, Dr. Gernot Starke and contributors.
 
-## Table of Contents
-
-- [1. Introduction and Goals](#1-introduction-and-goals)
-- [2. Architecture Constraints](#2-architecture-constraints)
-- [3. System Scope and Context](#3-system-scope-and-context)
-- [4. Building Block View](#4-building-block-view)
-- [5. Risks and Technical Debts](#5-risks-and-technical-debts)
-- [6. Glossary](#6-glossary)
-
 ## 1. Introduction and Goals
 
 ### Requirements Overview
 
-What is SIARD Suite?
 
-- SIARD Suite is a set of tools for the long-term archiving of data stored in relational databases as SIARD archives.
-- SIARD Suite is the reference implementation of the [SIARD Specification](https://siard.dilcis.eu/SIARD%202.2/SIARD%202.2.pdf).
+SIARD Suite is an application that allows users to archive data from relational databases as SIARD archives and restore data from SIARD archives into relational databases. It also serves as the reference implementation of the [SIARD Specification](https://siard.dilcis.eu/SIARD%202.2/SIARD%202.2.pdf).
 
-Main Features:
 
-- Support for multiple relational database management systems.
-- Graphical user interface (GUI) and command-line interface (CLI) for archiving and restoring data.
-- Clients for Windows, Mac, and Linux.
+| Requirement | Description |
+|---|---|
+| Exporting and Restoring relational Data | Data from relational databases can be exported as SIARD archives and restored from SIARD archives. |
+| Supporting SIARD 2.2 | SIARD Suite supports SIARD 2.2, the latest version of the SIARD specification. |
+| Supporting multiple DBMS | Widely used DBMS are supported: MS Access, MS SQL Server, Oracle, PostgreSQL, MySQL, MariaDB, and DB2. |
+| Easy of use | The application is easy to use and provides a user-friendly interface. |
+| Commnand line tool | A command line tool covers the basic import and export functionality |
+| Performance | SIARD Suite must be able to handle large datasets |
+
+
+### Quality Goals
+
+| Prio | Goal | Scenario |
+| --- | --- | --- |
+| 1 | Security | The application must never alter the content of the database when exporting to a SIARD archive. | 
+| 2 | Security | Archived data often includes sensitive and must never be leaked. |
+| 3 | Performance | SIARD Suite must be able to handle large datasets. |
+| 4 | Portability | SIARD Suite and SIARD Cmd run on Linux, Windows, and Mac. |
 
 ### Stakeholders
 
 | Role/Name | Contact | Expectations |
 |---|---|---|
-| Swiss Federal Archives (SFA) | https://github.com/sfa-siard | Long-term archiving of datasets. Support for common relational database systems.<br><br>Reliable, correct archiving of big datasets.<br><br>The software must run given the constraints on SFA laptops and workstations.<br><br>Cost-efficient maintenance and flexible software. |
-| Archives worldwide | - | Long-term archiving of datasets. Support for common relational database systems.<br><br>Reliable, correct archiving of big datasets.<br><br>Quick Issue handling. |
+| Swiss Federal Archives (SFA) | https://github.com/sfa-siard | Long-term archiving of datasets. Support for common relational database systems. Reliable, correct archiving of big datasets. The software must run given the constraints on SFA laptops and workstations.Cost-efficient maintenance and flexible software. |
+| Archives worldwide | - | Long-term archiving of datasets. Support for common relational database systems. Reliable, correct archiving of big datasets. Quick Issue handling. |
 | SIARD Suite users | - | Good User Experience<br>Support for a variety of different DBMS. |
 | Puzzle ITC AG (main contributor) | https://github.com/puzzle | |
+| Bundesamt für Informatik (BIT) | The BIT packages the application for distrubution among SFA workers. They expect the deliverablas to adhere to their security standards. |
 | Developers, contributors | - | Modern Java, clean codebase.<br>Simple setup including a variety of databases with test data. |
+
+
+
 
 ## 2. Architecture Constraints
 
@@ -42,7 +49,8 @@ Main Features:
 
 | Constraint | Explanation, Background |
 |---|---|
-| Swiss Federal Archives (SFA) staff cannot execute binary files or scripts | Computers (aka Bundeslaptops) used by the SFA are managed by the Bundesamt für Informatik und Telekommunikation (BIT). Users are not allowed to install any software on these machines. |
+| SFA staff cannot execute downloaded binary files or scripts | Computers (aka Bundeslaptops) used by the SFA are managed by the Bundesamt für Informatik und Telekommunikation (BIT). Users are not allowed to install any software on these machines. |
+| No JavaFX available for packaging||
 
 ## 3. System Scope and Context
 
@@ -163,3 +171,4 @@ Now that SIARD software has been migrated to Java 17, this old dependency can be
 |---|---|
 | BIT | Bundesamt für Informatik |
 | SFA | Swiss Federal Archives, Bundesarchiv |
+| SIARD | Software Independent Archival of Relational Databases |

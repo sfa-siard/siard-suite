@@ -18,8 +18,8 @@ dependencies {
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.testcontainers.mssql)
-    testImplementation(libs.testcontainers.junit)
     testImplementation(libs.testcontainers.jdbc)
+    testImplementation(libs.testcontainers.junit)
     testImplementation(testFixtures(project(":jdbc-base")))
 
     testRuntimeOnly(libs.junit.jupiter.engine)

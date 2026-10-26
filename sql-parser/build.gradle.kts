@@ -11,8 +11,6 @@ description = "SQL Parser"
 dependencies {
     antlr(libs.antlr4)
     antlr(libs.antlr4.runtime)
-    antlr(libs.antlr4.master)
-    implementation(libs.mssql.jdbc)
     implementation(project(":siard-utilities"))
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)

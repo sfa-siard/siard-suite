@@ -30,20 +30,14 @@ dependencies {
     implementation(project(":sql-parser"))
     implementation(project(":zip64-file"))
 
-    implementation(libs.antlr4.runtime)
-
-    implementation(libs.jaxb.activation)
     implementation(libs.jaxb.api)
-    implementation(libs.jaxb.core)
-    implementation(libs.jaxb.impl)
+    // JAXB impl is needed at compile time: Io.java references com.sun.xml.bind.v2 internals
+    implementation(libs.jaxb.runtime)
 
     implementation(libs.woodstox.stax2)
-    implementation(libs.woodstox.core)
+    // StAX implementation, resolved via ServiceLoader at runtime
+    runtimeOnly(libs.woodstox.core)
 
-    implementation(libs.msv.core)
-    implementation(libs.xsdlib)
-
-    implementation(libs.commons.text)
     implementation(libs.jsoup)
 
     testImplementation(platform(libs.junit.bom))
