@@ -20,7 +20,7 @@ mysql = "8.3.0"
 mssql = "13.4.0.jre11"
 oracle-ojdbc = "19.3.0.0"
 db2-license = "1.1"
-mariadb = "2.7.4"
+mariadb = "3.5.3"
 
 # JAXB & XML
 jaxb-api = "2.3.0"
@@ -31,7 +31,7 @@ woodstox-core = "4.3.0"
 # Testing
 junit-bom = "5.13.4"
 testcontainers = "1.21.4"
-hamcrest = "2.2"
+hamcrest = "3.0"
 assertj = "3.26.3"
 mockito = "5.19.0"
 
@@ -47,11 +47,11 @@ msv-core = "2010.2"
 xsdlib = "2013.2.2"
 jsoup = "1.21.2"
 logback = "1.5.18"
-slf4j = "2.0.16"
-jackson = "2.18.2"
+slf4j = "2.0.17"
+jackson = "2.19.0"
 mslinks = "1.0.6.2"
-jetbrains-annotations = "24.1.0"
-testfx = "4.0.16-alpha"
+jetbrains-annotations = "26.0.2"
+testfx = "4.0.18"
 bouncycastle = "1.84"
 
 [libraries]
@@ -146,7 +146,7 @@ mslinks = { module = "com.github.vatbub:mslinks", version.ref = "mslinks" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 testfx-core = { module = "org.testfx:testfx-core", version.ref = "testfx" }
 testfx-junit5 = { module = "org.testfx:testfx-junit5", version.ref = "testfx" }
-testfx-monocle = { module = "org.testfx:openjfx-monocle", version = "jdk-12.0.1+2" }
+testfx-monocle = { module = "org.testfx:openjfx-monocle", version = "21.0.2" }
 bouncycastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncycastle" }
 bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 
