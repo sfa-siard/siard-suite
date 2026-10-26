@@ -36,6 +36,16 @@ sourceSets {
     }
 }
 
+// integrationTest inherits the unit-test dependencies through the configuration
+// graph (not just the source set classpath), so that dependency-analysis can
+// attribute usages in src/integrationTest correctly.
+configurations.named("integrationTestImplementation") {
+    extendsFrom(configurations.testImplementation.get())
+}
+configurations.named("integrationTestRuntimeOnly") {
+    extendsFrom(configurations.testRuntimeOnly.get())
+}
+
 dependencies {
     implementation(libs.tika.core)
     implementation(libs.slf4j.api)
@@ -60,23 +70,25 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.bouncycastle.bcpkix)
 
-    testImplementation(libs.jackson.dataformat.xml)
-    testImplementation(libs.jackson.datatype.jdk8)
-    testImplementation(libs.testcontainers)
-    testImplementation(libs.testcontainers.mssql)
-    testImplementation(libs.testcontainers.postgresql)
-    testImplementation(libs.testcontainers.mysql)
-    testImplementation(libs.testcontainers.mariadb)
-    testImplementation(libs.testcontainers.oracle)
-    testImplementation(libs.testcontainers.db2)
-    testImplementation(libs.testcontainers.junit)
-
-    testRuntimeOnly(libs.mariadb.client)
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.bouncycastle.bcprov)
+
+    "integrationTestImplementation"(libs.bouncycastle.bcpkix)
+
+    "integrationTestImplementation"(libs.jackson.dataformat.xml)
+    "integrationTestImplementation"(libs.jackson.datatype.jdk8)
+    "integrationTestImplementation"(libs.testcontainers)
+    "integrationTestImplementation"(libs.testcontainers.mssql)
+    "integrationTestImplementation"(libs.testcontainers.postgresql)
+    "integrationTestImplementation"(libs.testcontainers.mysql)
+    "integrationTestImplementation"(libs.testcontainers.mariadb)
+    "integrationTestImplementation"(libs.testcontainers.oracle)
+    "integrationTestImplementation"(libs.testcontainers.db2)
+    "integrationTestImplementation"(libs.testcontainers.junit)
+
+    "integrationTestRuntimeOnly"(libs.mariadb.client)
+    "integrationTestRuntimeOnly"(libs.bouncycastle.bcprov)
 }
 
 tasks.withType(JavaExec::class) {
