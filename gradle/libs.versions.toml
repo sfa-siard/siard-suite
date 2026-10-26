@@ -43,6 +43,8 @@ materialfx = "11.17.0"
 jackcess = "2.1.12"
 json-simple = "1.1.1"
 jts-core = "1.14.0"
+msv-core = "2010.2"
+xsdlib = "2013.2.2"
 jsoup = "1.21.2"
 logback = "1.5.18"
 slf4j = "2.0.16"
@@ -87,6 +89,8 @@ woodstox-core = { module = "org.codehaus.woodstox:woodstox-core-lgpl", version.r
 jackcess = { module = "com.healthmarketscience.jackcess:jackcess", version.ref = "jackcess" }
 json-simple = { module = "com.googlecode.json-simple:json-simple", version.ref = "json-simple" }
 jts-core = { module = "com.vividsolutions:jts-core", version.ref = "jts-core" }
+msv-core = { module = "net.java.dev.msv:msv-core", version.ref = "msv-core" }
+xsdlib = { module = "net.java.dev.msv:xsdlib", version.ref = "xsdlib" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
