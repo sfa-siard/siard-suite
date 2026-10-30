@@ -34,10 +34,10 @@ When AI tools meaningfully contribute to a change, this is should be disclosed v
 
 ## Developer Setup
 
-Java 21 with JavaFX is required. Download it here:
+At least Java 21 with JavaFX is required. Download it here:
 - [Azul Zulu JDK 21 with FX](https://www.azul.com/downloads/?version=java-21-lts&package=jdk-fx#zulu)
 
-- or use [mise](https://mise.jdx.dev/):
+preferrably, use [mise](https://mise.jdx.dev/):
 ```shell
 mise install
 ```
@@ -201,20 +201,20 @@ Documentation is written in [AsciiDoc](https://asciidoctor.org/) and bundled wit
 - [Software Architecture Document](docs/sad/software-architecture-documentation.md)
 
 
-** Undertand Anything
+** Understand Anything
 
-see: https://understand-anything.com/
+[Understand Anything](https://understand-anything.com/) is a project that helps understand what the code really does.
+This projects knowledge graph is commited and you can view it locally, either using your coding agent or just using npx.
 
-Run it locally, use 
+First [install the plugin](https://github.com/Egonex-AI/Understand-Anything) and then run the dashboard:
 ```
 /understand-dashboard 
 ```
 
-or faster and without using tokens:
+or faster and without using tokens (but needs pnpm):
 
 ```
-cd ~/.understand-anything-plugin/packages/dashboard                                                                                                                                                                                                                            
-GRAPH_DIR=<siard-project-root> npx vite --host 127.0.0.1
+GRAPH_DIR="$PWD" pnpm -C ~/.understand-anything-plugin/packages/dashboard exec vite --host 127.0.0.1 
 ```
 
 ##  Code Formatting & Git Blame
