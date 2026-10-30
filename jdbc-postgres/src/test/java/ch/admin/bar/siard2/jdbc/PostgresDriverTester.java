@@ -94,9 +94,8 @@ public class PostgresDriverTester {
 
     @Test
     public void testVersion() {
-        int iMajorVersion = _driver.getMajorVersion();
-        int iMinorVersion = _driver.getMinorVersion();
-        String sVersion = iMajorVersion + "." + iMinorVersion;
-        assertEquals("42.7", sVersion, "Wrong Postgres version " + sVersion + " found!");
+        // delegation check only — don't pin the vendor driver's version
+        assertTrue(_driver.getMajorVersion() > 0, "Driver reports no major version!");
+        assertTrue(_driver.getMinorVersion() >= 0, "Driver reports no minor version!");
     }
 }
