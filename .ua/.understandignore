@@ -1,0 +1,127 @@
+# .understandignore — patterns for files/dirs to exclude from analysis
+# Syntax: same as .gitignore (globs, # comments, ! negation, trailing / for dirs)
+# Lines below are suggestions — uncomment to activate.
+# Use ! prefix to force-include something excluded by defaults.
+#
+# Built-in defaults (always excluded unless negated):
+#   node_modules/, .git/, dist/, build/, obj/, *.lock, *.min.js, etc.
+#
+
+# --- From .gitignore (uncomment to exclude) ---
+
+# !.mvn/wrapper/maven-wrapper.jar
+# !**/src/main/**/target/
+# !**/src/test/**/target/
+# !**/src/main/**/build/
+# !**/src/test/**/build/
+# .gradle/
+# *.iws
+# *.iml
+# *.ipr
+# .apt_generated
+# .classpath
+# .factorypath
+# .project
+# .settings
+# .springBeans
+# .sts4-cache
+# /nbproject/private/
+# /nbbuild/
+# /nbdist/
+# /.nb-gradle/
+# .DS_Store
+# .tool-versions
+# junit*.*
+# **/tmp/
+# **/src/test/resources/tmp/*
+# !**/.keep
+# **/doc/javadoc/
+# *.siard
+# /lobs/
+# siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/doc
+
+# --- Detected directories (uncomment to exclude) ---
+
+# docs/
+# scripts/
+
+# --- Test file patterns (uncomment to exclude) ---
+
+# JS / TS
+# *.test.*
+# *.spec.*
+# *.snap
+# C# / .NET
+# **/*Tests.cs
+# **/*Test.cs
+# **/*Fixture.cs
+# **/*.Tests.csproj
+# Java / Kotlin
+**/src/test/**
+# **/*Test.java
+# **/*IT.java
+# **/*Spec.kt
+# Go
+# **/*_test.go
+# C++
+# **/*_test.cc
+# **/*_test.cpp
+# **/*_test.cxx
+# **/*Test.cc
+# **/*Test.cpp
+# **/*_unittest.cc
+# **/*_unittest.cpp
+# **/*_browsertest.cc
+# **/*_benchmark.cc
+# **/*Benchmark.cpp
+# Python
+# **/test_*.py
+# **/*_test.py
+# **/tests.py
+# **/conftest.py
+# Rust
+# **/tests.rs
+# **/test_*.rs
+# **/*_test.rs
+# **/bench_*.rs
+# **/*_bench.rs
+# Ruby
+# **/*_spec.rb
+# **/*_test.rb
+# **/test_*.rb
+# **/spec_helper.rb
+# **/test_helper.rb
+# **/rails_helper.rb
+# Swift
+# **/Tests/**/*.swift
+# **/Specs/**/*.swift
+
+# --- Project-specific exclusions (added during /understand run) ---
+# Integration test sources and fixtures
+**/src/integrationTest/**
+**/testfiles/**
+# Binary fixtures / archives (not analyzable)
+*.siard
+*.accdb
+*.jar
+*.dll
+*.heif
+*.tiff
+*.webp
+*.odt
+*.ods
+*.db
+*.icns
+# Third-party license boilerplate
+**/doc/licenses/**
+# Scope: core modules + postgres JDBC only (user-selected slice)
+.ua/
+jdbc-mysql/
+jdbc-mssql/
+jdbc-oracle/
+jdbc-db2/
+jdbc-access/
+sql-parser/
+zip64-file/
+siard-utilities/
+**/src/testFixtures/**

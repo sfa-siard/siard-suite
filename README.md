@@ -201,6 +201,21 @@ Documentation is written in [AsciiDoc](https://asciidoctor.org/) and bundled wit
 - [Software Architecture Document](docs/sad/software-architecture-documentation.md)
 
 
+** Undertand Anything
+
+see: https://understand-anything.com/
+
+Run it locally, use 
+```
+/understand-dashboard 
+```
+
+or faster and without using tokens:
+
+```
+cd ~/.understand-anything-plugin/packages/dashboard                                                                                                                                                                                                                            
+GRAPH_DIR=<siard-project-root> npx vite --host 127.0.0.1
+```
 
 ##  Code Formatting & Git Blame
 
