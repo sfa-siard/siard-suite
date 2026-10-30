@@ -90,6 +90,8 @@ dependencies {
     "integrationTestImplementation"(libs.testcontainers.db2)
     "integrationTestImplementation"(libs.testcontainers.junit)
 
+    "integrationTestImplementation"(libs.mysql.connector)
+
     "integrationTestRuntimeOnly"(libs.mariadb.client)
 }
 

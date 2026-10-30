@@ -19,11 +19,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -90,7 +90,12 @@ public class MySqlFileTypesIT {
     private void loadFilesIntoDatabase() throws SQLException, IOException {
         String[] fileTypes = {"gif", "jpeg", "jpg", "png", "pdf", "webp", "tiff", "heif"};
 
-        try (Connection connection = DriverManager.getConnection(db.getJdbcUrl(), db.getUsername(), db.getPassword())) {
+        // Bypass DriverManager: the SIARD MySqlDriver registered for jdbc:mysql: rewrites
+        // unquoted identifiers to upper case, which breaks case-sensitive MySQL grants.
+        Properties info = new Properties();
+        info.setProperty("user", db.getUsername());
+        info.setProperty("password", db.getPassword());
+        try (Connection connection = new com.mysql.cj.jdbc.Driver().connect(db.getJdbcUrl(), info)) {
             connection.setAutoCommit(false);
 
             String insertSql = "INSERT INTO public.all_files (filename, file_type, file_data) VALUES (?, ?, ?)";
