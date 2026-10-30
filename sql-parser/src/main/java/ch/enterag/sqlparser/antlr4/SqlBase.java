@@ -170,8 +170,12 @@ public abstract class SqlBase {
             sp.getErrorListeners()
               .clear();
             sp.addErrorListener(ErrorListener.getInstance());
+            // LL, not SLL: since ANTLR ~4.10, SLL prediction resolves shared-prefix
+            // alternatives differently and returns a degraded parse (e.g.
+            // "NCHAR VARYING(54)" parsed as NCHAR) without a syntax error, so the
+            // LL retry below would never trigger.
             sp.getInterpreter()
-              .setPredictionMode(PredictionMode.SLL);
+              .setPredictionMode(PredictionMode.LL);
         } catch (IOException ie) {
             log.error("Exception logged", ie);
         }

@@ -38,6 +38,10 @@ dependencies {
     // StAX implementation, resolved via ServiceLoader at runtime
     runtimeOnly(libs.woodstox.core)
 
+    // MSV is loaded reflectively by the JAXB RI's deprecated Validator (ValidatingJAXBContext)
+    runtimeOnly(libs.msv.core)
+    runtimeOnly(libs.xsdlib)
+
     implementation(libs.jsoup)
 
     testImplementation(platform(libs.junit.bom))

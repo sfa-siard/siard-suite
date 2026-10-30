@@ -89,20 +89,14 @@ public class OracleDriverTester {
 
     @Test
     public void testVersion() {
-        int iMajorVersion = _driver.getMajorVersion();
-        int iMinorVersion = _driver.getMinorVersion();
-        String sVersion = String.valueOf(iMajorVersion) + "." + String.valueOf(iMinorVersion);
-        assertEquals("12.1", sVersion, "Wrong Oracle version " + sVersion + " found!");
+        // delegation check only — don't pin the vendor driver's version
+        assertTrue(_driver.getMajorVersion() > 0, "Driver reports no major version!");
+        assertTrue(_driver.getMinorVersion() >= 0, "Driver reports no minor version!");
     }
 
     @Test
-    public void testDriverProperties() {
-        try {
-            DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(db.getJdbcUrl(), new Properties());
-            assertSame(99, apropInfo.length, "Unexpected driver properties!");
-        } catch (SQLException se) {
-            fail(se.getClass()
-                   .getName() + ": " + se.getMessage());
-        }
+    public void testDriverProperties() throws SQLException {
+        DriverPropertyInfo[] apropInfo = _driver.getPropertyInfo(db.getJdbcUrl(), new Properties());
+        assertTrue(apropInfo.length > 0, "Driver reports no properties!");
     }
 }

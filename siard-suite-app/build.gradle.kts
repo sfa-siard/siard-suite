@@ -167,6 +167,16 @@ runtime {
 
 tasks.test {
     useJUnitPlatform()
+
+    // Tests must run on a JDK without bundled JavaFX: the foojay resolver
+    // provisions a Temurin JDK. On an FX-bundled JDK (e.g. zulu-javafx),
+    // javafx.graphics is a named module and openjfx-monocle on the classpath
+    // cannot access its internals (IllegalAccessError in NativePlatform).
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(21))
+        vendor.set(JvmVendorSpec.ADOPTIUM)
+    })
+
     jvmArgs(
         "-Djava.awt.headless=true",
         "-Dtestfx.headless=true",

@@ -6,6 +6,16 @@ plugins {
 group = "ch.admin.bar"
 version = scmVersion.version
 
+// lombok is auto-added to compileOnly/annotationProcessor by the io.freefair.lombok
+// plugin, so any advice about it is a false positive
+dependencyAnalysis {
+    issues {
+        all {
+            onAny { exclude("org.projectlombok:lombok") }
+        }
+    }
+}
+
 subprojects {
     group = rootProject.group
     version = rootProject.version

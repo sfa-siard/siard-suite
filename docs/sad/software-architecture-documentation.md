@@ -165,6 +165,30 @@ graph TD
 For compatibility with Java 8, Siard Suite has been using a MaterialFx dependency that was ported to Java 8: https://github.com/Glavo/MaterialFX-Java8.
 Now that SIARD software has been migrated to Java 17, this old dependency can be replaced with the official one: https://github.com/palexdev/MaterialFX. However, there are likely to be some breaking changes and the UI might have to be adapted.
 
+### JDBC wrapper drivers hijack `DriverManager`
+
+The `jdbc-*` modules register their wrapper `Driver` implementations (e.g. `MySqlDriver`) via `META-INF/services/java.sql.Driver`. On registration they deregister the native drivers and intercept every `DriverManager.getConnection("jdbc:mysql:...")` in the JVM. The wrappers rewrite SQL through the ANTLR parser: unquoted identifiers are upper-cased and `sessionVariables=sql_mode='ANSI,...'` is forced. That is intended for the SIARD code paths, but it also affects plain JDBC consumers (tests, testcontainers init scripts).
+
+Example: `INSERT INTO public.all_files` is sent as `INSERT INTO PUBLIC.ALL_FILES`, which fails on case-sensitive MySQL (`INSERT command denied`). Previously this was masked because `mariadb-java-client` 2.x claimed `jdbc:mysql:` URLs first; version 3.x correctly declines when `com.mysql.cj.jdbc.Driver` is present, exposing the wrapper.
+
+Systemic fix: remove the service-loader registration (`META-INF/services/java.sql.Driver`) from the `jdbc-*` modules and let SIARD code load the wrappers explicitly (`SiardConnection.loadValidDriver` already does `Class.forName` + `driver.connect()`), so unrelated `DriverManager` users keep the native drivers. Until then, code that needs a raw connection must bypass `DriverManager` (instantiate the vendor driver directly).
+
+### Deferred Dependency Upgrades
+
+After the dependency cleanup (Oct 2026), the following upgrades were identified but deliberately deferred. See `gradle/libs.versions.toml` in the siard-suite repository for current versions.
+
+| Dependency  | Current                              | Available                          | Effort / Risk                                                                                             |
+|-------------|--------------------------------------|------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| JavaFX      | 17.0.7                               | 21 / 25                            | Large version jump for `siard-suite-app`; verify UI + jpackage/runtime image                              |
+| MaterialFX  | 11.17.0                              | 21.x-alpha only                    | No stable release; keep until one exists                                                                  |
+| JTS         | `com.vividsolutions:jts-core` 1.14.0 | `org.locationtech:jts-core` 1.20.0 | Package relocation `com.vividsolutions` -> `org.locationtech`; requires code changes in `siard-utilities` |
+| Jackcess    | 2.1.12                               | 4.0.8                              | `jdbc-access` vendors a patched `DatabaseImpl`; port to new API first                                     |
+| JAXB        | `javax.xml.bind` 2.3.x               | `jakarta.xml.bind` 4.x             | Namespace migration `javax` -> `jakarta` across `siard-api` + generated code                              |
+| json-simple | 1.1.1                                | unmaintained                       | Replace with Jackson/Gson eventually                                                                      |
+| Tika        | 3.2.3                                | 4.0.0-alpha only                   | Wait for stable 4.x                                                                                       |
+
+Note: MSV (`msv-core`, `xsdlib`) is intentionally kept — it is loaded reflectively by the JAXB RI's deprecated `Validator` API at runtime (`ValidatingJAXBContext`); it appears unused to static analysis but removing it breaks schema validation (`NoClassDefFoundError`).
+
 ## 6. Glossary
 
 | Term | Definition |
