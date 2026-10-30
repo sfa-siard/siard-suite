@@ -1,3 +1,5 @@
 [tools]
 java = "zulu-javafx-21.32.17"
 just = "latest"
+pnpm = "latest"
+node = "latest"

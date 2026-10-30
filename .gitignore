@@ -57,3 +57,8 @@ junit*.*
 
 # ignore generated user manuals
 siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/doc
+
+# ignore understand anything artefacts
+.ua/intermediate/
+.ua/tmp/
+.ua/.trash-*/
