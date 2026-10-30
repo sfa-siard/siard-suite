@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "gitCommitHash": "ab2ff01c93472efa4787d9bdd47097546dd9f504",
-  "generatedAt": "2026-10-28T15:18:41.923Z",
+  "gitCommitHash": "54b64afdfbbf6fc26c8bbe22629096c886937d87",
+  "generatedAt": "2026-10-30T13:18:06.122Z",
   "files": {
     ".agents/skills/code-review/SKILL.md": {
       "filePath": ".agents/skills/code-review/SKILL.md",
@@ -115,22 +115,22 @@
     },
     "README.md": {
       "filePath": "README.md",
-      "contentHash": "92072d0bf7d48b44f3ebe410517b8dc8a1ef0c71a8b7b3b21d6e332ef68d2199",
+      "contentHash": "4e52aaeb34557e0565b8f49978f230940ac01ec80b3098705ba7ececb5a9ca52",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 215,
+      "totalLines": 230,
       "hasStructuralAnalysis": false
     },
     "build.gradle.kts": {
       "filePath": "build.gradle.kts",
-      "contentHash": "27831759e46e64675d67b090149d0f5779eca65a0614bb2ac272afa572b94c88",
+      "contentHash": "36d454b308238920206d19e3070d0926d97d00010948f32d831626e9f6c175d1",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 36,
+      "totalLines": 46,
       "hasStructuralAnalysis": true
     },
     "docker/docker-compose.yaml": {
@@ -265,12 +265,12 @@
     },
     "docs/sad/software-architecture-documentation.md": {
       "filePath": "docs/sad/software-architecture-documentation.md",
-      "contentHash": "8b78fb1a2dfc2586f1c30c332440c902df3a1f54ef5bba159d04e7cc2dfd2563",
+      "contentHash": "98598587c3d797982f86a7319c4031443a82976bd7c14c2fa42e109fbc46ea65",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 175,
+      "totalLines": 199,
       "hasStructuralAnalysis": false
     },
     "docs/sad/web-companion-spike-plan.md": {
@@ -365,12 +365,12 @@
     },
     "gradle/libs.versions.toml": {
       "filePath": "gradle/libs.versions.toml",
-      "contentHash": "c6d1e177aa130cb1b3a9097e190b91d56d76afc5dddc8aaaaa2ffec7b0b2439c",
+      "contentHash": "d4c6202610fdd0b044efbdd8b0f9a868deeac46fd1046288a34d4487be09132d",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 157,
+      "totalLines": 161,
       "hasStructuralAnalysis": false
     },
     "gradle/wrapper/gradle-wrapper.properties": {
@@ -13936,12 +13936,12 @@
     },
     "mise.toml": {
       "filePath": "mise.toml",
-      "contentHash": "05240c4c4bc92dd6cb758d8ad76840aef3525f4bef1de165bdb89761515f0009",
+      "contentHash": "0d281bfa0c07dae395252058a960e0ed8497eb7f1cbfa8fd4a9528fe15bca14a",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 3,
+      "totalLines": 5,
       "hasStructuralAnalysis": false
     },
     "publiccode.yml": {
@@ -14070,7 +14070,7 @@
     },
     "siard-api/build.gradle.kts": {
       "filePath": "siard-api/build.gradle.kts",
-      "contentHash": "d1acd33f8a2e6907e594a7c4b72aae5045d3e097984a7ff6dfd90340ad935e71",
+      "contentHash": "546c707eec45f599750fbf5e9fdd3118bda389428f1c0ca8f82405d329d9aa1c",
       "functions": [
         {
           "name": "registerXjcTask",
@@ -14108,7 +14108,7 @@
       "exports": [
         "registerXjcTask"
       ],
-      "totalLines": 130,
+      "totalLines": 134,
       "hasStructuralAnalysis": true
     },
     "siard-api/doc/specifications/metadata.xml": {
@@ -32097,7 +32097,7 @@
     },
     "siard-cmd/build.gradle.kts": {
       "filePath": "siard-cmd/build.gradle.kts",
-      "contentHash": "d0121172f2aab983d36d22d6745ff77867026951895299c7581625d48baa3f0c",
+      "contentHash": "ca92fc0d56eb8c544ce86ef1021e77eb1eeefd7d52db13de2ae33bc49bae08da",
       "functions": [
         {
           "name": "createDbIntegrationTestTask",
@@ -32128,7 +32128,7 @@
       "exports": [
         "createDbIntegrationTestTask"
       ],
-      "totalLines": 325,
+      "totalLines": 327,
       "hasStructuralAnalysis": true
     },
     "siard-cmd/doc/manual/assets/css/admin.css": {
@@ -36347,7 +36347,7 @@
     },
     "siard-suite-app/build.gradle.kts": {
       "filePath": "siard-suite-app/build.gradle.kts",
-      "contentHash": "5e524e97baf09c16937d2637e31be7fb3c1c2beee618f62e3651cce720d65735",
+      "contentHash": "4c1e8f19c24859d6a356d7d42558932699738c39b62597c7a717dec423f686d0",
       "functions": [],
       "classes": [],
       "imports": [
@@ -36359,7 +36359,7 @@
         }
       ],
       "exports": [],
-      "totalLines": 308,
+      "totalLines": 318,
       "hasStructuralAnalysis": true
     },
     "siard-suite-app/licenses/Apache-license-2.0.txt": {
