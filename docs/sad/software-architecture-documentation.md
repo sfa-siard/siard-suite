@@ -2,10 +2,27 @@
 
 Based on the [arc42](https://arc42.org) template for documentation of software and system architecture, by Dr. Peter Hruschka, Dr. Gernot Starke and contributors.
 
+## Table of Contents
+1. [Introduction and Goals](#1-introduction-and-goals)
+1. [Constraints](#2-constraints)
+1. [Context & Scope](#3-context-and-scope)
+1. [Solution Strategy](#4-solution-strategy)
+1. [Building Block View](#5-building-block-view)
+1. [Runtime View](#6-runtime-view)
+1. [Deployment View](#7-deployment-view)
+1. [Crosscutting Concepts](#8-crosscutting-concepts)
+1. [Architecutural Decisions](#9-architectural-decisions)
+1. [Quality Requirements](#10-quality-requirements)
+1. [Risks and Technical Debts](#11-risks-and-technical-debts)
+1. [Glossary](#12-glossary)
+
+
 ## 1. Introduction and Goals
 
-### Requirements Overview
+> _Disclaimer:
+This document describes the intended future software architecture of the SIARD Suite after the Migration from JavaFX to a web based user interface. It is not in sync with the current code base! Check the git history to see what changed._
 
+### 1.1. Requirements Overview
 
 SIARD Suite is an application that allows users to archive data from relational databases as SIARD archives and restore data from SIARD archives into relational databases. It also serves as the reference implementation of the [SIARD Specification](https://siard.dilcis.eu/SIARD%202.2/SIARD%202.2.pdf).
 
@@ -20,7 +37,9 @@ SIARD Suite is an application that allows users to archive data from relational 
 | Performance | SIARD Suite must be able to handle large datasets |
 
 
-### Quality Goals
+### 1.2. Quality Goals
+
+> TODO: review quality goals using https://quality.arc42.org/
 
 | Prio | Goal | Scenario |
 | --- | --- | --- |
@@ -29,74 +48,85 @@ SIARD Suite is an application that allows users to archive data from relational 
 | 3 | Performance | SIARD Suite must be able to handle large datasets. |
 | 4 | Portability | SIARD Suite and SIARD Cmd run on Linux, Windows, and Mac. |
 
-### Stakeholders
+### 1.3. Stakeholders
+
+> Only stakeholders interested in the documentation are included.
 
 | Role/Name | Contact | Expectations |
 |---|---|---|
-| Swiss Federal Archives (SFA) | https://github.com/sfa-siard | Long-term archiving of datasets. Support for common relational database systems. Reliable, correct archiving of big datasets. The software must run given the constraints on SFA laptops and workstations.Cost-efficient maintenance and flexible software. |
-| Archives worldwide | - | Long-term archiving of datasets. Support for common relational database systems. Reliable, correct archiving of big datasets. Quick Issue handling. |
-| SIARD Suite users | - | Good User Experience<br>Support for a variety of different DBMS. |
-| Puzzle ITC AG (main contributor) | https://github.com/puzzle | |
-| Bundesamt für Informatik (BIT) | The BIT packages the application for distrubution among SFA workers. They expect the deliverablas to adhere to their security standards. |
-| Developers, contributors | - | Modern Java, clean codebase.<br>Simple setup including a variety of databases with test data. |
+| Swiss Federal Archives (SFA) | https://github.com/sfa-siard | How can the software run on SFA laptops and workstations given the constraints by the BIT. |
+| Developers and Contributors | | Learn about the project structure and how to contribute. |
+| Bundesamt für Informatik (BIT) | The BIT packages the application for distrubution on Bundeslaptops. They expect the deliverablas to adhere to their security standards. |
 
+## 2. Constraints
 
-
-
-## 2. Architecture Constraints
-
-### Technical Constraints
+### 2.1. Technical Constraints
 
 | Constraint | Explanation, Background |
 |---|---|
-| SFA staff cannot execute downloaded binary files or scripts | Computers (aka Bundeslaptops) used by the SFA are managed by the Bundesamt für Informatik und Telekommunikation (BIT). Users are not allowed to install any software on these machines. |
-| No JavaFX available for packaging||
+| Java | The existing Libraries are written in Java. Porting to a different language is not an option. |
+| BIT Guidelines for packages | The BIT has strict guidelines for packages that are distributed to Bundeslaptops. One of them is that no JavaFX libraries can be included. _Important: There might be other constraints that will be revealed during the development process._ |
+| Database connections | SIARD Suite must be able to connect to actually connect to a database. This means the application must be in the same network as the database, or it must be possible to establish a connection to the network. |
 
-## 3. System Scope and Context
+### 2.2. Organizational Constraints
 
-### Business Context
+| Constraint | Explanation, Background |
+|---|---|
+| Bundeslaptops | Bundeslaptops used by the SFA and other federal agencies are managed by the Bundesamt für Informatik und Telekommunikation (BIT). Users are not allowed to install any software on these machines, except the software is provided by the BIT. |
+
+### 2.3. Conventions
+
+| Constraint | Explanation, Background |
+|---|---|
+| Modernising Legacy Code | Legacy code uses naming and structure that is not in line with modern Java practices. In general, new code should not follow the conventions of legacy code but use modern style. |
+| Coding AIs | The project provides `AGENTS.md` and provides some basic skills. When AI tools meaningfully contribute to a change, this is should be disclosed via a `Co-Authored-By:` or `Assisted-By:` trailer in the commit message. |
+
+## 3. Context and Scope
+
+### 3.1. Business Context
 
 ```mermaid
 graph LR
-    access[(MS Access)]
-    mssqlserver[(MS SQL Server)]
-    oracle[(Oracle)]
-    postgres[(PostGreSQL)]
-    mysql[(MySQL)]
-    mariadb[(Maria DB)]
-    db2[(IBM DB2)]
+    database[(Database)]
+    
     suite[SIARD Suite]
     archive[[SIARD Archive]]
     html[[HTML]]
 
 
-access <--> suite
-mssqlserver <--> suite
-oracle <--> suite
-postgres <--> suite
-mysql <--> suite
-mariadb <--> suite
-db2 <--> suite
-
-suite <--> archive
-suite --> html
+database <--archive/ upload---> suite
+suite <--export/ open---> archive
+suite --export---> html
 ```
 
-The Application `SIARD Suite` is able to read data from various database systems in order to create a SIARD Archive file. The application can also read a SIARD Archive and upload it into a database. This is not necessarily the same DBMS as the original data source.
+`SIARD Suite` reads data from various database systems in order to create a SIARD Archive file. The application can also read a SIARD Archive and upload it into a database. This is not necessarily the same DBMS as the original data source.
 
 A (somewhat limited) export function allows users to export data from an archive as html files.
 
-### Technical Context
+Supported Databases are:
+- PostgresQL
+- MS SQL Server
+- Oracle
+- MySQL
+- MariaDB
+- DB2
+- MS Access
 
-SIARD Suite is a standalone Java Application that runs on Linux, Windows, and Mac. The connection to the databases is done using vendor-specific JDBC drivers using a jdbc url.
+### 3.2. Technical Context
 
-## 4. Building Block View
+> TODO
 
-### Whitebox Overall System
+## 4. Solution Strategy
+
+> intentionally left blank for now
+
+## 5. Building Block View
+
+### 5.1. Whitebox Overall System
 
 ```mermaid
 graph TD
-    siardsuite[SiardSuite]
+    siardsuite[Siard Suite App]
     siardapi[SiardApi]
     siardcmd[SiardCmd]
     sqlparser[SqlParser]
@@ -140,30 +170,44 @@ graph TD
 
 ```
 
-### Contained Building Blocks
+| Module          | Description                                              |
+|-----------------|----------------------------------------------------------|
+| Siard Suite App | The current SIARD Suite Desktop Application using JavaFX |
+| SiardApi        | Core library for reading and writing SIARD 2.2 archive files. It handles the metadata XML (JAXB) and the table data inside the archive. |
+| SiardCmd        | Command-line interface providing `SiardFromDb` (archive a database into SIARD) and `SiardToDb` (restore a SIARD archive into a database). |
+| SqlParser       | ANTLR-based SQL parser. Used to analyze and transform SQL statements and datatypes during archiving and restoring. |
+| JdbcBase        | Abstract base JDBC wrapper shared by all database-specific driver modules. It also provides common test fixtures. |
+| JdbcAccess      | JDBC/ODBC wrapper for reading Microsoft Access databases. |
+| JdbcDb2         | JDBC wrapper for IBM DB2 databases. |
+| JdbcOracle      | JDBC wrapper for Oracle databases. |
+| JdbcMssql       | JDBC wrapper for Microsoft SQL Server databases. |
+| JdbcMysql       | JDBC wrapper for MySQL and MariaDB databases. |
+| JdbcPostgres    | JDBC wrapper for PostgreSQL databases. |
+| SiardUtilities      | Shared utility classes used across the other modules, e.g. for XML handling and progress tracking. |
+| Zip64File       | ZIP64 file format handler used to read and write the ZIP container of `.siard` files, including files larger than 4 GB. |
 
-| Module | Repository |
-|---|---|
-| SiardSuite | https://github.com/sfa-siard/siard-suite |
-| SiardApi | https://github.com/sfa-siard/SiardApi |
-| SiardCmd | https://github.com/sfa-siard/SiardCmd |
-| SqlParser | https://github.com/sfa-siard/SqlParser |
-| JdbcBase | https://github.com/sfa-siard/JdbcBase |
-| JdbcAccess | https://github.com/sfa-siard/JdbcAccess |
-| JdbcDb2 | https://github.com/sfa-siard/JdbcDb2 |
-| JdbcOracle | https://github.com/sfa-siard/JdbcOracle |
-| JdbcMssql | https://github.com/sfa-siard/JdbcMsSql |
-| JdbcMysql | https://github.com/sfa-siard/JdbcMySql |
-| JdbcPostgres | https://github.com/sfa-siard/JdbcPostgres |
-| EnterUtils | https://github.com/sfa-siard/EnterUtilities |
-| Zip64File | https://github.com/sfa-siard/Zip64File |
 
-## 5. Risks and Technical Debts
+## 6. Runtime View
 
-### MaterialFX
+> intentionally left blank for now
 
-For compatibility with Java 8, Siard Suite has been using a MaterialFx dependency that was ported to Java 8: https://github.com/Glavo/MaterialFX-Java8.
-Now that SIARD software has been migrated to Java 17, this old dependency can be replaced with the official one: https://github.com/palexdev/MaterialFX. However, there are likely to be some breaking changes and the UI might have to be adapted.
+## 7. Deployment View
+
+> intentionally left blank for now
+
+## 8. Crosscutting Concepts
+
+> intentionally left blank for now
+ 
+## 9. Architectural Decisions
+
+> intentionally left blank for now
+
+## 10. Quality Requirements
+
+> intentionally left blank for now
+
+## 11. Risks and Technical Debts
 
 ### JDBC wrapper drivers hijack `DriverManager`
 
@@ -189,10 +233,11 @@ After the dependency cleanup (Oct 2026), the following upgrades were identified 
 
 Note: MSV (`msv-core`, `xsdlib`) is intentionally kept — it is loaded reflectively by the JAXB RI's deprecated `Validator` API at runtime (`ValidatingJAXBContext`); it appears unused to static analysis but removing it breaks schema validation (`NoClassDefFoundError`).
 
-## 6. Glossary
+## 12. Glossary
 
 | Term | Definition |
 |---|---|
 | BIT | Bundesamt für Informatik |
+| Bundeslaptop | Systems provided to federal employees based on windows with strict security policies |
 | SFA | Swiss Federal Archives, Bundesarchiv |
 | SIARD | Software Independent Archival of Relational Databases |

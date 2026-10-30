@@ -36,8 +36,8 @@
       "GitHub Actions"
     ],
     "description": "SIARD Suite is a toolset for archiving relational databases in the SIARD 2.2 (Software-Independent Archival of Relational Databases) format, ensuring long-term preservation independent of the original DBMS. Includes a JavaFX desktop GUI, command-line tools, a core SIARD read/write API, and database-specific JDBC wrappers.",
-    "analyzedAt": "2026-10-30T13:18:06.005Z",
-    "gitCommitHash": "54b64afdfbbf6fc26c8bbe22629096c886937d87"
+    "analyzedAt": "2026-10-30T15:41:29.009Z",
+    "gitCommitHash": "bff5bbaa83763904574d18c433357302f52266fd"
   },
   "nodes": [
     {
@@ -29825,20 +29825,6 @@
       "complexity": "moderate"
     },
     {
-      "id": "document:docs/sad/software-architecture-documentation.md",
-      "type": "document",
-      "name": "software-architecture-documentation.md",
-      "filePath": "docs/sad/software-architecture-documentation.md",
-      "summary": "arc42-style software architecture document for SIARD Suite covering requirements and quality goals, SFA/BIT technical constraints, business and technical context, the building-block view of the Gradle modules (siard-suite-app, siard-api, siard-cmd, jdbc-*, sql-parser, zip64-file, siard-utilities), risks and technical debts (MaterialFX, JDBC wrapper DriverManager hijack, deferred dependency upgrades), and a glossary.",
-      "tags": [
-        "documentation",
-        "architecture",
-        "arc42",
-        "sad"
-      ],
-      "complexity": "moderate"
-    },
-    {
       "id": "config:gradle/libs.versions.toml",
       "type": "config",
       "name": "libs.versions.toml",
@@ -29855,21 +29841,6 @@
       "languageNotes": "Gradle TOML version catalog with [versions], [libraries], and [plugins] sections; libraries reference versions via version.ref aliases, auto-loaded by Gradle as the 'libs' catalog."
     },
     {
-      "id": "document:README.md",
-      "type": "document",
-      "name": "README.md",
-      "filePath": "README.md",
-      "summary": "Main project README introducing SIARD Suite 2.2, its Gradle monorepo module layout, developer setup (Java 21+ with JavaFX, mise, Docker/Testcontainers), Gradle build/test/package commands, release versioning, documentation generation, and an Understand Anything knowledge-graph viewing guide; also includes an AI-contribution declaration and git-blame formatting-ignore instructions.",
-      "tags": [
-        "documentation",
-        "entry-point",
-        "overview",
-        "developer-guide",
-        "build-system"
-      ],
-      "complexity": "moderate"
-    },
-    {
       "id": "config:mise.toml",
       "type": "config",
       "name": "mise.toml",
@@ -29881,6 +29852,36 @@
         "developer-environment"
       ],
       "complexity": "simple"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "Project README for SIARD Suite 2.2: project overview, developer setup (mise, Docker, Java 21 with JavaFX, pnpm, node, just), Gradle commands for running/building/testing/packaging, release versioning notes, and an experimental 'Understand Anything' knowledge-graph viewing guide. Includes an AI-contribution declaration and links to the user manual and software architecture document.",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "developer-setup",
+        "build-system",
+        "overview"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/sad/software-architecture-documentation.md",
+      "type": "document",
+      "name": "software-architecture-documentation.md",
+      "filePath": "docs/sad/software-architecture-documentation.md",
+      "summary": "arc42-style software architecture documentation describing the intended post-JavaFX-migration architecture of SIARD Suite: requirements, quality goals, stakeholders, technical/organizational constraints, business context, a module building-block view (siard-suite-app, siard-api, siard-cmd, sql-parser, jdbc-* wrappers, siard-utilities, zip64-file), and risks/technical debts including the JDBC DriverManager hijack issue and deferred dependency upgrades.",
+      "tags": [
+        "documentation",
+        "architecture",
+        "arc42",
+        "design",
+        "technical-debt"
+      ],
+      "complexity": "complex"
     }
   ],
   "edges": [
@@ -47511,36 +47512,43 @@
       "weight": 0.6
     },
     {
-      "source": "document:docs/sad/software-architecture-documentation.md",
-      "target": "file:siard-suite-app/build.gradle.kts",
+      "source": "config:mise.toml",
+      "target": "file:build.gradle.kts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:README.md",
+      "target": "document:docs/sad/software-architecture-documentation.md",
       "type": "documents",
       "direction": "forward",
       "weight": 0.5
     },
     {
-      "source": "document:docs/sad/software-architecture-documentation.md",
-      "target": "file:siard-api/build.gradle.kts",
+      "source": "document:README.md",
+      "target": "document:release-guide.md",
       "type": "documents",
       "direction": "forward",
       "weight": 0.5
     },
     {
-      "source": "document:docs/sad/software-architecture-documentation.md",
-      "target": "file:siard-cmd/build.gradle.kts",
+      "source": "document:README.md",
+      "target": "config:mise.toml",
       "type": "documents",
       "direction": "forward",
       "weight": 0.5
     },
     {
-      "source": "document:docs/sad/software-architecture-documentation.md",
-      "target": "file:jdbc-base/build.gradle.kts",
+      "source": "document:README.md",
+      "target": "pipeline:.github/workflows/build.yml",
       "type": "documents",
       "direction": "forward",
       "weight": 0.5
     },
     {
-      "source": "document:docs/sad/software-architecture-documentation.md",
-      "target": "file:jdbc-postgres/build.gradle.kts",
+      "source": "document:README.md",
+      "target": "pipeline:.github/workflows/integration-tests.yml",
       "type": "documents",
       "direction": "forward",
       "weight": 0.5
@@ -47554,21 +47562,7 @@
     },
     {
       "source": "document:docs/sad/software-architecture-documentation.md",
-      "target": "function:siard-cmd/src/main/java/ch/admin/bar/siard2/cmd/SiardConnection.java:loadValidDriver",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:docs/sad/software-architecture-documentation.md",
-      "target": "file:jdbc-base/src/main/java/ch/enterag/utils/jdbc/BaseDriver.java",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:docs/sad/software-architecture-documentation.md",
-      "target": "file:siard-api/src/main/java/ch/enterag/utils/jaxb/ValidatingJAXBContext.java",
+      "target": "document:AGENTS.md",
       "type": "documents",
       "direction": "forward",
       "weight": 0.5
@@ -55196,69 +55190,6 @@
       "direction": "forward",
       "weight": 0.7,
       "recoveredFromImportMap": true
-    },
-    {
-      "source": "document:README.md",
-      "target": "file:siard-suite-app/src/main/java/ch/admin/bar/siardsuite/SiardApplication.java",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:README.md",
-      "target": "file:siard-cmd/src/main/java/ch/admin/bar/siard2/cmd/SiardFromDb.java",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:README.md",
-      "target": "file:siard-cmd/src/main/java/ch/admin/bar/siard2/cmd/SiardToDb.java",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:README.md",
-      "target": "document:docs/sad/software-architecture-documentation.md",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:README.md",
-      "target": "document:release-guide.md",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:README.md",
-      "target": "pipeline:.github/workflows/build.yml",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:README.md",
-      "target": "pipeline:.github/workflows/integration-tests.yml",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "document:README.md",
-      "target": "file:justfile",
-      "type": "documents",
-      "direction": "forward",
-      "weight": 0.5
-    },
-    {
-      "source": "config:mise.toml",
-      "target": "file:build.gradle.kts",
-      "type": "configures",
-      "direction": "forward",
-      "weight": 0.6
     }
   ],
   "layers": [

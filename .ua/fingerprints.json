@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "gitCommitHash": "54b64afdfbbf6fc26c8bbe22629096c886937d87",
-  "generatedAt": "2026-10-30T13:18:06.122Z",
+  "gitCommitHash": "bff5bbaa83763904574d18c433357302f52266fd",
+  "generatedAt": "2026-10-30T15:41:29.095Z",
   "files": {
     ".agents/skills/code-review/SKILL.md": {
       "filePath": ".agents/skills/code-review/SKILL.md",
@@ -115,12 +115,12 @@
     },
     "README.md": {
       "filePath": "README.md",
-      "contentHash": "4e52aaeb34557e0565b8f49978f230940ac01ec80b3098705ba7ececb5a9ca52",
+      "contentHash": "7f284ee7bea0b704bbed73206159069ad6021b8d9d464aef07115e651f18d9cd",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 230,
+      "totalLines": 224,
       "hasStructuralAnalysis": false
     },
     "build.gradle.kts": {
@@ -265,12 +265,12 @@
     },
     "docs/sad/software-architecture-documentation.md": {
       "filePath": "docs/sad/software-architecture-documentation.md",
-      "contentHash": "98598587c3d797982f86a7319c4031443a82976bd7c14c2fa42e109fbc46ea65",
+      "contentHash": "d622b61e25577dec870f15f1dc2ce5a240e1d2f1c68a578c061983685a1b29f6",
       "functions": [],
       "classes": [],
       "imports": [],
       "exports": [],
-      "totalLines": 199,
+      "totalLines": 244,
       "hasStructuralAnalysis": false
     },
     "docs/sad/web-companion-spike-plan.md": {

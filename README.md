@@ -9,40 +9,55 @@
 
 SIARD Suite is a comprehensive toolset for archiving relational databases in the SIARD (Software-Independent Archival of Relational Databases) format. The suite ensures long-term preservation and accessibility of database contents, independent of the original database management system.
 
-**Key Features:**
-- **Graphical Interface**: User-friendly GUI for archiving, restoring, searching, and exporting databases
-- **Command-Line Tools**: Powerful CLI for automated workflows and scripting
-- **Multi-Database Support**: Compatible with PostgreSQL, MySQL, Oracle, MS SQL Server, DB2, and MS Access
-- **SIARD Format 2.2**: Compliant with the latest SIARD standard for database archival
+**Learn more about the project:**
+- [User Manual](docs/user-manual/en/user-manual.adoc)
+- [Software Architecture Document](docs/sad/software-architecture-documentation.md)
 
-**Project Structure:**
-This is a Gradle-based monorepo containing multiple modules:
-- `siard-suite-app` - Desktop application with GUI
-- `siard-cmd` - Command-line interface
-- `siard-api` - Core API for reading/writing SIARD files
-- `jdbc-*` - Database-specific JDBC wrappers
-- Supporting libraries and utilities
+
+**Experimental: Understand Anything**
+
+[Understand Anything](https://understand-anything.com/) is a project that helps understand what the code really does.
+This projects knowledge graph is commited and you can view it locally, either using your coding agent or just using npx.
+
+First [install the plugin](https://github.com/Egonex-AI/Understand-Anything) and then run the dashboard:
+
+```shell
+mise install
+GRAPH_DIR="$PWD" pnpm -C ~/.understand-anything-plugin/packages/dashboard exec vite --host 127.0.0.1 
+```
+
+or use the provided skill using your coding agent:
+
+```
+/understand-dashboard 
+```
+
 ## Declaration
 
-Contributions to the codebase have been and will be made with the support of AI-assisted
-coding tools. All contributions are reviewed by human maintainers before
-merging, and contributors remain responsible for the code they submit.
-
-When AI tools meaningfully contribute to a change, this is should be disclosed via a
+> Contributions to the codebase have been and will be made with the support of AI-assisted
+> coding tools. All contributions are reviewed by human maintainers before
+> merging, and contributors remain responsible for the code they submit.
+>
+> When AI tools meaningfully contribute to a change, this is should be disclosed via a
 `Co-Authored-By:` or `Assisted-By:` trailer in the commit message.
-
 
 ## Developer Setup
 
-At least Java 21 with JavaFX is required. Download it here:
-- [Azul Zulu JDK 21 with FX](https://www.azul.com/downloads/?version=java-21-lts&package=jdk-fx#zulu)
+Install everything with [mise](https://mise.jdx.dev/):
 
-preferrably, use [mise](https://mise.jdx.dev/):
 ```shell
 mise install
 ```
 
-[Docker](https://docs.docker.com/engine/install/) is required for running integration tests because they use [Testcontainers](https://www.testcontainers.org/)).
+You'll also need [Docker](https://docs.docker.com/engine/install/) 
+
+If you dont want to use mise, install:
+
+- java 21 with javafx
+- [pnpm](https://pnpm.io/)
+- [node](https://nodejs.org/en)
+- [just](https://just.systems/man/en/)
+- [docker](https://docs.docker.com/engine/install/)
 
 ### Running the Application
 
@@ -68,8 +83,6 @@ Then run the CLI tools:
 # Upload SIARD archive to database
 ./siard-cmd/build/install/siard-cmd/bin/siard-to-db <arguments>
 ```
-
-
 
 ### Building the Project
 
@@ -196,26 +209,7 @@ Documentation is written in [AsciiDoc](https://asciidoctor.org/) and bundled wit
 ./gradlew :siard-suite-app:asciidoctorPdf
 ```
 
-**Available Documentation:**
-- [User Manual](docs/user-manual/en/user-manual.adoc)
-- [Software Architecture Document](docs/sad/software-architecture-documentation.md)
 
-
-** Understand Anything
-
-[Understand Anything](https://understand-anything.com/) is a project that helps understand what the code really does.
-This projects knowledge graph is commited and you can view it locally, either using your coding agent or just using npx.
-
-First [install the plugin](https://github.com/Egonex-AI/Understand-Anything) and then run the dashboard:
-```
-/understand-dashboard 
-```
-
-or faster and without using tokens (but needs pnpm):
-
-```
-GRAPH_DIR="$PWD" pnpm -C ~/.understand-anything-plugin/packages/dashboard exec vite --host 127.0.0.1 
-```
 
 ##  Code Formatting & Git Blame
 
