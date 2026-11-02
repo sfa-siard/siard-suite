@@ -62,3 +62,4 @@ siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/doc
 .ua/intermediate/
 .ua/tmp/
 .ua/.trash-*/
+/AGENTS.local.md
