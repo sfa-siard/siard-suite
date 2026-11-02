@@ -14,6 +14,7 @@
 - [x] 2.2 Implement launch behavior: bind 127.0.0.1 on a random free port, open the default browser at the token URL on startup, and log the URL when no browser is available; verify a manual launch opens the browser (or logs the URL) and `/q/health` returns 200 without a token
 - [x] 2.3 Implement `POST /api/system/shutdown` returning 204 and terminating the process via `Quarkus.asyncExit()`; verify via `@QuarkusTest` that a valid token returns 204 and invalid/missing tokens return 401 (process exit verified manually in task 5.2)
 - [x] 2.4 At startup enumerate `DriverManager.getDrivers()` and log the registered JDBC drivers; verify a packaged/dev run lists all vendor drivers (postgres, mysql, mssql, oracle, db2, access/ucanaccess), proving the full chain loads inside the uber-jar
+- [x] 2.5 Prefer launching a Chromium-family browser with `--app=<url>` (dedicated window, no URL bar) over `Desktop.browse`, probing known browser executables and falling back to `Desktop.browse`; verify a launch opens an app-mode window when Chrome/Edge/Chromium is present and a tab otherwise
 
 ## 3. Archive browsing API
 

@@ -15,7 +15,7 @@ The agent SHALL start a web server bound to 127.0.0.1 on a dynamically selected 
 - **GIVEN** the agent executable is installed
 - **WHEN** the user launches the agent
 - **THEN** a web server listens on 127.0.0.1 on a free port
-- **AND** the default browser is opened at the agent URL
+- **AND** the default browser is opened at the agent URL — as a dedicated application window (`--app=` mode) when a Chromium-family browser is available, otherwise as a normal browser window/tab
 - **AND** the URL contains a per-launch session token
 
 #### Scenario: No browser available

@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.Desktop;
 import java.awt.GraphicsEnvironment;
+import java.io.IOException;
 import java.net.URI;
 import java.sql.DriverManager;
+import java.util.List;
 
 /**
  * Logs the agent URL with the session token, enumerates the JDBC drivers
@@ -54,7 +56,16 @@ public class AgentStartupLogger {
                         LOG.info("JDBC driver registered: {}", driver.getClass().getName()));
     }
 
+    // Chromium-family executables that support --app=<url> (dedicated window,
+    // no URL bar). On Windows they resolve through registered App Paths.
+    private static final List<String> APP_MODE_BROWSERS = List.of(
+            "msedge", "microsoft-edge", "chrome", "google-chrome",
+            "google-chrome-stable", "chromium", "chromium-browser", "brave", "brave-browser");
+
     private void openBrowser(String url) {
+        if (tryAppModeWindow(url)) {
+            return;
+        }
         if (!GraphicsEnvironment.isHeadless()
                 && Desktop.isDesktopSupported()
                 && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -66,5 +77,22 @@ public class AgentStartupLogger {
             }
         }
         LOG.info("No browser opened automatically. Navigate to: {}", url);
+    }
+
+    private boolean tryAppModeWindow(String url) {
+        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        for (String browser : APP_MODE_BROWSERS) {
+            try {
+                ProcessBuilder pb = windows
+                        ? new ProcessBuilder("cmd.exe", "/c", "start", "\"\"", browser, "--app=" + url)
+                        : new ProcessBuilder(browser, "--app=" + url);
+                pb.start();
+                LOG.info("Opened {} in application-window mode", browser);
+                return true;
+            } catch (IOException e) {
+                // not installed — try the next candidate
+            }
+        }
+        return false;
     }
 }
