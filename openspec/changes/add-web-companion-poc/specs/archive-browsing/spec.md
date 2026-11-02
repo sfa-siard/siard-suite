@@ -18,6 +18,19 @@ The agent SHALL open a `.siard` file at a given local filesystem path and return
 - **THEN** the response status is 201
 - **AND** the response body contains an archive id and the file name
 
+#### Scenario: File selected via native dialog
+
+- **GIVEN** the agent is running on a system with a graphical environment
+- **WHEN** a client requests `POST /api/system/file-picker`
+- **THEN** the operating system's native file dialog is presented on the local machine
+- **AND** when the user selects a file the response is 200 with its absolute path
+
+#### Scenario: File selection cancelled or headless
+
+- **GIVEN** the agent is running
+- **WHEN** the user cancels the file dialog, or no graphical environment is available
+- **THEN** `POST /api/system/file-picker` returns 204 with no path
+
 #### Scenario: Nonexistent path
 
 - **GIVEN** the agent is running

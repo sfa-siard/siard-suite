@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { fetchTree, openArchive, type SchemaDto } from './api'
+import { pickFile } from './api'
 
 export default function App() {
   const [path, setPath] = useState('')
@@ -7,18 +8,30 @@ export default function App() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  async function handleOpen() {
+  async function open(target: string) {
     setLoading(true)
     setError(null)
     setSchemas(null)
     try {
-      const opened = await openArchive(path)
+      const opened = await openArchive(target)
       const tree = await fetchTree(opened.id)
       setSchemas(tree.schemas)
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleOpen() {
+    await open(path)
+  }
+
+  async function handleBrowse() {
+    const selected = await pickFile();
+    if (selected) {
+      setPath(selected);
+      await open(selected);
     }
   }
 
@@ -37,6 +50,9 @@ export default function App() {
         />
         <button onClick={handleOpen} disabled={loading || path.trim() === ''}>
           {loading ? 'Opening…' : 'Open'}
+        </button>
+        <button onClick={handleBrowse} disabled={loading} style={{ marginLeft: '0.5rem' }}>
+          Browse…
         </button>
       </div>
       {error && (

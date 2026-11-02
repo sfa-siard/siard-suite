@@ -53,3 +53,10 @@ export async function fetchTree(id: string): Promise<TreeResponse> {
   }
   return response.json()
 }
+
+export async function pickFile(): Promise<string | null> {
+  const response = await apiFetch('/api/system/file-picker', { method: 'POST' });
+  if (response.status === 204) return null;
+  if (!response.ok) throw new Error(`file picker failed: ${response.status}`);
+  return (await response.json()).path;
+}
