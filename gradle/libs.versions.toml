@@ -7,6 +7,8 @@ beryx-runtime = "2.0.1"
 asciidoctor = "4.0.5"
 plantuml = "1.6.0"
 dependency-analysis = "3.6.1"
+quarkus = "3.40.1"
+node-gradle = "7.1.0"
 
 # Core Libraries
 antlr = "4.13.2"
@@ -58,6 +60,9 @@ bouncycastle = "1.84"
 # ANTLR
 antlr4-runtime = { module = "org.antlr:antlr4-runtime", version.ref = "antlr" }
 antlr4 = { module = "org.antlr:antlr4", version.ref = "antlr" }
+
+# Quarkus
+quarkus-bom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
 
 # Apache Commons
 commons-lang = { module = "commons-lang:commons-lang", version.ref = "commons-lang" }
@@ -158,3 +163,5 @@ asciidoctor-convert = { id = "org.asciidoctor.jvm.convert", version.ref = "ascii
 asciidoctor-pdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor" }
 plantuml = { id = "com.cosminpolifronie.gradle.plantuml", version.ref = "plantuml" }
 dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependency-analysis" }
+quarkus = { id = "io.quarkus", version.ref = "quarkus" }
+node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }

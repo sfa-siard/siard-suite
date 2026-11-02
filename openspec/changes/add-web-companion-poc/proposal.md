@@ -6,8 +6,8 @@ The BIT (Swiss Federal Office of IT) does not allow packages containing JavaFX o
 
 ## What Changes
 
-- **New module `siard-web-backend`**: Quarkus application (JVM mode, no GraalVM) that starts on a random localhost port, serves a REST API over `siard-api`, opens the system browser on launch, and supports explicit shutdown. It depends on `siard-cmd`, transitively shipping the full SIARD chain (`siard-api`, `sql-parser`, `siard-utilities`, `jdbc-base`, all `jdbc-*` with drivers) — so a BIT security scan of the PoC package covers the real dependency surface. The entire chain is JavaFX-free, so the deliverable is BIT-compliant by construction.
-- **New module `siard-web-frontend`**: React + Vite application, built via Gradle (node plugin), packaged as a jar exposing the production build under `META-INF/resources` so the backend serves it without extra wiring.
+- **New module `siard-web-backend-poc`**: Quarkus application (JVM mode, no GraalVM) that starts on a random localhost port, serves a REST API over `siard-api`, opens the system browser on launch, and supports explicit shutdown. It depends on `siard-cmd`, transitively shipping the full SIARD chain (`siard-api`, `sql-parser`, `siard-utilities`, `jdbc-base`, all `jdbc-*` with drivers) — so a BIT security scan of the PoC package covers the real dependency surface. The entire chain is JavaFX-free, so the deliverable is BIT-compliant by construction.
+- **New module `siard-web-frontend-poc`**: React + Vite application, built via Gradle (node plugin), packaged as a jar exposing the production build under `META-INF/resources` so the backend serves it without extra wiring.
 - **REST API for archive browsing (PoC slice)**: open a `.siard` file from the local filesystem, read its schema/table/column metadata tree via `Archive` (`siard-api`), expose it to the frontend. Uses the existing `master.siard` fixture for verification.
 - **Session token protection**: the backend issues a one-time token at launch; all `/api/*` requests require it (defense against cross-site requests to localhost / DNS rebinding).
 - **Native packaging**: the backend is packaged with the existing beryx `runtime`/`jpackage` toolchain (same as `siard-suite-app`) producing an installable `.exe`/`.msi` on Windows and `.deb` on Linux, each containing a bundled JRE — no JavaFX modules.
@@ -29,6 +29,6 @@ Out of scope for the PoC: JDBC-based archive upload/download, job progress strea
 ## Impact
 
 - **New code only** — two new Gradle modules added to `settings.gradle.kts`; no existing module's code is modified. The `AGENTS.md` monorepo module table is updated to document the two new modules.
-- **Dependencies added**: Quarkus platform/BOM and `quarkus-rest`/jackson in `siard-web-backend`; a Gradle node/npm plugin in `siard-web-frontend`; additions to `gradle/libs.versions.toml`.
-- **Build/CI**: the existing `deliverables.yml` matrix pattern can later produce `siard-web-backend` artifacts; PoC verifies `jpackage` locally/CI on `windows-latest`.
+- **Dependencies added**: Quarkus platform/BOM and `quarkus-rest`/jackson in `siard-web-backend-poc`; a Gradle node/npm plugin in `siard-web-frontend-poc`; additions to `gradle/libs.versions.toml`.
+- **Build/CI**: the existing `deliverables.yml` matrix pattern can later produce `siard-web-backend-poc` artifacts; PoC verifies `jpackage` locally/CI on `windows-latest`.
 - **No runtime/API breaking changes** to `siard-suite-app`, `siard-cmd`, or `siard-api`.

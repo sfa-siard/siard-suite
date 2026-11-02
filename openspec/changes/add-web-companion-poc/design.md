@@ -14,7 +14,7 @@ See `proposal.md` for motivation (BIT JavaFX ban → web frontend migration path
 **Goals:**
 
 - Prove the target stack end-to-end: Quarkus (JVM mode) hosting `siard-api`, serving a React frontend, packaged as a Windows installer via the existing jpackage toolchain.
-- Establish the module and build wiring (`siard-web-backend`, `siard-web-frontend`) that future web-UI work builds on.
+- Establish the module and build wiring (`siard-web-backend-poc`, `siard-web-frontend-poc`) that future web-UI work builds on.
 - Establish the local-agent lifecycle pattern: random port, launch token, browser open, explicit shutdown.
 
 **Non-Goals:**
@@ -28,18 +28,18 @@ See `proposal.md` for motivation (BIT JavaFX ban → web frontend migration path
 
 ### D1 — Two Gradle modules; frontend ships as a resources jar
 
-`siard-web-backend` (Quarkus) and `siard-web-frontend` (React+Vite+TypeScript, npm via `com.github.node-gradle.node`). The frontend module's `jar` task packs the Vite `dist/` output into `META-INF/resources`; the backend declares `implementation(project(":siard-web-frontend"))`, so Quarkus serves the UI from the classpath with zero config and the packaged artifact is a single jar.
+`siard-web-backend-poc` (Quarkus) and `siard-web-frontend-poc` (React+Vite+TypeScript, npm via `com.github.node-gradle.node`). The frontend module's `jar` task packs the Vite `dist/` output into `META-INF/resources`; the backend declares `implementation(project(":siard-web-frontend-poc"))`, so Quarkus serves the UI from the classpath with zero config and the packaged artifact is a single jar.
 
 - *Alternative — Quinoa*: Quarkus' frontend extension wires npm + dev proxy automatically but expects the UI inside the backend module, contradicting the two-module requirement.
 - *Alternative — frontend as loose files next to the jar*: complicates jpackage layout and the installed layout; the jar approach keeps packaging identical to today.
 
 Java package root for new code: `ch.admin.bar.siardsuite.web` (follows the `siard-suite-app` namespace, which is the GUI-side naming convention; `siard2.*` is the core-library namespace). Note: the `ch.admin.bar.siardsuite.*` namespace is shared across two artifacts (app and web-backend). This is safe while both remain classpath apps — packages are distinct (`siardsuite.web` vs `siardsuite.<existing>`) — but the shared namespace must not be split at package level if either module ever gets a `module-info`.
 
-### D2 — Quarkus JVM mode (uber-jar), packaged with the existing beryx jpackage toolchain
+### D2 — Quarkus JVM mode (fast-jar), packaged with the existing beryx jpackage toolchain
 
-The backend is built with `quarkus.package.jar.type=uber-jar`, producing a single self-contained runner jar whose entry point is `io.quarkus.bootstrap.runner.QuarkusEntryPoint`. The module applies the `application` plugin with `mainClass` set to that entry point, so the existing beryx `runtime` (jlink) + `jpackage` pipeline treats it exactly like `siard-suite-app`: jlink produces a JRE-only runtime image (Quarkus apps are classpath apps — no JPMS module for the app itself), and `jpackage` packages the uber-jar against it → `.exe`/`.msi` on Windows and `.deb` on Linux (jpackage selects the installer type per OS; `.deb` requires `dpkg` tooling on the build host). The Linux package is part of the PoC so the full pipeline is verifiable on the dev machine without a Windows box.
+The backend is built with `quarkus.package.jar.type=fast-jar` (`build/quarkus-app/` layout: run jar + `quarkus/`, `app/`, `lib/` siblings) and the `application` plugin with `mainClass = io.quarkus.bootstrap.runner.QuarkusEntryPoint`. An `installDist` hook stages the `quarkus-app/` contents into the distribution's `lib/` (run jar renamed to the project jar name), because `QuarkusEntryPoint` resolves `quarkus/quarkus-application.dat` relative to the run jar's parent directory — so neither the thin jar + loose-classpath layout nor an uber-jar on `-cp` can work. After `jpackageImage`, `SIARD-Web.cfg` is patched to keep only the run jar on `app.classpath` — otherwise jpackage puts every image jar on the classpath and the system classloader shadows Quarkus' `RunnerClassLoader`. jlink produces a JRE-only runtime image and `jpackage` packages it → `.exe`/`.msi` on Windows, `.deb` on Linux (requires `dpkg` on the build host). The Linux package is part of the PoC so the full pipeline is verifiable on the dev machine without a Windows box.
 
-- *Alternative — Quarkus fast-jar (`quarkus-app/` layout) + `jpackage --input`*: the default fast-jar layout spreads code across `quarkus-run.jar` + `lib/` + `app/`, which does not map onto the beryx `application` distribution model without custom staging. Rejected — uber-jar reuses the proven pipeline unchanged.
+- *Alternative — Quarkus uber-jar*: rejected during implementation — the runner jar works via `java -jar` but not on `-cp` (it looks for `quarkus/quarkus-application.dat` relative to the jar's parent), so it cannot run under a generated launcher.
 - *Alternative — GraalVM native*: single `.exe` without JRE, but `siard-api` relies on JAXB RI internals, reflectively-loaded MSV, and ServiceLoader StAX — native-image would need extensive reflection/resource config for no PoC benefit. Explicitly deferred; can be revisited as a separate change.
 - *Alternative — different packager (launch4j, install4j)*: would duplicate what the repo + CI already do.
 
@@ -83,7 +83,9 @@ Backend tests use `@QuarkusTest` + REST Assured against the `master.siard` fixtu
 
 - **`siard-api` internals under Quarkus** (Xerces parser factory, `--add-opens`, ServiceLoader StAX) → JVM mode means these are ordinary jars; the launcher flags are carried over (D2); an early `@QuarkusTest` opening `master.siard` proves it before UI work begins.
 - **Uber-jar merging of the full chain** (ServiceLoader entries, signed JDBC driver jars, duplicate `META-INF` resources) → Quarkus uber-jar merges service-provider configs and strips signature files; verified by the startup driver-enumeration smoke check and by opening `master.siard` in the packaged app (tasks 2.4, 5.2).
-- **Token handling in the SPA** (token in URL leaks into browser history) → acceptable for a localhost PoC; a hardened version can hand the token via a one-time redirect/cookie later. Noted, not solved.
+- **Token handling in the SPA** (token in URL leaks into browser history, and the launch URL is logged to stdout per spec) → mitigated: the frontend sends the token via `Authorization: Bearer` on every API call, so it does not propagate through query strings/Referer headers after landing; the URL-borne token at launch remains an accepted PoC risk (QM review M1), to be hardened via a one-time redirect/cookie later. Noted, not solved.
+- **Opened archives are never closed/evicted** (`ArchiveRegistry` holds them for the session) → accepted PoC resource-leak; a close/evict policy belongs to the productionized registry.
+- **npm dev-dependency vulnerabilities** (vite/vitest toolchain, `npm audit`) → do not ship in the artifact; `npm audit fix` applied, residual findings to be reviewed when the frontend graduates past PoC.
 - **No file picker** (typed path only) → acceptable for PoC; a `/api/fs/browse` endpoint is the known follow-up.
 - **Unsigned installer triggers SmartScreen** → expected; code signing is a release-time concern, not PoC.
 - **jpackage can't cross-build** → Windows artifact verification requires a Windows runner (already in CI matrix) or a Windows dev box; the `.deb` package covers the same pipeline end-to-end on the dev's Linux machine meanwhile.
