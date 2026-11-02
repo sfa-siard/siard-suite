@@ -72,14 +72,14 @@ val patchAppImageCfg = tasks.register("patchAppImageCfg") {
         // app image layout differs per OS: linux lib/app/, windows app/, macos .app/Contents/app/
         val cfg = layout.buildDirectory.dir("jpackage/SIARD-Web").get().asFile
             .walkTopDown().first { it.name == "SIARD-Web.cfg" }
-        val runJarLine = "app.classpath=\$APPDIR/${project.name}-${project.version}.jar"
-        val kept = cfg.readLines().filter { line ->
-            !line.startsWith("app.classpath=") || line == runJarLine
+        val jarName = "${project.name}-${project.version}.jar"
+        val lines = cfg.readLines()
+        if (lines.none { it.startsWith("app.classpath=") && it.endsWith(jarName) }) {
+            throw GradleException("run jar classpath entry not found in $cfg:\n" + lines.joinToString("\n"))
         }
-        if (runJarLine !in kept) {
-            throw GradleException("run jar classpath entry not found in $cfg")
-        }
-        cfg.writeText(kept.joinToString("\n") + "\n")
+        cfg.writeText(lines.filter { line ->
+            !line.startsWith("app.classpath=") || line.endsWith(jarName)
+        }.joinToString("\n") + "\n")
     }
 }
 
