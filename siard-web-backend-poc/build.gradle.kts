@@ -124,7 +124,9 @@ runtime {
     jpackage {
         imageName = "SIARD-Web"
         installerName = "SIARD-Web"
-        appVersion = version.toString()
+        // jpackage installers require a strictly numeric version (MSI ProductVersion);
+        // strip any -branch/-SNAPSHOT suffix from the project version.
+        appVersion = version.toString().replaceFirst(Regex("[^0-9.].*$"), "").removeSuffix(".")
         skipInstaller = false
 
         installerOptions.add("--vendor")
