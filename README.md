@@ -75,13 +75,13 @@ First, build the distribution:
 ./gradlew :siard-cmd:installDist
 ```
 
-Then run the CLI tools:
+Then run the CLI:
 ```shell
 # Download database to SIARD archive
-./siard-cmd/build/install/siard-cmd/bin/siard-from-db <arguments>
+./siard-cmd/build/install/siard/bin/siard archive --jdbc-url=<url> --user=<user> --password=<password> --siard-file=<file>
 
 # Upload SIARD archive to database
-./siard-cmd/build/install/siard-cmd/bin/siard-to-db <arguments>
+./siard-cmd/build/install/siard/bin/siard restore --jdbc-url=<url> --user=<user> --password=<password> --siard-file=<file>
 ```
 
 ### Building the Project

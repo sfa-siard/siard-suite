@@ -28,3 +28,5 @@ Records follow a lightweight MADR-like structure:
 | [ADR-0003](0003-web-companion-persistence.md) | Web Companion Job Persistence | Accepted |
 | [ADR-0004](0004-web-companion-external-lobs.md) | Web Companion External LOB Handling | Accepted |
 | ADR-0005 | Web Companion Backend Framework | Proposed — to be created after the spike |
+| [ADR-0006](0006-picocli-cli-framework.md) | Picocli as the CLI Framework | Accepted |
+| [ADR-0007](0007-read-only-driver-config.md) | Read-Only JDBC Driver Configuration | Accepted |
