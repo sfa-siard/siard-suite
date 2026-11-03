@@ -87,4 +87,19 @@ class ConfigRecordsTest {
         // then
         assertThat(config.schemaMapping()).containsEntry("HR", "HR_COPY");
     }
+
+    @Test
+    void configRecords_doNotExposePasswordInToString(@TempDir Path tempDir) {
+        // given
+        ArchiveConfig archive = new ArchiveConfig(URL, "u", "secret",
+                                                  tempDir.resolve("out.siard"), null,
+                                                  false, false, 300, 75,
+                                                  null, null, null, null);
+        RestoreConfig restore = new RestoreConfig(URL, "u", "secret",
+                                                  tempDir.resolve("in.siard"), false, 300, 75, null);
+
+        // then
+        assertThat(archive.toString()).doesNotContain("secret");
+        assertThat(restore.toString()).doesNotContain("secret");
+    }
 }

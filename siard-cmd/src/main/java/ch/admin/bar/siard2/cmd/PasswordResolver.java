@@ -1,6 +1,7 @@
 package ch.admin.bar.siard2.cmd;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.function.Function;
 
 /**
@@ -18,12 +19,19 @@ final class PasswordResolver {
                           PasswordPrompter prompter,
                           Function<String, String> env,
                           PrintWriter err) {
-        if (passwordOption != null && !passwordOption.isEmpty()) return passwordOption;
+        if (passwordOption != null && !passwordOption.isEmpty()) {
+            err.println("Warning: --password=<value> exposes the password via process listing; prefer --password to prompt or set SIARD_PASSWORD.");
+            return passwordOption;
+        }
 
         if (passwordRequested) {
 
             char[] prompted = prompter.prompt();
-            if (prompted != null) return new String(prompted);
+            if (prompted != null) {
+                String result = new String(prompted);
+                Arrays.fill(prompted, '\0');
+                return result;
+            }
 
             err.println("No console available for password prompt; use --password=<value> or set SIARD_PASSWORD.");
             return null;

@@ -21,7 +21,7 @@ Spec-derived unit tests land before implementation. They go red in this phase an
 ## 3. CLI layer (picocli)
 
 - [x] 3.1 Fill in `SiardCli` (`@Command` with `archive`/`restore` subcommands, `--help`/`--version`, exit codes 0/1/2, `main` does `System.exit(execute(...))`) — verify `siard --help` prints usage and exits `0`, bare `siard` prints usage and exits `2`, `SiardCliUsageTest` goes green
-- [x] 3.2 Implement `ArchiveCommand` options per design D3 (`ArgGroup(multiplicity="1")` for `--siard-file`/`--export-xml`), builds `ArchiveConfig`, resolves password per D4, calls `SiardFromDb.run(out, err)` — verify `ArchiveCommandParseTest` goes green: help `0`, unknown option `2`, missing `--jdbc-url` `2`, unsupported scheme `2`, neither output `2`
+- [x] 3.2 Implement `ArchiveCommand` options per design D3 (manual required/at-least-one-of validation in `call()` — declarative `required`/`ArgGroup` would hide unknown-option names), builds `ArchiveConfig`, resolves password per D4, calls `SiardFromDb.run(out, err)` — verify `ArchiveCommandParseTest` goes green: help `0`, unknown option `2`, missing `--jdbc-url` `2`, unsupported scheme `2`, neither output `2`
 - [x] 3.3 Implement `RestoreCommand` with repeatable `--map-schema=old=new` (Map type, malformed value → exit `2`) — verify `RestoreCommandParseTest` goes green
 - [x] 3.4 Implement password resolution order (value > prompt > `SIARD_PASSWORD` > error `2`) and password non-exposure — verify `PasswordResolutionTest` goes green
 

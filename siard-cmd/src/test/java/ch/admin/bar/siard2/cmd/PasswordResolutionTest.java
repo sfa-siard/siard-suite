@@ -1,6 +1,7 @@
 package ch.admin.bar.siard2.cmd;
 
 import ch.admin.bar.siard2.cmd.SiardCliTest.Result;
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
@@ -35,6 +36,30 @@ class PasswordResolutionTest {
     @AfterEach
     void detachLogAppender() {
         cmdLogger.detachAppender(logAppender);
+    }
+
+    @Test
+    void passwordNeverLeaked_atDebugLogLevel(@TempDir Path tempDir) {
+        // given the package logger temporarily at DEBUG — the strictest leak surface
+        Level previousLevel = cmdLogger.getLevel();
+        cmdLogger.setLevel(Level.DEBUG);
+        try {
+            // when
+            Result result = execute(() -> null,
+                                    Map.<String, String>of()::get,
+                                    "archive",
+                                    "--jdbc-url=" + UNREACHABLE_PG_URL,
+                                    "--user=u",
+                                    "--password=dbgsecret",
+                                    "--siard-file=" + tempDir.resolve("out.siard"));
+
+            // then
+            assertThat(result.out()).doesNotContain("dbgsecret");
+            assertThat(result.err()).doesNotContain("dbgsecret");
+            assertThat(logAppender.list).noneMatch(e -> e.getFormattedMessage().contains("dbgsecret"));
+        } finally {
+            cmdLogger.setLevel(previousLevel);
+        }
     }
 
     @Test

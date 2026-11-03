@@ -65,7 +65,7 @@ Alternatives: commands orchestrate directly (re-mixes parse and work — rejecte
 | `-m`, `--mime-type` | |
 | `--schema` | `--map-schema=old=new` (repeatable, `Map<String,String>`) |
 
-`archive` requires at least one of `--siard-file`/`--export-xml` → picocli `ArgGroup(multiplicity = "1")`. `restore`'s positional schema pairs become `--map-schema` (self-documenting, order-free, validated as `name=value`).
+`archive` requires at least one of `--siard-file`/`--export-xml` and required options (`--jdbc-url`, `--user`) are validated **manually in `call()`**, not via `required = true`/`ArgGroup`: picocli reports missing-required options *before* unmatched arguments, which would mask the unknown option that spec scenarios require to be named in the error (see ADR-0006). `restore`'s positional schema pairs become `--map-schema` (self-documenting, order-free; `archive-schema=db-schema` pairs are validated by the command rather than the picocli `Map` type, so malformed values produce a spec-exact error naming the expected syntax).
 
 ### D4 — Password resolution order
 

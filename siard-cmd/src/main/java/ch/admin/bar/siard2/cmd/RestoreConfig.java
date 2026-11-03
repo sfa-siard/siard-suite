@@ -18,4 +18,14 @@ public record RestoreConfig(String jdbcUrl, String databaseUser, String database
         Objects.requireNonNull(siardFile, "siardFile");
         schemaMapping = schemaMapping == null ? Map.of() : Map.copyOf(schemaMapping);
     }
+
+    /** Masked so the credential can never leak through logging or assertion output. */
+    @Override
+    public String toString() {
+        return "RestoreConfig[jdbcUrl=" + jdbcUrl + ", databaseUser=" + databaseUser
+                + ", databasePassword=***, siardFile=" + siardFile
+                + ", overwrite=" + overwrite + ", loginTimeoutSeconds=" + loginTimeoutSeconds
+                + ", queryTimeoutSeconds=" + queryTimeoutSeconds
+                + ", schemaMapping=" + schemaMapping + "]";
+    }
 }

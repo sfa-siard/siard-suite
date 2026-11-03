@@ -147,7 +147,7 @@ The CLI SHALL exit with `0` on success, `1` on execution errors, and `2` on usag
 
 #### Scenario: Execution error
 
-- **WHEN** an archive or restore fails at runtime (e.g., unreachable database, invalid JDBC URL scheme)
+- **WHEN** an archive or restore fails at runtime (e.g., unreachable database, missing output file on restore)
 - **THEN** a diagnostic is printed to standard error and the exit code is `1`
 
 #### Scenario: Usage error

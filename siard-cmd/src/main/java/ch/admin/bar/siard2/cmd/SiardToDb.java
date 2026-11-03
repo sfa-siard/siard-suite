@@ -44,6 +44,7 @@ public class SiardToDb {
      */
     public int run(PrintWriter out, PrintWriter err) {
         try {
+            ProgramInfoInit.ensure();
             return doRun(out, err);
         } catch (Exception e) {
             LOG.error("Exception while uploading SIARD archive", e);
@@ -71,11 +72,11 @@ public class SiardToDb {
             Connection conn = SiardConnection.getSiardConnection()
                     .createValidConnection(config.jdbcUrl(), config.databaseUser(), config.databasePassword());
             if (conn == null || conn.isClosed()) {
-                err.println("Connection to " + config.jdbcUrl() + " failed!");
+                err.println("Connection to " + SiardConnection.maskCredentials(config.jdbcUrl()) + " failed!");
                 return 1;
             }
             try {
-                out.println("Connected to " + conn.getMetaData().getURL());
+                out.println("Connected to " + SiardConnection.maskCredentials(conn.getMetaData().getURL()));
                 conn.setAutoCommit(false);
 
                 MetaData md = archive.getMetaData();
@@ -117,7 +118,7 @@ public class SiardToDb {
         StringBuilder sb = new StringBuilder()
                 .append("\nParameters\n")
                 .append("  SIARD file             : ").append(fileSiard.getAbsolutePath()).append("\n")
-                .append("  JDBC URL               : ").append(config.jdbcUrl()).append("\n")
+                .append("  JDBC URL               : ").append(SiardConnection.maskCredentials(config.jdbcUrl())).append("\n")
                 .append("  Database user          : ").append(config.databaseUser()).append("\n")
                 .append("  Database password      : ***\n")
                 .append("  Login timeout          : ").append(config.loginTimeoutSeconds()).append(" seconds\n")

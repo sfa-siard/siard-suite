@@ -20,3 +20,14 @@ Harness gap: none — resolved against the decisions index.
 
 Decided: picocli `required=true`/`ArgGroup` were dropped in favor of manual validation in `call()` — picocli reports missing-required before unmatched arguments, which would hide the unknown option that spec scenarios require to be named ("error identifying --jdbcurl").
 Harness gap: worth noting in ADR-0006 (done).
+
+Quality Gate results (pitc_architecture, pitc_quality, pitc_test, pitc_security — run in parallel):
+- M1 (blocking): config record `toString()`s could leak the password via generated component output → masked `toString()` added to both records + `ConfigRecordsTest` assertion.
+- M2 (blocking): spec self-contradiction — "unsupported scheme → 2" vs "invalid scheme" listed under exit-1 execution errors → spec.md amended (scheme stays exit 2).
+- HIGH (security): JDBC URL could embed `user:password@` and reach logs/stderr → `SiardConnection.maskCredentials()` applied at every URL log/print site in both engines and SiardConnection.
+- P0 (coverage): "export metadata only" and "existing objects w/o --overwrite" had no real test despite harness-notes claiming IT coverage → `exportXmlOnly_writesMetadataXmlAndExits0` + `restoreExistingObjectsWithoutOverwrite_failsWithConflictHint` added to `PostgresUploadDownloadSiardProjectIT` (both pass).
+- MEDIUM/SHOULD auto-fixed: `--password=<value>` emits a stderr warning; `--overwrite` checks `delete()` result; prompted `char[]` is zeroed; shared `usageError` helper extracted; `ProgramInfo` init moved to engine-owned `ProgramInfoInit` (web-companion callers covered); dead `keys()`/`FileWriter` residue removed; DEBUG-level no-leak test added.
+- Deliberately NOT applied: `--map-schema` as picocli `Map` type and `required=true` options (would break spec-exact error messages — documented in design.md D3); "etc drop vs defaults" S5 left as design decision (defaults stay as fallback).
+- 62 unit tests + postgres IT suite green after fixes.
+
+Harness gap (recurring): harness-notes' "migrated testcontainers ITs" claim was wrong for 2 scenarios — the coverage claim asserted migration that never happened. Suggestion: when recording IT-migration coverage claims in harness-notes, require naming the concrete test class per scenario, not a generic "section 6" pointer.

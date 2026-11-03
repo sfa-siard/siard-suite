@@ -18,7 +18,7 @@ import lombok.val;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -97,15 +97,6 @@ public class SiardConnection extends Properties {
     }
 
 
-    /** make keys() return elements in alphabetic order.
-     * This produces a nicer properties file, when store() is called.
-     */
-    @Override
-    public synchronized Enumeration<Object> keys() {
-        return Collections.enumeration(new TreeSet<Object>(super.keySet()));
-    }
-
-
     /** constructor loads properties.
      */
     private SiardConnection() {
@@ -169,7 +160,7 @@ public class SiardConnection extends Properties {
         }
 
         LOG.info("'{}' as driver loaded for url '{}'", driver.getClass()
-                                                             .getCanonicalName(), jdbcUrl);
+                                                             .getCanonicalName(), maskCredentials(jdbcUrl));
 
         return driver;
     }
@@ -194,7 +185,7 @@ public class SiardConnection extends Properties {
         val connection = driver.connect(jdbcUrl, info);
 
         LOG.info("Created connection of type '{}'for url '{}'", connection.getClass()
-                                                                          .getCanonicalName(), jdbcUrl);
+                                                                          .getCanonicalName(), maskCredentials(jdbcUrl));
 
         return connection;
     }
@@ -203,7 +194,7 @@ public class SiardConnection extends Properties {
     private static void logDrivers(final String jdbcUrl) {
         val sb = new StringBuilder()
                 .append("Registered JDBC drivers and its compatibility for url '")
-                .append(jdbcUrl)
+                .append(maskCredentials(jdbcUrl))
                 .append("':");
 
         val enumeration = DriverManager.getDrivers();
@@ -219,6 +210,24 @@ public class SiardConnection extends Properties {
         LOG.info(sb.toString());
     }
 
+
+    /** Masks credentials embedded as user:password@ in a JDBC URL for logging and output. */
+    public static String maskCredentials(String jdbcUrl) {
+        if (jdbcUrl == null) return null;
+        return jdbcUrl.replaceAll("://([^/:@]+):([^/@]+)@", "://$1:***@");
+    }
+
+    /** Returns the JDBC sub scheme if no driver is configured for it, otherwise null.
+     * Side-effect free — unlike {@link #loadDriver} it does not load driver classes.
+     */
+    public String unsupportedScheme(String sJdbcUrl) {
+        if (sJdbcUrl == null) return "unknown";
+        if (!sJdbcUrl.startsWith(BaseDriver.sJDBC_SCHEME + ":")) return sJdbcUrl;
+        String sSubScheme = sJdbcUrl.substring(BaseDriver.sJDBC_SCHEME.length() + 1);
+        int iSubScheme = sSubScheme.indexOf(":");
+        if (iSubScheme >= 0) sSubScheme = sSubScheme.substring(0, iSubScheme);
+        return getProperty(sSubScheme) != null ? null : sSubScheme;
+    }
 
     /** load JDBC driver for given JDBC URL.
      * @param sJdbcUrl JDBC URL.

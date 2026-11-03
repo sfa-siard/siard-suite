@@ -37,6 +37,18 @@ public record ArchiveConfig(
         }
     }
 
+    // masked the password so that it never leaks through logging or assertion output
+    @Override
+    public String toString() {
+        return "ArchiveConfig[jdbcUrl=" + jdbcUrl + ", databaseUser=" + databaseUser
+                + ", databasePassword=***, siardFile=" + siardFile + ", exportXml=" + exportXml
+                + ", overwrite=" + overwrite + ", viewsAsTables=" + viewsAsTables
+                + ", loginTimeoutSeconds=" + loginTimeoutSeconds
+                + ", queryTimeoutSeconds=" + queryTimeoutSeconds
+                + ", importXml=" + importXml + ", externalLobFolder=" + externalLobFolder
+                + ", mimeType=" + mimeType + ", schema=" + schema + "]";
+    }
+
     /**
      * The external LOB folder expressed relative to the SIARD file's parent,
      * prefixed with {@code ../} and suffixed with {@code /} as required by the archive format.

@@ -57,24 +57,23 @@ public class RestoreCommand implements Callable<Integer> {
         PrintWriter out = spec.commandLine().getOut();
         PrintWriter err = spec.commandLine().getErr();
 
-        if (jdbcUrl == null) return usageError(err, "Missing required option: '--jdbc-url=<url>'");
-        if (user == null) return usageError(err, "Missing required option: '--user=<user>'");
-        if (siardFile == null) return usageError(err, "Missing required option: '--siard-file=<siardFile>'");
+        if (jdbcUrl == null) return usageError("Missing required option: '--jdbc-url=<url>'");
+        if (user == null) return usageError("Missing required option: '--user=<user>'");
+        if (siardFile == null) return usageError("Missing required option: '--siard-file=<siardFile>'");
 
         Map<String, String> schemaMapping = new LinkedHashMap<>();
         if (schemaMappings != null) {
             for (String mapping : schemaMappings) {
                 int separator = mapping.indexOf('=');
                 if (separator <= 0 || separator == mapping.length() - 1) {
-                    return usageError(err,
-                                      "Invalid schema mapping '" + mapping + "': expected archive-schema=db-schema");
+                    return usageError("Invalid schema mapping '" + mapping + "': expected archive-schema=db-schema");
                 }
                 schemaMapping.put(mapping.substring(0, separator), mapping.substring(separator + 1));
             }
         }
 
-        String driverError = SiardConnection.getSiardConnection().loadDriver(jdbcUrl);
-        if (driverError != null) return usageError(err, "JDBC URL " + jdbcUrl + " is not supported: " + driverError);
+        String badScheme = SiardConnection.getSiardConnection().unsupportedScheme(jdbcUrl);
+        if (badScheme != null) return usageError("JDBC URL " + jdbcUrl + " has an unsupported scheme: " + badScheme);
 
         boolean passwordRequested = spec.commandLine().getParseResult().hasMatchedOption("--password");
         String resolvedPassword = PasswordResolver.resolve(password, passwordRequested,
@@ -91,9 +90,7 @@ public class RestoreCommand implements Callable<Integer> {
         return new SiardToDb(config).run(out, err);
     }
 
-    private int usageError(PrintWriter err, String message) {
-        err.println("Error: " + message);
-        err.println("Try 'siard restore --help' for more information.");
-        return 2;
+    private int usageError(String message) {
+        return SiardCli.usageError(spec, message);
     }
 }
