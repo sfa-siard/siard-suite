@@ -4,14 +4,6 @@
 <configuration>
     <property name="LOG_FILE" value="${user.home}/SIARD-Suite/siardcmd.log"/>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%thread)] %yellow(%logger{36}) %msg%n%throwable
-            </pattern>
-        </layout>
-    </appender>
-
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_FILE}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
@@ -32,6 +24,5 @@
 
     <root level="info">
         <appender-ref ref="ROLLING_FILE"/>
-        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

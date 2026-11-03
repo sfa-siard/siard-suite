@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.msaccess.issues.siardsuite163;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.header.Metadata;
@@ -30,15 +30,14 @@ public class MSAccessDataTypeMappingIT {
 
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb dbToSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + "jdbc:access:" + dbPath,
-                "-u:Admin",
-                "-p:pw",
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var dbToSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + "jdbc:access:" + dbPath,
+                "--user=Admin",
+                "--password=pw",
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(0, dbToSiard.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
         val softly = new SoftAssertions();

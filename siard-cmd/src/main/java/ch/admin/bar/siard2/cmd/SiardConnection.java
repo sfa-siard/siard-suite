@@ -123,9 +123,6 @@ public class SiardConnection extends Properties {
                     String sScheme = iterScheme.next();
                     setProperty(sScheme, propDefault.getProperty(sScheme));
                 }
-                FileWriter fw = new FileWriter(fileJdbcDrivers);
-                store(fw, "Map from JDBC sub schema to title, sample URL and JDBC Driver class to be loaded.");
-                fw.close();
             }
         } catch (IOException ie) {
             LOG.error(EU.getExceptionMessage(ie));
@@ -255,8 +252,6 @@ public class SiardConnection extends Properties {
                 sError = "JDBC URL " + sJdbcUrl + " must contain a subs scheme terminated by colon (\":\")!";
         } else
             sError = "JDBC URL " + sJdbcUrl + " must start with \"" + BaseDriver.sJDBC_SCHEME + "\"!";
-        if (sError != null)
-            System.err.println(sError);
         return sError;
     }
 

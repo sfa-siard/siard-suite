@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.siardsuite106;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.SiardToDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -41,15 +40,14 @@ public class SchemaNameUnderscoreIT {
     public void downloadArchive() throws SQLException, IOException, ClassNotFoundException {
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "IT_USER",
-                "-p:" + "password",
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "IT_USER",
+                "--password=" + "password",
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 
@@ -81,14 +79,13 @@ public class SchemaNameUnderscoreIT {
     public void uploadSiardArchive_expectNoExceptions() throws SQLException, IOException {
         val siardArchive = siardArchivesHandler.prepareResource("oracle/issues/siardsuite106/created-table-names-underscore-oracle.siard");
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "IT_USER",
-                "-p:" + "password",
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "IT_USER",
+                "--password=" + "password",
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        assertEquals(0, siardToDb.exitCode());
     }
 }

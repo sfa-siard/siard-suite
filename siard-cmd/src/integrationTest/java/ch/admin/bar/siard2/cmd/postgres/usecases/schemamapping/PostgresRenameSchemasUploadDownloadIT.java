@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.postgres.usecases.schemamapping;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.SiardToDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedTableId;
@@ -43,26 +42,24 @@ public class PostgresRenameSchemasUploadDownloadIT {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + expectedArchive.getPathToArchiveFile(),
-                "schema1", "editedSchema1",
-                "schema2", "editedSchema2"
-        });
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + expectedArchive.getPathToArchiveFile(),
+                "--map-schema=schema1=editedSchema1",
+                "--map-schema=schema2=editedSchema2");
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
-        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(0, siardToDb.exitCode());
+        assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = actualArchive.exploreMetadata();
 

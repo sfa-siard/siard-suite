@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.jdbcoracle6;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -43,15 +43,14 @@ public class PackagesIT {
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardFromDb dbToSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "testuser",
-                "-p:" + "testpassword",
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var dbToSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "testuser",
+                "--password=" + "testpassword",
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
         // then
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(0, dbToSiard.exitCode());
     }
 }

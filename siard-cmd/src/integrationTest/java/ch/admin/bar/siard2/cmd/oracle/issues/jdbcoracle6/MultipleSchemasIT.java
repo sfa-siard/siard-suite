@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.jdbcoracle6;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -42,13 +42,12 @@ public class MultipleSchemasIT {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
         // when/then
-        Assertions.assertThrows(SQLSyntaxErrorException.class, () -> new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "testuser",
-                "-p:" + "testpassword",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        }));
+        Assertions.assertThrows(SQLSyntaxErrorException.class, () -> SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "testuser",
+                "--password=" + "testpassword",
+                "--siard-file=" + actualArchive.getPathToArchiveFile()));
     }
 
     @Test
@@ -57,17 +56,16 @@ public class MultipleSchemasIT {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "testuser",
-                "-p:" + "testpassword",
-                "--schema:" + "TESTUSER",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "testuser",
+                "--password=" + "testpassword",
+                "--schema=" + "TESTUSER",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = actualArchive.exploreMetadata();
 

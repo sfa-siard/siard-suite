@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.mysql.issues.siardsuite113;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import lombok.val;
@@ -35,14 +35,13 @@ public class MySQLZeroDateValueIT {
     public void shouldCreateSiardArchiveFromDbWithNoZeroDate() throws SQLException, IOException, ClassNotFoundException {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl() + "?zeroDateTimeBehavior=convertToNull",
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl() + "?zeroDateTimeBehavior=convertToNull",
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(0, siardFromDb.exitCode());
     }
 }

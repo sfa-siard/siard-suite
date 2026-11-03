@@ -195,23 +195,15 @@ tasks.processResources {
     }
 }
 
-val siardToDb = tasks.register<CreateStartScripts>("siardToDb") {
-    applicationName = "siard-to-db"
-    mainClass.set("ch.admin.bar.siard2.cmd.SiardToDb")
+val siardCli = tasks.register<CreateStartScripts>("siardCli") {
+    applicationName = "siard"
+    mainClass.set("ch.admin.bar.siard2.cmd.SiardCli")
     outputDir = file("build/scripts")
     classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
-}
-
-val siardFromDb = tasks.register<CreateStartScripts>("siardFromDb") {
-    applicationName = "siard-from-db"
-    mainClass.set("ch.admin.bar.siard2.cmd.SiardFromDb")
-    outputDir = file("build/scripts")
-    classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
-    dependsOn(siardToDb)
 }
 
 tasks.named<CreateStartScripts>("startScripts") {
-    dependsOn(siardFromDb)
+    dependsOn(siardCli)
 }
 
 tasks.distTar {
@@ -223,8 +215,7 @@ tasks.distZip {
 }
 
 tasks.installDist {
-    dependsOn(siardFromDb)
-    dependsOn(siardToDb)
+    dependsOn(siardCli)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 

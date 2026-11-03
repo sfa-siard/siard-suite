@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.mysql.issues.siardgui29;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -37,15 +37,14 @@ public class MySqlVarCharTypesIT {
     public void downloadArchive() throws SQLException, IOException, ClassNotFoundException {
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb dbToSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var dbToSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        assertEquals(0, dbToSiard.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 

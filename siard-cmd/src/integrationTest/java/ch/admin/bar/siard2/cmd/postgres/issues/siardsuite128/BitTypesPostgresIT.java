@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.postgres.issues.siardsuite128;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
@@ -34,16 +34,15 @@ public class BitTypesPostgresIT {
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardFromDb dbtoSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var dbtoSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
         // then
-        assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+        assertEquals(0, dbtoSiard.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 
