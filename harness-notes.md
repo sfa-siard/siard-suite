@@ -31,3 +31,15 @@ Quality Gate results (pitc_architecture, pitc_quality, pitc_test, pitc_security 
 - 62 unit tests + postgres IT suite green after fixes.
 
 Harness gap (recurring): harness-notes' "migrated testcontainers ITs" claim was wrong for 2 scenarios — the coverage claim asserted migration that never happened. Suggestion: when recording IT-migration coverage claims in harness-notes, require naming the concrete test class per scenario, not a generic "section 6" pointer.
+
+Decided (propose siard-cli-packaging): distribution artifacts get their own capability `siard-cli-distribution` rather than folding installer requirements into the `siard-cli` behavior spec — packaging is a separate observable contract.
+Harness gap: none — standard capability-boundary decision.
+
+Decided (propose siard-cli-packaging): Windows installers install system-wide (no `--win-per-user-install`) — managed BIT deployments conventionally install machine-wide; the GUI's per-user flag is a GUI choice. Flagged for BIT feedback on first MSI.
+Harness gap: if BIT confirms a required install scope, it belongs in the spec.
+
+Decided (propose siard-cli-packaging, architecture review): installers do not add `siard` to PATH — jpackage offers no PATH integration and managed deployments should not mutate it; spec contract is "run from the installed location", documented per-OS. Icons are copied into `siard-cmd` resources, not referenced from `siard-suite-app` (would invert module direction). Second installer type via `-PinstallerType=` project property (beryx exposes only one `installerType`).
+Harness gap: none — review process worked as intended.
+
+Decided (propose siard-cli-packaging): the req-quality "authorization scenario" again mapped to constraint/security scenarios (JavaFX-free bundle, read-only install, elevation requirement) since the project has no roles model — same precedent as modernize-siard-cli.
+Harness gap: still open — AGENTS.local.md could name the CLI-tool fallback scenario type explicitly.
