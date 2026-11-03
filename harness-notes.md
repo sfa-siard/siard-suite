@@ -10,3 +10,13 @@ Harness gap: AGENTS.md has no Roles & Permissions section. For CLI/desktop tools
 
 Decided: architecture review findings were folded into design.md — `siard-suite-app` ships `siard-from-db`/`siard-to-db` scripts via `CreateStartScripts` (silent breakage risk since Gradle doesn't validate `mainClass`), so the app distribution moves to a single `siard` script too.
 Harness gap: none — review process worked as intended.
+
+Decided (TDD merge): spec-derived unit tests were scaffolded before implementation (tasks.md section 1). `PasswordPrompter.prompt()` contract: returns `char[]`, or `null` when no console is available — mapped to usage error exit 2. `SIARD_PASSWORD` lookup is injected as `Function<String,String>` into `SiardCli` since unit tests cannot mutate `System.getenv`.
+Spec scenarios intentionally left without a unit scaffold — coverage instead: "Archive a database", "Restore a SIARD file", "Export metadata only", "Existing SIARD file with --overwrite", "Restore with schema mapping", "Existing objects without --overwrite", "Successful operation (exit 0)" → migrated testcontainers ITs (section 6); "Interactive prompt" echo suppression → manual check (no console in tests); "First run in read-only location" → unit test of `SiardConnection` load order (task 4.3) + `installDist` manual check (task 5.1).
+Harness gap: SDD+TDD ordering is now proven in this change — a tasks.md convention ("test seam + spec scaffolds first, then implementation turns them green") could be added to AGENTS.local.md so future changes don't re-derive it.
+
+Decided: ADRs were numbered 0006/0007 instead of tasks.md's 0005/0006 — the decisions index already reserved ADR-0005 for the web-companion spike. tasks.md updated accordingly.
+Harness gap: none — resolved against the decisions index.
+
+Decided: picocli `required=true`/`ArgGroup` were dropped in favor of manual validation in `call()` — picocli reports missing-required before unmatched arguments, which would hide the unknown option that spec scenarios require to be named ("error identifying --jdbcurl").
+Harness gap: worth noting in ADR-0006 (done).

@@ -74,7 +74,7 @@ Alternatives: commands orchestrate directly (re-mixes parse and work — rejecte
 3. `SIARD_PASSWORD` env var → use
 4. none → missing-parameter error, exit 2, hint to use `--password`
 
-Prompting never triggers in tests: all ITs pass an explicit value. `PasswordPrompter` is injectable for unit tests.
+Prompting never triggers in tests: all ITs pass an explicit value. `PasswordPrompter` is injectable for unit tests — `SiardCli` takes a `PasswordPrompter` (default: console impl) so tests inject a fake. Likewise the `SIARD_PASSWORD` lookup is injectable (`Function<String,String>`, default `System::getenv`) because unit tests cannot mutate the process environment. Password non-exposure is verified by capturing out/err writers plus a logback `ListAppender` at DEBUG.
 
 ### D5 — Exit codes
 
