@@ -59,8 +59,7 @@ Die Distributionen mit und ohne inkludierter JRE werden als ZIP Archiv ausgelief
 | Skriptname | Beschreibung
 
 | siard-suite (.bat) | Starten der grafischen Benutzeroberfläche für Unix bzw. Windows Systeme
-| siard-from-db (.bat) | Archivieren einer Datenbank (CLI)
-| siard-to-db (.bat) | Upload eines SIARD Archives in eine Datenbank (CLI)
+|| siard (.bat) | Kommandozeile: Datenbank archivieren oder SIARD-Archiv in eine Datenbank laden (CLI)
 |===
 
 
@@ -69,8 +68,7 @@ Die Distributionen mit und ohne inkludierter JRE werden als ZIP Archiv ausgelief
 Die SIARD Suite besteht aus folgenden Komponenten:
 
 * Grafische Bentutzeroberfläche (GUI)
-* SiardFromDb (CLI)
-* SiardToDB (CLI)
+* siard (CLI)
 
 Zweck und Verwendung der Komponenten wird in der Folge erklärt.
 
@@ -121,11 +119,11 @@ Folgende Einstellungen können vorgenommen werden:
 
 Neben der grafischen Benutzeroberfläche können Datenbanken auch über die Kommandozeile archiviert bzw. ein Archiv wieder in eine Datenbank eingelesen werden.
 
-Dazu stehen in der ZIP-Distribution die Scripte `siard-from-db` und `siard-to-db` zur Verfügung.
+Dazu steht in der ZIP-Distribution das Script `siard` mit den Unterbefehlen `archive` (Datenbank in eine SIARD-Datei archivieren) und `restore` (SIARD-Archiv in eine Datenbank laden) zur Verfügung. `siard --help`, `siard archive --help` und `siard restore --help` geben eine generierte Hilfe aus, `siard --version` die Versionsinformationen; der Exit-Code ist `0` bei Erfolg, `1` bei Ausführungsfehlern und `2` bei Aufruffehlern. Das Datenbank-Passwort wird in dieser Reihenfolge ermittelt: `--password=<Wert>`, eine interaktive Konsolen-Abfrage bei `--password` ohne Wert, oder die Umgebungsvariable `SIARD_PASSWORD`.
 
-=== SiardFromDb
+=== siard archive
 
-Mit `siard-from-db` kann eine Datenbank ohne Verwendung des GUIs archiviert werden.
+Mit `siard archive` kann eine Datenbank ohne Verwendung des GUIs archiviert werden.
 
 
 ==== Aufruf
@@ -133,7 +131,7 @@ Mit `siard-from-db` kann eine Datenbank ohne Verwendung des GUIs archiviert werd
 Wechseln Sie in einem Terminal in das Verzeichnis, in dem das ZIP-Archiv entpackt wurde, öffnen Sie dort das Verzeichnis `bin` und führen Sie es aus mit
 
 ```
-siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<import meta data>] [-x=<external lob folder>] [-m=<mime type>] -j=<JDBC URL> -u=<database user> -p=<database password> -s=<siard file> -e=<export meta data>"
+siard archive --jdbc-url=<JDBC URL> --user=<database user> [--password[=<database password>]] (--siard-file=<siard file> | --export-xml=<export meta data>) [--overwrite] [--views-as-tables] [--login-timeout=<login timeout>] [--query-timeout=<query timeout>] [--import-xml=<import meta data>] [--lob-folder=<external lob folder>] [--mime-type=<mime type>] [--schema=<schema name>]
 ```
 
 ==== Argumente
@@ -141,14 +139,15 @@ siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<im
 |===
 |Argument | Beschreibung
 
-| -o | Überschreibe (overwrite) die Ausgabedatei(en), falls vorhanden
-| -v | Sichten als Tabellen archivieren
-| <login timeout> | Timeout in Sekunden für die Anmeldung (login) (0 für unbegrenzt)
-| <query timeout> | Timeout in Sekunden für die Abfrage (0 für unbegrenzt)
+| -o, --overwrite | Überschreibe (overwrite) die Ausgabedatei(en), falls vorhanden
+| -v, --views-as-tables | Sichten als Tabellen archivieren
+| -l, --login-timeout | Timeout in Sekunden für die Anmeldung (login) (0 für unbegrenzt)
+| -q, --query-timeout | Timeout in Sekunden für die Abfrage (0 für unbegrenzt)
 | <import meta data> | Name der Metadaten-XML-Datei, die als Vorlage verwendet werden soll
-| <external LOB folder> | Ordner, in dem die Daten der grössten LOB (large object) Spalte der Datenbank extern gespeichert werden sollen (gleichnamige Inhalte werden überschrieben!)
-| <mime type> | MIME-Typ der Daten der grössten LOB-Spalte der Datenbank (beeinflusst die Wahl der Namenserweiterung der extern gespeicherten LOBs)
-| <JDBC URL> | JDBC URL der Datenbank, die heruntergeladen werden soll
+| -x, --lob-folder | Ordner, in dem die Daten der grössten LOB (large object) Spalte der Datenbank extern gespeichert werden sollen (gleichnamige Inhalte werden überschrieben!)
+| -m, --mime-type | MIME-Typ der Daten der grössten LOB-Spalte der Datenbank (beeinflusst die Wahl der Namenserweiterung der extern gespeicherten LOBs)
+| --schema | Name des zu archivierenden Schemas
+| -j, --jdbc-url | JDBC URL der Datenbank, die heruntergeladen werden soll
 
 Beispiele:
 
@@ -166,9 +165,9 @@ jdbc:postgresql://<host>:5432/<db-name>.
 
 *SQL-Server:*
 jdbc:sqlserver://<host>/<db-name>:1433
-| <database user> | Datenbank Benutzer
-| <database password> | Datenbank Passwort
-| <siard file> | Name der zu erstellenden .siard Datei
+| -u, --user | Datenbank Benutzer
+| -p, --password | Datenbank Passwort
+| -s, --siard-file | Name der zu erstellenden .siard Datei
 | <export meta data> | Name der zu exportierenden .xml Metadaten Datei
 
 |===
@@ -183,21 +182,19 @@ Die Option Views als Tabellen archivieren führt in der Regel zu einer redundant
 
 Der Archivierungsprozess ist entweder vollständig erfolgreich oder schlägt fehl.
 
-Bei großen Datenbanken wird empfohlen, zuerst das Metadaten-XML herunterzuladen. Diese enthält alle Metadaten und Tabellengrößen und hilft so, die für den Download benötigte Ausführungszeit abzuschätzen. Außerdem sollte bei großen Tabellen die Option -q 0 verwendet werden, da nicht abgeschätzt werden kann, wie viele Sekunden eine Größenabfrage dauern wird.
+Bei grossen Datenbanken wird empfohlen, zuerst das Metadaten-XML herunterzuladen. Diese enthält alle Metadaten und Tabellengrößen und hilft so, die für den Download benötigte Ausführungszeit abzuschätzen. Außerdem sollte bei großen Tabellen die Option --query-timeout=0 verwendet werden, da nicht abgeschätzt werden kann, wie viele Sekunden eine Größenabfrage dauern wird.
 
 ==== Datenbank-Benutzer
 
 Es ist generell nicht empfehlenswert, den Datenbankadministrator (DBA, root, dbo, ...) mit allen Rechten für den Download eines SIARD-Archivs zu verwenden. Der Umfang der im SIARD-Archiv gespeicherten Daten wird durch die Objekte definiert, auf die der Archivbenutzer lesend zugreifen darf. Der globale DBA kann normalerweise alle Datenbanken auf dem System und zusätzlich viele Systemtabellen lesen, die nicht archiviert werden sollen. Aus diesem Grund ist es wichtig, für den Download einen geeigneten Archivbenutzer zu verwenden, der gegebenenfalls für diesen Zweck neu angelegt werden muss.
 
-=== SiardToDb
+=== siard restore
 
-SiardToDb ist ein Kommandozeilenprogramm, das ein SIARD-Archiv zu Recherchezwecken in eine Datenbankinstanz lädt.
+Mit `siard restore` kann ein SIARD-Archiv zu Recherchezwecken in eine Datenbankinstanz geladen werden.
 
 ==== Aufruf
 ```shell
-siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
--s=<siard-file> -j=<JDBC-URL> -u=<Datenbank-Benutzer> -p=<Datenbank-Passwort>
-[<schema> <mappedschema>]
+siard restore --siard-file=<siard file> --jdbc-url=<JDBC URL> --user=<database user> [--password[=<database password>]] [--overwrite] [--login-timeout=<login timeout>] [--query-timeout=<query timeout>] [--map-schema=<schema>=<mappedschema>]
 ```
 
 ==== Argumente
@@ -206,10 +203,10 @@ siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
 | Argument | Beschreibung
 
 |-o | Überschreiben (overwrite) von gleichnamigen Typen und/oder Tabellen in der Datenbank, falls vorhanden
-| <login timeout> | Timeout in Sekunden für die Anmeldung (login) (0 für unbegrenzt)
-| <query timeout> | Timeout in Sekunden für eine Anfrage (query) (0 für unbegrenzt)
-| <siard file> | Name der hochzuladenden .siard Datei
-| <JDBC URL> | JDBC URL der Zieldatenbank
+| -l, --login-timeout | Timeout in Sekunden für die Anmeldung (login) (0 für unbegrenzt)
+| -q, --query-timeout | Timeout in Sekunden für eine Anfrage (query) (0 für unbegrenzt)
+| -s, --siard-file | Name der hochzuladenden .siard Datei
+| -j, --jdbc-url | JDBC URL der Zieldatenbank
 Beispiele:
 
 *MS Access:* jdbc:access:<path>/<file-name>.mdb
@@ -223,10 +220,9 @@ Beispiele:
 *Postgres:* jdbc:postgres://<host>:5432/<db-name>
 
 *SQL-Server:* jdbc:sqlserver://<host>\<db-name>:1433
-| <database user> | Datenbank Benutzer
-| <database password> | Datenbank Passwort
-| <schema> | Name des Schemas im SIARD-Archiv
-| <mappedschema> | In der Datenbank zu verwendender Schemaname
+| -u, --user | Datenbank Benutzer
+| -p, --password | Datenbank Passwort
+| --map-schema=<schema>=<mappedschema> | Zuordnung eines Schemanamens im SIARD-Archiv zu dem in der Datenbank zu verwendenden Schemanamen (wiederholbar)
 |===
 
 ==== Anmerkungen
@@ -251,7 +247,7 @@ Wenn ein geeigneter Benutzer bestimmt oder angelegt wurde, kann der Datenbank-Do
 
 === Vorbereitung einer Datenbank für den Upload
 
-Für den Upload einer Datenbank in eine Instanz eines DBMS mit SIARD Suite müssen geeignete Datenbankschemas in der Zieldatenbank vorhanden sein. Diese Schemas können dann im Schema-Mapping des Upload-Dialogs (oder im Schema-Mapping der Kommandozeile von SiardToDb) den Schemas im SIARD-Archiv zugeordnet werden.
+Für den Upload einer Datenbank in eine Instanz eines DBMS mit SIARD Suite müssen geeignete Datenbankschemas in der Zieldatenbank vorhanden sein. Diese Schemas können dann im Schema-Mapping des Upload-Dialogs (oder im Schema-Mapping des Befehls `siard restore`) den Schemas im SIARD-Archiv zugeordnet werden.
 
 Im Idealfall sind die Zielschemas leer. Je nach Sicherheitseinstellungen des DBMS ist es jedoch nicht immer möglich, Schemas nach Belieben zu erstellen oder auszuwählen. Sind die Zielschemas nicht leer, werden die archivierten Daten nur dann hochgeladen, wenn entweder keine Namenskollisionen bei den Typen und Tabellen auftreten oder explizit die Option Überschreiben gewählt wurde.
 
@@ -259,7 +255,7 @@ Der Datenbankbenutzer, dessen Anmeldedaten für den Upload verwendet werden, mus
 
 === Zeit, Zeitstempel und Zeitzonen
 
-Die Konvertierung von TIMEs und TIMESTAMPs in der Datenbank hängt von der lokalen Zeitzone ab. Die UTC-Zeit 14:30 im SIARD-Archiv wird beim Upload in Zürich als lokale Zeit 15:30 in die Datenbank geladen - im Winter. Um diese Konvertierung zu unterdrücken, muss SiardToDb mit der Option `-Duser.timezone=GMT` gestartet werden, was SIARD dazu veranlasst, alle Datenbankzeiten als UTC-Zeiten zu interpretieren.
+Die Konvertierung von TIMEs und TIMESTAMPs in der Datenbank hängt von der lokalen Zeitzone ab. Die UTC-Zeit 14:30 im SIARD-Archiv wird beim Upload in Zürich als lokale Zeit 15:30 in die Datenbank geladen - im Winter. Um diese Konvertierung zu unterdrücken, muss `siard restore` mit der JVM-Option `-Duser.timezone=GMT` gestartet werden, was SIARD dazu veranlasst, alle Datenbankzeiten als UTC-Zeiten zu interpretieren.
 
 === Verschlüsselte Verbindungen
 

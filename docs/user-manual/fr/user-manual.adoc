@@ -59,8 +59,7 @@ Les distributions avec ou sans JRE inclus sont livrées sous forme d'archives ZI
 | nom du script | description
 
 | siard-suite (.bat) | Démarrage de l'interface utilisateur graphique pour les systèmes Unix ou Windows
-| siard-from-db (.bat) | Archiver une base de données (CLI)
-| siard-to-db (.bat) | Téléchargement d'une archive SIARD dans une base de données (CLI)
+|| siard (.bat) | Ligne de commande : archiver une base de données ou charger une archive SIARD (CLI)
 |===
 
 
@@ -69,8 +68,7 @@ Les distributions avec ou sans JRE inclus sont livrées sous forme d'archives ZI
 La suite SIARD est composée des éléments suivants :
 
 * Interface utilisateur graphique (GUI)
-* SiardFromDb (CLI)
-* SiardToDB (CLI)
+* siard (CLI)
 
 Le but et l'utilisation des composants sont expliqués dans la suite.
 
@@ -121,18 +119,18 @@ Les réglages suivants peuvent être effectués :
 
 Outre l'interface utilisateur graphique, les bases de données peuvent également être archivées ou une archive peut être relue dans une base de données via la ligne de commande.
 
-Pour cela, les scripts `siard-from-db` et `siard-to-db` sont disponibles dans la distribution ZIP.
+Pour cela, le script `siard` avec les sous-commandes `archive` (archiver une base de données dans un fichier SIARD) et `restore` (charger une archive SIARD dans une base de données) est disponible dans la distribution ZIP. `siard --help`, `siard archive --help` et `siard restore --help` affichent l'aide générée, `siard --version` les informations de version ; le code de sortie est `0` en cas de succès, `1` en cas d'erreur d'exécution et `2` en cas d'erreur d'usage. Le mot de passe de la base de données est déterminé dans cet ordre : `--password=<valeur>`, une invite interactive lorsque `--password` est donné sans valeur, ou la variable d'environnement `SIARD_PASSWORD`.
 
-=== SiardFromDb
+=== siard archive
 
-Avec `siard-from-db`, une base de données peut être archivée sans utiliser l'interface utilisateur graphique.
+Avec `siard archive`, une base de données peut être archivée sans utiliser l'interface utilisateur graphique.
 
 ==== Appel
 
 Dans un terminal, allez dans le répertoire où l'archive ZIP a été décompressée, ouvrez-y le répertoire `bin` et exécutez-le avec
 
 ```
-siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<import meta data>] [-x=<external lob folder>] [-m=<mime type>] -j=<JDBC URL> -u=<database user> -p=<database password> -s=<siard file> -e=<export meta data>"
+siard archive --jdbc-url=<JDBC URL> --user=<database user> [--password[=<database password>]] (--siard-file=<siard file> | --export-xml=<export meta data>) [--overwrite] [--views-as-tables] [--login-timeout=<login timeout>] [--query-timeout=<query timeout>] [--import-xml=<import meta data>] [--lob-folder=<external lob folder>] [--mime-type=<mime type>] [--schema=<schema name>]
 ```
 
 ==== Arguments
@@ -140,14 +138,15 @@ siard-from-db [-h] | [-o] [-v] [-l=<login timeout>] [-q=<query timeout>] [-i=<im
 |===
 |Argument | Description
 
-| -o | Écraser le(s) fichier(s) de sortie, s'il(s) existe(nt)
-| -v | Archiver les vues en tant que tables
-| <login timeout> | Timeout en secondes pour la connexion (login) (0 pour illimité)
-| <query timeout> | Timeout en secondes pour l'interrogation (0 pour illimité)
+| -o, --overwrite | Écraser le(s) fichier(s) de sortie, s'il(s) existe(nt)
+| -v, --views-as-tables | Archiver les vues en tant que tables
+| -l, --login-timeout | Timeout en secondes pour la connexion (login) (0 pour illimité)
+| -q, --query-timeout | Timeout en secondes pour l'interrogation (0 pour illimité)
 | <import meta data> | Nom du fichier XML de métadonnées à utiliser comme modèle
-| <external LOB folder> | Dossier dans lequel les données de la plus grande colonne LOB (large object) de la base de données doivent être enregistrées en externe (les contenus portant le même nom sont écrasés !)
-| <mime type> | Type MIME des données de la plus grande colonne LOB de la base de données (influence le choix de l'extension de nom des LOBs stockés en externe)
-| <JDBC URL> | URL JDBC de la base de données qui doit être téléchargée.
+| -x, --lob-folder | Dossier dans lequel les données de la plus grande colonne LOB (large object) de la base de données doivent être enregistrées en externe (les contenus portant le même nom sont écrasés !)
+| -m, --mime-type | Type MIME des données de la plus grande colonne LOB de la base de données (influence le choix de l'extension de nom des LOBs stockés en externe)
+| --schema | Nom du schéma à archiver
+| -j, --jdbc-url | URL JDBC de la base de données qui doit être téléchargée.
 
 Exemples :
 
@@ -165,9 +164,9 @@ jdbc:postgresql://<host>:5432/<db-name>.
 
 *SQL-Server:*
 jdbc:sqlserver://<host>/<db-name>:1433
-| <database user> | Utilisateur de la base de données
-| <database password> | Mot de passe de la base de données
-| <siard file> | Nom du fichier .siard à créer
+| -u, --user | Utilisateur de la base de données
+| -p, --password | Mot de passe de la base de données
+| -s, --siard-file | Nom du fichier .siard à créer
 | <export meta data> | Nom du fichier de métadonnées .xml à exporter
 
 |===
@@ -182,21 +181,19 @@ L'option Archiver les vues en tant que tables conduit généralement à un stock
 
 Le processus d'archivage est soit entièrement réussi, soit échoue.
 
-Pour les grandes bases de données, il est recommandé de télécharger d'abord le XML de métadonnées. Celui-ci contient toutes les métadonnées et les tailles des tables et aide ainsi à estimer le temps d'exécution nécessaire pour le téléchargement. En outre, pour les grandes tables, il est conseillé d'utiliser l'option -q 0, car il est impossible d'estimer le nombre de secondes que prendra une requête de taille.
+Pour les grandes bases de données, il est recommandé de télécharger d'abord le XML de métadonnées. Celui-ci contient toutes les métadonnées et les tailles des tables et aide ainsi à estimer le temps d'exécution nécessaire pour le téléchargement. En outre, pour les grandes tables, il est conseillé d'utiliser l'option --query-timeout=0, car il est impossible d'estimer le nombre de secondes que prendra une requête de taille.
 
 ==== Utilisateur de la base de données
 
 Il n'est généralement pas recommandé d'utiliser l'administrateur de la base de données (DBA, root, dbo, ...) avec tous les droits pour télécharger une archive SIARD. L'étendue des données stockées dans l'archive SIARD est définie par les objets auxquels l'utilisateur de l'archive peut accéder en lecture. Le DBA global peut normalement lire toutes les bases de données du système et, en outre, de nombreuses tables système qui ne doivent pas être archivées. C'est pourquoi il est important d'utiliser un utilisateur d'archives approprié pour le téléchargement, qui doit éventuellement être recréé à cette fin.
 
-=== SiardToDb
+=== siard restore
 
-SiardToDb est un programme en ligne de commande qui charge une archive SIARD dans une instance de base de données à des fins de recherche.
+La sous-commande `siard restore` charge une archive SIARD dans une instance de base de données à des fins de recherche.
 
 ==== Appel
 ```shell
-siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
--s=<siard-file> -j=<URL JDBC> -u=<utilisateur de la base de données> -p=<mot de passe de la base de données>
-[<schema> <mappedschema>]
+siard restore --siard-file=<siard file> --jdbc-url=<JDBC URL> --user=<database user> [--password[=<database password>]] [--overwrite] [--login-timeout=<login timeout>] [--query-timeout=<query timeout>] [--map-schema=<schema>=<mappedschema>]
 ```
 
 ==== Arguments
@@ -205,10 +202,10 @@ siard-to-db [-h] | [-o] [-l=<login timeout>] [-q=<query timeout>]
 | Argument | Description
 
 |-o | Écraser (overwrite) les types et/ou les tables de même nom dans la base de données, s'il y en a.
-| <login timeout> | Timeout en secondes pour la connexion (login) (0 pour illimité)
-| <query timeout> | Timeout en secondes pour une requête (query) (0 pour illimité)
-| <siard file> | Nom du fichier .siard à télécharger
-| <JDBC URL> | URL JDBC de la base de données cible.
+| -l, --login-timeout | Timeout en secondes pour la connexion (login) (0 pour illimité)
+| -q, --query-timeout | Timeout en secondes pour une requête (query) (0 pour illimité)
+| -s, --siard-file | Nom du fichier .siard à télécharger
+| -j, --jdbc-url | URL JDBC de la base de données cible.
 Exemples :
 
 *MS Access:* jdbc:access:<path>/<file-name>.mdb
@@ -222,10 +219,9 @@ Exemples :
 *Postgres:* jdbc:postgres://<host>:5432/<db-name>
 
 *SQL-Server:* jdbc:sqlserver://<host>\<db-name>:1433
-| <database user> | Utilisateur de la base de données
-| <database password> | Mot de passe de la base de données
-| <schema> | Nom du schéma dans l'archive SIARD
-| <mappedschema> | Nom du schéma à utiliser dans la base de données
+| -u, --user | Utilisateur de la base de données
+| -p, --password | Mot de passe de la base de données
+| --map-schema=<schema>=<mappedschema> | Correspondance d'un nom de schéma dans l'archive SIARD avec le nom à utiliser dans la base de données (répétable)
 |===
 
 ==== Remarques
@@ -250,7 +246,7 @@ Lorsqu'un utilisateur approprié a été désigné ou créé, le téléchargemen
 
 === Préparation d'une base de données pour l'upload
 
-Pour l'upload d'une base de données dans une instance d'un SGBD avec SIARD Suite, des schémas de base de données appropriés doivent être disponibles dans la base de données cible. Ces schémas peuvent ensuite être affectés aux schémas dans les archives SIARD dans le mappage des schémas de la boîte de dialogue de téléchargement (ou dans le mappage des schémas de la ligne de commande de SiardToDb).
+Pour l'upload d'une base de données dans une instance d'un SGBD avec SIARD Suite, des schémas de base de données appropriés doivent être disponibles dans la base de données cible. Ces schémas peuvent ensuite être affectés aux schémas dans les archives SIARD dans le mappage des schémas de la boîte de dialogue de téléchargement (ou dans le mappage des schémas de de la commande `siard restore`).
 
 Dans le cas idéal, les schémas cibles sont vides. Cependant, selon les paramètres de sécurité du SGBD, il n'est pas toujours possible de créer ou de sélectionner des schémas à volonté. Si les schémas cibles ne sont pas vides, les données archivées ne sont téléchargées que si soit il n'y a pas de collision de noms pour les types et les tables, soit l'option Écraser a été explicitement sélectionnée.
 
@@ -258,7 +254,7 @@ L'utilisateur de la base de données dont les données de connexion sont utilis�
 
 === Heure, horodatage et fuseaux horaires
 
-La conversion des TIMEs et des TIMESTAMPs dans la base de données dépend du fuseau horaire local. L'heure UTC 14:30 dans les archives SIARD est chargée dans la base de données en tant qu'heure locale 15:30 lors du téléchargement à Zurich - en hiver. Pour supprimer cette conversion, SiardToDb doit être démarré avec l'option `-Duser.timezone=GMT`, ce qui fait que SIARD interprète toutes les heures de la base de données comme des heures UTC.
+La conversion des TIMEs et des TIMESTAMPs dans la base de données dépend du fuseau horaire local. L'heure UTC 14:30 dans les archives SIARD est chargée dans la base de données en tant qu'heure locale 15:30 lors du téléchargement à Zurich - en hiver. Pour supprimer cette conversion, `siard restore` doit être démarré avec l'option `-Duser.timezone=GMT`, ce qui fait que SIARD interprète toutes les heures de la base de données comme des heures UTC.
 
 === Connexions chiffrées
 
