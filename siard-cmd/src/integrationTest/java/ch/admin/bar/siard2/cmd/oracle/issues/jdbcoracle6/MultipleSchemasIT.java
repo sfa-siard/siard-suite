@@ -14,9 +14,10 @@ import org.testcontainers.utility.MountableFile;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -35,19 +36,23 @@ public class MultipleSchemasIT {
                                                                    .toPath()),
                     "/container-entrypoint-initdb.d/00_create_schemas.sql");
 
-    // due to non-resolved issue https://github.com/sfa-siard/JdbcOracle/issues/10 expect an exception instead of ignoring the test.
+    // due to non-resolved issue https://github.com/sfa-siard/JdbcOracle/issues/10 expect a failure instead of ignoring the test.
     @Test
     public void downloadMultipleSchemas() {
         // given
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
-        // when/then
-        Assertions.assertThrows(SQLSyntaxErrorException.class, () -> SiardCliTest.execute("archive",
+        // when
+        var result = SiardCliTest.execute("archive",
                 "--overwrite",
                 "--jdbc-url=" + db.getJdbcUrl(),
                 "--user=" + "testuser",
                 "--password=" + "testpassword",
-                "--siard-file=" + actualArchive.getPathToArchiveFile()));
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
+
+        // then
+        assertEquals(1, result.exitCode());
+        assertThat(result.err()).contains("ORA-01031");
     }
 
     @Test
@@ -65,7 +70,7 @@ public class MultipleSchemasIT {
                 "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        Assertions.assertEquals(0, siardFromDb.exitCode());
+        assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = actualArchive.exploreMetadata();
 
