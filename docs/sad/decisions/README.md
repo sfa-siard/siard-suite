@@ -30,3 +30,4 @@ Records follow a lightweight MADR-like structure:
 | ADR-0005 | Web Companion Backend Framework | Proposed — to be created after the spike |
 | [ADR-0006](0006-picocli-cli-framework.md) | Picocli as the CLI Framework | Accepted |
 | [ADR-0007](0007-read-only-driver-config.md) | Read-Only JDBC Driver Configuration | Accepted |
+| [ADR-0008](0008-standalone-cli-distribution.md) | Standalone CLI Distribution | Accepted |

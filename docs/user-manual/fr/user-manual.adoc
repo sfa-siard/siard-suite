@@ -46,7 +46,7 @@ Les différentes distributions sont présentées ci-dessous. Toutes les distribu
 |Installateur natif pour MacOS
 |===
 
-*Note:* Si l'installateur natif est utilisé, le Siard CLI (Command Line Interface) n'est pas disponible. Pour pouvoir utiliser le CLI, il faut utiliser une distribution avec ou sans JRE inclus.
+*Note:* L'installateur SIARD Suite ne contient pas le Siard CLI (Command Line Interface). Le CLI est distribué comme produit séparé `siard-cli` avec ses propres installateurs natifs et archives image contenant un environnement Java embarqué.
 
 
 === Installation et exécution de l'application
@@ -59,7 +59,6 @@ Les distributions avec ou sans JRE inclus sont livrées sous forme d'archives ZI
 | nom du script | description
 
 | siard-suite (.bat) | Démarrage de l'interface utilisateur graphique pour les systèmes Unix ou Windows
-|| siard (.bat) | Ligne de commande : archiver une base de données ou charger une archive SIARD (CLI)
 |===
 
 
@@ -119,7 +118,16 @@ Les réglages suivants peuvent être effectués :
 
 Outre l'interface utilisateur graphique, les bases de données peuvent également être archivées ou une archive peut être relue dans une base de données via la ligne de commande.
 
-Pour cela, le script `siard` avec les sous-commandes `archive` (archiver une base de données dans un fichier SIARD) et `restore` (charger une archive SIARD dans une base de données) est disponible dans la distribution ZIP. `siard --help`, `siard archive --help` et `siard restore --help` affichent l'aide générée, `siard --version` les informations de version ; le code de sortie est `0` en cas de succès, `1` en cas d'erreur d'exécution et `2` en cas d'erreur d'usage. Le mot de passe de la base de données est déterminé dans cet ordre : `--password=<valeur>`, une invite interactive lorsque `--password` est donné sans valeur, ou la variable d'environnement `SIARD_PASSWORD`.
+L'outil en ligne de commande `siard` est distribué séparément en tant que produit `siard-cli` — il n'est pas inclus dans l'installateur SIARD Suite. Pour chaque système d'exploitation, un installateur natif (`siard-cli-<version>-win.msi` et `siard-cli-<version>-win.exe` pour Windows, `siard-cli-<version>-linux.deb` et `siard-cli-<version>-linux.rpm` pour Linux, `siard-cli-<version>-mac.dmg` pour macOS) ou une archive image ZIP (`siard-cli-<version>-<os>.zip`) est disponible. Les deux contiennent un environnement Java embarqué, aucune installation Java n'est requise.
+
+Le lanceur `siard` se trouve dans le répertoire d'installation et n'est pas ajouté au `PATH` :
+
+* Linux (`.deb`/`.rpm`) : `/opt/siard-cli/bin/siard`
+* Windows (`.msi`/`.exe`, installation système nécessitant des droits d'administrateur) : `siard.exe` dans le répertoire d'installation `siard-cli`
+* macOS (`.dmg`) : le lanceur `siard` dans le paquet applicatif `siard` ; pour une utilisation en terminal, le lanceur `bin/siard` de l'archive image ZIP est l'option la plus pratique
+* Archive image ZIP : `bin/siard` dans l'archive décompressée
+
+Le lanceur fournit les sous-commandes `archive` (archiver une base de données dans un fichier SIARD) et `restore` (charger une archive SIARD dans une base de données). `siard --help`, `siard archive --help` et `siard restore --help` affichent l'aide générée, `siard --version` les informations de version ; le code de sortie est `0` en cas de succès, `1` en cas d'erreur d'exécution et `2` en cas d'erreur d'usage. Le mot de passe de la base de données est déterminé dans cet ordre : `--password=<valeur>`, une invite interactive lorsque `--password` est donné sans valeur, ou la variable d'environnement `SIARD_PASSWORD`.
 
 === siard archive
 
@@ -127,7 +135,7 @@ Avec `siard archive`, une base de données peut être archivée sans utiliser l'
 
 ==== Appel
 
-Dans un terminal, allez dans le répertoire où l'archive ZIP a été décompressée, ouvrez-y le répertoire `bin` et exécutez-le avec
+Dans un terminal, allez dans le répertoire `bin` de l'archive image ZIP décompressée — ou à l'emplacement d'installation indiqué ci-dessus si un installateur natif a été utilisé — et exécutez-le avec
 
 ```
 siard archive --jdbc-url=<JDBC URL> --user=<database user> [--password[=<database password>]] (--siard-file=<siard file> | --export-xml=<export meta data>) [--overwrite] [--views-as-tables] [--login-timeout=<login timeout>] [--query-timeout=<query timeout>] [--import-xml=<import meta data>] [--lob-folder=<external lob folder>] [--mime-type=<mime type>] [--schema=<schema name>]

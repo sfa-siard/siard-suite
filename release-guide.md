@@ -4,30 +4,25 @@
 
 The development of SIARD Suite is financed by the Swiss Federal Archives (SFA), which are one of the main stakeholders of the project. The SFA are also one of the main users of the application. SFA staff workstations have the following restrictions:
 
-- Inability to download and run any form of executable binary or script (e.g. `SIARD-suite.bat`).
+- No Java is installed on the workstations.
+- Inability to download and run any form of executable binary or script (e.g. `SIARD-suite.bat`, image zips).
+- Only installers packaged by BIT (the federal IT service provider) are deployed to workstations.
+- BIT deployment policy forbids JavaFX in the `siard` CLI bundle, which is why the CLI is distributed as its own standalone product — with its own native installers and runtime-bundled image zips — rather than inside the SIARD Suite installer.
 
-The only way SFA staff can run the application is with the following cli command:
-
-```bash
-java -jar lib/siard-suite.jar
-```
-
-Due to these constraints, the application will often run fine when using native installers or start scripts (with bundled JRE), but not with the above command, without anyone noticing until an SFA staff member tries to run the application without success.
-
-That's why it is recommended to perform the following steps, to make sure that the application really works for SFA staff and for users of different distributions.
+That's why it is recommended to perform the following steps, to make sure that the packaged installers and images really work for SFA staff and for users of different distributions.
 
 ## Test script
 
-Switch to use Java 21 with JavaFX via sdkman (or any other way of switching between Java versions): 
-
-```bash
-sdk use java 21.0.2.fx-zulu
-```
-
-Run a build and create native installers and packaged distributions: 
+Run a build and create native installers and packaged distributions for both the SIARD Suite application and the `siard` CLI:
 
 ```bash
 ./gradlew clean jpackage
+```
+
+On Linux this produces the default installer type per module (`deb`). A second installer type is produced with:
+
+```bash
+./gradlew :siard-cmd:jpackage -PinstallerType=rpm
 ```
 
 Start some databases:
@@ -37,18 +32,18 @@ cd docker
 docker compose up -d --build
 ```
 
-## Smoke tests for SFA environment
+## Smoke tests for the packaged SIARD Suite application
 
-Switch to the unpacked distribution of your application:
+Switch to the installed or unpacked application (the jpackage app image mirrors what the native installers deploy):
 
 ```bash
-cd build/install/SIARD-Suite/
+cd siard-suite-app/build/jpackage/SIARD-Suite/
 ```
 
 Run the application:
 
 ```bash
-java -jar lib/siard-suite-2.2.*.jar 
+./SIARD-Suite(.exe)
 ```
 
 In the application, please carry out the following steps to archive data sources:
@@ -60,7 +55,7 @@ In the application, please carry out the following steps to archive data sources
 ### Microsoft SQL Server
   * Connection URL: jdbc:sqlserver://localhost:1433;databaseName=siard
   * Username: sa
-  * Password: Yukon900
+  * Password: Yukon900 (test password from `docker/docker-compose.yaml` — local test environment only, do not reuse elsewhere)
 
 ### Oracle
    * Connection URL: jdbc:oracle:thin:@localhost:1521/siard
@@ -73,21 +68,33 @@ In the application, please carry out the following steps to archive data sources
     * `/home/<username>/<your-directory>/siard-suite/docker/msaccess/nations.accdb`
 
 
-## Smoke tests for packaged distributions
+## Smoke tests for the `siard` CLI
 
-Change to the directory containing the unpacked application distribution (including a JRE)
+The CLI ships as native installers (`.msi`/`.exe`, `.deb`/`.rpm`, `.dmg`) and runtime-bundled image zips per OS. Unpack the image zip or install the native installer, then run the launcher **from the installed location** (launchers are not added to `PATH`):
+
+- Linux `.deb`/`.rpm`: `/opt/siard-cli/bin/siard`
+- Windows `.msi`/`.exe` (system-wide install): `siard-cli\siard.exe` under the chosen/program-files install dir
+- macOS `.dmg`: inside `siard.app`; the image zip (`bin/siard`) is the ergonomic path for terminal users
+- Image zip: `<unpacked>/bin/siard`
+
+Then verify:
 
 ```bash
-cd build/jpackage/SIARD-Suite/
+bin/siard --version          # prints program name, app version and SIARD format version; exit 0
+bin/siard archive --help     # usage help on stdout; exit 0
+bin/siard frobnicate         # error naming the unknown subcommand on stderr; exit 2
+bin/java --list-modules      # no module starting with javafx. (BIT requirement)
 ```
 
-Run the application:
+Optionally run a real archive against one of the docker databases:
 
 ```bash
-./bin/SIARD-Suite(.bat)
+bin/siard archive --jdbc-url=jdbc:postgresql://localhost:5432/siard --user=siard --password=siard --siard-file=/tmp/test.siard --overwrite   # exit 0
 ```
 
-Run the tests described above for both data sources. If everything works, push changes to the main branch and run the release task according to the readme.
+On Windows, also verify that running the `.msi`/`.exe` without administrator privileges reports that elevated privileges are required and installs no files, and that an installer built for a different OS is rejected.
+
+If everything works, push changes to the main branch and run the release task according to the readme.
 
 
 ## Considerations

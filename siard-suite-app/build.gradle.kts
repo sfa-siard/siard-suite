@@ -195,17 +195,6 @@ tasks.processResources {
     }
 }
 
-val siardCli = tasks.register<CreateStartScripts>("siardCli") {
-    applicationName = "siard"
-    mainClass.set("ch.admin.bar.siard2.cmd.SiardCli")
-    outputDir = file("build/scripts")
-    classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
-}
-
-tasks.named<CreateStartScripts>("startScripts") {
-    dependsOn(siardCli)
-}
-
 tasks.distTar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
@@ -215,8 +204,14 @@ tasks.distZip {
 }
 
 tasks.installDist {
-    dependsOn(siardCli)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    doLast {
+        // the siard CLI is a standalone product (siard-cli) and must not ship in the app distribution
+        val binDir = layout.buildDirectory.dir("install/SIARD-Suite/bin").get().asFile
+        check(!File(binDir, "siard").exists() && !File(binDir, "siard.bat").exists()) {
+            "siard launcher must not be part of the SIARD-Suite distribution"
+        }
+    }
 }
 
 tasks.asciidoctor {
