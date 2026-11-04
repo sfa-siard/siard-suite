@@ -38,6 +38,12 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
     private long _lRecordsUploaded = -1;
     private long _lRecordsTotal = -1;
     private long _lRecordsPercent = -1;
+    private PrintWriter _out = new PrintWriter(System.out, true);
+
+    /** Sets the writer for user-facing progress output. Defaults to {@code System.out}. */
+    public void setOut(PrintWriter out) {
+        _out = out;
+    }
 
 
     /** increment the number or records uploaded, issuing a notification,
@@ -388,7 +394,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
                                               mt.getParentMetaSchema()
                                                 .getName(),
                                               mt.getName());
-        System.out.println("  Table: " + qiTable.format());
+        _out.println("  Table: " + qiTable.format());
         TableRecordDispenser rd = table.openTableRecords();
         ResultSet rs = openTable(table, sm);
         Statement stmt = rs.getStatement();
@@ -408,14 +414,14 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             rs.moveToCurrentRow();
             lRecord++;
             if ((lRecord % lCOMMIT_RECORDS) == 0) {
-                System.out.println("    Record " + String.valueOf(lRecord) + " (" + sw.formatRate(rd.getByteCount() - lBytesStart, sw.stop()) + " kB/s)");
+                _out.println("    Record " + String.valueOf(lRecord) + " (" + sw.formatRate(rd.getByteCount() - lBytesStart, sw.stop()) + " kB/s)");
                 lBytesStart = rd.getByteCount();
                 sw.start();
             }
             incUploaded();
         }
-        System.out.println("    Record " + String.valueOf(lRecord) + " (" + sw.formatRate(rd.getByteCount() - lBytesStart, sw.stop()) + " kB/s)");
-        System.out.println("    Total: " + StopWatch.formatLong(lRecord) + " records (" + StopWatch.formatLong(rd.getByteCount()) + " bytes in " + sw.formatMs() + " ms)");
+        _out.println("    Record " + String.valueOf(lRecord) + " (" + sw.formatRate(rd.getByteCount() - lBytesStart, sw.stop()) + " kB/s)");
+        _out.println("    Total: " + StopWatch.formatLong(lRecord) + " records (" + StopWatch.formatLong(rd.getByteCount()) + " bytes in " + sw.formatMs() + " ms)");
         if (!rs.isClosed())
             rs.close();
         if (!stmt.isClosed())
@@ -455,7 +461,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
                  this._archive.getFile()
                               .getAbsoluteFile());
 
-        System.out.println("\r\nPrimary Data");
+        _out.println("\r\nPrimary Data");
         _progress = progress;
         /* determine total number of records in the database */
         _lRecordsTotal = 0;
@@ -478,7 +484,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
             enableConstraints();
         if (cancelRequested())
             throw new IOException("\r\nUpload of primary data cancelled!");
-        System.out.println("\r\nUpload terminated successfully.");
+        _out.println("\r\nUpload terminated successfully.");
         _conn.commit();
 
         LOG.info("Primary data upload finished");

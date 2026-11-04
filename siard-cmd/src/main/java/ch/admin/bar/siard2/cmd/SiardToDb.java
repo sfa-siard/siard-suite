@@ -82,6 +82,7 @@ public class SiardToDb {
                 MetaData md = archive.getMetaData();
                 MetaDataToDb mdtd = MetaDataToDb.newInstance(conn.getMetaData(), md, config.schemaMapping());
                 mdtd.setQueryTimeout(config.queryTimeoutSeconds());
+                mdtd.setOut(out);
                 if (!config.overwrite()
                         && (mdtd.tablesDroppedByUpload() != 0 || mdtd.typesDroppedByUpload() != 0)) {
                     err.println("Database objects exist which would be overwritten on upload!");
@@ -104,6 +105,7 @@ public class SiardToDb {
                 PrimaryDataToDb pdtd = PrimaryDataToDb.newInstance(conn, archive,
                         mdtd.getArchiveMapping(), mdtd.supportsArrays(), mdtd.supportsDistincts(), mdtd.supportsUdts());
                 pdtd.setQueryTimeout(config.queryTimeoutSeconds());
+                pdtd.setOut(out);
                 pdtd.upload(null);
                 return 0;
             } finally {

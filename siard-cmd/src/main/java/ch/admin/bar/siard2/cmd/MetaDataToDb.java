@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.text.ParseException;
 import java.util.*;
@@ -44,6 +45,12 @@ public class MetaDataToDb
     private int _iTablesCreated = -1;
     private int _iTables = -1;
     private int _iTablesPercent = -1;
+    private PrintWriter _out = new PrintWriter(System.out, true);
+
+    /** Sets the writer for user-facing progress output. Defaults to {@code System.out}. */
+    public void setOut(PrintWriter out) {
+        _out = out;
+    }
 
     /**
      * increment the number or tables created, issuing a notification,
@@ -411,7 +418,7 @@ public class MetaDataToDb
             MetaTable mt = ms.getMetaTable(iTable);
             QualifiedId qiTable = new QualifiedId(null, mt.getParentMetaSchema()
                                                           .getName(), mt.getName());
-            System.out.println("  Table: " + qiTable.format());
+            _out.println("  Table: " + qiTable.format());
             createTable(mt, sm);
             incTablesCreated();
         }
@@ -462,7 +469,7 @@ public class MetaDataToDb
                     String sSql = "DROP TABLE " + qiTable.format() + " CASCADE";
                     LOG.trace("SQL statement: '{}'", sSql);
                     stmt.executeUpdate(sSql);
-                    System.out.println("  Dropped: " + qiTable.format());
+                    _out.println("  Dropped: " + qiTable.format());
 
                     LOG.info("Table '{}.{}' successfully dropped", qiTable.getSchema(), qiTable.getName());
                 }
@@ -555,7 +562,7 @@ public class MetaDataToDb
                          .getFile()
                          .getAbsoluteFile());
 
-        System.out.println("Meta Data");
+        _out.println("Meta Data");
         _progress = progress;
         /* compute number of tables to create */
         _iTables = 0;

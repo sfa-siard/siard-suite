@@ -17,6 +17,7 @@ import org.apache.tika.Tika;
 
 import javax.xml.datatype.Duration;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -38,6 +39,12 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
     private StopWatch getCellStopWatch = null;
     private StopWatch setValueStopWatch = null;
     private final Tika tika = new Tika();
+    private PrintWriter out = new PrintWriter(System.out, true);
+
+    /** Sets the writer for user-facing progress output. Defaults to {@code System.out}. */
+    public void setOut(PrintWriter out) {
+        this.out = out;
+    }
 
 
     private PrimaryDataFromDb(Connection connection, Archive archive) {
@@ -69,7 +76,7 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
                  this._archive.getFile()
                               .getAbsoluteFile());
 
-        System.out.println("\r\nPrimary Data");
+        out.println("\r\nPrimary Data");
         this.progress = progress;
         /* determine total number of records in the database */
         recordsTotal = 0;
@@ -89,7 +96,7 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
         }
         if (cancelRequested())
             throw new IOException("\r\nDownload of primary data cancelled!");
-        System.out.println("\r\nDownload terminated successfully.");
+        out.println("\r\nDownload terminated successfully.");
         _conn.rollback();
 
         LOG.info("Primary data download finished");
@@ -244,7 +251,7 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
                                                    .getName(),
                                               table.getMetaTable()
                                                    .getName());
-        System.out.println("  Table: " + qiTable.format());
+        out.println("  Table: " + qiTable.format());
         long lRecord = 0;
         TableRecordRetainer rr = table.createTableRecords();
         ResultSet rs = openTable(table, null);
@@ -267,9 +274,9 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
 
         mimeTypeHandler.applyColumnMimeType(table);
 
-        System.out.println("    Record " + lRecord + " (" + sw.formatRate(rr.getByteCount() - lBytesStart,
+        out.println("    Record " + lRecord + " (" + sw.formatRate(rr.getByteCount() - lBytesStart,
                                                                           sw.stop()) + " kB/s)");
-        System.out.println("    Total: " + StopWatch.formatLong(lRecord) + " records (" + StopWatch.formatLong(rr.getByteCount()) + " bytes in " + sw.formatMs() + " ms)");
+        out.println("    Total: " + StopWatch.formatLong(lRecord) + " records (" + StopWatch.formatLong(rr.getByteCount()) + " bytes in " + sw.formatMs() + " ms)");
         if (!rs.isClosed())
             rs.close();
         if (!stmt.isClosed())
@@ -281,9 +288,9 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
                   qiTable.getName());
     }
 
-    private static long logTableRecordProgress(long lRecord, StopWatch sw, TableRecordRetainer rr, long lBytesStart) {
+    private long logTableRecordProgress(long lRecord, StopWatch sw, TableRecordRetainer rr, long lBytesStart) {
         if ((lRecord % REPORT_RECORDS) == 0) {
-            System.out.println("    Record " + lRecord + " (" + sw.formatRate(rr.getByteCount() - lBytesStart,
+            out.println("    Record " + lRecord + " (" + sw.formatRate(rr.getByteCount() - lBytesStart,
                                                                               sw.stop()) + " kB/s)");
             lBytesStart = rr.getByteCount();
             sw.start();

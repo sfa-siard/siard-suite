@@ -125,6 +125,7 @@ public class SiardFromDb {
                 if (fileSiard != null) {
                     PrimaryDataFromDb pdfd = PrimaryDataFromDb.newInstance(conn, archive);
                     pdfd.setQueryTimeout(config.queryTimeoutSeconds());
+                    pdfd.setOut(out);
                     pdfd.download(null);
                 } else {
                     fileArchive.deleteOnExit();
