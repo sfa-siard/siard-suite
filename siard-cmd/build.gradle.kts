@@ -364,6 +364,12 @@ tasks.named("jpackage") {
     }
 }
 
+listOf("jpackageImage", "jpackage").forEach { taskName ->
+    tasks.named(taskName) {
+        dependsOn(tasks.named("runtime"))
+    }
+}
+
 val cliImageSuffix = if (cliOsName != "unknown") "-$cliOsName" else ""
 tasks.register("verifyRuntimeImage") {
     description = "Verifies the bundled runtime image contains a siard launcher and no JavaFX modules"
