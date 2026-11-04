@@ -87,9 +87,8 @@ public class ArchiveCommand implements Callable<Integer> {
             }
         }
 
-        boolean passwordRequested = spec.commandLine()
-                                        .getParseResult()
-                                        .hasMatchedOption("--password");
+        boolean passwordRequested = PasswordResolver.passwordRequested(spec.commandLine()
+                                                                         .getParseResult());
         String resolvedPassword = PasswordResolver.resolve(password, passwordRequested,
                                                            parent.passwordPrompter(), parent.env(), err);
         if (resolvedPassword == null) return 2;

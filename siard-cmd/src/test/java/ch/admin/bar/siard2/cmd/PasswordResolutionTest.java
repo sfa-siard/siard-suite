@@ -109,6 +109,26 @@ class PasswordResolutionTest {
     }
 
     @Test
+    void passwordWithExplicitEmptyValue_isUsedWithoutPrompt(@TempDir Path tempDir) {
+        // given
+        PasswordPrompter failOnPrompt = () -> {
+            throw new AssertionError("prompt must not be called when --password= is given");
+        };
+
+        // when
+        Result result = execute(failOnPrompt,
+                                Map.<String, String>of()::get,
+                                "archive",
+                                "--jdbc-url=" + UNREACHABLE_PG_URL,
+                                "--user=u",
+                                "--password=",
+                                "--siard-file=" + tempDir.resolve("out.siard"));
+
+        // then the empty password was accepted and the run proceeded to an execution error, not a usage error
+        assertThat(result.exitCode()).isEqualTo(1);
+    }
+
+    @Test
     void passwordWithoutValueAndNoConsole_explainsAndExits2(@TempDir Path tempDir) {
         // given no console available
         PasswordPrompter noConsole = () -> null;
