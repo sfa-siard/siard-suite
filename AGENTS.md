@@ -18,6 +18,8 @@ This is a **Gradle multi-module monorepo**. All modules live in the same reposit
 | Module | Purpose |
 |---|---|
 | `siard-suite-app` | Desktop GUI application (JavaFX) |
+| `siard-web-backend-poc` | Web companion backend — Quarkus local agent serving REST API + frontend (PoC) |
+| `siard-web-frontend-poc` | Web companion frontend — React/Vite UI packaged as a `META-INF/resources` jar (PoC) |
 | `siard-cmd` | Command-line interface (`SiardFromDb`, `SiardToDb`) |
 | `siard-api` | Core API for reading/writing SIARD files (JAXB-based) |
 | `jdbc-base` | Abstract base JDBC wrapper with test fixtures |

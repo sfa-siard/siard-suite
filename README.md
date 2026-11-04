@@ -32,6 +32,53 @@ or use the provided skill using your coding agent:
 /understand-dashboard 
 ```
 
+## SIARD Web Companion (Proof of Concept)
+
+> **Proof of Concept — not for production use.** This is an experimental exploration of
+> replacing the JavaFX frontend with a browser-based UI served by a local agent process.
+> It exists to validate the architecture (Quarkus backend + React frontend + jpackage
+> installer); feature scope, stability, and UX are intentionally minimal. The JavaFX
+> application remains the supported interface.
+
+The PoC consists of two Gradle modules:
+
+- `siard-web-backend-poc` — a Quarkus local agent exposing a small REST API over `siard-api` (open a `.siard` file by path, browse its schema/table/column tree), protected by a per-launch session token
+- `siard-web-frontend-poc` — a React/Vite single-page frontend packaged into the backend as a `META-INF/resources` jar
+
+### Run in dev mode
+
+Backend only (serves the built frontend at the logged URL):
+
+```shell
+./gradlew :siard-web-backend-poc:quarkusDev
+# then open the logged URL: http://127.0.0.1:8080/?token=<uuid>
+```
+
+Frontend with hot reload (recommended for UI work):
+
+```shell
+# terminal 1
+./gradlew :siard-web-backend-poc:quarkusDev
+
+# terminal 2
+cd siard-web-frontend-poc && npm run dev
+# then open http://localhost:5173/?token=<token-from-terminal-1>
+# (Vite proxies /api to localhost:8080)
+```
+
+The session token is required in dev mode as well — copy it from the startup log line
+`SIARD web agent listening at ...`. It regenerates on every restart.
+Use `quarkusDev`, not `./gradlew :siard-web-backend-poc:run` (the application-plugin
+classpath layout is incompatible with the Quarkus entry point).
+
+### Build the native package
+
+```shell
+./gradlew :siard-web-backend-poc:jpackage
+# produces build/jpackage/SIARD-Web/ (app image) and a .deb on Linux
+# (.exe/.msi requires a Windows host — jpackage cannot cross-build)
+```
+
 ## Declaration
 
 > Contributions to the codebase have been and will be made with the support of AI-assisted
