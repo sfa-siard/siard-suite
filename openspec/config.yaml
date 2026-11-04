@@ -7,26 +7,56 @@ schema: spec-driven
 # Example:
 #   context: |
 #     Designs and tasks must cover Windows, macOS, and Linux
-#     Write all artifacts in Spanish
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
 # Example:
-#   rules:
+rules:
 #     proposal:
 #       - Keep proposals under 500 words
 #       - Always state what is out of scope
+  specs:
+    - >-
+      Every requirement needs 3 scenario types: happy path, error/edge case, and
+      authorization. For tools with no roles/permissions model (CLI, desktop apps),
+      use credential/input-security scenarios instead (e.g. no credential leakage
+      in logs or output, rejection of malformed input). Never omit it.
+    - >-
+      Every GIVEN/WHEN/THEN must be measurable: write "returns 201", not "the
+      system works correctly".
 #     tasks:
 #       - Break tasks into chunks of max 2 hours
 
 # Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
+# Guidance for how apply and archive should be conducted.
 # This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+
+operations:
+  apply:
+    guidance:
+      - >-
+        Do not implement behavior that isn't described in a spec scenario. If you
+        find behavior is needed that no scenario covers, update the spec first,
+        then implement.
+      - >-
+        Before asking, check AGENTS.md, the change's artifacts, and existing
+        codebase patterns. Decide and proceed on structural choices (layer
+        placement, reuse vs. new helper, naming), recording each with a one-line
+        reason in design.md (create it if missing). Ask only about uncovered behavior, public API or
+        schema changes, security, or anything hard to reverse.
+      - >-
+        When all tasks are complete, run the openspec-verify-change skill on this
+        change and fix any CRITICAL issues before reporting done.
+  archive:
+    guidance:
+      - >-
+        Before archiving, review this change for harness gaps: questions AGENTS.md
+        didn't answer, questions you had to ask the user, undocumented patterns you
+        applied, quality issues an openspec/config.yaml rule would have prevented,
+        scenario types that should be mandatory, and recurring decisions that
+        should become rules.
+      - >-
+        Append each gap to openspec/agent-guidance-suggestions.md under "## Harness Suggestions" as
+        "Suggestion: [change] in [AGENTS.md | openspec/config.yaml | .agents/skills/]"
+        followed by "Reason: [the specific ambiguity or decision that prompted it]".
+        Do not edit AGENTS.md or config.yaml directly. If there are no gaps, add nothing.
