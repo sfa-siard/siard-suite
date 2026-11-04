@@ -3,6 +3,8 @@ package ch.admin.bar.siard2.cmd;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -86,6 +88,19 @@ class ConfigRecordsTest {
 
         // then
         assertThat(config.schemaMapping()).containsEntry("HR", "HR_COPY");
+    }
+
+    @Test
+    void externalLobFolderUri_escapesSpecialCharacters(@TempDir Path tempDir) throws Exception {
+        // given a LOB folder whose name contains characters illegal in a URI path
+        Path lobFolder = Files.createDirectory(tempDir.resolve("lob folder#x"));
+
+        // when
+        URI uri = ArchiveConfig.externalLobFolderUri(tempDir.resolve("out.siard"), lobFolder);
+
+        // then
+        assertThat(uri.getPath()).isEqualTo("../lob folder#x/");
+        assertThat(uri.toString()).isEqualTo("../lob%20folder%23x/");
     }
 
     @Test

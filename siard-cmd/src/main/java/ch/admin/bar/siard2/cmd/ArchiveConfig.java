@@ -63,16 +63,17 @@ public record ArchiveConfig(
      * @throws IllegalArgumentException if the folder cannot be expressed as a URI
      */
     public static URI externalLobFolderUri(Path siardFile, Path externalLobFolder) {
-        File relative = siardFile.toFile()
-                                 .getParentFile()
-                                 .getAbsoluteFile()
-                                 .toPath()
-                                 .relativize(externalLobFolder.toFile()
-                                                              .getAbsoluteFile()
-                                                              .toPath())
-                                 .toFile();
+        String relative = siardFile.toFile()
+                                   .getParentFile()
+                                   .getAbsoluteFile()
+                                   .toPath()
+                                   .relativize(externalLobFolder.toFile()
+                                                                .getAbsoluteFile()
+                                                                .toPath())
+                                   .toString()
+                                   .replace(File.separatorChar, '/');
         try {
-            return new URI("../" + relative + "/");
+            return new URI(null, null, "../" + relative + "/", null);
         } catch (URISyntaxException use) {
             throw new IllegalArgumentException(
                     "External LOB folder " + externalLobFolder.toFile()
