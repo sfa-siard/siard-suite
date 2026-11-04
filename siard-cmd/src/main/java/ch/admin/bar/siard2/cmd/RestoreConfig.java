@@ -22,7 +22,8 @@ public record RestoreConfig(String jdbcUrl, String databaseUser, String database
     /** Masked so the credential can never leak through logging or assertion output. */
     @Override
     public String toString() {
-        return "RestoreConfig[jdbcUrl=" + jdbcUrl + ", databaseUser=" + databaseUser
+        return "RestoreConfig[jdbcUrl=" + SiardConnection.maskCredentials(jdbcUrl)
+                + ", databaseUser=" + databaseUser
                 + ", databasePassword=***, siardFile=" + siardFile
                 + ", overwrite=" + overwrite + ", loginTimeoutSeconds=" + loginTimeoutSeconds
                 + ", queryTimeoutSeconds=" + queryTimeoutSeconds

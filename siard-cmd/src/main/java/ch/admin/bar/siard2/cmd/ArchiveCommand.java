@@ -65,7 +65,10 @@ public class ArchiveCommand implements Callable<Integer> {
         }
         String badScheme = SiardConnection.getSiardConnection()
                                           .unsupportedScheme(jdbcUrl);
-        if (badScheme != null) return usageError("JDBC URL " + jdbcUrl + " has an unsupported scheme: " + badScheme);
+        if (badScheme != null) {
+            return usageError("JDBC URL " + SiardConnection.maskCredentials(jdbcUrl) +
+                                      " has an unsupported scheme: " + badScheme);
+        }
         if (importXml != null && !Files.isRegularFile(importXml)) {
             return usageError("Import XML file " + importXml + " does not exist!");
         }

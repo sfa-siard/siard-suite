@@ -40,7 +40,8 @@ public record ArchiveConfig(
     // masked the password so that it never leaks through logging or assertion output
     @Override
     public String toString() {
-        return "ArchiveConfig[jdbcUrl=" + jdbcUrl + ", databaseUser=" + databaseUser
+        return "ArchiveConfig[jdbcUrl=" + SiardConnection.maskCredentials(jdbcUrl)
+                + ", databaseUser=" + databaseUser
                 + ", databasePassword=***, siardFile=" + siardFile + ", exportXml=" + exportXml
                 + ", overwrite=" + overwrite + ", viewsAsTables=" + viewsAsTables
                 + ", loginTimeoutSeconds=" + loginTimeoutSeconds

@@ -39,6 +39,17 @@ public class SiardConnectionTest {
     }
 
     @Test
+    void maskCredentials_coversSupportedUrlCredentialFormats() {
+        assertThat(SiardConnection.maskCredentials("jdbc:postgresql://u:secret@host:5432/db"))
+                .isEqualTo("jdbc:postgresql://u:***@host:5432/db");
+        assertThat(SiardConnection.maskCredentials("jdbc:postgresql://host:5432/db?user=u&password=secret&ssl=true"))
+                .isEqualTo("jdbc:postgresql://host:5432/db?user=u&password=***&ssl=true");
+        assertThat(SiardConnection.maskCredentials("jdbc:sqlserver://host:1433;databaseName=db;user=u;password=secret"))
+                .isEqualTo("jdbc:sqlserver://host:1433;databaseName=db;user=u;password=***");
+        assertThat(SiardConnection.maskCredentials(null)).isNull();
+    }
+
+    @Test
     void driversOverride_loadsExternalPropertiesFile(@TempDir Path tempDir) throws Exception {
         // given
         Path props = tempDir.resolve("jdbcdrivers.properties");

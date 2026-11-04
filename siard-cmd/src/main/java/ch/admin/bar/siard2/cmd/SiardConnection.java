@@ -134,7 +134,7 @@ public class SiardConnection extends Properties {
         val split = jdbcUrl.split(":");
 
         if (split.length < 3 || !split[0].equals("jdbc")) {
-            throw new IllegalArgumentException(jdbcUrl + " is not a valid JDBC-Url.");
+            throw new IllegalArgumentException(maskCredentials(jdbcUrl) + " is not a valid JDBC-Url.");
         }
 
         return split[1];
@@ -146,7 +146,7 @@ public class SiardConnection extends Properties {
 
         val driverClassName = getProperty(subSchema);
         if (driverClassName == null) {
-            throw new IllegalArgumentException("No driver specified for url " + jdbcUrl);
+            throw new IllegalArgumentException("No driver specified for url " + maskCredentials(jdbcUrl));
         }
         val driverClass = Class.forName(driverClassName);
         val driver = (Driver) driverClass.newInstance();
@@ -156,7 +156,7 @@ public class SiardConnection extends Properties {
                     "Driver %s does not accept url %s.",
                     driver.getClass()
                           .getCanonicalName(),
-                    jdbcUrl));
+                    maskCredentials(jdbcUrl)));
         }
 
         LOG.info("'{}' as driver loaded for url '{}'", driver.getClass()
@@ -211,10 +211,14 @@ public class SiardConnection extends Properties {
     }
 
 
-    /** Masks credentials embedded as user:password@ in a JDBC URL for logging and output. */
+    /** Masks credentials embedded in a JDBC URL for logging and output.
+     * Covers {@code ://user:password@} authority syntax and password properties in
+     * query ({@code ?password=x}, {@code &password=x}) or property-list
+     * ({@code ;password=x}, {@code ;pwd=x}) style URLs. */
     public static String maskCredentials(String jdbcUrl) {
         if (jdbcUrl == null) return null;
-        return jdbcUrl.replaceAll("://([^/:@]+):([^/@]+)@", "://$1:***@");
+        return jdbcUrl.replaceAll("://([^/:@]+):([^/@]+)@", "://$1:***@")
+                      .replaceAll("([?&;](?i:password|pwd|pass)=)[^&;]*", "$1***");
     }
 
     /** Returns the JDBC sub scheme if no driver is configured for it, otherwise null.
@@ -258,9 +262,9 @@ public class SiardConnection extends Properties {
                 } else
                     sError = "No driver found for sub scheme \"" + sSubScheme + "\"!";
             } else
-                sError = "JDBC URL " + sJdbcUrl + " must contain a subs scheme terminated by colon (\":\")!";
+                sError = "JDBC URL " + maskCredentials(sJdbcUrl) + " must contain a subs scheme terminated by colon (\":\")!";
         } else
-            sError = "JDBC URL " + sJdbcUrl + " must start with \"" + BaseDriver.sJDBC_SCHEME + "\"!";
+            sError = "JDBC URL " + maskCredentials(sJdbcUrl) + " must start with \"" + BaseDriver.sJDBC_SCHEME + "\"!";
         return sError;
     }
 
