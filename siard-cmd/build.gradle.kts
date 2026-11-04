@@ -106,7 +106,7 @@ tasks.withType<Test> {
 }
 
 // Helper function to create database-specific integration test tasks
-fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskProvider<Test> {
+fun createDbIntegrationTestTask(dbName: String, packagePattern: String, forks: Int = 2): TaskProvider<Test> {
     return tasks.register<Test>("integrationTest${dbName.replaceFirstChar { it.uppercase() }}") {
         description = "Runs the $dbName integration tests"
         group = "verification"
@@ -119,7 +119,7 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskPro
             includeTestsMatching("ch.admin.bar.siard2.cmd.$packagePattern.*")
         }
 
-        maxParallelForks = 2
+        maxParallelForks = forks
 
         testLogging {
             events("passed", "skipped", "failed")
@@ -151,7 +151,8 @@ val integrationTestPostgres = createDbIntegrationTestTask("postgres", "postgres"
 val integrationTestMysql = createDbIntegrationTestTask("mysql", "mysql")
 val integrationTestMariadb = createDbIntegrationTestTask("mariadb", "mariadb")
 val integrationTestMssql = createDbIntegrationTestTask("mssql", "mssql")
-val integrationTestOracle = createDbIntegrationTestTask("oracle", "oracle")
+// Oracle XE cold-start does not tolerate parallel test forks on constrained CI runners
+val integrationTestOracle = createDbIntegrationTestTask("oracle", "oracle", forks = 1)
 val integrationTestDb2 = createDbIntegrationTestTask("db2", "db2")
 val integrationTestMsaccess = createDbIntegrationTestTask("msaccess", "msaccess")
 val integrationTestUtils = createDbIntegrationTestTask("utils", "utils")

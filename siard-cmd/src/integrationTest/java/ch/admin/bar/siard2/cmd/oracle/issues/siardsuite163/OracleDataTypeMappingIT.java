@@ -2,6 +2,7 @@ package ch.admin.bar.siard2.cmd.oracle.issues.siardsuite163;
 
 import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.ConsoleLogConsumer;
+import ch.admin.bar.siard2.cmd.utils.OracleTestDb;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -27,7 +28,7 @@ public class OracleDataTypeMappingIT {
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
     @Container
-    public OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
+    public OracleContainer db = OracleTestDb.newContainer()
             .withLogConsumer(new ConsoleLogConsumer())
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES).toPath()),
