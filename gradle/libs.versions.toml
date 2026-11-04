@@ -53,6 +53,7 @@ mslinks = "1.0.6.2"
 jetbrains-annotations = "26.0.2"
 testfx = "4.0.18"
 bouncycastle = "1.84"
+picocli = "4.7.7"
 
 [libraries]
 # ANTLR
@@ -95,6 +96,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 
 # JavaFX
 javafx-base-win = { module = "org.openjfx:javafx-base", version.ref = "javafx" }

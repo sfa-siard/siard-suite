@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.mysql.issues.jdbcmysql4;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -40,29 +40,27 @@ public class MySQLWildcardIT {
     public void downloadDbMySql8_expectNoException() throws SQLException, IOException, ClassNotFoundException {
         val createdArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb dbtoSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + downloadDbMySql8.getJdbcUrl(),
-                "-u:" + "it_user",
-                "-p:" + "it_password",
-                "-s:" + createdArchive.getPathToArchiveFile()
-        });
+        var dbtoSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + downloadDbMySql8.getJdbcUrl(),
+                "--user=" + "it_user",
+                "--password=" + "it_password",
+                "--siard-file=" + createdArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+        Assertions.assertEquals(0, dbtoSiard.exitCode());
     }
 
     @Test
     public void downloadDbMySql5_expectNoException() throws SQLException, IOException, ClassNotFoundException {
         val createdArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb dbtoSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + downloadDbMySql5.getJdbcUrl() + "?zeroDateTimeBehavior=convertToNull",
-                "-u:" + "it_user",
-                "-p:" + "it_password",
-                "-s:" + createdArchive.getPathToArchiveFile()
-        });
+        var dbtoSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + downloadDbMySql5.getJdbcUrl() + "?zeroDateTimeBehavior=convertToNull",
+                "--user=" + "it_user",
+                "--password=" + "it_password",
+                "--siard-file=" + createdArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+        Assertions.assertEquals(0, dbtoSiard.exitCode());
     }
 }

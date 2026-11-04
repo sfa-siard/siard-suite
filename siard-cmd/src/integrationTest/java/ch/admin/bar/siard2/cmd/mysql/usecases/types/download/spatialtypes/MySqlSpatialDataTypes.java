@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.mysql.usecases.types.download.spatialtypes;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
@@ -50,16 +50,15 @@ public class MySqlSpatialDataTypes {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + jdbcUrl,
-                "-u:" + "it_user",
-                "-p:" + "it_password",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + jdbcUrl,
+                "--user=" + "it_user",
+                "--password=" + "it_password",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(0, siardFromDb.exitCode());
 
         actualArchive.preserveArchive();
 

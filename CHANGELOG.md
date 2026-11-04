@@ -2,6 +2,15 @@
 
 ## unreleased
 
+* Feature:
+  * Modernized command-line interface: 
+    * a single `siard` binary with `archive` and `restore` subcommands, 
+    * GNU-style options (`--jdbc-url`, `--user`, `--password`, ...), 
+    * standard exit codes (0/1/2), 
+    * `--help`/`--version`, 
+    * interactive password prompt with `SIARD_PASSWORD` fallback. 
+    * **Breaking change:** replaces `siard-from-db`/`siard-to-db`, the old `-j:`/`-u:`/`-p:` option syntax, and the 0/4/8/12 exit codes.
+
 * Maintenance:
   * upgrade to gradle 9.7
   * upgrade to java 21

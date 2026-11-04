@@ -1,6 +1,7 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.jdbcoracle6;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
+import ch.admin.bar.siard2.cmd.utils.OracleTestDb;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -14,9 +15,10 @@ import org.testcontainers.utility.MountableFile;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -29,26 +31,29 @@ public class MultipleSchemasIT {
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
     @Container
-    public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
+    public final OracleContainer db = OracleTestDb.newContainer()
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.MULTPLE_SCHEMAS)
                                                                    .toPath()),
                     "/container-entrypoint-initdb.d/00_create_schemas.sql");
 
-    // due to non-resolved issue https://github.com/sfa-siard/JdbcOracle/issues/10 expect an exception instead of ignoring the test.
+    // due to non-resolved issue https://github.com/sfa-siard/JdbcOracle/issues/10 expect a failure instead of ignoring the test.
     @Test
     public void downloadMultipleSchemas() {
         // given
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
-        // when/then
-        Assertions.assertThrows(SQLSyntaxErrorException.class, () -> new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "testuser",
-                "-p:" + "testpassword",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        }));
+        // when
+        var result = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "testuser",
+                "--password=" + "testpassword",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
+
+        // then
+        assertEquals(1, result.exitCode());
+        assertThat(result.err()).contains("ORA-01031");
     }
 
     @Test
@@ -57,17 +62,16 @@ public class MultipleSchemasIT {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "testuser",
-                "-p:" + "testpassword",
-                "--schema:" + "TESTUSER",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "testuser",
+                "--password=" + "testpassword",
+                "--schema=" + "TESTUSER",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = actualArchive.exploreMetadata();
 

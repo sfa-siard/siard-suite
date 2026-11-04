@@ -31,7 +31,7 @@ repositories {
 sourceSets {
     create("integrationTest") {
         java.srcDir("src/integrationTest/java")
-        compileClasspath += sourceSets["main"].output + sourceSets["test"].compileClasspath
+        compileClasspath += sourceSets["main"].output + sourceSets["test"].output + sourceSets["test"].compileClasspath
         runtimeClasspath += output + compileClasspath + sourceSets["test"].runtimeClasspath
     }
 }
@@ -49,6 +49,7 @@ configurations.named("integrationTestRuntimeOnly") {
 dependencies {
     implementation(libs.tika.core)
     implementation(libs.slf4j.api)
+    implementation(libs.picocli)
 
 
     implementation(project(":siard-api"))
@@ -65,6 +66,7 @@ dependencies {
     runtimeOnly(libs.logback.classic)
 
     testImplementation(libs.assertj.core)
+    testImplementation(libs.logback.classic)
     testImplementation(libs.mockito.core)
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
@@ -104,7 +106,7 @@ tasks.withType<Test> {
 }
 
 // Helper function to create database-specific integration test tasks
-fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskProvider<Test> {
+fun createDbIntegrationTestTask(dbName: String, packagePattern: String, forks: Int = 2): TaskProvider<Test> {
     return tasks.register<Test>("integrationTest${dbName.replaceFirstChar { it.uppercase() }}") {
         description = "Runs the $dbName integration tests"
         group = "verification"
@@ -117,7 +119,7 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String): TaskPro
             includeTestsMatching("ch.admin.bar.siard2.cmd.$packagePattern.*")
         }
 
-        maxParallelForks = 2
+        maxParallelForks = forks
 
         testLogging {
             events("passed", "skipped", "failed")
@@ -149,7 +151,8 @@ val integrationTestPostgres = createDbIntegrationTestTask("postgres", "postgres"
 val integrationTestMysql = createDbIntegrationTestTask("mysql", "mysql")
 val integrationTestMariadb = createDbIntegrationTestTask("mariadb", "mariadb")
 val integrationTestMssql = createDbIntegrationTestTask("mssql", "mssql")
-val integrationTestOracle = createDbIntegrationTestTask("oracle", "oracle")
+// Oracle XE cold-start does not tolerate parallel test forks on constrained CI runners
+val integrationTestOracle = createDbIntegrationTestTask("oracle", "oracle", forks = 1)
 val integrationTestDb2 = createDbIntegrationTestTask("db2", "db2")
 val integrationTestMsaccess = createDbIntegrationTestTask("msaccess", "msaccess")
 val integrationTestUtils = createDbIntegrationTestTask("utils", "utils")
@@ -246,6 +249,12 @@ tasks {
     }
 }
 
+application {
+    mainClass.set("ch.admin.bar.siard2.cmd.SiardCli")
+    applicationName = "siard"
+    applicationDefaultJvmArgs = listOf(xercesSaxParserFactory)
+}
+
 distributions {
     main {
         contents {
@@ -269,49 +278,12 @@ distributions {
 
             from(layout.projectDirectory.dir("doc")) {
                 into("doc")
-                exclude("/manual/developer")
+                exclude("/manual/**")
             }
 
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
     }
-}
-
-val createSiardToDbStartScript = tasks.register<CreateStartScripts>("createSiardToDbStartScript") {
-    mainClass.set("ch.admin.bar.siard2.cmd.SiardToDb")
-    description = "Creates a start script for siard-to-db"
-    applicationName = "siard-to-db"
-    outputDir = layout.buildDirectory.dir("scripts").get().asFile
-    classpath = files(tasks.named<Jar>("jar").get().archiveFile, configurations.runtimeClasspath.get())
-}
-
-tasks.withType<CreateStartScripts>().configureEach {
-    doLast {
-        val jvmArgsLine = listOf(xercesSaxParserFactory).joinToString(" ")
-
-        // UNIX script
-        unixScript.writeText(
-            unixScript.readText().replace(
-                "DEFAULT_JVM_OPTS=\"\"",
-                "DEFAULT_JVM_OPTS=\"$jvmArgsLine\""
-            )
-        )
-
-        // Windows script
-        windowsScript.writeText(
-            windowsScript.readText().replace(
-                "set DEFAULT_JVM_OPTS=",
-                "set DEFAULT_JVM_OPTS=$jvmArgsLine"
-            )
-        )
-    }
-}
-
-
-tasks.named<CreateStartScripts>("startScripts") {
-    mainClass.set("ch.admin.bar.siard2.cmd.SiardFromDb")
-    applicationName = "siard-from-db"
-    dependsOn(createSiardToDbStartScript)
 }
 
 tasks.named<Sync>("installDist") {

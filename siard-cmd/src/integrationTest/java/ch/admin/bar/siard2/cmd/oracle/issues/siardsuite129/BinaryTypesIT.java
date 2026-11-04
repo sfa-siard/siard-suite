@@ -1,6 +1,7 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.siardsuite129;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
+import ch.admin.bar.siard2.cmd.utils.OracleTestDb;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -26,7 +27,7 @@ public class BinaryTypesIT {
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
     @Container
-    public OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
+    public OracleContainer db = OracleTestDb.newContainer()
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES)
                                                                    .toPath()),
@@ -40,15 +41,15 @@ public class BinaryTypesIT {
     public void downloadArchive() throws SQLException, IOException, ClassNotFoundException {
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb dbtoSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "IT_USER",
-                "-p:" + "password",
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var dbtoSiard = SiardCliTest.execute("archive",
+                "--overwrite",
 
-        assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "IT_USER",
+                "--password=" + "password",
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
+
+        assertEquals(0, dbtoSiard.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 

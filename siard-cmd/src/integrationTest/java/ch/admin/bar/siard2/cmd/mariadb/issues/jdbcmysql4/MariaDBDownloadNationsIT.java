@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.mariadb.issues.jdbcmysql4;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import lombok.val;
@@ -34,16 +34,15 @@ public class MariaDBDownloadNationsIT {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardFromDb dbToSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + downloadDb.getJdbcUrl()
+        var dbToSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + downloadDb.getJdbcUrl()
                                   .replace("jdbc:mariadb", "jdbc:mysql"),
-                "-u:" + "it_user",
-                "-p:" + "it_password",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+                "--user=" + "it_user",
+                "--password=" + "it_password",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(0, dbToSiard.exitCode());
     }
 }

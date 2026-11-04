@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.mysql.issues.siardsuite163;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -36,15 +36,14 @@ public class MySql8DataTypeMappingIT {
     public void downloadArchiveMySql8() throws SQLException, IOException, ClassNotFoundException {
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb dbToSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + downloadDbMySql8.getJdbcUrl(),
-                "-u:" + "it_user",
-                "-p:" + "it_password",
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var dbToSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + downloadDbMySql8.getJdbcUrl(),
+                "--user=" + "it_user",
+                "--password=" + "it_password",
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        assertEquals(0, dbToSiard.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 

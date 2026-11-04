@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.postgres.issues.siardsuite101;
 
-import ch.admin.bar.siard2.cmd.SiardToDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import lombok.val;
@@ -29,60 +29,56 @@ public class UploadToPostgresIT {
     public void uploadOracle() throws IOException, SQLException {
         val expectedArchive = siardArchivesHandler.prepareResource(SiardProjectExamples.SIMPLE_TEAMS_EXAMPLE_ORACLE21_2_2);
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + expectedArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + expectedArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(0, siardToDb.exitCode());
     }
 
     @Test
     public void uploadPostgres() throws IOException, SQLException {
         val expectedArchive = siardArchivesHandler.prepareResource(SiardProjectExamples.SIMPLE_TEAMS_EXAMPLE_POSTGRES13_2_2);
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + expectedArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + expectedArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(0, siardToDb.exitCode());
     }
 
     @Test
     public void uploadMsSql() throws IOException, SQLException {
         val expectedArchive = siardArchivesHandler.prepareResource(SiardProjectExamples.SIMPLE_TEAMS_EXAMPLE_MSSQL2017CU12_2_2);
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + expectedArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + expectedArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(0, siardToDb.exitCode());
     }
 
     @Test
     public void uploadMySql() throws IOException, SQLException {
         val expectedArchive = siardArchivesHandler.prepareResource(SiardProjectExamples.SIMPLE_TEAMS_EXAMPLE_MYSQL5_2_2);
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + expectedArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + expectedArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(0, siardToDb.exitCode());
     }
 
     @Disabled
@@ -90,29 +86,27 @@ public class UploadToPostgresIT {
     public void uploadMsAccess() throws IOException, SQLException {
         val expectedArchive = siardArchivesHandler.prepareResource(SiardProjectExamples.MS_ACCESS_NATIONS);
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + expectedArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + expectedArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(0, siardToDb.exitCode());
     }
 
     @Test
     public void uploadDB2() throws IOException, SQLException {
         val expectedArchive = siardArchivesHandler.prepareResource(SiardProjectExamples.SIMPLE_TEAMS_EXAMPLE_DB2);
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + expectedArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + expectedArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        Assertions.assertEquals(0, siardToDb.exitCode());
     }
 }

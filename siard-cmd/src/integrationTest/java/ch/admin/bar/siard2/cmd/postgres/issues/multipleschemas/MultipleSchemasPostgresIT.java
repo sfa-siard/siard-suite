@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.postgres.issues.multipleschemas;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
@@ -44,17 +44,16 @@ public class MultipleSchemasPostgresIT {
 
         // Connect as the restricted user (siard_user) who can only access views_schema
         // when
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "--schema:" + "views_schema",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--schema=" + "views_schema",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = actualArchive.exploreMetadata();
 

@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.mysql.issues.siardgui32;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.SiardToDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -56,30 +55,28 @@ public class TableNameUnderscoreIT {
     public void uploadSubmittedArchive_expectNoExceptions() throws SQLException, IOException {
         val submittedArchive = siardArchivesHandler.prepareResource("mysql/issues/siardgui32/submitted-table-names-underscore.siard");
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + emptyDb.getJdbcUrl(),
-                "-u:" + emptyDb.getUsername(),
-                "-p:" + emptyDb.getPassword(),
-                "-s:" + submittedArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + emptyDb.getJdbcUrl(),
+                "--user=" + emptyDb.getUsername(),
+                "--password=" + emptyDb.getPassword(),
+                "--siard-file=" + submittedArchive.getPathToArchiveFile());
 
-        assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        assertEquals(0, siardToDb.exitCode());
     }
 
     @Test
     public void downloadArchiveMySql5() throws SQLException, IOException, ClassNotFoundException {
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + dbMySql5.getJdbcUrl(),
-                "-u:" + dbMySql5.getUsername(),
-                "-p:" + dbMySql5.getPassword(),
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + dbMySql5.getJdbcUrl(),
+                "--user=" + dbMySql5.getUsername(),
+                "--password=" + dbMySql5.getPassword(),
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 
@@ -110,31 +107,29 @@ public class TableNameUnderscoreIT {
     public void uploadSiardArchiveMySql5_expectNoExceptions() throws SQLException, IOException {
         val siardArchive = siardArchivesHandler.prepareResource("mysql/issues/siardgui32/created-table-names-underscore-mysql5.siard");
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + dbMySql5.getJdbcUrl(),
-                "-u:" + dbMySql5.getUsername(),
-                "-p:" + dbMySql5.getPassword(),
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + dbMySql5.getJdbcUrl(),
+                "--user=" + dbMySql5.getUsername(),
+                "--password=" + dbMySql5.getPassword(),
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        assertEquals(0, siardToDb.exitCode());
     }
 
     @Test
     public void downloadArchiveMySql8() throws SQLException, IOException, ClassNotFoundException {
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + dbMySql8.getJdbcUrl(),
-                "-u:" + dbMySql8.getUsername(),
-                "-p:" + dbMySql8.getPassword(),
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + dbMySql8.getJdbcUrl(),
+                "--user=" + dbMySql8.getUsername(),
+                "--password=" + dbMySql8.getPassword(),
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
 
-        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 
@@ -164,14 +159,13 @@ public class TableNameUnderscoreIT {
     public void uploadSiardArchiveMySql8_expectNoExceptions() throws SQLException, IOException {
         val siardArchive = siardArchivesHandler.prepareResource("mysql/issues/siardgui32/created-table-names-underscore-mysql8.siard");
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + dbMySql8.getJdbcUrl(),
-                "-u:" + dbMySql8.getUsername(),
-                "-p:" + dbMySql8.getPassword(),
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + dbMySql8.getJdbcUrl(),
+                "--user=" + dbMySql8.getUsername(),
+                "--password=" + dbMySql8.getPassword(),
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        assertEquals(0, siardToDb.exitCode());
     }
 }

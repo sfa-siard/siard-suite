@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.mysql.issues.jdbcmysql4;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -35,14 +35,13 @@ public class MySQLDownloadVersionSupport5xIT {
     public void downloadDb_expectNoException() throws SQLException, IOException, ClassNotFoundException {
         val createdArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb dbtoSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + downloadDb.getJdbcUrl() + "?zeroDateTimeBehavior=convertToNull",
-                "-u:" + downloadDb.getUsername(),
-                "-p:" + downloadDb.getPassword(),
-                "-s:" + createdArchive.getPathToArchiveFile()
-        });
+        var dbtoSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + downloadDb.getJdbcUrl() + "?zeroDateTimeBehavior=convertToNull",
+                "--user=" + downloadDb.getUsername(),
+                "--password=" + downloadDb.getPassword(),
+                "--siard-file=" + createdArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbtoSiard.getReturn());
+        Assertions.assertEquals(0, dbtoSiard.exitCode());
     }
 }

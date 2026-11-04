@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.mssql.issues.siardcmd25;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.Id;
 import ch.admin.bar.siard2.cmd.utils.siard.model.utils.QualifiedColumnId;
@@ -35,15 +35,14 @@ public class DoubleQuotesInUserDefinedTypesIT {
     public void shouldCreateSiardArchiveFromDb() throws SQLException, IOException, ClassNotFoundException {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
-        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(0, siardFromDb.exitCode());
         actualArchive.preserveArchive();
 
         val metadataExplorer = actualArchive.exploreMetadata();

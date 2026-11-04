@@ -1,6 +1,6 @@
 package ch.admin.bar.siard2.cmd.msaccess.usecases.download;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
@@ -26,15 +26,14 @@ public class MSAccessDownloadSiardProjectIT {
         String path = this.getClass()
                           .getResource("/msaccess/usecases.download/nations.accdb")
                           .getPath();
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-u:Admin", // the user determines the schema that is used. don't change it.
-                "-p:pw",
-                "-j:" + "jdbc:access:" + path,
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--user=Admin", // the user determines the schema that is used. don't change it.
+                "--password=pw",
+                "--jdbc-url=" + "jdbc:access:" + path,
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(0, siardFromDb.exitCode());
 
         SiardArchiveAssertions.builder()
                               .assertionModifier(SiardArchiveAssertions.IGNORE_DBNAME) // FIXME ?

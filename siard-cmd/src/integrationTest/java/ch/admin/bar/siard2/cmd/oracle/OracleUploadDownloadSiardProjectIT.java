@@ -1,7 +1,7 @@
 package ch.admin.bar.siard2.cmd.oracle;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.SiardToDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
+import ch.admin.bar.siard2.cmd.utils.OracleTestDb;
 import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
@@ -27,7 +27,7 @@ public class OracleUploadDownloadSiardProjectIT {
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
     @Container
-    public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
+    public final OracleContainer db = OracleTestDb.newContainer()
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.CREATE_USER_WITH_ALL_PRIVILEGES)
                                                                    .toPath()),
@@ -40,24 +40,22 @@ public class OracleUploadDownloadSiardProjectIT {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "IT_USER",
-                "-p:" + "password",
-                "-s:" + expectedArchive.getPathToArchiveFile()
-        });
-        SiardFromDb dbToSiard = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "IT_USER",
-                "-p:" + "password",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "IT_USER",
+                "--password=" + "password",
+                "--siard-file=" + expectedArchive.getPathToArchiveFile());
+        var dbToSiard = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "IT_USER",
+                "--password=" + "password",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, dbToSiard.getReturn());
+        Assertions.assertEquals(0, siardToDb.exitCode());
+        Assertions.assertEquals(0, dbToSiard.exitCode());
 
         SiardArchiveAssertions.builder()
                               .expectedArchive(expectedArchive)

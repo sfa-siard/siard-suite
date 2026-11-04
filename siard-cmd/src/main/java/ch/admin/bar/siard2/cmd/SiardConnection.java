@@ -18,7 +18,7 @@ import lombok.val;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -85,7 +85,7 @@ public class SiardConnection extends Properties {
         propDrivers.put(MsSqlDriver.sSQLSERVER_SCHEME + sTITLE_SUFFIX, "SQL Server");
         propDrivers.put(MsSqlDriver.sSQLSERVER_SCHEME + sSAMPLE_SUFFIX, "jdbc:sqlserver://dbserver.enterag.ch:1433;databaseName=testdb");
         propDrivers.put(MySqlDriver.sMYSQL_SCHEME, MySqlDriver.class.getName());
-        propDrivers.put(MySqlDriver.sMYSQL_SCHEME + sTITLE_SUFFIX, "SQL Server");
+        propDrivers.put(MySqlDriver.sMYSQL_SCHEME + sTITLE_SUFFIX, "MySQL");
         propDrivers.put(MySqlDriver.sMYSQL_SCHEME + sSAMPLE_SUFFIX, "jdbc:mysql://dbserver.enterag.ch:3306/testdb");
         propDrivers.put(Db2Driver.sDB2_SCHEME, Db2Driver.class.getName());
         propDrivers.put(Db2Driver.sDB2_SCHEME + sTITLE_SUFFIX, "DB/2");
@@ -94,15 +94,6 @@ public class SiardConnection extends Properties {
         propDrivers.put(AccessDriver.sACCESS_SCHEME + sTITLE_SUFFIX, "Microsoft Access");
         propDrivers.put(AccessDriver.sACCESS_SCHEME + sSAMPLE_SUFFIX, "jdbc:access:D:\\Projekte\\SIARD2\\JdbcAccess\\testfiles\\dbfile.mdb");
         return propDrivers;
-    }
-
-
-    /** make keys() return elements in alphabetic order.
-     * This produces a nicer properties file, when store() is called.
-     */
-    @Override
-    public synchronized Enumeration<Object> keys() {
-        return Collections.enumeration(new TreeSet<Object>(super.keySet()));
     }
 
 
@@ -123,9 +114,6 @@ public class SiardConnection extends Properties {
                     String sScheme = iterScheme.next();
                     setProperty(sScheme, propDefault.getProperty(sScheme));
                 }
-                FileWriter fw = new FileWriter(fileJdbcDrivers);
-                store(fw, "Map from JDBC sub schema to title, sample URL and JDBC Driver class to be loaded.");
-                fw.close();
             }
         } catch (IOException ie) {
             LOG.error(EU.getExceptionMessage(ie));
@@ -146,7 +134,7 @@ public class SiardConnection extends Properties {
         val split = jdbcUrl.split(":");
 
         if (split.length < 3 || !split[0].equals("jdbc")) {
-            throw new IllegalArgumentException(jdbcUrl + " is not a valid JDBC-Url.");
+            throw new IllegalArgumentException(maskCredentials(jdbcUrl) + " is not a valid JDBC-Url.");
         }
 
         return split[1];
@@ -158,7 +146,7 @@ public class SiardConnection extends Properties {
 
         val driverClassName = getProperty(subSchema);
         if (driverClassName == null) {
-            throw new IllegalArgumentException("No driver specified for url " + jdbcUrl);
+            throw new IllegalArgumentException("No driver specified for url " + maskCredentials(jdbcUrl));
         }
         val driverClass = Class.forName(driverClassName);
         val driver = (Driver) driverClass.newInstance();
@@ -168,11 +156,11 @@ public class SiardConnection extends Properties {
                     "Driver %s does not accept url %s.",
                     driver.getClass()
                           .getCanonicalName(),
-                    jdbcUrl));
+                    maskCredentials(jdbcUrl)));
         }
 
         LOG.info("'{}' as driver loaded for url '{}'", driver.getClass()
-                                                             .getCanonicalName(), jdbcUrl);
+                                                             .getCanonicalName(), maskCredentials(jdbcUrl));
 
         return driver;
     }
@@ -197,7 +185,7 @@ public class SiardConnection extends Properties {
         val connection = driver.connect(jdbcUrl, info);
 
         LOG.info("Created connection of type '{}'for url '{}'", connection.getClass()
-                                                                          .getCanonicalName(), jdbcUrl);
+                                                                          .getCanonicalName(), maskCredentials(jdbcUrl));
 
         return connection;
     }
@@ -206,7 +194,7 @@ public class SiardConnection extends Properties {
     private static void logDrivers(final String jdbcUrl) {
         val sb = new StringBuilder()
                 .append("Registered JDBC drivers and its compatibility for url '")
-                .append(jdbcUrl)
+                .append(maskCredentials(jdbcUrl))
                 .append("':");
 
         val enumeration = DriverManager.getDrivers();
@@ -222,6 +210,28 @@ public class SiardConnection extends Properties {
         LOG.info(sb.toString());
     }
 
+
+    /** Masks credentials embedded in a JDBC URL for logging and output.
+     * Covers {@code ://user:password@} authority syntax and password properties in
+     * query ({@code ?password=x}, {@code &password=x}) or property-list
+     * ({@code ;password=x}, {@code ;pwd=x}) style URLs. */
+    public static String maskCredentials(String jdbcUrl) {
+        if (jdbcUrl == null) return null;
+        return jdbcUrl.replaceAll("://([^/:@]+):([^/@]+)@", "://$1:***@")
+                      .replaceAll("([?&;](?i:password|pwd|pass)=)[^&;]*", "$1***");
+    }
+
+    /** Returns the JDBC sub scheme if no driver is configured for it, otherwise null.
+     * Side-effect free — unlike {@link #loadDriver} it does not load driver classes.
+     */
+    public String unsupportedScheme(String sJdbcUrl) {
+        if (sJdbcUrl == null) return "unknown";
+        if (!sJdbcUrl.startsWith(BaseDriver.sJDBC_SCHEME + ":")) return sJdbcUrl;
+        String sSubScheme = sJdbcUrl.substring(BaseDriver.sJDBC_SCHEME.length() + 1);
+        int iSubScheme = sSubScheme.indexOf(":");
+        if (iSubScheme >= 0) sSubScheme = sSubScheme.substring(0, iSubScheme);
+        return getProperty(sSubScheme) != null ? null : sSubScheme;
+    }
 
     /** load JDBC driver for given JDBC URL.
      * @param sJdbcUrl JDBC URL.
@@ -252,11 +262,9 @@ public class SiardConnection extends Properties {
                 } else
                     sError = "No driver found for sub scheme \"" + sSubScheme + "\"!";
             } else
-                sError = "JDBC URL " + sJdbcUrl + " must contain a subs scheme terminated by colon (\":\")!";
+                sError = "JDBC URL " + maskCredentials(sJdbcUrl) + " must contain a subs scheme terminated by colon (\":\")!";
         } else
-            sError = "JDBC URL " + sJdbcUrl + " must start with \"" + BaseDriver.sJDBC_SCHEME + "\"!";
-        if (sError != null)
-            System.err.println(sError);
+            sError = "JDBC URL " + maskCredentials(sJdbcUrl) + " must start with \"" + BaseDriver.sJDBC_SCHEME + "\"!";
         return sError;
     }
 

@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.mysql.issues.siardgui32;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.SiardToDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.SupportedDbVersions;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -47,15 +46,14 @@ public class ForeignKeyWithSpacesIT {
     public void uploadSubmittedArchive_expectNoExceptions() throws SQLException, IOException {
         val submittedArchive = siardArchivesHandler.prepareResource("mysql/issues/siardgui32/submitted-foreign-key.siard");
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + emptyDb.getJdbcUrl(),
-                "-u:" + emptyDb.getUsername(),
-                "-p:" + emptyDb.getPassword(),
-                "-s:" + submittedArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + emptyDb.getJdbcUrl(),
+                "--user=" + emptyDb.getUsername(),
+                "--password=" + emptyDb.getPassword(),
+                "--siard-file=" + submittedArchive.getPathToArchiveFile());
 
-        assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
+        assertEquals(0, siardToDb.exitCode());
     }
 
     @Test
@@ -63,15 +61,14 @@ public class ForeignKeyWithSpacesIT {
 
         val siardArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + siardArchive.getPathToArchiveFile()
-        });
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + siardArchive.getPathToArchiveFile());
 
-        assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        assertEquals(0, siardFromDb.exitCode());
 
         val metadataExplorer = siardArchive.exploreMetadata();
 

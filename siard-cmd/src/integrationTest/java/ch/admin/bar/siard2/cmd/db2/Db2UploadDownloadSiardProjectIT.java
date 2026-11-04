@@ -1,7 +1,6 @@
 package ch.admin.bar.siard2.cmd.db2;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.SiardToDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
 import ch.admin.bar.siard2.cmd.utils.SiardProjectExamples;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
 import ch.admin.bar.siard2.cmd.utils.siard.assertions.SiardArchiveAssertions;
@@ -34,24 +33,22 @@ public class Db2UploadDownloadSiardProjectIT {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
         // when
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + expectedArchive.getPathToArchiveFile()
-        });
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + db.getUsername(),
-                "-p:" + db.getPassword(),
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + expectedArchive.getPathToArchiveFile());
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + db.getUsername(),
+                "--password=" + db.getPassword(),
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
 
         // then
-        Assertions.assertEquals(SiardToDb.iRETURN_OK, siardToDb.getReturn());
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        Assertions.assertEquals(0, siardToDb.exitCode());
+        Assertions.assertEquals(0, siardFromDb.exitCode());
 
         SiardArchiveAssertions.builder()
                               .expectedArchive(expectedArchive)

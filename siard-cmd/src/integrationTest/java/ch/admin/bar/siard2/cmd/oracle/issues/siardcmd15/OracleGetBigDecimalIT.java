@@ -1,7 +1,7 @@
 package ch.admin.bar.siard2.cmd.oracle.issues.siardcmd15;
 
-import ch.admin.bar.siard2.cmd.SiardFromDb;
-import ch.admin.bar.siard2.cmd.SiardToDb;
+import ch.admin.bar.siard2.cmd.SiardCliTest;
+import ch.admin.bar.siard2.cmd.utils.OracleTestDb;
 import ch.admin.bar.siard2.cmd.utils.SqlScripts;
 import ch.admin.bar.siard2.cmd.utils.TestResourcesResolver;
 import ch.admin.bar.siard2.cmd.utils.siard.SiardArchivesHandler;
@@ -24,14 +24,14 @@ public class OracleGetBigDecimalIT {
     public SiardArchivesHandler siardArchivesHandler = new SiardArchivesHandler();
 
     @Container
-    public final OracleContainer db = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
+    public final OracleContainer db = OracleTestDb.newContainer()
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDCMD_15)
                                                                    .toPath()),
                     "/container-entrypoint-initdb.d/siardcmd15.sql");
 
     @Container
-    public final OracleContainer uploadDb = new OracleContainer("gvenzl/oracle-xe:21-slim-faststart")
+    public final OracleContainer uploadDb = OracleTestDb.newContainer()
             .withCopyFileToContainer(
                     MountableFile.forHostPath(TestResourcesResolver.resolve(SqlScripts.Oracle.SIARDCMD_15)
                                                                    .toPath()),
@@ -41,22 +41,20 @@ public class OracleGetBigDecimalIT {
     public void download_and_upload_expectNoExceptions() throws IOException, SQLException, ClassNotFoundException {
         val actualArchive = siardArchivesHandler.prepareEmpty();
 
-        SiardFromDb siardFromDb = new SiardFromDb(new String[]{
-                "-o",
-                "-j:" + db.getJdbcUrl(),
-                "-u:" + "test",
-                "-p:" + "test",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardFromDb.getReturn());
+        var siardFromDb = SiardCliTest.execute("archive",
+                "--overwrite",
+                "--jdbc-url=" + db.getJdbcUrl(),
+                "--user=" + "test",
+                "--password=" + "test",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
+        Assertions.assertEquals(0, siardFromDb.exitCode());
 
-        SiardToDb siardToDb = new SiardToDb(new String[]{
-                "-o",
-                "-j:" + uploadDb.getJdbcUrl(),
-                "-u:" + "test",
-                "-p:" + "test",
-                "-s:" + actualArchive.getPathToArchiveFile()
-        });
-        Assertions.assertEquals(SiardFromDb.iRETURN_OK, siardToDb.getReturn());
+        var siardToDb = SiardCliTest.execute("restore",
+                "--overwrite",
+                "--jdbc-url=" + uploadDb.getJdbcUrl(),
+                "--user=" + "test",
+                "--password=" + "test",
+                "--siard-file=" + actualArchive.getPathToArchiveFile());
+        Assertions.assertEquals(0, siardToDb.exitCode());
     }
 }

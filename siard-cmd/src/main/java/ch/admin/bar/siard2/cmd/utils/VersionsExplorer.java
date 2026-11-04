@@ -34,7 +34,7 @@ public class VersionsExplorer {
     }
 
     private String getProperty(final String key) {
-        return Optional.ofNullable(properties.getProperty("App-Version"))
+        return Optional.ofNullable(properties.getProperty(key))
                        .orElseThrow(() -> new IllegalStateException(String.format("Property '%s' not found", key)));
     }
 
