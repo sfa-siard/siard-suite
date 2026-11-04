@@ -16,7 +16,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set TAG-Env
-        run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        run: |
+          ref_name="${GITHUB_REF#refs/*/}"
+          echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
       - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
@@ -62,13 +64,15 @@ jobs:
       - name: Set TAG-Env
         if: runner.os == 'Linux' || runner.os == 'macOS'
         run: |
-          echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo "CLI_TAG=siard-cli-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          ref_name="${GITHUB_REF#refs/*/}"
+          echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
+          echo "CLI_TAG=siard-cli-${ref_name//\//-}" >> $GITHUB_ENV
       - name: Set TAG-Env Windows
         if: runner.os == 'Windows'
         run: |
-          echo "NAME_TAG=SIARD-Suite-${{ github.ref_name }}" >> $env:GITHUB_ENV
-          echo "CLI_TAG=siard-cli-${{ github.ref_name }}" >> $env:GITHUB_ENV
+          $refName = $env:GITHUB_REF_NAME -replace '/', '-'
+          echo "NAME_TAG=SIARD-Suite-$refName" >> $env:GITHUB_ENV
+          echo "CLI_TAG=siard-cli-$refName" >> $env:GITHUB_ENV
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
