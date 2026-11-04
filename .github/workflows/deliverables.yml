@@ -135,33 +135,33 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.CLI_TAG }}-win-msi
-          path: siard-cmd/build/jpackage/*.msi
+          path: siard-cmd/build/installers/*.msi
           if-no-files-found: error
       - name: Upload CLI EXE as an artifact
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.CLI_TAG }}-win-exe
-          path: siard-cmd/build/jpackage/*.exe
+          path: siard-cmd/build/installers/*.exe
           if-no-files-found: error
       - name: Upload CLI DEB as an artifact
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.CLI_TAG }}-linux-deb
-          path: siard-cmd/build/jpackage/*.deb
+          path: siard-cmd/build/installers/*.deb
           if-no-files-found: error
       - name: Upload CLI RPM as an artifact
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.CLI_TAG }}-linux-rpm
-          path: siard-cmd/build/jpackage/*.rpm
+          path: siard-cmd/build/installers/*.rpm
           if-no-files-found: error
       - name: Upload CLI DMG as an artifact
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.CLI_TAG }}-mac-dmg
-          path: siard-cmd/build/jpackage/*.dmg
+          path: siard-cmd/build/installers/*.dmg
           if-no-files-found: error

@@ -354,6 +354,10 @@ tasks.named("jpackage") {
             throw GradleException("no default installerType for OS '$cliOsName' — pass -PinstallerType=")
         }
         val jpackageDir = layout.buildDirectory.dir("jpackage").get().asFile
+        // move (not rename in place): a second jpackage run with -PinstallerType=
+        // wipes build/jpackage, so finished installers live in build/installers
+        val installersDir = layout.buildDirectory.dir("installers").get().asFile
+        installersDir.mkdirs()
         val targetName = "siard-cli-${version}-$cliOsName.$cliInstallerType"
         val produced = (jpackageDir.listFiles() ?: emptyArray()).filter {
             it.isFile && it.extension == cliInstallerType && it.name.startsWith("siard-cli")
@@ -362,8 +366,8 @@ tasks.named("jpackage") {
             ?: throw GradleException(
                 "expected exactly one siard-cli *.$cliInstallerType installer in $jpackageDir, found: ${produced.map { it.name }}"
             )
-        if (installer.name != targetName && !installer.renameTo(File(jpackageDir, targetName))) {
-            throw GradleException("failed to rename ${installer.name} to $targetName")
+        if (!installer.renameTo(File(installersDir, targetName))) {
+            throw GradleException("failed to move ${installer.name} to $installersDir/$targetName")
         }
     }
 }
