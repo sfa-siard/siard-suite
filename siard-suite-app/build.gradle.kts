@@ -133,7 +133,9 @@ runtime {
     jpackage {
         imageName = "SIARD-Suite"
         installerName = "SIARD-Suite"
-        appVersion = version.toString()
+        // jpackage only accepts dotted-number versions; branch-SNAPSHOT versions like
+        // "2.2.168-feat-x-SNAPSHOT" are rejected by jpackage and by rpmbuild
+        appVersion = Regex("\\d+(\\.\\d+)*").find(version.toString())?.value ?: "0.0.1"
 
         skipInstaller = false
 

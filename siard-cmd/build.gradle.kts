@@ -263,6 +263,10 @@ val cliOsName = when {
     packagingOs.isMacOsX -> "mac"
     else -> "unknown"
 }
+// jpackage only accepts dotted-number versions; branch-SNAPSHOT versions like
+// "2.2.168-feat-x-SNAPSHOT" break jpackage validation (win/mac) and rpmbuild (linux)
+val jpackageVersion = Regex("\\d+(\\.\\d+)*").find(version.toString())?.value ?: "0.0.1"
+
 // jpackage accepts one --type per invocation; a second run passes -PinstallerType=
 val cliInstallerType = providers.gradleProperty("installerType").orNull ?: when (cliOsName) {
     "win" -> "msi"
@@ -317,7 +321,7 @@ runtime {
     jpackage {
         imageName = "siard"
         installerName = "siard-cli"
-        appVersion = version.toString()
+        appVersion = jpackageVersion
 
         skipInstaller = false
 
@@ -377,8 +381,11 @@ tasks.register("verifyRuntimeImage") {
     dependsOn("runtime")
     doLast {
         val imageBin = layout.buildDirectory.dir("siard-cli-${version}$cliImageSuffix/bin").get().asFile
-        check(File(imageBin, "siard").isFile) { "no bin/siard launcher in CLI runtime image" }
-        val modules = ProcessBuilder(File(imageBin, "java").absolutePath, "--list-modules")
+        // the launcher is a script (siard/siard.bat); java is java/java.exe on Windows
+        val launcherNames = if (packagingOs.isWindows) listOf("siard", "siard.bat") else listOf("siard")
+        check(launcherNames.any { File(imageBin, it).isFile }) { "no bin/siard launcher in CLI runtime image" }
+        val javaBin = File(imageBin, if (packagingOs.isWindows) "java.exe" else "java")
+        val modules = ProcessBuilder(javaBin.absolutePath, "--list-modules")
             .redirectErrorStream(true)
             .start()
             .inputStream.bufferedReader().readText()
