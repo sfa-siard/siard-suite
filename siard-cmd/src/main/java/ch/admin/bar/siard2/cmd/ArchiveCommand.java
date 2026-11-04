@@ -79,6 +79,13 @@ public class ArchiveCommand implements Callable<Integer> {
                                                                 .getParentFile() == null)) {
             return usageError("To use external LOB folder, specify --siard-file with a parent directory!");
         }
+        if (lobFolder != null) {
+            try {
+                ArchiveConfig.externalLobFolderUri(siardFile, lobFolder);
+            } catch (IllegalArgumentException iae) {
+                return usageError(iae.getMessage());
+            }
+        }
 
         boolean passwordRequested = spec.commandLine()
                                         .getParseResult()

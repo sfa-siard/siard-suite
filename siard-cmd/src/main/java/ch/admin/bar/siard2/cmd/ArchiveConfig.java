@@ -50,13 +50,19 @@ public record ArchiveConfig(
                 + ", mimeType=" + mimeType + ", schema=" + schema + "]";
     }
 
+    /** The external LOB folder URI, or {@code null} when no LOB folder is configured. */
+    public URI externalLobFolderUri() {
+        if (externalLobFolder == null) return null;
+        return externalLobFolderUri(siardFile, externalLobFolder);
+    }
+
     /**
      * The external LOB folder expressed relative to the SIARD file's parent,
      * prefixed with {@code ../} and suffixed with {@code /} as required by the archive format.
+     *
+     * @throws IllegalArgumentException if the folder cannot be expressed as a URI
      */
-    public URI externalLobFolderUri() {
-        if (externalLobFolder == null) return null;
-
+    public static URI externalLobFolderUri(Path siardFile, Path externalLobFolder) {
         File relative = siardFile.toFile()
                                  .getParentFile()
                                  .getAbsoluteFile()
