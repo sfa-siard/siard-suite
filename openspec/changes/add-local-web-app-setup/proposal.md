@@ -22,7 +22,8 @@ Out of scope: archive browsing, database archiving and upload, the job model, a 
 
 ### New Capabilities
 
-- `local-web-agent`: the locally running agent: loopback server, launch and browser opening, session establishment and API access control, presence-based exit, independent instances, launch modes, frontend delivery, interface language, error format, and native installer packaging.
+- `local-web-agent`: the locally running agent: loopback server, launch and browser opening, session establishment and API access control, presence-based exit, independent instances, launch modes, error format, and native installer packaging.
+- `local-web-ui`: app-wide frontend behaviour: delivery of the frontend (including client-side routes surviving a reload) and the interface language.
 - `system-info`: reporting the agent's version and runtime information through the API and showing it in the frontend's About view.
 
 ### Modified Capabilities
