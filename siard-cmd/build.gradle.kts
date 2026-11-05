@@ -328,6 +328,11 @@ runtime {
         val imgType = if (packagingOs.isWindows) "ico" else if (packagingOs.isMacOsX) "icns" else "png"
         imageOptions.add("--icon")
         imageOptions.add(layout.projectDirectory.file("packaging/icons/archive_red.$imgType").asFile.absolutePath)
+        if (packagingOs.isWindows) {
+            // without this, jpackage builds a GUI-subsystem exe that detaches
+            // from the console — all stdout/stderr of the CLI is lost
+            imageOptions.add("--win-console")
+        }
 
         installerOptions.add("--resource-dir")
         installerOptions.add(layout.projectDirectory.dir("packaging").asFile.absolutePath)
