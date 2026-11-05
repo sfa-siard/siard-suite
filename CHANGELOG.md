@@ -25,6 +25,7 @@
 
 * Other
   * added a code-review skill for agents
+  * setup OpenSpec for spec-driven development, with skills for Claude Code and Devin
  
 ## 2.2.167 (2026-08-17)
 
