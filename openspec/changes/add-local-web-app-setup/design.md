@@ -1,0 +1,195 @@
+# Design
+
+## Context
+
+See `proposal.md` (Why) for the motivation. Constraints and current state that shape the approach:
+
+- The PoC on branch `poc/executable-web-companion-application` (modules `siard-web-backend-poc` / `siard-web-frontend-poc`) proved that Quarkus can host `siard-cmd`/`siard-api` and be packaged with the repo's beryx `runtime`/`jpackage` toolchain. Its packaging findings are reused here. Its archive endpoints, its file picker and its documentation are not.
+- `siard-api` needs javax-era JAXB internals, the `xercesSaxParserFactory` system property and `--add-opens` for `java.xml` xerces/xalan and `java.base/java.lang`, at runtime **and** in tests.
+- The desktop app (`siard-suite-app`) is the behavioural reference. Its non-UI code (`service/`, `model/`) is written against `javafx.concurrent`/observables and cannot be reused as is; later feature changes port it. In this change, `siard-suite-app` stays untouched and keeps shipping.
+- Guiding principle: **match the desktop app's behaviour wherever reasonable.** Deliberate deviations are noted where they occur.
+
+## Goals / Non-Goals
+
+**Goals:**
+
+- A foundation that later feature changes (archive browsing, archiving, upload) only extend: module layout, security model, lifecycle, API and event conventions, frontend stack, packaging, CI.
+- Every risky integration exercised end to end by at least one automated test: `siard-api` under Quarkus, the full JDBC driver chain in the package, launch token → cookie → API → SSE in a real browser.
+
+**Non-Goals:**
+
+- Job model, progress events, `beforeunload` protection (first job change).
+- Origin header check (see D4 note).
+- Dedicated browser profile, tray icon.
+- Publishing web installers in tagged releases (`deliverables.yml`).
+
+## Decisions
+
+### D1: Nested module `siard-suite-local-web-app` with `backend` and `frontend`
+
+`include("siard-suite-local-web-app:backend")` / `include("siard-suite-local-web-app:frontend")`. Both subprojects set `base.archivesName` (`siard-suite-local-web-app-backend` / `-frontend`) so jars are not called `backend.jar`. The Java package root is `ch.admin.bar.siardsuite.localwebapp`. As in the PoC, the frontend's `jar` packs the Vite `dist/` into `META-INF/resources`, and the backend depends on it, so the installer contains a single app.
+
+*Alternatives:* two flat modules like the PoC (consistent with the rest of the repo, but splits one deliverable over two top-level folders); Quinoa (expects the UI inside the backend module).
+
+### D2: Quarkus JVM mode, fast-jar, packaging carried over from the PoC
+
+Taken over unchanged:
+- fast-jar layout with the `installDist` staging hook;
+- `patchAppImageCfg`, which keeps only the run jar on `app.classpath`;
+- `platform()` (not `enforcedPlatform()`) for the Quarkus BOM, plus `strictly()` pins for `jaxb-runtime`/`txw2` 2.3.9, `jaxb-core` 2.3.0.1 and `jakarta.activation-api` 1.2.2;
+- logback excluded from `siard-cmd`;
+- jlink modules including `java.desktop` and `jdk.zipfs`;
+- launcher `jvmArgs` with the xerces property and `--add-opens`;
+- a numeric `appVersion` for jpackage.
+
+The backend depends on `siard-cmd`, so the full driver chain ships and is scanned (PoC decision D5). The jpackage options are extended for macOS (`.dmg`).
+
+### D3: Binding and host name
+
+`quarkus.http.host=127.0.0.1` without a profile prefix (Quarkus' prod default would be `0.0.0.0`), and `quarkus.http.port=0` so the operating system assigns a free port. This avoids the PoC's race between finding a port, releasing it and binding it. After the `io.quarkus.vertx.http.HttpServerStart` event (async), the actual port is read from `io.quarkus.vertx.http.HttpServer#getPort()`, not from the event's `HttpServerOptions`, which may still say 0.
+
+`127.0.0.1` is used everywhere (launch URL, Vite proxy target) and the Host check accepts only `127.0.0.1:<port>`. Reasons:
+- Node ≥ 17 resolves `localhost` to `::1` first, and we do not listen there.
+- Cookies are scoped by host name, so a single host name avoids a session that only half works.
+
+*Alternative:* also allowing `localhost`/`[::1]`: no benefit, and a wider check.
+
+### D4: Launch token exchanged for a session cookie
+
+1. At startup a random single-use launch token and a random session secret are created.
+2. `GET /launch?token=…` checks the token in constant time and invalidates it.
+3. It answers `303` with a hand-set `Location: /` header, `Set-Cookie: siard_session_<port>=<secret>; HttpOnly; SameSite=Strict; Path=/`, `Cache-Control: no-store` and `Referrer-Policy: no-referrer`.
+
+`Location` is set as a raw header because JAX-RS `seeOther()`/`temporaryRedirect()` resolve relative URIs against the base URI. In dev that would turn into `http://127.0.0.1:8080/` and leave the Vite origin.
+
+A filter on `/api/*` enforces the cookie and the exact Host header. The frontend therefore never handles the token (the browser sends the cookie automatically). This works for `EventSource`, which cannot set headers.
+
+The launch URL is logged at startup. Because the token is single-use, a leaked log line is worthless once the window has opened.
+
+- **Port in the cookie name:** cookies are not port-scoped. **Independent instances (D7) rely on this**; without it, two agents would overwrite each other's session.
+- **Note for later:** if an Origin check is added, Vite's `changeOrigin` does not rewrite `Origin`, so in dev it arrives as `http://localhost:5173`. A dev allowance must be guarded like D8.
+
+*Alternatives:* the PoC's Bearer token read by JS from the URL (token stays in the history and is visible to JS); `history.replaceState` cleanup (token still in JS memory).
+
+### D5: Event stream and presence-based exit
+
+`GET /api/events` is a single multiplexed SSE stream per window. It serves as both the presence signal and the event channel for later features. A single stream keeps us within the browser's limit of 6 HTTP/1.1 connections per origin regardless of the number of jobs.
+
+The event type lives in the JSON data (`type`), not in SSE's `event:` field. That gives one `onmessage` handler and one TypeScript union. On a new stream the server first sends `connected`, then a keep-alive comment every 15 s; a failed write marks the connection as closed.
+
+The agent counts open authorized streams. When the count reaches 0, an exit timer starts (`siard.agent.idle-exit-grace`, default 20 s); a new stream cancels it. The default is a starting value, to be tuned after BIT testing.
+
+*Alternatives:*
+- Explicit Quit only: users would never quit the agent.
+- Timer heartbeats: browsers throttle timers in hidden windows to roughly one per minute, which causes false exits.
+- Watching the browser process: requires a dedicated profile (deferred).
+- WebSocket: bidirectional is not needed, and SSE is simpler.
+
+### D6: Typed events in the OpenAPI description
+
+Events are modelled as a sealed interface `AgentEvent` with record subtypes. Jackson writes `type` automatically (`@JsonTypeInfo(use = NAME, property = "type")` + `@JsonSubTypes`/`@JsonTypeName`), so records carry no hand-filled type field.
+
+SmallRye OpenAPI 4.3.5 does not read `@JsonTypeInfo`/`@JsonSubTypes`/`@JsonTypeName` (it handles only `JsonProperty`, `JsonPropertyOrder`, `JsonIgnore*`, `JsonUnwrapped`, `JsonValue` and `JsonView`; found by inspecting the jar). MicroProfile OpenAPI 4.1 has no `itemSchema` (an OpenAPI 3.2 feature). The SSE operation therefore declares `@APIResponse(content = @Content(mediaType = "text/event-stream", schema = @Schema(implementation = AgentEvent.class)))`, and the following variants are tried **in order of preference** (task 1.1):
+
+1. **`discriminatorMapping` only**: `@Schema(oneOf = …, discriminatorProperty = "type", discriminatorMapping = …)` on `AgentEvent`, if `openapi-typescript` injects the literal `type` into each union member itself.
+2. **`@SchemaProperty` + shared constant + test**: each record declares `type` as a required single-value enum, using the same constant as `@JsonTypeName`. A test iterates over `AgentEvent.class.getPermittedSubclasses()`, asserts that each subtype is covered by `@JsonSubTypes`/`@JsonTypeName`, serialises it with the application's `ObjectMapper`, and compares `type` with the spec's enum.
+3. **`OASFilter`**: derives the `type` property and discriminator mapping from the Jackson annotations. Last resort, to avoid custom code that rewrites the spec.
+
+**Chosen variant:** *to be filled in once task 1.1 is done.*
+
+### D7: Independent instances
+
+Every launch is its own agent: own JVM, port, token, session and lifetime, exactly like the desktop app, which has no single-instance logic. The instances do not coordinate, so there is no instance file, lock or control endpoint. This relies on the port-specific cookie name (D4).
+
+On macOS, LaunchServices does not start a second process when a running app is activated; it sends a reopen event instead. The agent registers `java.awt.desktop.AppReopenedListener` (via `Desktop.addAppEventListener`), mints a new single-use token and opens a browser window. **Unverified until tested on a Mac.**
+
+*Alternative:* single instance with a lock file plus handoff: a whole subsystem (secret on disk, extra endpoint, retry logic) for no gain over the desktop app's behaviour.
+
+### D8: Launch modes decide behaviour, not profiles
+
+`quarkus.profile` can be overridden at runtime (`-Dquarkus.profile=dev`), and the project is open source, so the dev values are public. Launch-dependent behaviour is therefore keyed on `LaunchMode.current()`:
+
+| | `NORMAL` (packaged) | `DEVELOPMENT` (quarkusDev) | `TEST` |
+|---|---|---|---|
+| Token / session secret | random, single-use token | fixed dev values from `%dev.` config | random |
+| `siard.agent.open-browser` (default) | true | false | false |
+| `siard.agent.idle-exit-grace` (default) | 20 s | disabled | disabled |
+
+Token and secret are **never** configurable outside `DEVELOPMENT`. The two flags can be set in any mode; the Playwright test runs the packaged jar (`NORMAL`) with `open-browser=false` and a short grace period, and reads the launch URL from the log.
+
+### D9: Browser launch
+
+1. Try Chromium-family browsers in `--app=<url>` mode: on Windows, Edge and then Chrome via their registered install paths (App Paths registry or the known `Program Files` locations), not by spawning nine names through `cmd /c start`; on Linux/macOS, the known executables or app bundles.
+2. Otherwise use `Desktop.browse`.
+3. Otherwise log the URL.
+
+Edge is **not** assumed to be present. No dedicated `--user-data-dir` for now: whether BIT policies allow it is unknown. It can be added later without affecting anything else.
+
+### D10: API conventions
+
+- Unversioned `/api/...`: frontend and backend always ship together.
+- DTOs are records mapped from `siard-api` types and never serialise `siard-api` objects directly.
+- Errors are RFC 9457 problem details produced by one central `ExceptionMapper`, without stack traces or exception messages; details are logged on the server.
+- `GET /api/system/info` returns `appVersion` (`ProgramInfo` / the build version), `javaVersion` and `jdbcDrivers` (from `DriverManager.getDrivers()`). This proves the packaged driver chain loads.
+- A backend-only `@QuarkusTest` opens `master.siard` via `ArchiveImpl` to prove `siard-api` works under Quarkus, without an endpoint.
+
+### D11: OpenAPI pipeline
+
+`quarkus-smallrye-openapi` generates the description at build time and stores it as the committed `siard-suite-local-web-app/openapi.yaml` (via `quarkus.smallrye-openapi.store-schema-directory`). The frontend generates `src/api/schema.d.ts` from the committed file with `openapi-typescript` (`npm run gen:api`).
+
+Committing the file breaks a build cycle: the backend embeds the frontend jar, so the frontend cannot depend on the backend build. It also makes API changes visible in PR diffs. CI fails if the regenerated file differs from the committed one.
+
+The client is `openapi-fetch` + `openapi-react-query` (typed TanStack Query hooks).
+
+*Alternatives:* hand-written TS types (drift); `orval` (more generated code); `openapi-generator` (heavy).
+
+### D12: Frontend stack
+
+- **Base:** React + TypeScript (strict) + Vite.
+- **UI:** MUI, themed after the desktop app's `root.css` colours and the Roboto font, to keep today's look.
+- **Routing:** React Router: `/` (start) and `/about`. The backend serves `index.html` for unknown non-API GET paths; `/api/*` never falls back.
+- **Data:** TanStack Query.
+- **i18n:** `react-i18next` with typed keys. The texts are JSON per language under `frontend/src/i18n/`, converted **once** from `siard-suite-app`'s `messages_*.properties` (`%s` → `{{arg}}`) by a script in this change and edited in JSON afterwards. The language is taken from the browser on every start, with English as fallback, and is **not** persisted: browser storage is per origin and the origin changes with every random port, and the desktop app does not persist the language either. Only shell and About texts are migrated now.
+- **Quality:** ESLint (typescript-eslint, react-hooks) and Prettier, Vitest + React Testing Library, all in Gradle `check`. One Playwright smoke test (Chromium) in a separate `e2eTest` task covers launch URL → clean URL → About shows the version → page closed → agent exits.
+
+### D13: Dev workflow
+
+- `./gradlew :siard-suite-local-web-app:backend:quarkusDev` on port 8080 (`%dev.quarkus.http.port`), plus `npm run dev` (Vite on 5173).
+- Vite proxies `/api` and `/launch` to `http://127.0.0.1:8080` with `changeOrigin: true`, so the backend sees `Host: 127.0.0.1:8080` and the Host check needs no dev exception. SSE works through the proxy.
+- In `DEVELOPMENT` the fixed token and secret (D8) survive hot restarts, so the browser session keeps working after Java changes.
+- Swagger UI (dev only) is available at `http://127.0.0.1:8080/q/swagger-ui`.
+
+### D14: CI and installers
+
+- **`build.yml`:** a new `local-web-app` job (ubuntu) runs `:siard-suite-local-web-app:check` (JUnit/`@QuarkusTest`, OpenAPI drift, ESLint, `tsc`, Vitest) and `:siard-suite-local-web-app:e2eTest` (Playwright, browser cached). Node comes from the Gradle node plugin.
+- **Installer workflow** (new file, replacing the PoC's `poc-web-installer.yml`):
+  - matrix: windows, ubuntu, macos; runs `:siard-suite-local-web-app:backend:jpackage`;
+  - uploads `.exe`/`.msi`, `.deb`, `.dmg`; a missing expected installer fails the run;
+  - actions at the versions used by the other workflows (`@v6`).
+- **Installer workflow triggers:**
+  - `pull_request` and `push` to `main` with `paths-ignore: ['siard-suite-app/**', 'docs/**', '**/*.md']`. Every other module (the whole `siard-cmd` dependency chain, root build files, version catalog, Gradle wrapper) can break packaging. An ignore list automatically includes new modules.
+  - `workflow_dispatch`, which only works once the file is on `main`. The PR trigger is what builds installers during this change.
+  - The module README documents that PRs trigger installer builds, so the trigger can be narrowed once packaging is stable.
+- `deliverables.yml` stays untouched until feature parity.
+
+## Risks / Trade-offs
+
+- **[Edge sleeping tabs / BIT Edge policies may freeze SSE or block app mode]** → test on a BIT Windows machine with an installer from the PR workflow before merging; D5's grace period and D9's fallbacks limit the impact.
+- **[macOS untested: `.dmg` packaging, AWT browser launch, reopen handler]** → macOS runner in the installer workflow; manual test on a Mac before relying on it.
+- **[Event typing variant may not render as expected]** → ordered fallbacks in D6, checked first (task 1.1).
+- **[Packaging regressions from changes anywhere in the core]** → installer builds on PRs with `paths-ignore`; costs CI minutes (macOS).
+- **[Closing the window kills the agent even mid-operation]** → same as the desktop app today; `beforeunload` prompt during jobs comes with the first job change.
+- **[Each launch is a full JVM]** → same memory and start time as the desktop app.
+- **[Fixed dev credentials are public]** → active only under `LaunchMode.DEVELOPMENT` and covered by a test asserting the packaged jar rejects them.
+- **[i18n texts diverge between desktop and web during coexistence]** → accepted; the desktop app is retired at parity.
+- **[Many tabs could exhaust the 6 HTTP/1.1 connections per origin]** → one stream per window; acceptable for typical use.
+
+## Migration Plan
+
+Additive. The new modules build and ship separately from `siard-suite-app`. Rollback means removing `siard-suite-local-web-app/`, its `settings.gradle.kts` includes, the `build.yml` job and the installer workflow.
+
+## Open Questions
+
+- How to obtain the `HttpServer` instance in a bean (it is backed by a `ValueRegistry`): resolved in task 1.2; the approach (D3) does not change.
+- Whether Quarkus writes the stored OpenAPI schema in dev mode or only on build: affects only the `gen:api` workflow description (task 1.3).
+- Final grace-period value: 20 s default, tuned after BIT testing.
