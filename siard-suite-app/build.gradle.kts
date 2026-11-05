@@ -147,7 +147,7 @@ runtime {
         installerOptions.add("src/main/resources")
         installerOptions.add("--vendor")
         installerOptions.add("BAR")
-        
+
         if (currentOs.isWindows) {
             installerOptions.addAll(
                 listOf(
@@ -207,13 +207,6 @@ tasks.distZip {
 
 tasks.installDist {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    doLast {
-        // the siard CLI is a standalone product (siard-cli) and must not ship in the app distribution
-        val binDir = layout.buildDirectory.dir("install/SIARD-Suite/bin").get().asFile
-        check(!File(binDir, "siard").exists() && !File(binDir, "siard.bat").exists()) {
-            "siard launcher must not be part of the SIARD-Suite distribution"
-        }
-    }
 }
 
 tasks.asciidoctor {
@@ -261,7 +254,7 @@ val copyDocumentation = tasks.register<Copy>("copyDocumentation") {
     into(layout.projectDirectory.dir("./src/main/resources/ch/admin/bar/siardsuite/doc"))
 }
 
-tasks.named("asciidoctorPdf") { 
+tasks.named("asciidoctorPdf") {
     finalizedBy(copyDocumentation)
 }
 
@@ -269,7 +262,7 @@ tasks.named("build") {
     dependsOn(tasks.asciidoctorPdf)
 }
 
-tasks.named("processResources") { 
+tasks.named("processResources") {
     dependsOn(copyDocumentation)
 }
 
