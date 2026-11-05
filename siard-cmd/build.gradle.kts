@@ -339,8 +339,12 @@ runtime {
         installerOptions.add("--vendor")
         installerOptions.add("BAR")
 
-        // Windows: system-wide install (no --win-per-user-install) for managed BIT deployments
+        // Windows: system-wide install (no --win-per-user-install) for managed BIT
+        // deployments; --win-dir-chooser lets the user pick a different install dir
         cliInstallerType?.let { installerType = it }
+        if (packagingOs.isWindows) {
+            installerOptions.add("--win-dir-chooser")
+        }
 
         if (packagingOs.isLinux) {
             installerOptions.addAll(listOf("--linux-package-name", "siard-cli"))
