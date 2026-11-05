@@ -127,6 +127,38 @@ Examples:
 
 **Note:** all tests require Docker to be running (uses [Testcontainers](https://www.testcontainers.org/)).
 
+### Spec-Driven Development (OpenSpec)
+
+OpenSpec (https://openspec.dev/) has been set up for Devin and claude code.  
+Install it following https://openspec.dev/docs/installation.
+
+If you are using another AI, add it following https://openspec.dev/docs/setup. Note that the optional skills new, continue, ff and verify should be added.  Verify is required for this project. 
+
+#### How to use:
+
+Ask for OpenSpec skills in plain language from your AI chat. To make sure the
+right skill runs, call it by name, e.g. in Claude Code:
+
+    /openspec-explore How could rate limiting work in this app?
+
+#### Workflow
+
+1. **Explore:** think the idea through with your agent.
+2. **Propose:** the agent writes the plan to `openspec/changes/<change-name>/`:
+   `proposal.md`, `specs/`, `tasks.md`, and optionally `design.md`.
+   **Review it before applying.** Edit the files directly or ask the agent to
+   revise them.
+   To build the plan step by step instead: `new` (empty scaffold), `continue`
+   (next artifact), `ff` (generate the rest).
+3. **Apply:** the agent works through `tasks.md`, checking off tasks as it goes,
+   then runs `verify` automatically.
+4. **Archive:** the agent merges the change's specs into `openspec/specs/`
+   (asks for your approval first) and moves the change to the archive. It also
+   records gaps in our agent setup in `openspec/agent-guidance-suggestions.md`.
+   **Review them** and promote useful ones into AGENTS.md or
+   `openspec/config.yaml`.
+
+
 ### Dependency Analysis
 
 The project uses the [Dependency Analysis Gradle Plugin](https://github.com/autonomousapps/dependency-analysis-gradle-plugin) to detect dependency issues.
