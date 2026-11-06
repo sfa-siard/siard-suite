@@ -10,6 +10,8 @@
     * `--help`/`--version`, 
     * interactive password prompt with `SIARD_PASSWORD` fallback. 
     * **Breaking change:** replaces `siard-from-db`/`siard-to-db`, the old `-j:`/`-u:`/`-p:` option syntax, and the 0/4/8/12 exit codes.
+  * Dedicated siard cli installers
+    * The siard cli was previously distributed as part of the SIARD Suite GUI application, but it now got its own installers 
 
 * Maintenance:
   * upgrade to gradle 9.7
