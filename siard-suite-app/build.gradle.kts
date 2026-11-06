@@ -182,6 +182,11 @@ tasks.test {
     jvmArgs(
         "-Djava.awt.headless=true",
         "-Dtestfx.headless=true",
+        "-Dtestfx.robot=glass",
+        "-Dglass.platform=Monocle",
+        "-Dmonocle.platform=Headless",
+        "-Dprism.order=sw",
+        "-Dprism.text=t2k",
         xercesSaxParserFactory,
         "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
         "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
