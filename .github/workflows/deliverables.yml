@@ -88,7 +88,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: Execute build runtimeZip jpackage (SIARD Suite app)
-        run: ./gradlew :siard-suite-app:build :siard-suite-app:runtimeZip :siard-suite-app:jpackage --no-daemon
+        # -x test: JavaFX toolkit cannot initialize headlessly on the macOS
+        # runner (Toolkit.java:275) — unit tests run in build.yml instead
+        run: ./gradlew :siard-suite-app:build -x test :siard-suite-app:runtimeZip :siard-suite-app:jpackage --no-daemon
       - name: Execute build runtimeZip jpackage (siard CLI)
         run: ./gradlew :siard-cmd:runtimeZip :siard-cmd:verifyRuntimeImage :siard-cmd:jpackage --no-daemon
       - name: "Build second CLI installer type (Windows: exe)"
