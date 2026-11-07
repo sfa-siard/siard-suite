@@ -10,10 +10,24 @@ app-run:
 
 
 alias cb := cli-build
-[doc("Build the SIARD Suite CLI")]
+[doc("Build the SIARD Suite CLI (dev distribution, requires Java 21)")]
 [group('SIARD Suite CLI')]
 cli-build:
     ./gradlew :siard-cmd:installDist
+
+
+alias ci := cli-image
+[doc("Build the runtime-bundled CLI image zip (no Java needed to run)")]
+[group('SIARD Suite CLI')]
+cli-image:
+    ./gradlew :siard-cmd:runtimeZip
+
+
+alias cp := cli-package
+[doc("Build the native CLI installer for the current OS")]
+[group('SIARD Suite CLI')]
+cli-package:
+    ./gradlew :siard-cmd:jpackage
 
 
 alias ta := test-all

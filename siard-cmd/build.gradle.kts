@@ -15,6 +15,7 @@ plugins {
     `java-library`
     alias(libs.plugins.axion.release)
     alias(libs.plugins.lombok)
+    alias(libs.plugins.beryx.runtime)
 }
 
 java {
@@ -253,6 +254,158 @@ application {
     mainClass.set("ch.admin.bar.siard2.cmd.SiardCli")
     applicationName = "siard"
     applicationDefaultJvmArgs = listOf(xercesSaxParserFactory)
+}
+
+val packagingOs = org.gradle.internal.os.OperatingSystem.current()
+val cliOsName = when {
+    packagingOs.isWindows -> "win"
+    packagingOs.isLinux -> "linux"
+    packagingOs.isMacOsX -> "mac"
+    else -> "unknown"
+}
+// jpackage only accepts dotted-number versions; branch-SNAPSHOT versions like
+// "2.2.168-feat-x-SNAPSHOT" break jpackage validation (win/mac) and rpmbuild (linux)
+val jpackageVersion = Regex("\\d+(\\.\\d+)*").find(version.toString())?.value ?: "0.0.1"
+
+// jpackage accepts one --type per invocation; a second run passes -PinstallerType=
+val cliInstallerType = providers.gradleProperty("installerType").orNull ?: when (cliOsName) {
+    "win" -> "msi"
+    "linux" -> "deb"
+    "mac" -> "dmg"
+    else -> null
+}
+
+runtime {
+    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+
+    launcher {
+        noConsole = false
+        jvmArgs = listOf(
+            xercesSaxParserFactory,
+            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
+            "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED"
+        )
+    }
+
+    additive = true
+    // derived via `jdeps --recursive --print-module-deps` on the runtime classpath
+    // (java.compiler, java.desktop, java.management, java.net.http, java.prefs,
+    // java.rmi, java.security.sasl, java.sql.rowset, jdk.security.auth, jdk.unsupported)
+    // plus modules loaded dynamically that jdeps cannot see:
+    // jdk.crypto.ec (TLS to databases), java.naming (JNDI lookups via reflection),
+    // jdk.charsets (non-UTF-8 database charsets)
+    modules = listOf(
+        "java.compiler",
+        "java.desktop",
+        "java.logging",
+        "java.management",
+        "java.naming",
+        "java.net.http",
+        "java.prefs",
+        "java.rmi",
+        "java.security.jgss",
+        "java.security.sasl",
+        "java.sql",
+        "java.sql.rowset",
+        "java.xml",
+        "jdk.charsets",
+        "jdk.crypto.ec",
+        "jdk.security.auth",
+        "jdk.unsupported"
+    )
+
+    val imageSuffix = if (cliOsName != "unknown") "-$cliOsName" else ""
+    imageZip.set(file("${layout.buildDirectory.get()}/image-zip/siard-cli-${version}$imageSuffix.zip"))
+    imageDir.set(file("${layout.buildDirectory.get()}/siard-cli-${version}$imageSuffix"))
+
+    jpackage {
+        imageName = "siard"
+        installerName = "siard-cli"
+        appVersion = jpackageVersion
+
+        skipInstaller = false
+
+        val imgType = if (packagingOs.isWindows) "ico" else if (packagingOs.isMacOsX) "icns" else "png"
+        imageOptions.add("--icon")
+        imageOptions.add(layout.projectDirectory.file("packaging/icons/archive_red.$imgType").asFile.absolutePath)
+        if (packagingOs.isWindows) {
+            // without this, jpackage builds a GUI-subsystem exe that detaches
+            // from the console — all stdout/stderr of the CLI is lost
+            imageOptions.add("--win-console")
+        }
+
+        installerOptions.add("--resource-dir")
+        installerOptions.add(layout.projectDirectory.dir("packaging").asFile.absolutePath)
+        installerOptions.add("--vendor")
+        installerOptions.add("BAR")
+
+        // Windows: system-wide install (no --win-per-user-install) for managed BIT
+        // deployments; --win-dir-chooser lets the user pick a different install dir
+        cliInstallerType?.let { installerType = it }
+        if (packagingOs.isWindows) {
+            installerOptions.add("--win-dir-chooser")
+        }
+
+        if (packagingOs.isLinux) {
+            installerOptions.addAll(listOf("--linux-package-name", "siard-cli"))
+        } else if (packagingOs.isMacOsX) {
+            installerOptions.addAll(listOf("--mac-package-name", "siard-cli"))
+        }
+    }
+}
+
+// jpackage names installers <name>-<version>.<ext> (or <name>_<version>_<arch>.deb/.rpm);
+// the release contract uses siard-cli-<version>-<os>.<ext>. Fail loudly rather than
+// silently shipping a misnamed artifact.
+tasks.named("jpackage") {
+    doLast {
+        if (cliInstallerType == null) {
+            throw GradleException("no default installerType for OS '$cliOsName' — pass -PinstallerType=")
+        }
+        val jpackageDir = layout.buildDirectory.dir("jpackage").get().asFile
+        // move (not rename in place): a second jpackage run with -PinstallerType=
+        // wipes build/jpackage, so finished installers live in build/installers
+        val installersDir = layout.buildDirectory.dir("installers").get().asFile
+        installersDir.mkdirs()
+        val targetName = "siard-cli-${version}-$cliOsName.$cliInstallerType"
+        val produced = (jpackageDir.listFiles() ?: emptyArray()).filter {
+            it.isFile && it.extension == cliInstallerType && it.name.startsWith("siard-cli")
+        }
+        val installer = produced.singleOrNull()
+            ?: throw GradleException(
+                "expected exactly one siard-cli *.$cliInstallerType installer in $jpackageDir, found: ${produced.map { it.name }}"
+            )
+        if (!installer.renameTo(File(installersDir, targetName))) {
+            throw GradleException("failed to move ${installer.name} to $installersDir/$targetName")
+        }
+    }
+}
+
+listOf("jpackageImage", "jpackage").forEach { taskName ->
+    tasks.named(taskName) {
+        dependsOn(tasks.named("runtime"))
+    }
+}
+
+val cliImageSuffix = if (cliOsName != "unknown") "-$cliOsName" else ""
+tasks.register("verifyRuntimeImage") {
+    description = "Verifies the bundled runtime image contains a siard launcher and no JavaFX modules"
+    group = "verification"
+    dependsOn("runtime")
+    doLast {
+        val imageBin = layout.buildDirectory.dir("siard-cli-${version}$cliImageSuffix/bin").get().asFile
+        // the launcher is a script (siard/siard.bat); java is java/java.exe on Windows
+        val launcherNames = if (packagingOs.isWindows) listOf("siard", "siard.bat") else listOf("siard")
+        check(launcherNames.any { File(imageBin, it).isFile }) { "no bin/siard launcher in CLI runtime image" }
+        val javaBin = File(imageBin, if (packagingOs.isWindows) "java.exe" else "java")
+        val modules = ProcessBuilder(javaBin.absolutePath, "--list-modules")
+            .redirectErrorStream(true)
+            .start()
+            .inputStream.bufferedReader().readText()
+        check(modules.lineSequence().none { it.startsWith("javafx.") }) {
+            "JavaFX module found in siard-cli runtime image (BIT forbids JavaFX in the CLI bundle)"
+        }
+    }
 }
 
 distributions {
