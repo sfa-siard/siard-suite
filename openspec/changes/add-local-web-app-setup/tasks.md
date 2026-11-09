@@ -9,9 +9,9 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 
 ## 2. Verification first
 
-- [ ] 2.1 Check the event typing variants in the order of design D6 (discriminatorMapping only → `@SchemaProperty` + shared constant + drift test → hand-written TypeScript event types) on a minimal backend with the `AgentEvent` sealed interface and `ConnectedEvent`, including confirming that SmallRye ignores `@JsonTypeInfo`/`@JsonSubTypes`; verify that the generated `openapi.yaml` gives `openapi-typescript` a discriminated union on which `switch (e.type)` narrows in a compiling TS snippet, then record the chosen variant and reason in design.md D6
-- [ ] 2.2 Determine how a bean obtains the actual HTTP port via `io.quarkus.vertx.http.HttpServer` after `HttpServerStart` with `quarkus.http.port=0`; verify by starting the backend once and comparing the read port with the port it actually listens on (no permanent test; covered later by the "Agent starts and logs its launch URL" test), and note the mechanism in design.md D3
-- [ ] 2.3 Check whether `quarkus.smallrye-openapi.store-schema-directory` writes the schema during `quarkusDev` or only on build; verify by running both, and note the result in design.md D11
+- [x] 2.1 Check the event typing variants in the order of design D6 (discriminatorMapping only → `@SchemaProperty` + shared constant + drift test → hand-written TypeScript event types) on a minimal backend with the `AgentEvent` sealed interface and `ConnectedEvent`, including confirming that SmallRye ignores `@JsonTypeInfo`/`@JsonSubTypes`; verify that the generated `openapi.yaml` gives `openapi-typescript` a discriminated union on which `switch (e.type)` narrows in a compiling TS snippet, then record the chosen variant and reason in design.md D6
+- [x] 2.2 Determine how a bean obtains the actual HTTP port via `io.quarkus.vertx.http.HttpServer` after `HttpServerStart` with `quarkus.http.port=0`; verify by starting the backend once and comparing the read port with the port it actually listens on (no permanent test; covered later by the "Agent starts and logs its launch URL" test), and note the mechanism in design.md D3
+- [x] 2.3 Check whether `quarkus.smallrye-openapi.store-schema-directory` writes the schema during `quarkusDev` or only on build; verify by running both, and note the result in design.md D11
 
 ## 3. Frontend project and remaining scaffolding
 
@@ -39,7 +39,7 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 ## 7. System info and OpenAPI pipeline
 
 - [ ] 7.1 Implement `GET /api/system/info` (`appVersion`, `javaVersion`, `jdbcDrivers`); verify with tests for the three "System information endpoint" scenarios
-- [ ] 7.2 Store the generated schema as the committed `siard-suite-local-web-app/openapi.yaml`, add `npm run gen:api` (openapi-typescript) and a Gradle check that fails when the regenerated schema differs from the committed one; verify the check fails after changing a DTO field without regenerating and passes after regenerating
+- [ ] 7.2 Store the generated schema as the committed `siard-suite-local-web-app/openapi.yaml` (with a constant `info.version` instead of the axion version, which contains the branch name, and with the auto-generated `servers` entries switched off, which differ between build and dev; candidate properties `quarkus.smallrye-openapi.info-version` and `quarkus.smallrye-openapi.auto-add-server`, to be confirmed), add `npm run gen:api` (openapi-typescript) and a Gradle check that fails when the regenerated schema differs from the committed one; verify the check fails after changing a DTO field without regenerating and passes after regenerating
 
 ## 8. Frontend shell and About view
 

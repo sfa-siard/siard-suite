@@ -47,7 +47,9 @@ The backend depends on `siard-cmd`, so the full driver chain ships and is scanne
 
 ### D3: Binding and host name
 
-`quarkus.http.host=127.0.0.1` without a profile prefix (Quarkus' prod default would be `0.0.0.0`), and `quarkus.http.port=0` so the operating system assigns a free port. This avoids the PoC's race between finding a port, releasing it and binding it. After the `io.quarkus.vertx.http.HttpServerStart` event (async), the actual port is read from `io.quarkus.vertx.http.HttpServer#getPort()`, not from the event's `HttpServerOptions`, which may still say 0.
+`quarkus.http.host=127.0.0.1` without a profile prefix (Quarkus' prod default would be `0.0.0.0`), and `quarkus.http.port=0` so the operating system assigns a free port. This avoids the PoC's race between finding a port, releasing it and binding it. After the `io.quarkus.vertx.http.HttpServerStart` event (async), the actual port is read from `io.quarkus.vertx.http.HttpServer#getPort()`, not from the event's `HttpServerOptions`.
+
+*Verified (task 2.2):* with `quarkus.http.port=0`, the event's `options().getPort()` is `-1`. `HttpServer` is a CDI bean (registered by `HttpServerRuntimeInfoProvider`) and `getPort()` returned the port the process listens on, both in the packaged jar (`NORMAL`) and in `quarkusDev`. Mechanism: `@Inject HttpServer` (or `Arc.container().instance(HttpServer.class)`) read in an `@ObservesAsync HttpServerStart` observer. Its Javadoc only promises the bean "in normal mode"; whether it exists under `@QuarkusTest` is checked with the first test in task 4.1. If it doesn't, the test reads `quarkus.http.test-port` instead.
 
 `127.0.0.1` is used everywhere (launch URL, Vite proxy target) and the Host check accepts only `127.0.0.1:<port>`. Reasons:
 - Node ≥ 17 resolves `localhost` to `::1` first, and we do not listen there.
@@ -98,7 +100,13 @@ SmallRye OpenAPI 4.3.5 does not read `@JsonTypeInfo`/`@JsonSubTypes`/`@JsonTypeN
 2. **`@SchemaProperty` + shared constant + test**: each record declares `type` as a required single-value enum, using the same constant as `@JsonTypeName`. A test iterates over `AgentEvent.class.getPermittedSubclasses()`, asserts that each subtype is covered by `@JsonSubTypes`/`@JsonTypeName`, serialises it with the application's `ObjectMapper`, and compares `type` with the spec's enum.
 3. **Hand-written TypeScript event types**: if neither variant yields a usable union, the event types are written by hand in the frontend (`src/api/events.ts`) next to the generated REST types. This gives up the automatic Java ↔ TypeScript check for events only; there are few event types and they change rarely. Code that rewrites the generated spec (an `OASFilter`) was considered and rejected as over-engineering for that.
 
-**Chosen variant:** *to be filled in once task 2.1 is done.*
+**Chosen variant: 1, `discriminatorMapping` only** (task 2.1). Checked on Quarkus 3.40.1 / SmallRye OpenAPI 4.3.5 / openapi-typescript 7.13.0 with a temporary second event:
+- SmallRye ignores the Jackson annotations: the member schemas had **no** `type` property, confirming the jar inspection.
+- With `@Schema(oneOf = …, discriminatorProperty = "type", discriminatorMapping = …)` on `AgentEvent`, the spec contains `oneOf` + `discriminator.mapping`, and openapi-typescript adds `type: "connected"` etc. to each member itself ("discriminator enum property added by openapi-typescript"). `AgentEvent` becomes a union of the members.
+- A `switch (e.type)` with a `never` default compiled under `--strict` and narrowed to the member's fields; accessing another member's field in the wrong branch failed to compile.
+- On the wire, Jackson writes `{"type":"connected"}`.
+
+Variants 2 and 3 and the Jackson ↔ spec drift test are therefore not needed. Remaining manual duty: a new event needs an entry in `permits`, `@JsonSubTypes`, `oneOf` and the mapping (documented in `AgentEvent`'s Javadoc).
 
 ### D7: Independent instances
 
@@ -143,6 +151,10 @@ Edge is **not** assumed to be present. No dedicated `--user-data-dir` for now: w
 Committing the file breaks a build cycle: the backend embeds the frontend jar, so the frontend cannot depend on the backend build. It also makes API changes visible in PR diffs. CI fails if the regenerated file differs from the committed one.
 
 The client is `openapi-fetch` + `openapi-react-query` (typed TanStack Query hooks).
+
+*Verified (task 2.3):* the schema is written on `quarkusBuild` **and** at `quarkusDev` startup. A relative `store-schema-directory` resolves against the backend module directory. Not checked: whether a live reload rewrites it. `npm run gen:api` therefore works after either.
+
+The committed spec contains no build- or environment-dependent values: `info.version` is constant and no `servers` entries are generated, so the drift check only fails on real API changes.
 
 *Alternatives:* hand-written TS types (drift); `orval` (more generated code); `openapi-generator` (heavy).
 
@@ -199,6 +211,4 @@ Additive. The new modules build and ship separately from `siard-suite-app`. Roll
 
 ## Open Questions
 
-- How to obtain the `HttpServer` instance in a bean (it is backed by a `ValueRegistry`): resolved in task 2.2; the approach (D3) does not change.
-- Whether Quarkus writes the stored OpenAPI schema in dev mode or only on build: affects only the `gen:api` workflow description (task 2.3).
 - Final grace-period value: 20 s default, tuned after BIT testing.
