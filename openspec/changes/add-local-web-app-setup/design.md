@@ -42,7 +42,7 @@ Taken over unchanged:
 - launcher `jvmArgs` with the xerces property and `--add-opens`;
 - a numeric `appVersion` for jpackage.
 
-The backend depends on `siard-cmd`, so the full driver chain ships and is scanned (PoC decision D5). The jpackage options are extended for macOS (`.dmg`).
+The backend depends on `siard-cmd`, so the full driver chain ships and is scanned (PoC decision D5). On macOS no installer is built: the beryx `runtimeZip` task produces a zip with the bundled runtime and a start script, the same mechanism `deliverables.yml` uses for the desktop app's runtime zips.
 
 ### D3: Binding and host name
 
@@ -57,12 +57,14 @@ The backend depends on `siard-cmd`, so the full driver chain ships and is scanne
 ### D4: Launch token exchanged for a session cookie
 
 1. At startup a random single-use launch token and a random session secret are created.
-2. `GET /launch?token=…` checks the token in constant time and invalidates it.
+2. `GET /launch?token=…` checks the token in constant time, checks that it is at most 2 minutes old, and invalidates it.
 3. It answers `303` with a hand-set `Location: /` header, `Set-Cookie: siard_session_<port>=<secret>; HttpOnly; SameSite=Strict; Path=/`, `Cache-Control: no-store` and `Referrer-Policy: no-referrer`.
 
 `Location` is set as a raw header because JAX-RS `seeOther()`/`temporaryRedirect()` resolve relative URIs against the base URI. In dev that would turn into `http://127.0.0.1:8080/` and leave the Vite origin.
 
-A filter on `/api/*` enforces the cookie and the exact Host header. The frontend therefore never handles the token (the browser sends the cookie automatically). This works for `EventSource`, which cannot set headers.
+Every failed exchange (expired, used, unknown, missing) answers identically with `303 Location: /launch-failed` and no cookie. That frontend route shows a translated "this start link has expired or was already used, please restart SIARD Suite" message. Using one response for all cases keeps the code small and reveals nothing about the token; the user's action is the same in every case. The 2-minute limit is a constant (tests use an injectable clock), so a launch URL leaked to a log is useless soon even if it was never opened.
+
+A Vert.x route filter on **every** request (including `/launch`, `/q/*` and static files) enforces the exact `Host: 127.0.0.1:<port>`; a mismatch gets `403` with problem details pointing to `http://127.0.0.1:<port>/`, so a user who typed `localhost` knows what to do. A filter on `/api/*` enforces the cookie. Tests must therefore use `127.0.0.1` as base URI (RestAssured defaults to `localhost`). The frontend therefore never handles the token (the browser sends the cookie automatically). This works for `EventSource`, which cannot set headers.
 
 The launch URL is logged at startup. Because the token is single-use, a leaked log line is worthless once the window has opened.
 
@@ -89,19 +91,19 @@ The agent counts open authorized streams. When the count reaches 0, an exit time
 
 Events are modelled as a sealed interface `AgentEvent` with record subtypes. Jackson writes `type` automatically (`@JsonTypeInfo(use = NAME, property = "type")` + `@JsonSubTypes`/`@JsonTypeName`), so records carry no hand-filled type field.
 
-SmallRye OpenAPI 4.3.5 does not read `@JsonTypeInfo`/`@JsonSubTypes`/`@JsonTypeName` (it handles only `JsonProperty`, `JsonPropertyOrder`, `JsonIgnore*`, `JsonUnwrapped`, `JsonValue` and `JsonView`; found by inspecting the jar). MicroProfile OpenAPI 4.1 has no `itemSchema` (an OpenAPI 3.2 feature). The SSE operation therefore declares `@APIResponse(content = @Content(mediaType = "text/event-stream", schema = @Schema(implementation = AgentEvent.class)))`, and the following variants are tried **in order of preference** (task 1.1):
+SmallRye OpenAPI 4.3.5 does not read `@JsonTypeInfo`/`@JsonSubTypes`/`@JsonTypeName` (it handles only `JsonProperty`, `JsonPropertyOrder`, `JsonIgnore*`, `JsonUnwrapped`, `JsonValue` and `JsonView`; found by inspecting the jar). MicroProfile OpenAPI 4.1 has no `itemSchema` (an OpenAPI 3.2 feature). The SSE operation therefore declares `@APIResponse(content = @Content(mediaType = "text/event-stream", schema = @Schema(implementation = AgentEvent.class)))`, and the following variants are tried **in order of preference** (task 2.1):
 
 1. **`discriminatorMapping` only**: `@Schema(oneOf = …, discriminatorProperty = "type", discriminatorMapping = …)` on `AgentEvent`, if `openapi-typescript` injects the literal `type` into each union member itself.
 2. **`@SchemaProperty` + shared constant + test**: each record declares `type` as a required single-value enum, using the same constant as `@JsonTypeName`. A test iterates over `AgentEvent.class.getPermittedSubclasses()`, asserts that each subtype is covered by `@JsonSubTypes`/`@JsonTypeName`, serialises it with the application's `ObjectMapper`, and compares `type` with the spec's enum.
-3. **`OASFilter`**: derives the `type` property and discriminator mapping from the Jackson annotations. Last resort, to avoid custom code that rewrites the spec.
+3. **Hand-written TypeScript event types**: if neither variant yields a usable union, the event types are written by hand in the frontend (`src/api/events.ts`) next to the generated REST types. This gives up the automatic Java ↔ TypeScript check for events only; there are few event types and they change rarely. Code that rewrites the generated spec (an `OASFilter`) was considered and rejected as over-engineering for that.
 
-**Chosen variant:** *to be filled in once task 1.1 is done.*
+**Chosen variant:** *to be filled in once task 2.1 is done.*
 
 ### D7: Independent instances
 
 Every launch is its own agent: own JVM, port, token, session and lifetime, exactly like the desktop app, which has no single-instance logic. The instances do not coordinate, so there is no instance file, lock or control endpoint. This relies on the port-specific cookie name (D4).
 
-On macOS, LaunchServices does not start a second process when a running app is activated; it sends a reopen event instead. The agent registers `java.awt.desktop.AppReopenedListener` (via `Desktop.addAppEventListener`), mints a new single-use token and opens a browser window. **Unverified until tested on a Mac.**
+On macOS the app is started from a zip with a start script, not as an `.app` bundle, so it behaves like Windows and Linux: every launch is a new instance. A reopen handler (`java.awt.desktop.AppReopenedListener`) is only needed if a macOS `.app` is ever shipped.
 
 *Alternative:* single instance with a lock file plus handoff: a whole subsystem (secret on disk, extra endpoint, retry logic) for no gain over the desktop app's behaviour.
 
@@ -111,7 +113,7 @@ On macOS, LaunchServices does not start a second process when a running app is a
 
 | | `NORMAL` (packaged) | `DEVELOPMENT` (quarkusDev) | `TEST` |
 |---|---|---|---|
-| Token / session secret | random, single-use token | fixed dev values from `%dev.` config | random |
+| Token / session secret | random; token single-use, expires after 2 min | fixed dev values from `%dev.` config; token reusable, no expiry | random; token single-use, expires after 2 min |
 | `siard.agent.open-browser` (default) | true | false | false |
 | `siard.agent.idle-exit-grace` (default) | 20 s | disabled | disabled |
 
@@ -147,9 +149,9 @@ The client is `openapi-fetch` + `openapi-react-query` (typed TanStack Query hook
 
 - **Base:** React + TypeScript (strict) + Vite.
 - **UI:** MUI, themed after the desktop app's `root.css` colours and the Roboto font, to keep today's look.
-- **Routing:** React Router: `/` (start) and `/about`. The backend serves `index.html` for unknown non-API GET paths; `/api/*` never falls back.
+- **Routing:** React Router: `/` (start) and `/about`. The backend serves `index.html` only for GET requests to unknown paths without a file extension in the last segment; `/api/*`, `/q/*`, `/launch` and missing files with an extension (e.g. a mistyped `.js`) return a real 404.
 - **Data:** TanStack Query.
-- **i18n:** `react-i18next` with typed keys. The texts are JSON per language under `frontend/src/i18n/`, converted **once** from `siard-suite-app`'s `messages_*.properties` (`%s` → `{{arg}}`) by a script in this change and edited in JSON afterwards. The language is taken from the browser on every start, with English as fallback, and is **not** persisted: browser storage is per origin and the origin changes with every random port, and the desktop app does not persist the language either. Only shell and About texts are migrated now.
+- **i18n:** `react-i18next` with typed keys. The texts are JSON per language under `frontend/src/i18n/`, converted **once** from `siard-suite-app`'s `messages_*.properties` by a script in this change. The script must read the files as ISO-8859-1 with `\uXXXX` escapes and line continuations (the de/fr/it files are Latin-1 bytes, the en file uses `\u` escapes), e.g. via `java.util.Properties.load(InputStream)`, and map placeholders to named arguments: sequential `%s`/`%d` → `{{arg0}}`, `{{arg1}}`, …, positional `%1$s` → `{{arg0}}` (index − 1), with the call sites adjusted accordingly and edited in JSON afterwards. The language is taken from the browser on every start, with English as fallback, and is **not** persisted: browser storage is per origin and the origin changes with every random port, and the desktop app does not persist the language either. Only shell and About texts are migrated now.
 - **Quality:** ESLint (typescript-eslint, react-hooks) and Prettier, Vitest + React Testing Library, all in Gradle `check`. One Playwright smoke test (Chromium) in a separate `e2eTest` task covers launch URL → clean URL → About shows the version → page closed → agent exits.
 
 ### D13: Dev workflow
@@ -163,21 +165,27 @@ The client is `openapi-fetch` + `openapi-react-query` (typed TanStack Query hook
 
 - **`build.yml`:** a new `local-web-app` job (ubuntu) runs `:siard-suite-local-web-app:check` (JUnit/`@QuarkusTest`, OpenAPI drift, ESLint, `tsc`, Vitest) and `:siard-suite-local-web-app:e2eTest` (Playwright, browser cached). Node comes from the Gradle node plugin.
 - **Installer workflow** (new file, replacing the PoC's `poc-web-installer.yml`):
-  - matrix: windows, ubuntu, macos; runs `:siard-suite-local-web-app:backend:jpackage`;
-  - uploads `.exe`/`.msi`, `.deb`, `.dmg`; a missing expected installer fails the run;
+  - matrix: windows and ubuntu run `:siard-suite-local-web-app:backend:jpackage`, macos runs `:siard-suite-local-web-app:backend:runtimeZip`;
+  - uploads `.exe`/`.msi`, `.deb` and the macOS zip; a missing expected package fails the run;
   - actions at the versions used by the other workflows (`@v6`).
 - **Installer workflow triggers:**
   - `pull_request` and `push` to `main` with `paths-ignore: ['siard-suite-app/**', 'docs/**', '**/*.md']`. Every other module (the whole `siard-cmd` dependency chain, root build files, version catalog, Gradle wrapper) can break packaging. An ignore list automatically includes new modules.
+  - `concurrency: { group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}, cancel-in-progress: ${{ github.event_name == 'pull_request' }} }`: a new push to a PR cancels its still-running, outdated packaging builds; pushes to `main` are not cancelled, so every merge produces packages.
   - `workflow_dispatch`, which only works once the file is on `main`. The PR trigger is what builds installers during this change.
   - The module README documents that PRs trigger installer builds, so the trigger can be narrowed once packaging is stable.
 - `deliverables.yml` stays untouched until feature parity.
 
+### D15: Test scope
+
+Tests are kept minimal: **one test per spec scenario**, and nothing beyond that. No extra edge-case combinations, no tests for trivial getters, configuration or DTOs, no snapshot tests. `@QuarkusTest` is preferred over Playwright; Playwright is limited to the single smoke test (D12). The exception is the security-relevant scenarios (launch token, Host check, session cookie, `LaunchMode` credentials): they are the core of this change and are tested thoroughly. Any other test is added only after asking.
+
 ## Risks / Trade-offs
 
 - **[Edge sleeping tabs / BIT Edge policies may freeze SSE or block app mode]** → test on a BIT Windows machine with an installer from the PR workflow before merging; D5's grace period and D9's fallbacks limit the impact.
-- **[macOS untested: `.dmg` packaging, AWT browser launch, reopen handler]** → macOS runner in the installer workflow; manual test on a Mac before relying on it.
-- **[Event typing variant may not render as expected]** → ordered fallbacks in D6, checked first (task 1.1).
-- **[Packaging regressions from changes anywhere in the core]** → installer builds on PRs with `paths-ignore`; costs CI minutes (macOS).
+- **[macOS untested: start script from the runtime zip with the fast-jar layout, AWT browser launch]** → macOS runner in the packaging workflow; manual test on a Mac before relying on it.
+- **[No macOS installer: users start the app from a terminal]** → accepted for now; an `.app`/`.dmg` (plus the reopen handler from D7) can be added later.
+- **[Event typing variant may not render as expected]** → ordered fallbacks in D6, checked first (task 2.1).
+- **[Packaging regressions from changes anywhere in the core]** → packaging builds (Windows/Linux installers, macOS zip) on PRs with `paths-ignore`; costs runner time on three OSes per push, limited by `concurrency` with `cancel-in-progress` for PRs.
 - **[Closing the window kills the agent even mid-operation]** → same as the desktop app today; `beforeunload` prompt during jobs comes with the first job change.
 - **[Each launch is a full JVM]** → same memory and start time as the desktop app.
 - **[Fixed dev credentials are public]** → active only under `LaunchMode.DEVELOPMENT` and covered by a test asserting the packaged jar rejects them.
@@ -190,6 +198,6 @@ Additive. The new modules build and ship separately from `siard-suite-app`. Roll
 
 ## Open Questions
 
-- How to obtain the `HttpServer` instance in a bean (it is backed by a `ValueRegistry`): resolved in task 1.2; the approach (D3) does not change.
-- Whether Quarkus writes the stored OpenAPI schema in dev mode or only on build: affects only the `gen:api` workflow description (task 1.3).
+- How to obtain the `HttpServer` instance in a bean (it is backed by a `ValueRegistry`): resolved in task 2.2; the approach (D3) does not change.
+- Whether Quarkus writes the stored OpenAPI schema in dev mode or only on build: affects only the `gen:api` workflow description (task 2.3).
 - Final grace-period value: 20 s default, tuned after BIT testing.

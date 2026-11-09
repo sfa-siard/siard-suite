@@ -13,8 +13,8 @@ The BIT (Swiss Federal Office of IT) does not allow packages containing JavaFX o
 - **Thin end-to-end feature**: `GET /api/system/info` (app version, Java version, registered JDBC drivers) and a React About view that reimplements the desktop app's info dialog.
 - **API conventions**: unversioned `/api/...`, record DTOs, RFC 9457 problem-details errors. The OpenAPI description is committed to the repo and the frontend's TypeScript types are generated from it.
 - **Frontend foundations**: MUI themed after the desktop app's look, routing, data fetching, i18n for de/fr/it/en with the browser language chosen at every start, linting and tests. Only the shell and About texts are translated in this change.
-- **Packaging**: native installers (Windows `.exe`/`.msi`, Linux `.deb`, macOS `.dmg`) with a bundled JRE without JavaFX, reusing the packaging workarounds proven in the PoC.
-- **CI**: a web-app job in `build.yml` (unit, component, OpenAPI drift and Playwright smoke tests) and a separate installer workflow for all three platforms. Release deliverables (`deliverables.yml`) stay unchanged until feature parity.
+- **Packaging**: native installers for Windows (`.exe`/`.msi`) and Linux (`.deb`), and a zip with a start script for macOS (no installer), all with a bundled JRE without JavaFX, reusing the packaging workarounds proven in the PoC.
+- **CI**: a web-app job in `build.yml` (unit, component, OpenAPI drift and Playwright smoke tests) and a separate packaging workflow for all three platforms. Release deliverables (`deliverables.yml`) stay unchanged until feature parity.
 
 Out of scope: archive browsing, database archiving and upload, the job model, a dedicated browser profile, and any change to `siard-suite-app`.
 

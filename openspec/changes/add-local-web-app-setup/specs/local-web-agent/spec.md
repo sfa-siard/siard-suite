@@ -48,32 +48,74 @@ After startup the agent SHALL open a browser window at the launch URL: a Chromiu
 - **THEN** no browser process is started by the agent
 - **AND** the launch URL is logged
 
-### Requirement: Session established by single-use launch token
+### Requirement: Session established by launch token
 
-`GET /launch?token=<token>` with a valid, unused token SHALL respond with status 303, `Location: /`, `Cache-Control: no-store`, `Referrer-Policy: no-referrer`, and a session cookie named `siard_session_<port>` with the `HttpOnly` and `SameSite=Strict` attributes. A token SHALL be accepted only once.
+`GET /launch?token=<token>` with a token that is unused and not older than 2 minutes SHALL respond with status 303, `Location: /`, `Cache-Control: no-store`, `Referrer-Policy: no-referrer`, and a session cookie named `siard_session_<port>` with the `HttpOnly` and `SameSite=Strict` attributes. A token SHALL be accepted only once.
 
 #### Scenario: Valid token is exchanged for a session cookie
-- **GIVEN** the agent is running on port P with an unused launch token T
+- **GIVEN** the agent is running on port P with an unused launch token T issued less than 2 minutes ago
 - **WHEN** `GET /launch?token=T` is requested with `Host: 127.0.0.1:P`
 - **THEN** the response status is 303 and the `Location` header is exactly `/`
 - **AND** the response sets cookie `siard_session_P` with `HttpOnly` and `SameSite=Strict`
 - **AND** the response has `Cache-Control: no-store` and `Referrer-Policy: no-referrer`
 
-#### Scenario: Token reused
+#### Scenario: Token exchanged just before expiry
+- **GIVEN** an unused launch token T issued 1 minute and 59 seconds ago
+- **WHEN** `GET /launch?token=T` is requested
+- **THEN** the response sets cookie `siard_session_<port>`
+
+#### Scenario: Second exchange of the same token
 - **GIVEN** token T has already been exchanged once
 - **WHEN** `GET /launch?token=T` is requested again
-- **THEN** the response status is 401
+- **THEN** the response sets no cookie
+
+### Requirement: Rejected launch link
+
+A launch request whose token is expired, already used, unknown or missing SHALL respond with status 303, `Location: /launch-failed`, `Cache-Control: no-store`, `Referrer-Policy: no-referrer`, and SHALL NOT set a session cookie.
+
+#### Scenario: Expired token
+- **GIVEN** an unused launch token T issued more than 2 minutes ago
+- **WHEN** `GET /launch?token=T` is requested
+- **THEN** the response status is 303 and the `Location` header is exactly `/launch-failed`
 - **AND** the response sets no cookie
 
-#### Scenario: Invalid or missing token
+#### Scenario: Reused, unknown or missing token
 - **GIVEN** the agent is running
-- **WHEN** `GET /launch` is requested without a token or with a token that was never issued
-- **THEN** the response status is 401
+- **WHEN** `GET /launch` is requested with an already used token, a token that was never issued, or no token
+- **THEN** the response status is 303 and the `Location` header is exactly `/launch-failed`
 - **AND** the response sets no cookie
 
-### Requirement: API access requires session and loopback host
+#### Scenario: Rejection reveals nothing about the token
+- **GIVEN** launch requests with an expired, a used and an unknown token
+- **WHEN** the three responses are compared
+- **THEN** status, headers and body are identical
+- **AND** the `Location` header contains no query string
 
-Every request to `/api/*` SHALL carry the valid session cookie of this agent instance and a `Host` header exactly equal to `127.0.0.1:<port>`. The frontend's static resources and `/q/health` SHALL be reachable without a session.
+### Requirement: Loopback Host header required
+
+Every request, including `/launch`, `/api/*`, `/q/*` and static resources, SHALL carry a `Host` header exactly equal to `127.0.0.1:<port>`. Any other Host SHALL be answered with status 403 and a problem-details body telling the user to open the application via `http://127.0.0.1:<port>/`.
+
+#### Scenario: Correct Host
+- **GIVEN** the agent is running on port P
+- **WHEN** `GET /q/health` is requested with `Host: 127.0.0.1:P`
+- **THEN** the response status is 200
+
+#### Scenario: Launch link via a different host name
+- **GIVEN** an unused, valid launch token T
+- **WHEN** `GET /launch?token=T` is requested with `Host: localhost:P`
+- **THEN** the response status is 403 with content type `application/problem+json`
+- **AND** the `detail` contains `http://127.0.0.1:P/`
+- **AND** no cookie is set and T can still be exchanged via `Host: 127.0.0.1:P`
+
+#### Scenario: Foreign Host header
+- **GIVEN** the agent is running on port P
+- **WHEN** `GET /`, `GET /api/system/info` (with a valid session cookie) or `GET /q/health` is requested with `Host` `[::1]:P`, `evil.example:P` or without a port
+- **THEN** each response status is 403
+- **AND** no response contains application data or the frontend's `index.html`
+
+### Requirement: API access requires session
+
+Every request to `/api/*` SHALL carry the valid session cookie of this agent instance. The frontend's static resources and `/q/health` SHALL be reachable without a session.
 
 #### Scenario: Authorized API request
 - **GIVEN** a browser holds the session cookie of the agent on port P
@@ -89,11 +131,6 @@ Every request to `/api/*` SHALL carry the valid session cookie of this agent ins
 - **GIVEN** the agent is running on port P
 - **WHEN** `GET /api/system/info` is requested without a cookie, or with `siard_session_P` set to a different value
 - **THEN** the response status is 401
-
-#### Scenario: Foreign Host header
-- **GIVEN** a request carries the valid session cookie
-- **WHEN** its `Host` header is `localhost:P`, `[::1]:P` or `evil.example:P`
-- **THEN** the response status is 403
 
 ### Requirement: Event stream
 
@@ -157,45 +194,24 @@ Each launch SHALL start an independent agent with its own port, launch token, se
 - **WHEN** it requests `GET /api/system/info` from the agent on P2 with `Host: 127.0.0.1:P2`
 - **THEN** the response status is 401
 
-### Requirement: Reopen on macOS
-
-On macOS, when the user activates the already running application (for example from the Dock), the agent SHALL open a new browser window with a new single-use launch URL.
-
-#### Scenario: Reopen opens a window
-- **GIVEN** the agent runs on macOS with no open browser window and is within its grace period
-- **WHEN** the user activates the application from the Dock
-- **THEN** a browser window opens at a new launch URL within 10 seconds
-- **AND** the agent does not exit after the grace period
-
-#### Scenario: Reopen after window was closed long ago
-- **GIVEN** the agent has already exited because no window was connected
-- **WHEN** the user activates the application from the Dock
-- **THEN** a new agent starts and opens a browser window
-
-#### Scenario: Reopen issues a fresh token
-- **GIVEN** a reopen opened a window with token T2 after an earlier launch with token T1
-- **WHEN** the tokens are compared and `GET /launch?token=T1` is requested
-- **THEN** T2 differs from T1
-- **AND** the request with T1 returns 401
-
 ### Requirement: Fixed development credentials only in development mode
 
-A fixed, configured development token and session secret SHALL be used only when the agent runs in Quarkus development mode. In every other launch mode, token and secret SHALL be random per launch and not configurable.
+A fixed, configured development token and session secret SHALL be used only when the agent runs in Quarkus development mode; there the token is reusable and does not expire. In every other launch mode, token and secret SHALL be random per launch and not configurable.
 
 #### Scenario: Development mode uses fixed credentials
 - **GIVEN** the backend runs via `quarkusDev`
-- **WHEN** `GET /launch?token=<configured dev token>` is requested
-- **THEN** the response status is 303
+- **WHEN** `GET /launch?token=<configured dev token>` is requested, also repeatedly and later than 2 minutes after startup
+- **THEN** the response status is 303 with `Location: /` and sets the session cookie
 
 #### Scenario: Packaged agent with a dev profile override
 - **GIVEN** the packaged agent is started with `-Dquarkus.profile=dev`
 - **WHEN** `GET /launch?token=<configured dev token>` is requested
-- **THEN** the response status is 401
+- **THEN** the `Location` header is `/launch-failed` and no cookie is set
 
 #### Scenario: Token cannot be set by configuration
 - **GIVEN** the packaged agent is started with a token property set to value V
 - **WHEN** `GET /launch?token=V` is requested
-- **THEN** the response status is 401
+- **THEN** the `Location` header is `/launch-failed` and no cookie is set
 - **AND** the logged launch URL contains a token different from V
 
 ### Requirement: Error responses
@@ -217,21 +233,26 @@ API errors SHALL be returned as RFC 9457 problem details (`application/problem+j
 - **WHEN** the error response body is inspected
 - **THEN** it contains neither M, nor the string `Exception`, nor a stack frame such as `at ch.admin`
 
-### Requirement: Native installer
+### Requirement: Platform packages
 
-The agent SHALL be distributable as a native installer per platform (Windows `.exe`/`.msi`, Linux `.deb`, macOS `.dmg`) that bundles a Java runtime without JavaFX modules and runs without a system-installed Java.
+The agent SHALL be distributable as a native installer for Windows (`.exe`/`.msi`) and Linux (`.deb`), and as a zip with a start script for macOS. Each bundles a Java runtime without JavaFX modules and runs without a system-installed Java.
 
-#### Scenario: Install and launch
+#### Scenario: Install and launch on Windows and Linux
 - **GIVEN** the installer for the current platform has been built
 - **WHEN** a user installs it and launches the application from the created shortcut
 - **THEN** a browser window shows the frontend's About view after navigating to it
 
+#### Scenario: Start on macOS from the zip
+- **GIVEN** the macOS zip has been built and extracted
+- **WHEN** a user runs its start script from a terminal
+- **THEN** the launch URL is logged and a browser window shows the frontend
+
 #### Scenario: No system Java
 - **GIVEN** a machine without any installed Java runtime
-- **WHEN** the installed application is launched
+- **WHEN** the installed or extracted application is launched
 - **THEN** `GET /q/health` on the logged port returns 200
 
 #### Scenario: Runtime contains no JavaFX
-- **GIVEN** the installed application's bundled runtime
+- **GIVEN** the bundled runtime of any of the platform packages
 - **WHEN** its module list is printed with `java --list-modules`
 - **THEN** no module name starts with `javafx`
