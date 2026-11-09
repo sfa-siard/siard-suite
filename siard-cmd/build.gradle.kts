@@ -127,11 +127,14 @@ fun createDbIntegrationTestTask(dbName: String, packagePattern: String, forks: I
             showStandardStreams = true
         }
 
-        // Clean up Docker resources after each test class to prevent disk space exhaustion
+        // Clean up Docker resources once per task to prevent disk space exhaustion.
+        // Pruning after every class suite races with sibling forks: "docker container
+        // prune" removes containers daemon-wide, including ones in "Created" state
+        // that another fork is about to start (409 "marked for removal").
         addTestListener(object : TestListener {
             override fun beforeSuite(suite: TestDescriptor) {}
             override fun afterSuite(suite: TestDescriptor, result: TestResult) {
-                if (suite.className != null) {
+                if (suite.parent == null) {
                     try {
                         project.providers.exec {
                             commandLine("docker", "container", "prune", "-f")
@@ -172,24 +175,6 @@ tasks.register<Test>("integrationTest") {
         events("passed", "skipped", "failed")
         showStandardStreams = true
     }
-
-    // Clean up Docker resources after each test class to prevent disk space exhaustion
-    addTestListener(object : TestListener {
-        override fun beforeSuite(suite: TestDescriptor) {}
-        override fun afterSuite(suite: TestDescriptor, result: TestResult) {}
-        override fun beforeTest(testDescriptor: TestDescriptor) {}
-        override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {
-            if (testDescriptor.parent == null) {
-                try {
-                    project.providers.exec {
-                        commandLine("docker", "container", "prune", "-f")
-                    }.result.get()
-                } catch (e: Exception) {
-                    logger.warn("Failed to clean up Docker containers: ${e.message}")
-                }
-            }
-        }
-    })
 
     // Depend on all database-specific test tasks
     dependsOn(
