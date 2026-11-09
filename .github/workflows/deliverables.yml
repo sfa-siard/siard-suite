@@ -14,7 +14,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set TAG-Env
-        run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        run: |
+          ref_name="${GITHUB_REF#refs/*/}"
+          echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
       - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
@@ -23,7 +25,7 @@ jobs:
           java-package: "jdk+fx"
           cache: "gradle"
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
       - name: Show current application version
         run: ./gradlew cV
       - name: Execute Gradle build
@@ -59,10 +61,16 @@ jobs:
         uses: actions/checkout@v6
       - name: Set TAG-Env
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        run: echo "NAME_TAG=SIARD-Suite-${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        run: |
+          ref_name="${GITHUB_REF#refs/*/}"
+          echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
+          echo "CLI_TAG=siard-cli-${ref_name//\//-}" >> $GITHUB_ENV
       - name: Set TAG-Env Windows
         if: runner.os == 'Windows'
-        run: echo "NAME_TAG=SIARD-Suite-${{ github.ref_name }}" >> $env:GITHUB_ENV
+        run: |
+          $refName = $env:GITHUB_REF_NAME -replace '/', '-'
+          echo "NAME_TAG=SIARD-Suite-$refName" >> $env:GITHUB_ENV
+          echo "CLI_TAG=siard-cli-$refName" >> $env:GITHUB_ENV
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
@@ -72,42 +80,88 @@ jobs:
           cache: "gradle"
       - name: Echo JAVA_HOME
         run: echo $JAVA_HOME
+      - name: Install rpm build tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y rpm
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-      - name: Execute build runtimeZip jpackage
-        run: ./gradlew :siard-suite-app:build runtimeZip jpackage --no-daemon
+        uses: gradle/actions/setup-gradle@v4
+      - name: Execute build runtimeZip jpackage (SIARD Suite app)
+        # -x test: JavaFX toolkit cannot initialize headlessly on the macOS
+        # runner (Toolkit.java:275) — unit tests run in build.yml instead
+        run: ./gradlew :siard-suite-app:build -x test :siard-suite-app:runtimeZip :siard-suite-app:jpackage --no-daemon
+      - name: Execute build runtimeZip jpackage (siard CLI)
+        run: ./gradlew :siard-cmd:runtimeZip :siard-cmd:verifyRuntimeImage :siard-cmd:jpackage --no-daemon
+      - name: "Build second CLI installer type (Windows: exe)"
+        if: runner.os == 'Windows'
+        run: ./gradlew :siard-cmd:jpackage -PinstallerType=exe --no-daemon
+      - name: "Build second CLI installer type (Linux: rpm)"
+        if: runner.os == 'Linux'
+        run: ./gradlew :siard-cmd:jpackage -PinstallerType=rpm --no-daemon
       - name: Upload DMG as an artifact
+        if: runner.os == 'macOS'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}-dmg
           path: siard-suite-app/build/jpackage/*.dmg
-          if-no-files-found: ignore
-      - name: Upload EXE as an artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: ${{ env.NAME_TAG }}-win-exe
-          path: siard-suite-app/build/jpackage/*.exe
-          if-no-files-found: ignore
+          if-no-files-found: error
       - name: Upload MSI as an artifact
+        if: runner.os == 'Windows'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-win-msi
           path: siard-suite-app/build/jpackage/*.msi
-          if-no-files-found: ignore
+          if-no-files-found: error
       - name: Upload DEB as an artifact
+        if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}-deb
           path: siard-suite-app/build/jpackage/*.deb
-          if-no-files-found: ignore
-      - name: Upload RPM as an artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: ${{ env.NAME_TAG }}-${{ runner.os }}-rpm
-          path: siard-suite-app/build/jpackage/*.rpm
-          if-no-files-found: ignore
+          if-no-files-found: error
       - name: Upload application image zip
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-${{ runner.os }}
           path: siard-suite-app/build/image-zip/*.zip
+          if-no-files-found: error
+      - name: Upload CLI image zip
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.CLI_TAG }}-${{ runner.os }}-image
+          path: siard-cmd/build/image-zip/siard-cli-*.zip
+          if-no-files-found: error
+      - name: Upload CLI MSI as an artifact
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.CLI_TAG }}-win-msi
+          path: siard-cmd/build/installers/*.msi
+          if-no-files-found: error
+      - name: Upload CLI EXE as an artifact
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.CLI_TAG }}-win-exe
+          path: siard-cmd/build/installers/*.exe
+          if-no-files-found: error
+      - name: Upload CLI DEB as an artifact
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.CLI_TAG }}-linux-deb
+          path: siard-cmd/build/installers/*.deb
+          if-no-files-found: error
+      - name: Upload CLI RPM as an artifact
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.CLI_TAG }}-linux-rpm
+          path: siard-cmd/build/installers/*.rpm
+          if-no-files-found: error
+      - name: Upload CLI DMG as an artifact
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.CLI_TAG }}-mac-dmg
+          path: siard-cmd/build/installers/*.dmg
+          if-no-files-found: error

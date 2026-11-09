@@ -133,7 +133,9 @@ runtime {
     jpackage {
         imageName = "SIARD-Suite"
         installerName = "SIARD-Suite"
-        appVersion = version.toString()
+        // jpackage only accepts dotted-number versions; branch-SNAPSHOT versions like
+        // "2.2.168-feat-x-SNAPSHOT" are rejected by jpackage and by rpmbuild
+        appVersion = Regex("\\d+(\\.\\d+)*").find(version.toString())?.value ?: "0.0.1"
 
         skipInstaller = false
 
@@ -145,7 +147,7 @@ runtime {
         installerOptions.add("src/main/resources")
         installerOptions.add("--vendor")
         installerOptions.add("BAR")
-        
+
         if (currentOs.isWindows) {
             installerOptions.addAll(
                 listOf(
@@ -180,6 +182,11 @@ tasks.test {
     jvmArgs(
         "-Djava.awt.headless=true",
         "-Dtestfx.headless=true",
+        "-Dtestfx.robot=glass",
+        "-Dglass.platform=Monocle",
+        "-Dmonocle.platform=Headless",
+        "-Dprism.order=sw",
+        "-Dprism.text=t2k",
         xercesSaxParserFactory,
         "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
         "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
@@ -195,17 +202,6 @@ tasks.processResources {
     }
 }
 
-val siardCli = tasks.register<CreateStartScripts>("siardCli") {
-    applicationName = "siard"
-    mainClass.set("ch.admin.bar.siard2.cmd.SiardCli")
-    outputDir = file("build/scripts")
-    classpath = files(tasks.jar.get().outputs.files, configurations.runtimeClasspath.get())
-}
-
-tasks.named<CreateStartScripts>("startScripts") {
-    dependsOn(siardCli)
-}
-
 tasks.distTar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
@@ -215,7 +211,6 @@ tasks.distZip {
 }
 
 tasks.installDist {
-    dependsOn(siardCli)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
@@ -264,7 +259,7 @@ val copyDocumentation = tasks.register<Copy>("copyDocumentation") {
     into(layout.projectDirectory.dir("./src/main/resources/ch/admin/bar/siardsuite/doc"))
 }
 
-tasks.named("asciidoctorPdf") { 
+tasks.named("asciidoctorPdf") {
     finalizedBy(copyDocumentation)
 }
 
@@ -272,7 +267,7 @@ tasks.named("build") {
     dependsOn(tasks.asciidoctorPdf)
 }
 
-tasks.named("processResources") { 
+tasks.named("processResources") {
     dependsOn(copyDocumentation)
 }
 

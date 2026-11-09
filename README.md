@@ -70,7 +70,9 @@ Note: There is a [justfile](./justfile) that provides convenient aliases for com
 
 **Command-Line Interface:**
 
-First, build the distribution:
+The `siard` CLI is distributed separately as `siard-cli` — releases ship native installers (`.msi`/`.exe`, `.deb`/`.rpm`, `.dmg`) and runtime-bundled image zips per OS. It is not included in the SIARD Suite installer.
+
+For development, build the plain distribution (requires Java 21):
 ```shell
 ./gradlew :siard-cmd:installDist
 ```
@@ -82,6 +84,12 @@ Then run the CLI:
 
 # Upload SIARD archive to database
 ./siard-cmd/build/install/siard/bin/siard restore --jdbc-url=<url> --user=<user> --password=<password> --siard-file=<file>
+```
+
+Or build a runtime-bundled image (no Java needed to run):
+```shell
+./gradlew :siard-cmd:runtimeZip
+# unzip siard-cmd/build/image-zip/siard-cli-*.zip and run bin/siard
 ```
 
 ### Building the Project
@@ -200,17 +208,21 @@ open build/reports/dependency-analysis/build-health-report.html
 ```shell
 ./gradlew jpackageImage
 ```
-The image will be available at `./build/jpackage/siard-suite` (OS-specific).
+The image will be available at `./build/jpackage/siard-suite` (OS-specific). The CLI image is built with `:siard-cmd:jpackageImage` (or `:siard-cmd:runtimeZip` for the zipped image).
 
 **Create installer:**
 ```shell
 ./gradlew jpackage
 ```
-Creates platform-specific installers (DMG, EXE, MSI, DEB, or RPM).
-
-**Ubuntu users:** Install `alien` if RPM building fails:
+Creates platform-specific installers for both SIARD Suite and the `siard` CLI (`siard-cli-<version>-<os>.dmg/.msi/.deb`, …). On Windows and Linux a second CLI installer type is produced with:
 ```shell
-sudo apt install alien
+./gradlew :siard-cmd:jpackage -PinstallerType=exe   # Windows (default: msi)
+./gradlew :siard-cmd:jpackage -PinstallerType=rpm   # Linux (default: deb, needs rpmbuild)
+```
+
+**Ubuntu users:** Install `rpm` (provides `rpmbuild`) to build RPM installers:
+```shell
+sudo apt install rpm
 ```
 
 ## Versioning and Releases

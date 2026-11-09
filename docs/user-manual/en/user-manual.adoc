@@ -232,7 +232,7 @@ Each distribution is listed below. All distributions can be downloaded from http
 |Native installer for MacOS
 |===
 
-*Note:* When using the native installer, the SIARD CLI (Command Line Interface) is not available. To use the CLI, a distribution with or without an included JRE should be used.
+*Note:* The SIARD Suite installer does not contain the SIARD CLI (Command Line Interface). The CLI is distributed as a separate product `siard-cli` with its own native installers and runtime-bundled image archives.
 
 === Architecture (32-bit/64-bit)
 In previous versions of SIARD Suite, reliance on ODBC required the use of 32-bit JAVA to access MS Access databases. SIARD Suite 2.2 no longer uses ODBC to access MS Access databases. Therefore, these databases can be accessed on any platform (e.g. LINUX), and SIARD Suite 2.2 is compatible with both 32-bit and 64-bit JAVA. It is recommended to choose the JAVA architecture according to the architecture of your operating system.
@@ -260,7 +260,6 @@ The distributions with and without JRE are delivered as a ZIP archive. This can 
 | Script name | Description
 
 | siard-suite (.bat) | Start the graphical user interface for Unix or Windows systems
-|| siard (.bat) | Command line interface: archive a database or upload a SIARD archive to a database (CLI)
 |===
 
 If the installation of SIARD-Suite is prevented due to security barriers on your computer, please follow the instructions in the link:../../../release-guide.md[release guide].
@@ -320,7 +319,16 @@ The following settings are available:
 
 In addition to the graphical user interface, databases can also be archived or an archive can be read back into a database via the command line.
 
-For this purpose the `siard` script is available in the ZIP distribution. It provides the subcommands `archive` (write a database to a SIARD file) and `restore` (load a SIARD file into a database). `siard --help`, `siard archive --help` and `siard restore --help` print generated usage help, `siard --version` prints version information, and the exit code is `0` on success, `1` on execution errors and `2` on usage errors. The database password is resolved in this order: `--password=<value>`, an interactive console prompt when `--password` is given without a value, or the `SIARD_PASSWORD` environment variable.
+The `siard` command line interface is distributed separately as the `siard-cli` product — it is not included in the SIARD Suite installer. For each operating system a native installer (`siard-cli-<version>-win.msi` and `siard-cli-<version>-win.exe` for Windows, `siard-cli-<version>-linux.deb` and `siard-cli-<version>-linux.rpm` for Linux, `siard-cli-<version>-mac.dmg` for macOS) or an application-image ZIP archive (`siard-cli-<version>-<os>.zip`) is available. Both contain an embedded Java runtime, so no Java installation is required.
+
+After installation the `siard` launcher is located in the installation directory — it is not added to `PATH`:
+
+* Linux (`.deb`/`.rpm`): `/opt/siard-cli/bin/siard`
+* Windows (`.msi`/`.exe`, system-wide install requiring administrator privileges): `siard.exe` in the `siard-cli` installation directory
+* macOS (`.dmg`): the `siard` launcher inside the `siard` application bundle; for terminal use the `bin/siard` launcher in the image ZIP is the convenient option
+* Image ZIP: `bin/siard` in the unpacked archive
+
+The launcher provides the subcommands `archive` (write a database to a SIARD file) and `restore` (load a SIARD file into a database). `siard --help`, `siard archive --help` and `siard restore --help` print generated usage help, `siard --version` prints version information, and the exit code is `0` on success, `1` on execution errors and `2` on usage errors. The database password is resolved in this order: `--password=<value>`, an interactive console prompt when `--password` is given without a value, or the `SIARD_PASSWORD` environment variable.
 
 === siard archive
 
@@ -328,7 +336,7 @@ With `siard archive` a database can be archived without using the GUI.
 
 ==== Usage
 
-In a terminal, change to the directory where the ZIP archive was unpacked, open the directory `bin` there and execute it with
+In a terminal, change to the `bin` directory of the unpacked image ZIP — or to the install location listed above when a native installer was used — and execute it with
 
 ```
 siard archive --jdbc-url=<JDBC URL> --user=<database user> [--password[=<database password>]] (--siard-file=<siard file> | --export-xml=<export meta data>) [--overwrite] [--views-as-tables] [--login-timeout=<login timeout>] [--query-timeout=<query timeout>] [--import-xml=<import meta data>] [--lob-folder=<external lob folder>] [--mime-type=<mime type>] [--schema=<schema name>]
