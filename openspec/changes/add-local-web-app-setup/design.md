@@ -142,7 +142,7 @@ Edge is **not** assumed to be present. No dedicated `--user-data-dir` for now: w
 - DTOs are records mapped from `siard-api` types and never serialise `siard-api` objects directly.
 - Errors are RFC 9457 problem details produced by one central `ExceptionMapper`, without stack traces or exception messages; details are logged on the server.
 - `GET /api/system/info` returns `appVersion` (`ProgramInfo` / the build version), `javaVersion` and `jdbcDrivers` (from `DriverManager.getDrivers()`). This proves the packaged driver chain loads.
-- A backend-only `@QuarkusTest` opens `master.siard` via `ArchiveImpl` to prove `siard-api` works under Quarkus, without an endpoint.
+- A backend-only `@QuarkusTest` opens the tracked fixture `siard-api/src/test/resources/testfiles/sample.siard` via `ArchiveImpl` to prove `siard-api` works under Quarkus, without an endpoint.
 
 ### D11: OpenAPI pipeline
 

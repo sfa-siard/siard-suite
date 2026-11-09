@@ -15,9 +15,9 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 
 ## 3. Frontend project and remaining scaffolding
 
-- [ ] 3.1 Create the frontend project (React, TS strict, Vite, MUI, React Router, TanStack Query, openapi-fetch/openapi-react-query, react-i18next, ESLint, Prettier, Vitest, RTL) with node-gradle tasks for install, build, lint, typecheck and test wired into `check`, and the jar packing `dist/` into `META-INF/resources`, plus the backend's `implementation(project(":siard-suite-local-web-app:frontend"))` dependency so the built frontend ends up in the backend's `META-INF/resources`; verify `./gradlew :siard-suite-local-web-app:frontend:jar` contains `META-INF/resources/index.html` and that `GET /` on the backend started with `quarkusRun` (or in a `@QuarkusTest`) returns the built `index.html`
-- [ ] 3.2 Add a `@QuarkusTest` that opens `master.siard` via `ArchiveImpl` (no endpoint); verify it passes under `./gradlew :siard-suite-local-web-app:backend:test`
-- [ ] 3.3 Update the `AGENTS.md` module table with the new module; verify it matches `settings.gradle.kts`
+- [x] 3.1 Create the frontend project (React, TS strict, Vite, MUI, React Router, TanStack Query, openapi-fetch/openapi-react-query, react-i18next, ESLint, Prettier, Vitest, RTL) with node-gradle tasks for install, build, lint, typecheck and test wired into `check`, and the jar packing `dist/` into `META-INF/resources`, plus the backend's `implementation(project(":siard-suite-local-web-app:frontend"))` dependency so the built frontend ends up in the backend's `META-INF/resources`; verify `./gradlew :siard-suite-local-web-app:frontend:jar` contains `META-INF/resources/index.html` and that `GET /` on the backend started with `quarkusRun` (or in a `@QuarkusTest`) returns the built `index.html`
+- [x] 3.2 Add a `@QuarkusTest` that opens the tracked fixture `siard-api/src/test/resources/testfiles/sample.siard` via `ArchiveImpl` (no endpoint); verify it passes under `./gradlew :siard-suite-local-web-app:backend:test`
+- [x] 3.3 Update the `AGENTS.md` module table with the new module; verify it matches `settings.gradle.kts`
 
 ## 4. Agent core: binding, launch modes, session, access control
 

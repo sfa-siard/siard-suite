@@ -27,6 +27,8 @@ dependencies {
         exclude(group = "ch.qos.logback")
     }
     implementation(project(":siard-api"))
+    // the built frontend, served from META-INF/resources
+    implementation(project(":siard-suite-local-web-app:frontend"))
 
     // siard-api uses javax JAXB internals (com.sun.xml.bind); the Quarkus BOM would
     // otherwise align the glassfish JAXB artifacts to the jakarta-based 4.x line
