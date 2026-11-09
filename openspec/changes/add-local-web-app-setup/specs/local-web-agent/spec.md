@@ -16,11 +16,6 @@ On every launch the agent SHALL listen on `127.0.0.1` only, on a port the operat
 - **THEN** within 30 seconds a log line contains a launch URL with host `127.0.0.1`, a port between 1024 and 65535, and a non-empty token
 - **AND** `GET http://127.0.0.1:<port>/q/health` returns 200
 
-#### Scenario: Port already in use is avoided
-- **GIVEN** another process listens on a port P
-- **WHEN** the agent is launched
-- **THEN** the port in the logged launch URL is not P
-
 #### Scenario: Not reachable from other network interfaces
 - **GIVEN** the agent is running on port P and the machine has a non-loopback IPv4 address A
 - **WHEN** a TCP connection to `A:P` is attempted

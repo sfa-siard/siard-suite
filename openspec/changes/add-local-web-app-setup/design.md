@@ -49,7 +49,7 @@ The backend depends on `siard-cmd`, so the full driver chain ships and is scanne
 
 `quarkus.http.host=127.0.0.1` without a profile prefix (Quarkus' prod default would be `0.0.0.0`), and `quarkus.http.port=0` so the operating system assigns a free port. This avoids the PoC's race between finding a port, releasing it and binding it. After the `io.quarkus.vertx.http.HttpServerStart` event (async), the actual port is read from `io.quarkus.vertx.http.HttpServer#getPort()`, not from the event's `HttpServerOptions`.
 
-*Verified (task 2.2):* with `quarkus.http.port=0`, the event's `options().getPort()` is `-1`. `HttpServer` is a CDI bean (registered by `HttpServerRuntimeInfoProvider`) and `getPort()` returned the port the process listens on, both in the packaged jar (`NORMAL`) and in `quarkusDev`. Mechanism: `@Inject HttpServer` (or `Arc.container().instance(HttpServer.class)`) read in an `@ObservesAsync HttpServerStart` observer. Its Javadoc only promises the bean "in normal mode"; whether it exists under `@QuarkusTest` is checked with the first test in task 4.1. If it doesn't, the test reads `quarkus.http.test-port` instead.
+*Verified (task 2.2):* with `quarkus.http.port=0`, the event's `options().getPort()` is `-1`. `HttpServer` is a CDI bean (registered by `HttpServerRuntimeInfoProvider`) and `getPort()` returned the port the process listens on, both in the packaged jar (`NORMAL`) and in `quarkusDev`. Mechanism: `@Inject HttpServer` (or `Arc.container().instance(HttpServer.class)`) read in an `@ObservesAsync HttpServerStart` observer. Its Javadoc only promises the bean "in normal mode", but it is also available under `@QuarkusTest` (task 4.1: tests read the random test port through it).
 
 `127.0.0.1` is used everywhere (launch URL, Vite proxy target) and the Host check accepts only `127.0.0.1:<port>`. Reasons:
 - Node ≥ 17 resolves `localhost` to `::1` first, and we do not listen there.
@@ -67,7 +67,7 @@ The backend depends on `siard-cmd`, so the full driver chain ships and is scanne
 
 Every failed exchange (expired, used, unknown, missing) answers identically with `303 Location: /launch-failed` and no cookie. That frontend route shows a translated "this start link has expired or was already used, please restart SIARD Suite" message. Using one response for all cases keeps the code small and reveals nothing about the token; the user's action is the same in every case. The 2-minute limit is a constant (tests use an injectable clock), so a launch URL leaked to a log is useless soon even if it was never opened.
 
-A Vert.x route filter on **every** request (including `/launch`, `/q/*` and static files) enforces the exact `Host: 127.0.0.1:<port>`; a mismatch gets `403` with problem details pointing to `http://127.0.0.1:<port>/`, so a user who typed `localhost` knows what to do. A filter on `/api/*` enforces the cookie. Tests must therefore use `127.0.0.1` as base URI (RestAssured defaults to `localhost`). The frontend therefore never handles the token (the browser sends the cookie automatically). This works for `EventSource`, which cannot set headers.
+The Host check reads Vert.x's `request.authority()`, not the raw `Host` header: in HTTP/2 the host arrives as the `:authority` pseudo-header, and Java's `HttpClient` upgrades to h2c, so a header-only check rejected such clients (found in task 4.1). A Vert.x route filter on **every** request (including `/launch`, `/q/*` and static files) enforces the exact `Host: 127.0.0.1:<port>`; a mismatch gets `403` with problem details pointing to `http://127.0.0.1:<port>/`, so a user who typed `localhost` knows what to do. A filter on `/api/*` enforces the cookie. Tests must therefore use `127.0.0.1` as base URI (RestAssured defaults to `localhost`). The frontend therefore never handles the token (the browser sends the cookie automatically). This works for `EventSource`, which cannot set headers.
 
 The launch URL is logged at startup. Because the token is single-use, a leaked log line is worthless once the window has opened.
 
@@ -140,7 +140,7 @@ Edge is **not** assumed to be present. No dedicated `--user-data-dir` for now: w
 
 - Unversioned `/api/...`: frontend and backend always ship together.
 - DTOs are records mapped from `siard-api` types and never serialise `siard-api` objects directly.
-- Errors are RFC 9457 problem details produced by one central `ExceptionMapper`, without stack traces or exception messages; details are logged on the server.
+- Errors are RFC 9457 problem details produced by one central `ExceptionMapper`, without stack traces or exception messages; details are logged on the server. *Deferred to the first change with an intentional client error (e.g. 400 for an invalid archive):* a dedicated `ProblemException(status, detail)` whose detail is passed through. Framework `WebApplicationException` messages stay hidden because they can contain internals. Later, a stable `type` per error would let the frontend translate the message.
 - `GET /api/system/info` returns `appVersion` (`ProgramInfo` / the build version), `javaVersion` and `jdbcDrivers` (from `DriverManager.getDrivers()`). This proves the packaged driver chain loads.
 - A backend-only `@QuarkusTest` opens the tracked fixture `siard-api/src/test/resources/testfiles/sample.siard` via `ArchiveImpl` to prove `siard-api` works under Quarkus, without an endpoint.
 
@@ -191,6 +191,11 @@ The committed spec contains no build- or environment-dependent values: `info.ver
 ### D15: Test scope
 
 Tests are kept minimal: **one test per spec scenario**, and nothing beyond that. No extra edge-case combinations, no tests for trivial getters, configuration or DTOs, no snapshot tests. `@QuarkusTest` is preferred over Playwright; Playwright is limited to the single smoke test (D12). The exception is the security-relevant scenarios (launch token, Host check, session cookie, `LaunchMode` credentials): they are the core of this change and are tested thoroughly. Any other test is added only after asking.
+
+How the scenarios are run (task 4.x):
+- **`@QuarkusTest`** (`TEST` mode) for everything that does not depend on the launch mode. A `MutableClock` alternative replaces the agent's clock for expiry, and a test-only `/api/test-probe` resource stands in for API endpoints that do not exist yet. It also provides the "handler throws" case.
+- **Packaged app** (`NORMAL` mode) for scenarios about the real launch mode. These live in the Quarkus plugin's `src/integrationTest` source set and run via `quarkusIntTest` (part of `check`). `@QuarkusIntegrationTest` is not used because it fixes the port and cannot read the agent's log. A `PackagedAgent` helper starts `quarkus-run.jar` with `siard.agent.open-browser=false`, reads the launch URL from its output, and always stops the process: via try-with-resources and a JVM shutdown hook. Its HTTP client uses no proxy, so an inherited proxy setting cannot reroute loopback requests. The "other interfaces" test only accepts "connection refused" and is skipped when the machine has no non-loopback IPv4 address.
+- **Development mode** ("Development mode uses fixed credentials") is a unit test of `LaunchCredentials` with `LaunchMode.DEVELOPMENT`, plus a manual `quarkusDev` check; running `quarkusDev` in a test is too heavy.
 
 ## Risks / Trade-offs
 

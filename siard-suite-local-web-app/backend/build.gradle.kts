@@ -59,3 +59,9 @@ tasks.test {
         "--add-opens=java.base/java.lang=ALL-UNNAMED"
     )
 }
+
+// src/integrationTest (source set and quarkusIntTest task come from the Quarkus plugin) starts the
+// packaged app as a separate process, for spec scenarios that need LaunchMode.NORMAL
+tasks.named("check") {
+    dependsOn("quarkusIntTest")
+}
