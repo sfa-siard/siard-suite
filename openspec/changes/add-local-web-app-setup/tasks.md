@@ -4,8 +4,8 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 
 ## 1. Backend skeleton
 
-- [ ] 1.1 Add the `siard-suite-local-web-app:backend` and `:frontend` includes to `settings.gradle.kts` and set `archivesName` in both; verify `./gradlew projects` lists both nested projects
-- [ ] 1.2 Add the Quarkus platform/plugin and the node-gradle plugin to `gradle/libs.versions.toml`, and create the backend build (Quarkus REST, Jackson, SmallRye Health, SmallRye OpenAPI, `siard-cmd` without logback, the PoC's JAXB/activation `strictly()` pins, test jvmArgs with the xerces property and `--add-opens`); verify `./gradlew :siard-suite-local-web-app:backend:build` succeeds
+- [x] 1.1 Add the `siard-suite-local-web-app:backend` and `:frontend` includes to `settings.gradle.kts` and set `archivesName` in both; verify `./gradlew projects` lists both nested projects
+- [x] 1.2 Add the Quarkus platform/plugin and the node-gradle plugin to `gradle/libs.versions.toml`, and create the backend build (Quarkus REST, Jackson, SmallRye Health, SmallRye OpenAPI, `siard-cmd` without logback, the PoC's JAXB/activation `strictly()` pins, test jvmArgs with the xerces property and `--add-opens`); verify `./gradlew :siard-suite-local-web-app:backend:build` succeeds
 
 ## 2. Verification first
 

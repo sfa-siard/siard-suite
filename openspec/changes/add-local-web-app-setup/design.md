@@ -37,6 +37,7 @@ Taken over unchanged:
 - fast-jar layout with the `installDist` staging hook;
 - `patchAppImageCfg`, which keeps only the run jar on `app.classpath`;
 - `platform()` (not `enforcedPlatform()`) for the Quarkus BOM, plus `strictly()` pins for `jaxb-runtime`/`txw2` 2.3.9, `jaxb-core` 2.3.0.1 and `jakarta.activation-api` 1.2.2;
+- new in this change: `strictly()` pins for the PostgreSQL, MySQL and MS SQL Server drivers to the version-catalog versions, because the advisory BOM otherwise aligns them to its own (it raised MySQL 9.3.0 → 9.7.0 and PostgreSQL 42.7.11 → 42.7.13), and the shipped drivers must be the ones the `siard-cmd` integration tests cover. The other drivers need no pin because the BOM does not manage their coordinates: Oracle (`jdbc-oracle/lib/ojdbc7.jar` file dependency; `com.oracle.ojdbc:xdb`/`xmlparserv2`, while the BOM manages `com.oracle.database.*`), DB2 (`jdbc-db2/lib/db2jcc4.jar` file dependency, `com.mysitex.sx.lib:db2jcc_license_cu`; the BOM manages `com.ibm.db2:jcc`) and Access (Jackcess). The MariaDB driver is only an integration-test dependency of `siard-cmd` and is not shipped;
 - logback excluded from `siard-cmd`;
 - jlink modules including `java.desktop` and `jdk.zipfs`;
 - launcher `jvmArgs` with the xerces property and `--add-opens`;
