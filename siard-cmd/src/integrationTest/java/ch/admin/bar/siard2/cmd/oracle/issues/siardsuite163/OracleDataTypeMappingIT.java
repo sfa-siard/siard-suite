@@ -209,9 +209,8 @@ public class OracleDataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("NCHAR_COL"))
                 .build());
-        //TODO is this a bug, 2 instead of 1?
-        Assertions.assertThat(nCharCol.getType()).contains(Id.of("NCHAR(2)"));
-        Assertions.assertThat(nCharCol.getTypeOriginal()).contains(Id.of("NCHAR(2)"));
+        Assertions.assertThat(nCharCol.getType()).contains(Id.of("NCHAR(1)"));
+        Assertions.assertThat(nCharCol.getTypeOriginal()).contains(Id.of("NCHAR(1)"));
 
         val nCharNCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
                 .schemaId(Id.of("IT_USER"))
