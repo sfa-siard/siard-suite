@@ -84,6 +84,8 @@ The event type lives in the JSON data (`type`), not in SSE's `event:` field. Tha
 
 The agent counts open authorized streams. When the count reaches 0, an exit timer starts (`siard.agent.idle-exit-grace`, default 20 s); a new stream cancels it. The default is a starting value, to be tuned after BIT testing.
 
+If no stream has connected by the time the launch token has expired (2 min after start) plus the grace period, the agent exits too: nobody can obtain a session any more, for example because the browser never opened. The grace period on top lets a click just before expiry still connect. The deadline is checked against the agent's clock, like the token expiry. Both exits are enabled by the same `idle-exit-grace` setting.
+
 *Alternatives:*
 - Explicit Quit only: users would never quit the agent.
 - Timer heartbeats: browsers throttle timers in hidden windows to roughly one per minute, which causes false exits.

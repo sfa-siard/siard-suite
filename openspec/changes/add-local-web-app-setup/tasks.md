@@ -28,8 +28,8 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 
 ## 5. Event stream and presence
 
-- [ ] 5.1 Implement `GET /api/events` (SSE, `AgentEvent` with the variant from 2.1, `connected` first, 15 s keep-alive comments, close detection); verify with tests for the three "Event stream" scenarios
-- [ ] 5.2 Implement counting of authorized streams and the idle exit timer (cancelled by a new stream, disabled per D8 defaults), with shutdown injected behind a bean so tests can replace it; verify with tests for the three "Exit when no window is connected" scenarios
+- [x] 5.1 Implement `GET /api/events` (SSE, `AgentEvent` with the variant from 2.1, `connected` first, 15 s keep-alive comments, close detection); verify with tests for the three "Event stream" scenarios
+- [x] 5.2 Implement counting of authorized streams and the idle exit timer (cancelled by a new stream, disabled per D8 defaults), with shutdown injected behind a bean so tests can replace it; exit when no stream has connected by token expiry plus the grace period; verify with tests for the four "Exit when no window is connected" scenarios
 
 ## 6. Browser launch and instances
 

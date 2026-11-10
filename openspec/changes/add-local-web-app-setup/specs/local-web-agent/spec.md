@@ -150,7 +150,7 @@ Every request to `/api/*` SHALL carry the valid session cookie of this agent ins
 
 ### Requirement: Exit when no window is connected
 
-In normal launch mode the agent SHALL exit once no authorized event stream has been open for the configured grace period (`siard.agent.idle-exit-grace`, default 20 seconds).
+In normal launch mode the agent SHALL exit once no authorized event stream has been open for the configured grace period (`siard.agent.idle-exit-grace`, default 20 seconds). If no authorized event stream has opened by the time the launch token has expired plus the grace period, the agent SHALL exit as well, since no new session can be obtained.
 
 #### Scenario: Last window closed
 - **GIVEN** the packaged agent with exactly one open event stream
@@ -167,6 +167,11 @@ In normal launch mode the agent SHALL exit once no authorized event stream has b
 - **WHEN** a client repeatedly requests `GET /api/events` without a valid session during the grace period
 - **THEN** each request returns 401
 - **AND** the agent exits within the grace period plus 5 seconds
+
+#### Scenario: No window connects after launch
+- **GIVEN** the agent has started and no authorized event stream has opened
+- **WHEN** the launch token lifetime plus the grace period has passed
+- **THEN** the agent exits
 
 ### Requirement: Independent instances
 

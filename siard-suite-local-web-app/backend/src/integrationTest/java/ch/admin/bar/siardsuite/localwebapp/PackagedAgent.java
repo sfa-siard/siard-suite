@@ -87,6 +87,11 @@ final class PackagedAgent implements AutoCloseable {
         return token;
     }
 
+    /** Waits for the process to end on its own; true if it did within the timeout. */
+    boolean awaitExit(Duration timeout) throws InterruptedException {
+        return process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS);
+    }
+
     @Override
     public void close() {
         process.destroy();

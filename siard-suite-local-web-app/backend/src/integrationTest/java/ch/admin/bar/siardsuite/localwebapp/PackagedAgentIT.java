@@ -2,8 +2,10 @@ package ch.admin.bar.siardsuite.localwebapp;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -14,6 +16,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Properties;
@@ -86,6 +90,28 @@ class PackagedAgentIT {
             assertEquals("/launch-failed", response.headers().firstValue("Location").orElse(null));
             assertTrue(response.headers().firstValue("Set-Cookie").isEmpty());
             assertNotEquals(configured, agent.token());
+        }
+    }
+
+    @Test
+    void lastWindowClosed() throws Exception {
+        Duration grace = Duration.ofSeconds(2);
+        try (PackagedAgent agent = PackagedAgent.start("-Dsiard.agent.idle-exit-grace=" + grace.toMillis() + "ms")) {
+            String cookie = get(agent, "/launch?token=" + agent.token()).headers().firstValue("Set-Cookie")
+                    .orElseThrow().split(";", 2)[0];
+            HttpRequest request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + agent.port() + "/api/events"))
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .header("Cookie", cookie)
+                    .GET().build();
+            HttpResponse<InputStream> stream = HTTP.send(request, HttpResponse.BodyHandlers.ofInputStream());
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream.body(), StandardCharsets.UTF_8))) {
+                String line;
+                do {
+                    line = reader.readLine();
+                } while (line != null && !line.startsWith("data:")); // reads only the connected event, and then closes the window
+                assertNotNull(line, "stream ended before the connected event");
+            }
+            assertTrue(agent.awaitExit(grace.plusSeconds(5)), "agent still running after the grace period plus 5 seconds");
         }
     }
 
