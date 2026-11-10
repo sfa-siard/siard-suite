@@ -14,7 +14,7 @@
     }
   },
   "launchFailed": {
-    "text": "This start link has expired or was already used. Please restart SIARD Suite."
+    "text": "This start link has expired or has already been used. Please restart SIARD Suite."
   },
   "session": {
     "missing": "This window is no longer connected to SIARD Suite. Please restart SIARD Suite."

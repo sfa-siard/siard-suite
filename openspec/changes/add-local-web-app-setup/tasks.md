@@ -58,8 +58,41 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 - [ ] 10.2 Add the packaging workflow (matrix windows/ubuntu with `jpackage`, macos with `runtimeZip`, `pull_request` + `push: main` with `paths-ignore` for `siard-suite-app/**`, `docs/**`, `**/*.md`, plus `workflow_dispatch`, `concurrency` cancelling outdated PR runs, actions `@v6`, failing on a missing package); verify the PR run uploads `.exe`/`.msi`, `.deb` and the macOS zip, and that a second push in quick succession cancels the first run
 - [ ] 10.3 Write `siard-suite-local-web-app/README.md`: prerequisites (JDK 21; Node.js not required because the Gradle node plugin downloads it, but useful for `npm run dev`), a short architecture overview (agent, frontend, launch token → cookie, SSE presence) linking to this change's design.md, the dev workflow (quarkusDev + Vite, dev token, `127.0.0.1` URLs, Swagger UI, and after an API change `openApiUpdate` then `gen:api`), running `./gradlew :siard-suite-local-web-app:check` and `:e2eTest` (noting that the latter downloads a Chromium browser on first run), building the `.deb` locally with `:backend:jpackage` (needs `dpkg`/`fakeroot`), and the CI section stating that PRs trigger packaging builds, why, and how to narrow the trigger later; verify every command in it runs as written
 
+## 11. Manual platform checks
+
+Everything the automated tests cannot cover. Each check uses the build from the PR's packaging workflow (installer or zip) unless it says otherwise; tick it only after doing it on a real machine.
+
+### Windows (BIT machine, installer from the PR workflow)
+
+- [ ] 11.1 Install and start the app with Edge present: an Edge window without address bar (app mode) opens and shows the frontend; check that Edge policies on the BIT machine allow app mode
+- [ ] 11.2 Browser lookup on a Windows machine without Edge (any Windows machine, not necessarily BIT): a machine-wide Chrome and a per-user Chrome (`%LOCALAPPDATA%`) each open in app mode; with neither Edge nor Chrome, the default browser opens via `Desktop.browse`
+- [ ] 11.3 Leave the window in the background (sleeping tabs) for at least 30 minutes: the agent is still running and the window still works; use this to decide the grace-period value
+- [ ] 11.4 Closing the window ends the agent within the grace period plus a few seconds (check Task Manager)
+
+### macOS (zip from the PR workflow)
+
+- [ ] 11.5 Extract the zip and run the start script: with Edge or Chrome in `/Applications`, an app-mode window opens and shows the frontend; repeat with the browser only in `~/Applications`
+- [ ] 11.6 With no Chromium-family browser installed, the default browser (Safari) opens via `Desktop.browse`
+- [ ] 11.7 Closing the window ends the agent within the grace period plus a few seconds
+
+### Linux (`.deb` from the PR workflow)
+
+- [ ] 11.8 Install the `.deb` and start the app in a desktop session, once under Wayland and once under X11: an app-mode window opens and shows the frontend (X11 done; Wayland open)
+- [x] 11.9 Closing the window ends the agent within the grace period plus a few seconds
+
+### All platforms (one platform is enough)
+
+- [x] 11.10 Launch the app twice: two independent windows on different ports; closing one leaves the other working
+- [x] 11.11 Start the packaged app with `-Dsiard.agent.open-browser=false` and do not open the launch URL: the agent exits about 2 minutes plus the grace period after start
+
+### Development mode
+
+- [x] 11.12 Run `quarkusDev` and `npm run dev`: `http://127.0.0.1:5173/launch?token=dev-token` (the dev token from `application.properties`) leads to the frontend through the Vite proxy, and the agent keeps running after the window is closed
+
+### Look
+
+- [ ] 11.13 Compare the web app with the desktop app side by side: header colour, background, text colours and the Roboto font (check in the browser's dev tools that the bundled font, not a system fallback, is used)
+
 ## Workflow follow-up
 
-- Test an installer from the PR workflow on a BIT Windows machine: Edge availability and app mode, Edge policies, sleeping tabs vs SSE, grace-period value.
-- Test the macOS zip on a Mac: extract, run the start script, browser window opens, closing the window ends the agent.
 - Run `openspec-verify-change` and archive the change after review.

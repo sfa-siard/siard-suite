@@ -8,6 +8,7 @@ const backend = { target: "http://127.0.0.1:8080", changeOrigin: true };
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: "127.0.0.1",
     proxy: {
       "/api": backend,
       "/launch": backend,

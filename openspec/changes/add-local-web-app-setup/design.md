@@ -72,7 +72,7 @@ The Host check reads Vert.x's `request.authority()`, not the raw `Host` header: 
 The launch URL is logged at startup. Because the token is single-use, a leaked log line is worthless once the window has opened.
 
 - **Port in the cookie name:** cookies are not port-scoped. **Independent instances (D7) rely on this**; without it, two agents would overwrite each other's session.
-- **Note for later:** if an Origin check is added, Vite's `changeOrigin` does not rewrite `Origin`, so in dev it arrives as `http://localhost:5173`. A dev allowance must be guarded like D8.
+- **Note for later:** if an Origin check is added, Vite's `changeOrigin` does not rewrite `Origin`, so in dev it arrives as `http://127.0.0.1:5173`. A dev allowance must be guarded like D8.
 
 *Alternatives:* the PoC's Bearer token read by JS from the URL (token stays in the history and is visible to JS); `history.replaceState` cleanup (token still in JS memory).
 
@@ -175,7 +175,7 @@ The committed spec contains no build- or environment-dependent values: `info.ver
 
 ### D13: Dev workflow
 
-- `./gradlew :siard-suite-local-web-app:backend:quarkusDev` on port 8080 (`%dev.quarkus.http.port`), plus `npm run dev` (Vite on 5173).
+- `./gradlew :siard-suite-local-web-app:backend:quarkusDev` on port 8080 (`%dev.quarkus.http.port`), plus `npm run dev` (Vite on `127.0.0.1:5173`, bound explicitly via `server.host`: plain `localhost` may resolve to `::1` only, and the dev URL must use the same single host as the agent).
 - Vite proxies `/api` and `/launch` to `http://127.0.0.1:8080` with `changeOrigin: true`, so the backend sees `Host: 127.0.0.1:8080` and the Host check needs no dev exception. SSE works through the proxy.
 - In `DEVELOPMENT` the fixed token and secret (D8) survive hot restarts, so the browser session keeps working after Java changes.
 - Swagger UI (dev only) is available at `http://127.0.0.1:8080/q/swagger-ui`.
