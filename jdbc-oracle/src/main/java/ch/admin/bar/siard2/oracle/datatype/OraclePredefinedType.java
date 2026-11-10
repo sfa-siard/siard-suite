@@ -51,7 +51,7 @@ public class OraclePredefinedType
         mapISO_TO_ORACLE.put(PreType.SMALLINT, "SMALLINT");
         mapISO_TO_ORACLE.put(PreType.INTEGER, "INTEGER");
         mapISO_TO_ORACLE.put(PreType.BIGINT, "NUMBER(20)");
-        mapISO_TO_ORACLE.put(PreType.FLOAT, "BINARY_DOUBLE");
+        mapISO_TO_ORACLE.put(PreType.FLOAT, "NUMBER");
         mapISO_TO_ORACLE.put(PreType.REAL, "BINARY_FLOAT");
         mapISO_TO_ORACLE.put(PreType.DOUBLE, "BINARY_DOUBLE");
         mapISO_TO_ORACLE.put(PreType.BOOLEAN, "NUMBER(1)");

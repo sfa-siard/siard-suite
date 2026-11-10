@@ -962,8 +962,13 @@ public class OracleResultSetTester extends BaseResultSetTester {
                         assertEquals((Float) tcd.getValue(), f, "Invalid value for " + tcd.getType() + "!");
                     } else fail("Type Float expected for " + tcd.getType() + "!");
                 } else if (tcd.getName()
-                              .equals("CDOUBLE") || tcd.getName()
-                                                       .equals("CFLOAT_10")) {
+                              .equals("CFLOAT_10")) {
+                    if (o instanceof BigDecimal) {
+                        BigDecimal bd = (BigDecimal) o;
+                        assertEquals(((Float) tcd.getValue()).doubleValue(), bd.doubleValue(), 0.000001, "Invalid value for " + tcd.getType() + "!");
+                    } else fail("Type BigDecimal expected for " + tcd.getType() + "!");
+                } else if (tcd.getName()
+                              .equals("CDOUBLE")) {
                     if (o instanceof Double) {
                         Double dExpected = Double.NaN;
                         if (tcd.getValue() instanceof Float) {
