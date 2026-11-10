@@ -44,7 +44,7 @@ On every start the frontend SHALL display its texts in the browser's preferred l
 #### Scenario: Supported browser language
 - **GIVEN** the browser's preferred language is `fr-CH`
 - **WHEN** the frontend loads
-- **THEN** the About view title is shown in French
+- **THEN** the About view's description text is shown in French
 
 #### Scenario: Unsupported browser language
 - **GIVEN** the browser's preferred language is `es`

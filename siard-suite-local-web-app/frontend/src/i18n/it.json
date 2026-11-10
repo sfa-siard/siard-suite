@@ -1,0 +1,25 @@
+{
+  "welcome": {
+    "text": "Bienvenuti à SIARD Suite!"
+  },
+  "menu": {
+    "item": {
+      "info": "Informazioni"
+    }
+  },
+  "info": {
+    "dialog": {
+      "title": "SIARD Suite {{arg0}}",
+      "text": "SIARD Suite consente di scaricare database relazionali nel formato di archiviazione indipendente dal software SIARD Format 2.2, modificare i metadati di tale archivio di database e caricarli in un sistema di database."
+    }
+  },
+  "launchFailed": {
+    "text": "Questo link di avvio è scaduto o è già stato utilizzato. Riavviare SIARD Suite."
+  },
+  "session": {
+    "missing": "Questa finestra non è più collegata a SIARD Suite. Riavviare SIARD Suite."
+  },
+  "about": {
+    "loadError": "Non è stato possibile caricare le informazioni."
+  }
+}

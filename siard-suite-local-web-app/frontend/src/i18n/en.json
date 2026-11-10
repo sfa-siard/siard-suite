@@ -1,0 +1,25 @@
+{
+  "welcome": {
+    "text": "Welcome to SIARD Suite!"
+  },
+  "menu": {
+    "item": {
+      "info": "Info"
+    }
+  },
+  "info": {
+    "dialog": {
+      "title": "SIARD Suite {{arg0}}",
+      "text": "SIARD Suite permits downloading relational databases into the software-independent archival format SIARD Format 2.2, editing the meta data of such a database archive, and uploading it to a database system."
+    }
+  },
+  "launchFailed": {
+    "text": "This start link has expired or was already used. Please restart SIARD Suite."
+  },
+  "session": {
+    "missing": "This window is no longer connected to SIARD Suite. Please restart SIARD Suite."
+  },
+  "about": {
+    "loadError": "The information could not be loaded."
+  }
+}
