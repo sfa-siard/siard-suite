@@ -2,7 +2,12 @@ package ch.admin.bar.siardsuite.localwebapp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,6 +15,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -24,6 +30,12 @@ import java.util.regex.Pattern;
 final class PackagedAgent implements AutoCloseable {
 
     static final Duration STARTUP_TIMEOUT = Duration.ofSeconds(30);
+
+    // talks to the local agent directly; an inherited proxy setting must not reroute loopback requests
+    private static final HttpClient HTTP = HttpClient.newBuilder()
+            .proxy(HttpClient.Builder.NO_PROXY)
+            .followRedirects(HttpClient.Redirect.NEVER)
+            .build();
 
     private static final Path RUN_JAR = Path.of("build/quarkus-app/quarkus-run.jar");
     private static final Pattern LAUNCH_URL =
@@ -49,6 +61,15 @@ final class PackagedAgent implements AutoCloseable {
      * Starts the agent with the browser disabled and waits for its launch URL.
      */
     static PackagedAgent start(String... extraJvmArgs) throws IOException, InterruptedException {
+        return start(Map.of(), extraJvmArgs);
+    }
+
+    /**
+     * Like {@link #start(String...)}, with environment variables replaced for the agent process.
+     * A later {@code -Dsiard.agent.open-browser=true} overrides the default {@code false}.
+     */
+    static PackagedAgent start(Map<String, String> environment, String... extraJvmArgs)
+            throws IOException, InterruptedException {
         if (!Files.isRegularFile(RUN_JAR)) {
             throw new IllegalStateException(RUN_JAR.toAbsolutePath() + " missing; run quarkusBuild first");
         }
@@ -65,7 +86,9 @@ final class PackagedAgent implements AutoCloseable {
         command.add("-jar");
         command.add(RUN_JAR.toString());
 
-        PackagedAgent agent = new PackagedAgent(new ProcessBuilder(command).redirectErrorStream(true).start());
+        ProcessBuilder builder = new ProcessBuilder(command).redirectErrorStream(true);
+        builder.environment().putAll(environment);
+        PackagedAgent agent = new PackagedAgent(builder.start());
         try {
             agent.awaitLaunchUrl();
             return agent;
@@ -85,6 +108,59 @@ final class PackagedAgent implements AutoCloseable {
 
     String token() {
         return token;
+    }
+
+    /** The agent's output so far (stdout and stderr). */
+    List<String> output() {
+        return List.copyOf(output);
+    }
+
+    /** The agent process and the processes it started. */
+    ProcessHandle processHandle() {
+        return process.toHandle();
+    }
+
+    HttpResponse<String> get(String path, String... headers) throws IOException, InterruptedException {
+        // the timeout turns an unexpectedly opened event stream into a failure instead of a hang
+        HttpRequest.Builder request = HttpRequest.newBuilder(uri(path)).timeout(Duration.ofSeconds(10)).GET();
+        if (headers.length > 0) {
+            request.headers(headers);
+        }
+        return HTTP.send(request.build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    /** Exchanges the launch token for a session; returns the cookie as {@code name=value}. */
+    String sessionCookie() throws IOException, InterruptedException {
+        return get("/launch?token=" + token).headers().firstValue("Set-Cookie")
+                .orElseThrow(() -> new IllegalStateException("no session cookie"))
+                .split(";", 2)[0];
+    }
+
+    /**
+     * Opens {@code /api/events} like a browser window and returns once the {@code connected}
+     * event has arrived; closing the returned stream closes the window.
+     */
+    AutoCloseable openWindow(String cookie) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/events"))
+                .version(HttpClient.Version.HTTP_1_1)
+                .header("Cookie", cookie)
+                .GET().build();
+        HttpResponse<InputStream> response = HTTP.send(request, HttpResponse.BodyHandlers.ofInputStream());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(response.body(), StandardCharsets.UTF_8));
+        String line;
+        do {
+            line = reader.readLine();
+        } while (line != null && !line.startsWith("data:"));
+        if (line == null) {
+            reader.close();
+            throw new IllegalStateException("event stream ended before the connected event (status "
+                    + response.statusCode() + ")");
+        }
+        return reader;
+    }
+
+    private URI uri(String path) {
+        return URI.create("http://127.0.0.1:" + port + path);
     }
 
     /** Waits for the process to end on its own; true if it did within the timeout. */

@@ -2,21 +2,15 @@ package ch.admin.bar.siardsuite.localwebapp;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Optional;
@@ -36,19 +30,13 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  */
 class PackagedAgentIT {
 
-    // talks to the local agent directly; an inherited proxy setting must not reroute loopback requests
-    private static final HttpClient HTTP = HttpClient.newBuilder()
-            .proxy(HttpClient.Builder.NO_PROXY)
-            .followRedirects(HttpClient.Redirect.NEVER)
-            .build();
-
     @Test
     void agentStartsAndLogsItsLaunchUrl() throws Exception {
         try (PackagedAgent agent = PackagedAgent.start()) {
             assertTrue(agent.launchUrl().startsWith("http://127.0.0.1:"));
             assertTrue(agent.port() >= 1024 && agent.port() <= 65535, "port " + agent.port());
             assertFalse(agent.token().isEmpty());
-            assertEquals(200, get(agent, "/q/health").statusCode());
+            assertEquals(200, agent.get("/q/health").statusCode());
         }
     }
 
@@ -73,7 +61,7 @@ class PackagedAgentIT {
     @Test
     void packagedAgentWithDevProfileOverrideRejectsDevToken() throws Exception {
         try (PackagedAgent agent = PackagedAgent.start("-Dquarkus.profile=dev", "-Dquarkus.http.port=0")) {
-            HttpResponse<String> response = get(agent, "/launch?token=" + configuredDevToken());
+            HttpResponse<String> response = agent.get("/launch?token=" + configuredDevToken());
             assertEquals("/launch-failed", response.headers().firstValue("Location").orElse(null));
             assertTrue(response.headers().firstValue("Set-Cookie").isEmpty());
         }
@@ -86,7 +74,7 @@ class PackagedAgentIT {
                 "-Dsiard.agent.token=" + configured,
                 "-Dsiard.agent.dev-token=" + configured,
                 "-Dsiard.agent.dev-session-secret=configured-secret")) {
-            HttpResponse<String> response = get(agent, "/launch?token=" + configured);
+            HttpResponse<String> response = agent.get("/launch?token=" + configured);
             assertEquals("/launch-failed", response.headers().firstValue("Location").orElse(null));
             assertTrue(response.headers().firstValue("Set-Cookie").isEmpty());
             assertNotEquals(configured, agent.token());
@@ -97,20 +85,7 @@ class PackagedAgentIT {
     void lastWindowClosed() throws Exception {
         Duration grace = Duration.ofSeconds(2);
         try (PackagedAgent agent = PackagedAgent.start("-Dsiard.agent.idle-exit-grace=" + grace.toMillis() + "ms")) {
-            String cookie = get(agent, "/launch?token=" + agent.token()).headers().firstValue("Set-Cookie")
-                    .orElseThrow().split(";", 2)[0];
-            HttpRequest request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + agent.port() + "/api/events"))
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .header("Cookie", cookie)
-                    .GET().build();
-            HttpResponse<InputStream> stream = HTTP.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream.body(), StandardCharsets.UTF_8))) {
-                String line;
-                do {
-                    line = reader.readLine();
-                } while (line != null && !line.startsWith("data:")); // reads only the connected event, and then closes the window
-                assertNotNull(line, "stream ended before the connected event");
-            }
+            agent.openWindow(agent.sessionCookie()).close();
             assertTrue(agent.awaitExit(grace.plusSeconds(5)), "agent still running after the grace period plus 5 seconds");
         }
     }
@@ -125,11 +100,6 @@ class PackagedAgentIT {
         String token = properties.getProperty("%dev.siard.agent.dev-token");
         assertNotNull(token, "%dev.siard.agent.dev-token missing in application.properties");
         return token;
-    }
-
-    private static HttpResponse<String> get(PackagedAgent agent, String path) throws IOException, InterruptedException {
-        URI uri = URI.create("http://127.0.0.1:" + agent.port() + path);
-        return HTTP.send(HttpRequest.newBuilder(uri).GET().build(), HttpResponse.BodyHandlers.ofString());
     }
 
     private static Optional<InetAddress> nonLoopbackIpv4Address() throws IOException {

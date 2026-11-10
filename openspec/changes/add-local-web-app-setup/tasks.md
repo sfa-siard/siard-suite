@@ -33,8 +33,8 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 
 ## 6. Browser launch and instances
 
-- [ ] 6.1 Implement browser launch per design D9 (Edge/Chrome install paths on Windows, executables on Linux/macOS, `--app`, then `Desktop.browse`, then log only), honouring `siard.agent.open-browser`; verify with tests for the "Browser is opened at launch" scenarios that can run headless
-- [ ] 6.2 Verify independent instances: a test starting two packaged-jar agents checks different ports, both healthy, one session rejected by the other agent, and only the agent whose stream closes exits ("Independent instances" scenarios)
+- [x] 6.1 Implement browser launch per design D9 (Edge/Chrome install paths on Windows, executables on Linux/macOS, `--app`, then `Desktop.browse`, then log only), honouring `siard.agent.open-browser`; verify with tests for the "Browser is opened at launch" scenarios that can run headless
+- [x] 6.2 Verify independent instances: a test starting two packaged-jar agents checks different ports, both healthy, one session rejected by the other agent, and only the agent whose stream closes exits ("Independent instances" scenarios)
 
 ## 7. System info and OpenAPI pipeline
 
