@@ -55,7 +55,7 @@ class HostCheckTest {
         int port = Sessions.port();
         String session = Sessions.cookieValue();
         for (String host : List.of("[::1]:" + port, "evil.example:" + port, "127.0.0.1")) {
-            for (String path : List.of("/", "/api/test-probe", "/q/health")) {
+            for (String path : List.of("/", "/api/system/info", "/q/health")) {
                 given().header("Host", host)
                         .cookie(Sessions.cookieName(), session)
                         .get(path)

@@ -6,7 +6,13 @@ import prettier from "eslint-config-prettier";
 import globals from "globals";
 
 export default defineConfig([
-  globalIgnores(["dist", "build", ".gradle", "node_modules"]),
+  globalIgnores([
+    "dist",
+    "build",
+    ".gradle",
+    "node_modules",
+    "src/api/schema.d.ts",
+  ]),
   {
     files: ["**/*.{ts,tsx}"],
     extends: [

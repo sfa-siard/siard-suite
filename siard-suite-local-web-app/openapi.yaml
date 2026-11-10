@@ -1,0 +1,56 @@
+---
+openapi: 3.1.0
+components:
+  schemas:
+    AgentEvent:
+      oneOf:
+      - $ref: "#/components/schemas/ConnectedEvent"
+      discriminator:
+        propertyName: type
+        mapping:
+          connected: "#/components/schemas/ConnectedEvent"
+      type: object
+    ConnectedEvent:
+      type: object
+    SystemInfo:
+      type: object
+      required:
+      - appVersion
+      - javaVersion
+      - jdbcDrivers
+      properties:
+        appVersion:
+          type: string
+        javaVersion:
+          type: string
+        jdbcDrivers:
+          type: array
+          items:
+            type: string
+paths:
+  /api/events:
+    get:
+      summary: Event stream of the agent; each event's data is an AgentEvent
+      responses:
+        "200":
+          content:
+            text/event-stream:
+              schema:
+                $ref: "#/components/schemas/AgentEvent"
+      tags:
+      - Events Resource
+  /api/system/info:
+    get:
+      summary: Version and runtime of the agent
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SystemInfo"
+      tags:
+      - System Resource
+info:
+  title: SIARD Suite local agent API
+  version: "1"

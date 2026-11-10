@@ -19,7 +19,8 @@ node {
     npmInstallCommand.set("ci")
 }
 
-val sources = listOf("src", "index.html", "package.json", "package-lock.json", "tsconfig.json", "vite.config.ts")
+// ../openapi.yaml: the committed API description the TypeScript types are generated from
+val sources = listOf("src", "index.html", "package.json", "package-lock.json", "tsconfig.json", "vite.config.ts", "../openapi.yaml")
 
 val frontendBuild = tasks.register<NpmTask>("frontendBuild") {
     description = "Builds the frontend into dist/."

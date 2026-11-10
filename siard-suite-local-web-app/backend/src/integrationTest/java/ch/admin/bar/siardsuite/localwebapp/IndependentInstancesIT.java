@@ -38,8 +38,7 @@ class IndependentInstancesIT {
         }
     }
 
-    // a browser sends the cookies of both instances to both, since cookies are not port-specific;
-    // the spec names /api/system/info, which arrives with task 7.1, so /api/events stands in for it
+    // a browser sends the cookies of both instances to both, since cookies are not port-specific
     @Test
     void sessionOfOneInstanceIsRejectedByAnother() throws Exception {
         try (PackagedAgent first = PackagedAgent.start();
@@ -47,7 +46,7 @@ class IndependentInstancesIT {
             String firstCookie = first.sessionCookie();
             String firstSecret = firstCookie.substring(firstCookie.indexOf('=') + 1);
             String cookies = firstCookie + "; siard_session_" + second.port() + "=" + firstSecret;
-            assertEquals(401, second.get("/api/events", "Cookie", cookies).statusCode());
+            assertEquals(401, second.get("/api/system/info", "Cookie", cookies).statusCode());
         }
     }
 }

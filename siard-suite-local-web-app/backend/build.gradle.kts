@@ -65,3 +65,48 @@ tasks.test {
 tasks.named("check") {
     dependsOn("quarkusIntTest")
 }
+
+// OpenAPI description (design D11): Quarkus writes it to build/openapi/ during quarkusBuild; the
+// committed copy ../openapi.yaml is what the frontend generates its types from
+val generatedOpenApi = layout.buildDirectory.file("openapi/openapi.yaml")
+val committedOpenApi = layout.projectDirectory.file("../openapi.yaml")
+
+val openApiCheck = tasks.register("openApiCheck") {
+    description = "Fails if the generated OpenAPI description differs from the committed openapi.yaml."
+    group = "verification"
+    dependsOn("quarkusBuild")
+    inputs.files(generatedOpenApi, committedOpenApi)
+    doLast {
+        val generated = generatedOpenApi.get().asFile
+        val committed = committedOpenApi.asFile
+        if (!generated.isFile) {
+            throw GradleException("$generated was not written by quarkusBuild")
+        }
+        // line endings may differ after a Windows checkout
+        fun normalized(file: File) = file.readText().replace("\r\n", "\n")
+        if (!committed.isFile || normalized(generated) != normalized(committed)) {
+            throw GradleException(
+                "The API changed: ${committed.canonicalPath} is out of date. Run " +
+                    "./gradlew :siard-suite-local-web-app:backend:openApiUpdate, then commit openapi.yaml."
+            )
+        }
+    }
+}
+
+tasks.register("openApiUpdate") {
+    description = "Copies the generated OpenAPI description to the committed openapi.yaml."
+    group = "build"
+    dependsOn("quarkusBuild")
+    doLast {
+        generatedOpenApi.get().asFile.copyTo(committedOpenApi.asFile, overwrite = true)
+    }
+}
+
+tasks.named("check") {
+    dependsOn(openApiCheck)
+}
+
+tasks.named<Test>("quarkusIntTest") {
+    // the version the packaged agent must report in /api/system/info
+    systemProperty("siard.expected-app-version", project.version.toString())
+}

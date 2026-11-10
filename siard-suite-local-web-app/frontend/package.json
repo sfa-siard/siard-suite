@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "typecheck": "tsc --noEmit",
+    "build": "npm run gen:api && vite build",
+    "typecheck": "npm run gen:api && tsc --noEmit",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "gen:api": "openapi-typescript ../openapi.yaml -o src/api/schema.d.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

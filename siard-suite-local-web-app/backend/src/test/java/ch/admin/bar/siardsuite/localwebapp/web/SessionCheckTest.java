@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 /**
- * Spec requirement "API access requires session"; {@code /api/test-probe} stands in for
- * {@code /api/system/info} until task 7.1.
+ * Spec requirement "API access requires session".
  */
 @QuarkusTest
 class SessionCheckTest {
@@ -16,7 +15,7 @@ class SessionCheckTest {
     @Test
     void authorizedApiRequest() {
         given().cookie(Sessions.cookieName(), Sessions.cookieValue())
-                .get("/api/test-probe")
+                .get("/api/system/info")
                 .then().statusCode(200);
     }
 
@@ -28,9 +27,9 @@ class SessionCheckTest {
 
     @Test
     void missingOrInvalidSessionIsRejected() {
-        given().get("/api/test-probe").then().statusCode(401);
+        given().get("/api/system/info").then().statusCode(401);
         given().cookie(Sessions.cookieName(), "not-the-secret")
-                .get("/api/test-probe")
+                .get("/api/system/info")
                 .then().statusCode(401);
     }
 }
