@@ -1,5 +1,6 @@
 ### Build outputs ###
 target/
+bin/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -35,6 +36,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Zed ###
+.zed/
 
 ### Mac OS ###
 .DS_Store
