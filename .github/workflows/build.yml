@@ -22,9 +22,8 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
           java-package: "jdk+fx"
-          cache: "gradle"
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
       - name: Show version
         run: ./gradlew cV
       - name: Compile all modules
@@ -60,9 +59,8 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
           java-package: "jdk+fx"
-          cache: "gradle"
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
       - name: Test ${{ matrix.module }}
         run: ./gradlew :${{ matrix.module }}:test -Djava.awt.headless=true -Dtestfx.headless=true
       - name: Upload test reports
