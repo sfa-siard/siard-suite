@@ -262,7 +262,7 @@ public class OracleDatabaseMetaData
     }
 
     private String getTypeNameCase(String sDataType, String sTypeOwner, String sTypeName,
-                                   String sDataLength, String sDataPrecision, String sDataScale) {
+                                   String sDataLength, String sCharLength, String sDataPrecision, String sDataScale) {
         StringBuilder sbTypeNameCase = new StringBuilder("  CASE \r\n");
 
         // Built-in Oracle types
@@ -311,44 +311,44 @@ public class OracleDatabaseMetaData
         sbTypeNameCase.append("        WHEN ");
         sbTypeNameCase.append(sDataType);
         sbTypeNameCase.append(" = 'VARCHAR2' AND ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" IS NOT NULL THEN 'VARCHAR2(' || ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" || ')' \r\n");
         sbTypeNameCase.append("        WHEN ");
         sbTypeNameCase.append(sDataType);
         sbTypeNameCase.append(" = 'VARCHAR' AND ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" IS NOT NULL THEN 'VARCHAR(' || ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" || ')' \r\n");
         sbTypeNameCase.append("        WHEN ");
         sbTypeNameCase.append(sDataType);
         sbTypeNameCase.append(" = 'CHAR' AND ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" IS NOT NULL THEN 'CHAR(' || ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" || ')' \r\n");
         sbTypeNameCase.append("        WHEN ");
         sbTypeNameCase.append(sDataType);
         sbTypeNameCase.append(" = 'NCHAR' AND ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" IS NOT NULL THEN 'NCHAR(' || ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" || ')' \r\n");
         sbTypeNameCase.append("        WHEN ");
         sbTypeNameCase.append(sDataType);
         sbTypeNameCase.append(" = 'NVARCHAR2' AND ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" IS NOT NULL THEN 'NVARCHAR2(' || ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" || ')' \r\n");
         sbTypeNameCase.append("        WHEN ");
         sbTypeNameCase.append(sDataType);
         sbTypeNameCase.append(" = 'NVARCHAR' AND ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" IS NOT NULL THEN 'NVARCHAR(' || ");
-        sbTypeNameCase.append(sDataLength);
+        sbTypeNameCase.append(sCharLength);
         sbTypeNameCase.append(" || ')' \r\n");
 
         // Date/time types
@@ -400,7 +400,7 @@ public class OracleDatabaseMetaData
         return sbTypeNameCase.toString();
     }
 
-    private String getSizeCase(String sDataType, String sLength, String sPrecision) {
+    private String getSizeCase(String sDataType, String sLength, String sCharLength, String sPrecision) {
         StringBuilder sbColumnSizeCase = new StringBuilder("  CASE \r\n");
         sbColumnSizeCase.append("    WHEN ");
         sbColumnSizeCase.append(sPrecision);
@@ -408,6 +408,11 @@ public class OracleDatabaseMetaData
         sbColumnSizeCase.append("      WHEN ");
         sbColumnSizeCase.append(sDataType);
         sbColumnSizeCase.append(" = 'NUMBER' THEN 38 \r\n");
+        sbColumnSizeCase.append("      WHEN ");
+        sbColumnSizeCase.append(sDataType);
+        sbColumnSizeCase.append(" IN ('CHAR', 'VARCHAR2', 'VARCHAR', 'NCHAR', 'NVARCHAR2', 'NVARCHAR') THEN ");
+        sbColumnSizeCase.append(sCharLength);
+        sbColumnSizeCase.append("\r\n");
         sbColumnSizeCase.append("      ELSE ");
         sbColumnSizeCase.append(sLength);
         sbColumnSizeCase.append("\r\n");
@@ -488,8 +493,8 @@ public class OracleDatabaseMetaData
                 "  C.TABLE_NAME AS TABLE_NAME,\r\n" +
                 "  C.COLUMN_NAME AS COLUMN_NAME,\r\n" +
                 getDataTypeCase("C.DATA_TYPE", "T.TYPECODE") + " AS DATA_TYPE,\r\n" +
-                getTypeNameCase("C.DATA_TYPE", "C.DATA_TYPE_OWNER", "T.TYPE_NAME", "C.DATA_LENGTH", "C.DATA_PRECISION", "C.DATA_SCALE") + " AS TYPE_NAME,\r\n" +
-                getSizeCase("C.DATA_TYPE", "C.DATA_LENGTH", "C.DATA_PRECISION") + " AS COLUMN_SIZE,\r\n" +
+                getTypeNameCase("C.DATA_TYPE", "C.DATA_TYPE_OWNER", "T.TYPE_NAME", "C.DATA_LENGTH", "C.CHAR_LENGTH", "C.DATA_PRECISION", "C.DATA_SCALE") + " AS TYPE_NAME,\r\n" +
+                getSizeCase("C.DATA_TYPE", "C.DATA_LENGTH", "C.CHAR_LENGTH", "C.DATA_PRECISION") + " AS COLUMN_SIZE,\r\n" +
                 "  CAST(NULL AS NUMBER) AS BUFFER_LENGTH,\r\n" +
                 "  C.DATA_SCALE AS DECIMAL_DIGITS,\r\n" +
                 "  10 AS NUM_PREC_RADIX,\r\n" +
@@ -498,7 +503,7 @@ public class OracleDatabaseMetaData
                 "  C.DATA_DEFAULT AS COLUMN_DEF,\r\n" +
                 "  CAST(NULL AS NUMBER) AS SQL_DATA_TYPE,\r\n" +
                 "  CAST(NULL AS NUMBER) AS SQL_DATETIME_SUB,\r\n" +
-                "  C.CHAR_LENGTH AS CHAR_OCTET_LENGTH,\r\n" +
+                "  C.DATA_LENGTH AS CHAR_OCTET_LENGTH,\r\n" +
                 "  C.COLUMN_ID AS ORDINAL_POSITION,\r\n" +
                 sbIsNullableCase + " AS IS_NULLABLE,\r\n" +
                 "  CAST(NULL AS VARCHAR2(30)) AS SCOPE_CATALOG,\r\n" +
@@ -606,8 +611,8 @@ public class OracleDatabaseMetaData
                 "A.TYPE_NAME as TYPE_NAME,\r\n" +
                 "A.ATTR_NAME as ATTR_NAME,\r\n" +
                 getDataTypeCase("A.ATTR_TYPE_NAME", "T.TYPECODE") + " AS DATA_TYPE,\r\n" +
-                getTypeNameCase("A.ATTR_TYPE_NAME", "A.ATTR_TYPE_OWNER", "A.ATTR_TYPE_NAME", "A.LENGTH", "A.PRECISION", "A.SCALE") + " AS ATTR_TYPE_NAME,\r\n" +
-                getSizeCase("A.ATTR_TYPE_NAME", "A.LENGTH", "A.PRECISION") + " as ATTR_SIZE,\r\n" +
+                getTypeNameCase("A.ATTR_TYPE_NAME", "A.ATTR_TYPE_OWNER", "A.ATTR_TYPE_NAME", "A.LENGTH", "A.LENGTH", "A.PRECISION", "A.SCALE") + " AS ATTR_TYPE_NAME,\r\n" +
+                getSizeCase("A.ATTR_TYPE_NAME", "A.LENGTH", "A.LENGTH", "A.PRECISION") + " as ATTR_SIZE,\r\n" +
                 "A.SCALE as DECIMAL_DIGITS,\r\n" +
                 "10 as NUM_PREC_RADIX,\r\n" +
                 String.valueOf(DatabaseMetaData.attributeNullableUnknown) + " AS NULLABLE,\r\n" +
@@ -810,9 +815,9 @@ public class OracleDatabaseMetaData
         sbSql.append(" AS COLUMN_TYPE,\r\n");
         sbSql.append(getDataTypeCase("A.DATA_TYPE", "T.TYPECODE"));
         sbSql.append(" AS DATA_TYPE,\r\n");
-        sbSql.append(getTypeNameCase("A.DATA_TYPE", "A.TYPE_OWNER", "A.TYPE_NAME", "A.DATA_LENGTH", "A.DATA_PRECISION", "A.DATA_SCALE"));
+        sbSql.append(getTypeNameCase("A.DATA_TYPE", "A.TYPE_OWNER", "A.TYPE_NAME", "A.DATA_LENGTH", "A.CHAR_LENGTH", "A.DATA_PRECISION", "A.DATA_SCALE"));
         sbSql.append(" AS TYPE_NAME,\r\n");
-        sbSql.append(getSizeCase("A.DATA_TYPE", "A.DATA_LENGTH", "A.DATA_PRECISION"));
+        sbSql.append(getSizeCase("A.DATA_TYPE", "A.DATA_LENGTH", "A.CHAR_LENGTH", "A.DATA_PRECISION"));
         sbSql.append(" AS PRECISION,\r\n");
         sbSql.append("  A.DATA_LENGTH AS LENGTH,\r\n");
         sbSql.append("  A.DATA_SCALE AS SCALE,\r\n");
