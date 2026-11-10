@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.slf4j.api)
 
     testFixturesApi(libs.junit.jupiter.api)
+    testFixturesApi(platform(libs.junit.bom))
 
     testFixturesImplementation(project(":siard-utilities"))
     testFixturesImplementation(platform(libs.junit.bom))

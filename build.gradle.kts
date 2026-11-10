@@ -42,6 +42,12 @@ subprojects {
                 languageVersion.set(JavaLanguageVersion.of(21))
             }
         }
+
+        // sonar analyzes compiled classes; make sure they exist before it runs
+        val compileTasks = listOf(tasks.named("classes"), tasks.named("testClasses"))
+        rootProject.tasks.named("sonar") {
+            dependsOn(compileTasks)
+        }
     }
 
     tasks.withType<JavaCompile> {
