@@ -59,6 +59,9 @@ Harness gap: none — covered by release-guide smoke steps + CI.
 Decided (quality gate auto-fix): packaging invariants are now asserted by the producing tasks — `verifyRuntimeImage` (no javafx.* modules, bin/siard exists) wired into the CI CLI step, and an installDist doLast check that the app bin/ contains no siard launcher. Icons moved to `siard-cmd/packaging/icons/` (not jar resources) per architecture review; jpackage rename now throws on missing/ambiguous artifacts.
 Harness gap: none.
 
+Decided (sonarqube setup): SonarQube Cloud analysis was added without an OpenSpec change — CI/build tooling, not product behavior covered by capability specs. SonarScanner for Gradle (`org.sonarqube` 7.5.0.8588) applied at root only; `sonar.exclusions=**/generated/**` covers JAXB (`siard-api`) and ANTLR (`sql-parser`) generated sources. Workflow restricted to push/PR on `main` (Free/OSS plan limits branch analysis).
+Harness gap: AGENTS.local.md says "never implement a feature without a spec scenario" but doesn't define whether build/CI tooling counts — a one-line carve-out ("CI/tooling changes don't require specs") would prevent re-litigating this.
+
 ## Cycle: siard-cli-packaging (2026-11-04)
 
 ### Agent Decisions

@@ -1,6 +1,16 @@
 plugins {
     alias(libs.plugins.axion.release)
     alias(libs.plugins.dependency.analysis)
+    alias(libs.plugins.sonarqube)
+}
+
+sonarqube {
+    properties {
+        property("sonar.organization", "siard-suite")
+        property("sonar.projectKey", "siard-suite_siard-suite")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.exclusions", "**/generated/**")
+    }
 }
 
 group = "ch.admin.bar"
