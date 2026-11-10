@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 // dev: the backend runs via quarkusDev on 127.0.0.1:8080 (design D13). changeOrigin makes the
@@ -16,5 +16,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["src/test/setup.ts"],
+    // e2e/ holds the Playwright smoke test, run by the e2eTest Gradle task
+    exclude: [...configDefaults.exclude, "e2e/**"],
   },
 });

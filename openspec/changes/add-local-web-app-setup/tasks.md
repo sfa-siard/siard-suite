@@ -49,8 +49,8 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 
 ## 9. End-to-end and packaging
 
-- [ ] 9.1 Add the Playwright `e2eTest` Gradle task (Chromium) that starts the built backend jar with `open-browser=false` and a short grace period, reads the launch URL from the log, opens it, asserts the clean URL and the session cookie, checks that `/about` shows `SIARD Suite <version>`, closes the page and asserts the agent exits; verify `./gradlew :siard-suite-local-web-app:e2eTest` passes
-- [ ] 9.2 Configure beryx `runtime`/`jpackage` with the PoC's launcher jvmArgs, jlink modules (incl. `java.desktop`, `jdk.zipfs`), fast-jar `installDist` staging and `patchAppImageCfg`, plus `runtimeZip` for macOS; verify `./gradlew :siard-suite-local-web-app:backend:jpackage` produces a `.deb` locally, that the start script in the `runtimeZip` output launches the agent with the fast-jar layout, and that `java --list-modules` of the bundled runtime lists no `javafx` module
+- [x] 9.1 Add the Playwright `e2eTest` Gradle task (Chromium) that starts the built backend jar with `open-browser=false` and a short grace period, reads the launch URL from the log, opens it, asserts the clean URL and the session cookie, checks that `/about` shows `SIARD Suite <version>`, closes the page and asserts the agent exits; verify `./gradlew :siard-suite-local-web-app:e2eTest` passes
+- [x] 9.2 Configure beryx `runtime`/`jpackage` with the PoC's launcher jvmArgs, jlink modules (incl. `java.desktop`, `jdk.zipfs`), fast-jar `installDist` staging and `patchAppImageCfg`, plus `runtimeZip` for macOS; verify `./gradlew :siard-suite-local-web-app:backend:jpackage` produces a `.deb` locally, that the start script in the `runtimeZip` output launches the agent with the fast-jar layout, and that `java --list-modules` of the bundled runtime lists no `javafx` module
 
 ## 10. CI and documentation
 

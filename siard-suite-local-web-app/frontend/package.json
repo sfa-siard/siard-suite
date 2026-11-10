@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run gen:api && vite build",
-    "typecheck": "npm run gen:api && tsc --noEmit",
+    "typecheck": "npm run gen:api && tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "test": "vitest run --passWithNoTests",
-    "gen:api": "openapi-typescript ../openapi.yaml -o src/api/schema.d.ts"
+    "gen:api": "openapi-typescript ../openapi.yaml -o src/api/schema.d.ts",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -27,9 +28,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.0",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",
