@@ -209,27 +209,24 @@ public class OracleDataTypeMappingIT {
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("NCHAR_COL"))
                 .build());
-        //TODO is this a bug, 2 instead of 1?
-        Assertions.assertThat(nCharCol.getType()).contains(Id.of("NCHAR(2)"));
-        Assertions.assertThat(nCharCol.getTypeOriginal()).contains(Id.of("NCHAR(2)"));
+        Assertions.assertThat(nCharCol.getType()).contains(Id.of("NCHAR(1)"));
+        Assertions.assertThat(nCharCol.getTypeOriginal()).contains(Id.of("NCHAR(1)"));
 
         val nCharNCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
                 .schemaId(Id.of("IT_USER"))
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("NCHAR_N_COL"))
                 .build());
-        //TODO is this a bug, 20 instead of 10?
-        Assertions.assertThat(nCharNCol.getType()).contains(Id.of("NCHAR(20)"));
-        Assertions.assertThat(nCharNCol.getTypeOriginal()).contains(Id.of("NCHAR(20)"));
+        Assertions.assertThat(nCharNCol.getType()).contains(Id.of("NCHAR(10)"));
+        Assertions.assertThat(nCharNCol.getTypeOriginal()).contains(Id.of("NCHAR(10)"));
 
         val nVarchar2Col = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
                 .schemaId(Id.of("IT_USER"))
                 .tableId(Id.of("DATATYPE_MAPPING_TEST"))
                 .columnId(Id.of("NVARCHAR2_COL"))
                 .build());
-        //TODO is this a bug, 200 instead of 100?
-        Assertions.assertThat(nVarchar2Col.getType()).contains(Id.of("NCHAR VARYING(200)"));
-        Assertions.assertThat(nVarchar2Col.getTypeOriginal()).contains(Id.of("NVARCHAR2(200)"));
+        Assertions.assertThat(nVarchar2Col.getType()).contains(Id.of("NCHAR VARYING(100)"));
+        Assertions.assertThat(nVarchar2Col.getTypeOriginal()).contains(Id.of("NVARCHAR2(100)"));
 
         val clobCol = metadataExplorer.findByColumnId(QualifiedColumnId.builder()
                 .schemaId(Id.of("IT_USER"))
