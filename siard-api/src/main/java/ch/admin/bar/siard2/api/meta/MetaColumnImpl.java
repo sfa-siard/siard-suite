@@ -17,6 +17,7 @@ import ch.enterag.sqlparser.datatype.PredefinedType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.sqlparser.ddl.enums.Multiplier;
 import ch.enterag.utils.DU;
+import ch.enterag.utils.database.SqlTypes;
 import ch.enterag.utils.SU;
 import ch.enterag.utils.xml.XU;
 
@@ -412,6 +413,9 @@ public class MetaColumnImpl
         PredefinedType prt = sf.newPredefinedType();
         prt.initialize(iDataType, lPrecision, iScale);
         String sType = prt.format();
+        if (sType == null)
+            throw new IOException("Unsupported SQL data type " +
+                                          SqlTypes.getTypeName(iDataType) + " (" + iDataType + ")");
         setType(sType);
     }
 
