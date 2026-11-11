@@ -21,3 +21,4 @@
 - [x] 4.1 Run `./gradlew build -x integrationTest` for affected modules (`jdbc-postgres`, `siard-cmd`) and unit tests; verify all pass
 - [x] 4.2 Re-run `./gradlew :siard-cmd:integrationTestPostgres` in full; verify green including the new regression test
 - [x] 4.3 Self-review the diff: changes confined to `jdbc-postgres` and `siard-cmd` export path, no behavior change for other drivers, no unrelated edits
+- [x] 4.4 Add `PostgresExportStreamingIT` covering "export survives interleaved per-cell queries" (all 350 rows intact across fetch-size boundaries incl. oid-domain blob/clob, interval, int[] cells) and "no large-object descriptors remain open" (fd probe via Progress callback, max fd < 10; verified meaningful by failing with leaked fds 8..696 when stream closing was reverted)
