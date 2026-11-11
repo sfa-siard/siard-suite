@@ -199,7 +199,7 @@ runtime {
         currentOs.isMacOsX -> "mac"
         else -> "linux"
     }
-    // runtimeZip: the macOS deliverable (no installer), a zip with the runtime and a start script
+    // runtimeZip: a zip with the runtime and a start script, for each OS
     imageDir.set(layout.buildDirectory.dir("$appName.$version-$platform"))
     imageZip.set(layout.buildDirectory.file("image-zip/$appName.$version-$platform.zip"))
 

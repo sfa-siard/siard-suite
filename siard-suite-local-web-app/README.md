@@ -65,17 +65,27 @@ agent exits) against the packaged agent. The first run downloads a pinned Chromi
 
 ## Packaging
 
-Windows and Linux build installers via jpackage; macOS gets a runtime zip instead of an installer:
+Windows and Linux build installers via jpackage; every OS also gets a runtime zip (bundled runtime
+plus a start script). On macOS the zip is the deliverable, as there is no installer; on Windows
+and Linux the zips are built for parity with the desktop app's deliverables and are not
+distributed yet.
 
     ./gradlew :siard-suite-local-web-app:backend:jpackage    # .deb on Linux, installer on Windows
-    ./gradlew :siard-suite-local-web-app:backend:runtimeZip  # macOS zip with a start script
+    ./gradlew :siard-suite-local-web-app:backend:runtimeZip  # zip with a start script, per OS
 
 Building the `.deb` locally needs `dpkg` and `fakeroot`.
+
+### Known limitations
+
+- The Windows runtime zip is untested.
+- On Windows, the zip starts the agent through `SIARD-Suite-Web.bat`, which keeps a console
+  window open while the agent runs; closing that window ends the agent. The installer has no
+  console window.
 
 ## CI
 
 Pull requests (and pushes to `main`) trigger the packaging workflow
-(`local-web-app-packages.yml`), which builds the Windows/Linux installers and the macOS zip and
+(`local-web-app-packages.yml`), which builds the Windows/Linux installers and the runtime zips for all three OSes and
 uploads them as artifacts. It runs on PRs because changes anywhere in the `siard-cmd` dependency
 chain can break packaging; `siard-suite-app/**`, `docs/**` and markdown-only changes are ignored.
 Once packaging has proven stable, the trigger can be narrowed.

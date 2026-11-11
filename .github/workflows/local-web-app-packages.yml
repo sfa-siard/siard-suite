@@ -1,4 +1,6 @@
-# Packages the local web app agent: Windows/Linux installers (jpackage) and a macOS runtime zip.
+# Packages the local web app agent: Windows/Linux installers (jpackage) and runtime zips for all
+# three OSes (the macOS deliverable; on Windows/Linux built for parity with the desktop app's
+# deliverables, not distributed yet).
 # Runs on PRs and main pushes so packaging regressions in the siard-cmd dependency chain surface
 # before merge; siard-suite-app, docs and markdown-only changes are ignored (design D14).
 name: Build local web app packages
@@ -42,9 +44,9 @@ jobs:
           distribution: 'zulu'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: Build installer (Windows/Linux)
+      - name: Build installer and runtime zip (Windows/Linux)
         if: runner.os != 'macOS'
-        run: ./gradlew :siard-suite-local-web-app:backend:jpackage --no-daemon
+        run: ./gradlew :siard-suite-local-web-app:backend:jpackage :siard-suite-local-web-app:backend:runtimeZip --no-daemon
       - name: Build runtime zip (macOS)
         if: runner.os == 'macOS'
         run: ./gradlew :siard-suite-local-web-app:backend:runtimeZip --no-daemon
@@ -64,8 +66,7 @@ jobs:
           name: siard-suite-web-${{ runner.os }}-deb
           path: siard-suite-local-web-app/backend/build/jpackage/*.deb
           if-no-files-found: error
-      - name: Upload macOS runtime zip
-        if: runner.os == 'macOS'
+      - name: Upload runtime zip
         uses: actions/upload-artifact@v6
         with:
           name: siard-suite-web-${{ runner.os }}-zip

@@ -57,17 +57,19 @@ Test scope: see design.md D15. One test per spec scenario, nothing beyond; secur
 - [x] 10.1 Add the `local-web-app` job to `.github/workflows/build.yml` running `check` and `e2eTest` with a cached Playwright browser; verify the job passes on the PR
 - [x] 10.2 Add the packaging workflow (matrix windows/ubuntu with `jpackage`, macos with `runtimeZip`, `pull_request` + `push: main` with `paths-ignore` for `siard-suite-app/**`, `docs/**`, `**/*.md`, plus `workflow_dispatch`, `concurrency` cancelling outdated PR runs, actions `@v6`, failing on a missing package); verify the PR run uploads `.exe`/`.msi`, `.deb` and the macOS zip, and that a second push in quick succession cancels the first run
 - [x] 10.3 Write `siard-suite-local-web-app/README.md`: prerequisites (JDK 21; Node.js not required because the Gradle node plugin downloads it, but useful for `npm run dev`), a short architecture overview (agent, frontend, launch token → cookie, SSE presence) linking to this change's design.md, the dev workflow (quarkusDev + Vite, dev token, `127.0.0.1` URLs, Swagger UI, and after an API change `openApiUpdate` then `gen:api`), running `./gradlew :siard-suite-local-web-app:check` and `:e2eTest` (noting that the latter downloads a Chromium browser on first run), building the `.deb` locally with `:backend:jpackage` (needs `dpkg`/`fakeroot`), and the CI section stating that PRs trigger packaging builds, why, and how to narrow the trigger later; verify every command in it runs as written
+- [ ] 10.4 Build and upload a runtime zip on Windows and Linux too, next to their installers (parity with the desktop app's deliverables, not distributed yet), and list the untested zips and the Windows console window as known limitations in the README; verify the PR run uploads a runtime zip for each of the three OSes
 
 ## 11. Manual platform checks
 
 Everything the automated tests cannot cover. Each check uses the build from the PR's packaging workflow (installer or zip) unless it says otherwise; tick it only after doing it on a real machine.
 
-### Windows (BIT machine, installer from the PR workflow)
+### Windows (BIT machine, installer and runtime zip from the PR workflow)
 
 - [ ] 11.1 Install and start the app with Edge present: an Edge window without address bar (app mode) opens and shows the frontend; check that Edge policies on the BIT machine allow app mode
 - [ ] 11.2 Browser lookup on a Windows machine without Edge (any Windows machine, not necessarily BIT): a machine-wide Chrome and a per-user Chrome (`%LOCALAPPDATA%`) each open in app mode; with neither Edge nor Chrome, the default browser opens via `Desktop.browse`
 - [ ] 11.3 Leave the window in the background (sleeping tabs) for at least 30 minutes: the agent is still running and the window still works; use this to decide the grace-period value
 - [ ] 11.4 Closing the window ends the agent within the grace period plus a few seconds (check Task Manager)
+- [ ] 11.15 Extract the Windows runtime zip and run `SIARD-Suite-Web.bat`: the app starts and works; a console window stays open while the agent runs, and closing it ends the agent (the known limitation in the README)
 
 ### macOS (zip from the PR workflow)
 
@@ -75,10 +77,11 @@ Everything the automated tests cannot cover. Each check uses the build from the 
 - [ ] 11.6 With no Chromium-family browser installed, the default browser (Safari) opens via `Desktop.browse`
 - [ ] 11.7 Closing the window ends the agent within the grace period plus a few seconds
 
-### Linux (`.deb` from the PR workflow)
+### Linux (`.deb` and runtime zip from the PR workflow)
 
 - [ ] 11.8 Install the `.deb` and start the app in a desktop session, once under Wayland and once under X11: an app-mode window opens and shows the frontend (X11 done; Wayland open)
 - [x] 11.9 Closing the window ends the agent within the grace period plus a few seconds
+- [x] 11.14 Extract the Linux runtime zip and run its start script: the app starts and works
 
 ### All platforms (one platform is enough)
 

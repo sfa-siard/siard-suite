@@ -43,7 +43,7 @@ Taken over unchanged:
 - launcher `jvmArgs` with the xerces property and `--add-opens`;
 - a numeric `appVersion` for jpackage.
 
-The backend depends on `siard-cmd`, so the full driver chain ships and is scanned (PoC decision D5). On macOS no installer is built: the beryx `runtimeZip` task produces a zip with the bundled runtime and a start script, the same mechanism `deliverables.yml` uses for the desktop app's runtime zips.
+The backend depends on `siard-cmd`, so the full driver chain ships and is scanned (PoC decision D5). On macOS no installer is built: the beryx `runtimeZip` task produces a zip with the bundled runtime and a start script, the same mechanism `deliverables.yml` uses for the desktop app's runtime zips. Windows and Linux get such a zip too, next to their installers (D14).
 
 ### D3: Binding and host name
 
@@ -184,8 +184,9 @@ The committed spec contains no build- or environment-dependent values: `info.ver
 
 - **`build.yml`:** a new `local-web-app` job (ubuntu) runs `:siard-suite-local-web-app:check` (JUnit/`@QuarkusTest`, OpenAPI drift, ESLint, `tsc`, Vitest) and `:siard-suite-local-web-app:e2eTest` (Playwright, browser cached). Node comes from the Gradle node plugin.
 - **Installer workflow** (new file, replacing the PoC's `poc-web-installer.yml`):
-  - matrix: windows and ubuntu run `:siard-suite-local-web-app:backend:jpackage`, macos runs `:siard-suite-local-web-app:backend:runtimeZip`;
-  - uploads `.exe`/`.msi`, `.deb` and the macOS zip; a missing expected package fails the run;
+  - matrix: windows and ubuntu run `:siard-suite-local-web-app:backend:jpackage` and `runtimeZip`, macos runs `runtimeZip`;
+  - uploads `.exe`/`.msi`, `.deb` and a runtime zip per OS; a missing expected package fails the run;
+  - the Windows and Linux zips are built for parity with the desktop app's deliverables; not distributed yet. They are untested (no manual check while no one consumes them), and on Windows the zip's `.bat` start script keeps a console window open while the agent runs (a known limitation, listed in the README);
   - actions at the versions used by the other workflows (`@v6`).
 - **Installer workflow triggers:**
   - `pull_request` and `push` to `main` with `paths-ignore: ['siard-suite-app/**', 'docs/**', '**/*.md']`. Every other module (the whole `siard-cmd` dependency chain, root build files, version catalog, Gradle wrapper) can break packaging. An ignore list automatically includes new modules.
@@ -209,7 +210,7 @@ How the scenarios are run (task 4.x):
 - **[macOS untested: start script from the runtime zip with the fast-jar layout, AWT browser launch]** → macOS runner in the packaging workflow; manual test on a Mac before relying on it.
 - **[No macOS installer: users start the app from a terminal]** → accepted for now; an `.app`/`.dmg` (plus the reopen handler from D7) can be added later.
 - **[Event typing variant may not render as expected]** → ordered fallbacks in D6, checked first (task 2.1).
-- **[Packaging regressions from changes anywhere in the core]** → packaging builds (Windows/Linux installers, macOS zip) on PRs with `paths-ignore`; costs runner time on three OSes per push, limited by `concurrency` with `cancel-in-progress` for PRs.
+- **[Packaging regressions from changes anywhere in the core]** → packaging builds (Windows/Linux installers, runtime zips for all three OSes) on PRs with `paths-ignore`; costs runner time on three OSes per push, limited by `concurrency` with `cancel-in-progress` for PRs.
 - **[Closing the window kills the agent even mid-operation]** → same as the desktop app today; `beforeunload` prompt during jobs comes with the first job change.
 - **[Each launch is a full JVM]** → same memory and start time as the desktop app.
 - **[Fixed dev credentials are public]** → active only under `LaunchMode.DEVELOPMENT` and covered by a test asserting the packaged jar rejects them.
