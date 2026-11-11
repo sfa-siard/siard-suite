@@ -60,6 +60,7 @@ Decided (quality gate auto-fix): packaging invariants are now asserted by the pr
 Harness gap: none.
 
 Decided (sonarqube setup): SonarQube Cloud analysis was added without an OpenSpec change — CI/build tooling, not product behavior covered by capability specs. SonarScanner for Gradle (`org.sonarqube` 7.5.0.8588) applied at root only; `sonar.exclusions=**/generated/**` covers JAXB (`siard-api`) and ANTLR (`sql-parser`) generated sources. Workflow restricted to push/PR on `main` (Free/OSS plan limits branch analysis).
+Decided (sonar coverage): JaCoCo (built-in Gradle plugin) applied to all Java modules; `jacocoTestReport` XML reports are produced by `test` and fed to Sonar via `sonar.coverage.jacoco.xmlReportPaths`; the `sonar` task now depends on the reports, so the Sonar job runs unit tests. Integration-test coverage (siard-cmd `integrationTest*`) is deferred — JaCoCo agent disabled on non-`test` Test tasks.
 Harness gap: AGENTS.local.md says "never implement a feature without a spec scenario" but doesn't define whether build/CI tooling counts — a one-line carve-out ("CI/tooling changes don't require specs") would prevent re-litigating this.
 
 ## Cycle: siard-cli-packaging (2026-11-04)
