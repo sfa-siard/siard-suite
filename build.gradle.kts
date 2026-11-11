@@ -10,6 +10,7 @@ sonarqube {
         property("sonar.projectKey", "siard-suite_siard-suite")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.exclusions", "**/generated/**")
+        property("sonar.coverage.jacoco.xmlReportPaths", "**/build/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
 
@@ -43,10 +44,28 @@ subprojects {
             }
         }
 
-        // sonar analyzes compiled classes; make sure they exist before it runs
+        apply(plugin = "jacoco")
+
+        tasks.named<JacocoReport>("jacocoTestReport") {
+            reports.xml.required.set(true)
+        }
+
+        // JaCoCo instruments unit tests only; integration test tasks stay uninstrumented
+        tasks.withType<Test>().configureEach {
+            if (name == "test") {
+                finalizedBy("jacocoTestReport")
+            } else {
+                extensions.configure<JacocoTaskExtension> { isEnabled = false }
+            }
+        }
+
+        // sonar analyzes compiled classes and coverage reports; make sure they exist before it runs
         val compileTasks = listOf(tasks.named("classes"), tasks.named("testClasses"))
         rootProject.tasks.named("sonar") {
             dependsOn(compileTasks)
+            // test produces the .exec data (finalizedBy jacocoTestReport); the report must exist for sonar
+            dependsOn(tasks.named("test"))
+            dependsOn(tasks.named("jacocoTestReport"))
         }
     }
 

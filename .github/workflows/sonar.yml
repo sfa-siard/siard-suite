@@ -25,6 +25,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: SonarQube analysis
-        run: ./gradlew sonar
+        run: ./gradlew sonar -Djava.awt.headless=true -Dtestfx.headless=true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
