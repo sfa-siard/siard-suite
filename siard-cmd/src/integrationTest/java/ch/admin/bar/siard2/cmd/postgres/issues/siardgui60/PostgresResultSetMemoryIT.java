@@ -11,7 +11,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,9 +52,19 @@ public class PostgresResultSetMemoryIT {
             .withUsername("postgres")
             .withPassword("postgres");
 
+    // must use the native driver explicitly: once the SIARD PostgresDriver is
+    // registered, DriverManager.getConnection returns the wrapped connection
+    // whose SQL parser does not support "DROP TABLE IF EXISTS"
+    private static Connection newNativeConnection() throws SQLException {
+        java.util.Properties props = new java.util.Properties();
+        props.setProperty("user", DB.getUsername());
+        props.setProperty("password", DB.getPassword());
+        return new org.postgresql.Driver().connect(DB.getJdbcUrl(), props);
+    }
+
     @BeforeAll
     void setUp() throws SQLException {
-        try (Connection conn = DriverManager.getConnection(DB.getJdbcUrl(), DB.getUsername(), DB.getPassword())) {
+        try (Connection conn = newNativeConnection()) {
             try (Statement stmt = conn.createStatement()) {
                 stmt.executeUpdate("DROP TABLE IF EXISTS memory_test");
                 stmt.executeUpdate("CREATE TABLE memory_test (id INT PRIMARY KEY, payload BYTEA)");
@@ -75,7 +84,7 @@ public class PostgresResultSetMemoryIT {
 
     @AfterAll
     void tearDown() throws SQLException {
-        try (Connection conn = DriverManager.getConnection(DB.getJdbcUrl(), DB.getUsername(), DB.getPassword());
+        try (Connection conn = newNativeConnection();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate("DROP TABLE IF EXISTS memory_test");
         }
@@ -120,9 +129,9 @@ public class PostgresResultSetMemoryIT {
 
     @Test
     void holdableResultSetWithoutFetchSize_buffersEntireResultSet() throws SQLException {
-        // documents current driver behavior: HOLD_CURSORS_OVER_COMMIT + fetchSize=0
-        // buffers all rows during executeQuery
-        try (Connection conn = newWrappedConnection()) {
+        // documents raw pgjdbc driver behavior (unwrapped connection):
+        // HOLD_CURSORS_OVER_COMMIT + fetchSize=0 buffers all rows during executeQuery
+        try (Connection conn = newNativeConnection()) {
             conn.setAutoCommit(false);
             try (Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,
                                                         ResultSet.CONCUR_READ_ONLY,
@@ -138,8 +147,8 @@ public class PostgresResultSetMemoryIT {
     @Test
     void fetchSizeAloneDoesNotEnableCursorWhenResultSetIsHoldable() throws SQLException {
         // proves holdability must be fixed as well: fetchSize>0 is ignored for
-        // holdable result sets
-        try (Connection conn = newWrappedConnection()) {
+        // holdable result sets (raw pgjdbc driver behavior, unwrapped connection)
+        try (Connection conn = newNativeConnection()) {
             conn.setAutoCommit(false);
             try (Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY,
                                                         ResultSet.CONCUR_READ_ONLY,

@@ -4,6 +4,7 @@ import ch.admin.bar.siard2.api.*;
 import org.apache.tika.Tika;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.SQLException;
@@ -57,6 +58,15 @@ class MimeTypeHandler {
         if (value instanceof Field) this.applyMimeType((Field) value);
     }
 
+    /**
+     * Clears the per-record mime type entries. Entries are only needed until
+     * their record has been written; retaining them for the whole table would
+     * keep every processed cell object reachable.
+     */
+    public void clearIndividualMimeTypes() {
+        individualMimeTypes.clear();
+    }
+
     public void applyColumnMimeType(Table table) throws IOException {
         for (int i = 0; i < table.getMetaTable()
                                  .getMetaColumns(); i++) {
@@ -79,25 +89,37 @@ class MimeTypeHandler {
     }
 
     private void add(Cell cell, Clob clob) throws SQLException, IOException {
-        String mimeType = tika.detect(clob.getAsciiStream());
+        String mimeType;
+        try (InputStream stream = clob.getAsciiStream()) {
+            mimeType = tika.detect(stream);
+        }
         add(cell, mimeType);
         individualMimeTypes.put(cell, mimeType);
     }
 
     private void add(Field field, Clob clob) throws SQLException, IOException {
-        String mimeType = tika.detect(clob.getAsciiStream());
+        String mimeType;
+        try (InputStream stream = clob.getAsciiStream()) {
+            mimeType = tika.detect(stream);
+        }
         add(field, mimeType);
         individualMimeTypes.put(field, mimeType);
     }
 
     private void add(Cell cell, Blob blob) throws SQLException, IOException {
-        String mimeType = tika.detect(blob.getBinaryStream());
+        String mimeType;
+        try (InputStream stream = blob.getBinaryStream()) {
+            mimeType = tika.detect(stream);
+        }
         add(cell, mimeType);
         individualMimeTypes.put(cell, mimeType);
     }
 
     private void add(Field field, Blob blob) throws SQLException, IOException {
-        String mimeType = tika.detect(blob.getBinaryStream());
+        String mimeType;
+        try (InputStream stream = blob.getBinaryStream()) {
+            mimeType = tika.detect(stream);
+        }
         add(field, mimeType);
         individualMimeTypes.put(field, mimeType);
     }

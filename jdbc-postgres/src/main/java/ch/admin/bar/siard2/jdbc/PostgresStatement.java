@@ -38,6 +38,14 @@ public class PostgresStatement
     private long _lParse = -1;
     private long _lExecute = -1;
 
+    /**
+     * Default fetch size enabling PgJDBC's server-side cursor. Without a
+     * fetch size the driver buffers the entire result set in heap, which
+     * breaks exports of bytea-heavy tables. 100 bounds memory per fetch
+     * while amortizing round trips.
+     */
+    static final int DEFAULT_FETCH_SIZE = 100;
+
 
     /** constructor
      * @param stmtWrapped statement to be wrapped.
@@ -47,6 +55,13 @@ public class PostgresStatement
             throws SQLException {
         super(stmtWrapped);
         _conn = conn;
+        /* A server-side cursor requires fetchSize > 0 and a forward-only,
+         * read-only result set (scrollable or updatable result sets cannot
+         * use one anyway). Callers can still override via setFetchSize. */
+        if ((stmtWrapped.getResultSetType() == ResultSet.TYPE_FORWARD_ONLY) &&
+                (stmtWrapped.getResultSetConcurrency() == ResultSet.CONCUR_READ_ONLY) &&
+                (stmtWrapped.getFetchSize() == 0))
+            stmtWrapped.setFetchSize(DEFAULT_FETCH_SIZE);
     }
 
 

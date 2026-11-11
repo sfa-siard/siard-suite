@@ -268,6 +268,7 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
             TableRecord record = createTableRecord(swCreate, rr);
             readTableRecord(swGet, rs, record, mimeTypeHandler);
             putTableRecord(swPut, rr, record);
+            mimeTypeHandler.clearIndividualMimeTypes();
             lBytesStart = logTableRecordProgress(lRecord++, sw, rr, lBytesStart);
             incDownloaded();
         }

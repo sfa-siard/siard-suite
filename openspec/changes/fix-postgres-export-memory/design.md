@@ -40,7 +40,7 @@ The export loop (`PrimaryDataFromDb`) runs inside one transaction for the whole 
 
 `openTable()` is shared by all six database drivers. Changing it to `CLOSE_CURSORS_AT_COMMIT` would alter behavior for every database — and `HOLD_CURSORS_OVER_COMMIT` there is likely vestigial anyway, but that is not this change's risk to take.
 
-Instead, `PostgresConnection.createStatement(3-arg)` maps `HOLD_CURSORS_AT_COMMIT` → `CLOSE_CURSORS_AT_COMMIT` before delegating, and `setHoldability(HOLD_CURSORS_AT_COMMIT)` stores `CLOSE_CURSORS_AT_COMMIT` as the connection default. `openTable()` keeps requesting holdable; the Postgres wrapper silently downgrades it. Rationale: the wrapper owns Postgres-specific driver quirks, and no code path in this codebase depends on Postgres cursors surviving a commit (the export never commits mid-table; `PostgresConnection` itself toggles autocommit during construction before any statements exist).
+Instead, `PostgresConnection.createStatement(3-arg)` maps `HOLD_CURSORS_OVER_COMMIT` → `CLOSE_CURSORS_AT_COMMIT` before delegating, and `setHoldability(HOLD_CURSORS_OVER_COMMIT)` stores `CLOSE_CURSORS_AT_COMMIT` as the connection default. `openTable()` keeps requesting holdable; the Postgres wrapper silently downgrades it. Rationale: the wrapper owns Postgres-specific driver quirks, and no code path in this codebase depends on Postgres cursors surviving a commit (the export never commits mid-table; `PostgresConnection` itself toggles autocommit during construction before any statements exist).
 
 Alternative considered: fix `openTable()` to pass `CLOSE_CURSORS_AT_COMMIT` for all drivers. Rejected — cross-database behavior change for a Postgres-specific problem.
 
@@ -50,6 +50,8 @@ Set a conservative default `fetchSize` (candidate: 100 rows) inside `PostgresSta
 
 Why not `openTable`? Same reasoning as D1 — shared code. Why not a per-row byte budget? Rows can be 100 MB+ PDFs, so any fixed row count can still buffer gigabytes in pathological cases, but 100 rows is small enough that the worst case is bounded and the round-trip cost is amortized over large payloads. (A byte-aware fetch size is impossible — JDBC fetchSize counts rows.) If 100 proves too aggressive for wide-row tables in practice, the constant is a one-line change.
 
+The default is applied only to `TYPE_FORWARD_ONLY` + `CONCUR_READ_ONLY` statements (checked on the wrapped statement in the constructor): scrollable statements cannot use a cursor anyway, and `CONCUR_UPDATABLE` statements are the restore path, owned by `fix-postgres-import-memory`.
+
 Alternative considered: set fetchSize only in `openTable` via a driver-name check. Rejected — scattered driver sniffing; the wrapper is the right layer.
 
 ### D3: Cache `PostgresResultSetMetaData` per column
@@ -58,7 +60,9 @@ Alternative considered: set fetchSize only in `openTable` via a driver-name chec
 
 ### D4: Make `MimeTypeHandler`'s per-cell map transient
 
-`individualMimeTypes` (`HashMap<Value,String>`) is populated in `add()` and consumed immediately after by `applyMimeType()` — entries are never needed beyond that. Either remove entries after application or replace the map with a per-cell return value; simplest correct fix is `individualMimeTypes.remove(cell)` (or restructure so the map is not retained). Keys are `Cell` objects that keep the record DOM reachable, so retention is the leak.
+`individualMimeTypes` (`HashMap<Value,String>`) is populated in `add()` and consumed by `applyMimeType()` within the same record — entries are never needed beyond the record. Keys are `Cell`/`Field` objects that keep the record DOM reachable, so retention across the table is the leak.
+
+Fix: add `MimeTypeHandler.clearIndividualMimeTypes()` and call it in `PrimaryDataFromDb`'s table loop after each record is put. Decided against removing the entry on first `applyMimeType`: for array elements `PrimaryDataFromDb.setValue` applies the mime type inside `setValue` and again afterwards, so remove-on-read would make the second call fall back to the column-level type and change archive output. Per-record clearing preserves behavior exactly.
 
 ### D5: Close the stream handed to Tika
 

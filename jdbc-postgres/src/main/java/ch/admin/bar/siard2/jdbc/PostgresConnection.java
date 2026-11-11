@@ -107,12 +107,19 @@ public class PostgresConnection
     }
 
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     * Downgrades {@link ResultSet#HOLD_CURSORS_OVER_COMMIT} to
+     * {@link ResultSet#CLOSE_CURSORS_AT_COMMIT}: PgJDBC never uses a
+     * server-side cursor for holdable result sets and buffers the whole
+     * result set in heap instead. No caller relies on cursors surviving a
+     * commit, so the downgrade is safe and enables streaming.
+     */
     @Override
     public Statement createStatement(int resultSetType,
                                      int resultSetConcurrency, int resultSetHoldability)
             throws SQLException {
-        Statement stmt = super.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
+        Statement stmt = super.createStatement(resultSetType, resultSetConcurrency,
+                                               downgradeHoldability(resultSetHoldability));
         return new PostgresStatement(stmt, this);
     }
 
@@ -135,11 +142,16 @@ public class PostgresConnection
     }
 
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     * Downgrades {@link ResultSet#HOLD_CURSORS_OVER_COMMIT} to
+     * {@link ResultSet#CLOSE_CURSORS_AT_COMMIT}; see
+     * {@link #createStatement(int, int, int)}.
+     */
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
         String sNative = nativeSQL(sql);
-        PreparedStatement ps = super.prepareStatement(sNative, resultSetType, resultSetConcurrency, resultSetHoldability);
+        PreparedStatement ps = super.prepareStatement(sNative, resultSetType, resultSetConcurrency,
+                                                      downgradeHoldability(resultSetHoldability));
         return new PostgresPreparedStatement(ps, this);
     }
 
@@ -189,12 +201,38 @@ public class PostgresConnection
     }
 
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     * Downgrades {@link ResultSet#HOLD_CURSORS_OVER_COMMIT} to
+     * {@link ResultSet#CLOSE_CURSORS_AT_COMMIT}; see
+     * {@link #createStatement(int, int, int)}.
+     */
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
         String sNative = nativeSQL(sql);
-        CallableStatement cs = super.prepareCall(sNative, resultSetType, resultSetConcurrency, resultSetHoldability);
+        CallableStatement cs = super.prepareCall(sNative, resultSetType, resultSetConcurrency,
+                                                 downgradeHoldability(resultSetHoldability));
         return cs;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * Downgrades {@link ResultSet#HOLD_CURSORS_OVER_COMMIT} to
+     * {@link ResultSet#CLOSE_CURSORS_AT_COMMIT} when storing the connection
+     * default; see {@link #createStatement(int, int, int)}.
+     * {@link #getHoldability()} therefore reports the downgraded value.
+     */
+    @Override
+    public void setHoldability(int holdability)
+            throws SQLException {
+        super.setHoldability(downgradeHoldability(holdability));
+    }
+
+
+    private static int downgradeHoldability(int holdability) {
+        if (holdability == ResultSet.HOLD_CURSORS_OVER_COMMIT)
+            return ResultSet.CLOSE_CURSORS_AT_COMMIT;
+        return holdability;
     }
 
     private long createLob()
