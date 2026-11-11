@@ -5,14 +5,12 @@ import ch.admin.bar.siard2.api.MetaColumn;
 import org.apache.tika.Tika;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,36 +25,19 @@ class MimeTypeHandlerTest {
         return cell;
     }
 
+    // lob streams are opened once by the caller and reused for writing the value:
+    // mime type detection must not consume or close them (mssql-jdbc discards
+    // streamed lob values after the first stream has been consumed and closed)
     @Test
-    void addBlobClosesTheDetectionStream() throws Exception {
-        InputStream stream = mock(InputStream.class);
-        when(stream.read(any(byte[].class), anyInt(), anyInt())).thenReturn(-1);
-        Blob blob = mock(Blob.class);
-        when(blob.getBinaryStream()).thenReturn(stream);
+    void addStreamResetsTheDetectionStream() throws Exception {
+        byte[] content = "hello".getBytes();
+        InputStream stream = new BufferedInputStream(new ByteArrayInputStream(content));
 
         MimeTypeHandler handler = new MimeTypeHandler(new Tika());
-        handler.add(newCell("bin"), blob);
+        handler.add(newCell("bin"), stream);
 
-        verify(stream).close();
-    }
-
-    @Test
-    void addBlobClosesTheStreamReturnedByGetBinaryStream() throws Exception {
-        boolean[] closed = {false};
-        InputStream stream = new ByteArrayInputStream("hello".getBytes()) {
-            @Override
-            public void close() throws IOException {
-                closed[0] = true;
-                super.close();
-            }
-        };
-        Blob blob = mock(Blob.class);
-        when(blob.getBinaryStream()).thenReturn(stream);
-
-        MimeTypeHandler handler = new MimeTypeHandler(new Tika());
-        handler.add(newCell("bin"), blob);
-
-        assertTrue(closed[0], "detection stream must be closed");
+        byte[] after = stream.readAllBytes();
+        assertEquals(new String(content), new String(after));
     }
 
     @Test
