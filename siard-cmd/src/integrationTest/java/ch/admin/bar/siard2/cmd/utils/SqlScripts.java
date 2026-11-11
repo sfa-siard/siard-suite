@@ -34,6 +34,7 @@ public class SqlScripts {
 
     public static class Db2 {
         public final static String SIARDSUITE_163_DATATYPE_MAPPING = "db2/issues/siardsuite163/datatype-mapping-db2.sql";
+        public final static String SIARDSUITE_204_LONG_VARCHAR = "db2/issues/siardsuite204/long-varchar-db2.sql";
     }
 
     public static class MsSQL {

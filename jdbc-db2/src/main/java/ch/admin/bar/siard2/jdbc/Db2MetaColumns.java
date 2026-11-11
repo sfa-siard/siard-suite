@@ -52,6 +52,10 @@ public class Db2MetaColumns
             iDataType = Types.DECIMAL;
         else if (sTypeName.equals("XML"))
             iDataType = Types.SQLXML;
+        else if (iDataType == Types.LONGVARCHAR)
+            iDataType = Types.VARCHAR;
+        else if (iDataType == Types.LONGVARBINARY)
+            iDataType = Types.VARBINARY;
         else if (iDataType == Types.DISTINCT) {
             try {
                 QualifiedId qiType = new QualifiedId(sTypeName);

@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MetaColumnTester {
+public class MetaColumnTest {
     private static final File _fileSIARD_21_NEW = new File("src/test/resources/tmp/sql2008new.siard");
     private static final File _fileSIARD_10_SOURCE = new File("src/test/resources/testfiles/sql1999.siard");
     private static final File _fileSIARD_10 = new File("src/test/resources/tmp/sql1999.siard");
@@ -343,6 +343,14 @@ public class MetaColumnTester {
             String sType = mc.getType(listSubNames);
             System.out.println(sbNames + ": " + sType);
         }
+    }
+
+    @Test
+    public void testSetPreTypeUnsupportedType() {
+        IOException ie = assertThrows(IOException.class,
+                                      () -> _mcNew.setPreType(Types.LONGVARCHAR, -1, -1));
+        assertTrue(ie.getMessage()
+                     .contains("LONGVARCHAR"));
     }
 
     @Test
