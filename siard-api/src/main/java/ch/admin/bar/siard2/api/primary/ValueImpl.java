@@ -1,7 +1,7 @@
 /*== ValueImpl.java ===================================================
 ValueImpl implements the interface Value.
 Application : SIARD 2.0
-Description : ValueImpl implements the interface Value. 
+Description : ValueImpl implements the interface Value.
 ------------------------------------------------------------------------
 Copyright  : Swiss Federal Archives, Berne, Switzerland, 2016
 Created    : 05.07.2016, Hartwig Thomas, Enter AG, Rüti ZH
@@ -746,27 +746,17 @@ public abstract class ValueImpl
         throw new IllegalArgumentException("Value of cell of complex type cannot be converted to BigDecimal!");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void setBigDecimal(BigDecimal bd)
-            throws IOException {
-        int iPreType = getPreType();
-        if (isBigDecimalType(iPreType)) {
+    public void setBigDecimal(BigDecimal bigDecimal) throws IOException {
+        int preType = getPreType();
+        if (isBigDecimalType(preType)) {
             /* avoid scientific notation and confusion with approximate float/double */
-            String s = bd.toPlainString();
-            try {
-                long l = bd.longValueExact(); // TODO: what! set bigdecimal converts to long? this is probably a bug!
-                s = String.valueOf(l);
-            } catch (ArithmeticException ae) {
-                logger.warning("conversion to bigdecimal not possible for " + this);
-            }
-            getValueElement().setTextContent(s);
-        } else if (iPreType != Types.NULL)
-            throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(iPreType) + " cannot be set to BigDecimal value!");
-        else
+            getValueElement().setTextContent(bigDecimal.toPlainString());
+        } else if (preType != Types.NULL) {
+            throw new IllegalArgumentException("Cell of type " + SqlTypes.getTypeName(preType) + " cannot be set to BigDecimal value!");
+        } else {
             throw new IllegalArgumentException("Value of cell of complex type cannot be set to BigDecimal!");
+        }
     }
 
     /**
