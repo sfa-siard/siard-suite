@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":siard-utilities"))
 
     testImplementation(libs.json.simple)
+    testImplementation(libs.mockito.core)
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.testcontainers.postgresql)
