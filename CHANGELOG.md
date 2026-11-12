@@ -2,6 +2,8 @@
 
 ## Next Release
 
+## 2.2.171
+
 * Fix: 
   * unnecessary "conversion to bigdecimal not possible" warning when archiving Oracle NUMBER/DECIMAL values [#181](https://github.com/sfa-siard/siard-suite/issues/181)
     * `Value.setBigDecimal` now always writes the plain decimal string and no longer converts integral values to `long`. Whole numbers with a scale (e.g. `5.000000`) are now stored with their scale instead of as `5`, so the SIARD output for such NUMERIC/DECIMAL cells differs from earlier versions.
