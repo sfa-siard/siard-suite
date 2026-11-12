@@ -127,6 +127,26 @@ Every request to `/api/*` SHALL carry the valid session cookie of this agent ins
 - **WHEN** `GET /api/system/info` is requested without a cookie, or with `siard_session_P` set to a different value
 - **THEN** the response status is 401
 
+### Requirement: API access only from the agent's own pages
+
+A request to `/api/*` whose `Sec-Fetch-Site` header is present and not `same-origin` or `none` SHALL be rejected with status 403 and content type `application/problem+json`, for every method and even with a valid session cookie. Requests without the header SHALL be handled as before.
+
+#### Scenario: Request from a page on another local port
+- **GIVEN** a browser holds the session cookie of the agent on port P
+- **WHEN** a page served from `http://127.0.0.1:<another port>` makes it send `GET /api/system/info`, `GET /api/events` or `POST /api/system/info` to the agent (`Sec-Fetch-Site: same-site`)
+- **THEN** each response status is 403 with content type `application/problem+json`
+- **AND** no response contains `appVersion`
+
+#### Scenario: Request from a foreign site
+- **GIVEN** a browser holds the session cookie of the agent on port P
+- **WHEN** a page of another site makes it send `GET /api/system/info` to the agent (`Sec-Fetch-Site: cross-site`)
+- **THEN** the response status is 403
+
+#### Scenario: Requests from the agent's own pages and from non-browser clients
+- **GIVEN** a valid session cookie for the agent on port P
+- **WHEN** `GET /api/system/info` is requested with `Sec-Fetch-Site: same-origin`, with `Sec-Fetch-Site: none`, or without the header
+- **THEN** each response status is 200
+
 ### Requirement: Event stream
 
 `GET /api/events` SHALL open a server-sent event stream whose events carry JSON data with a `type` property. The first event on every new stream SHALL have `type` equal to `connected`.

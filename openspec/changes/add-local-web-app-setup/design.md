@@ -19,7 +19,7 @@ See `proposal.md` (Why) for the motivation. Constraints and current state that s
 **Non-Goals:**
 
 - Job model, progress events, `beforeunload` protection (first job change).
-- Origin header check (see D4 note).
+- An additional Origin header check: Fetch Metadata (D4) already rejects API requests from other pages; an Origin check on non-GET requests would only be needed for browsers that do not send `Sec-Fetch-Site`.
 - Dedicated browser profile, tray icon.
 - Publishing web installers in tagged releases (`deliverables.yml`).
 
@@ -72,7 +72,8 @@ The Host check reads Vert.x's `request.authority()`, not the raw `Host` header: 
 The launch URL is logged at startup. Because the token is single-use, a leaked log line is worthless once the window has opened.
 
 - **Port in the cookie name:** cookies are not port-scoped. **Independent instances (D7) rely on this**; without it, two agents would overwrite each other's session.
-- **Note for later:** if an Origin check is added, Vite's `changeOrigin` does not rewrite `Origin`, so in dev it arrives as `http://127.0.0.1:5173`. A dev allowance must be guarded like D8.
+- **`SameSite=Strict` does not separate ports:** for an IP address, browsers treat scheme plus host as the site and ignore the port. A page on any other `http://127.0.0.1:<x>` (another local server, or another user's on a shared terminal server) is same-site, so its requests to the agent carry the session cookie, and the Host check passes because they really go to `127.0.0.1:<port>`. **Fetch Metadata closes this:** a filter on `/api/*`, before the session check, rejects every request whose `Sec-Fetch-Site` header is present and not `same-origin` or `none`, with `403` and problem details. The agent's own pages send `same-origin`; a navigation the user started sends `none`; another port sends `same-site`, a foreign site `cross-site`. This covers all methods, so state-changing endpoints are protected from the start, and also `GET /api/events`, which a foreign page could otherwise hold open and thereby keep the agent from exiting. Requests without the header come from non-browser clients, which cannot carry the user's cookie, and are let through. Behind the Vite proxy the page and the API share the origin `127.0.0.1:5173`, so dev needs no exception. Edge, Chrome and Firefox send the header; browsers without it would need an additional Origin check on non-GET requests (Non-Goals).
+- **Note for later:** if an Origin check is ever added (see above), Vite's `changeOrigin` does not rewrite `Origin`, so in dev it arrives as `http://127.0.0.1:5173`. A dev allowance must be guarded like D8.
 
 *Alternatives:* the PoC's Bearer token read by JS from the URL (token stays in the history and is visible to JS); `history.replaceState` cleanup (token still in JS memory).
 
@@ -199,7 +200,7 @@ The committed spec contains no build- or environment-dependent values: `info.ver
 
 ### D15: Test scope
 
-Tests are kept minimal: **one test per spec scenario**, and nothing beyond that. No extra edge-case combinations, no tests for trivial getters, configuration or DTOs, no snapshot tests. `@QuarkusTest` is preferred over Playwright; Playwright is limited to the single smoke test (D12). The exception is the security-relevant scenarios (launch token, Host check, session cookie, `LaunchMode` credentials): they are the core of this change and are tested thoroughly. Any other test is added only after asking.
+Tests are kept minimal: **one test per spec scenario**, and nothing beyond that. No extra edge-case combinations, no tests for trivial getters, configuration or DTOs, no snapshot tests. `@QuarkusTest` is preferred over Playwright; Playwright is limited to the single smoke test (D12). The exception is the security-relevant scenarios (launch token, Host check, session cookie, Fetch Metadata check, `LaunchMode` credentials): they are the core of this change and are tested thoroughly. Any other test is added only after asking.
 
 How the scenarios are run (task 4.x):
 - **`@QuarkusTest`** (`TEST` mode) for everything that does not depend on the launch mode. A `MutableClock` alternative replaces the agent's clock for expiry, and a test-only `/api/test-probe` resource stands in for API endpoints that do not exist yet. It also provides the "handler throws" case.
@@ -218,6 +219,9 @@ How the scenarios are run (task 4.x):
 - **[Fixed dev credentials are public]** → active only under `LaunchMode.DEVELOPMENT` and covered by a test asserting the packaged jar rejects them.
 - **[i18n texts diverge between desktop and web during coexistence]** → accepted; the desktop app is retired at parity.
 - **[Many tabs could exhaust the 6 HTTP/1.1 connections per origin]** → one stream per window; acceptable for typical use.
+- **[The session secret reaches every server on `127.0.0.1`]** → cookies are not port-scoped, so the browser sends `siard_session_<port>` with every request to any `127.0.0.1` port the user visits. On a single-user machine those servers are the user's own. On a shared terminal server, another user's server on the loopback address can obtain the secret if this user's browser opens one of its pages, and can then call the agent directly; Fetch Metadata (D4) does not help, because such a request comes from a non-browser client. Accepted for now; if terminal servers are a target (Open Questions), credentials that are not cookies are needed, e.g. a token in `sessionStorage` (per origin, so per port) sent as a request header, which requires another mechanism for `EventSource`.
+- **[Session cookies of ended agents pile up]** → every launch adds a `siard_session_<port>` cookie of about 65 bytes; they are session cookies, but a browser that keeps running or restores its session keeps them, and all are sent with every request to `127.0.0.1`. Bounded by the browsers' cookie limit per host (about 180, the oldest evicted first): about 12 KB of headers at most, below Quarkus' 20 KB limit. Cleaning them up would require probing other ports (against D7) and is not done.
+- **[The launch token is visible on the browser's command line]** → the agent starts the browser with `--app=<launch URL>`; on a multi-user Linux system other users can read process command lines (unless `/proc` is mounted with `hidepid`). The token is single-use and redeemed within seconds, so the window is tiny; accepted.
 
 ## Migration Plan
 
@@ -226,3 +230,4 @@ Additive. The new modules build and ship separately from `siard-suite-app`. Roll
 ## Open Questions
 
 - Final grace-period value: 20 s default, tuned after BIT testing.
+- Do BIT users work on shared terminal servers (RDS/Citrix)? If so, the session secret needs to leave the cookie (see the risk "session secret reaches every server on `127.0.0.1`").
