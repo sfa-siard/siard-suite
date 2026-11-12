@@ -82,6 +82,8 @@ The launch URL is logged at startup. Because the token is single-use, a leaked l
 
 The event type lives in the JSON data (`type`), not in SSE's `event:` field. That gives one `onmessage` handler and one TypeScript union. On a new stream the server first sends `connected`, then a keep-alive comment every 15 s; a failed write marks the connection as closed.
 
+A stream is counted and registered with the broadcaster **before** `connected` is sent. Quarkus REST installs the sink's own close handler only after the resource method has returned, so a client that disconnects while its stream is being opened (a window closed or reloaded right away) would otherwise never be reported: its window would stay counted and the agent would never exit. A stream that is already closed, or whose `connected` cannot be sent, is therefore counted out immediately; a close after registration is reported by the broadcaster, at the latest with the next keep-alive.
+
 In this change only the app shell opens the stream (`useAgentEvents`). *Deferred to the first change with job events:* restructure the hook into one stream per window that distributes events to components, preferably by updating the React Query cache, so that components never open streams of their own. Each extra stream would count as an extra window, take one of the 6 connections per origin and reconnect whenever its callback changes.
 
 The agent counts open authorized streams. When the count reaches 0, an exit timer starts (`siard.agent.idle-exit-grace`, default 20 s); a new stream cancels it. The default is a starting value, to be tuned after BIT testing.

@@ -50,8 +50,25 @@ public class EventStreams {
         }
         open.add(sink);
         presence.streamOpened();
-        sink.send(event(new ConnectedEvent()));
+        // Registered before anything is sent: from here on, a close reaches closed() through the
+        // broadcaster, at the latest with the next keep-alive. The sink's own close handler is only
+        // installed after this method returns, so a stream that is already gone, or fails while
+        // sending connected, is counted out here; otherwise the window would stay counted and the
+        // agent would never exit.
         broadcaster.register(sink);
+        if (sink.isClosed()) {
+            closed(sink);
+            return;
+        }
+        try {
+            sink.send(event(new ConnectedEvent())).whenComplete((ignored, error) -> {
+                if (error != null) {
+                    closed(sink);
+                }
+            });
+        } catch (IllegalStateException alreadyClosed) {
+            closed(sink);
+        }
     }
 
     @PreDestroy

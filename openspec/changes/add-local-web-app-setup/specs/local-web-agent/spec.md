@@ -168,6 +168,12 @@ In normal launch mode the agent SHALL exit once no authorized event stream has b
 - **THEN** each request returns 401
 - **AND** the agent exits within the grace period plus 5 seconds
 
+#### Scenario: Window closed while its stream opens
+- **GIVEN** a browser window opens `GET /api/events`
+- **WHEN** the connection is already closed by the time the agent starts the stream
+- **THEN** the window is not counted as connected
+- **AND** the agent exits within the grace period plus 5 seconds once no other window is connected
+
 #### Scenario: No window connects after launch
 - **GIVEN** the agent has started and no authorized event stream has opened
 - **WHEN** the launch token lifetime plus the grace period has passed
