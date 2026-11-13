@@ -216,6 +216,37 @@ public class MsSqlDatabaseMetaData
 
     /**
      * {@inheritDoc}
+     * MSSQL reports all non-clustered indexes as {@link DatabaseMetaData#tableIndexOther}.
+     * They are mapped to {@link DatabaseMetaData#tableIndexHashed} so that unique
+     * non-clustered indexes (e.g. backing unique constraints) are recognized as
+     * candidate keys when downloading meta data.
+     */
+    @Override
+    public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)
+            throws SQLException {
+        return new MsSqlIndexInfo(super.getIndexInfo(catalog, schema, table, unique, approximate), _conn);
+    }
+
+    private static class MsSqlIndexInfo
+            extends MsSqlResultSet {
+        private final int _iType;
+
+        MsSqlIndexInfo(ResultSet rsWrapped, MsSqlConnection conn) throws SQLException {
+            super(rsWrapped, conn);
+            _iType = findColumn("TYPE");
+        }
+
+        @Override
+        public int getInt(int columnIndex) throws SQLException {
+            int iType = super.getInt(columnIndex);
+            if ((columnIndex == _iType) && (iType == DatabaseMetaData.tableIndexOther))
+                iType = DatabaseMetaData.tableIndexHashed;
+            return iType;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public ResultSet getUDTs(String catalog, String schemaPattern,

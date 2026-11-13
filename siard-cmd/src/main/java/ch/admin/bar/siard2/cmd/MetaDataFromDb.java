@@ -972,15 +972,18 @@ public class MetaDataFromDb extends MetaDataBase {
                                                                       .getName()
                                                                       .equals(sIndexName));
             if ((iIndexType != DatabaseMetaData.tableIndexStatistic) && (iIndexType != DatabaseMetaData.tableIndexOther) && (!bPrimary)) {
-                MetaUniqueKey muk = mt.getMetaCandidateKey(sIndexName);
-                if (muk == null) {
-                    addColumns(mt, sUniqueKeyName, mapUniqueColumns);
-                    sUniqueKeyName = sIndexName;
-                    muk = mt.createMetaCandidateKey(sUniqueKeyName);
-                }
                 int iOrdinalPosition = rs.getInt("ORDINAL_POSITION");
                 String sColumnName = rs.getString("COLUMN_NAME");
-                mapUniqueColumns.put(iOrdinalPosition, sColumnName);
+                /* index rows without a column name (e.g. index options) are ignored */
+                if (sColumnName != null) {
+                    MetaUniqueKey muk = mt.getMetaCandidateKey(sIndexName);
+                    if (muk == null) {
+                        addColumns(mt, sUniqueKeyName, mapUniqueColumns);
+                        sUniqueKeyName = sIndexName;
+                        muk = mt.createMetaCandidateKey(sUniqueKeyName);
+                    }
+                    mapUniqueColumns.put(iOrdinalPosition, sColumnName);
+                }
             }
 
             LOG.debug("Metadata for unique key '{}' (table '{}.{}') loaded", sUniqueKeyName, sTableSchema, sTableName);

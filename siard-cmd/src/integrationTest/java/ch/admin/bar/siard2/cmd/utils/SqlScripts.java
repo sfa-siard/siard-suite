@@ -18,6 +18,7 @@ public class SqlScripts {
         public static final String SIARDSUITE_128_BIT = "postgres/issues/siardsuite128/bit-types-schema-postgres.sql";
         public static final String SIARDSUITE_128_PRECISION_TYPES = "postgres/issues/siardsuite128/precision-types-schema-postgres.sql";
         public static final String MULTIPLE_SCHEMAS = "postgres/issues/multiple-schemas/multiple-schemas-postgres.sql";
+        public static final String SIARDGUI_44_CANDIDATE_KEYS = "postgres/issues/siardgui44/create-candidate-keys-example_postgres.sql";
     }
 
     public static class MySQL {
@@ -35,6 +36,7 @@ public class SqlScripts {
     public static class Db2 {
         public final static String SIARDSUITE_163_DATATYPE_MAPPING = "db2/issues/siardsuite163/datatype-mapping-db2.sql";
         public final static String SIARDSUITE_204_LONG_VARCHAR = "db2/issues/siardsuite204/long-varchar-db2.sql";
+        public static final String SIARDGUI_44_CANDIDATE_KEYS = "db2/issues/siardgui44/create-candidate-keys-example_db2.sql";
     }
 
     public static class MsSQL {
