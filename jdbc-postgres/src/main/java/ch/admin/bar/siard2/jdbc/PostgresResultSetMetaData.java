@@ -28,6 +28,12 @@ public class PostgresResultSetMetaData
         implements ResultSetMetaData {
     protected Statement _stmt = null;
 
+    /* Resolved column types/type names are cached per column: resolving
+     * them issues catalog queries, and the result set metadata is immutable
+     * for the life of the result set. */
+    private Integer[] _columnTypes = null;
+    private String[] _columnTypeNames = null;
+
     /** constructor
      * @param rsWrapped result set to be wrapped.
      * @param wrapped statement.
@@ -39,6 +45,10 @@ public class PostgresResultSetMetaData
 
     @Override
     public int getColumnType(int column) throws SQLException {
+        if (_columnTypes == null)
+            _columnTypes = new Integer[getColumnCount()];
+        if (_columnTypes[column - 1] != null)
+            return _columnTypes[column - 1];
         int iType = super.getColumnType(column);
         String sTypeName = getColumnTypeName(column);
         PostgresType pgt = PostgresType.getByKeyword(sTypeName.toLowerCase());
@@ -66,11 +76,16 @@ public class PostgresResultSetMetaData
                 throw new SQLException("Type name " + sTypeName + " could not be parsed (" + EU.getExceptionMessage(pe) + ")!");
             }
         }
+        _columnTypes[column - 1] = iType;
         return iType;
     }
 
     @Override
     public String getColumnTypeName(int column) throws SQLException {
+        if (_columnTypeNames == null)
+            _columnTypeNames = new String[getColumnCount()];
+        if (_columnTypeNames[column - 1] != null)
+            return _columnTypeNames[column - 1];
         String sTypeName = super.getColumnTypeName(column);
         String sTableName = super.getTableName(column);
         String sColumnName = super.getColumnName(column);
@@ -86,6 +101,7 @@ public class PostgresResultSetMetaData
                 sTypeName = rsColumn.getString("TYPE_NAME");
             rsColumn.close();
         }
+        _columnTypeNames[column - 1] = sTypeName;
         return sTypeName;
     }
 

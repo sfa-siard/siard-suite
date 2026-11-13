@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 
 import javax.xml.datatype.Duration;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -169,17 +171,22 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
             else if (oValue instanceof Duration)
                 value.setDuration((Duration) oValue);
             else if (oValue instanceof Clob clob) {
-                mimeTypeHandler.add(value, clob);
+                // open the lob stream only once: some drivers (e.g. mssql-jdbc with
+                // adaptive response buffering) discard streamed lob values after
+                // the first stream has been consumed and closed
+                BufferedReader reader = new BufferedReader(clob.getCharacterStream());
+                mimeTypeHandler.add(value, reader);
                 mimeTypeHandler.applyMimeType(value);
-                value.setReader(clob.getCharacterStream());
+                value.setReader(reader);
                 clob.free();
             } else if (oValue instanceof SQLXML sqlxml) {
                 value.setReader(sqlxml.getCharacterStream());
                 sqlxml.free();
             } else if (oValue instanceof Blob blob) {
-                mimeTypeHandler.add(value, blob);
+                BufferedInputStream stream = new BufferedInputStream(blob.getBinaryStream());
+                mimeTypeHandler.add(value, stream);
                 mimeTypeHandler.applyMimeType(value);
-                value.setInputStream(blob.getBinaryStream());
+                value.setInputStream(stream);
                 blob.free();
             } else if (oValue instanceof URL url) {
                 value.setInputStream(url.openStream(), url.getPath());
@@ -268,6 +275,7 @@ public class PrimaryDataFromDb extends PrimaryDataTransfer {
             TableRecord record = createTableRecord(swCreate, rr);
             readTableRecord(swGet, rs, record, mimeTypeHandler);
             putTableRecord(swPut, rr, record);
+            mimeTypeHandler.clearIndividualMimeTypes();
             lBytesStart = logTableRecordProgress(lRecord++, sw, rr, lBytesStart);
             incDownloaded();
         }
