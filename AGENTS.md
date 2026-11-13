@@ -18,6 +18,7 @@ This is a **Gradle multi-module monorepo**. All modules live in the same reposit
 | Module | Purpose |
 |---|---|
 | `siard-suite-app` | Desktop GUI application (JavaFX) |
+| `siard-suite-local-web-app` | Local web app replacing the JavaFX UI: `backend` (Quarkus agent, REST API) and `frontend` (React/TypeScript, served by the backend) |
 | `siard-cmd` | Command-line interface (`SiardFromDb`, `SiardToDb`) |
 | `siard-api` | Core API for reading/writing SIARD files (JAXB-based) |
 | `jdbc-base` | Abstract base JDBC wrapper with test fixtures |
