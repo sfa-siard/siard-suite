@@ -217,6 +217,7 @@ runtime {
         ))
         installerOptions.addAll(listOf("--vendor", "BAR"))
         if (currentOs.isWindows) {
+            installerType = "msi"
             installerOptions.addAll(listOf(
                 "--win-per-user-install",
                 "--win-menu",
