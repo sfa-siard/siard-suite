@@ -1,6 +1,15 @@
 package ch.admin.bar.siard2.cmd.postgres.issues.siardgui60;
 
+import ch.admin.bar.siard2.api.Archive;
+import ch.admin.bar.siard2.api.MetaData;
+import ch.admin.bar.siard2.api.primary.ArchiveImpl;
+import ch.admin.bar.siard2.cmd.MetaDataFromDb;
+import ch.admin.bar.siard2.cmd.MetaDataToDb;
+import ch.admin.bar.siard2.cmd.PrimaryDataFromDb;
+import ch.admin.bar.siard2.cmd.PrimaryDataToDb;
 import ch.admin.bar.siard2.jdbcx.PostgresDataSource;
+import ch.enterag.utils.ProgramInfo;
+import ch.enterag.utils.background.Progress;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,12 +19,18 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -64,6 +79,13 @@ public class PostgresResultSetMemoryIT {
 
     @BeforeAll
     void setUp() throws SQLException {
+        try {
+            ProgramInfo.getProgramInfo();
+        } catch (RuntimeException notInitialized) {
+            ProgramInfo.getProgramInfo("SIARD Suite", "test", "siard", "test",
+                                       "test", "test",
+                                       List.of(), List.of(), List.of(), List.of());
+        }
         try (Connection conn = newNativeConnection()) {
             try (Statement stmt = conn.createStatement()) {
                 stmt.executeUpdate("DROP TABLE IF EXISTS memory_test");
@@ -125,6 +147,95 @@ public class PostgresResultSetMemoryIT {
         }
         assertEquals(ROWS, count);
         assertEquals(EXPECTED_TOTAL_BYTES, total);
+    }
+
+    private void exportMemoryTestArchive(File siard) throws Exception {
+        try (Connection conn = newWrappedConnection()) {
+            conn.setAutoCommit(false);
+            Archive archive = ArchiveImpl.newInstance();
+            archive.create(siard);
+            try {
+                MetaDataFromDb.newInstance(conn.getMetaData(), archive.getMetaData())
+                              .download(false, false, "public", null);
+                PrimaryDataFromDb pdfd = PrimaryDataFromDb.newInstance(conn, archive);
+                pdfd.setOut(new PrintWriter(Writer.nullWriter()));
+                pdfd.download(null);
+            } catch (Throwable failure) {
+                try {
+                    archive.close();
+                } catch (Throwable closeFailure) {
+                    failure.addSuppressed(closeFailure);
+                }
+                throw failure;
+            }
+            archive.close();
+        }
+    }
+
+    private long restoreMemoryTestArchive(File siard) throws Exception {
+        Archive archive = ArchiveImpl.newInstance();
+        archive.open(siard);
+        try (Connection conn = newWrappedConnection()) {
+            conn.setAutoCommit(false);
+            MetaData md = archive.getMetaData();
+            MetaDataToDb mdtd = MetaDataToDb.newInstance(conn.getMetaData(), md,
+                    Map.of("public", "restore_memory"));
+            mdtd.setOut(new PrintWriter(Writer.nullWriter()));
+            mdtd.upload(null);
+
+            PrimaryDataToDb pdtd = PrimaryDataToDb.newInstance(conn, archive,
+                    mdtd.getArchiveMapping(), mdtd.supportsArrays(),
+                    mdtd.supportsDistincts(), mdtd.supportsUdts());
+            pdtd.setOut(new PrintWriter(Writer.nullWriter()));
+
+            long baseline = usedMemory();
+            AtomicLong peak = new AtomicLong();
+            Progress progress = new Progress() {
+                @Override
+                public boolean cancelRequested() {
+                    return false;
+                }
+
+                @Override
+                public void notifyProgress(int percent) {
+                    if (percent % 10 == 0) {
+                        long delta = usedMemory() - baseline;
+                        peak.set(Math.max(peak.get(), delta));
+                    }
+                }
+            };
+            pdtd.upload(progress);
+            return peak.get();
+        } finally {
+            archive.close();
+        }
+    }
+
+    @Test
+    void restorePathDoesNotRetainInsertedRows() throws Exception {
+        // The previous CONCUR_UPDATABLE path retained every inserted row in the
+        // pgjdbc result set until the table finished, so this peak grows with the
+        // ~98 MiB table on the old path and stays bounded on the prepared path.
+        File siard = File.createTempFile("restore-memory", ".siard");
+        siard.delete();
+        try {
+            exportMemoryTestArchive(siard);
+            long peak = restoreMemoryTestArchive(siard);
+            assertTrue(peak < STREAMING_THRESHOLD,
+                       "restore retained " + peak + " bytes of heap for a "
+                               + EXPECTED_TOTAL_BYTES + "-byte table");
+            try (Connection conn = newNativeConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(
+                         "SELECT COUNT(*), COALESCE(SUM(OCTET_LENGTH(payload)), 0)"
+                                 + " FROM restore_memory.memory_test")) {
+                assertTrue(rs.next());
+                assertEquals(ROWS, rs.getLong(1));
+                assertEquals(EXPECTED_TOTAL_BYTES, rs.getLong(2));
+            }
+        } finally {
+            siard.delete();
+        }
     }
 
     @Test
