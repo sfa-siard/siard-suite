@@ -1,7 +1,6 @@
 # SIARD Suite 2.2
 
-[![Build](https://github.com/sfa-siard/siard-suite/actions/workflows/build.yml/badge.svg)](https://github.com/sfa-siard/siard-suite/actions/workflows/build.yml)
-[![Integration Tests](https://github.com/sfa-siard/siard-suite/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/sfa-siard/siard-suite/actions/workflows/integration-tests.yml)
+[![CI](https://github.com/sfa-siard/siard-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/sfa-siard/siard-suite/actions/workflows/ci.yml)
 [![License: CDDL-1.0](https://img.shields.io/badge/License-CDDL--1.0-blue.svg)](LICENSE.txt)
 [![GitHub release](https://img.shields.io/github/v/release/sfa-siard/siard-suite)](https://github.com/sfa-siard/siard-suite/releases)
 

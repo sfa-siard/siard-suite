@@ -7,6 +7,12 @@ schema: spec-driven
 # Example:
 #   context: |
 #     Designs and tasks must cover Windows, macOS, and Linux
+context: |
+  Only free, open-source-licensed dependencies (e.g. MUI core and @mui/x-* Community tiers, MIT).
+  If a feature would need a paid license, look for an open-source
+  alternative or, if there is none, ask what to do.
+  Everything must run on Windows, macOS and Linux; designs and tasks must cover all three.
+  Which platforms get installers is decided per change.
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.

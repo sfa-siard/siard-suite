@@ -1,0 +1,158 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "feature/*", "issue/*", "doc/*" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  TZ: Europe/Zurich
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-java-gradle
+        with:
+          javafx: 'true'
+      - name: Show version
+        run: ./gradlew cV
+      - name: Compile all modules
+        run: ./gradlew compileJava compileTestJava
+
+  unit-tests:
+    needs: compile
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - siard-utilities
+          - zip64-file
+          - sql-parser
+          - siard-api
+          - jdbc-base
+          - jdbc-oracle
+          - jdbc-access
+          - jdbc-db2
+          - jdbc-mssql
+          - jdbc-mysql
+          - jdbc-postgres
+          - siard-cmd
+          - siard-suite-app
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-java-gradle
+        with:
+          javafx: 'true'
+      - name: Test ${{ matrix.module }}
+        run: ./gradlew :${{ matrix.module }}:test -Djava.awt.headless=true -Dtestfx.headless=true
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: test-reports-${{ matrix.module }}
+          path: ${{ matrix.module }}/build/reports/tests/
+
+  local-web-app:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-java-gradle
+      - name: Cache Playwright browser
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('siard-suite-local-web-app/frontend/package-lock.json') }}
+      - name: Check local web app
+        run: ./gradlew :siard-suite-local-web-app:check
+      - name: Run Playwright smoke test
+        run: ./gradlew :siard-suite-local-web-app:e2eTest
+
+  integration-tests:
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database:
+          - name: postgres
+            task: integrationTestPostgres
+          - name: mysql
+            task: integrationTestMysql
+          - name: mariadb
+            task: integrationTestMariadb
+          - name: mssql
+            task: integrationTestMssql
+          - name: oracle
+            task: integrationTestOracle
+          - name: db2
+            task: integrationTestDb2
+          - name: msaccess
+            task: integrationTestMsaccess
+          - name: utils
+            task: integrationTestUtils
+    name: Integration Tests (${{ matrix.database.name }})
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-java-gradle
+      - name: Free up disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+          # Remove unnecessary software to free up disk space
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune -a -f
+          echo "Disk space after cleanup:"
+          df -h
+      - name: Run ${{ matrix.database.name }} integration tests
+        run: ./gradlew :siard-cmd:${{ matrix.database.task }}
+      - name: Dump Docker logs on failure
+        if: failure()
+        run: |
+          echo "=== Docker containers ==="
+          docker ps -a
+          echo "=== Docker logs ==="
+          docker ps -a -q | xargs -I {} docker logs {}
+      - name: Store reports
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: integration-test-reports-${{ matrix.database.name }}
+          path: |
+            siard-cmd/build/reports/
+            siard-cmd/build/test-results/
+
+  sonar:
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-java-gradle
+        with:
+          javafx: 'true'
+      - name: SonarQube analysis
+        run: ./gradlew sonar -Djava.awt.headless=true -Dtestfx.headless=true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
