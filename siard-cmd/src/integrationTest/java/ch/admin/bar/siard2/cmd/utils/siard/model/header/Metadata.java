@@ -98,6 +98,9 @@ public class Metadata implements Updatable<Metadata> {
         @Builder.Default
         Set<ForeignKey> foreignKeys = new HashSet<>();
 
+        @Builder.Default
+        Set<CandidateKey> candidateKeys = new HashSet<>();
+
         FolderId folder;
 
         @NonNull
@@ -117,6 +120,9 @@ public class Metadata implements Updatable<Metadata> {
                     updatedThis.foreignKeys.stream()
                                            .map(foreignKey -> foreignKey.applyUpdates(updater))
                                            .collect(Collectors.toSet()),
+                    updatedThis.candidateKeys.stream()
+                                             .map(candidateKey -> candidateKey.applyUpdates(updater))
+                                             .collect(Collectors.toSet()),
                     updatedThis.folder.applyUpdates(updater),
                     updatedThis.description.map(description -> description.applyUpdates(updater))
             );
@@ -258,6 +264,30 @@ public class Metadata implements Updatable<Metadata> {
                                           .collect(Collectors.toSet()),
                     updatedThis.deleteAction.map(s -> s.applyUpdates(updater)),
                     updatedThis.updateAction.map(s -> s.applyUpdates(updater)));
+        }
+    }
+
+    @Value
+    @Builder(toBuilder = true)
+    @Jacksonized
+    public static class CandidateKey implements Updatable<CandidateKey> {
+        Id<CandidateKey> name;
+
+        @NonNull
+        @Builder.Default
+        @JacksonXmlProperty(localName = "column")
+        @JacksonXmlElementWrapper(useWrapping = false)
+        Set<Id<Column>> columns = new HashSet<>();
+
+        @Override
+        public CandidateKey applyUpdates(Updater updater) {
+            val updatedThis = updater.applyUpdate(this);
+
+            return new CandidateKey(
+                    updatedThis.name.applyUpdates(updater),
+                    updatedThis.columns.stream()
+                                       .map(columnId -> columnId.applyUpdates(updater))
+                                       .collect(Collectors.toSet()));
         }
     }
 
