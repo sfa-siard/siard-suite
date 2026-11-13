@@ -70,7 +70,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
 
     private void copyFromReaderToWriter(Reader rdr, Writer wr)
             throws IOException {
-        char[] cbuf = new char[iBUFFER_SIZE];
+        char[] cbuf = new char[_conn instanceof ch.admin.bar.siard2.jdbc.PostgresConnection ? 256 * 1024 : iBUFFER_SIZE];
         for (int iRead = rdr.read(cbuf); iRead != -1; iRead = rdr.read(cbuf))
             wr.write(cbuf, 0, iRead);
         rdr.close();
@@ -79,7 +79,7 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
 
     private void copyFromInputToOutput(InputStream is, OutputStream os)
             throws IOException {
-        byte[] buf = new byte[iBUFFER_SIZE];
+        byte[] buf = new byte[_conn instanceof ch.admin.bar.siard2.jdbc.PostgresConnection ? 256 * 1024 : iBUFFER_SIZE];
         for (int iRead = is.read(buf); iRead != -1; iRead = is.read(buf))
             os.write(buf, 0, iRead);
         is.close();
@@ -381,6 +381,82 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
     }
 
 
+    private PreparedStatement preparePostgresInsert(Table table, SchemaMapping mapping, ResultSetMetaData metadata)
+            throws SQLException {
+        TableMapping tableMapping = mapping.getTableMapping(table.getMetaTable().getName());
+        QualifiedId target = new QualifiedId(null, mapping.getMappedSchemaName(), tableMapping.getMappedTableName());
+        StringBuilder columns = new StringBuilder();
+        StringBuilder parameters = new StringBuilder();
+        for (int column = 1; column <= metadata.getColumnCount(); column++) {
+            if (column > 1) {
+                columns.append(", ");
+                parameters.append(", ");
+            }
+            columns.append('"').append(metadata.getColumnName(column).replace("\"", "\"\"")).append('"');
+            parameters.append('?');
+        }
+        PreparedStatement insert = _conn.prepareStatement("INSERT INTO " + target.format()
+                + " (" + columns + ") VALUES (" + parameters + ")");
+        insert.setQueryTimeout(_iQueryTimeoutSeconds);
+        return insert;
+    }
+
+    static long estimatePostgresRow(List<Value> values) throws IOException {
+        long bytes = 0;
+        for (Value value : values) {
+            if (value.isNull()) continue;
+            if (value.getMetaValue().getCardinality() >= 0 || value.getAttributes() > 0) {
+                long size = 64;
+                for (int element = 0; element < value.getElements(); element++) {
+                    size += estimatePostgresRow(List.of(value.getElement(element)));
+                    if (size >= PostgresInsertBatch.BYTE_LIMIT) break;
+                }
+                for (int attribute = 0; attribute < value.getAttributes(); attribute++) {
+                    size += estimatePostgresRow(List.of(value.getAttribute(attribute)));
+                    if (size >= PostgresInsertBatch.BYTE_LIMIT) break;
+                }
+                bytes = Math.min(PostgresInsertBatch.BYTE_LIMIT, bytes + size);
+                continue;
+            }
+            long size = switch (value.getMetaValue().getPreType()) {
+                case Types.BINARY, Types.VARBINARY, Types.BLOB, Types.DATALINK -> value.getByteLength();
+                case Types.CHAR, Types.VARCHAR, Types.NCHAR, Types.NVARCHAR, Types.CLOB, Types.NCLOB, Types.SQLXML ->
+                        Math.min(PostgresInsertBatch.BYTE_LIMIT, Math.max(0, value.getCharLength())) * 4;
+                default -> 64;
+            };
+            bytes = Math.min(PostgresInsertBatch.BYTE_LIMIT, bytes + Math.min(PostgresInsertBatch.BYTE_LIMIT, Math.max(64, size)));
+        }
+        return bytes;
+    }
+
+    void putPreparedRecord(TableRecord record, PreparedStatement insert, int[] types, String[] typeNames,
+                                   Set<Object> resources, PostgresInsertBatch batch)
+            throws IOException, SQLException {
+        List<Value> values = record.getValues(supportsArrays(), supportsUdts());
+        if (values.size() != types.length) throw new IOException("Invalid number of result columns found!");
+        long bytes = estimatePostgresRow(values);
+        batch.beforeRow(bytes);
+        for (int column = 0; column < values.size(); column++) {
+            Value value = values.get(column);
+            if (!value.isNull() && (types[column] == Types.BINARY || types[column] == Types.VARBINARY)) {
+                InputStream stream = value.getInputStream();
+                batch.retain(stream);
+                if (insert instanceof ch.admin.bar.siard2.jdbc.PostgresPreparedStatement postgresInsert)
+                    postgresInsert.setBinaryStream(column + 1, stream, value.getByteLength(), types[column]);
+                else
+                    insert.setBinaryStream(column + 1, stream, value.getByteLength());
+            } else {
+                Object object = getValue(value, (ch.enterag.utils.jdbc.BaseConnection) _conn, resources);
+                if (insert instanceof ch.admin.bar.siard2.jdbc.PostgresPreparedStatement postgresInsert
+                        && types[column] == Types.DISTINCT)
+                    postgresInsert.setObject(column + 1, object, types[column], typeNames[column]);
+                else
+                    insert.setObject(column + 1, object, types[column]);
+            }
+        }
+        batch.addRow(bytes);
+    }
+
     /** upload primary data of a table using a SELECT query for all fields.
      * @param table table.
      * @param sm mapping of names in schema.
@@ -398,34 +474,53 @@ public class PrimaryDataToDb extends PrimaryDataTransfer {
         TableRecordDispenser rd = table.openTableRecords();
         ResultSet rs = openTable(table, sm);
         Statement stmt = rs.getStatement();
-        Set<Object> setResources = new HashSet<Object>();
-        long lRecord = 0;
-        TableRecord record = null;
-        StopWatch sw = StopWatch.getInstance();
-        sw.start();
-        long lBytesStart = rd.getByteCount();
-        while ((lRecord < mt.getRows()) && (!cancelRequested())) {
-            record = rd.get();
-            setResources.clear();
-            rs.moveToInsertRow();
-            putTableRecord(record, rs, setResources);
-            rs.insertRow();
-            freeResources(setResources);
-            rs.moveToCurrentRow();
-            lRecord++;
-            if ((lRecord % lCOMMIT_RECORDS) == 0) {
-                _out.println("    Record " + String.valueOf(lRecord) + " (" + sw.formatRate(rd.getByteCount() - lBytesStart, sw.stop()) + " kB/s)");
-                lBytesStart = rd.getByteCount();
-                sw.start();
-            }
-            incUploaded();
+        boolean postgres = _conn instanceof ch.admin.bar.siard2.jdbc.PostgresConnection;
+        ResultSetMetaData metadata = postgres ? rs.getMetaData() : null;
+        int[] types = new int[postgres ? metadata.getColumnCount() : 0];
+        String[] typeNames = new String[postgres ? metadata.getColumnCount() : 0];
+        for (int column = 0; column < types.length; column++) {
+            types[column] = metadata.getColumnType(column + 1);
+            typeNames[column] = metadata.getColumnTypeName(column + 1);
         }
-        _out.println("    Record " + String.valueOf(lRecord) + " (" + sw.formatRate(rd.getByteCount() - lBytesStart, sw.stop()) + " kB/s)");
-        _out.println("    Total: " + StopWatch.formatLong(lRecord) + " records (" + StopWatch.formatLong(rd.getByteCount()) + " bytes in " + sw.formatMs() + " ms)");
-        if (!rs.isClosed())
-            rs.close();
-        if (!stmt.isClosed())
-            stmt.close();
+        try (PreparedStatement insert = postgres ? preparePostgresInsert(table, sm, metadata) : null;
+             PostgresInsertBatch batch = postgres ? new PostgresInsertBatch(insert) : null) {
+            if (postgres) rs.close();
+            Set<Object> setResources = new HashSet<Object>();
+            long lRecord = 0;
+            TableRecord record = null;
+            StopWatch sw = StopWatch.getInstance();
+            sw.start();
+            long lBytesStart = rd.getByteCount();
+            while ((lRecord < mt.getRows()) && (!cancelRequested())) {
+                record = rd.get();
+                setResources.clear();
+                if (postgres) {
+                    try {
+                        putPreparedRecord(record, insert, types, typeNames, setResources, batch);
+                    } finally {
+                        freeResources(setResources);
+                    }
+                } else {
+                    rs.moveToInsertRow();
+                    putTableRecord(record, rs, setResources);
+                    rs.insertRow();
+                    freeResources(setResources);
+                    rs.moveToCurrentRow();
+                }
+                lRecord++;
+                if ((lRecord % lCOMMIT_RECORDS) == 0) {
+                    _out.println("    Record " + String.valueOf(lRecord) + " (" + sw.formatRate(rd.getByteCount() - lBytesStart, sw.stop()) + " kB/s)");
+                    lBytesStart = rd.getByteCount();
+                    sw.start();
+                }
+                incUploaded();
+            }
+            if (postgres) batch.flush();
+            _out.println("    Record " + String.valueOf(lRecord) + " (" + sw.formatRate(rd.getByteCount() - lBytesStart, sw.stop()) + " kB/s)");
+            _out.println("    Total: " + StopWatch.formatLong(lRecord) + " records (" + StopWatch.formatLong(rd.getByteCount()) + " bytes in " + sw.formatMs() + " ms)");
+        }
+        if (!rs.isClosed()) rs.close();
+        if (!stmt.isClosed()) stmt.close();
         rd.close();
         _conn.commit();
         LOG.debug("Records of table '{}.{}' successfully uploaded", qiTable.getSchema(), qiTable.getName());

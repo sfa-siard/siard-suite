@@ -44,6 +44,19 @@ Alternatives considered:
 
 Inventory `PostgresResultSet.updateObject`'s per-type handling during implementation and mirror it: `PostgresBlob`/`PostgresClob` → create large object, stream contents, bind OID; `PostgresArray` → `java.sql.Array`; temporal/interval/`OTHER`/`STRUCT` → same conversions. Where logic is shareable, extract a helper rather than duplicating. This is the main correctness risk — parity is enforced by the existing round-trip integration test (`PostgresUploadDownloadSiardProjectIT`) plus a dedicated type-matrix test if coverage gaps appear.
 
+#### Type parity inventory (PR/commit review notes)
+
+- `CLOB`: cast to `PostgresClob`, bind `getOid()` as a long; `BLOB` and `DATALINK`: cast to `PostgresBlob`, bind `getOid()` as a long. Existing `updateObject` does not create or copy LOBs; creation happens upstream in `PrimaryDataToDb.getValue`.
+- `BINARY`/`VARBINARY`: bind `byte[]` through `updateBytes`; its bit-string conversion applies only when metadata reports `BIT` or `OTHER`, not these binary branches.
+- `SMALLINT`/`INTEGER`/`BIGINT`: dispatch `Short`, `Integer`, and `Long` to corresponding numeric setters; convert `BigInteger` to `BigDecimal`; bind `BigDecimal` directly. Null delegates to the raw driver. Other runtime classes silently leave the column unset.
+- `DECIMAL`/`NUMERIC`: bind `BigDecimal`; `TIME`: bind `java.sql.Time`; `VARCHAR`: bind `String`.
+- `OTHER`: cast to XML `Duration`, construct `PGInterval` using signed year/month/day/hour/minute fields and the existing epoch-based milliseconds-modulo-60000 seconds calculation.
+- `ARRAY`: unwrap `PostgresArray` to `PgArray` and bind as `java.sql.Array`.
+- `STRUCT`: serialize with `PostgresObject` using the struct's SQL type name, then bind a `PGobject` with that type and serialized value. Wrap serialization `ParseException` in `SQLException`.
+- `DISTINCT`: serialize with `PostgresObject` using the column's metadata type name, then bind a typed `PGobject`; same exception conversion as `STRUCT`.
+- All other types (including `DATE`, `TIMESTAMP`, and booleans) delegate unchanged to the driver's `updateObject`.
+- Null handling is not uniform: reference-valued scalar setters accept null, but wrapper casts/dereferences for LOBs, arrays, intervals, and structs are unsafe. The current restore loop avoids these branches by skipping null cells entirely; the prepared insert must bind SQL NULL explicitly to preserve archived nulls without retaining previous-row parameters.
+
 ### D3: Byte-aware batching, not just row-count batching
 
 `PreparedStatement.executeBatch()` accumulates parameter values until flush, so a row-count-only batch still buffers `batchSize × rowBytes`. Flush when either a row-count cap (e.g., 100) **or** an estimated byte budget (e.g., 16 MiB, summed from value sizes known before binding) is reached. This bounds memory to O(budget) while keeping round-trips low for small-row tables. For oid-domain LOBs the parameter is an OID (small), but the LO write itself must stream — see D4.
@@ -54,7 +67,7 @@ Today each oid-domain `BLOB`/`CLOB` cell costs `createLO` + `GRANT` + open + wri
 
 ### D5: Resolve column types once per table
 
-The prepared-insert path needs target column types for `setObject` translation. Fetch them once per table (via `DatabaseMetaData.getColumns` or the existing metadata path, cached per `fix-postgres-export-memory`) instead of per cell — reducing catalog queries from O(cells) to O(tables).
+The prepared-insert path needs target column types for `setObject` translation. Fetch them once per table (via `DatabaseMetaData.getColumns` or the existing metadata path, cached per `fix-postgres-export-memory`) instead of per cell — reducing catalog queries from O(cells) to O(tables). `PostgresObject` also caches `STRUCT`/`DISTINCT` attribute and base-type metadata per connection and type name, because those lookups would otherwise repeat for every composite cell.
 
 ## Risks / Trade-offs
 

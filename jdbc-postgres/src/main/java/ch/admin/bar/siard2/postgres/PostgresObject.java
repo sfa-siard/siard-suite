@@ -17,7 +17,11 @@ import java.math.BigInteger;
 import java.sql.*;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PostgresObject {
     private static char cCOMMA = ',';
@@ -41,7 +45,17 @@ public class PostgresObject {
     private PostgresConnection _pconn = null;
     private String _sIndent = null;
 
-    private class TypeDescription {
+    private static final Map<PostgresConnection, Map<String, CachedTypeMetadata>> OBJECT_METADATA =
+            Collections.synchronizedMap(new WeakHashMap<>());
+
+    private static final class CachedTypeMetadata {
+        private List<TypeDescription> attributeDescriptions;
+        private boolean attributeDescriptionsLoaded;
+        private TypeDescription baseTypeDescription;
+        private boolean baseTypeDescriptionLoaded;
+    }
+
+    private static class TypeDescription {
         private int _iDataType;
 
         public int getDataType() {
@@ -141,7 +155,15 @@ public class PostgresObject {
         //System.out.println(sIndent + _sValue);
     }
 
-    private List<TypeDescription> getAttributeDescriptions()
+    private CachedTypeMetadata cachedTypeMetadata() {
+        Map<String, CachedTypeMetadata> metadataByType;
+        synchronized (OBJECT_METADATA) {
+            metadataByType = OBJECT_METADATA.computeIfAbsent(_pconn, connection -> new ConcurrentHashMap<>());
+        }
+        return metadataByType.computeIfAbsent(_qiType.format(), typeName -> new CachedTypeMetadata());
+    }
+
+    private List<TypeDescription> queryAttributeDescriptions()
             throws SQLException, ParseException {
         PostgresDatabaseMetaData pdmd = (PostgresDatabaseMetaData) _pconn.getMetaData();
         List<TypeDescription> listAttributeDescription = new ArrayList<TypeDescription>();
@@ -169,7 +191,19 @@ public class PostgresObject {
         return listAttributeDescription;
     }
 
-    private TypeDescription getBaseTypeDescription()
+    private List<TypeDescription> getAttributeDescriptions()
+            throws SQLException, ParseException {
+        CachedTypeMetadata metadata = cachedTypeMetadata();
+        synchronized (metadata) {
+            if (!metadata.attributeDescriptionsLoaded) {
+                metadata.attributeDescriptions = queryAttributeDescriptions();
+                metadata.attributeDescriptionsLoaded = true;
+            }
+            return metadata.attributeDescriptions;
+        }
+    }
+
+    private TypeDescription queryBaseTypeDescription()
             throws SQLException {
         TypeDescription tdBase = null;
         PostgresDatabaseMetaData pdmd = (PostgresDatabaseMetaData) _pconn.getMetaData();
@@ -178,15 +212,31 @@ public class PostgresObject {
                 pdmd.toPattern(_qiType.getSchema()),
                 pdmd.toPattern(_qiType.getName()),
                 new int[]{Types.DISTINCT});
-        if (rsUdt.next()) {
-            int iBaseType = rsUdt.getInt("BASE_TYPE");
-            String sBaseType = null;
-            PreType pt = PreType.getBySqlType(iBaseType);
-            if (pt != null)
-                sBaseType = pt.getKeyword();
-            tdBase = new TypeDescription(iBaseType, sBaseType);
+        try {
+            if (rsUdt.next()) {
+                int iBaseType = rsUdt.getInt("BASE_TYPE");
+                String sBaseType = null;
+                PreType pt = PreType.getBySqlType(iBaseType);
+                if (pt != null)
+                    sBaseType = pt.getKeyword();
+                tdBase = new TypeDescription(iBaseType, sBaseType);
+            }
+        } finally {
+            rsUdt.close();
         }
         return tdBase;
+    }
+
+    private TypeDescription getBaseTypeDescription()
+            throws SQLException {
+        CachedTypeMetadata metadata = cachedTypeMetadata();
+        synchronized (metadata) {
+            if (!metadata.baseTypeDescriptionLoaded) {
+                metadata.baseTypeDescription = queryBaseTypeDescription();
+                metadata.baseTypeDescriptionLoaded = true;
+            }
+            return metadata.baseTypeDescription;
+        }
     }
 
     private String formatStruct(Struct struct)
