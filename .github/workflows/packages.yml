@@ -29,7 +29,7 @@ jobs:
           ref_name="${GITHUB_REF#refs/*/}"
           echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
       - name: Build zipped distributions (no bundled runtime)
-        run: ./gradlew :siard-suite-app:asciidoctorPdf :siard-suite-app:distZip :siard-cmd:distZip :siard-suite-local-web-app:backend:distZip --no-daemon
+        run: ./gradlew :siard-suite-app:asciidoctorPdf :siard-suite-app:distZip :siard-cmd:distZip :siard-suite-local-web-app:backend:siardwebDistZip --no-daemon
       - name: Upload distributions
         uses: actions/upload-artifact@v6
         with:

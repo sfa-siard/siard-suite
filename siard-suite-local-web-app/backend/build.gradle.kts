@@ -26,6 +26,9 @@ val appName = "SIARD-Suite-Web"
 application {
     mainClass.set("io.quarkus.bootstrap.runner.QuarkusEntryPoint")
     applicationName = appName
+    // the generated start scripts are launchers too: they need the same JVM flags as tests
+    // and the packaged runtime, or siard-api's Xerces parsing fails
+    applicationDefaultJvmArgs = siardJvmArgs
 }
 
 dependencies {
@@ -144,6 +147,37 @@ tasks.named<Sync>("installDist") {
         }
     }
 }
+
+// distZip/distTar of the "main" distribution cannot produce a working archive: the application
+// plugin adds the runtime classpath jars flat into lib/ through distributions.main.contents,
+// and contents specs are additive-only, so those jars would shadow the fast-jar layout and
+// QuarkusEntryPoint would resolve the wrong application root again. A dedicated distribution
+// with fully controlled contents produces siardwebDistZip/installSiardwebDist instead; the
+// archive and install dir keep the SIARD-Suite-Web-<version> naming of the old distZip.
+distributions {
+    create("siardweb") {
+        distributionBaseName.set(appName)
+        contents {
+            into("bin") {
+                from(tasks.named("startScripts"))
+                filePermissions { unix("rwxr-xr-x") }
+            }
+            into("lib") {
+                from(layout.buildDirectory.dir("quarkus-app")) {
+                    rename("quarkus-run.jar", runJarName.get())
+                }
+            }
+        }
+    }
+}
+
+// the fast-jar payload is written by quarkusBuild
+listOf("siardwebDistZip", "siardwebDistTar", "installSiardwebDist", "assembleSiardwebDist")
+    .forEach { tasks.named(it) { dependsOn("quarkusBuild") } }
+
+// the "main" distribution archives are unusable for this app; don't let them be built by accident
+tasks.named("distZip") { enabled = false }
+tasks.named("distTar") { enabled = false }
 
 // jpackage puts every jar of the app image on app.classpath, which loads the application through
 // the system class loader and breaks Quarkus' RunnerClassLoader: keep only the run jar
