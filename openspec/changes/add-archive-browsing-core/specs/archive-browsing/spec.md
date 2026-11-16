@@ -94,7 +94,7 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **AND** every other cell has `type` `text`, a string `value` equal to what the desktop app shows for the same cell, and `truncated` false
 
 #### Scenario: Large text is truncated
-- **GIVEN** a text cell of 100000 characters
+- **GIVEN** a crafted archive (built in the test) with a text cell of 100000 characters
 - **WHEN** its row is requested
 - **THEN** the cell's `value` has length 4096 and `truncated` is true
 - **AND** the full text is available through the content endpoint
@@ -107,7 +107,7 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 
 ### Requirement: Large object content
 
-`GET /api/archives/{archiveId}/schemas/{s}/tables/{t}/rows/{row}/columns/{c}/content` SHALL stream the cell's full bytes with content type `application/octet-stream`, `Content-Disposition: attachment` with a file name derived only from the table, row and column indexes, and `X-Content-Type-Options: nosniff`.
+`GET /api/archives/{archiveId}/schemas/{s}/tables/{t}/rows/{row}/columns/{c}/content` SHALL stream the cell's full bytes with content type `application/octet-stream`, `Content-Disposition: attachment` with a file name derived only from the table, row and column indexes, and `X-Content-Type-Options: nosniff`. The archive SHALL be available for further requests as soon as a download completes, fails or is aborted by the client.
 
 #### Scenario: Download of a binary LOB
 - **GIVEN** `sample.siard` is open and a LOB cell of known length
@@ -116,10 +116,10 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **AND** the body's bytes equal the entry's bytes in the archive
 
 #### Scenario: Cell without content
-- **GIVEN** a NULL cell, a column that is not a LOB or text column, and a row number beyond the table
+- **GIVEN** a NULL cell, a numeric cell, and a row number beyond the table
 - **WHEN** the content endpoint is requested for each
-- **THEN** a NULL cell and a row beyond the table answer 404 with `application/problem+json`
-- **AND** a numeric column answers the cell's text as bytes with status 200
+- **THEN** the NULL cell and the row beyond the table answer 404 with `application/problem+json`
+- **AND** the numeric cell answers its text as bytes with status 200
 
 #### Scenario: Active content is never rendered by the browser
 - **GIVEN** a LOB whose bytes are `<script>alert(1)</script>` and whose name suggests `.html`
@@ -127,22 +127,27 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **THEN** the content type is `application/octet-stream`, `Content-Disposition` starts with `attachment` and `X-Content-Type-Options` is `nosniff`
 - **AND** the file name contains no character outside `[A-Za-z0-9._-]`
 
+#### Scenario: Aborted download releases the archive
+- **GIVEN** a crafted archive with a LOB larger than the server's output buffers, and a lock timeout of 1 second
+- **WHEN** a client starts downloading its content, reads part of the body and closes the connection
+- **THEN** a following `GET /api/archives/{archiveId}` on the same archive returns 200, not 503
+
 ### Requirement: Bounded search in a table
 
-`GET .../tables/{t}/search?q=&matchCase=&afterRow=` SHALL find the next row after `afterRow` (default -1) with a text cell containing `q`, scanning at most 20000 rows or 5 seconds per request, and return `found`, `row`, `column`, and `complete`. When the scan stops without a match before the end, `found` is false, `complete` is false and `nextRow` tells where to continue.
+`GET .../tables/{t}/search?q=&matchCase=&afterRow=` SHALL find the next row after `afterRow` (default -1) with a text cell containing `q`, scanning at most 20000 rows or 5 seconds per request, and return `found`, `row`, `column`, and `complete`. When the scan stops without a match before the end, `found` is false, `complete` is false and `nextRow` tells where to continue. Search SHALL compare the displayed text of each cell: the first 4096 characters of every textual and numeric cell, including CLOB, NCLOB and XML cells; text beyond 4096 characters and binary cells are not searched.
 
 #### Scenario: Match found
-- **GIVEN** the table `payment` is open and a value that occurs first in row 7 of a text column
-- **WHEN** the search for that value is requested with `afterRow=-1`
-- **THEN** `found` is true, `row` is 7 and `column` is the index of the matching column
+- **GIVEN** the table `customer` (599 rows) of `sfdbsakila.siard` is open, where `WILSON` occurs only in row 7 (`last_name`, column 3, and `email`, column 4)
+- **WHEN** `q=WILSON` is searched with `afterRow=-1`
+- **THEN** `found` is true, `row` is 7 and `column` is 3
 
 #### Scenario: Continue after a match and reach the end
-- **GIVEN** the previous search found row 7 and no further row matches
+- **GIVEN** the previous search for `WILSON` in `customer` found row 7
 - **WHEN** the search is repeated with `afterRow=7`
 - **THEN** `found` is false and `complete` is true
 
 #### Scenario: Scan budget is exhausted
-- **GIVEN** the table `payment` (16049 rows) and a search value that occurs nowhere, with the budget configured to 5000 rows
+- **GIVEN** the table `payment` (16049 rows) and the search value `zzz`, which occurs nowhere, with the row budget configured to 5000 rows and the time budget high enough not to trigger
 - **WHEN** the search is requested with `afterRow=-1`
 - **THEN** `found` is false, `complete` is false and `nextRow` is 5000
 - **AND** repeating with `afterRow=4999` continues at row 5000
@@ -152,10 +157,22 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **WHEN** search is requested with an empty `q` and with a `q` of 201 characters
 - **THEN** each response status is 400 with content type `application/problem+json`
 
+#### Scenario: Search covers only the displayed text
+- **GIVEN** the crafted archive with a text cell of 100000 characters (see "Large text is truncated"), containing the value `alpha42` within its first 4096 characters and `omega42` only at position 50000
+- **WHEN** `q=alpha42` and `q=omega42` are searched with `afterRow=-1`
+- **THEN** the first returns `found` true with the row and column of that cell
+- **AND** the second returns `found` false and `complete` true
+
 #### Scenario: Search honours case option
-- **GIVEN** a value that occurs only as `Smith`
-- **WHEN** `q=smith` is searched once with `matchCase=true` and once with `matchCase=false`
+- **GIVEN** the table `customer` of `sfdbsakila.siard`, where `smith` occurs only in upper case (`SMITH` in row 0)
+- **WHEN** `q=smith` is searched with `afterRow=-1` once with `matchCase=true` and once with `matchCase=false`
 - **THEN** the first returns `found` false and the second returns `found` true
+
+#### Scenario: Search does not disturb paging
+- **GIVEN** the table `payment` is open, its pages were requested in order up to offset 1900 (limit 100), and the row budget is configured to 5000 rows
+- **WHEN** `q=zzz` is searched with `afterRow=-1`, the search is continued with `afterRow=4999`, and then the page at offset 2000 is requested
+- **THEN** the two search requests together read at most 10000 records from the archive file
+- **AND** the page request reads at most 100 records
 
 ### Requirement: The archive API is described and stays consistent across apps
 

@@ -21,8 +21,8 @@ Precondition: `restructure-into-siard-web` is applied. Test scope: one test per 
 - [ ] 3.1 Implement `GET /api/archives/{id}`, `/schemas/{s}`, `/schemas/{s}/tables/{t}` and `/schemas/{s}/views/{v}` with record DTOs mapped from `siard-api`; verify the scenarios of "Archive metadata" and "Schema, table and view structure" pass against `sample.siard`, including 404 for bad indexes, 405 for write methods with the file unchanged, and a name containing `../` returned verbatim (small crafted archive built in the test)
 - [ ] 3.2 Implement `rows?offset=&limit=` with the retained-cursor strategy of design D4 and the records-read counter; verify the scenarios of "Paged table rows" pass on `payment` (page, last partial page, offset beyond end, 400s, forward paging reads at most 100 records)
 - [ ] 3.3 Implement `CellRenderer` and the cell DTO union (design D6); verify the scenarios of "Cell values" pass (NULL, text equal to the desktop display, 4096 truncation, LOB cells carry no content and the page stays under 20000 bytes) and compare the rendered text of every `TSIMPLE` cell with `Value`'s display conversion
-- [ ] 3.4 Implement the LOB/text content endpoint with streaming and the attachment-only headers (design D7); verify the scenarios of "Large object content" pass, including the byte-for-byte comparison with the zip entry and the `<script>` content case
-- [ ] 3.5 Implement the bounded search (design D5) with the budget properties; verify the scenarios of "Bounded search in a table" pass, with the budget set to 5000 rows for the exhaustion case, and that a table scan releases the archive lock between requests
+- [ ] 3.4 Implement the LOB/text content endpoint with streaming and the attachment-only headers, releasing the archive lock inside the streaming writer's `finally` on completion, failure and client abort (design D7); verify the scenarios of "Large object content" pass, including the byte-for-byte comparison with the zip entry, the `<script>` content case, and the aborted download with a large crafted LOB
+- [ ] 3.5 Implement the bounded search (design D5) with the budget properties and the dedicated search cursor, separate from the paging cursors, comparing only the displayed text (first 4096 characters per cell, CLOB prefix read through `getReader()`, binary cells skipped); verify the scenarios of "Bounded search in a table" pass, with the budget set to 5000 rows for the exhaustion case, and that a table scan releases the archive lock between requests
 
 ## 4. OpenAPI
 
@@ -43,4 +43,4 @@ Precondition: `restructure-into-siard-web` is applied. Test scope: one test per 
 
 ## Workflow follow-up
 
-- Archive after review. Next changes: `add-local-archive-picker` (native dialog, `POST /api/archives/pick`, local open view and route) and `add-remote-web-app` (server shell, scope from the authenticated user, store and upload).
+- Archive after review. Next changes: `add-local-archive-picker` (native dialog, `POST /api/archives/pick`, local open view and route) and `add-remote-web-app` (server shell, scope from the authenticated user, store and upload; must resolve the external-LOB open question of design.md first).
