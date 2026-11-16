@@ -13,7 +13,7 @@ package ch.admin.bar.siard2.jdbc;
 import ch.admin.bar.siard2.db2.datatype.Db2PredefinedType;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
-import ch.enterag.utils.jdbc.BaseResultSet;
+import ch.enterag.utils.jdbc.IndexInfoResultSet;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -149,25 +149,7 @@ public class Db2DatabaseMetaData
     @Override
     public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)
             throws SQLException {
-        return new Db2IndexInfo(super.getIndexInfo(catalog, schema, table, unique, approximate));
-    }
-
-    private static class Db2IndexInfo
-            extends BaseResultSet {
-        private final int _iType;
-
-        Db2IndexInfo(ResultSet rsWrapped) throws SQLException {
-            super(rsWrapped);
-            _iType = findColumn("TYPE");
-        }
-
-        @Override
-        public int getInt(int columnIndex) throws SQLException {
-            int iType = super.getInt(columnIndex);
-            if ((columnIndex == _iType) && (iType == DatabaseMetaData.tableIndexOther))
-                iType = DatabaseMetaData.tableIndexHashed;
-            return iType;
-        }
+        return new IndexInfoResultSet(super.getIndexInfo(catalog, schema, table, unique, approximate));
     }
 
 

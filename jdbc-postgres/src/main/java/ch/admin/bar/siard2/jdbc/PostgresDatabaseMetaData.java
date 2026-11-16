@@ -14,7 +14,7 @@ import ch.admin.bar.siard2.postgres.PostgresLiterals;
 import ch.admin.bar.siard2.postgres.PostgresType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
-import ch.enterag.utils.jdbc.BaseResultSet;
+import ch.enterag.utils.jdbc.IndexInfoResultSet;
 
 import java.sql.*;
 
@@ -97,25 +97,7 @@ public class PostgresDatabaseMetaData
     @Override
     public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)
             throws SQLException {
-        return new PostgresIndexInfo(super.getIndexInfo(catalog, schema, table, unique, approximate));
-    }
-
-    private static class PostgresIndexInfo
-            extends BaseResultSet {
-        private final int _iType;
-
-        PostgresIndexInfo(ResultSet rsWrapped) throws SQLException {
-            super(rsWrapped);
-            _iType = findColumn("TYPE");
-        }
-
-        @Override
-        public int getInt(int columnIndex) throws SQLException {
-            int iType = super.getInt(columnIndex);
-            if ((columnIndex == _iType) && (iType == DatabaseMetaData.tableIndexOther))
-                iType = DatabaseMetaData.tableIndexHashed;
-            return iType;
-        }
+        return new IndexInfoResultSet(super.getIndexInfo(catalog, schema, table, unique, approximate));
     }
 
     private String getTypeNamespace(String sPgType, String sPgNamespace) {
