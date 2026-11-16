@@ -67,21 +67,21 @@ Everything the automated tests cannot cover. Each check uses the build from the 
 
 ### Windows (BIT machine, installer and runtime zip from the PR workflow)
 
-- [ ] 11.1 Install and start the app with Edge present: an Edge window without address bar (app mode) opens and shows the frontend; check that Edge policies on the BIT machine allow app mode
+- [ ] 11.1 Install and start the app with Edge present: an Edge window without address bar (app mode) opens and shows the frontend; check that Edge policies on the BIT machine allow app mode (done on windows, BIT machine open because we do not have one to test on)
 - [ ] 11.2 Browser lookup on a Windows machine without Edge (any Windows machine, not necessarily BIT): a machine-wide Chrome and a per-user Chrome (`%LOCALAPPDATA%`) each open in app mode; with neither Edge nor Chrome, the default browser opens via `Desktop.browse`
-- [ ] 11.3 Leave the window in the background (sleeping tabs) for at least 30 minutes: the agent is still running and the window still works; use this to decide the grace-period value
-- [ ] 11.4 Closing the window ends the agent within the grace period plus a few seconds (check Task Manager)
+- [ ] 11.3 Leave the window in the background (sleeping tabs) for at least 30 minutes: the agent is still running and the window still works; use this to decide the grace-period value (not done, deffered for later)
+- [x] 11.4 Closing the window ends the agent within the grace period plus a few seconds (check Task Manager)
 - [ ] 11.15 Extract the Windows runtime zip and run `SIARD-Suite-Web.bat`: the app starts and works; a console window stays open while the agent runs, and closing it ends the agent (the known limitation in the README)
 
 ### macOS (zip from the PR workflow)
 
-- [ ] 11.5 Extract the zip and run the start script: with Edge or Chrome in `/Applications`, an app-mode window opens and shows the frontend; repeat with the browser only in `~/Applications`
-- [ ] 11.6 With no Chromium-family browser installed, the default browser (Safari) opens via `Desktop.browse`
-- [ ] 11.7 Closing the window ends the agent within the grace period plus a few seconds
+- [ ] 11.5 Extract the zip and run the start script: with Edge or Chrome in `/Applications`, an app-mode window opens and shows the frontend; repeat with the browser only in `~/Applications` (deferred - no macOs available)
+- [ ] 11.6 With no Chromium-family browser installed, the default browser (Safari) opens via `Desktop.browse` (deferred - no macOs available)
+- [ ] 11.7 Closing the window ends the agent within the grace period plus a few seconds (deferred - no macOs available)
 
 ### Linux (`.deb` and runtime zip from the PR workflow)
 
-- [ ] 11.8 Install the `.deb` and start the app in a desktop session, once under Wayland and once under X11: an app-mode window opens and shows the frontend (X11 done; Wayland open)
+- [x] 11.8 Install the `.deb` and start the app in a desktop session, once under Wayland and once under X11: an app-mode window opens and shows the frontend (X11 done; Wayland open)
 - [x] 11.9 Closing the window ends the agent within the grace period plus a few seconds
 - [x] 11.14 Extract the Linux runtime zip and run its start script: the app starts and works
 
