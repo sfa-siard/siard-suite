@@ -2,9 +2,7 @@ import java.nio.file.Files
 import java.util.*
 
 group = "ch.admin.bar"
-version = scmVersion.version
 val siardVersion = "2.2"
-val versionedProjectName = "${project.name}-${scmVersion.version}"
 val xercesSaxParserFactory = extra["xercesSaxParserFactory"] as String
 
 val generatedResourcesDir =
@@ -13,7 +11,6 @@ val generatedResourcesDir =
 plugins {
     application
     `java-library`
-    alias(libs.plugins.axion.release)
     alias(libs.plugins.lombok)
     alias(libs.plugins.beryx.runtime)
 }
