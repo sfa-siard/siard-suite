@@ -27,17 +27,23 @@ jobs:
       - name: Set artifact prefix
         run: |
           ref_name="${GITHUB_REF#refs/*/}"
-          echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
+          echo "NAME_TAG=$(echo "siard-suite-${ref_name//\//-}" | tr 'A-Z' 'a-z')" >> $GITHUB_ENV
       - name: Build zipped distributions (no bundled runtime)
         run: ./gradlew :siard-suite-app:asciidoctorPdf :siard-suite-app:distZip :siard-cmd:distZip :siard-suite-local-web-app:backend:siardwebDistZip --no-daemon
+      - name: Collect distribution files
+        shell: bash
+        run: |
+          shopt -s nullglob
+          norm() { basename "$1" | tr 'A-Z' 'a-z' | sed -E 's/-(linux|win|mac)(\.[a-z0-9]+)$/\2/' | tr '_' '-' | sed -E 's/([a-z])\.([0-9])/\1-\2/'; }
+          mkdir -p artifacts/dists
+          for f in siard-suite-app/build/distributions/*.zip siard-cmd/build/distributions/*.zip siard-suite-local-web-app/backend/build/distributions/*.zip; do
+            cp "$f" "artifacts/dists/$(norm "$f")"
+          done
       - name: Upload distributions
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-dists
-          path: |
-            siard-suite-app/build/distributions/*.zip
-            siard-cmd/build/distributions/*.zip
-            siard-suite-local-web-app/backend/build/distributions/*.zip
+          path: artifacts/dists/*
       - name: Upload user manual
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v6
@@ -64,33 +70,41 @@ jobs:
         shell: bash
         run: |
           ref_name="${GITHUB_REF#refs/*/}"
-          echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
+          echo "NAME_TAG=$(echo "siard-suite-${ref_name//\//-}" | tr 'A-Z' 'a-z')" >> $GITHUB_ENV
+          echo "ARTIFACT_OS=$(echo "$RUNNER_OS" | tr 'A-Z' 'a-z')" >> $GITHUB_ENV
       - name: Build runtime images and installers
         shell: bash
         run: ./gradlew :siard-suite-app:build -x test :siard-suite-app:runtimeZip :siard-suite-app:jpackage :siard-cmd:runtimeZip :siard-cmd:verifyRuntimeImage :siard-cmd:jpackage :siard-suite-local-web-app:backend:runtimeZip :siard-suite-local-web-app:backend:jpackage --no-daemon
+      - name: Collect artifacts
+        shell: bash
+        run: |
+          shopt -s nullglob
+          norm() { basename "$1" | tr 'A-Z' 'a-z' | sed -E 's/-(linux|win|mac)(\.[a-z0-9]+)$/\2/' | tr '_' '-' | sed -E 's/([a-z])\.([0-9])/\1-\2/'; }
+          mkdir -p artifacts/runtime artifacts/deb artifacts/msi
+          for f in siard-suite-app/build/image-zip/*.zip siard-cmd/build/image-zip/*.zip siard-suite-local-web-app/backend/build/image-zip/*.zip; do
+            cp "$f" "artifacts/runtime/$(norm "$f")"
+          done
+          for f in siard-suite-app/build/jpackage/*.{deb,msi} siard-cmd/build/installers/*.{deb,msi} siard-suite-local-web-app/backend/build/jpackage/*.{deb,msi}; do
+            case "$f" in
+              *.deb) d=deb ;;
+              *.msi) d=msi ;;
+            esac
+            cp "$f" "artifacts/$d/$(norm "$f")"
+          done
       - name: Upload runtime zips
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ env.NAME_TAG }}-runtime-${{ runner.os }}
-          path: |
-            siard-suite-app/build/image-zip/*.zip
-            siard-cmd/build/image-zip/*.zip
-            siard-suite-local-web-app/backend/build/image-zip/*.zip
+          name: ${{ env.NAME_TAG }}-runtime-${{ env.ARTIFACT_OS }}
+          path: artifacts/runtime/*
       - name: Upload DEB installers
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-linux-deb
-          path: |
-            siard-suite-app/build/jpackage/*.deb
-            siard-cmd/build/installers/*.deb
-            siard-suite-local-web-app/backend/build/jpackage/*.deb
+          path: artifacts/deb/*
       - name: Upload MSI installers
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ env.NAME_TAG }}-win-msi
-          path: |
-            siard-suite-app/build/jpackage/*.msi
-            siard-cmd/build/installers/*.msi
-            siard-suite-local-web-app/backend/build/jpackage/*.msi
+          path: artifacts/msi/*

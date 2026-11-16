@@ -6,6 +6,8 @@
   * Initial Version of `siard-suite-local-web-app` - an app based on web technologies that will replace the JavaFX based desktop app.
 * Fix:
   * Pin Github Workflows to `ubuntu-24.04` for now
+* Maintenance:
+  * Release artifacts are flattened and use consistent lowercase names: the per-OS archives now contain the installers and runtime zips directly (e.g. `siard-cli-2.2.172.msi`, `siard-suite-2.2.172-amd64.deb`) instead of the Gradle `build/` directory tree
 
 ## 2.2.171
 
