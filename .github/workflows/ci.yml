@@ -153,6 +153,6 @@ jobs:
         with:
           javafx: 'true'
       - name: SonarQube analysis
-        run: ./gradlew sonar -Djava.awt.headless=true -Dtestfx.headless=true
+        run: ./gradlew sonar --parellel -Djava.awt.headless=true -Dtestfx.headless=true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
