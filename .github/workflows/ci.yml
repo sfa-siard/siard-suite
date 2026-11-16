@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   compile:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -31,7 +31,7 @@ jobs:
 
   unit-tests:
     needs: compile
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -67,7 +67,7 @@ jobs:
 
   local-web-app:
     needs: compile
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
         with:
@@ -85,7 +85,7 @@ jobs:
 
   integration-tests:
     if: github.event_name != 'push' || github.ref == 'refs/heads/main'
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -144,7 +144,7 @@ jobs:
 
   sonar:
     if: github.event_name != 'push' || github.ref == 'refs/heads/main'
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
         with:
