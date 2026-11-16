@@ -200,8 +200,8 @@ The shared frontend package SHALL provide archive browse views that, given an `a
 
 #### Scenario: Archive no longer open
 - **GIVEN** a table is shown
-- **WHEN** a request is answered 404 with the "no longer open" problem
-- **THEN** the views show a message that the archive was closed and must be opened again
+- **WHEN** a request is answered 404
+- **THEN** the views show a message that the archive is not or no longer open and must be opened again
 - **AND** no stale rows remain visible
 
 #### Scenario: Session lost

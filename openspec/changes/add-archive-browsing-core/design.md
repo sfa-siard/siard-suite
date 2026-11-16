@@ -4,7 +4,7 @@
 
 See `proposal.md` (Why) and `restructure-into-siard-web` for the module layout: this change adds code to `siard-web/backend-core` (depends on `siard-api` and Quarkus only, never `siard-cmd`/JDBC) and `siard-web/frontend-shared` (source-only npm package, no shell). Facts about `siard-api` verified for this design:
 
-- `Archive.open(File)` takes a `java.io.File`, so an archive must exist as a file on disk. The implementation calls `new Zip64File(file)`, not the `(File, boolean readOnly)` constructor. Whether that opens the file read-write is **unverified** (spike S2).
+- `Archive.open(File)` takes a `java.io.File`, so an archive must exist as a file on disk. The implementation calls `new Zip64File(file)`, not the `(File, boolean readOnly)` constructor, and that opens the file in mode `rw` (`DiskFile(File)`), so a write-protected archive cannot be opened at all. A read-only open is therefore needed (archives on a server are typically write-protected originals). `Zip64File` and `DiskFile` already have a read-only mode; whether `ArchiveImpl` works through it (no write during open, `validate()`, reading or `close()`) is **unverified** (spike S2).
 - Rows are read through `Table.openTableRecords()` returning a forward-only `TableRecordDispenser` (`get()`, `skip(long)`, `getPosition()`, `close()`). There is no seek. The total comes from `MetaTable.getRows()`. The desktop app (`RowsOverviewForm.TableRecordDataSource`) opens a new dispenser and calls `skip(startIndex)` for every page.
 - `Search` (`find`, `findNext`, `getFoundRow`...) keeps its position inside the object, so it cannot serve independent clients.
 - `Table.sort(...)` mutates archive state; this change does not expose it.
@@ -52,7 +52,7 @@ See `proposal.md` (Why) and `restructure-into-siard-web` for the module layout: 
 
 ### D2: Limits and eviction
 
-Defaults (configurable): `siard.archives.max-per-scope=5`, `max-total=50`, `idle-timeout=PT30M`, `lock-timeout=PT30S`. Registration beyond a limit throws; it never evicts someone's archive that may be in use. Idle archives are closed by a scheduler (`quarkus-scheduler`, once per minute); `evictIdle()` is also callable directly so tests drive it with an injectable clock (pattern of the setup change's `MutableClock`). A new dependency on one Quarkus extension is the cost of releasing files without a periodic request. Every `acquire` updates `lastUsed`. A closed archive answers `404` with problem `type` `urn:siard:problem:archive-closed` so the frontend can tell "closed" from "bad index" (both are 404). Application shutdown closes everything via a `ShutdownEvent` observer.
+Defaults (configurable): `siard.archives.max-per-scope=5`, `max-total=50`, `idle-timeout=PT30M`, `lock-timeout=PT30S`. Registration beyond a limit throws; it never evicts someone's archive that may be in use. Idle archives are closed by a scheduler (`quarkus-scheduler`, once per minute); `evictIdle()` is also callable directly so tests drive it with an injectable clock (pattern of the setup change's `MutableClock`). A new dependency on one Quarkus extension is the cost of releasing files without a periodic request. Every `acquire` updates `lastUsed`. A closed archive is removed from the registry and answers exactly like an unknown id (`404`, same body), so a closed id does not tell another scope that it ever existed and the registry keeps no record of closed ids. The frontend treats a 404 as "not or no longer open" (bad indexes do not occur through the UI, which builds them from server responses). Application shutdown closes everything via a `ShutdownEvent` observer.
 
 *Alternative:* evict only lazily on registration. Idle archives would then hold file handles and memory for as long as no one registers again.
 
@@ -62,7 +62,7 @@ Defaults (configurable): `siard.archives.max-per-scope=5`, `max-total=50`, `idle
 
 ### D4: Forward paging with a retained cursor; no row index yet
 
-Each entry keeps at most 2 open `TableRecordDispenser`s (LRU per archive), each with its table and position. A page request with `offset` reuses the cursor if its position is `<= offset` (skipping the difference) and reopens it otherwise. Sequential paging (next/previous page by a user, the common case) costs at most `limit` record reads; jumping costs `O(offset)`. The registry exposes a counter of records read, which the "forward paging does not rescan" scenario asserts.
+Each entry keeps at most 2 open `TableRecordDispenser`s (LRU per archive), each with its table and position. A page request with `offset` reuses the cursor if its position is `<= offset` (skipping the difference) and reopens it otherwise. The next page costs at most `limit` record reads. The previous page and jumps reopen the cursor and cost `O(offset)`; the second cursor only helps when two positions alternate. The registry exposes a counter of records read, which the "forward paging does not rescan" scenario asserts.
 
 A jump on a table with millions of rows is slow and would hold the archive's lock meanwhile. Accepted for v1 and bounded by the lock timeout; the follow-up if it matters is a sparse position index (every N rows) built lazily per cursor, which does not change the API. S3 measures real numbers before the budget is trusted.
 
@@ -86,7 +86,7 @@ The content endpoint copies from the cell's input stream to the response without
 
 ### D9: Errors and `ProblemException`
 
-Add `ProblemException(status, detail, type?)` to the core: its `detail` is passed through to the RFC 9457 body and nothing else is (framework exception messages stay hidden, as before). All new client errors (`400` bad paging/search parameters, `404`, `429`, `503`) use it. Stable `type` URIs exist only where the frontend needs to branch (`archive-closed`); everything else keeps `about:blank`.
+Add `ProblemException(status, detail)` to the core: its `detail` is passed through to the RFC 9457 body and nothing else is (framework exception messages stay hidden, as before). All new client errors (`400` bad paging/search parameters, `404`, `429`, `503`) use it. All keep `type` `about:blank`; a stable `type` URI is added only when the frontend needs to branch on one.
 
 ### D10: OpenAPI for a library
 
@@ -106,10 +106,10 @@ One test per spec scenario (as in the setup change). Backend: `@QuarkusTest` wit
 
 ## Risks / Trade-offs
 
-- **[`ArchiveImpl`/`Zip64File` is not thread-safe, or opens read-write]** → S1/S2 before anything else; D3's lock is the safe default, and a read-write open is fixed with a minimal read-only path in `siard-api` if S2 shows it is needed.
+- **[`ArchiveImpl`/`Zip64File` is not thread-safe, or does not work through a read-only handle]** → S1/S2 before anything else; D3's lock is the safe default. The read-only open path in `siard-api` is expected to be minimal (pass the existing read-only mode through); if S2 shows `ArchiveImpl` writes while reading, the extent of the fix is decided from S2's findings before implementation continues.
 - **[Jump to a late row of a large table is slow]** → bounded by the lock timeout; the sparse index of D4 is a compatible follow-up. Measured in S3 so the decision rests on numbers.
 - **[Memory per open archive]** → `MetaData` is loaded as a JAXB tree on open and `validate()` runs once; the limits (5 per scope, 50 total) are guesses until S3 measures the largest fixture. Limits are configuration for that reason.
-- **[Eviction closes an archive under a reader]** → eviction takes the archive lock; a request in flight finishes first, the next one gets `archive-closed`.
+- **[Eviction closes an archive under a reader]** → eviction takes the archive lock; a request in flight finishes first, the next one gets `404`.
 - **[Hidden exposure through LOB content]** → D7 headers, plus a scenario with `<script>` content.
 - **[Scope seam is untested against a real second app]** → tested with two scopes in `@QuarkusTest`; the remote app's change is its real consumer and may extend the resolver contract, which is why it is one small interface.
 - **[Core description generation for a library is unproven]** → D10 and S4; fallback named.
@@ -118,8 +118,8 @@ One test per spec scenario (as in the setup change). Backend: `@QuarkusTest` wit
 ## Spikes (done first, results recorded in this file)
 
 - **S1 thread-safety:** run concurrent page requests against one `ArchiveImpl` without the lock and see whether results differ; decides whether D3 may be relaxed to a read/write split.
-- **S2 read-only open:** open `sample.siard` from a read-only file and directory; check `DiskFile`'s mode and whether the archive file is touched (size, mtime, sidecar files). If it needs write access, add `Archive.open(File, boolean readOnly)`-style support in `siard-api` with minimal edits to the legacy code.
-- **S3 cost:** on `sfdbsakila.siard` measure open time, heap per open archive, cost of `skip(n)` at 0, 5000 and 16000, and LOB streaming from the zip (`Value.getInputStream()` vs `getBytes()`).
+- **S2 read-only open:** open the fixtures (`sample.siard`, `sfdbsakila.siard`, the SIARD 2.1 fixture `sfdbsakila_2_1.siard`) through a read-only `Zip64File` from a write-protected file in a write-protected directory; read all metadata, every row and every LOB, close the archive, and check that the results equal a normal read-write open and that the file is untouched (size, mtime, no new files). If it works, add `Archive.open(File, boolean readOnly)`-style support in `siard-api` with minimal edits to the legacy code; if not, record what writes and decide the fix from that.
+- **S3 cost:** on `sfdbsakila.siard` measure open time, heap per open archive, cost of `skip(n)` at 0, 5000 and 16000, a previous-page request at offset 16000 extrapolated linearly to 1M and 10M rows and compared with `lock-timeout` (if it does not stay well below, the sparse position index of D4 is raised for a decision before 3.2 is implemented), and LOB streaming from the zip (`Value.getInputStream()` vs `getBytes()`).
 - **S4 build:** prove Jandex/`beans.xml` discovery of core resources, that `@QuarkusTest` runs in the library module, that resource methods run on worker threads, that `quarkus-scheduler` works from the core, and that the SmallRye Gradle plugin produces the description (D10).
 
 ## Migration Plan

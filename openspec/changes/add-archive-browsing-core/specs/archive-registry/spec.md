@@ -14,6 +14,7 @@ An app SHALL register an archive file for a scope and receive an `archiveId` of 
 - **GIVEN** the fixture `sample.siard` and a scope S
 - **WHEN** an app registers the file for S
 - **THEN** it receives an `archiveId` of at least 22 characters matching `[A-Za-z0-9_-]+`
+- **AND** the id does not contain the file name
 - **AND** `GET /api/archives/{archiveId}` for scope S returns 200
 
 #### Scenario: Registering a file that is not a valid archive
@@ -23,11 +24,11 @@ An app SHALL register an archive file for a scope and receive an `archiveId` of 
 - **AND** the registry holds no entry for any of them
 - **AND** the release callback given at registration is invoked exactly once per failed registration
 
-#### Scenario: Ids are not derivable
-- **GIVEN** 1000 registrations of the same file
-- **WHEN** the returned ids are compared
+#### Scenario: Generated ids are unique
+- **GIVEN** the archive id generator
+- **WHEN** 1000 ids are generated
 - **THEN** all 1000 ids are distinct
-- **AND** no id contains the file name
+- **AND** each id is 22 characters long and matches `[A-Za-z0-9_-]+`
 
 ### Requirement: Archives are isolated by scope
 
@@ -79,7 +80,7 @@ The registry SHALL allow at most 5 open archives per scope and 50 in total by de
 
 ### Requirement: Idle archives are closed
 
-An archive that has not been addressed for the idle timeout (default 30 minutes, configurable) SHALL be closed and its release callback invoked exactly once. Every successful request on the archive restarts the timeout. A request for a closed archive SHALL be answered `404` with problem details stating that the archive is no longer open.
+An archive that has not been addressed for the idle timeout (default 30 minutes, configurable) SHALL be closed and its release callback invoked exactly once. Every successful request on the archive restarts the timeout. A request for a closed archive SHALL be answered exactly like a request for an unknown id: `404` with identical problem details.
 
 #### Scenario: Activity keeps the archive open
 - **GIVEN** an archive and a controllable clock with a 30 minute timeout
@@ -92,6 +93,7 @@ An archive that has not been addressed for the idle timeout (default 30 minutes,
 - **WHEN** the eviction runs
 - **THEN** the archive is closed and the release callback has been invoked exactly once
 - **AND** `GET /api/archives/{archiveId}` returns 404 with content type `application/problem+json`
+- **AND** the response body is identical to the one for an id that was never issued
 
 #### Scenario: Released archive leaves no readable data
 - **GIVEN** an archive that was evicted
