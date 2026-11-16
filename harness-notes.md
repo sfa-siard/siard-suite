@@ -85,3 +85,11 @@ Harness gap: AGENTS.local.md says "never implement a feature without a spec scen
 - Auto-fixed: installer rename now fail-loud (arch HIGH); icons moved out of jar resources (arch MEDIUM); absolute jpackage paths (arch MEDIUM); setup-gradle@v4 (QM MUSS M1); test-credential clarification (QM MUSS M2); verifyRuntimeImage + installDist guard tasks (test gap)
 - Escalated: none
 - Top 3 harness suggestions: (1) strict-uploads implies per-OS conditioning convention; (2) name concrete verification per scenario; (3) repo-wide action SHA pinning policy
+
+## Cycle: add-local-web-app-setup — section 10 (2026-11-11)
+
+### Agent Decisions
+- Decided: `local-web-app` CI jobs use plain `jdk` (not `jdk+fx`) because the web app deliberately ships a runtime without JavaFX and its tests do not need it — matching the packaging intent in design D2/D14.
+- Decided: `actions/cache@v4` for the Playwright browser cache; v6 does not exist for the cache action, while task 10.2's "@v6" applies to checkout/upload-artifact which the repo already pins at v6.
+- Decided: one Windows upload step globs both `*.msi` and `*.exe` instead of two strict steps — jpackage produces whichever installer type is default on the runner, and two `if-no-files-found: error` steps would fail the run on the type that was not built (same reasoning as the siard-cli cycle's strict-uploads note).
+Harness gap: none.

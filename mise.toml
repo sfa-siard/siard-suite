@@ -2,4 +2,5 @@
 java = "zulu-javafx-21.32.17"
 just = "latest"
 pnpm = "latest"
-node = "latest"
+# keep in sync with siard-suite-local-web-app/frontend/.nvmrc
+node = "26.13.0"

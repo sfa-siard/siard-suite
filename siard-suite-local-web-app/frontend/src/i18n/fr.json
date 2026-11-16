@@ -1,0 +1,25 @@
+{
+  "welcome": {
+    "text": "Bienvenue à la SIARD Suite!"
+  },
+  "menu": {
+    "item": {
+      "info": "Info"
+    }
+  },
+  "info": {
+    "dialog": {
+      "title": "SIARD Suite {{arg0}}",
+      "text": "SIARD Suite permet de télécharger des bases de données relationnelles dans le format d'archivage indépendant du logiciel SIARD Format 2.2, d'éditer les métadonnées d'une telle archive de base de données et de les télécharger dans un système de base de données."
+    }
+  },
+  "launchFailed": {
+    "text": "Ce lien de démarrage a expiré ou a déjà été utilisé. Veuillez redémarrer SIARD Suite."
+  },
+  "session": {
+    "missing": "Cette fenêtre n'est plus connectée à SIARD Suite. Veuillez redémarrer SIARD Suite."
+  },
+  "about": {
+    "loadError": "Les informations n'ont pas pu être chargées."
+  }
+}

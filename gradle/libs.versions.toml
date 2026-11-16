@@ -8,6 +8,8 @@ asciidoctor = "4.0.5"
 plantuml = "1.6.0"
 dependency-analysis = "3.6.1"
 sonarqube = "7.5.0.8588"
+quarkus = "3.40.1"
+node-gradle = "7.1.0"
 
 # Core Libraries
 antlr = "4.13.2"
@@ -57,6 +59,9 @@ bouncycastle = "1.84"
 picocli = "4.7.7"
 
 [libraries]
+# Quarkus
+quarkus-bom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
+
 # ANTLR
 antlr4-runtime = { module = "org.antlr:antlr4-runtime", version.ref = "antlr" }
 antlr4 = { module = "org.antlr:antlr4", version.ref = "antlr" }
@@ -162,3 +167,5 @@ asciidoctor-pdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor" 
 plantuml = { id = "com.cosminpolifronie.gradle.plantuml", version.ref = "plantuml" }
 dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependency-analysis" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+quarkus = { id = "io.quarkus", version.ref = "quarkus" }
+node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }

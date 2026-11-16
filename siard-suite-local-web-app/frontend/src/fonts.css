@@ -1,0 +1,16 @@
+/* Roboto from the desktop app, bundled so the app works without internet access */
+@font-face {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("./assets/fonts/Roboto-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("./assets/fonts/Roboto-Medium.ttf") format("truetype");
+}

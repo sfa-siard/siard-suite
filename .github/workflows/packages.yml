@@ -1,0 +1,96 @@
+# Builds the distributable packages:
+# - every push to main / workflow_dispatch: zipped distributions without a bundled runtime
+# - every v* tag (or manual dispatch): additionally the runtime-bundled zips for Windows and
+#   Linux (no macOS) and the .deb/.msi installers
+name: Packages
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  workflow_dispatch:
+
+env:
+  TZ: Europe/Zurich
+
+jobs:
+  dist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # the axion version plugin needs the tags to compute the version
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-java-gradle
+        with:
+          javafx: 'true'
+      - name: Set artifact prefix
+        run: |
+          ref_name="${GITHUB_REF#refs/*/}"
+          echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
+      - name: Build zipped distributions (no bundled runtime)
+        run: ./gradlew :siard-suite-app:asciidoctorPdf :siard-suite-app:distZip :siard-cmd:distZip :siard-suite-local-web-app:backend:distZip --no-daemon
+      - name: Upload distributions
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.NAME_TAG }}-dists
+          path: |
+            siard-suite-app/build/distributions/*.zip
+            siard-cmd/build/distributions/*.zip
+            siard-suite-local-web-app/backend/build/distributions/*.zip
+      - name: Upload user manual
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.NAME_TAG }}-user-manual.pdf
+          path: siard-suite-app/build/docs/pdf/en/user-manual.pdf
+
+  packages:
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    name: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-java-gradle
+        with:
+          javafx: 'true'
+      - name: Set artifact prefix
+        shell: bash
+        run: |
+          ref_name="${GITHUB_REF#refs/*/}"
+          echo "NAME_TAG=SIARD-Suite-${ref_name//\//-}" >> $GITHUB_ENV
+      - name: Build runtime images and installers
+        shell: bash
+        run: ./gradlew :siard-suite-app:build -x test :siard-suite-app:runtimeZip :siard-suite-app:jpackage :siard-cmd:runtimeZip :siard-cmd:verifyRuntimeImage :siard-cmd:jpackage :siard-suite-local-web-app:backend:runtimeZip :siard-suite-local-web-app:backend:jpackage --no-daemon
+      - name: Upload runtime zips
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.NAME_TAG }}-runtime-${{ runner.os }}
+          path: |
+            siard-suite-app/build/image-zip/*.zip
+            siard-cmd/build/image-zip/*.zip
+            siard-suite-local-web-app/backend/build/image-zip/*.zip
+      - name: Upload DEB installers
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.NAME_TAG }}-linux-deb
+          path: |
+            siard-suite-app/build/jpackage/*.deb
+            siard-cmd/build/installers/*.deb
+            siard-suite-local-web-app/backend/build/jpackage/*.deb
+      - name: Upload MSI installers
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.NAME_TAG }}-win-msi
+          path: |
+            siard-suite-app/build/jpackage/*.msi
+            siard-cmd/build/installers/*.msi
+            siard-suite-local-web-app/backend/build/jpackage/*.msi
