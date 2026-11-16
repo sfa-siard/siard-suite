@@ -15,4 +15,4 @@ runs:
         java-version: '21'
         distribution: 'zulu'
         java-package: ${{ inputs.javafx == 'true' && 'jdk+fx' || 'jdk' }}
-    - uses: gradle/actions/setup-gradle@v4
+    - uses: gradle/actions/setup-gradle@v5
