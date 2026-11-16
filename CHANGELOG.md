@@ -2,6 +2,11 @@
 
 ## Next Release
 
+* Feature:
+  * Initial Version of `siard-suite-local-web-app` - an app based on web technologies that will replace the JavaFX based desktop app.
+* Fix:
+  * Pin Github Workflows to `ubuntu-24.04` for now
+
 ## 2.2.171
 
 * Fix: 
