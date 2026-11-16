@@ -11,6 +11,12 @@ Created    : 09.08.2019, Hartwig Thomas, Enter AG, Rüti ZH, Switzerland
 package ch.admin.bar.siard2.jdbc;
 
 import ch.admin.bar.siard2.postgres.PostgresType;
+import ch.admin.bar.siard2.postgres.PostgresObject;
+import org.postgresql.util.PGInterval;
+import org.postgresql.util.PGobject;
+import javax.xml.datatype.Duration;
+import java.math.BigInteger;
+import java.text.ParseException;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.SU;
 import org.postgresql.PGConnection;
@@ -30,9 +36,10 @@ import java.util.Calendar;
 public class PostgresPreparedStatement
         extends PostgresStatement
         implements PreparedStatement {
-    private static final int iBUFSIZ = 65536;
+    private static final int iBUFSIZ = 256 * 1024;
     /** wrapped prepared statement */
     private PreparedStatement _pstmtWrapped = null;
+    private ParameterMetaData parameterMetadata;
 
 
     /** constructor
@@ -56,7 +63,8 @@ public class PostgresPreparedStatement
     /** {@inheritDoc} */
     @Override
     public ParameterMetaData getParameterMetaData() throws SQLException {
-        return _pstmtWrapped.getParameterMetaData();
+        if (parameterMetadata == null) parameterMetadata = _pstmtWrapped.getParameterMetaData();
+        return parameterMetadata;
     }
 
 
@@ -357,7 +365,7 @@ public class PostgresPreparedStatement
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader)
             throws SQLException {
-        ParameterMetaData pmd = _pstmtWrapped.getParameterMetaData();
+        ParameterMetaData pmd = getParameterMetaData();
         if (!PostgresType.CLOB.getKeyword()
                               .equals(pmd.getParameterTypeName(parameterIndex)))
             _pstmtWrapped.setCharacterStream(parameterIndex, reader);
@@ -378,7 +386,7 @@ public class PostgresPreparedStatement
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader,
                                    long length) throws SQLException {
-        ParameterMetaData pmd = _pstmtWrapped.getParameterMetaData();
+        ParameterMetaData pmd = getParameterMetaData();
         if (!PostgresType.CLOB.getKeyword()
                               .equals(pmd.getParameterTypeName(parameterIndex)))
             _pstmtWrapped.setCharacterStream(parameterIndex, reader);
@@ -495,7 +503,7 @@ public class PostgresPreparedStatement
     @Override
     public void setBinaryStream(int parameterIndex, InputStream x)
             throws SQLException {
-        ParameterMetaData pmd = _pstmtWrapped.getParameterMetaData();
+        ParameterMetaData pmd = getParameterMetaData();
         if (!PostgresType.BLOB.getKeyword()
                               .equals(pmd.getParameterTypeName(parameterIndex)))
             _pstmtWrapped.setBinaryStream(parameterIndex, x);
@@ -516,14 +524,29 @@ public class PostgresPreparedStatement
     @Override
     public void setBinaryStream(int parameterIndex, InputStream x,
                                 long length) throws SQLException {
-        ParameterMetaData pmd = _pstmtWrapped.getParameterMetaData();
+        ParameterMetaData pmd = getParameterMetaData();
         if (!PostgresType.BLOB.getKeyword()
                               .equals(pmd.getParameterTypeName(parameterIndex)))
-            _pstmtWrapped.setBinaryStream(parameterIndex, x);
+            _pstmtWrapped.setBinaryStream(parameterIndex, x, length);
         else {
             long lLength = createBlob(parameterIndex, x);
             if (length != lLength)
                 throw new SQLException("Invalid length in setBinaryStream of PreparedStatement!");
+        }
+    }
+
+
+    /** Binds a binary stream using a caller-resolved target type. INSERT parameter
+     * metadata cannot always name pgjdbc parameter types, so restore passes the
+     * column type resolved once per table instead of querying it per cell. */
+    public void setBinaryStream(int parameterIndex, InputStream x, long length,
+                                int targetSqlType) throws SQLException {
+        if (targetSqlType == Types.BLOB || targetSqlType == Types.DATALINK) {
+            long lLength = createBlob(parameterIndex, x);
+            if (length != lLength)
+                throw new SQLException("Invalid length in setBinaryStream of PreparedStatement!");
+        } else {
+            _pstmtWrapped.setBinaryStream(parameterIndex, x, length);
         }
     }
 
@@ -540,7 +563,13 @@ public class PostgresPreparedStatement
     public void setObject(int parameterIndex, Object x)
             throws SQLException {
         /* TODO: ... if BLOB/CLOB */
-        _pstmtWrapped.setObject(parameterIndex, x);
+        int type = x instanceof PostgresClob ? Types.CLOB
+                : x instanceof PostgresBlob ? Types.BLOB
+                : x instanceof PostgresArray ? Types.ARRAY
+                : x instanceof Duration ? Types.OTHER
+                : x instanceof Struct ? Types.STRUCT
+                : getParameterMetaData().getParameterType(parameterIndex);
+        setObject(parameterIndex, x, type);
     }
 
 
@@ -548,8 +577,60 @@ public class PostgresPreparedStatement
     @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType)
             throws SQLException {
+        setObject(parameterIndex, x, targetSqlType, null);
+    }
+
+
+    /** Binds an object using a caller-resolved column type name. INSERT parameter
+     * metadata cannot always name pgjdbc parameter types, so restore passes the
+     * type resolved once per table instead of querying it per cell. */
+    public void setObject(int parameterIndex, Object x, int targetSqlType, String typeName)
+            throws SQLException {
         /* TODO: ... if BLOB/CLOB */
-        _pstmtWrapped.setObject(parameterIndex, x, targetSqlType);
+        if (x == null) {
+            _pstmtWrapped.setNull(parameterIndex, Types.NULL);
+            return;
+        }
+        switch (targetSqlType) {
+            case Types.CLOB, Types.NCLOB -> _pstmtWrapped.setLong(parameterIndex, ((PostgresClob) x).getOid());
+            case Types.BLOB, Types.DATALINK -> _pstmtWrapped.setLong(parameterIndex, ((PostgresBlob) x).getOid());
+            case Types.BINARY, Types.VARBINARY -> _pstmtWrapped.setBytes(parameterIndex, (byte[]) x);
+            case Types.SMALLINT, Types.INTEGER, Types.BIGINT -> {
+                if (x instanceof Short value) _pstmtWrapped.setShort(parameterIndex, value);
+                else if (x instanceof Integer value) _pstmtWrapped.setInt(parameterIndex, value);
+                else if (x instanceof Long value) _pstmtWrapped.setLong(parameterIndex, value);
+                else if (x instanceof BigInteger value) _pstmtWrapped.setBigDecimal(parameterIndex, new BigDecimal(value));
+                else if (x instanceof BigDecimal value) _pstmtWrapped.setBigDecimal(parameterIndex, value);
+
+            }
+            case Types.DECIMAL, Types.NUMERIC -> _pstmtWrapped.setBigDecimal(parameterIndex, (BigDecimal) x);
+            case Types.TIME -> _pstmtWrapped.setTime(parameterIndex, (Time) x);
+            case Types.VARCHAR -> _pstmtWrapped.setString(parameterIndex, (String) x);
+            case Types.OTHER -> {
+                Duration value = (Duration) x;
+                int sign = value.getSign();
+                double seconds = sign * (value.getTimeInMillis(new java.util.Date(0)) % 60000) / 1000.0;
+                _pstmtWrapped.setObject(parameterIndex, new PGInterval(sign * value.getYears(),
+                        sign * value.getMonths(), sign * value.getDays(), sign * value.getHours(),
+                        sign * value.getMinutes(), seconds));
+            }
+            case Types.ARRAY -> _pstmtWrapped.setArray(parameterIndex, ((PostgresArray) x).unwrap(Array.class));
+            case Types.STRUCT, Types.DISTINCT -> {
+                String resolvedTypeName = targetSqlType == Types.STRUCT ? ((Struct) x).getSQLTypeName()
+                        : typeName != null ? typeName : getParameterMetaData().getParameterTypeName(parameterIndex);
+                try {
+                    PostgresObject value = new PostgresObject(x, targetSqlType, resolvedTypeName,
+                            (PostgresConnection) _conn, "");
+                    PGobject object = new PGobject();
+                    object.setType(resolvedTypeName);
+                    object.setValue(value.getValue());
+                    _pstmtWrapped.setObject(parameterIndex, object);
+                } catch (ParseException exception) {
+                    throw new SQLException("PostgresObject could not be constructed", exception);
+                }
+            }
+            default -> _pstmtWrapped.setObject(parameterIndex, x);
+        }
     }
 
 
@@ -558,7 +639,7 @@ public class PostgresPreparedStatement
     public void setObject(int parameterIndex, Object x, int targetSqlType,
                           int scaleOrLength) throws SQLException {
         /* TODO: ... if BLOB/CLOB */
-        _pstmtWrapped.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
+        setObject(parameterIndex, x, targetSqlType);
     }
 
 }
