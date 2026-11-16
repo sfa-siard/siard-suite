@@ -24,7 +24,7 @@ export function required(name: string): string {
   const value = process.env[name];
   if (!value) {
     throw new Error(
-      `${name} is not set; run the test via ./gradlew :siard-suite-local-web-app:e2eTest`,
+      `${name} is not set; run the test via ./gradlew :siard-web:local:e2eTest`,
     );
   }
   return value;

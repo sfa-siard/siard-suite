@@ -27,7 +27,7 @@ It is a per-launch local agent plus a React frontend, packaged as a single insta
   from it; `openApiCheck` (part of `check`) fails when it drifts.
 
 The decisions behind this are documented in
-[`../openspec/changes/add-local-web-app-setup/design.md`](../openspec/changes/add-local-web-app-setup/design.md).
+[`../../openspec/changes/archive/2026-11-16-add-local-web-app-setup/design.md`](../../openspec/changes/archive/2026-11-16-add-local-web-app-setup/design.md).
 
 ## Development
 

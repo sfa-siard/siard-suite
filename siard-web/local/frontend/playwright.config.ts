@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 // The smoke test starts the packaged agent itself (e2e/agent.ts); run it through
-// ./gradlew :siard-suite-local-web-app:e2eTest, which builds the agent and passes its location.
+// ./gradlew :siard-web:local:e2eTest, which builds the agent and passes its location.
 export default defineConfig({
   testDir: "e2e",
   // one agent process per test; the smoke test is a single sequential flow

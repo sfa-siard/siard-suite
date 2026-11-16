@@ -48,7 +48,7 @@ dependencies {
     }
     implementation(project(":siard-api"))
     // the built frontend, served from META-INF/resources
-    implementation(project(":siard-suite-local-web-app:frontend"))
+    implementation(project(":siard-web:local:frontend"))
 
     // siard-api uses javax JAXB internals (com.sun.xml.bind); the Quarkus BOM would
     // otherwise align the glassfish JAXB artifacts to the jakarta-based 4.x line
@@ -102,7 +102,7 @@ val openApiCheck = tasks.register("openApiCheck") {
         if (!committed.isFile || normalized(generated) != normalized(committed)) {
             throw GradleException(
                 "The API changed: ${committed.canonicalPath} is out of date. Run " +
-                    "./gradlew :siard-suite-local-web-app:backend:openApiUpdate, then commit openapi.yaml."
+                    "./gradlew :siard-web:local:backend:openApiUpdate, then commit openapi.yaml."
             )
         }
     }

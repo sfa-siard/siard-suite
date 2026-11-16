@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SiardApiIntegrationTest {
 
     private static final Path SAMPLE_ARCHIVE =
-            Path.of("../../siard-api/src/test/resources/testfiles/sample.siard").toAbsolutePath().normalize();
+            Path.of("../../../siard-api/src/test/resources/testfiles/sample.siard").toAbsolutePath().normalize();
 
     @Test
     void opensSiardArchiveWithItsMetaData() throws Exception {

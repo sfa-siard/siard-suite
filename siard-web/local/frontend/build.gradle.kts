@@ -71,9 +71,9 @@ val playwrightInstall = tasks.register<NpxTask>("playwrightInstall") {
 tasks.register<NpmTask>("e2eTest") {
     description = "Runs the Playwright smoke test against the packaged agent."
     group = "verification"
-    dependsOn(playwrightInstall, ":siard-suite-local-web-app:backend:quarkusBuild")
+    dependsOn(playwrightInstall, ":siard-web:local:backend:quarkusBuild")
     args.set(listOf("run", "e2e"))
-    val backend = project(":siard-suite-local-web-app:backend")
+    val backend = project(":siard-web:local:backend")
     environment.putAll(mapOf(
         "E2E_JAVA" to File(System.getProperty("java.home"), "bin/java").path,
         "E2E_AGENT_JAR" to backend.layout.buildDirectory.file("quarkus-app/quarkus-run.jar").get().asFile.path,

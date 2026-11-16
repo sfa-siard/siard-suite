@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  *
  * <pre>
  * java scripts/ConvertMessages.java \
- *     ../../siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/i18n src/i18n \
+ *     ../../../siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/i18n src/i18n \
  *     welcome.text menu.item.info info.dialog.title info.dialog.text
  * </pre>
  *

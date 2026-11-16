@@ -4,9 +4,11 @@ Precondition: `add-local-web-app-setup` is archived (design R10). Test scope as 
 
 ## 1. Baseline and pure move
 
-- [ ] 1.1 Record the baseline on the pre-move tree: number of executed backend tests (`:siard-suite-local-web-app:backend:test` and `quarkusIntTest`), frontend tests and the Playwright test, and a copy of `openapi.yaml`; verify the numbers are written into the PR description
-- [ ] 1.2 `git mv siard-suite-local-web-app siard-web/local` in a commit with no content changes, then update `settings.gradle.kts` to `siard-web:local:backend` / `siard-web:local:frontend` and fix only the paths needed for the build (`../openapi.yaml` references, `.nvmrc`, README links); verify `./gradlew projects` lists the new paths and no `:siard-suite-local-web-app` project
-- [ ] 1.3 Verify `./gradlew :siard-web:local:check` and `:siard-web:local:e2eTest` pass with the baseline test counts and that `openApiCheck` passes with a byte-identical `openapi.yaml`
+- [x] 1.1 Record the baseline on the pre-move tree: number of executed backend tests (`:siard-suite-local-web-app:backend:test` and `quarkusIntTest`), frontend tests and the Playwright test, and a copy of `openapi.yaml`; verify the numbers are recorded below
+  - Baseline (commit `8b22cf8a`): backend `test` 34; `quarkusIntTest` 12 (1 skipped: `PackagedAgentIT.notReachableFromOtherNetworkInterfaces`, no non-loopback IPv4 address in the sandboxed build environment); frontend 9 tests in 4 files; Playwright 1. `openapi.yaml` sha256 `1bbc212eff454b71d3db201d53a712b68ae687054747e52a95957cf2421ac7c8` (the file at `8b22cf8a` is the reference copy)
+- [x] 1.2 `git mv siard-suite-local-web-app siard-web/local` in a commit with no content changes, then update `settings.gradle.kts` to `siard-web:local:backend` / `siard-web:local:frontend` and fix only the paths needed for the build (`../openapi.yaml` references, `.nvmrc`, README links); verify `./gradlew projects` lists the new paths and no `:siard-suite-local-web-app` project
+- [x] 1.3 Verify `./gradlew :siard-web:local:check` and `:siard-web:local:e2eTest` pass with the baseline test counts and that `openApiCheck` passes with a byte-identical `openapi.yaml`
+  - After the move: backend `test` 34; `quarkusIntTest` 12 (same test skipped); frontend 9 tests in 4 files; Playwright 1; `openApiCheck` passes and `openapi.yaml` has the same sha256
 
 ## 2. Backend core
 
