@@ -30,8 +30,12 @@ rules:
     - >-
       Every GIVEN/WHEN/THEN must be measurable: write "returns 201", not "the
       system works correctly".
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  tasks:
+    - >-
+      A verification step that needs a remote run (CI, workflow_dispatch, a manual
+      check on another OS) is written as a separate user step that names the exact
+      command and what to check. The agent does not mark it done without the
+      user's report.
 
 # Per-operation guidance (optional)
 # Guidance for how apply and archive should be conducted.
@@ -50,6 +54,10 @@ operations:
         placement, reuse vs. new helper, naming), recording each with a one-line
         reason in design.md (create it if missing). Ask only about uncovered behavior, public API or
         schema changes, security, or anything hard to reverse.
+      - >-
+        Before applying a task, check that every file path and Gradle task it
+        names exists. If one was renamed or removed meanwhile, update the change's
+        artifacts first and say so.
       - >-
         When all tasks are complete, run the openspec-verify-change skill on this
         change and fix any CRITICAL issues before reporting done.
