@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.localwebapp.web;
 
+import ch.admin.bar.siardsuite.webcore.error.ProblemDetail;
 import ch.admin.bar.siardsuite.localwebapp.agent.AgentPort;
 import ch.admin.bar.siardsuite.localwebapp.agent.LaunchCredentials;
 import io.vertx.core.http.Cookie;

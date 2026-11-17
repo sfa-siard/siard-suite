@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.localwebapp.web;
 
+import ch.admin.bar.siardsuite.webcore.error.ProblemDetail;
 import ch.admin.bar.siardsuite.localwebapp.support.Sessions;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

@@ -10,15 +10,10 @@ base {
     archivesName.set("siard-suite-local-web-app-backend")
 }
 
-val xercesSaxParserFactory = extra["xercesSaxParserFactory"] as String
-
-// JVM flags siard-api needs (design D2), for tests, the launcher and the packaged runtime
-val siardJvmArgs = listOf(
-    xercesSaxParserFactory,
-    "--add-opens=java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED",
-    "--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax=ALL-UNNAMED",
-    "--add-opens=java.base/java.lang=ALL-UNNAMED"
-)
+// JVM flags siard-api needs (design D2), for tests, the launcher and the packaged runtime; defined
+// once in siard-web/build.gradle.kts for all web modules
+@Suppress("UNCHECKED_CAST")
+val siardJvmArgs = extra["siardApiJvmArgs"] as List<String>
 
 // differs from the desktop app's "SIARD-Suite" so both can be installed side by side
 val appName = "SIARD-Suite-Web"
@@ -46,12 +41,14 @@ dependencies {
     implementation(project(":siard-cmd")) {
         exclude(group = "ch.qos.logback")
     }
-    implementation(project(":siard-api"))
+    // shared backend core (design R2); brings siard-api and its JAXB/activation pins as api
+    implementation(project(":siard-web:backend-core"))
     // the built frontend, served from META-INF/resources
     implementation(project(":siard-web:local:frontend"))
 
     // siard-api uses javax JAXB internals (com.sun.xml.bind); the Quarkus BOM would
-    // otherwise align the glassfish JAXB artifacts to the jakarta-based 4.x line
+    // otherwise align the glassfish JAXB artifacts to the jakarta-based 4.x line. The core declares
+    // the same pins, but transitive pins do not win against the BOM here (restructure design R2).
     implementation("org.glassfish.jaxb:jaxb-runtime") { version { strictly("2.3.9") } }
     implementation("org.glassfish.jaxb:jaxb-core") { version { strictly("2.3.0.1") } }
     implementation("org.glassfish.jaxb:txw2") { version { strictly("2.3.9") } }

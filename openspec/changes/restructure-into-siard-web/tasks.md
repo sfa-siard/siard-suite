@@ -12,10 +12,10 @@ Precondition: `add-local-web-app-setup` is archived (design R10). Test scope as 
 
 ## 2. Backend core
 
-- [ ] 2.1 Create `siard-web/backend-core` (`java-library`, `api` on `siard-api`, the JAXB/activation `strictly()` pins and Quarkus REST/Jackson/OpenAPI, empty `META-INF/beans.xml`) and make the local backend depend on it; before moving code, prove with a throw-away resource that CDI beans and a JAX-RS resource in the core are active in the local app and appear in the generated OpenAPI, and record the result in design R4 (fall back to `quarkus.index-dependency` if not)
-- [ ] 2.2 Move `ProblemDetail` and `ProblemExceptionMapper` into the core (new package `ch.admin.bar.siardsuite.webcore.error`) and move their existing tests (`ErrorResponseTest`); verify `:siard-web:backend-core:test` and the local app's error-format scenarios pass
-- [ ] 2.3 Add `verifyCoreBoundary` (R3) to the core's `check`, the empty-`DriverManager` test and the no-reference-to-`localwebapp` test; verify each of the three boundary scenarios by temporarily adding `siard-cmd` to the core and confirming `check` fails with the dependency named, then removing it
-- [ ] 2.4 Define the `siard-api` JVM flags once in the root `extra` and apply them in the core's tests and the local backend; verify `SiardApiIntegrationTest` still passes
+- [x] 2.1 Create `siard-web/backend-core` (`java-library`, `api` on `siard-api`, the JAXB/activation `strictly()` pins and Quarkus REST/Jackson/OpenAPI, empty `META-INF/beans.xml`) and make the local backend depend on it; before moving code, prove with a throw-away resource that CDI beans and a JAX-RS resource in the core are active in the local app and appear in the generated OpenAPI, and record the result in design R4 (fall back to `quarkus.index-dependency` if not)
+- [x] 2.2 Move `ProblemDetail` and `ProblemExceptionMapper` into the core (new package `ch.admin.bar.siardsuite.webcore.error`) and move their existing tests (`ErrorResponseTest`); verify `:siard-web:backend-core:test` and the local app's error-format scenarios pass
+- [x] 2.3 Add `verifyCoreBoundary` (R3) to the core's `check`, the empty-`DriverManager` test and the no-reference-to-`localwebapp` test; verify each of the three boundary scenarios by temporarily adding `siard-cmd` to the core and confirming `check` fails with the dependency named, then removing it
+- [x] 2.4 Define the `siard-api` JVM flags once in the root `extra` and apply them in the core's tests and the local backend; verify `SiardApiIntegrationTest` still passes
 
 ## 3. Frontend workspace and shared package
 

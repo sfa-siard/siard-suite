@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.localwebapp.support;
+package ch.admin.bar.siardsuite.webcore.error;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

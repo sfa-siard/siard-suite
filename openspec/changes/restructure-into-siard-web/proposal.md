@@ -24,7 +24,7 @@ Out of scope: any new endpoint, view or feature (see `add-archive-browsing-core`
 
 ### Modified Capabilities
 
-None. The requirements of the local web app's capabilities (`local-web-agent`, `local-web-ui`, `system-info`) do not change; the move is verified by their existing scenarios still passing.
+- `local-web-agent`: "Error responses" is replaced by "Shared error format behind the session", which only requires that the local app answers with the shared error format of the core; the format itself (and that nothing internal leaks) is specified and tested once in `web-module-boundaries` ("Shared error format"). The other requirements of the local web app's capabilities (`local-web-agent`, `local-web-ui`, `system-info`) do not change; the move is verified by their existing scenarios still passing.
 
 ## Impact
 

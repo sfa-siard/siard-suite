@@ -1,10 +1,10 @@
-package ch.admin.bar.siardsuite.localwebapp.web;
+package ch.admin.bar.siardsuite.webcore.error;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.ws.rs.core.Response;
 
 /**
- * RFC 9457 problem details, the body of every error response (design D10).
+ * RFC 9457 problem details, the body of every error response (design D10 of the archived change add-local-web-app-setup).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ProblemDetail(String type, String title, int status, String detail) {

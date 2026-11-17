@@ -1,4 +1,4 @@
-package ch.admin.bar.siardsuite.localwebapp.web;
+package ch.admin.bar.siardsuite.webcore.error;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;

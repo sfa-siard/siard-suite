@@ -40,10 +40,25 @@ The shared backend core SHALL NOT contain or depend on the local agent's launch 
 - **WHEN** they are scanned for references to the package `ch.admin.bar.siardsuite.localwebapp`
 - **THEN** no class references it
 
-#### Scenario: Core endpoints are not protected by the local session
+### Requirement: Shared error format
+
+API errors of every web app built on the shared backend core SHALL be returned by the core as RFC 9457 problem details (`application/problem+json`) containing at least `status` and `title`. They SHALL NOT expose stack traces or internal exception messages. The core applies no session or access control of its own.
+
+#### Scenario: Not found without any session
 - **GIVEN** a test application started with only the core and no local module
-- **WHEN** a request without any cookie reaches a core-provided error response
-- **THEN** it is answered with `application/problem+json`, not with the local agent's `401` or `403` access-control responses
+- **WHEN** `GET /api/does-not-exist` is requested without any cookie
+- **THEN** the response status is 404 with content type `application/problem+json`, not the local agent's `401` or `403` access-control response
+- **AND** the body is JSON with `"status": 404` and a non-empty `title`
+
+#### Scenario: Unexpected failure
+- **GIVEN** a test application with only the core, and an API handler that fails with an unexpected exception
+- **WHEN** the request completes
+- **THEN** the response status is 500 with content type `application/problem+json`
+
+#### Scenario: No internal details leaked
+- **GIVEN** a test application with only the core, and an unexpected exception with message M that occurred while handling a request
+- **WHEN** the error response body is inspected
+- **THEN** it contains neither M, nor the string `Exception`, nor a stack frame such as `at ch.admin`
 
 ### Requirement: Shared frontend package contains no app shell
 
