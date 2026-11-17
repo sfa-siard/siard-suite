@@ -1,8 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import { vi } from "vitest";
 import App from "../App";
+
+export { respondWith } from "@siard-web/shared/test";
 
 /** Renders the whole app at the given path, as after a navigation or reload. */
 export function renderAt(path: string) {
@@ -16,22 +17,6 @@ export function renderAt(path: string) {
       </MemoryRouter>
     </QueryClientProvider>,
   );
-}
-
-/** Answers every API request with the given status and JSON body; returns the mock. */
-export function respondWith(status: number, body?: unknown) {
-  const fetch = vi.fn(
-    async () =>
-      new Response(body === undefined ? null : JSON.stringify(body), {
-        status,
-        headers: {
-          "Content-Type":
-            status < 300 ? "application/json" : "application/problem+json",
-        },
-      }),
-  );
-  vi.stubGlobal("fetch", fetch);
-  return fetch;
 }
 
 export const systemInfo = {

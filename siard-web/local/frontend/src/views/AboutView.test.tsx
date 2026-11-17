@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { expect, test } from "vitest";
-import en from "../i18n/en.json";
+import en from "@siard-web/shared/i18n/en.json";
 import { renderAt, respondWith, systemInfo } from "../test/render";
 
 // Spec requirement "About view"

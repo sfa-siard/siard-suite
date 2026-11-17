@@ -70,6 +70,8 @@ Quarkus does not discover CDI beans or JAX-RS resources in a dependency jar unle
 
 `siard-web/package.json` declares `workspaces: ["frontend-shared", "local/frontend"]`; the remote app's change adds `remote/frontend`. The lockfile and `.nvmrc` live at `siard-web/`; `mise.toml` and the node-gradle `version` read the new location. `npmInstall` (`npm ci`) runs once at the workspace root, in a Gradle project that owns it; the frontend projects' `lint`, `typecheck`, `test`, `build` tasks depend on it and run `npm run <script> --workspace <name>`.
 
+**Implemented (task 3.1):** the Gradle project `:siard-web` (`siard-web/build.gradle.kts`) applies the node plugin and owns the only `npmInstall`; the frontend projects set `node.workDir`/`npmWorkDir` to its download, disable their own `npmInstall`/`nodeSetup`/`npmSetup`, and depend on `:siard-web:npmInstall`. They keep running their scripts in their own directory (`npm run <script>`), which npm resolves inside the workspace. The lockfile was rebuilt offline from the existing one, so no locked version changed. `tsconfig.base.json`, `eslint.config.js` (paths as `**/…`) and `.prettierrc.json` live at the workspace root; `.prettierignore` stays per package because Prettier reads it only from the directory it runs in. Package names: `@siard-web/local` and `@siard-web/shared` (open question below).
+
 *Alternative:* a `file:` dependency without workspaces. It leaves two lockfiles and two installs, and nothing guarantees one React/MUI version across apps; two copies of React in one bundle break hooks.
 
 ### R6: `frontend-shared` is consumed as TypeScript source
@@ -88,11 +90,11 @@ The package exports `src/index.ts` directly; there is no build step. Vite, Vites
 | `test/render.tsx`, `test/setup.ts` | shared test helpers |
 | `scripts/ConvertMessages.java` | goes with the i18n texts it produces |
 
-Stays in `local/frontend`: `App.tsx`, `main.tsx`, `views/*`, `api/events.ts`, `api/schema.d.ts` (generated from `../openapi.yaml`), Playwright e2e. A shared **shell** is deliberately not extracted: the remote app may have different design requirements (open question of the exploration), and a shell can be extracted later from two real examples.
+Stays in `local/frontend`: `App.tsx`, `main.tsx`, `views/*`, `api/events.ts`, `api/schema.d.ts` (generated from `../openapi.yaml`), Playwright e2e. **Implemented (task 3.2):** the test helpers were split, because `test/render.tsx` renders the local `App` and `test/setup.ts` stubs the local shell's `EventSource`, which the shared package may not import (R8): the shared package exports `respondWith` (`@siard-web/shared/test`) and the generic setup (`@siard-web/shared/test/setup`: jest-dom, cleanup, mock reset, language reset); the local app keeps `renderAt`, `systemInfo` and the `EventSource` stub, and imports the shared setup. `i18n/language.test.tsx` renders the local app, so it stays local (now `src/language.test.tsx`); the shared package has no tests yet. The i18next key typing is a type-only module `i18n/i18next.ts` imported by the package entry (ESLint forbids a triple-slash reference); an unknown key still fails `tsc` in the local app. Package exports: `.`, `./i18n/*.json`, `./test`, `./test/setup`; React, MUI and i18next are peer dependencies. A shared **shell** is deliberately not extracted: the remote app may have different design requirements (open question of the exploration), and a shell can be extracted later from two real examples.
 
 ### R8: The shared frontend boundary is a lint rule
 
-`frontend-shared` has no dependency on any app package, and its ESLint config sets `no-restricted-imports` for paths into `local/` and `remote/` and for the app package names. Because the package is source-only, the rule runs as part of its normal `lint`. A grep-style test asserts that the strings `siard_session_` and `/launch` do not occur in its source, so session handling cannot creep into the shared parts.
+`frontend-shared` has no dependency on any app package, and its ESLint config sets `no-restricted-imports` for paths into `local/` and `remote/` and for the app package names. Because the package is source-only, the rule runs as part of its normal `lint`. A grep-style test asserts that the strings `siard_session_` and `/launch` do not occur in its source, so session handling cannot creep into the shared parts. **Implemented (task 3.4):** the rule is a block of the workspace's `eslint.config.js` limited to `frontend-shared/**` (relative paths into `local/`/`remote/` and the app package names `@siard-web/local`, `@siard-web/remote`); the source check is a Vitest test (`src/boundary.test.ts`) that reads the package's sources with `import.meta.glob(..., { query: "?raw" })`, so it needs no Node types. Both were verified to fail on a probe (relative import, package import, a `siard_session_` string) and to pass after reverting.
 
 ### R9: Gradle task surface
 
@@ -125,4 +127,4 @@ Rollback: revert the commits; nothing is published, and `deliverables.yml` is un
 
 ## Open Questions
 
-- Package names for the workspace (`@siard-web/shared`, `@siard-web/local`) are an implementation choice made in task 3.1; nothing else depends on them.
+- ~~Package names~~ decided in task 3.1: `@siard-web/shared`, `@siard-web/local`.

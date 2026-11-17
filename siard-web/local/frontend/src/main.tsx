@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import { ApiError } from "./api/client";
-import "./i18n";
+import "@siard-web/shared";
 
 const queryClient = new QueryClient({
   defaultOptions: {

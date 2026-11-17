@@ -8,7 +8,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { Link, Outlet, Route, Routes } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useAgentEvents } from "./api/events";
-import { theme } from "./theme";
+import { theme } from "@siard-web/shared";
 import AboutView from "./views/AboutView";
 import LaunchFailedView from "./views/LaunchFailedView";
 import StartView from "./views/StartView";

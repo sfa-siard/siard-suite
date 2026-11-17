@@ -1,9 +1,9 @@
 import { cleanup, screen } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
-import { renderAt, respondWith, systemInfo } from "../test/render";
-import en from "./en.json";
-import fr from "./fr.json";
-import i18n, { startLanguage } from ".";
+import { renderAt, respondWith, systemInfo } from "./test/render";
+import en from "@siard-web/shared/i18n/en.json";
+import fr from "@siard-web/shared/i18n/fr.json";
+import { i18n, startLanguage } from "@siard-web/shared";
 
 // Spec requirement "Interface language": on load the frontend picks startLanguage(navigator)
 

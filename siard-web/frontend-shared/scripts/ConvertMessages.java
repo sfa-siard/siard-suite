@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
 
 /**
  * One-time conversion of the desktop app's messages_*.properties into the frontend's i18n JSON
- * files (design D12). Run from the frontend directory:
+ * files (design D12 of the setup change). Run from siard-web/frontend-shared:
  *
  * <pre>
  * java scripts/ConvertMessages.java \
- *     ../../../siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/i18n src/i18n \
+ *     ../../siard-suite-app/src/main/resources/ch/admin/bar/siardsuite/i18n src/i18n \
  *     welcome.text menu.item.info info.dialog.title info.dialog.text
  * </pre>
  *

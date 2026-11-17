@@ -19,11 +19,11 @@ Precondition: `add-local-web-app-setup` is archived (design R10). Test scope as 
 
 ## 3. Frontend workspace and shared package
 
-- [ ] 3.1 Create `siard-web/package.json` (workspaces, scripts), move `package-lock.json`, `.nvmrc` and the shared tool configs (`tsconfig.base`, ESLint, Prettier) to the workspace root, point node-gradle at it and move `npmInstall` to one Gradle project; verify `./gradlew :siard-web:local:frontend:frontendBuild` succeeds from a clean checkout and that only one `npm ci` runs for a whole `:siard-web:check`
-- [ ] 3.2 Create `siard-web/frontend-shared` (source-only, `exports: src/index.ts`), move `theme.ts`, `fonts.css` with the font files, `i18n/`, `test/render.tsx`, `test/setup.ts` and `scripts/ConvertMessages.java`, and repoint the local frontend's imports; verify `tsc`, ESLint and the moved tests pass in both packages
-- [ ] 3.3 Turn `api/client.ts` into `createApiClient<Paths>()` in the shared package and instantiate it in the local frontend with its generated `paths`; verify the typed hooks still compile (`$api.useQuery("get", "/api/system/info")`) and the existing 401-handling tests pass
-- [ ] 3.4 Add the `no-restricted-imports` rule (R8) and the check for `siard_session_` and `/launch` to `frontend-shared`; verify both boundary scenarios by temporarily importing from the local frontend and confirming lint fails, then reverting
-- [ ] 3.5 Add `frontend-shared` Gradle tasks (`lint`, `typecheck`, `test`) wired into its `check`, and the aggregate `:siard-web:check`; verify `./gradlew :siard-web:check` runs the shared package's tests once and passes
+- [x] 3.1 Create `siard-web/package.json` (workspaces, scripts), move `package-lock.json`, `.nvmrc` and the shared tool configs (`tsconfig.base`, ESLint, Prettier) to the workspace root, point node-gradle at it and move `npmInstall` to one Gradle project; verify `./gradlew :siard-web:local:frontend:frontendBuild` succeeds from a clean checkout and that only one `npm ci` runs for a whole `:siard-web:check`
+- [x] 3.2 Create `siard-web/frontend-shared` (source-only, `exports: src/index.ts`), move `theme.ts`, `fonts.css` with the font files, `i18n/`, `test/render.tsx`, `test/setup.ts` and `scripts/ConvertMessages.java`, and repoint the local frontend's imports; verify `tsc`, ESLint and the moved tests pass in both packages
+- [x] 3.3 Turn `api/client.ts` into `createApiClient<Paths>()` in the shared package and instantiate it in the local frontend with its generated `paths`; verify the typed hooks still compile (`$api.useQuery("get", "/api/system/info")`) and the existing 401-handling tests pass
+- [x] 3.4 Add the `no-restricted-imports` rule (R8) and the check for `siard_session_` and `/launch` to `frontend-shared`; verify both boundary scenarios by temporarily importing from the local frontend and confirming lint fails, then reverting
+- [x] 3.5 Add `frontend-shared` Gradle tasks (`lint`, `typecheck`, `test`) wired into its `check`, and the aggregate `:siard-web:check`; verify `./gradlew :siard-web:check` runs the shared package's tests once and passes
 
 ## 4. CI, documentation and tooling
 
