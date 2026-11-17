@@ -10,7 +10,7 @@ The Swiss Federal Archives (SFA) cannot install the local web app on their lapto
 - **New backend module `siard-web/backend-core`** (`:siard-web:backend-core`): a library for code both web apps use. It depends on `siard-api` and Quarkus only, never on `siard-cmd` or any JDBC driver. This change moves the app-agnostic RFC 9457 error format (`ProblemDetail`, `ProblemExceptionMapper`) and the `siard-api` runtime requirements (JAXB/activation pins, JVM flags) into it. The local backend depends on it.
 - **New npm workspace at `siard-web/`** with one lockfile and one Node version, and a new package `siard-web/frontend-shared` (`:siard-web:frontend-shared`) consumed as TypeScript source. It receives the app-agnostic frontend code: theme and fonts, i18n setup and texts, the typed API client factory and shared test helpers. The local frontend consumes it. Views, routes and the app shell stay in the local app.
 - **Boundary checks**: the build fails if `backend-core` gets a dependency on `siard-cmd` or a JDBC driver, and lint fails if `frontend-shared` imports from an app.
-- **CI, docs and tooling paths** (`build.yml`, the packaging workflow, `mise.toml`, `AGENTS.md`, module README) updated to the new locations.
+- **CI, docs and tooling paths** (`ci.yml`, `packages.yml`, `mise.toml`, `AGENTS.md`, module README) updated to the new locations.
 
 Out of scope: any new endpoint, view or feature (see `add-archive-browsing-core`), the remote web app itself (`siard-web/remote` is created by its own change), and any change to `siard-suite-app`.
 
@@ -31,6 +31,6 @@ Out of scope: any new endpoint, view or feature (see `add-archive-browsing-core`
 - **Moved code**: everything under `siard-suite-local-web-app/` to `siard-web/local/`; `openapi.yaml` moves with it.
 - **New code**: `siard-web/backend-core`, `siard-web/frontend-shared`, `siard-web/package.json` (workspace root) and `package-lock.json`.
 - **Build**: `settings.gradle.kts` includes, Gradle paths `:siard-suite-local-web-app:*` become `:siard-web:local:*`, the node-gradle setup moves to the workspace root, `.nvmrc` moves to `siard-web/`.
-- **CI**: `.github/workflows/build.yml` (task paths, Playwright cache key from the lockfile), `.github/workflows/local-web-app-packages.yml` (artifact paths).
+- **CI**: `.github/workflows/ci.yml` (task paths, Playwright cache key from the lockfile), `.github/workflows/packages.yml` (task paths, artifact paths).
 - **Docs/tooling**: `AGENTS.md` module table, `mise.toml` comment, the module README (dev commands, structure).
 - **Unchanged**: the application's runtime behaviour, installer names (`SIARD-Suite-Web`), the Java package root `ch.admin.bar.siardsuite.localwebapp`, and the API.

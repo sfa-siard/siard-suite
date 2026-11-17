@@ -27,9 +27,10 @@ Precondition: `add-local-web-app-setup` is archived (design R10). Test scope as 
 
 ## 4. CI, documentation and tooling
 
-- [ ] 4.1 Update `.github/workflows/build.yml` (task paths, Playwright cache key from `siard-web/package-lock.json`) and `.github/workflows/local-web-app-packages.yml` (artifact globs); verify with a PR run that checks, e2e and the three-OS packaging jobs pass and upload the same artifacts as before (`SIARD-Suite-Web.<version>-<platform>.zip`, `.deb`, `.exe`/`.msi`)
-- [ ] 4.2 Update `AGENTS.md` (module table: `siard-web/local`, `siard-web/backend-core`, `siard-web/frontend-shared`, with the boundary rules in one sentence), `mise.toml` comment, and the module README (structure, dev commands, where shared code goes, how the boundary checks fail); verify every command in the README runs as written and `./gradlew projects` matches the `AGENTS.md` table
-- [ ] 4.3 Final integration check: from a clean clone run `./gradlew :siard-web:check :siard-web:local:e2eTest` and compare the executed test counts with the recorded baseline; verify they match
+- [ ] 4.1 Update `.github/workflows/ci.yml` (job `local-web-app`: task paths, Playwright cache key from `siard-web/package-lock.json`) and `.github/workflows/packages.yml` (task paths, artifact globs); verify with a PR run of `ci.yml` that checks and e2e pass, and with a `workflow_dispatch` run of `packages.yml` on the branch (it has no PR trigger) that the dist job and the Windows/Linux runtime jobs pass and upload the same artifacts as before (`SIARD-Suite-Web-<version>.zip`, runtime zips, `.deb`, `.msi`)
+- [x] 4.2 Update `AGENTS.md` (module table: `siard-web/local`, `siard-web/backend-core`, `siard-web/frontend-shared`, with the boundary rules in one sentence), `mise.toml` comment, and the module README (structure, dev commands, where shared code goes, how the boundary checks fail); verify every command in the README runs as written and `./gradlew projects` matches the `AGENTS.md` table
+- [x] 4.3 Final integration check: from a clean clone run `./gradlew :siard-web:check :siard-web:local:e2eTest` and compare the executed test counts with the recorded baseline; verify they match
+  - Clean clone of `2b88b6a6` (section 4 changes only CI and docs): local backend `test` 32 + backend-core `test` 5 (the 2 moved error tests plus 1 core error test and 2 boundary tests; the local `ErrorResponseTest` keeps 1, see the `local-web-agent` delta) = all 34 baseline tests still run; `quarkusIntTest` 12 (same test skipped); local frontend 9 tests in 4 files; frontend-shared 1 (boundary); Playwright 1; `openapi.yaml` sha256 unchanged
 
 ## Workflow follow-up
 

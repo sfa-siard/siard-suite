@@ -18,7 +18,11 @@ This is a **Gradle multi-module monorepo**. All modules live in the same reposit
 | Module | Purpose |
 |---|---|
 | `siard-suite-app` | Desktop GUI application (JavaFX) |
-| `siard-suite-local-web-app` | Local web app replacing the JavaFX UI: `backend` (Quarkus agent, REST API) and `frontend` (React/TypeScript, served by the backend) |
+| `siard-web/local` | Local web app replacing the JavaFX UI: `backend` (Quarkus agent, REST API) and `frontend` (React/TypeScript, served by the backend) |
+| `siard-web/backend-core` | Shared Quarkus backend library of the web apps (error format, later archive browsing) |
+| `siard-web/frontend-shared` | Shared frontend package of the web apps (theme, fonts, i18n, typed API client, test helpers) |
+
+Web module boundaries (checked by `./gradlew :siard-web:check`): `backend-core` must not depend on `siard-cmd`, a `jdbc-*` module, a JDBC driver or a web app, and `frontend-shared` must not import from an app or handle sessions. See `siard-web/README.md`.
 | `siard-cmd` | Command-line interface (`SiardFromDb`, `SiardToDb`) |
 | `siard-api` | Core API for reading/writing SIARD files (JAXB-based) |
 | `jdbc-base` | Abstract base JDBC wrapper with test fixtures |

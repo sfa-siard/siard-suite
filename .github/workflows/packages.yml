@@ -29,14 +29,14 @@ jobs:
           ref_name="${GITHUB_REF#refs/*/}"
           echo "NAME_TAG=$(echo "siard-suite-${ref_name//\//-}" | tr 'A-Z' 'a-z')" >> $GITHUB_ENV
       - name: Build zipped distributions (no bundled runtime)
-        run: ./gradlew :siard-suite-app:asciidoctorPdf :siard-suite-app:distZip :siard-cmd:distZip :siard-suite-local-web-app:backend:siardwebDistZip --no-daemon
+        run: ./gradlew :siard-suite-app:asciidoctorPdf :siard-suite-app:distZip :siard-cmd:distZip :siard-web:local:backend:siardwebDistZip --no-daemon
       - name: Collect distribution files
         shell: bash
         run: |
           shopt -s nullglob
           norm() { basename "$1" | tr 'A-Z' 'a-z' | sed -E 's/-(linux|win|mac)(\.[a-z0-9]+)$/\2/' | tr '_' '-' | sed -E 's/([a-z])\.([0-9])/\1-\2/'; }
           mkdir -p artifacts/dists
-          for f in siard-suite-app/build/distributions/*.zip siard-cmd/build/distributions/*.zip siard-suite-local-web-app/backend/build/distributions/*.zip; do
+          for f in siard-suite-app/build/distributions/*.zip siard-cmd/build/distributions/*.zip siard-web/local/backend/build/distributions/*.zip; do
             cp "$f" "artifacts/dists/$(norm "$f")"
           done
       - name: Upload distributions
@@ -74,17 +74,17 @@ jobs:
           echo "ARTIFACT_OS=$(echo "$RUNNER_OS" | tr 'A-Z' 'a-z')" >> $GITHUB_ENV
       - name: Build runtime images and installers
         shell: bash
-        run: ./gradlew :siard-suite-app:build -x test :siard-suite-app:runtimeZip :siard-suite-app:jpackage :siard-cmd:runtimeZip :siard-cmd:verifyRuntimeImage :siard-cmd:jpackage :siard-suite-local-web-app:backend:runtimeZip :siard-suite-local-web-app:backend:jpackage --no-daemon
+        run: ./gradlew :siard-suite-app:build -x test :siard-suite-app:runtimeZip :siard-suite-app:jpackage :siard-cmd:runtimeZip :siard-cmd:verifyRuntimeImage :siard-cmd:jpackage :siard-web:local:backend:runtimeZip :siard-web:local:backend:jpackage --no-daemon
       - name: Collect artifacts
         shell: bash
         run: |
           shopt -s nullglob
           norm() { basename "$1" | tr 'A-Z' 'a-z' | sed -E 's/-(linux|win|mac)(\.[a-z0-9]+)$/\2/' | tr '_' '-' | sed -E 's/([a-z])\.([0-9])/\1-\2/'; }
           mkdir -p artifacts/runtime artifacts/deb artifacts/msi
-          for f in siard-suite-app/build/image-zip/*.zip siard-cmd/build/image-zip/*.zip siard-suite-local-web-app/backend/build/image-zip/*.zip; do
+          for f in siard-suite-app/build/image-zip/*.zip siard-cmd/build/image-zip/*.zip siard-web/local/backend/build/image-zip/*.zip; do
             cp "$f" "artifacts/runtime/$(norm "$f")"
           done
-          for f in siard-suite-app/build/jpackage/*.{deb,msi} siard-cmd/build/installers/*.{deb,msi} siard-suite-local-web-app/backend/build/jpackage/*.{deb,msi}; do
+          for f in siard-suite-app/build/jpackage/*.{deb,msi} siard-cmd/build/installers/*.{deb,msi} siard-web/local/backend/build/jpackage/*.{deb,msi}; do
             case "$f" in
               *.deb) d=deb ;;
               *.msi) d=msi ;;

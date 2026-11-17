@@ -6,7 +6,7 @@ See `proposal.md` (Why). Facts that shape the approach, verified in the repo:
 
 - `siard-suite-local-web-app` has two Gradle subprojects. The backend depends on `siard-cmd` (all JDBC drivers) and embeds the frontend jar. The Gradle aggregate tasks `check` and `e2eTest` live in the module's own `build.gradle.kts`.
 - The frontend is a stand-alone npm project (own `package-lock.json`, `.nvmrc`), built through the node-gradle plugin with `npmInstallCommand = ci` and `download = true`. Its Gradle input list names `../openapi.yaml`.
-- Files that name the old paths outside the module: `settings.gradle.kts`, `.github/workflows/build.yml` (task paths and the Playwright cache key from `package-lock.json`), `.github/workflows/local-web-app-packages.yml` (artifact globs), `mise.toml` (comment pointing at `.nvmrc`), `AGENTS.md` (module table), `harness-notes.md` (historical, left alone). The open change `add-local-web-app-setup` names them in prose.
+- Files that name the old paths outside the module: `settings.gradle.kts`, `.github/workflows/ci.yml` (job `local-web-app`: task paths and the Playwright cache key from `package-lock.json`), `.github/workflows/packages.yml` (task paths and artifact globs), `mise.toml` (comment pointing at `.nvmrc`), `AGENTS.md` (module table), `harness-notes.md` (historical, left alone). The open change `add-local-web-app-setup` names them in prose.
 - App-agnostic pieces today: backend `ProblemDetail` and `ProblemExceptionMapper` import only Jackson, SLF4J and Jakarta. Frontend `theme.ts`, `fonts.css` plus font files, `i18n/` (setup, four JSON files, typed-keys declaration), `api/client.ts` (fetch client, `ApiError`), `test/render.tsx` and `test/setup.ts`, and `scripts/ConvertMessages.java`.
 - Local-only pieces that must stay local: everything in `agent/`, `events/`, `web/RequestFilters`, `LaunchResource`, `SpaFallback`, and `system/` (`SystemResource` reports `jdbcDrivers` and uses `siard-cmd`'s `VersionsExplorer`, so it cannot be shared and the remote app will get its own system endpoint). On the frontend: `App.tsx`, `views/*`, `api/events.ts`.
 - There is no `buildSrc`/`build-logic`; shared Gradle values are passed via `extra[...]` in the root build (`xercesSaxParserFactory`).
@@ -100,7 +100,8 @@ Stays in `local/frontend`: `App.tsx`, `main.tsx`, `views/*`, `api/events.ts`, `a
 
 - `:siard-web:check` aggregates everything (`backend-core`, `frontend-shared`, `local`); `:siard-web:local:check` and `:siard-web:local:e2eTest` replace the old module-level aggregates.
 - The CI job `local-web-app` runs `:siard-web:check` then `:siard-web:local:e2eTest`. The Playwright cache key hashes `siard-web/package-lock.json`.
-- The packaging workflow's artifact globs change to `siard-web/local/backend/build/...`; its trigger rules and `paths-ignore` stay as designed in the setup change (D14).
+- The packaging workflow's task paths and artifact globs change to `:siard-web:local:backend` and `siard-web/local/backend/build/...`; its triggers stay as they are.
+- **Implemented (task 4.1):** the setup change's `build.yml` and `local-web-app-packages.yml` were replaced by `ci.yml` and `packages.yml` in `38fa3097` (merged with #193) before this change was applied; `packages.yml` builds the local app's packages on pushes to `main`, `v*` tags and manual dispatch (runtime zips and installers for Windows and Linux only, no PR trigger, no macOS). Only task paths, globs and the cache key were changed; the triggers were left as they are on `main`. A shared `siard-web/README.md` holds the structure, where shared code goes and the boundary checks; `local/README.md` keeps the local app's commands.
 
 ### R10: Sequencing and history
 

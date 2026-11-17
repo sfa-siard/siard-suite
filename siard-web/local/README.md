@@ -7,7 +7,7 @@ It is a per-launch local agent plus a React frontend, packaged as a single insta
 
 - **JDK 21**
 - Node.js is **not** required: the Gradle node plugin downloads the version pinned in
-  `frontend/.nvmrc`. A local Node installation is still useful for `npm run dev` (Vite) and for
+  `siard-web/.nvmrc`. A local Node installation is still useful for `npm run dev` (Vite) and for
   running the frontend's lint/typecheck without Gradle.
 
 ## Architecture
@@ -33,11 +33,11 @@ The decisions behind this are documented in
 
 Terminal 1 (backend, port 8080, fixed dev token, hot restart):
 
-    ./gradlew :siard-suite-local-web-app:backend:quarkusDev
+    ./gradlew :siard-web:local:backend:quarkusDev
 
 Terminal 2 (frontend, Vite on `http://127.0.0.1:5173`, proxies `/api` and `/launch` to the backend):
 
-    cd siard-suite-local-web-app/frontend && npm run dev
+    cd siard-web/local/frontend && npm run dev
 
 Open `http://127.0.0.1:5173/launch?token=dev-token` (the dev token lives in
 `backend/src/main/resources/application.properties` and is only honoured in development mode).
@@ -47,18 +47,18 @@ Swagger UI is available at `http://127.0.0.1:8080/q/swagger-ui` while `quarkusDe
 
 After an API change, regenerate the committed description and the frontend types:
 
-    ./gradlew :siard-suite-local-web-app:backend:openApiUpdate
-    cd siard-suite-local-web-app/frontend && npm run gen:api
+    ./gradlew :siard-web:local:backend:openApiUpdate
+    cd siard-web/local/frontend && npm run gen:api
 
 then commit `openapi.yaml`. `schema.d.ts` is generated, not committed.
 
 ## Checks
 
-    ./gradlew :siard-suite-local-web-app:check
+    ./gradlew :siard-web:local:check
 
 runs backend unit and packaged-agent tests, the OpenAPI drift check, ESLint, `tsc` and Vitest.
 
-    ./gradlew :siard-suite-local-web-app:e2eTest
+    ./gradlew :siard-web:local:e2eTest
 
 runs the Playwright smoke test (launch URL → clean URL → About shows the version → page closed →
 agent exits) against the packaged agent. The first run downloads a pinned Chromium build.
@@ -70,8 +70,8 @@ plus a start script). On macOS the zip is the deliverable, as there is no instal
 and Linux the zips are built for parity with the desktop app's deliverables and are not
 distributed yet.
 
-    ./gradlew :siard-suite-local-web-app:backend:jpackage    # .deb on Linux, installer on Windows
-    ./gradlew :siard-suite-local-web-app:backend:runtimeZip  # zip with a start script, per OS
+    ./gradlew :siard-web:local:backend:jpackage    # .deb on Linux, installer on Windows
+    ./gradlew :siard-web:local:backend:runtimeZip  # zip with a start script, per OS
 
 Building the `.deb` locally needs `dpkg` and `fakeroot`.
 
@@ -84,8 +84,8 @@ Building the `.deb` locally needs `dpkg` and `fakeroot`.
 
 ## CI
 
-Pull requests (and pushes to `main`) trigger the packaging workflow
-(`local-web-app-packages.yml`), which builds the Windows/Linux installers and the runtime zips for all three OSes and
-uploads them as artifacts. It runs on PRs because changes anywhere in the `siard-cmd` dependency
-chain can break packaging; `siard-suite-app/**`, `docs/**` and markdown-only changes are ignored.
-Once packaging has proven stable, the trigger can be narrowed.
+The `local-web-app` job of `.github/workflows/ci.yml` runs `./gradlew :siard-web:check` and the
+Playwright smoke test. The packaging workflow (`.github/workflows/packages.yml`, on pushes to
+`main`, `v*` tags and manual dispatch) builds the local app's distribution zip together with the
+other modules' packages; on `v*` tags and manual dispatch it also builds the Windows and Linux
+runtime zips and installers.
