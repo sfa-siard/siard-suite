@@ -1,0 +1,30 @@
+# Tasks
+
+This is a test-only refactor with `skip_specs: true`. The implementation contract is design.md AC1–AC7; existing product specs remain unchanged. Mark tasks complete only after verification succeeds. Keep `OracleDataTypeMappingIT` and its SQL fixture unchanged and separate throughout. Do not implement production fixes or change fixture data to work around baseline failures.
+
+## 1. Establish scope, assertions, and execution baselines
+
+- [ ] 1.1 Expand the design coverage matrix to list every qualified column, normalized type, and original type from only `BinaryTypesIT` and `OracleVarCharTypesIT`; verify it line-by-line against the original assertions and record the source revision. Record how both cases satisfy the future-test admission criteria, and explicitly exclude mapping characterization from migration (AC1, AC7).
+- [ ] 1.2 Before changing tests, execute the two-test baseline command in design.md three times with fresh containers and cached images; record host/JDK/image details, test names, two source-container starts, two archive operations, execution times, wall times, and SQL initialization errors. Check the existing VARCHAR `12.56` / `NUMBER(3,2)` input without changing it; report a blocker if baseline cannot pass. Summarize the measured opportunity and recommend stopping if it does not justify consolidation rather than expanding scope (AC1, AC2, AC5).
+- [ ] 1.3 Execute the unchanged full `:siard-cmd:integrationTestOracle --rerun-tasks --no-build-cache --console=plain` command three times under the same conditions; record results and durations, confirming separate execution of `OracleDataTypeMappingIT`, permissions, historical-archive restore, and round-trip tests. Stop and report pre-existing failures instead of expanding this refactor (AC4–AC6).
+
+## 2. Add and verify the composed type-export regression suite
+
+- [ ] 2.1 Add `oracle.regression.OracleTypeExportRegressionIT` with one class-scoped container from `OracleTestDb`, one common user setup, and only the binary/VARCHAR SQL fragments in deterministic order; add class-scoped temporary-file ownership and one archive/extract/parse setup using existing readers, without changing the global archive handler. Verify the candidate command runs real tests and lifecycle/command evidence shows one source container and one successful archive operation (AC2, AC4).
+- [ ] 2.2 Migrate the exact assertion matrix into independently named binary and VARCHAR test methods with qualified-column failure context and issue provenance; run the candidate command and compare all expectations to task 1.1, with no weakened assertions, missing columns, new exclusions, or migrated general-mapping checks (AC1, AC3, AC7).
+- [ ] 2.3 Verify focused execution of each named method, then temporarily change one expected type and run the entire candidate suite: its family must fail with column context and the other family must execute. Temporarily force shared setup failure and verify a failing task rather than skipped-success reporting. Revert fault injections and rerun successfully; record exact commands/results in design.md (AC3).
+- [ ] 2.4 Run the candidate suite twice with fresh execution, confirming unique temporary paths, readable archive state through both methods, cleanup after completion/failure, and container termination. Review new diagnostics for credential exposure and record evidence without passwords or credential-bearing command lines (AC4).
+- [ ] 2.5 Retire only `BinaryTypesIT` and `OracleVarCharTypesIT` after equivalence is demonstrated, obtaining explicit confirmation before deleting existing files; retain both SQL fragments and every other Oracle test/fixture. Verify discovery includes the new suite without duplicate legacy execution, and update the design matrix with final method references and focused commands (AC1, AC2, AC6).
+
+## 3. Verify integration and evaluate the pilot
+
+- [ ] 3.1 Run the final selected-workload command three times under baseline-equivalent conditions with caching/up-to-date skipping disabled. Record execution and wall times, startup/archive counts, medians, and absolute/relative savings in design.md. Claim runtime benefit only if the selected median improves; otherwise report the pilot unsuccessful and seek a decision without forcing consolidation or expanding scope (AC2, AC5).
+- [ ] 3.2 Run the full Oracle task three times under baseline-equivalent conditions; verify every remaining test passes unchanged, explicitly including `OracleDataTypeMappingIT` as separate characterization coverage, `MultipleSchemasIT`'s exit-code/ORA-01031 expectations, and historical-archive restore/round trips. Record full-task timings separately and report any repeatable slowdown without altering out-of-scope tests (AC4–AC6).
+- [ ] 3.3 Verify host-side resource/temp-path portability and Linux execution; run the candidate on Windows/macOS where a compatible Oracle container runtime is available, recording concrete commands/results or explicit limitations. Review the diff for zero production, other-engine, JDBC-wrapper-test, dependency, Gradle-task, CI, or mapping-characterization changes, and verify the design retains admission/separation rules for future feature and regression tests (AC6, AC7).
+- [ ] 3.4 Perform scoped architecture, QM-Guide, and acceptance-to-test coverage reviews, followed by security review last; fix within-scope HIGH findings and escalate CRITICAL findings. Use direct review unless subagent use is explicitly authorized. Record concrete AC1–AC7 evidence, run `openspec validate consolidate-oracle-regression-fixtures --strict` and the `openspec-verify-change` workflow, and do not mark complete with critical issues outstanding.
+
+## Workflow follow-up
+
+- Review whether the bounded saving of one startup/archive operation justifies keeping the pilot before proposing expansion.
+- Apply the design's admission criteria in future changes; neither feature labels nor issue numbers justify joining the shared suite by themselves. Keep characterization separate.
+- Archive only after verification and required quality reviews; planning completion is not implementation completion.
