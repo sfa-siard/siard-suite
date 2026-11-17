@@ -13,6 +13,7 @@ package ch.admin.bar.siard2.jdbc;
 import ch.admin.bar.siard2.db2.datatype.Db2PredefinedType;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
+import ch.enterag.utils.jdbc.IndexInfoResultSet;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -136,6 +137,19 @@ public class Db2DatabaseMetaData
         return new Db2MetaColumns(
                 super.getAttributes(catalog, schemaPattern, typeNamePattern, attributeNamePattern),
                 5, 6, 7, 7);
+    }
+
+
+    /** {@inheritDoc}
+     * DB/2 reports regular indexes as {@link DatabaseMetaData#tableIndexOther}.
+     * They are mapped to {@link DatabaseMetaData#tableIndexHashed} so that unique
+     * regular indexes (e.g. backing unique constraints) are recognized as
+     * candidate keys when downloading meta data.
+     */
+    @Override
+    public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)
+            throws SQLException {
+        return new IndexInfoResultSet(super.getIndexInfo(catalog, schema, table, unique, approximate));
     }
 
 

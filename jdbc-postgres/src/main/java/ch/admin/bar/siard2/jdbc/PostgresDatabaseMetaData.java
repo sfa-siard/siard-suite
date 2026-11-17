@@ -14,6 +14,7 @@ import ch.admin.bar.siard2.postgres.PostgresLiterals;
 import ch.admin.bar.siard2.postgres.PostgresType;
 import ch.enterag.sqlparser.datatype.enums.PreType;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
+import ch.enterag.utils.jdbc.IndexInfoResultSet;
 
 import java.sql.*;
 
@@ -84,6 +85,19 @@ public class PostgresDatabaseMetaData
         ResultSet rs = dmd.getFunctionColumns(catalog, schemaPattern, functionNamePattern, columnNamePattern);
         PostgresStatement stmt = new PostgresStatement(rs.getStatement(), _conn);
         return new PostgresMetaColumns(new PostgresResultSet(rs, stmt), _conn, 1, 2, 6, 7, 8, 9, 10, -1, -1);
+    }
+
+
+    /** {@inheritDoc}
+     * PostgreSQL reports all non-clustered indexes as {@link DatabaseMetaData#tableIndexOther}.
+     * They are mapped to {@link DatabaseMetaData#tableIndexHashed} so that unique
+     * non-clustered indexes (e.g. backing unique constraints) are recognized as
+     * candidate keys when downloading meta data.
+     */
+    @Override
+    public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)
+            throws SQLException {
+        return new IndexInfoResultSet(super.getIndexInfo(catalog, schema, table, unique, approximate));
     }
 
     private String getTypeNamespace(String sPgType, String sPgNamespace) {

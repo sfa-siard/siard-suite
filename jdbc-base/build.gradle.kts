@@ -15,6 +15,12 @@ dependencies {
 
     implementation(libs.slf4j.api)
 
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.mockito.junit.jupiter)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
+
     testFixturesApi(libs.junit.jupiter.api)
     testFixturesApi(platform(libs.junit.bom))
 

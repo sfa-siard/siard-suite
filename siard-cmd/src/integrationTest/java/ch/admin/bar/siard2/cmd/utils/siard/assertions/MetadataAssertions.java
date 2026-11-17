@@ -37,6 +37,12 @@ class MetadataAssertions {
                 .as("Foreign keys of SIARD archives are not equal")
                 .isEqualTo(extractQualifiedForeignKeys(expected));
 
+        // candidate keys
+        Assertions
+                .assertThat(extractQualifiedCandidateKeys(actual))
+                .as("Candidate keys of SIARD archives are not equal")
+                .isEqualTo(extractQualifiedCandidateKeys(expected));
+
         Assertions.assertThat(actual)
                   .as("SIARD archives are not equal")
                   .isEqualTo(expected);
@@ -95,6 +101,29 @@ class MetadataAssertions {
                                                                                                   foreignKey.getName()),
                                                                                     foreignKey
                                                                             ))))
+                            .sorted(Comparator.comparing(Qualifier::getQualifier))
+                            .collect(Collectors.toList());
+    }
+
+    private static List<Qualifier<Metadata.CandidateKey>> extractQualifiedCandidateKeys(final Metadata siardMetadata) {
+        return siardMetadata.getSchemas()
+                            .stream()
+                            .flatMap(schema -> schema.getTables()
+                                                     .stream()
+                                                     .flatMap(table -> table.getCandidateKeys()
+                                                                            .stream()
+                                                                            .map(candidateKey -> new Qualifier<>(
+                                                                                    String.format("%s.%s.%s->%s",
+                                                                                                  table.getName(),
+                                                                                                  schema.getName(),
+                                                                                                  candidateKey.getName(),
+                                                                                                  candidateKey.getColumns()
+                                                                                                              .stream()
+                                                                                                              .map(columnId -> columnId.getValue()
+                                                                                                                       .getValue())
+                                                                                                              .sorted()
+                                                                                                              .collect(Collectors.joining(";"))),
+                                                                                    candidateKey))))
                             .sorted(Comparator.comparing(Qualifier::getQualifier))
                             .collect(Collectors.toList());
     }

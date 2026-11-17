@@ -14,6 +14,7 @@ import ch.admin.bar.siard2.mssql.MsSqlType;
 import ch.enterag.sqlparser.SqlLiterals;
 import ch.enterag.sqlparser.identifier.QualifiedId;
 import ch.enterag.utils.jdbc.BaseDatabaseMetaData;
+import ch.enterag.utils.jdbc.IndexInfoResultSet;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -212,6 +213,20 @@ public class MsSqlDatabaseMetaData
     public ResultSet getTableTypes()
             throws SQLException {
         return super.getTableTypes();
+    }
+
+    /**
+     * {@inheritDoc}
+     * MSSQL reports all non-clustered indexes as {@link DatabaseMetaData#tableIndexOther}.
+     * They are mapped to {@link DatabaseMetaData#tableIndexHashed} so that unique
+     * non-clustered indexes (e.g. backing unique constraints) are recognized as
+     * candidate keys when downloading meta data.
+     */
+    @Override
+    public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)
+            throws SQLException {
+        return new IndexInfoResultSet(
+                new MsSqlResultSet(super.getIndexInfo(catalog, schema, table, unique, approximate), _conn));
     }
 
     /**

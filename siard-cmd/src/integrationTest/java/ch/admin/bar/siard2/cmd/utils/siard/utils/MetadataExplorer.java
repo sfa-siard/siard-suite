@@ -83,6 +83,20 @@ public class MetadataExplorer {
                                        .findAny());
     }
 
+    public Metadata.CandidateKey findCandidateKey(final QualifiedCandidateKeyId candidateKeyId) {
+        return tryFindCandidateKey(candidateKeyId)
+                .orElseThrow(() -> new IllegalArgumentException("No candidate key with id " + candidateKeyId + " found"));
+    }
+
+    public Optional<Metadata.CandidateKey> tryFindCandidateKey(final QualifiedCandidateKeyId candidateKeyId) {
+        return tryFindByTableId(candidateKeyId.getQualifiedTableId())
+                .flatMap(table -> table.getCandidateKeys()
+                                       .stream()
+                                       .filter(candidateKey -> candidateKey.getName()
+                                                                           .equals(candidateKeyId.getCandidateKeyId()))
+                                       .findAny());
+    }
+
     public Metadata.View findByViewId(final QualifiedViewId qualifiedViewId) {
         return tryFindByViewId(qualifiedViewId)
                 .orElseThrow(() -> new IllegalArgumentException("No view with id " + qualifiedViewId + " found"));
