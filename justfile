@@ -9,6 +9,43 @@ app-run:
     ./gradlew :siard-suite-app:run
 
 
+alias wd := web-dev
+[doc("Run the SIARD Suite local web app in dev mode (Quarkus :8080 + Vite :5173, Ctrl+C stops both)")]
+[group('SIARD Suite Web Application')]
+web-dev:
+    #!/usr/bin/env bash
+    set -uo pipefail
+
+    if ! command -v npm >/dev/null 2>&1; then
+        echo "error: npm not found — the dev frontend needs Node.js (see siard-web/.nvmrc)" >&2
+        exit 1
+    fi
+    [ -d siard-web/node_modules ] || (cd siard-web && npm ci)
+
+    # job control gives each dev server its own process group, so stop() can
+    # take down whole trees (gradlew->java, npm->vite); without it kill $PID
+    # would only reach the direct child
+    set -m
+    ./gradlew :siard-web:local:backend:quarkusDev &
+    BACKEND=$!
+    (cd siard-web/local/frontend && exec npm run dev) &
+    FRONTEND=$!
+
+    stop() {
+        kill -INT -- "-$BACKEND" "-$FRONTEND" 2>/dev/null || true
+        wait 2>/dev/null || true
+    }
+    trap stop EXIT
+    trap 'exit 130' INT TERM
+
+    # poll instead of wait -n (bash 3.2 on macOS lacks it); sleep stays async
+    # so this shell keeps the terminal's foreground and receives Ctrl+C
+    while kill -0 "$BACKEND" 2>/dev/null && kill -0 "$FRONTEND" 2>/dev/null; do
+        sleep 1 &
+        wait $!
+    done
+
+
 alias cb := cli-build
 [doc("Build the SIARD Suite CLI (dev distribution, requires Java 21)")]
 [group('SIARD Suite CLI')]
