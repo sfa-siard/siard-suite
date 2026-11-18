@@ -43,4 +43,14 @@ class ErrorResponseTest {
                 .body(not(containsString("Exception")))
                 .body(not(containsString("at ch.admin")));
     }
+
+    @Test
+    void deliberateDetailIsReturned() {
+        given().get("/api/test-probe/problem")
+                .then()
+                .statusCode(400)
+                .contentType(startsWith(ProblemDetail.MEDIA_TYPE))
+                .body("status", equalTo(400))
+                .body("detail", equalTo("D"));
+    }
 }

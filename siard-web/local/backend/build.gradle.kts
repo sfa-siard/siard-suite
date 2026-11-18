@@ -70,6 +70,8 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
     jvmArgs(siardJvmArgs)
+    // the archive fixtures are read in place, never copied
+    systemProperty("siard.testfiles", project(":siard-api").file("src/test/resources/testfiles").absolutePath)
 }
 
 // src/integrationTest (source set and quarkusIntTest task come from the Quarkus plugin) starts the

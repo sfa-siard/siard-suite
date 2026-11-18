@@ -9,15 +9,19 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Turns every exception from a REST resource into problem details. Unexpected exceptions are
- * logged with their details here and answered with a generic 500 that reveals nothing internal.
+ * logged with their details here and answered with a generic 500 that reveals nothing internal;
+ * only a {@link ProblemException} carries a {@code detail} to the client.
  */
 @Provider
-public class ProblemExceptionMapper implements ExceptionMapper<Throwable> {
+public class ErrorResponseMapper implements ExceptionMapper<Throwable> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProblemExceptionMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ErrorResponseMapper.class);
 
     @Override
     public Response toResponse(Throwable exception) {
+        if (exception instanceof ProblemException problemException) {
+            return problem(ProblemDetail.of(problemException.status(), problemException.detail()));
+        }
         if (exception instanceof WebApplicationException webException) {
             return problem(ProblemDetail.of(webException.getResponse().getStatus(), null));
         }

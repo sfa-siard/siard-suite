@@ -25,6 +25,8 @@ dependencies {
     api("io.quarkus:quarkus-rest")
     api("io.quarkus:quarkus-rest-jackson")
     api("io.quarkus:quarkus-smallrye-openapi")
+    // idle eviction of open archives (design D2)
+    api("io.quarkus:quarkus-scheduler")
 
     api(project(":siard-api"))
 
@@ -106,4 +108,6 @@ tasks.named("check") {
 tasks.test {
     // the compiled main classes, scanned by CoreBoundaryTest for references to the local app
     systemProperty("webcore.classesDirs", sourceSets.main.get().output.classesDirs.asPath)
+    // the archive fixtures are read in place, never copied (design D13)
+    systemProperty("siard.testfiles", project(":siard-api").file("src/test/resources/testfiles").absolutePath)
 }
