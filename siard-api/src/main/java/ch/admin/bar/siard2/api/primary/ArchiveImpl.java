@@ -426,9 +426,19 @@ public class ArchiveImpl
     @Override
     public void open(File file)
             throws IOException {
+        open(file, false);
+    }
+
+    @Override
+    public void openReadOnly(File file) throws IOException {
+        open(file, true);
+    }
+
+    private void open(File file, boolean readOnly)
+            throws IOException {
         if (file.exists()) {
             /* open the ZIP file */
-            _zipFile = new Zip64File(file);
+            _zipFile = new Zip64File(file, readOnly);
             loadMetaData();
             SiardArchive sa = ((MetaDataImpl) getMetaData()).getSiardArchive();
             SchemasType sts = sa.getSchemas();
