@@ -3,7 +3,7 @@
 ## Next Release
 
 * Feature:
-  * Initial Version of `siard-suite-local-web-app` - an app based on web technologies that will replace the JavaFX based desktop app.
+  * Initial Version of the local web app (`siard-web/local`) - an app based on web technologies that will replace the JavaFX based desktop app.
 * Fix:
   * Pin Github Workflows to `ubuntu-22.04` so generated `.deb` installers depend on `libasound2` instead of the Ubuntu 24.04-only `libasound2t64`
 * Maintenance:

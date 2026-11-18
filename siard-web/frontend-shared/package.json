@@ -1,0 +1,28 @@
+{
+  "name": "@siard-web/shared",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "App-agnostic frontend code of the SIARD web apps, consumed as TypeScript source (design R6)",
+  "exports": {
+    ".": "./src/index.ts",
+    "./i18n/*.json": "./src/i18n/*.json",
+    "./test": "./src/test/index.ts",
+    "./test/setup": "./src/test/setup.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "peerDependencies": {
+    "@mui/material": "^9.5.0",
+    "@tanstack/react-query": "^5.107.1",
+    "i18next": "^27.0.1",
+    "openapi-fetch": "^0.17.0",
+    "openapi-react-query": "^0.5.4",
+    "react": "^19.3.1",
+    "react-i18next": "^18.0.1"
+  }
+}

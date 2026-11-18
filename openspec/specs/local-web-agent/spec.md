@@ -240,24 +240,15 @@ A fixed, configured development token and session secret SHALL be used only when
 - **THEN** the `Location` header is `/launch-failed` and no cookie is set
 - **AND** the logged launch URL contains a token different from V
 
-### Requirement: Error responses
+### Requirement: Shared error format behind the session
 
-API errors SHALL be returned as RFC 9457 problem details (`application/problem+json`) containing at least `status` and `title`. They SHALL NOT expose stack traces or internal exception messages.
+API errors of the local agent SHALL be returned in the shared error format of the backend core (RFC 9457 problem details, `application/problem+json`, see `web-module-boundaries` "Shared error format"), also for requests that passed the agent's session check.
 
-#### Scenario: Not found
+#### Scenario: Not found with a valid session
 - **GIVEN** a valid session
 - **WHEN** `GET /api/does-not-exist` is requested
-- **THEN** the body is JSON with `"status": 404` and a non-empty `title`
-
-#### Scenario: Unexpected failure
-- **GIVEN** an API handler fails with an unexpected exception
-- **WHEN** the request completes
-- **THEN** the response status is 500 with content type `application/problem+json`
-
-#### Scenario: No internal details leaked
-- **GIVEN** an unexpected exception with message M occurred while handling a request
-- **WHEN** the error response body is inspected
-- **THEN** it contains neither M, nor the string `Exception`, nor a stack frame such as `at ch.admin`
+- **THEN** the response status is 404 with content type `application/problem+json`
+- **AND** the body is JSON with `"status": 404` and a non-empty `title`
 
 ### Requirement: Platform packages
 

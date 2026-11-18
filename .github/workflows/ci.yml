@@ -61,11 +61,11 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('siard-suite-local-web-app/frontend/package-lock.json') }}
-      - name: Check local web app
-        run: ./gradlew :siard-suite-local-web-app:check
+          key: ${{ runner.os }}-playwright-${{ hashFiles('siard-web/package-lock.json') }}
+      - name: Check web modules (core, shared frontend, local app)
+        run: ./gradlew :siard-web:check
       - name: Run Playwright smoke test
-        run: ./gradlew :siard-suite-local-web-app:e2eTest
+        run: ./gradlew :siard-web:local:e2eTest
 
   integration-tests:
     if: github.event_name != 'push' || github.ref == 'refs/heads/main'
