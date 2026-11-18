@@ -56,7 +56,7 @@ Add namespaced start-page keys to the existing shared de/en/fr/it JSON resources
 
 Use local component tests for accessible controls, text, pointer/focus state, reset, inert activation and untrusted query handling. Extend browser coverage in `local/frontend/e2e/` for actual geometry, all four language layouts, hover artwork, dot movement/reset, reduced motion and keyboard focus. Observe requests relative to the existing agent event stream; no new workflow traffic is allowed, but existing lifecycle traffic and bundled asset requests are expected.
 
-Keep the existing agent launch/About/close smoke test. Add browser screenshot capture for comparison with the issue at desktop size and a narrow viewport; prefer layout/state assertions over platform-sensitive font/shadow pixel thresholds. Run through the existing Gradle e2e task, which supplies the packaged agent. Windows/macOS checks are explicit user verification steps when only Linux is available.
+Keep the existing agent launch/About/close smoke test. Add browser screenshot capture for comparison with the issue at desktop size and a narrow viewport; prefer layout/state assertions over platform-sensitive font/shadow pixel thresholds. Run through the existing Gradle e2e task, which supplies the packaged agent. Run the local web-app CI job on Linux, Windows and macOS using GitHub-hosted runners because the user has no Windows/macOS machines. Use Bash consistently, OS-specific Playwright cache paths with architecture-aware keys, and retain browser reports/screenshots for seven days even on failure. The Windows/macOS verification tasks require successful CI results for this change; Linux results alone do not complete them.
 
 ## Risks / Trade-offs
 

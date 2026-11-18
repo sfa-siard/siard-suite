@@ -1,4 +1,13 @@
 {
+  "startPage": {
+    "archive": "Archive",
+    "open": "Open",
+    "upload": "Upload",
+    "export": "Export",
+    "archiveDescription": "<strong>Archive</strong> database and save in SIARD format.",
+    "openDescription": "<strong>Display</strong> contents of a SIARD file.",
+    "destinationDescription": "<strong>Upload</strong> contents of a SIARD file to a database or <strong>export</strong> data to a table."
+  },
   "welcome": {
     "text": "Welcome to SIARD Suite!"
   },

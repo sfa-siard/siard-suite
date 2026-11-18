@@ -31,6 +31,9 @@ The decisions behind this are documented in
 
 ## Development
 
+From the repository root, `just web-dev` (alias `just wd`) starts both servers below and opens
+the launch URL in the browser once they are up.
+
 Terminal 1 (backend, port 8080, fixed dev token, hot restart):
 
     ./gradlew :siard-web:local:backend:quarkusDev

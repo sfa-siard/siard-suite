@@ -1,4 +1,13 @@
 {
+  "startPage": {
+    "archive": "Archivio",
+    "open": "Aperto",
+    "upload": "Caricare",
+    "export": "Esportazione",
+    "archiveDescription": "<strong>Archiviare</strong> il database e salvarlo in formato SIARD.",
+    "openDescription": "<strong>Visualizzare</strong> il contenuto di un file SIARD",
+    "destinationDescription": "<strong>Caricare</strong> il contenuto di un file SIARD in un database o <strong>esportare</strong> i dati in una tabella."
+  },
   "welcome": {
     "text": "Bienvenuti à SIARD Suite!"
   },
