@@ -51,7 +51,21 @@ jobs:
           path: ${{ matrix.module }}/build/reports/tests/
 
   local-web-app:
-    runs-on: ubuntu-22.04
+    name: Local web app (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            playwright-cache: ~/.cache/ms-playwright
+          - os: windows-latest
+            playwright-cache: ~/AppData/Local/ms-playwright
+          - os: macos-latest
+            playwright-cache: ~/Library/Caches/ms-playwright
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v6
         with:
@@ -60,12 +74,22 @@ jobs:
       - name: Cache Playwright browser
         uses: actions/cache@v6
         with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('siard-web/package-lock.json') }}
+          path: ${{ matrix.playwright-cache }}
+          key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ hashFiles('siard-web/package-lock.json') }}
       - name: Check web modules (core, shared frontend, local app)
         run: ./gradlew :siard-web:check
-      - name: Run Playwright smoke test
+      - name: Run Playwright browser tests
         run: ./gradlew :siard-web:local:e2eTest
+      - name: Upload browser reports and screenshots
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: local-web-browser-results-${{ matrix.os }}-${{ runner.arch }}
+          path: |
+            siard-web/local/frontend/playwright-report/
+            siard-web/local/frontend/test-results/
+          retention-days: 7
+          if-no-files-found: warn
 
   integration-tests:
     if: github.event_name != 'push' || github.ref == 'refs/heads/main'
