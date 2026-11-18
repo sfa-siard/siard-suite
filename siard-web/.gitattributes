@@ -1,0 +1,21 @@
+# All text files use LF on every platform. Without this, Windows runners check out
+# CRLF (core.autocrlf=true) and the frontend Prettier/ESLint checks fail.
+* text=auto eol=lf
+
+# Windows scripts need CRLF: cmd.exe label/goto handling breaks on LF-only files.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files must not be normalized.
+*.jar binary
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.icns binary
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
