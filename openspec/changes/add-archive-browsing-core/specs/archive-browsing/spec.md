@@ -91,7 +91,8 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **GIVEN** the table `TSIMPLE` of `sample.siard` is open
 - **WHEN** its rows are requested
 - **THEN** a NULL cell is JSON `null`
-- **AND** every other cell has `type` `text`, a string `value` equal to what the desktop app shows for the same cell, and `truncated` false
+- **AND** every other non-binary cell has `type` `text` and a string `value` equal to what the desktop app shows for the same cell, cut at 4096 characters
+- **AND** `truncated` is true exactly for the cells whose text is longer than 4096 characters (the fixture's CLOBs)
 
 #### Scenario: Large text is truncated
 - **GIVEN** a crafted archive (built in the test) with a text cell of 100000 characters
@@ -100,10 +101,11 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **AND** the full text is available through the content endpoint
 
 #### Scenario: Large object cells carry no content
-- **GIVEN** the table `TCOMPLEX` of `sample.siard` with its binary and external LOB columns
-- **WHEN** its rows are requested
-- **THEN** each LOB cell has `type` `lob` and a `length` greater than 0
-- **AND** the response body is smaller than 20000 bytes although the archive's LOB files total more than 100000 bytes
+- **GIVEN** the tables `TSIMPLE` (binary columns, LOB files up to 1 MB) and `TCOMPLEX` (LOBs nested in structured values) of `sample.siard`
+- **WHEN** their rows are requested
+- **THEN** each binary cell has `type` `lob` and a `length` greater than 0
+- **AND** the `TSIMPLE` response body is smaller than its binary LOB files together (more than 1 MB)
+- **AND** the `TCOMPLEX` response body is smaller than 20000 bytes although its LOB files total more than 100000 bytes
 
 ### Requirement: Large object content
 
@@ -131,6 +133,11 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **GIVEN** a crafted archive with a LOB larger than the server's output buffers, and a lock timeout of 1 second
 - **WHEN** a client starts downloading its content, reads part of the body and closes the connection
 - **THEN** a following `GET /api/archives/{archiveId}` on the same archive returns 200, not 503
+
+#### Scenario: A download that is never written releases the archive
+- **GIVEN** `sample.siard` is open and a lock timeout of 1 second
+- **WHEN** its content endpoint is requested with `HEAD`, and, while another request holds the archive, a client requests the content with `GET` and closes the connection before the body is written
+- **THEN** after each, a following `GET /api/archives/{archiveId}` on the same archive returns 200, not 503
 
 ### Requirement: Bounded search in a table
 

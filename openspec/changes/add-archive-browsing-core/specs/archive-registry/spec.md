@@ -120,7 +120,7 @@ An archive that has not been addressed for the idle timeout (default 30 minutes,
 
 Requests addressing the same archive SHALL be served one at a time, so that concurrent requests never share a read position and always return the same result as when run sequentially.
 
-#### Scenario: Concurrent paging returns the correct pages
+#### Scenario: Concurrent row requests answer as if issued alone
 - **GIVEN** a table of the fixture with at least 20 rows and 8 concurrent requests for different offsets
 - **WHEN** they are all issued at once
 - **THEN** each response equals the response of the same request issued alone

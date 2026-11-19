@@ -66,3 +66,22 @@ class IdleEvictionTest {
         assertEquals(get(scope, "/api/archives/" + ArchiveId.random().value()).asString(), evicted.asString());
     }
 
+    @Test
+    void releasedArchiveLeavesNoReadableData() throws IOException {
+        ArchiveScope scope = newScope();
+        String id = registry.register(scope, fixture("sample.siard"), () -> { }).value();
+        String[] paths = {"/schemas/0/tables/0/rows?offset=0&limit=10", "/schemas/0/tables/0/rows/0/columns/2/content"};
+        // the paths are right: they answer while the archive is open
+        for (String path : paths) {
+            get(scope, "/api/archives/" + id + path).then().statusCode(200);
+        }
+        clock.advance(Duration.ofMinutes(31));
+        registry.evictIdle();
+
+        for (String path : paths) {
+            Response response = get(scope, "/api/archives/" + id + path);
+            response.then().statusCode(404);
+            assertFalse(response.asString().contains("cells"), path);
+        }
+    }
+}
