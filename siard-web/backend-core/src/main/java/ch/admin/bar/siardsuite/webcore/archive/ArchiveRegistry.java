@@ -21,9 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Holds the open archives of all scopes (design D1-D3): registration with limits, lookup by
@@ -40,23 +41,28 @@ public class ArchiveRegistry {
         final ArchiveId id;
         final ArchiveScope scope;
         final Archive archive;
-        final ReentrantLock lock = new ReentrantLock();
+        // a semaphore, not a ReentrantLock: a streamed download releases it on another thread (design D3)
+        final Semaphore lock = new Semaphore(1);
         final Runnable onRelease;
         final AtomicBoolean released = new AtomicBoolean();
+        final RowCursors cursors;
         volatile Instant lastUsed;
 
-        Entry(ArchiveId id, ArchiveScope scope, Archive archive, Runnable onRelease, Instant now) {
+        Entry(ArchiveId id, ArchiveScope scope, Archive archive, Runnable onRelease, Instant now,
+              AtomicLong recordsRead) {
             this.id = id;
             this.scope = scope;
             this.archive = archive;
             this.onRelease = onRelease;
             this.lastUsed = now;
+            this.cursors = new RowCursors(recordsRead);
         }
     }
 
     private final Map<ArchiveId, Entry> entries = new ConcurrentHashMap<>();
     // registrations counted against the limits while their archive is being opened
     private final Map<ArchiveScope, Integer> pending = new ConcurrentHashMap<>();
+    private final AtomicLong recordsRead = new AtomicLong();
 
     @Inject
     Clock clock;
@@ -93,7 +99,7 @@ public class ArchiveRegistry {
         }
         ArchiveId id = ArchiveId.random();
         synchronized (this) {
-            entries.put(id, new Entry(id, scope, archive, onRelease, clock.instant()));
+            entries.put(id, new Entry(id, scope, archive, onRelease, clock.instant(), recordsRead));
             unreserve(scope);
         }
         return id;
@@ -124,7 +130,7 @@ public class ArchiveRegistry {
         Entry entry = find(scope, id);
         lock(entry);
         if (entries.get(id) != entry) {
-            entry.lock.unlock();
+            entry.lock.release();
             throw notFound();
         }
         entry.lastUsed = clock.instant();
@@ -145,7 +151,7 @@ public class ArchiveRegistry {
             }
             release(entry);
         } finally {
-            entry.lock.unlock();
+            entry.lock.release();
         }
     }
 
@@ -154,13 +160,13 @@ public class ArchiveRegistry {
     public void evictIdle() {
         Instant cutoff = clock.instant().minus(idleTimeout);
         for (Entry entry : List.copyOf(entries.values())) {
-            if (entry.lastUsed.isBefore(cutoff) && entry.lock.tryLock()) {
+            if (entry.lastUsed.isBefore(cutoff) && entry.lock.tryAcquire()) {
                 try {
                     if (entry.lastUsed.isBefore(cutoff) && entries.remove(entry.id, entry)) {
                         release(entry);
                     }
                 } finally {
-                    entry.lock.unlock();
+                    entry.lock.release();
                 }
             }
         }
@@ -173,13 +179,13 @@ public class ArchiveRegistry {
     /** Closes every open archive, waiting for requests in flight. */
     public void closeAll() {
         for (Entry entry : List.copyOf(entries.values())) {
-            entry.lock.lock();
+            entry.lock.acquireUninterruptibly();
             try {
                 if (entries.remove(entry.id, entry)) {
                     release(entry);
                 }
             } finally {
-                entry.lock.unlock();
+                entry.lock.release();
             }
         }
     }
@@ -188,6 +194,11 @@ public class ArchiveRegistry {
     public Optional<Instant> lastUsed(ArchiveScope scope, ArchiveId id) {
         Entry entry = entries.get(id);
         return entry != null && entry.scope.equals(scope) ? Optional.of(entry.lastUsed) : Optional.empty();
+    }
+
+    /** Records read from archive files so far, over all archives (paging and search; design D4). */
+    public long recordsRead() {
+        return recordsRead.get();
     }
 
     /** Number of open archives over all scopes. */
@@ -205,7 +216,7 @@ public class ArchiveRegistry {
 
     private void lock(Entry entry) {
         try {
-            if (!entry.lock.tryLock(lockTimeout.toMillis(), TimeUnit.MILLISECONDS)) {
+            if (!entry.lock.tryAcquire(lockTimeout.toMillis(), TimeUnit.MILLISECONDS)) {
                 throw new ProblemException(503, "The archive is busy, try again later");
             }
         } catch (InterruptedException e) {
@@ -219,6 +230,7 @@ public class ArchiveRegistry {
             return;
         }
         try {
+            entry.cursors.closeAll();
             entry.archive.close();
         } catch (IOException | RuntimeException e) {
             LOG.warn("Archive {} could not be closed cleanly", entry.id, e);
