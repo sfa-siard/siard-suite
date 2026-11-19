@@ -67,8 +67,8 @@ class SearchTest {
     void invalidSearchInput() throws IOException {
         String search = customerSearch();
 
-        for (String q : new String[]{"", "a".repeat(201)}) {
-            get(scope, search + "?q=" + q).then()
+        for (String query : new String[]{"?q=", "?q=" + "a".repeat(201), "?q=a&afterRow=-2"}) {
+            get(scope, search + query).then()
                     .statusCode(400)
                     .contentType(startsWith(ProblemDetail.MEDIA_TYPE));
         }
@@ -90,7 +90,7 @@ class SearchTest {
     }
 
     @Test
-    void searchHonoursTheCaseOption() throws IOException {
+    void searchHonoursCaseOption() throws IOException {
         String search = customerSearch();
 
         get(scope, search + "?q=smith&afterRow=-1&matchCase=true").then().statusCode(200)

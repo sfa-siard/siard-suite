@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router";
 import { vi } from "vitest";
-import { ArchiveBrowser } from "./ArchiveBrowser";
+import { ArchiveBrowser } from "../archive/ArchiveBrowser";
 
 export const ARCHIVE_ID = "a1";
 const BASE = `/api/archives/${ARCHIVE_ID}`;
@@ -61,6 +61,17 @@ export function renderBrowser(below = "", onUnauthorized = () => {}) {
   );
 }
 
+/** The detail of the schema's only view. */
+export const VIEW1 = {
+  index: 0,
+  name: "VIEW1",
+  query: "SELECT CINTEGER, CVARCHAR FROM TSIMPLE",
+  columns: [
+    { index: 0, name: "CINTEGER", type: "INTEGER" },
+    { index: 1, name: "CVARCHAR", type: "VARCHAR(256)" },
+  ],
+};
+
 const text = (value: string) => ({ type: "text", value, truncated: false });
 
 /**
@@ -98,6 +109,9 @@ export function archiveHandler(
           views: [{ index: 0, name: "VIEW1" }],
         },
       ];
+    }
+    if (path === `${BASE}/schemas/0/views/0`) {
+      return [200, VIEW1];
     }
     const match =
       /^\/api\/archives\/a1\/schemas\/0\/tables\/(\d+)(\/rows)?$/.exec(path);

@@ -131,7 +131,7 @@ Requests addressing the same archive SHALL be served one at a time, so that conc
 - **THEN** each response equals the response of the same request issued alone
 - **AND** no response is an error
 
-#### Scenario: A slow request does not block another archive
+#### Scenario: A slow request does not block another open archive
 - **GIVEN** a long-running request on archive X
 - **WHEN** a request is made for archive Y of the same scope
 - **THEN** it completes without waiting for the request on X
