@@ -176,16 +176,30 @@ public class ArchiveRegistry {
         closeAll();
     }
 
-    /** Closes every open archive, waiting for requests in flight. */
+    /**
+     * Closes every open archive. Waits at most {@code lock-timeout} per archive for a running
+     * request; an archive still locked after that is closed anyway (design D3), so a lock that was
+     * never released cannot keep shutdown from completing.
+     */
     public void closeAll() {
         for (Entry entry : List.copyOf(entries.values())) {
-            entry.lock.acquireUninterruptibly();
+            boolean locked = false;
+            try {
+                locked = entry.lock.tryAcquire(lockTimeout.toMillis(), TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            if (!locked) {
+                LOG.warn("Archive {} is still in use after {}; closing it anyway", entry.id, lockTimeout);
+            }
             try {
                 if (entries.remove(entry.id, entry)) {
                     release(entry);
                 }
             } finally {
-                entry.lock.release();
+                if (locked) {
+                    entry.lock.release();
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ package ch.admin.bar.siardsuite.webcore.archive;
 import ch.admin.bar.siard2.api.Cell;
 import ch.admin.bar.siardsuite.webcore.archive.ArchiveDtos.CellDto;
 import ch.admin.bar.siardsuite.webcore.archive.ArchiveDtos.LobCell;
+import ch.admin.bar.siardsuite.webcore.archive.ArchiveDtos.NullCell;
 import ch.admin.bar.siardsuite.webcore.archive.ArchiveDtos.TextCell;
 
 import java.io.IOException;
@@ -20,10 +21,10 @@ final class CellRenderer {
     private CellRenderer() {
     }
 
-    /** The cell as DTO, {@code null} for SQL NULL. */
+    /** The cell as DTO. */
     static CellDto render(Cell cell) throws IOException {
         if (cell.isNull()) {
-            return null;
+            return new NullCell();
         }
         if (isBinary(cell)) {
             return new LobCell(cell.getByteLength());

@@ -43,16 +43,21 @@ public final class ArchiveDtos {
     public record ViewDto(int index, String name, String description, String query, List<ColumnDto> columns) {
     }
 
-    /** A cell: JSON {@code null} for SQL NULL, otherwise text or a large object (design D6). */
+    /** A cell: SQL NULL, text or a large object (design D6). */
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
     @JsonSubTypes({
+            @JsonSubTypes.Type(value = NullCell.class, name = "null"),
             @JsonSubTypes.Type(value = TextCell.class, name = "text"),
             @JsonSubTypes.Type(value = LobCell.class, name = "lob")})
-    @Schema(oneOf = {TextCell.class, LobCell.class}, discriminatorProperty = "type",
+    @Schema(oneOf = {NullCell.class, TextCell.class, LobCell.class}, discriminatorProperty = "type",
             discriminatorMapping = {
+                    @DiscriminatorMapping(value = "null", schema = NullCell.class),
                     @DiscriminatorMapping(value = "text", schema = TextCell.class),
                     @DiscriminatorMapping(value = "lob", schema = LobCell.class)})
-    public sealed interface CellDto permits TextCell, LobCell {
+    public sealed interface CellDto permits NullCell, TextCell, LobCell {
+    }
+
+    public record NullCell() implements CellDto {
     }
 
     public record TextCell(String value, boolean truncated) implements CellDto {

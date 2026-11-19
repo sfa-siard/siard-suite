@@ -25,7 +25,6 @@ import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.get;
 import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.newScope;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -75,7 +74,7 @@ class CellValuesTest {
                     Map<String, Object> rendered = rows.getMap("rows[" + r + "].cells[" + c + "]");
                     String where = "row " + r + ", column " + c;
                     if (cell.isNull()) {
-                        assertNull(rendered, where);
+                        assertEquals(Map.of("type", "null"), rendered, where);
                     } else if (!CellRenderer.isBinary(cell)) {
                         // what the desktop app shows (RowsOverviewForm.extractText), design D6
                         String shown = cell.getString();
