@@ -6,7 +6,8 @@ import {
   type Handler,
   mockApi,
   renderBrowser,
-} from "./testing";
+  VIEW1,
+} from "../test/archive";
 
 // TSIMPLE of sample.siard (siard-api test resources): 4 rows, these columns
 const TSIMPLE = {
@@ -202,5 +203,58 @@ describe("ArchiveBrowser", () => {
     expect(document.body.textContent).not.toMatch(
       /\b(archive|tableContainer|search|button)\.[A-Za-z.]+/,
     );
+  });
+
+  // spec requirement "Shared browse views", scenario "LOB cell offers a download"
+  it("offers a download for a LOB cell", async () => {
+    const base = archiveHandler([
+      { name: "TSIMPLE", rows: 1, columns: ["CINTEGER", "CBLOB"] },
+    ]);
+    const handler: Handler = (path, query) =>
+      path.endsWith("/rows")
+        ? [
+            200,
+            {
+              total: 1,
+              offset: 0,
+              rows: [
+                {
+                  row: 0,
+                  cells: [
+                    { type: "text", value: "1", truncated: false },
+                    { type: "lob", length: 2048 },
+                  ],
+                },
+              ],
+            },
+          ]
+        : base(path, query);
+    mockApi(handler);
+    renderBrowser("/schemas/0/tables/0");
+
+    const link = await screen.findByRole("link", { name: "Download" });
+    expect(link).toHaveTextContent("2048 bytes");
+    expect(link).toHaveAttribute(
+      "href",
+      "/api/archives/a1/schemas/0/tables/0/rows/0/columns/1/content",
+    );
+    expect(link).toHaveAttribute("download");
+  });
+
+  // spec requirement "Shared browse views", scenario "View shows its query and columns"
+  it("shows a view's query and columns", async () => {
+    mockApi(archiveHandler([TSIMPLE]));
+    renderBrowser();
+
+    fireEvent.click(await screen.findByRole("link", { name: "VIEW1" }));
+
+    expect(await screen.findByText(VIEW1.query)).toBeInTheDocument();
+    const columns = screen.getByRole("table", { name: "Columns" });
+    for (const column of VIEW1.columns) {
+      const row = within(columns).getByRole("row", {
+        name: new RegExp(column.name),
+      });
+      expect(row).toHaveTextContent(column.type);
+    }
   });
 });

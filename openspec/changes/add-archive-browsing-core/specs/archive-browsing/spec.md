@@ -161,7 +161,7 @@ Each cell SHALL be an object `{"type":"null"}` for an SQL NULL, `{"type":"text",
 
 #### Scenario: Invalid search input
 - **GIVEN** an open table
-- **WHEN** search is requested with an empty `q` and with a `q` of 201 characters
+- **WHEN** search is requested with an empty `q`, with a `q` of 201 characters, and with `afterRow=-2`
 - **THEN** each response status is 400 with content type `application/problem+json`
 
 #### Scenario: Search covers only the displayed text
@@ -232,6 +232,16 @@ The shared frontend package SHALL provide archive browse views that, given an `a
 - **GIVEN** a table is shown
 - **WHEN** a request is answered 401
 - **THEN** the views report it to the host app through a callback and show no row data
+
+#### Scenario: LOB cell offers a download
+- **GIVEN** a table is shown whose row 0 has a large-object cell of 2048 bytes in column 1
+- **WHEN** the grid shows that cell
+- **THEN** the cell shows the size and a download link to `/api/archives/{archiveId}/schemas/0/tables/0/rows/0/columns/1/content`
+
+#### Scenario: View shows its query and columns
+- **GIVEN** an archive with the view `VIEW1`
+- **WHEN** the user selects `VIEW1`
+- **THEN** the view's query and the name and type of each of its columns are shown
 
 #### Scenario: Language
 - **GIVEN** the interface language is German
