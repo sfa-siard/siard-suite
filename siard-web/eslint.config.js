@@ -14,6 +14,7 @@ export default defineConfig([
     "**/.gradle",
     "**/node_modules",
     "**/src/api/schema.d.ts",
+    "**/src/api/core-schema.d.ts",
     "**/test-results",
     "**/playwright-report",
   ]),

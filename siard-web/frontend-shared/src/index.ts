@@ -12,3 +12,5 @@ export { default as startPageDatabaseRed } from "./assets/start-page/siard-db_re
 export { default as startPageExport } from "./assets/start-page/export.png";
 export { default as startPageExportRed } from "./assets/start-page/export_red.png";
 export { default as startPageArrow } from "./assets/start-page/arrow.png";
+export { ArchiveBrowser } from "./archive/ArchiveBrowser";
+export type { ArchiveBrowserProps } from "./archive/ArchiveBrowser";
