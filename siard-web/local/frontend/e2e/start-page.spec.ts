@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
-import en from "../../../frontend-shared/src/i18n/en.json" with { type: "json" };
-import de from "../../../frontend-shared/src/i18n/de.json" with { type: "json" };
-import fr from "../../../frontend-shared/src/i18n/fr.json" with { type: "json" };
-import it from "../../../frontend-shared/src/i18n/it.json" with { type: "json" };
+import en from "@siard-web/shared/i18n/en.json" with { type: "json" };
+import de from "@siard-web/shared/i18n/de.json" with { type: "json" };
+import fr from "@siard-web/shared/i18n/fr.json" with { type: "json" };
+import it from "@siard-web/shared/i18n/it.json" with { type: "json" };
 import { startAgent } from "./agent";
 
 for (const [locale, resource] of Object.entries({ en, de, fr, it })) {
