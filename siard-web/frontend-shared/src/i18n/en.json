@@ -21,5 +21,42 @@
   },
   "about": {
     "loadError": "The information could not be loaded."
+  },
+  "tableContainer": {
+    "title": {
+      "schemas": "Schemas",
+      "tables": "Tables",
+      "views": "Views",
+      "columns": "Columns"
+    },
+    "labelNumberOfRows": "Records",
+    "table": {
+      "header": {
+        "columnName": "Column name",
+        "columnType": "Column type"
+      }
+    }
+  },
+  "search": {
+    "table": {
+      "dialog": {
+        "search": "Search",
+        "nodata": "No search hits"
+      }
+    }
+  },
+  "button": {
+    "next": "Next"
+  },
+  "archive": {
+    "lob": {
+      "download": "Download",
+      "size": "{{size}} bytes"
+    },
+    "search": {
+      "matchCase": "Match case"
+    },
+    "notOpen": "This archive is not or no longer open. Please open it again.",
+    "loadError": "The archive content could not be loaded."
   }
 }

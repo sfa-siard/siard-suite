@@ -11,18 +11,21 @@
     "./test/setup": "./src/test/setup.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "typecheck": "npm run gen:api && tsc --noEmit -p tsconfig.json",
+    "gen:api": "openapi-typescript ../backend-core/openapi.yaml -o src/api/core-schema.d.ts",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "test": "vitest run --passWithNoTests"
   },
   "peerDependencies": {
     "@mui/material": "^9.5.0",
+    "@mui/x-data-grid": "^9.18.0",
     "@tanstack/react-query": "^5.107.1",
     "i18next": "^27.0.1",
     "openapi-fetch": "^0.17.0",
     "openapi-react-query": "^0.5.4",
     "react": "^19.3.1",
-    "react-i18next": "^18.0.1"
+    "react-i18next": "^18.0.1",
+    "react-router": "^8.5.1"
   }
 }

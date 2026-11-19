@@ -21,5 +21,42 @@
   },
   "about": {
     "loadError": "Non è stato possibile caricare le informazioni."
+  },
+  "tableContainer": {
+    "title": {
+      "schemas": "Schemi",
+      "tables": "Tabelle",
+      "views": "Visualizzazioni",
+      "columns": "Colonne"
+    },
+    "labelNumberOfRows": "Set di dati",
+    "table": {
+      "header": {
+        "columnName": "Nome della colonna",
+        "columnType": "Tipo di colonna"
+      }
+    }
+  },
+  "search": {
+    "table": {
+      "dialog": {
+        "search": "Cerca",
+        "nodata": "Nessun risultato di ricerca"
+      }
+    }
+  },
+  "button": {
+    "next": "Continua"
+  },
+  "archive": {
+    "lob": {
+      "download": "Scarica",
+      "size": "{{size}} byte"
+    },
+    "search": {
+      "matchCase": "Distinguere maiuscole e minuscole"
+    },
+    "notOpen": "Questo archivio non è aperto o non lo è più. Si prega di aprirlo di nuovo.",
+    "loadError": "Non è stato possibile caricare il contenuto dell'archivio."
   }
 }

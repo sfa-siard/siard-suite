@@ -5,3 +5,5 @@ export { theme } from "./theme";
 export { default as i18n, startLanguage, supportedLanguages } from "./i18n";
 export type { Language } from "./i18n";
 export { ApiError, createApiClient, isUnauthorized } from "./api/client";
+export { ArchiveBrowser } from "./archive/ArchiveBrowser";
+export type { ArchiveBrowserProps } from "./archive/ArchiveBrowser";

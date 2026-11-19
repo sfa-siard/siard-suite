@@ -22,7 +22,9 @@ tasks.nodeSetup { enabled = false }
 tasks.npmSetup { enabled = false }
 val workspaceInstall = ":siard-web:npmInstall"
 
-val sources = listOf("src", "package.json", "tsconfig.json", "vitest.config.ts", "../tsconfig.base.json", "../package-lock.json")
+// ../backend-core/openapi.yaml: the shared API description src/api/core-schema.d.ts is generated
+// from by the typecheck script (archive design D10), so a changed description re-runs the checks
+val sources = listOf("src", "package.json", "tsconfig.json", "vitest.config.ts", "../tsconfig.base.json", "../package-lock.json", "../backend-core/openapi.yaml")
 
 val sharedTypecheck = tasks.register<NpmTask>("sharedTypecheck") {
     description = "Type-checks the shared frontend package with tsc."

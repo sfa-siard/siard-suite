@@ -10,13 +10,14 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "test": "vitest run --passWithNoTests",
-    "gen:api": "openapi-typescript ../openapi.yaml -o src/api/schema.d.ts",
+    "gen:api": "npm run gen:api -w @siard-web/shared && openapi-typescript ../openapi.yaml -o src/api/schema.d.ts",
     "e2e": "playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^9.5.0",
+    "@mui/x-data-grid": "^9.18.0",
     "@siard-web/shared": "0.0.0",
     "@tanstack/react-query": "^5.107.1",
     "i18next": "^27.0.1",

@@ -21,5 +21,42 @@
   },
   "about": {
     "loadError": "Les informations n'ont pas pu être chargées."
+  },
+  "tableContainer": {
+    "title": {
+      "schemas": "Schémas",
+      "tables": "Tableaux",
+      "views": "Views",
+      "columns": "Colonnes"
+    },
+    "labelNumberOfRows": "Jeux de données",
+    "table": {
+      "header": {
+        "columnName": "Nom de colonne",
+        "columnType": "Type de colonne"
+      }
+    }
+  },
+  "search": {
+    "table": {
+      "dialog": {
+        "search": "Cherche",
+        "nodata": "Aucun résultat de recherche"
+      }
+    }
+  },
+  "button": {
+    "next": "Weiter"
+  },
+  "archive": {
+    "lob": {
+      "download": "Télécharger",
+      "size": "{{size}} octets"
+    },
+    "search": {
+      "matchCase": "Respecter la casse"
+    },
+    "notOpen": "Cette archive n'est pas ou plus ouverte. Veuillez l'ouvrir à nouveau.",
+    "loadError": "Le contenu de l'archive n'a pas pu être chargé."
   }
 }

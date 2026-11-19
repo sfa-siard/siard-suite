@@ -21,5 +21,42 @@
   },
   "about": {
     "loadError": "Die Informationen konnten nicht geladen werden."
+  },
+  "tableContainer": {
+    "title": {
+      "schemas": "Schemas",
+      "tables": "Tabellen",
+      "views": "Views",
+      "columns": "Spalten"
+    },
+    "labelNumberOfRows": "Datensätze",
+    "table": {
+      "header": {
+        "columnName": "Spaltenname",
+        "columnType": "Spaltentyp"
+      }
+    }
+  },
+  "search": {
+    "table": {
+      "dialog": {
+        "search": "Suche",
+        "nodata": "Keine Suchtreffer"
+      }
+    }
+  },
+  "button": {
+    "next": "Weiter"
+  },
+  "archive": {
+    "lob": {
+      "download": "Herunterladen",
+      "size": "{{size}} Bytes"
+    },
+    "search": {
+      "matchCase": "Gross-/Kleinschreibung beachten"
+    },
+    "notOpen": "Dieses Archiv ist nicht oder nicht mehr geöffnet. Bitte öffnen Sie es erneut.",
+    "loadError": "Der Inhalt des Archivs konnte nicht geladen werden."
   }
 }
