@@ -30,21 +30,21 @@ const cases = [
   {
     locale: "fr",
     resource: fr,
-    labels: ["Archiver", "Ouvrir", "Télécharger", "Exporter"],
+    labels: ["Archiver", "Ouvrir", "Téléverser", "Exporter"],
     descriptions: [
       "Archiver la base de données et la sauvegarder au format SIARD.",
-      "Afficher le contenu d'un fichier SIARD",
-      "Télécharger le contenu d'un fichier SIARD dans une base de données ou exporter des données dans une table.",
+      "Afficher le contenu d'un fichier SIARD.",
+      "Téléverser le contenu d'un fichier SIARD dans une base de données ou exporter des données dans une table.",
     ],
-    verbs: ["Archiver", "Afficher", "Télécharger", "exporter"],
+    verbs: ["Archiver", "Afficher", "Téléverser", "exporter"],
   },
   {
     locale: "it",
     resource: it,
-    labels: ["Archivio", "Aperto", "Caricare", "Esportazione"],
+    labels: ["Archivia", "Apri", "Carica", "Esporta"],
     descriptions: [
       "Archiviare il database e salvarlo in formato SIARD.",
-      "Visualizzare il contenuto di un file SIARD",
+      "Visualizzare il contenuto di un file SIARD.",
       "Caricare il contenuto di un file SIARD in un database o esportare i dati in una tabella.",
     ],
     verbs: ["Archiviare", "Visualizzare", "Caricare", "esportare"],

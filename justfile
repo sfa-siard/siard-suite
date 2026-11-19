@@ -34,7 +34,7 @@ web-dev:
 
     stop() {
         kill -INT -- "-$BACKEND" "-$FRONTEND" 2>/dev/null || true
-        [ -n "$OPENER" ] && kill --` "$OPENER" 2>/dev/null || true
+        [ -n "$OPENER" ] && kill -- "$OPENER" 2>/dev/null || true
         wait 2>/dev/null || true
     }
     trap stop EXIT
