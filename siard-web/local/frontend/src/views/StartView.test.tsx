@@ -25,6 +25,9 @@ test.each([
         screen.getByRole("button", { name: text[action] }),
       ).toHaveAttribute("type", "button");
     }
+    expect(
+      screen.getByRole("heading", { level: 1, name: resource.welcome.text }),
+    ).toBeInTheDocument();
     const overview = screen.getByRole("region", { name: "SIARD" });
     for (const description of [
       text.archiveDescription,

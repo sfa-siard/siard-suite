@@ -37,11 +37,7 @@ export default function StartView() {
     </Button>
   );
   const arrow = (name: Exclude<Action, "open">) => (
-    <Box
-      className="workflow-arrow"
-      data-testid={`${name}-arrow`}
-      aria-hidden="true"
-    >
+    <Box className="workflow-arrow" aria-hidden="true">
       <img src={startPageArrow} alt="" width="272" height="36" />
       {active === name && (
         <span className="workflow-dot" data-testid={`${name}-dot`} />
@@ -50,6 +46,9 @@ export default function StartView() {
   );
   return (
     <Box component="section" aria-label="SIARD" className="start-overview">
+      <Typography component="h1" className="sr-only">
+        {t("welcome.text")}
+      </Typography>
       <Typography component="p" className="archive-description">
         <Trans
           i18nKey="startPage.archiveDescription"
