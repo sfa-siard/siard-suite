@@ -41,8 +41,8 @@ Precondition: `restructure-into-siard-web` is applied. Test scope: one test per 
 
 ## 6. Integration and documentation
 
-- [ ] 6.1 Run `./gradlew :siard-web:check :siard-web:local:e2eTest` and verify it is green with no change to the existing local-app test counts other than the new tests; verify `siard-web:backend-core` still passes `verifyCoreBoundary`
-- [ ] 6.2 Update the `backend-core` row of `AGENTS.md` (now: error format, archive registry and browsing API under `/api/archives`), and `siard-web/README.md` with the archive API overview, the limits and their properties, and a note that no app exposes "open archive" yet; verify every property named in the README exists in `application.properties` of the core's test or the apps
+- [x] 6.1 Run `./gradlew :siard-web:check :siard-web:local:e2eTest` and verify it is green with no change to the existing local-app test counts other than the new tests; verify `siard-web:backend-core` still passes `verifyCoreBoundary`
+- [x] 6.2 Update the `backend-core` row of `AGENTS.md` (now: error format, archive registry and browsing API under `/api/archives`), and `siard-web/README.md` with the archive API overview, the limits and their properties, and a note that no app exposes "open archive" yet; verify every property named in the README exists in `application.properties` of the core's test or the apps
 
 ## Workflow follow-up
 
