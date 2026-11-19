@@ -57,6 +57,7 @@ class AbortedDownloadTest {
         String archive = "/api/archives/" + registry.register(scope, crafted, () -> { }).value();
 
         try (Socket socket = new Socket(server.getHost(), server.getPort())) {
+            socket.setSoTimeout(10_000); // an unexpected response fails the test instead of hanging it
             OutputStream out = socket.getOutputStream();
             out.write(("GET " + archive + "/schemas/0/tables/0/rows/1/columns/" + ContentTest.CBLOB + "/content HTTP/1.1\r\n"
                     + "Host: " + server.getHost() + ":" + server.getPort() + "\r\n"
@@ -88,6 +89,7 @@ class AbortedDownloadTest {
         // after the connection is closed, so Quarkus never calls the writer
         ArchiveLease held = registry.acquire(scope, id);
         try (Socket socket = new Socket(server.getHost(), server.getPort())) {
+            socket.setSoTimeout(10_000); // an unexpected response fails the test instead of hanging it
             OutputStream out = socket.getOutputStream();
             out.write(("GET " + content + " HTTP/1.1\r\n"
                     + "Host: " + server.getHost() + ":" + server.getPort() + "\r\n"

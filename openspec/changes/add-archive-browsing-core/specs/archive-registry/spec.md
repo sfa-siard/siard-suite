@@ -32,7 +32,7 @@ An app SHALL register an archive file for a scope and receive an `archiveId` of 
 
 ### Requirement: Archives are isolated by scope
 
-Every archive request SHALL be resolved in the scope the app determines for the request. An id that belongs to another scope SHALL be answered exactly like an unknown id: `404` with identical problem details. A request for which the app resolves no scope SHALL be answered `401` before any archive is looked up.
+Every archive request SHALL be resolved in the scope the app determines for the request. An id that belongs to another scope SHALL be answered exactly like an unknown id: `404` with identical problem details. A request for which the app resolves no scope SHALL be answered `401` before any archive is looked up. An app that provides no scope resolver SHALL fail to start, so archives are never served without scopes.
 
 #### Scenario: Same scope reaches its archive
 - **GIVEN** an archive registered for scope A
@@ -56,6 +56,11 @@ Every archive request SHALL be resolved in the scope the app determines for the 
 - **WHEN** a request in scope B sends `DELETE /api/archives/{archiveId}`
 - **THEN** the response status is 404
 - **AND** the archive is still readable in scope A
+
+#### Scenario: An app without exactly one scope resolver does not start
+- **GIVEN** an app that provides no scope resolver, or two
+- **WHEN** it starts
+- **THEN** startup fails with an error naming `ScopeResolver` and stating that an app must provide exactly one
 
 ### Requirement: Open archives are limited per scope
 

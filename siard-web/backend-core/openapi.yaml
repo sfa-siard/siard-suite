@@ -1,0 +1,431 @@
+---
+openapi: 3.1.0
+components:
+  schemas:
+    ArchiveDto:
+      type: object
+      properties:
+        dbName:
+          type: string
+        description:
+          type: string
+        dataOwner:
+          type: string
+        dataOriginTimespan:
+          type: string
+        archiver:
+          type: string
+        archiverContact:
+          type: string
+        archivalDate:
+          $ref: "#/components/schemas/LocalDate"
+        version:
+          type: string
+        schemas:
+          type: array
+          items:
+            $ref: "#/components/schemas/SchemaRef"
+    CellDto:
+      oneOf:
+      - $ref: "#/components/schemas/NullCell"
+      - $ref: "#/components/schemas/TextCell"
+      - $ref: "#/components/schemas/LobCell"
+      discriminator:
+        propertyName: type
+        mapping:
+          "null": "#/components/schemas/NullCell"
+          text: "#/components/schemas/TextCell"
+          lob: "#/components/schemas/LobCell"
+      type: object
+    ColumnDto:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        name:
+          type: string
+        type:
+          type: string
+        nullable:
+          type: boolean
+        description:
+          type: string
+        lob:
+          type: boolean
+    LobCell:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int64
+    LocalDate:
+      type: string
+      format: date
+      examples:
+      - 2022-03-10
+    NullCell:
+      type: object
+    RowDto:
+      type: object
+      properties:
+        row:
+          type: integer
+          format: int64
+        cells:
+          type: array
+          items:
+            $ref: "#/components/schemas/CellDto"
+    RowsDto:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        offset:
+          type: integer
+          format: int64
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/RowDto"
+    SchemaDto:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        tables:
+          type: array
+          items:
+            $ref: "#/components/schemas/TableRef"
+        views:
+          type: array
+          items:
+            $ref: "#/components/schemas/ViewRef"
+    SchemaRef:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        name:
+          type: string
+    SearchDto:
+      type: object
+      properties:
+        found:
+          type: boolean
+        row:
+          type: integer
+          format: int64
+        column:
+          type: integer
+          format: int32
+        complete:
+          type: boolean
+        nextRow:
+          type: integer
+          format: int64
+    TableDto:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        rows:
+          type: integer
+          format: int64
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/ColumnDto"
+    TableRef:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        name:
+          type: string
+        rows:
+          type: integer
+          format: int64
+    TextCell:
+      type: object
+      properties:
+        value:
+          type: string
+        truncated:
+          type: boolean
+    ViewDto:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        query:
+          type: string
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/ColumnDto"
+    ViewRef:
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        name:
+          type: string
+paths:
+  /api/archives/{archiveId}:
+    parameters:
+    - name: archiveId
+      in: path
+      required: true
+      schema:
+        type: string
+    delete:
+      responses:
+        "204":
+          description: No Content
+      summary: Close
+      tags:
+      - Archive Resource
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArchiveDto"
+      summary: Archive
+      tags:
+      - Archive Resource
+  /api/archives/{archiveId}/schemas/{s}:
+    parameters:
+    - name: archiveId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      parameters:
+      - name: s
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SchemaDto"
+      summary: Schema
+      tags:
+      - Archive Resource
+  /api/archives/{archiveId}/schemas/{s}/tables/{t}:
+    parameters:
+    - name: archiveId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      parameters:
+      - name: s
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: t
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TableDto"
+      summary: Table
+      tags:
+      - Archive Resource
+  /api/archives/{archiveId}/schemas/{s}/tables/{t}/rows:
+    parameters:
+    - name: archiveId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      parameters:
+      - name: s
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: t
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RowsDto"
+      summary: Rows
+      tags:
+      - Archive Resource
+  /api/archives/{archiveId}/schemas/{s}/tables/{t}/rows/{row}/columns/{c}/content:
+    parameters:
+    - name: archiveId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      parameters:
+      - name: c
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: row
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: s
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: t
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/octet-stream: {}
+      summary: Content
+      tags:
+      - Archive Resource
+  /api/archives/{archiveId}/schemas/{s}/tables/{t}/search:
+    parameters:
+    - name: archiveId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      parameters:
+      - name: s
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: t
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: afterRow
+        in: query
+        schema:
+          type: string
+      - name: matchCase
+        in: query
+        schema:
+          type: string
+      - name: q
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchDto"
+      summary: Search
+      tags:
+      - Archive Resource
+  /api/archives/{archiveId}/schemas/{s}/views/{v}:
+    parameters:
+    - name: archiveId
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      parameters:
+      - name: s
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: v
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ViewDto"
+      summary: View
+      tags:
+      - Archive Resource
+info:
+  title: SIARD Suite web backend core API
+  version: "1"

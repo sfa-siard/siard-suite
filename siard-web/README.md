@@ -37,7 +37,7 @@ The core keeps open archives in `ArchiveRegistry` and serves them under `/api/ar
 An app provides:
 
 1. **One `ScopeResolver` bean** that maps each `/api/archives/**` request to an `ArchiveScope`
-   (none: `401`). There is no default, so an app without one fails at build time. Locally,
+   (none: `401`). There is no default, so an app without one fails at startup. Locally,
    `LocalScopeResolver` returns one fixed scope per agent instance.
 2. **A way to obtain archive files** (a picker locally, an upload remotely), calling
    `register(scope, path, onRelease)` for each and passing the returned id to the frontend.
@@ -49,6 +49,17 @@ An app provides:
 
 Configuration (defaults): `siard.archives.max-per-scope` (5), `max-total` (50), `idle-timeout`
 (30 min), `lock-timeout` (30 s).
+
+## Shared API description
+
+`backend-core/openapi.yaml` is the committed description of the shared API; `frontend-shared`
+generates its types from it. Each app's own description must contain the `/api/archives/**` paths
+and their schemas unchanged (checked by a test in the app). After changing the shared API, run
+
+    ./gradlew :siard-web:backend-core:openApiUpdate :siard-web:local:backend:openApiUpdate
+
+and commit both `openapi.yaml` files. `openApiCheck`, part of each module's `check`, fails while
+one is out of date.
 
 ## Checks
 
@@ -64,3 +75,5 @@ runs the checks of `backend-core`, `frontend-shared` and every web app, includin
   `remote/` or an app package.
 - `frontend-shared/src/boundary.test.ts` fails when the shared sources contain `siard_session_` or
   `/launch`.
+- `SharedApiDescriptionTest` (local backend) fails when the local app's description differs from
+  `backend-core/openapi.yaml` in an `/api/archives/**` path or a schema it references.

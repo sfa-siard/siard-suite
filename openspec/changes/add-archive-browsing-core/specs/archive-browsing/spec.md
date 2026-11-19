@@ -85,12 +85,12 @@ The API SHALL expose, addressed by zero-based indexes: a schema with its tables 
 
 ### Requirement: Cell values
 
-Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…,"truncated":…}` for textual and numeric content, or `{"type":"lob","length":…}` for binary and large-object content. Text longer than 4096 characters SHALL be cut at 4096 with `truncated` true. Structured values (arrays, user-defined types) SHALL be delivered as text.
+Each cell SHALL be an object `{"type":"null"}` for an SQL NULL, `{"type":"text","value":…,"truncated":…}` for textual and numeric content, or `{"type":"lob","length":…}` for binary and large-object content. Text longer than 4096 characters SHALL be cut at 4096 with `truncated` true. Structured values (arrays, user-defined types) SHALL be delivered as text.
 
 #### Scenario: Text, null and numeric cells
 - **GIVEN** the table `TSIMPLE` of `sample.siard` is open
 - **WHEN** its rows are requested
-- **THEN** a NULL cell is JSON `null`
+- **THEN** a NULL cell is `{"type":"null"}`
 - **AND** every other non-binary cell has `type` `text` and a string `value` equal to what the desktop app shows for the same cell, cut at 4096 characters
 - **AND** `truncated` is true exactly for the cells whose text is longer than 4096 characters (the fixture's CLOBs)
 

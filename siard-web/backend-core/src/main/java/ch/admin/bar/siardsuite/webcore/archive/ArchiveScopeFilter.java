@@ -1,6 +1,9 @@
 package ch.admin.bar.siardsuite.webcore.archive;
 
 import ch.admin.bar.siardsuite.webcore.error.ProblemDetail;
+import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
@@ -12,6 +15,9 @@ import java.util.Optional;
 /**
  * Resolves the scope of every {@code /api/archives/**} request through the app's
  * {@link ScopeResolver} and answers 401 before any archive is looked up when there is none.
+ * The resolver is looked up per request, not injected directly, so that the core's own build
+ * (which writes its OpenAPI description, design D10) needs no resolver; an app without exactly
+ * one fails at startup instead (design D1).
  */
 @Provider
 public class ArchiveScopeFilter implements ContainerRequestFilter {
@@ -19,7 +25,19 @@ public class ArchiveScopeFilter implements ContainerRequestFilter {
     private static final String SCOPE_PROPERTY = ArchiveScope.class.getName();
 
     @Inject
-    ScopeResolver resolver;
+    Instance<ScopeResolver> resolver;
+
+    void requireResolver(@Observes StartupEvent event) {
+        requireExactlyOne(resolver.handlesStream().count());
+    }
+
+    /** Fails unless the app provides exactly one {@link ScopeResolver} bean (design D1). */
+    static void requireExactlyOne(long resolvers) {
+        if (resolvers != 1) {
+            throw new IllegalStateException("An app using siard-web:backend-core must provide exactly one "
+                    + ScopeResolver.class.getName() + " bean, found " + resolvers + " (see siard-web/README.md)");
+        }
+    }
 
     @Override
     public void filter(ContainerRequestContext request) {
@@ -27,7 +45,7 @@ public class ArchiveScopeFilter implements ContainerRequestFilter {
         if (!path.equals("/api/archives") && !path.startsWith("/api/archives/")) {
             return;
         }
-        Optional<ArchiveScope> scope = resolver.resolve(request);
+        Optional<ArchiveScope> scope = resolver.get().resolve(request);
         if (scope.isEmpty()) {
             ProblemDetail problem = ProblemDetail.of(401, null);
             request.abortWith(Response.status(401).type(ProblemDetail.MEDIA_TYPE).entity(problem).build());

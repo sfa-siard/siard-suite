@@ -45,7 +45,9 @@ Always use `127.0.0.1`, never `localhost` — the Host check only accepts `127.0
 
 Swagger UI is available at `http://127.0.0.1:8080/q/swagger-ui` while `quarkusDev` runs.
 
-After an API change, regenerate the committed description and the frontend types:
+After an API change, regenerate the committed description and the frontend types (for a change
+to the shared `/api/archives/**` API, also run `:siard-web:backend-core:openApiUpdate`, see
+[`../README.md`](../README.md#shared-api-description)):
 
     ./gradlew :siard-web:local:backend:openApiUpdate
     cd siard-web/local/frontend && npm run gen:api

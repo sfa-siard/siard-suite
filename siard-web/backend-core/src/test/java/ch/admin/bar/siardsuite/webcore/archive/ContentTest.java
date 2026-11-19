@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.fixture;
 import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.get;
@@ -84,7 +85,7 @@ class ContentTest {
     private static int[] firstNullCell(JsonPath rows) {
         List<List<Object>> cells = rows.getList("rows.cells");
         for (int r = 0; r < cells.size(); r++) {
-            int c = cells.get(r).indexOf(null);
+            int c = cells.get(r).indexOf(Map.of("type", "null"));
             if (c >= 0) {
                 return new int[]{r, c};
             }

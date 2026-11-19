@@ -29,8 +29,8 @@ Precondition: `restructure-into-siard-web` is applied. Test scope: one test per 
 
 ## 4. OpenAPI
 
-- [ ] 4.1 Add the core's generated `openapi.yaml`, `openApiCheck`/`openApiUpdate` tasks wired into the core's `check` (per the S4 result), and regenerate the local app's `openapi.yaml`; verify the scenarios of "The archive API is described and stays consistent across apps" (core description current, app contains the shared paths unchanged, drift fails the build naming the command)
-- [ ] 4.2 Add the test in the local backend that compares the `/api/archives/**` paths and schemas of both descriptions; verify it fails when a field is changed in only one file and passes after regeneration
+- [x] 4.1 Add the core's generated `openapi.yaml`, `openApiCheck`/`openApiUpdate` tasks wired into the core's `check` (per the S4 result), and regenerate the local app's `openapi.yaml`; verify the scenarios of "The archive API is described and stays consistent across apps" (core description current, app contains the shared paths unchanged, drift fails the build naming the command)
+- [x] 4.2 Add the test in the local backend that compares the `/api/archives/**` paths and schemas of both descriptions; verify it fails when a field is changed in only one file and passes after regeneration
 
 ## 5. Shared frontend views
 
