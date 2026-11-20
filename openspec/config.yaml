@@ -36,6 +36,11 @@ rules:
       check on another OS) is written as a separate user step that names the exact
       command and what to check. The agent does not mark it done without the
       user's report.
+    - >-
+      A task that removes or replaces existing tests must first record a
+      coverage-equivalence matrix in design.md (each removed assertion -> its
+      replacement), and the removal is a separate task that needs the user's
+      explicit approval.
 
 # Per-operation guidance (optional)
 # Guidance for how apply and archive should be conducted.
@@ -61,6 +66,10 @@ operations:
       - >-
         When all tasks are complete, run the openspec-verify-change skill on this
         change and fix any CRITICAL issues before reporting done.
+      - >-
+        As part of that verification, check every requirement in the change's
+        delta specs against the specs rules above. A requirement missing a
+        required scenario type is a CRITICAL issue.
   archive:
     guidance:
       - >-

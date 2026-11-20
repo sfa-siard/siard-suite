@@ -21,8 +21,6 @@ This is a **Gradle multi-module monorepo**. All modules live in the same reposit
 | `siard-web/local` | Local web app replacing the JavaFX UI: `backend` (Quarkus agent, REST API) and `frontend` (React/TypeScript, served by the backend) |
 | `siard-web/backend-core` | Shared Quarkus backend library of the web apps (error format, later archive browsing) |
 | `siard-web/frontend-shared` | Shared frontend package of the web apps (theme, fonts, i18n, typed API client, test helpers) |
-
-Web module boundaries (checked by `./gradlew :siard-web:check`): `backend-core` must not depend on `siard-cmd`, a `jdbc-*` module, a JDBC driver or a web app, and `frontend-shared` must not import from an app or handle sessions. See `siard-web/README.md`.
 | `siard-cmd` | Command-line interface (`SiardFromDb`, `SiardToDb`) |
 | `siard-api` | Core API for reading/writing SIARD files (JAXB-based) |
 | `jdbc-base` | Abstract base JDBC wrapper with test fixtures |
@@ -36,6 +34,8 @@ Web module boundaries (checked by `./gradlew :siard-web:check`): `backend-core` 
 | `zip64-file` | ZIP64 file format handler |
 | `siard-utilities` | Shared utility classes |
 
+Web module boundaries (checked by `./gradlew :siard-web:check`): `backend-core` must not depend on `siard-cmd`, a `jdbc-*` module, a JDBC driver or a web app, and `frontend-shared` must not import from an app or handle sessions. See `siard-web/README.md`.
+
 ## Language & style
 
 - **Java 21** — use modern Java features (records, sealed classes, pattern matching, text blocks) where appropriate in new code
@@ -44,6 +44,14 @@ Web module boundaries (checked by `./gradlew :siard-web:check`): `backend-core` 
     - **Modern style** (mostly in `siard-suite-app` and newer `siard-cmd` classes): Standard Java conventions, no Hungarian notation, clean formatting, SLF4J logging.
 - **New code always uses the modern style** — even inside legacy files. New files, classes, methods and fields get plain names, standard conventions and SLF4J logging, regardless of surrounding code. Mixed style within a file is expected during the transition.
 - When touching legacy code, keep edits minimal and leave the surrounding legacy-style code as it is — do not reformat or modernise code you are not changing.
+
+## Integration tests (Docker)
+
+- The `siard-cmd` database integration tests (`integrationTestOracle`, `integrationTestPostgres`, `integrationTestMysql`, ...) start databases with Testcontainers. They need Docker access and a writable Gradle user home (`~/.gradle`).
+- Run each Gradle test task as its own command. Do not chain it with other commands (`&&`, pipes), and process reports in a separate step.
+- If a run fails before any database starts (Gradle lock/cache errors, `Can not connect to Ryuk`), it is a sandbox problem, not a test failure: stop and ask the user to allow the task outside the sandbox or to run it themselves. Do not disable Ryuk, override the Docker host or change test configuration to work around it.
+- For timing comparisons, use `--rerun-tasks --no-build-cache` and exclude runs that never reached the database.
+
 
 ## Approach
 

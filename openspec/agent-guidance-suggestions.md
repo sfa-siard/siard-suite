@@ -1,4 +1,7 @@
 ## Harness Suggestions
 
-Suggestion: [fix-postgres-import-memory] in [openspec/config.yaml]
-Reason: The specs rule requiring 3 scenario types per requirement (happy path, error/edge case, credential/input-security) exists in config.yaml but was not enforced: all 3 requirements in the postgres-archive-import delta shipped with only 1–2 scenarios and no error/edge or credential scenario, and neither openspec validate nor openspec-verify-change flagged the gap before archive.
+## Processed
+
+- [fix-postgres-import-memory] scenario rule not enforced: config.yaml `operations.apply` now treats a missing scenario type as CRITICAL during verification (2026-11-20).
+- [consolidate-oracle-regression-fixtures] Testcontainers in sandbox: AGENTS.md "Integration tests (Docker)" section (2026-11-20).
+- [consolidate-oracle-regression-fixtures] removing replaced tests: config.yaml `rules.tasks` equivalence matrix + approval rule (2026-11-20).
