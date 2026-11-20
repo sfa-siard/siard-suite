@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * Spec requirements "List saved connections", "Save a connection", "Delete a saved connection"
+ * Spec requirements "List saved connections", "Save a connection", "Update a saved connection", "Delete a saved connection"
  * and "Passwords are never stored or transmitted". Each test class gets an isolated store via
  * {@link TempConnectionStoreProfile}.
  */
@@ -167,10 +167,115 @@ class ConnectionsResourceTest {
                 .statusCode(400)
                 .contentType(startsWith("application/problem+json"));
 
+        // port out of range
+        for (String port : new String[] {"0", "65536", "123456789012345678901234567890"}) {
+            authenticated().body(Map.of("name", "X", "dbmsId", "postgresql", "host", "h",
+                            "port", port, "dbName", "d", "user", "u"))
+                    .contentType("application/json")
+                    .post("/api/connections")
+                    .then()
+                    .statusCode(400)
+                    .contentType(startsWith("application/problem+json"));
+        }
+
         authenticated().get("/api/connections")
                 .then()
                 .statusCode(200)
                 .body("$", empty());
+    }
+
+    @Test
+    void updateReplacesTheProfile() {
+        String id = createValidPostgres();
+        Map<String, Object> changed = new java.util.HashMap<>(validPostgresBody());
+        changed.put("name", "Archive Renamed");
+        changed.put("port", "6543");
+
+        authenticated().body(changed)
+                .contentType("application/json")
+                .put("/api/connections/" + id)
+                .then()
+                .statusCode(200)
+                .body("id", is(Integer.valueOf(id)))
+                .body("name", is("Archive Renamed"))
+                .body("port", is("6543"));
+
+        authenticated().get("/api/connections")
+                .then()
+                .statusCode(200)
+                .body("size()", is(1))
+                .body("[0].name", is("Archive Renamed"));
+    }
+
+    @Test
+    void updateWithUnchangedNameSucceeds() {
+        String id = createValidPostgres();
+
+        authenticated().body(validPostgresBody())
+                .contentType("application/json")
+                .put("/api/connections/" + id)
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void updateToAnotherProfilesNameIsConflict() {
+        createValidPostgres();
+        String id = authenticated().body(Map.of("name", "Archive B", "dbmsId", "mysql", "host", "h",
+                        "port", "3306", "dbName", "d", "user", "u"))
+                .contentType("application/json")
+                .post("/api/connections")
+                .then().statusCode(201)
+                .extract().jsonPath().getString("id");
+
+        authenticated().body(validPostgresBody())
+                .contentType("application/json")
+                .put("/api/connections/" + id)
+                .then()
+                .statusCode(409)
+                .contentType(startsWith("application/problem+json"));
+    }
+
+    @Test
+    void updateValidatesAndRejectsUnknownIdentifiers() {
+        String id = createValidPostgres();
+        Map<String, Object> invalid = new java.util.HashMap<>(validPostgresBody());
+        invalid.put("port", "70000");
+
+        authenticated().body(invalid)
+                .contentType("application/json")
+                .put("/api/connections/" + id)
+                .then()
+                .statusCode(400)
+                .contentType(startsWith("application/problem+json"));
+
+        authenticated().body(validPostgresBody())
+                .contentType("application/json")
+                .put("/api/connections/999")
+                .then()
+                .statusCode(404)
+                .contentType(startsWith("application/problem+json"));
+
+        authenticated().body(validPostgresBody())
+                .contentType("application/json")
+                .put("/api/connections/not-a-number")
+                .then()
+                .statusCode(404)
+                .contentType(startsWith("application/problem+json"));
+
+        given().body(validPostgresBody())
+                .contentType("application/json")
+                .put("/api/connections/" + id)
+                .then()
+                .statusCode(401);
+    }
+
+    private static String createValidPostgres() {
+        return authenticated().body(validPostgresBody())
+                .contentType("application/json")
+                .post("/api/connections")
+                .then().statusCode(201)
+                .extract().jsonPath().getString("id");
     }
 
     @Test

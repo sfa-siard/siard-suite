@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
-import { $api, isUnauthorized } from "../api/client";
+import { $api, ApiError, isUnauthorized } from "../api/client";
 import type { components } from "../api/schema";
 import { usePrimaryAction } from "../wizard/WizardActionsContext";
 
@@ -28,6 +28,13 @@ const FIELD_VALUES: Record<
   user: "user",
   options: "options",
 };
+
+/** A port is a whole number in the TCP range; the backend enforces the same. */
+function isValidPort(value: string): boolean {
+  return (
+    /^\d{1,5}$/.test(value) && Number(value) >= 1 && Number(value) <= 65535
+  );
+}
 
 /** Paired fields of the desktop-inspired grid; every other descriptor key is additional. */
 const PAIRED_KEYS = new Set(["host", "port", "dbName", "user", "password"]);
@@ -47,7 +54,9 @@ function ConnectionForm({
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { mutate, isPending } = $api.useMutation("post", "/api/connections");
+  const create = $api.useMutation("post", "/api/connections");
+  const update = $api.useMutation("put", "/api/connections/{id}");
+  const isPending = create.isPending || update.isPending;
   const [name, setName] = useState(saved?.name ?? "");
   const [values, setValues] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};
@@ -68,6 +77,7 @@ function ConnectionForm({
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saveFailed, setSaveFailed] = useState(false);
+  const [nameError, setNameError] = useState<string | undefined>();
   const [showPassword, setShowPassword] = useState(false);
 
   const setField = (key: string) => (event: { target: { value: string } }) =>
@@ -80,11 +90,13 @@ function ConnectionForm({
       const value = (values[key] ?? "").trim();
       if (descriptor.required && value === "") {
         found[key] = t("connections.required");
-      } else if (key === "port" && value !== "" && !/^\d+$/.test(value)) {
+      } else if (key === "port" && value !== "" && !isValidPort(value)) {
         found[key] = t("connections.invalidPort");
       }
     }
     setErrors(found);
+    setSaveFailed(false);
+    setNameError(undefined);
     if (Object.keys(found).length > 0) {
       return;
     }
@@ -108,14 +120,25 @@ function ConnectionForm({
         body[key] = value;
       }
     }
-    mutate(
-      { body },
-      {
-        onSuccess: () => navigate("/archive"),
-        onError: () => setSaveFailed(true),
+    const callbacks = {
+      onSuccess: () => navigate("/archive"),
+      onError: (error: unknown) => {
+        if (error instanceof ApiError && error.status === 409) {
+          setNameError(t("connections.duplicateName"));
+        } else {
+          setSaveFailed(true);
+        }
       },
-    );
-  }, [entry, values, name, t, navigate, mutate]);
+    };
+    if (saved?.id !== undefined) {
+      update.mutate(
+        { params: { path: { id: String(saved.id) } }, body },
+        callbacks,
+      );
+    } else {
+      create.mutate({ body }, callbacks);
+    }
+  }, [entry, saved, values, name, t, navigate, create, update]);
 
   usePrimaryAction({
     label: t("connections.save"),
@@ -232,7 +255,8 @@ function ConnectionForm({
         label={t("connections.name")}
         value={name}
         onChange={(event) => setName(event.target.value)}
-        helperText={t("connections.nameHint")}
+        error={nameError !== undefined}
+        helperText={nameError ?? t("connections.nameHint")}
         fullWidth
         sx={{ gridColumn: "1 / -1" }}
       />
@@ -300,5 +324,12 @@ export default function ConnectionDetailsView() {
       </Box>
     );
   }
-  return <ConnectionForm entry={entry} saved={saved} />;
+  // a new key remounts the form, so its state follows a changed ?dbms= or ?connection=
+  return (
+    <ConnectionForm
+      key={`${entry.id}-${saved?.id ?? "new"}`}
+      entry={entry}
+      saved={saved}
+    />
+  );
 }

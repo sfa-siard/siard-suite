@@ -66,7 +66,7 @@ The agent SHALL expose the supported server-based DBMS through `GET /api/dbms`: 
 
 #### Scenario: Invalid fields rejected
 - **GIVEN** a valid local session
-- **WHEN** `POST /api/connections` is called with a missing name, an unknown DBMS identifier, or a non-numeric port
+- **WHEN** `POST /api/connections` is called with a missing name, an unknown DBMS identifier, or a port that is not a number between 1 and 65535
 - **THEN** the response status is 400 with content type `application/problem+json`
 - **AND** no profile is created
 
@@ -75,6 +75,26 @@ The agent SHALL expose the supported server-based DBMS through `GET /api/dbms`: 
 - **WHEN** `POST /api/connections` is called without a session cookie or with an invalid one
 - **THEN** the response status is 401 with content type `application/problem+json`
 - **AND** no profile is created
+
+### Requirement: Update a saved connection
+
+`PUT /api/connections/{id}` SHALL replace the fields of the profile with the given identifier, keeping its identifier and creation time. Fields SHALL be validated as for saving. The name SHALL stay unique among other profiles; keeping the profile's own name SHALL be allowed.
+
+#### Scenario: Update an existing profile
+- **GIVEN** a valid local session and a saved connection "Archive A"
+- **WHEN** `PUT /api/connections/{id}` is called with its identifier, the name "Archive Renamed" and valid fields
+- **THEN** the response status is 200 and the body is the updated profile with the same identifier
+- **AND** `GET /api/connections` lists "Archive Renamed" and no longer "Archive A"
+
+#### Scenario: Name of another profile rejected
+- **GIVEN** a valid local session and saved connections "Archive A" and "Archive B"
+- **WHEN** `PUT /api/connections/{id}` is called for "Archive B" with the name "Archive A"
+- **THEN** the response status is 409 with content type `application/problem+json`
+
+#### Scenario: Unknown or invalid update rejected
+- **GIVEN** a valid local session
+- **WHEN** `PUT /api/connections/{id}` is called with an unknown identifier, or with invalid fields
+- **THEN** the response status is 404 respectively 400 with content type `application/problem+json`
 
 ### Requirement: Delete a saved connection
 
@@ -254,7 +274,7 @@ The `/archive/connection` route SHALL show a responsive desktop-inspired form fo
 
 #### Scenario: Validation blocks submit
 - **GIVEN** the details page for a new connection
-- **WHEN** the user submits with a required field empty or the port non-numeric
+- **WHEN** the user submits with a required field empty or a port that is not a number between 1 and 65535
 - **THEN** inline validation messages appear on the invalid fields
 - **AND** no save request is sent
 
@@ -263,6 +283,18 @@ The `/archive/connection` route SHALL show a responsive desktop-inspired form fo
 - **WHEN** the user submits the form
 - **THEN** a `POST /api/connections` request is sent with the entered fields and name
 - **AND** the route returns to `/archive` where the new profile is listed
+
+#### Scenario: Save an opened saved connection
+- **GIVEN** the details page for the saved connection "Archive A"
+- **WHEN** the user submits the form, with or without changes
+- **THEN** a `PUT /api/connections/{id}` request is sent for that profile and no `POST /api/connections` request
+- **AND** the route returns to `/archive`
+
+#### Scenario: Taken name shown on the name field
+- **GIVEN** the details page with a name that another saved connection already uses
+- **WHEN** the user submits the form and the save is rejected with 409
+- **THEN** the name field shows that the name is already taken and the route stays on the page
+- **AND** the message is cleared on the next submit
 
 #### Scenario: Submit without name does not save
 - **GIVEN** the details page for a new connection with valid fields and an empty name field

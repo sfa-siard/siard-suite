@@ -54,8 +54,15 @@ public final class ConnectionPaths {
         return appDataDirectory(osName, environment, userHome).resolve(DATABASE_FILE);
     }
 
-    /** Creates the directory (and parents) and restricts it to the current user where POSIX applies. */
+    /**
+     * Creates the directory (and parents) and restricts it to the current user where POSIX
+     * applies. An existing directory is left untouched: a configured database path may point
+     * into a shared or working directory whose permissions are not ours to change.
+     */
     public static void createUserOnlyDirectory(Path directory) throws IOException {
+        if (Files.isDirectory(directory)) {
+            return;
+        }
         Files.createDirectories(directory);
         setPosixPermissions(directory, PosixFilePermissions.fromString(OWNER_ONLY_DIRECTORY));
     }

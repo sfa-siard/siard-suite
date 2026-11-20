@@ -70,4 +70,18 @@ class ConnectionPathsTest {
                     Files.getPosixFilePermissions(directory));
         }
     }
+
+    @Test
+    void existingDirectoryKeepsItsPermissions(@TempDir Path tempDir) throws IOException {
+        if (!FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
+            return;
+        }
+        Path shared = tempDir.resolve("shared");
+        Files.createDirectory(shared);
+        Files.setPosixFilePermissions(shared, PosixFilePermissions.fromString("rwxr-xr-x"));
+
+        ConnectionPaths.createUserOnlyDirectory(shared);
+
+        assertEquals(PosixFilePermissions.fromString("rwxr-xr-x"), Files.getPosixFilePermissions(shared));
+    }
 }

@@ -89,9 +89,6 @@ export default function ArchiveView() {
         <Typography component="h2" variant="h6">
           {t("archive.savedConnections")}
         </Typography>
-        {deleteFailed && (
-          <Alert severity="error">{t("archive.deleteError")}</Alert>
-        )}
         {connections.isPending ? (
           <LinearProgress />
         ) : connectionError ? (
@@ -190,6 +187,11 @@ export default function ArchiveView() {
           <DialogContentText>
             {t("archive.deleteText", { name: pendingDelete?.name })}
           </DialogContentText>
+          {deleteFailed && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {t("archive.deleteError")}
+            </Alert>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setPendingDelete(null)}>

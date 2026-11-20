@@ -38,7 +38,7 @@ See proposal.md for motivation. Relevant current state:
 
 ### D2. `SavedConnection` record + `ConnectionStore` interface in `localwebapp.connections`
 
-A flat record (`id`, `name`, `dbmsId`, `host`, `port`, `dbName`, `user`, `options`, `file`, `createdAt`, `updatedAt`) — no password field exists, so none can leak. `ConnectionStore` is a small interface (`list`, `create`, `delete`, `existsByName`) with a SQLite implementation; tests can substitute an in-memory implementation. This keeps the persistence detail swappable when the remote app arrives.
+A flat record (`id`, `name`, `dbmsId`, `host`, `port`, `dbName`, `user`, `options`, `file`, `createdAt`, `updatedAt`) — no password field exists, so none can leak. `ConnectionStore` is a small interface (`list`, `create`, `update`, `delete`) with a SQLite implementation; tests can substitute an in-memory implementation. This keeps the persistence detail swappable when the remote app arrives.
 
 *Alternative considered:* reusing `DbmsConnectionData` as the stored shape — rejected because it carries a password supplier and JDBC-URL semantics that don't belong in a profile record.
 
@@ -63,7 +63,9 @@ Directory created with user-only permissions where the OS allows (POSIX `700`/`6
 - `GET /api/dbms` → catalog entries `{id, name, kind, fields[], examples}` — enough for the form without exposing encoder functions.
 - `GET /api/connections` → profile list ordered by name.
 - `POST /api/connections` → 201; 400 on validation failure, 409 on duplicate name (DB `UNIQUE` constraint on `name` mapped to 409).
+- `PUT /api/connections/{id}` → 200 with the updated profile; 400 on validation failure, 404 for an unknown id, 409 when the name belongs to another profile. Saving an opened saved profile uses this, so it never re-creates the profile.
 - `DELETE /api/connections/{id}` → 204 / 404.
+- Ports are validated as whole numbers 1–65535 in both backend and frontend.
 
 All under `/api/` so existing session, Host and `Sec-Fetch-Site` filters apply unchanged; errors via the core's problem-details mapper. `openApiUpdate` regenerates `openapi.yaml`; the frontend client is regenerated from it.
 

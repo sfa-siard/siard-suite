@@ -84,15 +84,32 @@ function fill(label: string | RegExp, value: string) {
   fireEvent.change(screen.getByLabelText(label), { target: { value } });
 }
 
-function postCalls(fetchMock: ReturnType<typeof vi.fn>) {
+function callsTo(
+  fetchMock: ReturnType<typeof vi.fn>,
+  method: string,
+  path: string,
+) {
   return fetchMock.mock.calls.filter(([input]) => {
     const request =
       input instanceof Request ? input : new Request(String(input));
-    return (
-      request.method === "POST" &&
-      new URL(request.url).pathname === "/api/connections"
-    );
+    return request.method === method && new URL(request.url).pathname === path;
   });
+}
+
+function postCalls(fetchMock: ReturnType<typeof vi.fn>) {
+  return callsTo(fetchMock, "POST", "/api/connections");
+}
+
+function putCalls(fetchMock: ReturnType<typeof vi.fn>) {
+  return callsTo(fetchMock, "PUT", "/api/connections/7");
+}
+
+function clickSave() {
+  fireEvent.click(
+    within(screen.getByTestId("wizard-actions")).getByRole("button", {
+      name: en.connections.save,
+    }),
+  );
 }
 
 test.each([
@@ -315,7 +332,7 @@ test("Save is disabled while pending and clears when returning to the picker", a
   });
   const fetchMock = respondApi({
     ...okApi,
-    "POST /api/connections": () => pending,
+    "PUT /api/connections/7": () => pending,
   });
   renderAt("/archive/connection?connection=7");
   await screen.findByLabelText(/^Host/);
@@ -329,8 +346,8 @@ test("Save is disabled while pending and clears when returning to the picker", a
   fireEvent.click(save);
   await waitFor(() => expect(save).toBeDisabled());
   fireEvent.click(save);
-  expect(postCalls(fetchMock)).toHaveLength(1);
-  finish({ status: 201, body: archiveA });
+  expect(putCalls(fetchMock)).toHaveLength(1);
+  finish({ status: 200, body: archiveA });
   await screen.findByRole("heading", { name: en.archive.title });
   await waitFor(() =>
     expect(
@@ -342,7 +359,7 @@ test("Save is disabled while pending and clears when returning to the picker", a
 test("the form submit path still validates and saves without the visible button", async () => {
   const fetchMock = respondApi({
     ...okApi,
-    "POST /api/connections": { status: 201, body: archiveA },
+    "PUT /api/connections/7": { body: archiveA },
   });
   renderAt("/archive/connection?connection=7");
   const host = await screen.findByLabelText(/^Host/);
@@ -353,8 +370,105 @@ test("the form submit path still validates and saves without the visible button"
   expect(form.querySelector('button[type="submit"]')).toBeInTheDocument();
   fireEvent.submit(form);
   await screen.findByRole("heading", { name: en.archive.title });
-  expect(postCalls(fetchMock)).toHaveLength(1);
+  expect(putCalls(fetchMock)).toHaveLength(1);
+  expect(postCalls(fetchMock)).toHaveLength(0);
 });
+
+test("saving an opened saved connection updates it instead of creating a copy", async () => {
+  const fetchMock = respondApi({
+    ...okApi,
+    "PUT /api/connections/7": {
+      body: { ...archiveA, name: "Archive Renamed" },
+    },
+  });
+  renderAt("/archive/connection?connection=7");
+  await screen.findByLabelText(/^Host/);
+
+  fill(/^Connection name/, "Archive Renamed");
+  clickSave();
+
+  await screen.findByRole("heading", { name: en.archive.title });
+  expect(postCalls(fetchMock)).toHaveLength(0);
+  expect(putCalls(fetchMock)).toHaveLength(1);
+  const body = await (putCalls(fetchMock)[0][0] as Request).clone().json();
+  expect(body).toMatchObject({ name: "Archive Renamed", port: "15432" });
+  expect(body).not.toHaveProperty("password");
+});
+
+test("a taken name is shown on the name field and cleared on the next submit", async () => {
+  let conflict = true;
+  respondApi({
+    ...okApi,
+    "POST /api/connections": () =>
+      conflict
+        ? { status: 409, body: { title: "Conflict" } }
+        : { status: 201, body: archiveA },
+  });
+  renderAt("/archive/connection?dbms=postgresql");
+  await screen.findByLabelText(/^Host/);
+  fill(/^Database \*/, "archive");
+  fill(/^User/, "archivist");
+  fill(/^Connection name/, "Archive A");
+
+  clickSave();
+
+  expect(
+    await screen.findByText(en.connections.duplicateName),
+  ).toBeInTheDocument();
+  expect(screen.getByLabelText(/^Connection name/)).toHaveAttribute(
+    "aria-invalid",
+    "true",
+  );
+  expect(screen.queryByText(en.connections.saveError)).not.toBeInTheDocument();
+
+  conflict = false;
+  fill(/^Connection name/, "Archive B");
+  clickSave();
+  await screen.findByRole("heading", { name: en.archive.title });
+});
+
+test("a failed save shows the generic error until the next submit", async () => {
+  let fail = true;
+  respondApi({
+    ...okApi,
+    "POST /api/connections": () =>
+      fail
+        ? { status: 500, body: { title: "Error" } }
+        : { status: 201, body: archiveA },
+  });
+  renderAt("/archive/connection?dbms=postgresql");
+  await screen.findByLabelText(/^Host/);
+  fill(/^Database \*/, "archive");
+  fill(/^User/, "archivist");
+  fill(/^Connection name/, "Archive B");
+
+  clickSave();
+  expect(await screen.findByText(en.connections.saveError)).toBeInTheDocument();
+
+  fail = false;
+  clickSave();
+  await screen.findByRole("heading", { name: en.archive.title });
+});
+
+test.each(["0", "65536", "123456789012345678901234567890"])(
+  "port %s outside 1..65535 is rejected",
+  async (port) => {
+    const fetchMock = respondApi(okApi);
+    renderAt("/archive/connection?dbms=postgresql");
+    await screen.findByLabelText(/^Host/);
+    fill(/^Port/, port);
+    fill(/^Database \*/, "archive");
+    fill(/^User/, "archivist");
+    fill(/^Connection name/, "Archive B");
+
+    clickSave();
+
+    expect(
+      await screen.findByText(en.connections.invalidPort),
+    ).toBeInTheDocument();
+    expect(postCalls(fetchMock)).toHaveLength(0);
+  },
+);
 
 test("dismissing Cancel leaves real form values intact", async () => {
   respondApi(okApi);

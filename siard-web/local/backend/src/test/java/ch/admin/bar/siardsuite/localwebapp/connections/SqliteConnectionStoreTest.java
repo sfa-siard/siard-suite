@@ -85,10 +85,56 @@ class SqliteConnectionStoreTest {
     }
 
     @Test
-    void existsByName() {
-        assertFalse(store.existsByName("Archive A"));
+    void updateReplacesFieldsAndKeepsIdAndCreationTime() {
+        SavedConnection saved = store.create(newConnection("Archive A"));
+
+        SavedConnection updated = store.update(saved.id(), new NewConnection("Archive Renamed", "mysql",
+                "other.example.org", "3306", "other", "someone", null, null)).orElseThrow();
+
+        assertEquals(saved.id(), updated.id());
+        assertEquals(saved.createdAt(), updated.createdAt());
+        assertEquals("Archive Renamed", updated.name());
+        assertEquals("mysql", updated.dbmsId());
+        assertNull(updated.options());
+        assertEquals(List.of(updated), store.list());
+    }
+
+    @Test
+    void updateKeepingTheNameIsAllowed() {
+        SavedConnection saved = store.create(newConnection("Archive A"));
+
+        assertTrue(store.update(saved.id(), newConnection("Archive A")).isPresent());
+        assertEquals(1, store.list().size());
+    }
+
+    @Test
+    void updateToAnotherProfilesNameIsRejected() {
         store.create(newConnection("Archive A"));
-        assertTrue(store.existsByName("Archive A"));
+        SavedConnection other = store.create(newConnection("Archive B"));
+
+        assertThrows(DuplicateConnectionNameException.class,
+                () -> store.update(other.id(), newConnection("Archive A")));
+        assertEquals(List.of("Archive A", "Archive B"),
+                store.list().stream().map(SavedConnection::name).toList());
+    }
+
+    @Test
+    void updateOfUnknownIdIsEmpty() {
+        assertTrue(store.update(999, newConnection("Archive A")).isEmpty());
+        assertTrue(store.list().isEmpty());
+    }
+
+    @Test
+    void failedOpenIsRetried() throws Exception {
+        // a directory where the database file should be makes the open fail
+        Path blocked = tempDir.resolve("blocked.db");
+        Files.createDirectory(blocked);
+        SqliteConnectionStore blockedStore = new SqliteConnectionStore(blocked, Clock.systemUTC());
+
+        assertThrows(ConnectionStoreException.class, blockedStore::list);
+
+        Files.delete(blocked);
+        assertTrue(blockedStore.list().isEmpty(), "the schema is created on the next attempt");
     }
 
     @Test

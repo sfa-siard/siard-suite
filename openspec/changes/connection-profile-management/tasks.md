@@ -40,6 +40,13 @@ The completed tasks above record the original implementation; the following task
 - [ ] 6.3 Implement the desktop-inspired responsive layout: server plus compact port upper left, database name upper right, username below server, password below database name, existing additional fields next, optional connection name last and full-width. Stack fields in the specified order on narrow screens; retain localized labels and the existing wizard action bar. Do not add schema or connection-URL functionality. Verify: targeted tests pass and manually inspect the form at 1280 by 800 and 360 by 800 CSS pixels, confirming field positions, order, reachability and no horizontal overflow.
 - [ ] 6.4 Run `./gradlew :siard-web:check` and the mandatory architecture, QM-Guide, spec-to-test and security reviews (security last) for the form refinement. Record results and resolve blocking findings before archiving. Verify the new defaults can be edited and saved, saved custom values survive reopening, passwords remain absent from API payloads, and unnamed submission still does not save.
 
+## 7. Code review fixes
+
+- [x] 7.1 Saving an opened saved profile updates it via new `PUT /api/connections/{id}` (`ConnectionStore.update`) instead of re-creating it; `existsByName` removed as unused.
+- [x] 7.2 409 shown as a name-field error; save error cleared on resubmit; form remounts when `?dbms=`/`?connection=` changes; delete error shown inside the confirm dialog.
+- [x] 7.3 Ports validated as 1–65535 (backend and frontend); duplicate names detected via `SQLITE_CONSTRAINT_UNIQUE` result code.
+- [x] 7.4 Store open is atomic (connection kept only after schema and permissions succeed); an existing database directory keeps its permissions.
+
 ## Workflow follow-up
 
 - CI runs the test suites on Windows, macOS and Linux — if the pipeline is green on all three, the cross-platform requirement is verified; the agent does not mark that done without the user's report.

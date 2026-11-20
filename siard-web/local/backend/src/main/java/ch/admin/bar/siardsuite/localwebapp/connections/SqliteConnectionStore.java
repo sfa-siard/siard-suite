@@ -7,6 +7,8 @@ import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
+import org.sqlite.SQLiteErrorCode;
+import org.sqlite.SQLiteException;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -160,6 +162,45 @@ public class SqliteConnectionStore implements ConnectionStore {
     }
 
     @Override
+    public synchronized Optional<SavedConnection> update(long id, NewConnection connection) {
+        String update = "UPDATE saved_connections SET name = ?, dbms_id = ?, host = ?, port = ?,"
+                + " db_name = ?, user_name = ?, options = ?, file = ?, updated_at = ? WHERE id = ?";
+        try (PreparedStatement statement = connection().prepareStatement(update)) {
+            statement.setString(1, connection.name());
+            statement.setString(2, connection.dbmsId());
+            statement.setString(3, connection.host());
+            statement.setString(4, connection.port());
+            statement.setString(5, connection.dbName());
+            statement.setString(6, connection.user());
+            statement.setString(7, connection.options());
+            statement.setString(8, connection.file());
+            statement.setString(9, clock.instant().toString());
+            statement.setLong(10, id);
+            if (statement.executeUpdate() == 0) {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            if (isDuplicateName(e)) {
+                throw new DuplicateConnectionNameException(connection.name(), e);
+            }
+            throw new ConnectionStoreException("Could not update the connection", e);
+        }
+        return find(id);
+    }
+
+    private Optional<SavedConnection> find(long id) {
+        try (PreparedStatement statement = connection().prepareStatement(
+                "SELECT " + COLUMNS + " FROM saved_connections WHERE id = ?")) {
+            statement.setLong(1, id);
+            try (ResultSet rows = statement.executeQuery()) {
+                return rows.next() ? Optional.of(map(rows)) : Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new ConnectionStoreException("Could not read the connection", e);
+        }
+    }
+
+    @Override
     public synchronized boolean delete(long id) {
         try (PreparedStatement statement = connection().prepareStatement(
                 "DELETE FROM saved_connections WHERE id = ?")) {
@@ -170,33 +211,26 @@ public class SqliteConnectionStore implements ConnectionStore {
         }
     }
 
-    @Override
-    public synchronized boolean existsByName(String name) {
-        try (PreparedStatement statement = connection().prepareStatement(
-                "SELECT COUNT(*) FROM saved_connections WHERE name = ?")) {
-            statement.setString(1, name);
-            try (ResultSet rows = statement.executeQuery()) {
-                return rows.next() && rows.getLong(1) > 0;
-            }
-        } catch (SQLException e) {
-            throw new ConnectionStoreException("Could not check the connection name", e);
-        }
-    }
-
-    /** The lazily opened connection; the first call creates the directory, file and schema. */
+    /**
+     * The lazily opened connection; the first call creates the directory, file and schema. The
+     * field is only set once schema and permissions are in place, so a failed open is retried.
+     */
     private Connection connection() {
         if (connection == null || isClosed()) {
+            Connection opened = null;
             try {
                 Path directory = databaseFile.getParent();
                 if (directory != null) {
                     ConnectionPaths.createUserOnlyDirectory(directory);
                 }
-                connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
-                try (Statement statement = connection.createStatement()) {
+                opened = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
+                try (Statement statement = opened.createStatement()) {
                     statement.execute(CREATE_TABLE);
                 }
                 ConnectionPaths.restrictFileToOwner(databaseFile);
+                connection = opened;
             } catch (SQLException | IOException e) {
+                closeQuietly(opened);
                 throw new ConnectionStoreException("Could not open the connection store at " + databaseFile, e);
             }
         }
@@ -224,8 +258,10 @@ public class SqliteConnectionStore implements ConnectionStore {
         }
     }
 
+    // name is the table's only UNIQUE column
     private static boolean isDuplicateName(SQLException e) {
-        return e.getMessage() != null && e.getMessage().contains("UNIQUE constraint failed");
+        return e instanceof SQLiteException sqliteException
+                && sqliteException.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE;
     }
 
     private static SavedConnection map(ResultSet rows) throws SQLException {
@@ -244,13 +280,17 @@ public class SqliteConnectionStore implements ConnectionStore {
     }
 
     private void closeQuietly() {
-        if (connection != null) {
+        closeQuietly(connection);
+        connection = null;
+    }
+
+    private static void closeQuietly(Connection toClose) {
+        if (toClose != null) {
             try {
-                connection.close();
+                toClose.close();
             } catch (SQLException e) {
                 LOG.debug("Could not close the connection store", e);
             }
-            connection = null;
         }
     }
 }

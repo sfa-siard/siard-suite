@@ -1,5 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router";
 import { expect, test, vi } from "vitest";
 import en from "@siard-web/shared/i18n/en.json";
@@ -247,6 +253,30 @@ test("delete confirmation sends DELETE and refreshes the list", async () => {
       new URL(input.url).pathname === "/api/connections/7",
   );
   expect(deleteCall).toBeDefined();
+});
+
+test("a failed delete shows its error inside the open dialog", async () => {
+  respondApi({
+    "GET /api/connections": { body: [archiveA] },
+    "GET /api/dbms": { body: catalog },
+    "DELETE /api/connections/7": { status: 500, body: { title: "Error" } },
+  });
+
+  renderAt("/archive");
+
+  fireEvent.click(
+    await screen.findByRole("button", {
+      name: en.archive.delete.replace("{{name}}", "Archive A"),
+    }),
+  );
+  fireEvent.click(
+    await screen.findByRole("button", { name: en.archive.deleteConfirm }),
+  );
+
+  const dialog = screen.getByRole("dialog");
+  expect(
+    await within(dialog).findByText(en.archive.deleteError),
+  ).toBeInTheDocument();
 });
 
 test("empty state when no connections are saved", async () => {

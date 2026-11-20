@@ -138,6 +138,35 @@ paths:
       tags:
       - Connections Resource
   /api/connections/{id}:
+    put:
+      summary: Update a saved connection profile; the name must stay unique
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveConnectionRequest"
+        required: true
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavedConnection"
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "409":
+          description: Conflict
+      tags:
+      - Connections Resource
     delete:
       summary: Delete a saved connection by id
       parameters:
