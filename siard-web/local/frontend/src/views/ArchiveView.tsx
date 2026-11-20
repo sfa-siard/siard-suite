@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -30,20 +31,6 @@ function targetSummary(connection: SavedConnection): string {
   const parts = [connection.host, connection.port].filter(Boolean).join(":");
   const target = connection.dbName ? `${parts}/${connection.dbName}` : parts;
   return connection.file ?? target;
-}
-
-function DeleteIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-    </svg>
-  );
 }
 
 /** Connection picker: saved profiles above the catalog of server-based DBMS. */
@@ -118,7 +105,7 @@ export default function ArchiveView() {
                       setPendingDelete(connection);
                     }}
                   >
-                    <DeleteIcon />
+                    <DeleteIcon fontSize="small" />
                   </IconButton>
                 }
               >

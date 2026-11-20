@@ -1,1 +1,0 @@
-{"root":["./vite.config.ts","./playwright.config.ts","./e2e/agent.ts","./e2e/archive-wizard.spec.ts","./e2e/smoke.spec.ts","./e2e/start-feedback.spec.ts","./e2e/start-page.spec.ts"],"errors":true,"version":"5.9.3"}
