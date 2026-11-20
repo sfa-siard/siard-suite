@@ -75,6 +75,7 @@
     "required": "Campo obbligatorio.",
     "invalidPort": "Inserire una porta tra 1 e 65535.",
     "duplicateName": "Esiste già una connessione con questo nome.",
+    "nameRequired": "Una connessione salvata deve avere un nome.",
     "unknown": "La connessione richiesta non esiste.",
     "loadError": "Impossibile caricare i dettagli della connessione.",
     "backToArchive": "Torna alle connessioni",

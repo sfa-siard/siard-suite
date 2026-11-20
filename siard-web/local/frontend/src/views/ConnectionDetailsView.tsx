@@ -1,4 +1,5 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -54,6 +55,7 @@ function ConnectionForm({
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const create = $api.useMutation("post", "/api/connections");
   const update = $api.useMutation("put", "/api/connections/{id}");
   const isPending = create.isPending || update.isPending;
@@ -104,6 +106,11 @@ function ConnectionForm({
       return;
     }
     const trimmedName = name.trim();
+    if (trimmedName === "" && saved) {
+      // a saved profile keeps a name; clearing it must not silently drop the edits
+      setNameError(t("connections.nameRequired"));
+      return;
+    }
     if (trimmedName === "") {
       // unnamed use is not saved
       navigate("/archive");
@@ -124,7 +131,13 @@ function ConnectionForm({
       }
     }
     const callbacks = {
-      onSuccess: () => navigate("/archive"),
+      onSuccess: async () => {
+        // the picker and a later edit must not show the list cached before this save
+        await queryClient.invalidateQueries({
+          queryKey: ["get", "/api/connections"],
+        });
+        navigate("/archive");
+      },
       onError: (error: unknown) => {
         if (error instanceof ApiError && error.status === 409) {
           setNameError(t("connections.duplicateName"));
@@ -266,7 +279,10 @@ function ConnectionForm({
         value={name}
         onChange={(event) => setName(event.target.value)}
         error={nameError !== undefined}
-        helperText={nameError ?? t("connections.nameHint")}
+        helperText={
+          nameError ?? (saved ? undefined : t("connections.nameHint"))
+        }
+        required={saved !== undefined}
         fullWidth
         sx={{ gridColumn: "1 / -1" }}
       />
@@ -286,8 +302,11 @@ export default function ConnectionDetailsView() {
   const connectionParam = params.get("connection");
 
   const dbms = $api.useQuery("get", "/api/dbms");
+  // always refetch on mount: the form copies the profile into its state once, so it must
+  // not be seeded from a stale cached list
   const connections = $api.useQuery("get", "/api/connections", undefined, {
     enabled: connectionParam !== null,
+    refetchOnMount: "always",
   });
 
   const saved: SavedConnection | undefined = connectionParam
@@ -301,7 +320,10 @@ export default function ConnectionDetailsView() {
   );
 
   const loading =
-    dbms.isPending || (connectionParam !== null && connections.isPending);
+    dbms.isPending ||
+    (connectionParam !== null &&
+      !connections.isFetchedAfterMount &&
+      !connections.isError);
   const loadError = dbms.error ?? (connectionParam ? connections.error : null);
   const unknown =
     !loading &&

@@ -417,6 +417,43 @@ test("saving an opened saved connection updates it instead of creating a copy", 
   expect(body).not.toHaveProperty("password");
 });
 
+test("clearing the name of a saved connection asks for a name instead of dropping the edits", async () => {
+  const fetchMock = respondApi(okApi);
+  renderAt("/archive/connection?connection=7");
+  await screen.findByLabelText(/^Host/);
+
+  fill(/^Port/, "5433");
+  fill(/^Connection name/, "");
+  clickSave();
+
+  expect(
+    await screen.findByText(en.connections.nameRequired),
+  ).toBeInTheDocument();
+  expect(putCalls(fetchMock)).toHaveLength(0);
+  expect(screen.getByLabelText(/^Port/)).toHaveValue("5433");
+  expect(
+    screen.queryByRole("heading", { name: en.archive.title }),
+  ).not.toBeInTheDocument();
+});
+
+test("a saved connection opened from a cached list is prefilled with fresh data", async () => {
+  let listCalls = 0;
+  respondApi({
+    ...okApi,
+    "GET /api/connections": () => {
+      listCalls += 1;
+      return {
+        body: [{ ...archiveA, port: listCalls === 1 ? "15432" : "25432" }],
+      };
+    },
+  });
+  renderAt("/archive");
+  fireEvent.click(await screen.findByRole("button", { name: /^Archive A/ }));
+
+  const port = await screen.findByLabelText(/^Port/);
+  expect(port).toHaveValue("25432");
+});
+
 test("a taken name is shown on the name field and cleared on the next submit", async () => {
   let conflict = true;
   respondApi({

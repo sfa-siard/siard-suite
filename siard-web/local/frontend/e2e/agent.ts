@@ -1,4 +1,7 @@
 import { spawn, type ChildProcess } from "node:child_process";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 /** The packaged agent as a separate process, started like an installed app. */
 export interface Agent {
@@ -35,24 +38,38 @@ export function required(name: string): string {
  * and waits for the launch URL in its log.
  */
 export async function startAgent(idleExitGraceSeconds: number): Promise<Agent> {
+  // a temp connection store, so tests never touch the user's real saved connections
+  const dataDirectory = mkdtempSync(join(tmpdir(), "siard-e2e-"));
+  const removeDataDirectory = () => {
+    try {
+      rmSync(dataDirectory, { recursive: true, force: true });
+    } catch {
+      // best effort: a leftover temp directory is harmless
+    }
+  };
   const child: ChildProcess = spawn(
     required("E2E_JAVA"),
     [
       ...SIARD_JVM_ARGS,
       "-Dsiard.agent.open-browser=false",
       `-Dsiard.agent.idle-exit-grace=${idleExitGraceSeconds}s`,
+      `-Dsiard.connections.db=${join(dataDirectory, "siard-suite.db")}`,
       "-jar",
       required("E2E_AGENT_JAR"),
     ],
     { stdio: ["ignore", "pipe", "pipe"] },
   );
   const exited = new Promise<number | null>((resolve) =>
-    child.once("exit", (code) => resolve(code)),
+    child.once("exit", (code) => {
+      removeDataDirectory();
+      resolve(code);
+    }),
   );
   const stop = () => {
     if (child.exitCode === null && child.signalCode === null) {
       child.kill();
     }
+    removeDataDirectory();
   };
 
   let output = "";

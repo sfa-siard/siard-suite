@@ -75,6 +75,7 @@
     "required": "Ce champ est obligatoire.",
     "invalidPort": "Saisir un port entre 1 et 65535.",
     "duplicateName": "Une connexion portant ce nom existe déjà.",
+    "nameRequired": "Une connexion enregistrée doit avoir un nom.",
     "unknown": "La connexion demandée n'existe pas.",
     "loadError": "Les détails de la connexion n'ont pas pu être chargés.",
     "backToArchive": "Retour aux connexions",
