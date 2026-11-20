@@ -8,9 +8,7 @@ test("renders the start, about and launch-failed routes", async () => {
   respondWith(200, systemInfo);
 
   const start = renderAt("/");
-  expect(
-    screen.getByRole("heading", { name: en.welcome.text }),
-  ).toBeInTheDocument();
+  expect(screen.getByRole("region", { name: "SIARD" })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: en.menu.item.info })).toHaveAttribute(
     "href",
     "/about",

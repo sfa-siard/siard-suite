@@ -10,7 +10,7 @@ app-run:
 
 
 alias wd := web-dev
-[doc("Run the SIARD Suite local web app in dev mode (Quarkus :8080 + Vite :5173, Ctrl+C stops both)")]
+[doc("Run the SIARD Suite local web app in dev mode (Quarkus :8080 + Vite :5173, opens the launch URL, Ctrl+C stops both)")]
 [group('SIARD Suite Web Application')]
 web-dev:
     #!/usr/bin/env bash
@@ -30,13 +30,44 @@ web-dev:
     BACKEND=$!
     (cd siard-web/local/frontend && exec npm run dev) &
     FRONTEND=$!
+    OPENER=
 
     stop() {
         kill -INT -- "-$BACKEND" "-$FRONTEND" 2>/dev/null || true
+        [ -n "$OPENER" ] && kill -- "$OPENER" 2>/dev/null || true
         wait 2>/dev/null || true
     }
     trap stop EXIT
     trap 'exit 130' INT TERM
+
+    # once the backend and Vite answer, open the documented dev launch URL
+    # (siard-web/local/README.md); the token is the fixed dev token — reusable
+    # and non-expiring in development mode (LaunchCredentials). Probe both
+    # servers directly: hitting /launch through the Vite proxy while the backend
+    # is still compiling would spam "http proxy error" into the dev output
+    token=$(sed -n 's/^%dev\.siard\.agent\.dev-token=//p' \
+        siard-web/local/backend/src/main/resources/application.properties | head -n1)
+    if [ -n "$token" ] && command -v curl >/dev/null 2>&1; then
+        url="http://127.0.0.1:5173/launch?token=$token"
+        (
+            for ((i = 0; i < 180; i++)); do
+                # a missing token still yields a <400 response (303), so -f only
+                # fails while a server is not up yet
+                if curl -sf -o /dev/null "http://127.0.0.1:8080/launch" \
+                    && curl -sf -o /dev/null "http://127.0.0.1:5173/"; then
+                    echo "opening $url"
+                    case "$(uname -s)" in
+                        Linux*)               xdg-open "$url" >/dev/null 2>&1 ;;
+                        Darwin*)              open "$url" >/dev/null 2>&1 ;;
+                        MINGW*|MSYS*|CYGWIN*) cmd //c start "" "$url" >/dev/null 2>&1 ;;
+                    esac
+                    exit 0
+                fi
+                sleep 1
+            done
+        ) &
+        OPENER=$!
+    fi
 
     # poll instead of wait -n (bash 3.2 on macOS lacks it); sleep stays async
     # so this shell keeps the terminal's foreground and receives Ctrl+C
