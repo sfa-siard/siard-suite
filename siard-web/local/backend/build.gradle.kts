@@ -80,6 +80,18 @@ tasks.named("check") {
 
 // OpenAPI description (design D11): Quarkus writes it to build/openapi/ during quarkusBuild; the
 // committed copy ../openapi.yaml is what the frontend generates its types from
+
+// build/openapi is a side effect of the augmentation (store-schema-directory) that the Quarkus
+// plugin does not declare as an output, so up-to-date checks and the build cache ignore it and a
+// cache hit leaves the file missing. quarkusAppPartsBuild is the task that runs the augmentation;
+// declaring the directory there makes the cache store and restore it. The input property changes
+// the cache key once so entries stored before this declaration - which do not contain the file -
+// are not reused.
+tasks.named("quarkusAppPartsBuild") {
+    outputs.dir(layout.buildDirectory.dir("openapi"))
+    inputs.property("openapi-output-tracking", "1")
+}
+
 val generatedOpenApi = layout.buildDirectory.file("openapi/openapi.yaml")
 val committedOpenApi = layout.projectDirectory.file("../openapi.yaml")
 
