@@ -2,6 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { visuallyHidden } from "@mui/utils";
 import { Trans, useTranslation } from "react-i18next";
 import {
   startPageArchive,
@@ -46,7 +47,7 @@ export default function StartView() {
   );
   return (
     <Box component="section" aria-label="SIARD" className="start-overview">
-      <Typography component="h1" className="sr-only">
+      <Typography component="h1" sx={visuallyHidden}>
         {t("welcome.text")}
       </Typography>
       <Typography component="p" className="archive-description">
