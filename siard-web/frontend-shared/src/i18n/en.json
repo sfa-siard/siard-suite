@@ -44,6 +44,16 @@
     "deleteCancel": "Cancel",
     "deleteError": "The connection could not be deleted."
   },
+  "archiveWizard": {
+    "selectConnection": "Select connection",
+    "connectionDetails": "Connection details",
+    "back": "Back",
+    "cancel": "Cancel",
+    "cancelTitle": "Cancel archiving",
+    "cancelText": "Are you sure you want to leave the archive workflow?",
+    "cancelConfirm": "Leave archiving",
+    "cancelStay": "Stay"
+  },
   "connections": {
     "newTitle": "New connection",
     "editTitle": "Connection",

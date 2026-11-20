@@ -23,19 +23,30 @@ test("renders the start, about, archive and launch-failed routes", async () => {
     "href",
     "/about",
   );
+  expect(screen.queryByTestId("archive-stepper")).not.toBeInTheDocument();
+  expect(screen.queryByTestId("wizard-actions")).not.toBeInTheDocument();
   start.unmount();
 
   const about = renderAt("/about");
   expect(
     await screen.findByRole("heading", { name: "SIARD Suite 2.2.168" }),
   ).toBeInTheDocument();
+  expect(screen.queryByTestId("archive-stepper")).not.toBeInTheDocument();
+  expect(screen.queryByTestId("wizard-actions")).not.toBeInTheDocument();
   about.unmount();
 
   const archive = renderAt("/archive");
   expect(
     await screen.findByRole("heading", { name: en.archive.title }),
   ).toBeInTheDocument();
+  expect(screen.getByTestId("archive-stepper")).toBeInTheDocument();
+  expect(screen.getByTestId("wizard-actions")).toBeInTheDocument();
   archive.unmount();
+
+  const details = renderAt("/archive/connection?dbms=postgresql");
+  expect(screen.getByTestId("archive-stepper")).toBeInTheDocument();
+  expect(screen.getByTestId("wizard-actions")).toBeInTheDocument();
+  details.unmount();
 
   renderAt("/launch-failed");
   expect(screen.getByRole("alert")).toHaveTextContent(en.launchFailed.text);

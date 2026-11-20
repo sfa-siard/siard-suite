@@ -44,6 +44,16 @@
     "deleteCancel": "Annulla",
     "deleteError": "Impossibile eliminare la connessione."
   },
+  "archiveWizard": {
+    "selectConnection": "Seleziona connessione",
+    "connectionDetails": "Dettagli della connessione",
+    "back": "Indietro",
+    "cancel": "Annulla",
+    "cancelTitle": "Annulla archiviazione",
+    "cancelText": "Sei sicuro di voler uscire dal processo di archiviazione?",
+    "cancelConfirm": "Esci dall'archiviazione",
+    "cancelStay": "Resta"
+  },
   "connections": {
     "newTitle": "Nuova connessione",
     "editTitle": "Connessione",

@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
 import en from "@siard-web/shared/i18n/en.json";
 import { renderAt } from "../test/render";
@@ -41,7 +41,7 @@ const archiveA = {
 };
 
 type Handler = { status?: number; body?: unknown };
-type Routes = Record<string, Handler | (() => Handler)>;
+type Routes = Record<string, Handler | (() => Handler | Promise<Handler>)>;
 
 function respondApi(routes: Routes) {
   const fetchMock = vi.fn(
@@ -51,7 +51,7 @@ function respondApi(routes: Routes) {
       const path = new URL(request.url).pathname;
       const handler = routes[`${request.method} ${path}`];
       const resolved =
-        typeof handler === "function" ? handler() : (handler ?? {});
+        typeof handler === "function" ? await handler() : (handler ?? {});
       const status = resolved.status ?? (handler ? 200 : 404);
       const body = resolved.body ?? { title: "Not Found" };
       return new Response(JSON.stringify(body), {
@@ -128,7 +128,11 @@ test("validation blocks submit with inline messages and no request", async () =>
   renderAt("/archive/connection?dbms=postgresql");
   await screen.findByLabelText(/^Host/);
 
-  fireEvent.click(screen.getByRole("button", { name: en.connections.save }));
+  fireEvent.click(
+    within(screen.getByTestId("wizard-actions")).getByRole("button", {
+      name: en.connections.save,
+    }),
+  );
 
   expect(await screen.findAllByText(en.connections.required)).not.toHaveLength(
     0,
@@ -140,7 +144,11 @@ test("validation blocks submit with inline messages and no request", async () =>
   fill(/^Database \*/, "archive");
   fill(/^User/, "archivist");
   fill(/^Connection name/, "Archive B");
-  fireEvent.click(screen.getByRole("button", { name: en.connections.save }));
+  fireEvent.click(
+    within(screen.getByTestId("wizard-actions")).getByRole("button", {
+      name: en.connections.save,
+    }),
+  );
 
   expect(
     await screen.findByText(en.connections.invalidPort),
@@ -165,7 +173,9 @@ test("save sends the fields without the password and returns to /archive", async
   fill(/^Options/, "ssl=true");
   fill(/^Password/, "s3cret!");
   fireEvent.click(
-    await screen.findByRole("button", { name: en.connections.save }),
+    await within(screen.getByTestId("wizard-actions")).findByRole("button", {
+      name: en.connections.save,
+    }),
   );
 
   await waitFor(() => expect(postCalls(fetchMock)).toHaveLength(1));
@@ -198,12 +208,78 @@ test("submit without a name does not save and returns to /archive", async () => 
   fill(/^Port/, "5432");
   fill(/^Database \*/, "archive");
   fill(/^User/, "archivist");
-  fireEvent.click(screen.getByRole("button", { name: en.connections.save }));
+  fireEvent.click(
+    within(screen.getByTestId("wizard-actions")).getByRole("button", {
+      name: en.connections.save,
+    }),
+  );
 
   expect(
     await screen.findByRole("heading", { name: en.archive.title }),
   ).toBeInTheDocument();
   expect(postCalls(fetchMock)).toHaveLength(0);
+});
+
+test("Save is disabled while pending and clears when returning to the picker", async () => {
+  let finish!: (handler: Handler) => void;
+  const pending = new Promise<Handler>((resolve) => {
+    finish = resolve;
+  });
+  const fetchMock = respondApi({
+    ...okApi,
+    "POST /api/connections": () => pending,
+  });
+  renderAt("/archive/connection?connection=7");
+  await screen.findByLabelText(/^Host/);
+  const save = within(screen.getByTestId("wizard-actions")).getByRole(
+    "button",
+    { name: en.connections.save },
+  );
+  expect(
+    screen.queryByRole("button", { name: /next/i }),
+  ).not.toBeInTheDocument();
+  fireEvent.click(save);
+  await waitFor(() => expect(save).toBeDisabled());
+  fireEvent.click(save);
+  expect(postCalls(fetchMock)).toHaveLength(1);
+  finish({ status: 201, body: archiveA });
+  await screen.findByRole("heading", { name: en.archive.title });
+  await waitFor(() =>
+    expect(
+      screen.queryByRole("button", { name: en.connections.save }),
+    ).not.toBeInTheDocument(),
+  );
+});
+
+test("the form submit path still validates and saves without the visible button", async () => {
+  const fetchMock = respondApi({
+    ...okApi,
+    "POST /api/connections": { status: 201, body: archiveA },
+  });
+  renderAt("/archive/connection?connection=7");
+  const host = await screen.findByLabelText(/^Host/);
+  const form = host.closest("form")!;
+  expect(within(form).queryByRole("button")).not.toBeInTheDocument();
+  expect(form.querySelector('button[type="submit"]')).toBeInTheDocument();
+  fireEvent.submit(form);
+  await screen.findByRole("heading", { name: en.archive.title });
+  expect(postCalls(fetchMock)).toHaveLength(1);
+});
+
+test("dismissing Cancel leaves real form values intact", async () => {
+  respondApi(okApi);
+  renderAt("/archive/connection?dbms=postgresql");
+  await screen.findByLabelText(/^Host/);
+  fill(/^Host/, "edited.example.org");
+  fill(/^Connection name/, "Unsaved name");
+  fireEvent.click(
+    screen.getByRole("button", { name: en.archiveWizard.cancel }),
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: en.archiveWizard.cancelStay }),
+  );
+  expect(screen.getByLabelText(/^Host/)).toHaveValue("edited.example.org");
+  expect(screen.getByLabelText(/^Connection name/)).toHaveValue("Unsaved name");
 });
 
 test("unknown dbms and connection identifiers show an error with a way back", async () => {

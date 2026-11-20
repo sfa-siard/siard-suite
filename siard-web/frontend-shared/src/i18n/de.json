@@ -44,6 +44,16 @@
     "deleteCancel": "Abbrechen",
     "deleteError": "Die Verbindung konnte nicht gelöscht werden."
   },
+  "archiveWizard": {
+    "selectConnection": "Verbindung auswählen",
+    "connectionDetails": "Verbindungsdetails",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "cancelTitle": "Archivierung abbrechen",
+    "cancelText": "Sind Sie sicher, dass Sie den Archivierungsprozess verlassen möchten?",
+    "cancelConfirm": "Archivierung verlassen",
+    "cancelStay": "Bleiben"
+  },
   "connections": {
     "newTitle": "Neue Verbindung",
     "editTitle": "Verbindung",

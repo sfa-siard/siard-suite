@@ -44,6 +44,16 @@
     "deleteCancel": "Annuler",
     "deleteError": "La connexion n'a pas pu être supprimée."
   },
+  "archiveWizard": {
+    "selectConnection": "Sélectionner une connexion",
+    "connectionDetails": "Détails de la connexion",
+    "back": "Retour",
+    "cancel": "Annuler",
+    "cancelTitle": "Annuler l'archivage",
+    "cancelText": "Voulez-vous vraiment quitter le processus d'archivage ?",
+    "cancelConfirm": "Quitter l'archivage",
+    "cancelStay": "Rester"
+  },
   "connections": {
     "newTitle": "Nouvelle connexion",
     "editTitle": "Connexion",

@@ -34,6 +34,8 @@ See proposal.md — Why. The archive flow is two sibling routes (`/archive`, `/a
 
 - **Components live in `siard-web/local/frontend/src/wizard/`**, not `frontend-shared`: the capability is local-only and the shared package stays app-agnostic. i18n strings still go into the shared JSON files, matching the existing convention that all app strings live there.
 
+- **Native Enter submission.** Keep a hidden native submit control in the details form because browsers do not implicitly submit a multi-field form without a submit control after the visible Save action moves to the bar.
+
 ## Risks / Trade-offs
 
 - Moving Save out of the form breaks tests that query it inside the form → update `ConnectionDetailsView.test.tsx` to target the action bar; Enter-submit stays covered via `onSubmit`.

@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useCallback, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { $api, isUnauthorized } from "../api/client";
 import type { components } from "../api/schema";
+import { usePrimaryAction } from "../wizard/WizardActionsContext";
 
 type DbmsCatalogEntry = components["schemas"]["DbmsCatalogEntry"];
 type SavedConnection = components["schemas"]["SavedConnection"];
@@ -38,7 +39,7 @@ function ConnectionForm({
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const save = $api.useMutation("post", "/api/connections");
+  const { mutate, isPending } = $api.useMutation("post", "/api/connections");
   const [name, setName] = useState(saved?.name ?? "");
   const [values, setValues] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};
@@ -55,8 +56,7 @@ function ConnectionForm({
   const setField = (key: string) => (event: { target: { value: string } }) =>
     setValues((current) => ({ ...current, [key]: event.target.value }));
 
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
+  const submit = useCallback(() => {
     const found: Record<string, string> = {};
     for (const descriptor of entry.fields ?? []) {
       const key = descriptor.key ?? "";
@@ -91,20 +91,29 @@ function ConnectionForm({
         body[key] = value;
       }
     }
-    save.mutate(
+    mutate(
       { body },
       {
         onSuccess: () => navigate("/archive"),
         onError: () => setSaveFailed(true),
       },
     );
-  };
+  }, [entry, values, name, t, navigate, mutate]);
+
+  usePrimaryAction({
+    label: t("connections.save"),
+    onClick: submit,
+    disabled: isPending,
+  });
 
   return (
     <Box
       component="form"
       noValidate
-      onSubmit={submit}
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (!isPending) submit();
+      }}
       sx={{ display: "grid", gap: 2, maxWidth: 480 }}
     >
       <Typography component="h1" variant="h5">
@@ -146,14 +155,7 @@ function ConnectionForm({
           />
         );
       })}
-      <Box sx={{ display: "flex", gap: 1 }}>
-        <Button type="submit" variant="contained" disabled={save.isPending}>
-          {t("connections.save")}
-        </Button>
-        <Button component={Link} to="/archive">
-          {t("connections.back")}
-        </Button>
-      </Box>
+      <button type="submit" hidden disabled={isPending} />
     </Box>
   );
 }
