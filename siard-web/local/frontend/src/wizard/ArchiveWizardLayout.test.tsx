@@ -133,10 +133,13 @@ test("missing session still shows the indicator, missing-session message and usa
   expect(
     (await screen.findAllByText(en.session.missing)).length,
   ).toBeGreaterThan(0);
-  expect(screen.getByTestId("archive-stepper")).toHaveTextContent(
-    en.archiveWizard.selectConnection,
-  );
-  expect(screen.queryAllByRole("listitem")).toHaveLength(2);
+  const stepper = screen.getByTestId("archive-stepper");
+  expect(
+    within(stepper).getByText(en.archiveWizard.selectConnection),
+  ).toBeInTheDocument();
+  expect(
+    within(stepper).getByText(en.archiveWizard.connectionDetails),
+  ).toBeInTheDocument();
   expect(
     screen.queryByRole("button", { name: en.connections.save }),
   ).not.toBeInTheDocument();

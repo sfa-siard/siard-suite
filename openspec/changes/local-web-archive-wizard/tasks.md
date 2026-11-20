@@ -21,6 +21,8 @@
 - [x] 4.1 Run `./gradlew :siard-web:check` — backend tests, boundary checks, OpenAPI check, frontend lint/typecheck/tests all pass.
 - [x] 4.2 Manual smoke on this machine: launch the app, walk `/` → Archive → `/archive` → a DBMS or saved connection → `/archive/connection`, exercising the stepper, Back, Cancel confirm/dismiss, save-and-return, and a 360px-wide viewport. Report the result.
 
+- [x] 4.3 Cover the "Narrow viewport" scenario automatically: `e2e/archive-wizard.spec.ts` opens `/archive` and `/archive/connection?dbms=postgresql` at 360×800 against the packaged agent, checks that the step indicator and every action-bar button can be scrolled into view, and asserts `scrollWidth <= 360`; the "Details step action bar" scenario gets an exact button-list test in `ConnectionDetailsView.test.tsx`. Verify: `./gradlew :siard-web:local:e2eTest` and `npm test` pass.
+
 ## Workflow follow-up
 
 - CI runs the test suites on Windows, macOS and Linux — if the pipeline is green on all three, the cross-platform requirement is verified; the agent does not mark that done without the user's report.

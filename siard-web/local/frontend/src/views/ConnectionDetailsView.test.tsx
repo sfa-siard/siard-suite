@@ -261,6 +261,28 @@ test("validation blocks submit with inline messages and no request", async () =>
   expect(postCalls(fetchMock)).toHaveLength(0);
 });
 
+// Spec scenario "Details step action bar" (local-web-archive-wizard)
+test("the details action bar shows Back, Cancel and Save and no Next", async () => {
+  respondApi(okApi);
+  renderAt("/archive/connection?dbms=postgresql");
+  await screen.findByLabelText(/^Host/);
+
+  const actions = screen.getByTestId("wizard-actions");
+  await within(actions).findByRole("button", { name: en.connections.save });
+  expect(
+    within(actions)
+      .getAllByRole("button")
+      .map((button) => button.textContent),
+  ).toEqual([
+    en.archiveWizard.back,
+    en.archiveWizard.cancel,
+    en.connections.save,
+  ]);
+  expect(
+    screen.queryByRole("button", { name: /next/i }),
+  ).not.toBeInTheDocument();
+});
+
 test("save sends the fields without the password and returns to /archive", async () => {
   const fetchMock = respondApi({
     ...okApi,

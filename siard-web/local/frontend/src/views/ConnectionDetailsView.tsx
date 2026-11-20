@@ -57,6 +57,9 @@ function ConnectionForm({
   const create = $api.useMutation("post", "/api/connections");
   const update = $api.useMutation("put", "/api/connections/{id}");
   const isPending = create.isPending || update.isPending;
+  // mutate is stable while the mutation result object is new on every render
+  const { mutate: createConnection } = create;
+  const { mutate: updateConnection } = update;
   const [name, setName] = useState(saved?.name ?? "");
   const [values, setValues] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};
@@ -131,14 +134,23 @@ function ConnectionForm({
       },
     };
     if (saved?.id !== undefined) {
-      update.mutate(
+      updateConnection(
         { params: { path: { id: String(saved.id) } }, body },
         callbacks,
       );
     } else {
-      create.mutate({ body }, callbacks);
+      createConnection({ body }, callbacks);
     }
-  }, [entry, saved, values, name, t, navigate, create, update]);
+  }, [
+    entry,
+    saved,
+    values,
+    name,
+    t,
+    navigate,
+    createConnection,
+    updateConnection,
+  ]);
 
   usePrimaryAction({
     label: t("connections.save"),
