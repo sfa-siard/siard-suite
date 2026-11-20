@@ -1,17 +1,5 @@
 package ch.admin.bar.siardsuite.localwebapp.connections;
 
-import ch.admin.bar.siardsuite.localwebapp.support.Sessions;
-import ch.admin.bar.siardsuite.localwebapp.support.TempConnectionStoreProfile;
-import io.quarkus.arc.Arc;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Map;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -19,6 +7,19 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import ch.admin.bar.siardsuite.localwebapp.support.Sessions;
+import ch.admin.bar.siardsuite.localwebapp.support.TempConnectionStoreProfile;
+import io.quarkus.arc.Arc;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 /**
  * Spec requirements "List saved connections", "Save a connection", "Update a saved connection", "Delete a saved connection"
@@ -345,6 +346,15 @@ class ConnectionsResourceTest {
                 .post("/api/connections")
                 .then().statusCode(201)
                 .extract().jsonPath().getString("id");
+
+        Map<String, Object> renamed = new java.util.HashMap<>(validPostgresBody());
+        renamed.put("name", "Archive Renamed");
+        given().body(renamed)
+                .contentType("application/json")
+                .put("/api/connections/" + id)
+                .then()
+                .statusCode(401)
+                .contentType(startsWith("application/problem+json"));
 
         given().delete("/api/connections/" + id)
                 .then()

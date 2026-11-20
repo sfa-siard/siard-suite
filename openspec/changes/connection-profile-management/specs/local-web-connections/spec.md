@@ -96,6 +96,12 @@ The agent SHALL expose the supported server-based DBMS through `GET /api/dbms`: 
 - **WHEN** `PUT /api/connections/{id}` is called with an unknown identifier, or with invalid fields
 - **THEN** the response status is 404 respectively 400 with content type `application/problem+json`
 
+#### Scenario: Update requires a session
+- **GIVEN** the agent is running and a saved connection "Archive A"
+- **WHEN** `PUT /api/connections/{id}` is called for it with the name "Archive Renamed" without a session cookie or with an invalid one
+- **THEN** the response status is 401 with content type `application/problem+json`
+- **AND** `GET /api/connections` with a valid session still lists "Archive A"
+
 ### Requirement: Delete a saved connection
 
 `DELETE /api/connections/{id}` SHALL remove the profile with the given identifier. Deleting an unknown identifier SHALL return 404.
@@ -202,6 +208,12 @@ The `/archive` route SHALL show a heading, the list of saved connections and the
 - **WHEN** the user visits `/archive`
 - **THEN** the page shows a localized error message instead of crashing
 - **AND** the DBMS choices remain visible if the catalog loaded
+
+#### Scenario: Picker without a session
+- **GIVEN** the agent rejects the API requests with 401 because the session is missing or invalid
+- **WHEN** the user visits `/archive`
+- **THEN** the localized missing-session message is shown instead of saved connections
+- **AND** no saved connection data is displayed
 
 ### Requirement: Connection details page
 
@@ -311,3 +323,9 @@ The `/archive/connection` route SHALL show a responsive desktop-inspired form fo
 - **GIVEN** the catalog or connections API responds with an error
 - **WHEN** the details page loads
 - **THEN** the page shows a localized error message instead of a broken form
+
+#### Scenario: Details without a session
+- **GIVEN** the agent rejects the API requests with 401 because the session is missing or invalid
+- **WHEN** the user visits `/archive/connection?connection=<id>` or `?dbms=postgresql`
+- **THEN** the localized missing-session message is shown instead of the form
+- **AND** no saved connection values are displayed and no save request is sent

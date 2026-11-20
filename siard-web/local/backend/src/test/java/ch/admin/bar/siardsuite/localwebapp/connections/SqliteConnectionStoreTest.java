@@ -66,6 +66,19 @@ class SqliteConnectionStoreTest {
     }
 
     @Test
+    void profilesSurviveReopeningTheDatabase() {
+        SavedConnection saved = store.create(newConnection("Archive A"));
+
+        // a new store on the same file stands for a restarted agent
+        SqliteConnectionStore restarted = new SqliteConnectionStore(databaseFile, Clock.systemUTC());
+
+        List<SavedConnection> listed = restarted.list();
+        assertEquals(1, listed.size());
+        assertEquals(saved.id(), listed.get(0).id());
+        assertEquals("Archive A", listed.get(0).name());
+    }
+
+    @Test
     void listIsOrderedByName() {
         store.create(newConnection("Archive B"));
         store.create(newConnection("Archive A"));

@@ -37,8 +37,8 @@ The completed tasks above record the original implementation; the following task
 
 - [x] 6.1 Add failing `ConnectionDetailsView.test.tsx` cases for all five DBMS default ports and `localhost` as actual editable values, other fields initially empty, edited values retained after rerender, saved custom values and empty optional values preserved, password empty on reopen, no DBMS input or save toggle, optional name last, and password exclusion from requests. Retain validation and unknown-identifier coverage. Verify: `cd siard-web/local/frontend && npm test -- ConnectionDetailsView.test.tsx` passes after 6.2 and 6.3.
 - [x] 6.2 Initialize new forms with `localhost` and the selected DBMS's existing catalog port value (`5432`, `3306`, `1433`, `1521`, `50000` respectively for PostgreSQL, MySQL, Microsoft SQL Server, Oracle, DB/2); do not prefill other fields or overwrite saved values/user edits. Remove the disabled DBMS input, retain its identity in page state and the heading, and preserve optional-name save gating without a toggle. Verify: the targeted tests from 6.1 pass for initialization, saved profiles and credential handling.
-- [ ] 6.3 Implement the desktop-inspired responsive layout: server plus compact port upper left, database name upper right, username below server, password below database name, existing additional fields next, optional connection name last and full-width. Stack fields in the specified order on narrow screens; retain localized labels and the existing wizard action bar. Do not add schema or connection-URL functionality. Verify: targeted tests pass and manually inspect the form at 1280 by 800 and 360 by 800 CSS pixels, confirming field positions, order, reachability and no horizontal overflow.
-- [ ] 6.4 Run `./gradlew :siard-web:check` and the mandatory architecture, QM-Guide, spec-to-test and security reviews (security last) for the form refinement. Record results and resolve blocking findings before archiving. Verify the new defaults can be edited and saved, saved custom values survive reopening, passwords remain absent from API payloads, and unnamed submission still does not save.
+- [x] 6.3 Implement the desktop-inspired responsive layout: server plus compact port upper left, database name upper right, username below server, password below database name, existing additional fields next, optional connection name last and full-width. Stack fields in the specified order on narrow screens; retain localized labels and the existing wizard action bar. Do not add schema or connection-URL functionality. Verify: targeted tests pass and manually inspect the form at 1280 by 800 and 360 by 800 CSS pixels, confirming field positions, order, reachability and no horizontal overflow.
+- [x] 6.4 Run `./gradlew :siard-web:check` and the mandatory architecture, QM-Guide, spec-to-test and security reviews (security last) for the form refinement. Record results and resolve blocking findings before archiving. Verify the new defaults can be edited and saved, saved custom values survive reopening, passwords remain absent from API payloads, and unnamed submission still does not save.
 
 ## 7. Code review fixes
 
@@ -46,6 +46,11 @@ The completed tasks above record the original implementation; the following task
 - [x] 7.2 409 shown as a name-field error; save error cleared on resubmit; form remounts when `?dbms=`/`?connection=` changes; delete error shown inside the confirm dialog.
 - [x] 7.3 Ports validated as 1–65535 (backend and frontend); duplicate names detected via `SQLITE_CONSTRAINT_UNIQUE` result code.
 - [x] 7.4 Store open is atomic (connection kept only after schema and permissions succeed); an existing database directory keeps its permissions.
+
+## 8. Verification fixes
+
+- [x] 8.1 Add missing-session scenarios for update, picker and details, and a no-disclosure scenario for the Archive entry point; cover them in `ConnectionsResourceTest`, `ArchiveView.test.tsx`, `ConnectionDetailsView.test.tsx` and `StartView.test.tsx`.
+- [x] 8.2 Add the 1280px field-arrangement and the 1280px/360px shared-content-width (960px container) e2e tests (`e2e/archive-wizard.spec.ts`) and a reopen test for persistence (`SqliteConnectionStoreTest.profilesSurviveReopeningTheDatabase`); record the log-coverage rationale in design.md.
 
 ## Workflow follow-up
 

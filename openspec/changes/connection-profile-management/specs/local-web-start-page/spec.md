@@ -22,6 +22,12 @@ The Archive workflow control on the start page SHALL be an accessible, named but
 - **THEN** the connection picker page is displayed
 - **AND** the existing SIARD Suite header and Info navigation remain visible
 
+#### Scenario: Archive activation discloses no local information
+- **GIVEN** the start page opened through the local agent's launch link and a network-request recorder
+- **WHEN** the user activates the Archive button
+- **THEN** the route becomes `/archive` with no query parameters
+- **AND** no launch token appears in the address bar or in any request URL or payload
+
 ## MODIFIED Requirements
 
 ### Requirement: Presentation-only workflow controls

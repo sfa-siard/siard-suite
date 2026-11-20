@@ -548,3 +548,24 @@ test("catalog API failure shows a localized error", async () => {
     en.connections.loadError,
   );
 });
+
+test.each(["?connection=7", "?dbms=postgresql"])(
+  "missing session on %s shows the session message instead of the form",
+  async (query) => {
+    const unauthorized = { status: 401, body: { title: "Unauthorized" } };
+    const fetchMock = respondApi({
+      "GET /api/dbms": unauthorized,
+      "GET /api/connections": unauthorized,
+    });
+
+    renderAt(`/archive/connection${query}`);
+
+    expect(
+      (await screen.findAllByText(en.session.missing)).length,
+    ).toBeGreaterThan(0);
+    expect(screen.queryByLabelText(/^Host/)).not.toBeInTheDocument();
+    expect(screen.queryByDisplayValue(archiveA.host)).not.toBeInTheDocument();
+    expect(postCalls(fetchMock)).toHaveLength(0);
+    expect(putCalls(fetchMock)).toHaveLength(0);
+  },
+);

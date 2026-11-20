@@ -318,3 +318,19 @@ test("connections API failure shows a localized error", async () => {
     screen.getByRole("button", { name: "PostgreSQL" }),
   ).toBeInTheDocument();
 });
+
+test("missing session shows the session message and no saved data", async () => {
+  const unauthorized = { status: 401, body: { title: "Unauthorized" } };
+  respondApi({
+    "GET /api/connections": unauthorized,
+    "GET /api/dbms": unauthorized,
+  });
+
+  renderAt("/archive");
+
+  expect(
+    (await screen.findAllByText(en.session.missing)).length,
+  ).toBeGreaterThan(0);
+  expect(screen.queryByText(archiveA.name)).not.toBeInTheDocument();
+  expect(screen.queryByText(en.archive.empty)).not.toBeInTheDocument();
+});

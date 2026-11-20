@@ -88,4 +88,5 @@ All under `/api/` so existing session, Host and `Sec-Fetch-Site` filters apply u
 - [Corrupt or unwritable DB file] → store init failure surfaces as problem+json 500, agent keeps running; no auto-repair in this change (logged for follow-up).
 - [Model drift between desktop and web copies] → accepted: desktop is frozen and will be deleted; divergence is bounded. Documented in code comment at the port site.
 - [Password field collects but never sends] → interim UX oddity, deliberate: it preserves form parity and gives the connect change a ready field. Spec scenario pins the no-transmission behavior.
+- [No automated agent-log check for passwords] → the scenario "Errors and logs disclose no password" is covered structurally: the frontend never sends the password (`ConnectionDetailsView.test.tsx`), the agent's request model has no password field and never echoes one (`ConnectionsResourceTest.passwordFieldIsNeverStored`), so no password can reach a log. A log-capture test is not added.
 - [Catalog JSON shape may need fields the form didn't anticipate] → `fields[]` is descriptor-driven so additions don't break the contract; OpenAPI is the contract of record.

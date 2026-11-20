@@ -89,3 +89,33 @@ test("archive button navigates to the connection picker", async () => {
     screen.queryByRole("region", { name: "SIARD" }),
   ).not.toBeInTheDocument();
 });
+
+test("archive activation adds no launch token or query to the route or requests", async () => {
+  await i18n.changeLanguage("en");
+  const fetchMock = vi.fn(
+    async () =>
+      new Response("[]", {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+  );
+  vi.stubGlobal("fetch", fetchMock);
+  renderAt("/");
+
+  fireEvent.click(screen.getByRole("button", { name: "Archive" }));
+  await screen.findByRole("heading", { name: en.archive.title });
+
+  expect(window.location.search).toBe("");
+  expect(fetchMock).toHaveBeenCalled();
+  for (const [input, init] of fetchMock.mock.calls as unknown as [
+    RequestInfo | URL,
+    RequestInit | undefined,
+  ][]) {
+    const request =
+      input instanceof Request ? input : new Request(String(input), init);
+    const url = new URL(request.url);
+    expect(url.search).toBe("");
+    expect(url.href).not.toMatch(/token/i);
+    expect(request.method).toBe("GET");
+  }
+});
