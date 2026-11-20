@@ -31,6 +31,15 @@
 - [x] 5.1 Run `./gradlew :siard-web:check` — backend tests, `verifyCoreBoundary`, `openApiCheck`, frontend lint/typecheck/tests all pass.
 - [x] 5.2 Manual smoke on this machine: start the backend (`quarkusDev` or packaged run), open the launch URL, exercise picker → details → save → delete, restart the agent and confirm the profile persists. Report the result.
 
+## 6. Connection details form refinement
+
+The completed tasks above record the original implementation; the following tasks carry the revised form requirements into code.
+
+- [x] 6.1 Add failing `ConnectionDetailsView.test.tsx` cases for all five DBMS default ports and `localhost` as actual editable values, other fields initially empty, edited values retained after rerender, saved custom values and empty optional values preserved, password empty on reopen, no DBMS input or save toggle, optional name last, and password exclusion from requests. Retain validation and unknown-identifier coverage. Verify: `cd siard-web/local/frontend && npm test -- ConnectionDetailsView.test.tsx` passes after 6.2 and 6.3.
+- [x] 6.2 Initialize new forms with `localhost` and the selected DBMS's existing catalog port value (`5432`, `3306`, `1433`, `1521`, `50000` respectively for PostgreSQL, MySQL, Microsoft SQL Server, Oracle, DB/2); do not prefill other fields or overwrite saved values/user edits. Remove the disabled DBMS input, retain its identity in page state and the heading, and preserve optional-name save gating without a toggle. Verify: the targeted tests from 6.1 pass for initialization, saved profiles and credential handling.
+- [ ] 6.3 Implement the desktop-inspired responsive layout: server plus compact port upper left, database name upper right, username below server, password below database name, existing additional fields next, optional connection name last and full-width. Stack fields in the specified order on narrow screens; retain localized labels and the existing wizard action bar. Do not add schema or connection-URL functionality. Verify: targeted tests pass and manually inspect the form at 1280 by 800 and 360 by 800 CSS pixels, confirming field positions, order, reachability and no horizontal overflow.
+- [ ] 6.4 Run `./gradlew :siard-web:check` and the mandatory architecture, QM-Guide, spec-to-test and security reviews (security last) for the form refinement. Record results and resolve blocking findings before archiving. Verify the new defaults can be edited and saved, saved custom values survive reopening, passwords remain absent from API payloads, and unnamed submission still does not save.
+
 ## Workflow follow-up
 
 - CI runs the test suites on Windows, macOS and Linux — if the pipeline is green on all three, the cross-platform requirement is verified; the agent does not mark that done without the user's report.

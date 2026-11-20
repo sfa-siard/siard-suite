@@ -60,6 +60,8 @@
     "name": "Nom de la connexion",
     "nameHint": "Facultatif. Laisser vide pour utiliser la connexion sans l'enregistrer.",
     "dbms": "Système de base de données",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
     "fields": {
       "host": "Hôte",
       "port": "Port",

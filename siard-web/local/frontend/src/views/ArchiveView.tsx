@@ -156,17 +156,16 @@ export default function ArchiveView() {
         ) : (
           <Box
             sx={{
-              display: "flex",
-              flexWrap: "wrap",
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "minmax(0, 1fr)",
+                sm: "repeat(3, minmax(0, 1fr))",
+              },
               gap: 2,
             }}
           >
             {dbms.data?.map((entry: DbmsCatalogEntry) => (
-              <Card
-                key={entry.id}
-                variant="outlined"
-                sx={{ minWidth: 180, flex: "1 1 180px", maxWidth: 280 }}
-              >
+              <Card key={entry.id} variant="outlined" sx={{ minWidth: 0 }}>
                 <CardActionArea
                   onClick={() =>
                     navigate(`/archive/connection?dbms=${entry.id}`)

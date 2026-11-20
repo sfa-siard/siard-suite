@@ -60,6 +60,8 @@
     "name": "Connection name",
     "nameHint": "Optional. Leave empty to use the connection without saving it.",
     "dbms": "Database system",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "fields": {
       "host": "Host",
       "port": "Port",

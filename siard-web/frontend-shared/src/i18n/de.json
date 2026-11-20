@@ -60,6 +60,8 @@
     "name": "Verbindungsname",
     "nameHint": "Optional. Leer lassen, um die Verbindung nicht zu speichern.",
     "dbms": "Datenbanksystem",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort verbergen",
     "fields": {
       "host": "Host",
       "port": "Port",

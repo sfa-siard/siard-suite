@@ -51,7 +51,7 @@ export default function ArchiveWizardLayout() {
             </Step>
           ))}
         </Stepper>
-        <Box sx={{ minWidth: 0 }}>
+        <Box sx={{ minWidth: 0, width: "100%", maxWidth: 960, mx: "auto" }}>
           <Outlet />
         </Box>
         <Box

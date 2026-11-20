@@ -5,25 +5,33 @@ import { renderAt } from "../test/render";
 
 // Spec requirement "Connection details page"
 
-const catalog = [
-  {
-    id: "postgresql",
-    name: "PostgreSQL",
-    kind: "server",
-    fields: [
-      { key: "host", type: "text", required: true },
-      { key: "port", type: "text", required: true },
-      { key: "dbName", type: "text", required: true },
-      { key: "user", type: "text", required: true },
-      { key: "password", type: "password", required: false },
-      { key: "options", type: "text", required: false },
-    ],
-    examples: {
-      host: "db.exampleHost",
-      port: "5432",
-      dbName: "exampleDb",
-    },
+const serverFields = [
+  { key: "host", type: "text", required: true },
+  { key: "port", type: "text", required: true },
+  { key: "dbName", type: "text", required: true },
+  { key: "user", type: "text", required: true },
+  { key: "password", type: "password", required: false },
+  { key: "options", type: "text", required: false },
+];
+
+const catalogEntry = (id: string, name: string, port: string) => ({
+  id,
+  name,
+  kind: "server",
+  fields: serverFields,
+  examples: {
+    host: `${id}.exampleHost`,
+    port,
+    dbName: "exampleDb",
   },
+});
+
+const catalog = [
+  catalogEntry("postgresql", "PostgreSQL", "5432"),
+  catalogEntry("mysql", "MySQL", "3306"),
+  catalogEntry("sqlserver", "Microsoft SQL Server", "1433"),
+  catalogEntry("oracle", "Oracle", "1521"),
+  catalogEntry("db2", "DB/2", "50000"),
 ];
 
 const archiveA = {
@@ -31,10 +39,10 @@ const archiveA = {
   name: "Archive A",
   dbmsId: "postgresql",
   host: "db.example.org",
-  port: "5432",
+  port: "15432",
   dbName: "archive",
   user: "archivist",
-  options: "ssl=true",
+  options: "",
   file: null,
   createdAt: "2026-01-01T00:00:00Z",
   updatedAt: "2026-01-01T00:00:00Z",
@@ -87,24 +95,82 @@ function postCalls(fetchMock: ReturnType<typeof vi.fn>) {
   });
 }
 
-test("new connection form shows placeholders and no saved data", async () => {
+test.each([
+  ["postgresql", "PostgreSQL", "5432"],
+  ["mysql", "MySQL", "3306"],
+  ["sqlserver", "Microsoft SQL Server", "1433"],
+  ["oracle", "Oracle", "1521"],
+  ["db2", "DB/2", "50000"],
+])(
+  "new %s form defaults to localhost and the DBMS port as editable values",
+  async (id, dbmsName, port) => {
+    respondApi(okApi);
+
+    renderAt(`/archive/connection?dbms=${id}`);
+
+    const host = await screen.findByLabelText(/^Host/);
+    expect(host).toHaveValue("localhost");
+    expect(host).toBeEnabled();
+    const portInput = screen.getByLabelText(/^Port/);
+    expect(portInput).toHaveValue(port);
+    expect(portInput).toBeEnabled();
+    expect(screen.getByLabelText(/^Database \*/)).toHaveValue("");
+    expect(screen.getByLabelText(/^User/)).toHaveValue("");
+    expect(screen.getByLabelText(/^Password/)).toHaveValue("");
+    expect(screen.getByLabelText(/^Password/)).toHaveAttribute(
+      "type",
+      "password",
+    );
+    expect(screen.getByLabelText(/^Options/)).toHaveValue("");
+    expect(screen.getByLabelText(/^Connection name/)).toHaveValue("");
+    expect(
+      screen.getByRole("heading", { name: new RegExp(dbmsName) }),
+    ).toBeInTheDocument();
+    expect(screen.queryByLabelText(/database system/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
+  },
+);
+
+test("user edits to the defaults are not replaced when other fields change", async () => {
   respondApi(okApi);
 
   renderAt("/archive/connection?dbms=postgresql");
-
   const host = await screen.findByLabelText(/^Host/);
-  expect(host).toHaveAttribute("placeholder", "db.exampleHost");
-  expect(host).toHaveValue("");
-  expect(screen.getByLabelText(/^Port/)).toHaveAttribute("placeholder", "5432");
-  expect(screen.getByLabelText(/^Database \*/)).toHaveAttribute(
-    "placeholder",
-    "exampleDb",
+
+  fill(/^Host/, "db.example.org");
+  fill(/^Port/, "15432");
+  fill(/^Database \*/, "archive");
+
+  expect(host).toHaveValue("db.example.org");
+  expect(screen.getByLabelText(/^Port/)).toHaveValue("15432");
+});
+
+test("a horizontal divider separates the details from the optional name", async () => {
+  respondApi(okApi);
+  renderAt("/archive/connection?dbms=postgresql");
+  const name = await screen.findByLabelText(/^Connection name/);
+  const divider = screen.getByRole("separator");
+  expect(
+    screen.getByLabelText(/^Options/).compareDocumentPosition(divider),
+  ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  expect(divider.compareDocumentPosition(name)).toBe(
+    Node.DOCUMENT_POSITION_FOLLOWING,
   );
-  expect(screen.getByLabelText(/^Password/)).toHaveAttribute(
-    "type",
-    "password",
+  expect(
+    within(name.closest("form")!).queryByRole("group"),
+  ).not.toBeInTheDocument();
+});
+
+test("the optional connection name is the last input", async () => {
+  respondApi(okApi);
+
+  renderAt("/archive/connection?dbms=postgresql");
+  const name = await screen.findByLabelText(/^Connection name/);
+  const options = screen.getByLabelText(/^Options/);
+
+  expect(options.compareDocumentPosition(name)).toBe(
+    Node.DOCUMENT_POSITION_FOLLOWING,
   );
-  expect(screen.getByLabelText(/^Connection name/)).toHaveValue("");
 });
 
 test("saved connection is prefilled with an empty password and fixed DBMS", async () => {
@@ -113,13 +179,35 @@ test("saved connection is prefilled with an empty password and fixed DBMS", asyn
   renderAt("/archive/connection?connection=7");
 
   expect(await screen.findByLabelText(/^Host/)).toHaveValue("db.example.org");
-  expect(screen.getByLabelText(/^Port/)).toHaveValue("5432");
+  expect(screen.getByLabelText(/^Port/)).toHaveValue("15432");
   expect(screen.getByLabelText(/^Database \*/)).toHaveValue("archive");
   expect(screen.getByLabelText(/^User/)).toHaveValue("archivist");
-  expect(screen.getByLabelText(/^Options/)).toHaveValue("ssl=true");
+  expect(screen.getByLabelText(/^Options/)).toHaveValue("");
   expect(screen.getByLabelText(/^Password/)).toHaveValue("");
-  expect(screen.getByLabelText(/^Database system/)).toBeDisabled();
+  expect(screen.queryByLabelText(/database system/i)).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", { name: /PostgreSQL/ }),
+  ).toBeInTheDocument();
   expect(screen.getByLabelText(/^Connection name/)).toHaveValue("Archive A");
+});
+
+test("eye button reveals and masks the password without submitting", async () => {
+  const fetchMock = respondApi(okApi);
+  renderAt("/archive/connection?dbms=postgresql");
+  const password = await screen.findByLabelText(/^Password/);
+  fill(/^Password/, "test-secret");
+  expect(password).toHaveAttribute("type", "password");
+  fireEvent.click(
+    screen.getByRole("button", { name: en.connections.showPassword }),
+  );
+  expect(password).toHaveAttribute("type", "text");
+  expect(password).toHaveValue("test-secret");
+  fireEvent.click(
+    screen.getByRole("button", { name: en.connections.hidePassword }),
+  );
+  expect(password).toHaveAttribute("type", "password");
+  expect(password).toHaveValue("test-secret");
+  expect(postCalls(fetchMock)).toHaveLength(0);
 });
 
 test("validation blocks submit with inline messages and no request", async () => {
@@ -259,7 +347,9 @@ test("the form submit path still validates and saves without the visible button"
   renderAt("/archive/connection?connection=7");
   const host = await screen.findByLabelText(/^Host/);
   const form = host.closest("form")!;
-  expect(within(form).queryByRole("button")).not.toBeInTheDocument();
+  expect(
+    within(form).getByRole("button", { name: en.connections.showPassword }),
+  ).toHaveAttribute("type", "button");
   expect(form.querySelector('button[type="submit"]')).toBeInTheDocument();
   fireEvent.submit(form);
   await screen.findByRole("heading", { name: en.archive.title });

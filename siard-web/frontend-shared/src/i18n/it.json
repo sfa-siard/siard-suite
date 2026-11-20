@@ -60,6 +60,8 @@
     "name": "Nome della connessione",
     "nameHint": "Facoltativo. Lasciare vuoto per usare la connessione senza salvarla.",
     "dbms": "Sistema di database",
+    "showPassword": "Mostra password",
+    "hidePassword": "Nascondi password",
     "fields": {
       "host": "Host",
       "port": "Porta",

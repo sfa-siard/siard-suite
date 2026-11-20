@@ -147,6 +147,8 @@ The `/archive` route SHALL show a heading, the list of saved connections and the
 - **WHEN** the user visits `/archive`
 - **THEN** the saved connection is listed with its name and target summary
 - **AND** the five server-based DBMS are offered as new-connection choices
+- **AND** on desktop the choices use three equal-width columns, with three choices in the first row and two in the second
+- **AND** on narrow screens the choices stack in one column without horizontal overflow
 - **AND** MS Access is not offered
 
 #### Scenario: Selection navigates to details
@@ -183,20 +185,72 @@ The `/archive` route SHALL show a heading, the list of saved connections and the
 
 ### Requirement: Connection details page
 
-The `/archive/connection` route SHALL render the connection form for the DBMS identified by its query parameters: empty with example placeholders for a new DBMS, or prefilled from a saved connection with an empty password field and a read-only DBMS indicator. Submitting with a connection name SHALL save the profile and return to `/archive`; submitting without a name SHALL NOT save. Unknown identifiers SHALL show an error state.
+The `/archive/connection` route SHALL show a responsive desktop-inspired form for the selected DBMS, with editable new-connection defaults or saved values and an empty password. The heading SHALL identify the fixed DBMS without a DBMS input. Saving SHALL depend only on the optional connection name, with no toggle. Submission SHALL return to `/archive`; unknown identifiers SHALL show an error state. Defaults and layout SHALL match the scenarios below.
 
-#### Scenario: New connection form
-- **GIVEN** the picker page and the PostgreSQL DBMS choice
-- **WHEN** the details page loads
-- **THEN** the form shows the server-based fields with the catalog's example values as placeholders
+#### Scenario: New connection defaults for each DBMS
+- **GIVEN** a valid local session and a new-connection choice for each supported server-based DBMS
+- **WHEN** its details page loads
+- **THEN** the host input value is `localhost`
+- **AND** the port input value is `5432` for PostgreSQL, `3306` for MySQL, `1433` for Microsoft SQL Server, `1521` for Oracle or `50000` for DB/2
+- **AND** host and port are editable values rather than placeholders
+- **AND** database name, username, password, options and connection name start empty
 - **AND** no field is prefilled with saved data
 
+#### Scenario: User edits are not replaced by defaults
+- **GIVEN** a new connection form where the user changed host to `db.example.org` and port to `15432`
+- **WHEN** the user edits the database name
+- **THEN** host remains `db.example.org` and port remains `15432`
+
+#### Scenario: Desktop field arrangement
+- **GIVEN** a valid local session and a 1280 by 800 CSS-pixel viewport
+- **WHEN** the connection details page loads
+- **THEN** server and compact port inputs share the upper-left half and database name occupies the upper-right half
+- **AND** username appears below server and password appears below database name
+- **AND** existing additional fields follow those rows and the optional connection name is the last input, spanning the form width
+- **AND** the heading identifies the selected DBMS and no DBMS input or save toggle is rendered
+
+#### Scenario: Narrow form stacks without overflow
+- **GIVEN** a valid local session and a 360 by 800 CSS-pixel viewport
+- **WHEN** the connection details page loads
+- **THEN** inputs stack in the order server, port, database name, username, password, existing additional fields, connection name
+- **AND** every input is reachable by scrolling and the page scroll width is no greater than the viewport width
+
 #### Scenario: Saved connection prefilled
-- **GIVEN** a saved PostgreSQL connection "Archive A" with host `db.example.org`
+- **GIVEN** a saved PostgreSQL connection "Archive A" with host `db.example.org`, port `15432` and empty options
 - **WHEN** the user opens its details page
-- **THEN** host, port, database name, user and options show the saved values
+- **THEN** host, port, database name, user and options show the saved values, including the custom port and empty options
 - **AND** the password field is empty
-- **AND** the DBMS is shown as fixed and cannot be changed to another DBMS
+- **AND** the heading identifies PostgreSQL and no DBMS input is rendered
+- **AND** the selected DBMS cannot be changed to another DBMS
+
+#### Scenario: Refined form preserves credential protection
+- **GIVEN** a valid local session, a new connection form and a network-request recorder
+- **WHEN** the user submits valid fields with a connection name and a password entered
+- **THEN** no recorded request payload contains the password
+- **AND** the password input masks its value
+- **AND** the saved profile and API responses contain no password
+
+#### Scenario: Wizard steps share a content width
+- **GIVEN** the archive wizard at a desktop viewport
+- **WHEN** the user navigates between the picker and connection details
+- **THEN** both pages use the wizard's centered content container with a maximum width of 960 CSS pixels
+- **AND** their headings have the same left edge
+- **AND** the container shrinks to the available width on narrow screens and DBMS choices wrap as needed
+
+#### Scenario: Connection details are separated from the profile name
+- **GIVEN** the connection details page
+- **WHEN** the form is displayed
+- **THEN** a horizontal divider spans the form between the connection parameters and the optional connection name
+- **AND** no fieldsets are rendered
+- **AND** the existing responsive field order and optional-name saving behavior are preserved
+
+#### Scenario: Toggle password visibility
+- **GIVEN** a connection details form with a password entered and masked by default
+- **WHEN** the user activates the eye button labelled in the interface language
+- **THEN** the password is displayed as plain text without changing its value or submitting the form
+- **WHEN** the user activates the button again
+- **THEN** the password is masked again
+- **AND** toggling visibility never sends the password in a request
 
 #### Scenario: Validation blocks submit
 - **GIVEN** the details page for a new connection
