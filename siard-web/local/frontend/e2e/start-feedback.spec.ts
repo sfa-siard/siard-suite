@@ -27,8 +27,17 @@ for (const width of [1280, 360]) {
       page.on("filechooser", () => unexpected.push("filechooser"));
       page.on("download", () => unexpected.push("download"));
       page.on("popup", () => unexpected.push("popup"));
+      // Archive opens the archive wizard, whose picker loads these lists
+      const archiveRequests = ["GET /api/connections", "GET /api/dbms"];
+      let onArchive = false;
       page.on("request", (request) => {
         const url = new URL(request.url());
+        if (
+          onArchive &&
+          archiveRequests.includes(`${request.method()} ${url.pathname}`)
+        ) {
+          return;
+        }
         if (
           request.resourceType() !== "image" &&
           request.resourceType() !== "font" &&
@@ -97,7 +106,20 @@ for (const width of [1280, 360]) {
           () => button.press("Enter"),
           () => button.press("Space"),
         ]) {
-          await activate();
+          if (name === "archive") {
+            onArchive = true;
+            await activate();
+            await expect(page).toHaveURL(
+              `http://127.0.0.1:${agent.port}/archive`,
+            );
+            await page.goBack();
+            await expect(
+              page.getByRole("region", { name: "SIARD" }),
+            ).toBeVisible();
+            onArchive = false;
+          } else {
+            await activate();
+          }
           await expect(page).toHaveURL(`http://127.0.0.1:${agent.port}/`);
           await expect(page.getByRole("dialog")).toHaveCount(0);
         }

@@ -12,6 +12,80 @@ components:
       type: object
     ConnectedEvent:
       type: object
+    DbmsCatalogEntry:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        kind:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/FieldDescriptor"
+        examples:
+          type: object
+          additionalProperties:
+            type: string
+    FieldDescriptor:
+      type: object
+      properties:
+        key:
+          type: string
+        type:
+          type: string
+        required:
+          type: boolean
+    Instant:
+      type: string
+      format: date-time
+      examples:
+      - 2022-03-10T16:15:50Z
+    SaveConnectionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        dbmsId:
+          type: string
+        host:
+          type: string
+        port:
+          type: string
+        dbName:
+          type: string
+        user:
+          type: string
+        options:
+          type: string
+    SavedConnection:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        dbmsId:
+          type: string
+        host:
+          type: string
+        port:
+          type: string
+        dbName:
+          type: string
+        user:
+          type: string
+        options:
+          type: string
+        file:
+          type: string
+        createdAt:
+          $ref: "#/components/schemas/Instant"
+        updatedAt:
+          $ref: "#/components/schemas/Instant"
     SystemInfo:
       type: object
       required:
@@ -28,6 +102,100 @@ components:
           items:
             type: string
 paths:
+  /api/connections:
+    get:
+      summary: "All saved connections, ordered by name"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SavedConnection"
+      tags:
+      - Connections Resource
+    post:
+      summary: Save a connection profile; the name must be unique
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveConnectionRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavedConnection"
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
+      tags:
+      - Connections Resource
+  /api/connections/{id}:
+    put:
+      summary: Update a saved connection profile; the name must stay unique
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveConnectionRequest"
+        required: true
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavedConnection"
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "409":
+          description: Conflict
+      tags:
+      - Connections Resource
+    delete:
+      summary: Delete a saved connection by id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not Found
+      tags:
+      - Connections Resource
+  /api/dbms:
+    get:
+      summary: Catalog of the supported server-based DBMS
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DbmsCatalogEntry"
+      tags:
+      - Dbms Resource
   /api/events:
     get:
       summary: Event stream of the agent; each event's data is an AgentEvent

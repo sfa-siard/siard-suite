@@ -76,8 +76,8 @@ jobs:
         with:
           path: ${{ matrix.playwright-cache }}
           key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ hashFiles('siard-web/package-lock.json') }}
-      # lint/typecheck/unit tests only run on Linux - should not be different on other os - should it?
-      # only run e2e tests on mac and windows too
+      # lint/typecheck/unit tests only run on Linux: a Windows checkout has CRLF line endings
+      # and the Prettier check fails on every file; macOS and Windows only run the e2e tests
       - name: Check web modules (core, shared frontend, local app)
         if: runner.os == 'Linux'
         run: ./gradlew :siard-web:check

@@ -30,5 +30,55 @@
   },
   "about": {
     "loadError": "Die Informationen konnten nicht geladen werden."
+  },
+  "archive": {
+    "title": "Archivieren",
+    "savedConnections": "Gespeicherte Verbindungen",
+    "newConnection": "Neue Verbindung",
+    "empty": "Noch keine gespeicherten Verbindungen.",
+    "loadError": "Die Verbindungen konnten nicht geladen werden.",
+    "delete": "{{name}} löschen",
+    "deleteTitle": "Verbindung löschen?",
+    "deleteText": "Die Verbindung „{{name}}“ wird gelöscht.",
+    "deleteConfirm": "Löschen",
+    "deleteCancel": "Abbrechen",
+    "deleteError": "Die Verbindung konnte nicht gelöscht werden."
+  },
+  "archiveWizard": {
+    "selectConnection": "Verbindung auswählen",
+    "connectionDetails": "Verbindungsdetails",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "cancelTitle": "Archivierung abbrechen",
+    "cancelText": "Sind Sie sicher, dass Sie den Archivierungsprozess verlassen möchten?",
+    "cancelConfirm": "Archivierung verlassen",
+    "cancelStay": "Bleiben"
+  },
+  "connections": {
+    "newTitle": "Neue Verbindung",
+    "editTitle": "Verbindung",
+    "name": "Verbindungsname",
+    "nameHint": "Optional. Leer lassen, um die Verbindung nicht zu speichern.",
+    "dbms": "Datenbanksystem",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort verbergen",
+    "fields": {
+      "host": "Host",
+      "port": "Port",
+      "dbName": "Datenbank",
+      "user": "Benutzer",
+      "password": "Passwort",
+      "options": "Optionen"
+    },
+    "save": "Speichern",
+    "back": "Zurück",
+    "required": "Dieses Feld ist erforderlich.",
+    "invalidPort": "Einen Port zwischen 1 und 65535 eingeben.",
+    "duplicateName": "Eine Verbindung mit diesem Namen existiert bereits.",
+    "nameRequired": "Eine gespeicherte Verbindung braucht einen Namen.",
+    "unknown": "Die angeforderte Verbindung existiert nicht.",
+    "loadError": "Die Verbindungsdaten konnten nicht geladen werden.",
+    "backToArchive": "Zurück zu den Verbindungen",
+    "saveError": "Die Verbindung konnte nicht gespeichert werden."
   }
 }

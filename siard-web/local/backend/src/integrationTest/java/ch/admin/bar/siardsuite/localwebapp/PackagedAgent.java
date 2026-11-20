@@ -14,12 +14,14 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * Runs the packaged agent ({@code build/quarkus-app/quarkus-run.jar}) as a separate process, so
@@ -42,14 +44,16 @@ final class PackagedAgent implements AutoCloseable {
             Pattern.compile("launch URL: (http://127\\.0\\.0\\.1:(\\d+)/launch\\?token=(\\S+))");
 
     private final Process process;
+    private final Path dataDirectory;
     private final List<String> output = new CopyOnWriteArrayList<>();
     private final Thread shutdownHook;
     private String launchUrl;
     private int port;
     private String token;
 
-    private PackagedAgent(Process process) {
+    private PackagedAgent(Process process, Path dataDirectory) {
         this.process = process;
+        this.dataDirectory = dataDirectory;
         this.shutdownHook = new Thread(process::destroyForcibly);
         Runtime.getRuntime().addShutdownHook(shutdownHook);
         Thread reader = new Thread(this::readOutput, "packaged-agent-output");
@@ -82,13 +86,22 @@ final class PackagedAgent implements AutoCloseable {
         command.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
         command.add("-Djava.io.tmpdir=" + System.getProperty("java.io.tmpdir"));
         command.add("-Dsiard.agent.open-browser=false");
+        // a temp connection store, so tests never touch the user's real saved connections
+        Path dataDirectory = Files.createTempDirectory("siard-packaged-agent");
+        command.add("-Dsiard.connections.db=" + dataDirectory.resolve("siard-suite.db"));
         command.addAll(List.of(extraJvmArgs));
         command.add("-jar");
         command.add(RUN_JAR.toString());
 
         ProcessBuilder builder = new ProcessBuilder(command).redirectErrorStream(true);
         builder.environment().putAll(environment);
-        PackagedAgent agent = new PackagedAgent(builder.start());
+        PackagedAgent agent;
+        try {
+            agent = new PackagedAgent(builder.start(), dataDirectory);
+        } catch (IOException | RuntimeException e) {
+            deleteRecursively(dataDirectory);
+            throw e;
+        }
         try {
             agent.awaitLaunchUrl();
             return agent;
@@ -184,6 +197,15 @@ final class PackagedAgent implements AutoCloseable {
             } catch (IllegalStateException alreadyShuttingDown) {
                 // the hook runs anyway
             }
+            deleteRecursively(dataDirectory);
+        }
+    }
+
+    private static void deleteRecursively(Path directory) {
+        try (Stream<Path> paths = Files.walk(directory)) {
+            paths.sorted(Comparator.reverseOrder()).forEach(path -> path.toFile().delete());
+        } catch (IOException ignored) {
+            // best effort: a leftover temp directory is harmless
         }
     }
 
