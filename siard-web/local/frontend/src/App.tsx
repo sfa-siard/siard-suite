@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next";
 import { useAgentEvents } from "./api/events";
 import { theme } from "@siard-web/shared";
 import AboutView from "./views/AboutView";
+import ArchiveView from "./views/ArchiveView";
+import ConnectionDetailsView from "./views/ConnectionDetailsView";
 import LaunchFailedView from "./views/LaunchFailedView";
 import StartView from "./views/StartView";
 
@@ -54,6 +56,11 @@ export default function App() {
         <Route element={<ConnectedLayout />}>
           <Route index element={<StartView />} />
           <Route path="about" element={<AboutView />} />
+          <Route path="archive" element={<ArchiveView />} />
+          <Route
+            path="archive/connection"
+            element={<ConnectionDetailsView />}
+          />
         </Route>
         {/* no session here, so no event stream and no navigation into the app */}
         <Route element={<Layout navigation={false} />}>

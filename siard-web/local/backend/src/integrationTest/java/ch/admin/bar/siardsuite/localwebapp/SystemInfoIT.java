@@ -31,7 +31,8 @@ class SystemInfoIT {
             "ch.admin.bar.siard2.jdbc.MsSqlDriver",    // MS SQL Server
             "ch.admin.bar.siard2.jdbc.MySqlDriver",    // MySQL/MariaDB
             "ch.admin.bar.siard2.jdbc.OracleDriver",   // Oracle
-            "org.postgresql.Driver");                  // PostgreSQL
+            "org.postgresql.Driver",                  // PostgreSQL
+            "org.sqlite.JDBC");                       // saved connection profiles
 
     @Test
     void informationOfThePackagedAgent() throws Exception {

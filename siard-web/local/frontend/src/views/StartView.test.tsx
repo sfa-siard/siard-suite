@@ -1,5 +1,5 @@
 import { fireEvent, screen } from "@testing-library/react";
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { i18n } from "@siard-web/shared";
 import de from "@siard-web/shared/i18n/de.json";
 import en from "@siard-web/shared/i18n/en.json";
@@ -48,7 +48,7 @@ test("query text is ignored and pointer and keyboard activation are inert", asyn
   const before = overview.innerHTML;
   expect(overview).not.toHaveTextContent("alert(1)");
   expect(overview.querySelector("script")).toBeNull();
-  for (const name of ["Archive", "Open", "Upload", "Export"]) {
+  for (const name of ["Open", "Upload", "Export"]) {
     const button = screen.getByRole("button", { name });
     fireEvent.click(button);
     for (const key of ["Enter", " "]) {
@@ -60,5 +60,32 @@ test("query text is ignored and pointer and keyboard activation are inert", asyn
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   expect(
     screen.queryByRole("heading", { name: /SIARD Suite 2/ }),
+  ).not.toBeInTheDocument();
+});
+
+test("archive button navigates to the connection picker", async () => {
+  await i18n.changeLanguage("en");
+  // both picker queries answer with empty data
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(
+      async () =>
+        new Response("[]", {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+    ),
+  );
+  renderAt("/");
+
+  const archive = screen.getByRole("button", { name: "Archive" });
+  expect(archive).toHaveAttribute("type", "button");
+  fireEvent.click(archive);
+
+  expect(
+    await screen.findByRole("heading", { name: en.archive.title }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("region", { name: "SIARD" }),
   ).not.toBeInTheDocument();
 });

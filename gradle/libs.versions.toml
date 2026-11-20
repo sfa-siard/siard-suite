@@ -24,6 +24,7 @@ mssql = "13.4.0.jre11"
 oracle-ojdbc = "19.3.0.0"
 db2-license = "1.1"
 mariadb = "3.5.3"
+sqlite-jdbc = "3.54.1.0"
 
 # JAXB & XML
 jaxb-api = "2.3.0"
@@ -84,6 +85,7 @@ oracle-xdb = { module = "com.oracle.ojdbc:xdb", version.ref = "oracle-ojdbc" }
 oracle-xmlparser = { module = "com.oracle.ojdbc:xmlparserv2", version.ref = "oracle-ojdbc" }
 db2-license = { module = "com.mysitex.sx.lib:db2jcc_license_cu", version.ref = "db2-license" }
 mariadb-client = { module = "org.mariadb.jdbc:mariadb-java-client", version.ref = "mariadb" }
+sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc" }
 
 # JAXB & XML
 jaxb-api = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb-api" }

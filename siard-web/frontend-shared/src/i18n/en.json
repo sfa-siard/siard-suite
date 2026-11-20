@@ -30,5 +30,41 @@
   },
   "about": {
     "loadError": "The information could not be loaded."
+  },
+  "archive": {
+    "title": "Archive",
+    "savedConnections": "Saved connections",
+    "newConnection": "New connection",
+    "empty": "No saved connections yet.",
+    "loadError": "The connections could not be loaded.",
+    "delete": "Delete {{name}}",
+    "deleteTitle": "Delete connection?",
+    "deleteText": "The connection \"{{name}}\" will be deleted.",
+    "deleteConfirm": "Delete",
+    "deleteCancel": "Cancel",
+    "deleteError": "The connection could not be deleted."
+  },
+  "connections": {
+    "newTitle": "New connection",
+    "editTitle": "Connection",
+    "name": "Connection name",
+    "nameHint": "Optional. Leave empty to use the connection without saving it.",
+    "dbms": "Database system",
+    "fields": {
+      "host": "Host",
+      "port": "Port",
+      "dbName": "Database",
+      "user": "User",
+      "password": "Password",
+      "options": "Options"
+    },
+    "save": "Save",
+    "back": "Back",
+    "required": "This field is required.",
+    "invalidPort": "Enter a number.",
+    "unknown": "The requested connection does not exist.",
+    "loadError": "The connection details could not be loaded.",
+    "saveError": "The connection could not be saved.",
+    "backToArchive": "Back to connections"
   }
 }

@@ -30,5 +30,41 @@
   },
   "about": {
     "loadError": "Non è stato possibile caricare le informazioni."
+  },
+  "archive": {
+    "title": "Archivio",
+    "savedConnections": "Connessioni salvate",
+    "newConnection": "Nuova connessione",
+    "empty": "Nessuna connessione salvata.",
+    "loadError": "Impossibile caricare le connessioni.",
+    "delete": "Elimina {{name}}",
+    "deleteTitle": "Eliminare la connessione?",
+    "deleteText": "La connessione \"{{name}}\" verrà eliminata.",
+    "deleteConfirm": "Elimina",
+    "deleteCancel": "Annulla",
+    "deleteError": "Impossibile eliminare la connessione."
+  },
+  "connections": {
+    "newTitle": "Nuova connessione",
+    "editTitle": "Connessione",
+    "name": "Nome della connessione",
+    "nameHint": "Facoltativo. Lasciare vuoto per usare la connessione senza salvarla.",
+    "dbms": "Sistema di database",
+    "fields": {
+      "host": "Host",
+      "port": "Porta",
+      "dbName": "Database",
+      "user": "Utente",
+      "password": "Password",
+      "options": "Opzioni"
+    },
+    "save": "Salva",
+    "back": "Indietro",
+    "required": "Campo obbligatorio.",
+    "invalidPort": "Inserire un numero.",
+    "unknown": "La connessione richiesta non esiste.",
+    "loadError": "Impossibile caricare i dettagli della connessione.",
+    "backToArchive": "Torna alle connessioni",
+    "saveError": "Impossibile salvare la connessione."
   }
 }

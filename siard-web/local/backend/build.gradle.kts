@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.postgresql) { version { strictly(libs.versions.postgresql.get()) } }
     implementation(libs.mysql.connector) { version { strictly(libs.versions.mysql.get()) } }
     implementation(libs.mssql.jdbc) { version { strictly(libs.versions.mssql.get()) } }
+    // saved-connection profiles of the local app; Apache-2.0, bundles natives for all platforms
+    implementation(libs.sqlite.jdbc) { version { strictly(libs.versions.sqlite.jdbc.get()) } }
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
