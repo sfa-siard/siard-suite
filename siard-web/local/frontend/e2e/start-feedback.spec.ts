@@ -37,8 +37,12 @@ for (const width of [1280, 360]) {
         ) {
           unexpected.push(`${request.method()} ${url.pathname}`);
         }
-        expect(url.searchParams.has("token")).toBe(false);
-        expect(request.postData()).toBeNull();
+        if (url.searchParams.has("token")) {
+          unexpected.push(`token in ${request.method()} ${url.pathname}`);
+        }
+        if (request.postData() !== null) {
+          unexpected.push(`body in ${request.method()} ${url.pathname}`);
+        }
       });
       const ids = [
         "source-database",
