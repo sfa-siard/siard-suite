@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -86,7 +86,7 @@ function ConnectionForm({
   const setField = (key: string) => (event: { target: { value: string } }) =>
     setValues((current) => ({ ...current, [key]: event.target.value }));
 
-  const submit = useCallback(() => {
+  const submit = () => {
     const found: Record<string, string> = {};
     for (const descriptor of entry.fields ?? []) {
       const key = descriptor.key ?? "";
@@ -141,20 +141,18 @@ function ConnectionForm({
     } else {
       createConnection({ body }, callbacks);
     }
-  }, [
-    entry,
-    saved,
-    values,
-    name,
-    t,
-    navigate,
-    createConnection,
-    updateConnection,
-  ]);
+  };
+
+  // stable handler, so typing does not re-register the action bar's Save
+  const submitRef = useRef(submit);
+  useLayoutEffect(() => {
+    submitRef.current = submit;
+  });
+  const submitLatest = useCallback(() => submitRef.current(), []);
 
   usePrimaryAction({
     label: t("connections.save"),
-    onClick: submit,
+    onClick: submitLatest,
     disabled: isPending,
   });
 
