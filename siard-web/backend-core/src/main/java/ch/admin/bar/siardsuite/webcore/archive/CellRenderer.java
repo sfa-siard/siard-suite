@@ -53,7 +53,10 @@ final class CellRenderer {
     }
 
     static boolean isBinary(Cell cell) throws IOException {
-        int type = cell.getMetaValue().getPreType();
+        return isBinaryType(cell.getMetaValue().getPreType());
+    }
+
+    static boolean isBinaryType(int type) {
         return type == Types.BINARY || type == Types.VARBINARY || type == Types.BLOB;
     }
 

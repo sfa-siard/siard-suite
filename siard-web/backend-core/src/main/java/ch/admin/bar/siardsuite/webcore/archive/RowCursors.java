@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -120,10 +119,8 @@ final class RowCursors {
             close(search);
             search = null;
         }
-        for (Iterator<Cursor> it = paging.iterator(); it.hasNext(); ) {
-            close(it.next());
-            it.remove();
-        }
+        paging.forEach(RowCursors::close);
+        paging.clear();
     }
 
     private static void close(Cursor cursor) {

@@ -124,8 +124,7 @@ public class DU {
             _sdfDate = new SimpleDateFormat(sDateFormat.substring(iFirstDateSymbol, iLastDateSymbol + 1));
         if (iFirstTimeSymbol >= 0)
             _sdfTime = new SimpleDateFormat(sDateFormat.substring(iFirstTimeSymbol, iLastTimeSymbol + 1));
-        String pattern = sDateFormat;
-        dateFormat = ThreadLocal.withInitial(() -> new SimpleDateFormat(pattern));
+        dateFormat = ThreadLocal.withInitial(() -> new SimpleDateFormat(sDateFormat));
         _sdfTimestamp = new SimpleDateFormat(sDateFormat);
         _map.put(sLanguage, this);
     }

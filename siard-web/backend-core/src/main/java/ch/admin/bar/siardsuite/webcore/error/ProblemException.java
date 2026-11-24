@@ -7,12 +7,10 @@ package ch.admin.bar.siardsuite.webcore.error;
 public class ProblemException extends RuntimeException {
 
     private final int status;
-    private final String detail;
 
     public ProblemException(int status, String detail) {
         super(detail, null, false, false);
         this.status = status;
-        this.detail = detail;
     }
 
     public int status() {
@@ -20,6 +18,6 @@ public class ProblemException extends RuntimeException {
     }
 
     public String detail() {
-        return detail;
+        return getMessage();
     }
 }

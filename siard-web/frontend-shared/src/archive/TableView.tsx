@@ -1,12 +1,8 @@
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import {
-  DataGrid,
-  type GridColDef,
-  type GridPaginationModel,
-} from "@mui/x-data-grid";
+import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { deDE, enUS, frFR, itIT } from "@mui/x-data-grid/locales";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import type { components } from "../api/core-schema";
@@ -25,7 +21,7 @@ function gridLocaleText(language: string) {
 }
 
 /** One page size (archive design D12): the Community grid's maximum. */
-export const PAGE_SIZE = 100;
+const PAGE_SIZE = 100;
 
 type GridRow = { id: number } & Record<string, CellDto | number>;
 
@@ -81,37 +77,42 @@ function TableContent({
   useReportError(table.error);
   useReportError(rows.error);
 
-  const columns: GridColDef<GridRow>[] = (table.data?.columns ?? []).map(
-    (column) => ({
-      field: `c${column.index}`,
-      headerName: column.name,
-      description: column.type,
-      minWidth: 120,
-      flex: 1,
-      sortable: false,
-      filterable: false,
-      renderCell: ({ value, row }) => (
-        <Cell
-          cell={value as CellDto | undefined}
-          contentUrl={`/api/archives/${encodeURIComponent(archiveId)}/schemas/${schemaIndex}/tables/${tableIndex}/rows/${row.id}/columns/${column.index}/content`}
-        />
-      ),
-    }),
+  // stable grid inputs: the grid reprocesses all columns or rows when it gets new arrays
+  const columns = useMemo<GridColDef<GridRow>[]>(
+    () =>
+      (table.data?.columns ?? []).map((column) => ({
+        field: `c${column.index}`,
+        headerName: column.name,
+        description: column.type,
+        minWidth: 120,
+        flex: 1,
+        sortable: false,
+        filterable: false,
+        renderCell: ({ value, row }) => (
+          <Cell
+            cell={value as CellDto | undefined}
+            contentUrl={`/api/archives/${encodeURIComponent(archiveId)}/schemas/${schemaIndex}/tables/${tableIndex}/rows/${row.id}/columns/${column.index}/content`}
+          />
+        ),
+      })),
+    [table.data, archiveId, schemaIndex, tableIndex],
   );
-  const gridRows: GridRow[] = (rows.data?.rows ?? []).map((row) => ({
-    id: row.row ?? 0,
-    ...Object.fromEntries((row.cells ?? []).map((cell, c) => [`c${c}`, cell])),
-  }));
+  const gridRows = useMemo<GridRow[]>(
+    () =>
+      (rows.data?.rows ?? []).map((row) => ({
+        id: row.row ?? 0,
+        ...Object.fromEntries(
+          (row.cells ?? []).map((cell, c) => [`c${c}`, cell]),
+        ),
+      })),
+    [rows.data],
+  );
 
   function showPage(target: number) {
     setSearchParams((params) => {
       params.set("page", String(target));
       return params;
     });
-  }
-
-  function changePage(model: GridPaginationModel) {
-    showPage(model.page + 1);
   }
 
   function showMatch(found: Match | null) {
@@ -138,7 +139,7 @@ function TableContent({
         paginationMode="server"
         rowCount={table.data?.rows ?? 0}
         paginationModel={{ page: page - 1, pageSize: PAGE_SIZE }}
-        onPaginationModelChange={changePage}
+        onPaginationModelChange={(model) => showPage(model.page + 1)}
         pageSizeOptions={[PAGE_SIZE]}
         localeText={gridLocaleText(i18n.language)}
         disableColumnSorting

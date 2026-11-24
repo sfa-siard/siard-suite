@@ -12,13 +12,12 @@ import { useReportError } from "./errors";
 /** A view's query and columns; views have no rows in a SIARD archive. */
 export function ViewView({ archiveId }: { archiveId: string }) {
   const { t } = useTranslation();
-  const schemaIndex = Number(useParams().s);
-  const viewIndex = Number(useParams().v);
+  const { s, v } = useParams();
   const view = coreApi.useQuery(
     "get",
     "/api/archives/{archiveId}/schemas/{s}/views/{v}",
     {
-      params: { path: { archiveId, s: schemaIndex, v: viewIndex } },
+      params: { path: { archiveId, s: Number(s), v: Number(v) } },
     },
   );
   useReportError(view.error);

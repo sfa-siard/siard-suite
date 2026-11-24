@@ -23,7 +23,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -44,7 +43,6 @@ public class ArchiveRegistry {
         // a semaphore, not a ReentrantLock: a streamed download releases it on another thread (design D3)
         final Semaphore lock = new Semaphore(1);
         final Runnable onRelease;
-        final AtomicBoolean released = new AtomicBoolean();
         final RowCursors cursors;
         volatile Instant lastUsed;
 
@@ -88,13 +86,11 @@ public class ArchiveRegistry {
      */
     public ArchiveId register(ArchiveScope scope, Path file, Runnable onRelease) throws IOException {
         reserve(scope, onRelease);
-        Archive archive = null;
+        Archive archive;
         try {
             archive = ArchiveImpl.newInstance();
             archive.openReadOnly(file.toFile());
         } catch (IOException | RuntimeException e) {
-            // a failed open can leave the zip file open (it is opened before the metadata is read)
-            closeQuietly(archive);
             unreserve(scope);
             onRelease.run();
             throw e instanceof IOException io ? io : new IOException("Archive cannot be opened", e);
@@ -242,9 +238,7 @@ public class ArchiveRegistry {
     }
 
     private static void release(Entry entry) {
-        if (!entry.released.compareAndSet(false, true)) {
-            return;
-        }
+        // callers only get here after winning entries.remove(id, entry), so this runs once per entry
         try {
             entry.cursors.closeAll();
             entry.archive.close();
@@ -255,16 +249,8 @@ public class ArchiveRegistry {
         }
     }
 
-    private static void closeQuietly(Archive archive) {
-        if (archive == null) return;
-        try {
-            archive.close();
-        } catch (IOException | RuntimeException e) {
-            LOG.debug("Archive that failed to open could not be closed", e);
-        }
-    }
-
-    private static ProblemException notFound() {
+    /** Unknown, foreign and closed ids all answer the same 404. */
+    static ProblemException notFound() {
         return new ProblemException(404, null);
     }
 }

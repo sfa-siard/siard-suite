@@ -3,8 +3,9 @@ import { render } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router";
 import { vi } from "vitest";
 import { ArchiveBrowser } from "../archive/ArchiveBrowser";
+import { jsonResponse } from "./index";
 
-export const ARCHIVE_ID = "a1";
+const ARCHIVE_ID = "a1";
 const BASE = `/api/archives/${ARCHIVE_ID}`;
 
 /** Answers API requests by path; a handler returns [status, body], or undefined for 404. */
@@ -25,13 +26,7 @@ export function mockApi(handler: Handler) {
         404,
         undefined,
       ];
-      return new Response(body === undefined ? null : JSON.stringify(body), {
-        status,
-        headers: {
-          "Content-Type":
-            status < 300 ? "application/json" : "application/problem+json",
-        },
-      });
+      return jsonResponse(status, body);
     }),
   );
   return requests;

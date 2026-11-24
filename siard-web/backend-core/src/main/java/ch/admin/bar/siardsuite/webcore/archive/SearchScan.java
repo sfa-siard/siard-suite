@@ -49,9 +49,6 @@ final class SearchScan {
             return false;
         }
         String text = CellRenderer.text(cell, CellRenderer.MAX_TEXT);
-        if (text.length() > CellRenderer.MAX_TEXT) {
-            text = text.substring(0, CellRenderer.MAX_TEXT);
-        }
         return (matchCase ? text : text.toLowerCase(Locale.ROOT)).contains(needle);
     }
 }

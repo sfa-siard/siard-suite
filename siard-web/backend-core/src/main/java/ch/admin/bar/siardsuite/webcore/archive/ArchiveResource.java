@@ -10,7 +10,6 @@ import ch.admin.bar.siard2.api.MetaView;
 import ch.admin.bar.siard2.api.Schema;
 import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.TableRecord;
-import ch.admin.bar.siard2.api.facade.MetaTableFacade;
 import ch.admin.bar.siard2.api.facade.TableRecordFacade;
 import ch.admin.bar.siardsuite.webcore.archive.ArchiveDtos.ArchiveDto;
 import ch.admin.bar.siardsuite.webcore.archive.ArchiveDtos.CellDto;
@@ -127,10 +126,9 @@ public class ArchiveResource {
     public TableDto table(@PathParam("s") int s, @PathParam("t") int t) throws IOException {
         try (ArchiveLease lease = acquire()) {
             MetaTable mt = table(schema(lease, s), t).getMetaTable();
-            List<MetaColumn> metaColumns = new MetaTableFacade(mt).getMetaColums();
             List<ColumnDto> columns = new ArrayList<>();
-            for (int c = 0; c < metaColumns.size(); c++) {
-                columns.add(column(c, metaColumns.get(c)));
+            for (int c = 0; c < mt.getMetaColumns(); c++) {
+                columns.add(column(c, mt.getMetaColumn(c)));
             }
             return new TableDto(t, mt.getName(), mt.getDescription(), mt.getRows(), columns);
         }
@@ -142,7 +140,7 @@ public class ArchiveResource {
         try (ArchiveLease lease = acquire()) {
             MetaSchema ms = schema(lease, s).getMetaSchema();
             if (v < 0 || v >= ms.getMetaViews()) {
-                throw notFound();
+                throw ArchiveRegistry.notFound();
             }
             MetaView mv = ms.getMetaView(v);
             List<ColumnDto> columns = new ArrayList<>();
@@ -221,16 +219,16 @@ public class ArchiveResource {
         requestContext.registerCompletionCallback(failure -> lease.close());
         Table table = table(schema(lease, s), t);
         if (row < 0 || row >= table.getMetaTable().getRows()) {
-            throw notFound();
+            throw ArchiveRegistry.notFound();
         }
         TableRecord record = lease.cursors().page(table, row, 1).getFirst();
         List<Cell> cells = new TableRecordFacade(record).getCells();
         if (c < 0 || c >= cells.size()) {
-            throw notFound();
+            throw ArchiveRegistry.notFound();
         }
         Cell cell = cells.get(c);
         if (cell.isNull()) {
-            throw notFound();
+            throw ArchiveRegistry.notFound();
         }
         StreamingOutput body = output -> write(cell, output);
         return Response.ok(body, MediaType.APPLICATION_OCTET_STREAM_TYPE)
@@ -262,25 +260,24 @@ public class ArchiveResource {
         return registry.acquire(ArchiveScopeFilter.scopeOf(request), new ArchiveId(archiveId));
     }
 
-    static Schema schema(ArchiveLease lease, int s) {
+    private static Schema schema(ArchiveLease lease, int s) {
         Archive archive = lease.archive();
         if (s < 0 || s >= archive.getSchemas()) {
-            throw notFound();
+            throw ArchiveRegistry.notFound();
         }
         return archive.getSchema(s);
     }
 
-    static Table table(Schema schema, int t) {
+    private static Table table(Schema schema, int t) {
         if (t < 0 || t >= schema.getTables()) {
-            throw notFound();
+            throw ArchiveRegistry.notFound();
         }
         return schema.getTable(t);
     }
 
     private static ColumnDto column(int index, MetaColumn mc) throws IOException {
-        int type = mc.getPreType();
-        boolean lob = type == java.sql.Types.BINARY || type == java.sql.Types.VARBINARY || type == java.sql.Types.BLOB;
-        return new ColumnDto(index, mc.getName(), mc.getType(), mc.isNullable(), mc.getDescription(), lob);
+        return new ColumnDto(index, mc.getName(), mc.getType(), mc.isNullable(), mc.getDescription(),
+                CellRenderer.isBinaryType(mc.getPreType()));
     }
 
     private static long parse(String value, long defaultValue, String name) {
@@ -292,10 +289,6 @@ public class ArchiveResource {
         } catch (NumberFormatException e) {
             throw new ProblemException(400, name + " must be a whole number");
         }
-    }
-
-    static ProblemException notFound() {
-        return new ProblemException(404, null);
     }
 
     private static LocalDate toLocalDate(Calendar calendar) {

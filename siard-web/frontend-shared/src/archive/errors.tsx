@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect } from "react";
-import { ApiError } from "../api/client";
+import { ApiError, isUnauthorized } from "../api/client";
 
 /** Why the browse views cannot show the archive: archive design D11, spec "Archive no longer open". */
 export type Failure = "notOpen" | "unauthorized" | "load";
@@ -8,7 +8,7 @@ export function failureOf(error: unknown): Failure {
   if (error instanceof ApiError && error.status === 404) {
     return "notOpen";
   }
-  if (error instanceof ApiError && error.status === 401) {
+  if (isUnauthorized(error)) {
     return "unauthorized";
   }
   return "load";

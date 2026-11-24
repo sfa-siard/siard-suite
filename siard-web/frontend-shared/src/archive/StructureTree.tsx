@@ -47,36 +47,24 @@ function SchemaNode({
   return (
     <li>
       <ListSubheader disableSticky>{schema.name}</ListSubheader>
-      <List
-        dense
-        disablePadding
-        aria-label={`${schema.name}: ${t("tableContainer.title.tables")}`}
-      >
-        {(detail.data?.tables ?? []).map((table) => (
-          <ListItemButton
-            key={table.index}
-            component={NavLink}
-            to={`schemas/${schemaIndex}/tables/${table.index}`}
-          >
-            <ListItemText primary={table.name} />
-          </ListItemButton>
-        ))}
-      </List>
-      <List
-        dense
-        disablePadding
-        aria-label={`${schema.name}: ${t("tableContainer.title.views")}`}
-      >
-        {(detail.data?.views ?? []).map((view) => (
-          <ListItemButton
-            key={view.index}
-            component={NavLink}
-            to={`schemas/${schemaIndex}/views/${view.index}`}
-          >
-            <ListItemText primary={view.name} />
-          </ListItemButton>
-        ))}
-      </List>
+      {(["tables", "views"] as const).map((kind) => (
+        <List
+          key={kind}
+          dense
+          disablePadding
+          aria-label={`${schema.name}: ${t(`tableContainer.title.${kind}`)}`}
+        >
+          {(detail.data?.[kind] ?? []).map((item) => (
+            <ListItemButton
+              key={item.index}
+              component={NavLink}
+              to={`schemas/${schemaIndex}/${kind}/${item.index}`}
+            >
+              <ListItemText primary={item.name} />
+            </ListItemButton>
+          ))}
+        </List>
+      ))}
     </li>
   );
 }

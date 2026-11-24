@@ -439,19 +439,30 @@ public class ArchiveImpl
         if (file.exists()) {
             /* open the ZIP file */
             _zipFile = new Zip64File(file, readOnly);
-            loadMetaData();
-            SiardArchive sa = ((MetaDataImpl) getMetaData()).getSiardArchive();
-            SchemasType sts = sa.getSchemas();
-            for (int iSchema = 0; iSchema < sts.getSchema()
-                                               .size(); iSchema++) {
-                SchemaType st = sts.getSchema()
-                                   .get(iSchema);
-                SchemaImpl.newInstance(this, st.getName());
+            try {
+                loadMetaData();
+                SiardArchive sa = ((MetaDataImpl) getMetaData()).getSiardArchive();
+                SchemasType sts = sa.getSchemas();
+                for (int iSchema = 0; iSchema < sts.getSchema()
+                                                   .size(); iSchema++) {
+                    SchemaType st = sts.getSchema()
+                                       .get(iSchema);
+                    SchemaImpl.newInstance(this, st.getName());
+                }
+                _bModifyPrimaryData = false;
+                _bMetaDataModified = false;
+                /* compute initial cached validity */
+                validate();
+            } catch (IOException | RuntimeException e) {
+                // an archive that failed to open must not keep its zip file open
+                try {
+                    _zipFile.close();
+                } catch (IOException closeFailure) {
+                    e.addSuppressed(closeFailure);
+                }
+                _zipFile = null;
+                throw e;
             }
-            _bModifyPrimaryData = false;
-            _bMetaDataModified = false;
-            /* compute initial cached validity */
-            validate();
         } else
             throw new IOException("SIARD file " + file.getAbsolutePath() + " does not exist!");
     }
