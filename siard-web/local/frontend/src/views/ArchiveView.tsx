@@ -81,6 +81,42 @@ export default function ArchiveView() {
 
       <Box component="section" sx={{ display: "grid", gap: 1 }}>
         <Typography component="h2" variant="h6">
+          {t("archive.newConnection")}
+        </Typography>
+        {dbms.isPending ? (
+          <LinearProgress />
+        ) : dbmsError ? (
+          <LoadErrorAlert error={dbmsError} messageKey="archive.loadError" />
+        ) : (
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "minmax(0, 1fr)",
+                sm: "repeat(3, minmax(0, 1fr))",
+              },
+              gap: 2,
+            }}
+          >
+            {dbms.data?.map((entry: DbmsCatalogEntry) => (
+              <Card key={entry.id} variant="outlined" sx={{ minWidth: 0 }}>
+                <CardActionArea
+                  onClick={() =>
+                    navigate(`/archive/connection?dbms=${entry.id}`)
+                  }
+                >
+                  <CardContent>
+                    <Typography>{entry.name}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            ))}
+          </Box>
+        )}
+      </Box>
+
+      <Box component="section" sx={{ display: "grid", gap: 1 }}>
+        <Typography component="h2" variant="h6">
           {t("archive.savedConnections")}
         </Typography>
         {connections.isPending ? (
@@ -126,42 +162,6 @@ export default function ArchiveView() {
               </ListItem>
             ))}
           </List>
-        )}
-      </Box>
-
-      <Box component="section" sx={{ display: "grid", gap: 1 }}>
-        <Typography component="h2" variant="h6">
-          {t("archive.newConnection")}
-        </Typography>
-        {dbms.isPending ? (
-          <LinearProgress />
-        ) : dbmsError ? (
-          <LoadErrorAlert error={dbmsError} messageKey="archive.loadError" />
-        ) : (
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "minmax(0, 1fr)",
-                sm: "repeat(3, minmax(0, 1fr))",
-              },
-              gap: 2,
-            }}
-          >
-            {dbms.data?.map((entry: DbmsCatalogEntry) => (
-              <Card key={entry.id} variant="outlined" sx={{ minWidth: 0 }}>
-                <CardActionArea
-                  onClick={() =>
-                    navigate(`/archive/connection?dbms=${entry.id}`)
-                  }
-                >
-                  <CardContent>
-                    <Typography>{entry.name}</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            ))}
-          </Box>
         )}
       </Box>
 

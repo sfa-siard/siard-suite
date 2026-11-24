@@ -145,12 +145,17 @@ test("saved connections and the DBMS catalog render", async () => {
   ).toBeInTheDocument();
   expect(await screen.findByText("Archive A")).toBeInTheDocument();
   expect(screen.getByText("db.example.org:5432/archive")).toBeInTheDocument();
+  const saved = screen.getByRole("heading", {
+    name: en.archive.savedConnections,
+  });
+  const newConnection = screen.getByRole("heading", {
+    name: en.archive.newConnection,
+  });
+  // New-connection choices stay reachable however many connections are saved.
   expect(
-    screen.getByRole("heading", { name: en.archive.savedConnections }),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByRole("heading", { name: en.archive.newConnection }),
-  ).toBeInTheDocument();
+    newConnection.compareDocumentPosition(saved) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
   for (const entry of catalog) {
     expect(
       screen.getByRole("button", { name: entry.name }),

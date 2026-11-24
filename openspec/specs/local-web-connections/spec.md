@@ -166,13 +166,14 @@ Saved connection profiles SHALL be stored in a SQLite database in the per-OS app
 
 ### Requirement: Connection picker page
 
-The `/archive` route SHALL show a heading, the list of saved connections and the new-connection choices for the five server-based DBMS. Each saved connection SHALL show its name and target summary. Each entry SHALL offer a delete action with confirmation. Selecting a saved connection or a DBMS SHALL navigate to the details page. The page SHALL be localized in de, fr, it and en and usable on narrow viewports.
+The `/archive` route SHALL show a heading, the new-connection choices for the five server-based DBMS and, below them, the list of saved connections, so the choices stay in view however many connections are saved. Each saved connection SHALL show its name and target summary. Each entry SHALL offer a delete action with confirmation. Selecting a saved connection or a DBMS SHALL navigate to the details page. The page SHALL be localized in de, fr, it and en and usable on narrow viewports.
 
 #### Scenario: Picker shows both sections
 - **GIVEN** a valid local session, one saved connection and the catalog
 - **WHEN** the user visits `/archive`
 - **THEN** the saved connection is listed with its name and target summary
 - **AND** the five server-based DBMS are offered as new-connection choices
+- **AND** the new-connection section appears above the saved-connections section
 - **AND** on desktop the choices use three equal-width columns, with three choices in the first row and two in the second
 - **AND** on narrow screens the choices stack in one column without horizontal overflow
 - **AND** MS Access is not offered
