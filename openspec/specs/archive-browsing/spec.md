@@ -1,10 +1,10 @@
-# Spec Delta
+# archive-browsing Specification
 
 ## Purpose
 
 Lets a user of either web app browse an already opened SIARD archive read-only: its metadata, schemas, tables and views, the rows of a table in pages, a bounded text search within a table, and the content of large objects, through one shared API and one shared set of views.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Archive metadata
 
@@ -85,13 +85,14 @@ The API SHALL expose, addressed by zero-based indexes: a schema with its tables 
 
 ### Requirement: Cell values
 
-Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…,"truncated":…}` for textual and numeric content, or `{"type":"lob","length":…}` for binary and large-object content. Text longer than 4096 characters SHALL be cut at 4096 with `truncated` true. Structured values (arrays, user-defined types) SHALL be delivered as text.
+Each cell SHALL be an object `{"type":"null"}` for an SQL NULL, `{"type":"text","value":…,"truncated":…}` for textual and numeric content, or `{"type":"lob","length":…}` for binary and large-object content. Text longer than 4096 characters SHALL be cut at 4096 with `truncated` true. Structured values (arrays, user-defined types) SHALL be delivered as text.
 
 #### Scenario: Text, null and numeric cells
 - **GIVEN** the table `TSIMPLE` of `sample.siard` is open
 - **WHEN** its rows are requested
-- **THEN** a NULL cell is JSON `null`
-- **AND** every other cell has `type` `text`, a string `value` equal to what the desktop app shows for the same cell, and `truncated` false
+- **THEN** a NULL cell is `{"type":"null"}`
+- **AND** every other non-binary cell has `type` `text` and a string `value` equal to what the desktop app shows for the same cell, cut at 4096 characters
+- **AND** `truncated` is true exactly for the cells whose text is longer than 4096 characters (the fixture's CLOBs)
 
 #### Scenario: Large text is truncated
 - **GIVEN** a crafted archive (built in the test) with a text cell of 100000 characters
@@ -100,10 +101,11 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **AND** the full text is available through the content endpoint
 
 #### Scenario: Large object cells carry no content
-- **GIVEN** the table `TCOMPLEX` of `sample.siard` with its binary and external LOB columns
-- **WHEN** its rows are requested
-- **THEN** each LOB cell has `type` `lob` and a `length` greater than 0
-- **AND** the response body is smaller than 20000 bytes although the archive's LOB files total more than 100000 bytes
+- **GIVEN** the tables `TSIMPLE` (binary columns, LOB files up to 1 MB) and `TCOMPLEX` (LOBs nested in structured values) of `sample.siard`
+- **WHEN** their rows are requested
+- **THEN** each binary cell has `type` `lob` and a `length` greater than 0
+- **AND** the `TSIMPLE` response body is smaller than its binary LOB files together (more than 1 MB)
+- **AND** the `TCOMPLEX` response body is smaller than 20000 bytes although its LOB files total more than 100000 bytes
 
 ### Requirement: Large object content
 
@@ -132,6 +134,11 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 - **WHEN** a client starts downloading its content, reads part of the body and closes the connection
 - **THEN** a following `GET /api/archives/{archiveId}` on the same archive returns 200, not 503
 
+#### Scenario: A download that is never written releases the archive
+- **GIVEN** `sample.siard` is open and a lock timeout of 1 second
+- **WHEN** its content endpoint is requested with `HEAD`, and, while another request holds the archive, a client requests the content with `GET` and closes the connection before the body is written
+- **THEN** after each, a following `GET /api/archives/{archiveId}` on the same archive returns 200, not 503
+
 ### Requirement: Bounded search in a table
 
 `GET .../tables/{t}/search?q=&matchCase=&afterRow=` SHALL find the next row after `afterRow` (default -1) with a text cell containing `q`, scanning at most 20000 rows or 5 seconds per request, and return `found`, `row`, `column`, and `complete`. When the scan stops without a match before the end, `found` is false, `complete` is false and `nextRow` tells where to continue. Search SHALL compare the displayed text of each cell: the first 4096 characters of every textual and numeric cell, including CLOB, NCLOB and XML cells; text beyond 4096 characters and binary cells are not searched.
@@ -154,7 +161,7 @@ Each cell SHALL be `null` for an SQL NULL, an object `{"type":"text","value":…
 
 #### Scenario: Invalid search input
 - **GIVEN** an open table
-- **WHEN** search is requested with an empty `q` and with a `q` of 201 characters
+- **WHEN** search is requested with an empty `q`, with a `q` of 201 characters, and with `afterRow=-2`
 - **THEN** each response status is 400 with content type `application/problem+json`
 
 #### Scenario: Search covers only the displayed text
@@ -225,6 +232,16 @@ The shared frontend package SHALL provide archive browse views that, given an `a
 - **GIVEN** a table is shown
 - **WHEN** a request is answered 401
 - **THEN** the views report it to the host app through a callback and show no row data
+
+#### Scenario: LOB cell offers a download
+- **GIVEN** a table is shown whose row 0 has a large-object cell of 2048 bytes in column 1
+- **WHEN** the grid shows that cell
+- **THEN** the cell shows the size and a download link to `/api/archives/{archiveId}/schemas/0/tables/0/rows/0/columns/1/content`
+
+#### Scenario: View shows its query and columns
+- **GIVEN** an archive with the view `VIEW1`
+- **WHEN** the user selects `VIEW1`
+- **THEN** the view's query and the name and type of each of its columns are shown
 
 #### Scenario: Language
 - **GIVEN** the interface language is German

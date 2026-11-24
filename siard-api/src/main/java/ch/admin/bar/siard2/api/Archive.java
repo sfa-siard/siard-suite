@@ -165,6 +165,15 @@ public interface Archive {
     void open(File file) throws IOException;
 
     /**
+     * Opens an existing SIARD file without write access, so a write-protected file can be read.
+     * The meta data must not be modified.
+     *
+     * @param file the SIARD file on disk.
+     * @throws IOException if an I/O error occurred.
+     */
+    void openReadOnly(File file) throws IOException;
+
+    /**
      * create a new SIARD file with empty meta data and without primary
      * data.
      * If a file with the same name exists already, this method throws

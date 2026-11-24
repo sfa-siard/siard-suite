@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import java.util.Map;
 
 /**
- * Test-only API endpoint whose handler throws, for the error-response scenarios.
+ * Test-only API endpoints whose handlers throw, for the error-response scenarios.
  */
 @Path("/api/test-probe")
 @Produces(MediaType.APPLICATION_JSON)
@@ -20,5 +20,11 @@ public class ProbeResource {
     @Path("/fail")
     public Map<String, Boolean> fail() {
         throw new IllegalStateException(INTERNAL_MESSAGE);
+    }
+
+    @GET
+    @Path("/problem")
+    public Map<String, Boolean> problem() {
+        throw new ProblemException(400, "D");
     }
 }

@@ -825,7 +825,7 @@ public class Zip64File {
     public Zip64File(String sFileName, boolean bReadOnly)
             throws FileNotFoundException, IOException {
         m_df = new DiskFile(sFileName, bReadOnly);
-        getCentralDirectory();
+        readCentralDirectoryOrClose();
     }
 
     /**
@@ -844,7 +844,7 @@ public class Zip64File {
     public Zip64File(File file, boolean bReadOnly)
             throws FileNotFoundException, IOException {
         m_df = new DiskFile(file, bReadOnly);
-        getCentralDirectory();
+        readCentralDirectoryOrClose();
     }
 
     /**
@@ -860,7 +860,7 @@ public class Zip64File {
     public Zip64File(String sFileName)
             throws FileNotFoundException, IOException {
         m_df = new DiskFile(sFileName);
-        getCentralDirectory();
+        readCentralDirectoryOrClose();
     }
 
     /**
@@ -876,7 +876,21 @@ public class Zip64File {
     public Zip64File(File file)
             throws FileNotFoundException, IOException {
         m_df = new DiskFile(file);
-        getCentralDirectory();
+        readCentralDirectoryOrClose();
+    }
+
+    /** Reads the central directory; on failure closes the disk file, so a rejected file is not left open. */
+    private void readCentralDirectoryOrClose() throws IOException {
+        try {
+            getCentralDirectory();
+        } catch (IOException | RuntimeException e) {
+            try {
+                m_df.close();
+            } catch (IOException closeFailure) {
+                e.addSuppressed(closeFailure);
+            }
+            throw e;
+        }
     }
 
     /**

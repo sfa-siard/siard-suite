@@ -42,7 +42,16 @@
     "deleteText": "La connexion « {{name}} » sera supprimée.",
     "deleteConfirm": "Supprimer",
     "deleteCancel": "Annuler",
-    "deleteError": "La connexion n'a pas pu être supprimée."
+    "deleteError": "La connexion n'a pas pu être supprimée.",
+    "lob": {
+      "download": "Télécharger",
+      "size": "{{size}} octets"
+    },
+    "search": {
+      "matchCase": "Respecter la casse"
+    },
+    "notOpen": "Cette archive n'est pas ou plus ouverte. Veuillez l'ouvrir à nouveau.",
+    "contentLoadError": "Le contenu de l'archive n'a pas pu être chargé."
   },
   "archiveWizard": {
     "selectConnection": "Sélectionner une connexion",
@@ -78,5 +87,31 @@
     "loadError": "Les détails de la connexion n'ont pas pu être chargés.",
     "backToArchive": "Retour aux connexions",
     "saveError": "La connexion n'a pas pu être enregistrée."
+  },
+  "tableContainer": {
+    "title": {
+      "schemas": "Schémas",
+      "tables": "Tableaux",
+      "views": "Views",
+      "columns": "Colonnes"
+    },
+    "labelNumberOfRows": "Jeux de données",
+    "table": {
+      "header": {
+        "columnName": "Nom de colonne",
+        "columnType": "Type de colonne"
+      }
+    }
+  },
+  "search": {
+    "table": {
+      "dialog": {
+        "search": "Cherche",
+        "nodata": "Aucun résultat de recherche"
+      }
+    }
+  },
+  "button": {
+    "next": "Weiter"
   }
 }

@@ -19,7 +19,7 @@ This is a **Gradle multi-module monorepo**. All modules live in the same reposit
 |---|---|
 | `siard-suite-app` | Desktop GUI application (JavaFX) |
 | `siard-web/local` | Local web app replacing the JavaFX UI: `backend` (Quarkus agent, REST API) and `frontend` (React/TypeScript, served by the backend) |
-| `siard-web/backend-core` | Shared Quarkus backend library of the web apps (error format, later archive browsing) |
+| `siard-web/backend-core` | Shared Quarkus backend library of the web apps (error format, archive registry and browsing API under `/api/archives`) |
 | `siard-web/frontend-shared` | Shared frontend package of the web apps (theme, fonts, i18n, typed API client, test helpers) |
 | `siard-cmd` | Command-line interface (`SiardFromDb`, `SiardToDb`) |
 | `siard-api` | Core API for reading/writing SIARD files (JAXB-based) |

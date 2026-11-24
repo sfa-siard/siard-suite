@@ -66,12 +66,22 @@ dependencies {
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
+    // reads both OpenAPI descriptions in SharedApiDescriptionTest
+    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.test {
     useJUnitPlatform()
     jvmArgs(siardJvmArgs)
+    // the archive fixtures are read in place, never copied
+    systemProperty("siard.testfiles", project(":siard-api").file("src/test/resources/testfiles").absolutePath)
+    // the shared API must appear unchanged in this app's description (archive design D10)
+    val coreOpenApi = project(":siard-web:backend-core").file("openapi.yaml")
+    val appOpenApi = file("../openapi.yaml")
+    inputs.files(coreOpenApi, appOpenApi)
+    systemProperty("siard.openapi.core", coreOpenApi.absolutePath)
+    systemProperty("siard.openapi.app", appOpenApi.absolutePath)
 }
 
 // src/integrationTest (source set and quarkusIntTest task come from the Quarkus plugin) starts the

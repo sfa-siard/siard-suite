@@ -25,7 +25,8 @@ Out of scope: opening or uploading archives (app-specific, follow-up changes), e
 
 ### Modified Capabilities
 
-None.
+- `local-web-agent`: the local agent supplies the scope of its archive requests (one fixed scope per agent instance, behind its session check).
+- `web-module-boundaries`: the shared error format may carry a deliberate `detail` (`ProblemException`), never an exception message.
 
 ## Impact
 
@@ -33,4 +34,5 @@ None.
 - **API**: new `/api/archives/**` endpoints in every app that includes the core (the local app's `openapi.yaml` grows accordingly; the drift check requires it to be regenerated).
 - **Dependencies**: `@mui/x-data-grid` (Community tier, MIT) in the shared frontend package. Nothing new in the backend; the core stays free of `siard-cmd` and JDBC drivers (boundary from `restructure-into-siard-web`).
 - **`siard-api` change**: archives are only openable read-write today (`DiskFile` mode `rw`), so a write-protected archive cannot be opened. A read-only open path is added to `siard-api`; this is the only change outside the web modules. Whether reading works through a read-only handle without further changes is verified by a spike first (design S2).
-- **Risks to validate early** (design Spikes): thread-safety of `ArchiveImpl`, cost of forward-only paging, read-only open, and Jandex/OpenAPI scanning across the module boundary.
+- **Local app**: implements the core's `ScopeResolver`; the `Clock` producer moves from the local agent to the core.
+- **Risks to validate early** (design Spikes): thread-safety of `ArchiveImpl`, cost of forward-only paging, read-only open, and generating the core's OpenAPI description (discovery of core resources by the apps was proven by `restructure-into-siard-web`).

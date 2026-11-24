@@ -1,10 +1,10 @@
-# Spec Delta
+# archive-registry Specification
 
 ## Purpose
 
 Defines how a web app holds open SIARD archives for its users: how an archive is referenced, who may reach it, how many may be open, and when it is released, so that a server shared by many users neither leaks one user's archive to another nor accumulates open files.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Archives are referenced by opaque ids
 
@@ -32,7 +32,7 @@ An app SHALL register an archive file for a scope and receive an `archiveId` of 
 
 ### Requirement: Archives are isolated by scope
 
-Every archive request SHALL be resolved in the scope the app determines for the request. An id that belongs to another scope SHALL be answered exactly like an unknown id: `404` with identical problem details. A request for which the app resolves no scope SHALL be answered `401` before any archive is looked up.
+Every archive request SHALL be resolved in the scope the app determines for the request. An id that belongs to another scope SHALL be answered exactly like an unknown id: `404` with identical problem details. A request for which the app resolves no scope SHALL be answered `401` before any archive is looked up. An app that provides no scope resolver SHALL fail to start, so archives are never served without scopes.
 
 #### Scenario: Same scope reaches its archive
 - **GIVEN** an archive registered for scope A
@@ -56,6 +56,11 @@ Every archive request SHALL be resolved in the scope the app determines for the 
 - **WHEN** a request in scope B sends `DELETE /api/archives/{archiveId}`
 - **THEN** the response status is 404
 - **AND** the archive is still readable in scope A
+
+#### Scenario: An app without exactly one scope resolver does not start
+- **GIVEN** an app that provides no scope resolver, or two
+- **WHEN** it starts
+- **THEN** startup fails with an error naming `ScopeResolver` and stating that an app must provide exactly one
 
 ### Requirement: Open archives are limited per scope
 
@@ -120,13 +125,13 @@ An archive that has not been addressed for the idle timeout (default 30 minutes,
 
 Requests addressing the same archive SHALL be served one at a time, so that concurrent requests never share a read position and always return the same result as when run sequentially.
 
-#### Scenario: Concurrent paging returns the correct pages
+#### Scenario: Concurrent row requests answer as if issued alone
 - **GIVEN** a table of the fixture with at least 20 rows and 8 concurrent requests for different offsets
 - **WHEN** they are all issued at once
 - **THEN** each response equals the response of the same request issued alone
 - **AND** no response is an error
 
-#### Scenario: A slow request does not block another archive
+#### Scenario: A slow request does not block another open archive
 - **GIVEN** a long-running request on archive X
 - **WHEN** a request is made for archive Y of the same scope
 - **THEN** it completes without waiting for the request on X

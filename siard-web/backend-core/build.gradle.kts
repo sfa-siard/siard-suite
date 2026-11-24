@@ -25,6 +25,8 @@ dependencies {
     api("io.quarkus:quarkus-rest")
     api("io.quarkus:quarkus-rest-jackson")
     api("io.quarkus:quarkus-smallrye-openapi")
+    // idle eviction of open archives (design D2)
+    api("io.quarkus:quarkus-scheduler")
 
     api(project(":siard-api"))
 
@@ -53,8 +55,52 @@ tasks.test {
     jvmArgs(siardJvmArgs)
 }
 
-// the core is a library consumed as a plain jar; it must not be packaged as a Quarkus application
-tasks.named("quarkusBuild") { enabled = false }
+// OpenAPI description of the shared API (design D10): the core is a library consumed as a plain
+// jar, so quarkusBuild runs only to let Quarkus write the description to build/openapi/; nothing
+// uses or publishes its build/quarkus-app. Set here, not in an application.properties, which
+// would ship in the jar to every app. No build-dependent values, so the check only sees API changes.
+quarkus {
+    set("smallrye-openapi.store-schema-directory", "build/openapi")
+    set("smallrye-openapi.info-title", "SIARD Suite web backend core API")
+    set("smallrye-openapi.info-version", "1")
+    set("smallrye-openapi.auto-add-server", "false")
+}
+
+// the committed copy openapi.yaml is what frontend-shared generates its types from
+val generatedOpenApi = layout.buildDirectory.file("openapi/openapi.yaml")
+val committedOpenApi = layout.projectDirectory.file("openapi.yaml")
+
+val openApiCheck = tasks.register("openApiCheck") {
+    description = "Fails if the generated OpenAPI description differs from the committed openapi.yaml."
+    group = "verification"
+    dependsOn("quarkusBuild")
+    inputs.files(generatedOpenApi, committedOpenApi)
+    doLast {
+        val generated = generatedOpenApi.get().asFile
+        val committed = committedOpenApi.asFile
+        if (!generated.isFile) {
+            throw GradleException("$generated was not written by quarkusBuild")
+        }
+        // line endings may differ after a Windows checkout
+        fun normalized(file: File) = file.readText().replace("\r\n", "\n")
+        if (!committed.isFile || normalized(generated) != normalized(committed)) {
+            throw GradleException(
+                "The API changed: ${committed.canonicalPath} is out of date. Run " +
+                    "./gradlew :siard-web:backend-core:openApiUpdate :siard-web:local:backend:openApiUpdate, " +
+                    "then commit both openapi.yaml files."
+            )
+        }
+    }
+}
+
+tasks.register("openApiUpdate") {
+    description = "Copies the generated OpenAPI description to the committed openapi.yaml."
+    group = "build"
+    dependsOn("quarkusBuild")
+    doLast {
+        generatedOpenApi.get().asFile.copyTo(committedOpenApi.asFile, overwrite = true)
+    }
+}
 
 // Boundary of the core (design R3): a server built on the core must not be able to open database
 // connections, and must not inherit the local agent's code. Fails with the offending coordinates.
@@ -100,10 +146,12 @@ val verifyCoreBoundary = tasks.register("verifyCoreBoundary") {
 }
 
 tasks.named("check") {
-    dependsOn(verifyCoreBoundary)
+    dependsOn(verifyCoreBoundary, openApiCheck)
 }
 
 tasks.test {
     // the compiled main classes, scanned by CoreBoundaryTest for references to the local app
     systemProperty("webcore.classesDirs", sourceSets.main.get().output.classesDirs.asPath)
+    // the archive fixtures are read in place, never copied (design D13)
+    systemProperty("siard.testfiles", project(":siard-api").file("src/test/resources/testfiles").absolutePath)
 }

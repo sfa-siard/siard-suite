@@ -32,9 +32,14 @@ import java.util.Map;
 public class DU {
 
     private static final String _sZ = "Z";
-    private static final SimpleDateFormat _sdfXS_DATE = new SimpleDateFormat("yyyy-MM-dd");
-    private static final SimpleDateFormat _sdfXS_TIME = new SimpleDateFormat("HH:mm:ss");
-    private static final SimpleDateFormat _sdfXS_DATE_TIME = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    // one formatter per thread: SimpleDateFormat is not thread-safe, and DU instances are shared
+    // (e.g. the static one in siard-api's ValueImpl) by the web apps' concurrent requests
+    private static final ThreadLocal<SimpleDateFormat> XS_DATE_FORMAT =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+    private static final ThreadLocal<SimpleDateFormat> XS_TIME_FORMAT =
+            ThreadLocal.withInitial(() -> utcFormat("HH:mm:ss"));
+    private static final ThreadLocal<SimpleDateFormat> XS_DATE_TIME_FORMAT =
+            ThreadLocal.withInitial(() -> utcFormat("yyyy-MM-dd'T'HH:mm:ss"));
     private static final DecimalFormat _dfMILLIS = new DecimalFormat("000");
     private static final DecimalFormat _dfNANOS = new DecimalFormat("000000000");
     public static java.sql.Date dateMINIMUM_SQL = null;
@@ -43,8 +48,6 @@ public class DU {
     public static java.sql.Timestamp tsMAXIMUM_SQL = null;
 
     static {
-        _sdfXS_TIME.setTimeZone(TZ.getUtcTimeZone());
-        _sdfXS_DATE_TIME.setTimeZone(TZ.getUtcTimeZone());
         try {
             SimpleDateFormat sdfInternal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z");
             Date dateMinimum = sdfInternal.parse("0001-01-01 00:00:00.000 UTC");
@@ -61,13 +64,19 @@ public class DU {
         }
     }
 
+    private static SimpleDateFormat utcFormat(String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        format.setTimeZone(TZ.getUtcTimeZone());
+        return format;
+    }
+
     /** one instance per language */
     private static Map<String, DU> _map = new HashMap<String, DU>();
-    /** the simple date format of this instance */
-    private SimpleDateFormat _sdf = null;
+    /** the simple date format of this instance, one per thread (DU instances are shared between threads) */
+    private ThreadLocal<SimpleDateFormat> dateFormat = null;
 
     public String getDateFormat() {
-        return _sdf.toPattern();
+        return dateFormat.get().toPattern();
     }
 
     private SimpleDateFormat _sdfDate = null;
@@ -115,7 +124,7 @@ public class DU {
             _sdfDate = new SimpleDateFormat(sDateFormat.substring(iFirstDateSymbol, iLastDateSymbol + 1));
         if (iFirstTimeSymbol >= 0)
             _sdfTime = new SimpleDateFormat(sDateFormat.substring(iFirstTimeSymbol, iLastTimeSymbol + 1));
-        _sdf = new SimpleDateFormat(sDateFormat);
+        dateFormat = ThreadLocal.withInitial(() -> new SimpleDateFormat(sDateFormat));
         _sdfTimestamp = new SimpleDateFormat(sDateFormat);
         _map.put(sLanguage, this);
     }
@@ -143,7 +152,7 @@ public class DU {
     public String fromDate(Date date) {
         String s = "";
         if (date != null)
-            s = _sdf.format(date);
+            s = dateFormat.get().format(date);
         return s;
     }
 
@@ -158,7 +167,7 @@ public class DU {
             throws ParseException {
         Date date = null;
         if (s.length() > 0)
-            date = _sdf.parse(s);
+            date = dateFormat.get().parse(s);
         return date;
     }
 
@@ -232,7 +241,7 @@ public class DU {
     public String fromGregorianCalendar(GregorianCalendar gc) {
         String s = "";
         if (gc != null)
-            s = _sdf.format(gc.getTime());
+            s = dateFormat.get().format(gc.getTime());
         return s;
     }
 
@@ -291,7 +300,7 @@ public class DU {
     public String fromXmlGregorianCalendar(XMLGregorianCalendar xgc) {
         String s = "";
         if (xgc != null)
-            s = _sdf.format(xgc.toGregorianCalendar()
+            s = dateFormat.get().format(xgc.toGregorianCalendar()
                                .getTime());
         return s;
     }
@@ -369,14 +378,14 @@ public class DU {
      */
     public String toXsDate(java.sql.Date date) {
         if (date.after(dateMAXIMUM_SQL)) {
-            log.warn("Converted illegal date " + _sdf.format(date) + " to " + _sdf.format(dateMAXIMUM_SQL));
+            log.warn("Converted illegal date " + dateFormat.get().format(date) + " to " + dateFormat.get().format(dateMAXIMUM_SQL));
             date = dateMAXIMUM_SQL;
         }
         if (date.before(dateMINIMUM_SQL)) {
-            log.warn("Converted illegal date " + _sdf.format(date) + " to " + _sdf.format(dateMINIMUM_SQL));
+            log.warn("Converted illegal date " + dateFormat.get().format(date) + " to " + dateFormat.get().format(dateMINIMUM_SQL));
             date = dateMINIMUM_SQL;
         }
-        String s = _sdfXS_DATE.format(date);
+        String s = XS_DATE_FORMAT.get().format(date);
         return s;
     }
 
@@ -390,14 +399,14 @@ public class DU {
     public java.sql.Date fromXsDate(String s)
             throws ParseException {
         java.sql.Date d = null;
-        Date date = _sdfXS_DATE.parse(s);
+        Date date = XS_DATE_FORMAT.get().parse(s);
         d = new java.sql.Date(date.getTime());
         if (d.after(dateMAXIMUM_SQL)) {
-            log.warn("Converted illegal date " + _sdf.format(d) + " to " + _sdf.format(dateMAXIMUM_SQL));
+            log.warn("Converted illegal date " + dateFormat.get().format(d) + " to " + dateFormat.get().format(dateMAXIMUM_SQL));
             d = dateMAXIMUM_SQL;
         }
         if (d.before(dateMINIMUM_SQL)) {
-            log.warn("Converted illegal date " + _sdf.format(d) + " to " + _sdf.format(dateMINIMUM_SQL));
+            log.warn("Converted illegal date " + dateFormat.get().format(d) + " to " + dateFormat.get().format(dateMINIMUM_SQL));
             d = dateMINIMUM_SQL;
         }
         return d;
@@ -411,7 +420,7 @@ public class DU {
     public String toXsTime(java.sql.Time time) {
         StringBuilder sbTime = new StringBuilder();
         int iMillis = (int) (time.getTime() % 1000);
-        sbTime.append(_sdfXS_TIME.format(time));
+        sbTime.append(XS_TIME_FORMAT.get().format(time));
         if (iMillis > 0) {
             sbTime.append(".");
             /* format left padding with "0"s */
@@ -450,7 +459,7 @@ public class DU {
                                   .replace(" ", "0");
             iMillis = Integer.parseInt(sDecimals);
         }
-        time = new java.sql.Time(_sdfXS_TIME.parse(s)
+        time = new java.sql.Time(XS_TIME_FORMAT.get().parse(s)
                                             .getTime() + iMillis);
         return time;
     }
@@ -462,15 +471,15 @@ public class DU {
      */
     public String toXsDateTime(java.sql.Timestamp ts) {
         if (ts.after(tsMAXIMUM_SQL)) {
-            log.warn("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMAXIMUM_SQL));
+            log.warn("Converted illegal date/time " + dateFormat.get().format(ts) + " to " + dateFormat.get().format(tsMAXIMUM_SQL));
             ts = tsMAXIMUM_SQL;
         }
         if (ts.before(tsMINIMUM_SQL)) {
-            log.warn("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMINIMUM_SQL));
+            log.warn("Converted illegal date/time " + dateFormat.get().format(ts) + " to " + dateFormat.get().format(tsMINIMUM_SQL));
             ts = tsMINIMUM_SQL;
         }
         StringBuilder sbDateTime = new StringBuilder();
-        sbDateTime.append(_sdfXS_DATE_TIME.format(ts));
+        sbDateTime.append(XS_DATE_TIME_FORMAT.get().format(ts));
         if (ts.getNanos() > 0) {
             sbDateTime.append(".");
             /* format left padding with "0"s */
@@ -509,15 +518,15 @@ public class DU {
             ;
             iNanos = Integer.parseInt(sDecimals);
         }
-        Date date = _sdfXS_DATE_TIME.parse(s);
+        Date date = XS_DATE_TIME_FORMAT.get().parse(s);
         ts = new java.sql.Timestamp(date.getTime());
         ts.setNanos(iNanos);
         if (ts.after(tsMAXIMUM_SQL)) {
-            log.warn("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMAXIMUM_SQL));
+            log.warn("Converted illegal date/time " + dateFormat.get().format(ts) + " to " + dateFormat.get().format(tsMAXIMUM_SQL));
             ts = tsMAXIMUM_SQL;
         }
         if (ts.before(tsMINIMUM_SQL)) {
-            log.warn("Converted illegal date/time " + _sdf.format(ts) + " to " + _sdf.format(tsMINIMUM_SQL));
+            log.warn("Converted illegal date/time " + dateFormat.get().format(ts) + " to " + dateFormat.get().format(tsMINIMUM_SQL));
             ts = tsMINIMUM_SQL;
         }
         return ts;

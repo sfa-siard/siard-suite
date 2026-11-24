@@ -42,7 +42,16 @@
     "deleteText": "The connection \"{{name}}\" will be deleted.",
     "deleteConfirm": "Delete",
     "deleteCancel": "Cancel",
-    "deleteError": "The connection could not be deleted."
+    "deleteError": "The connection could not be deleted.",
+    "lob": {
+      "download": "Download",
+      "size": "{{size}} bytes"
+    },
+    "search": {
+      "matchCase": "Match case"
+    },
+    "notOpen": "This archive is not or no longer open. Please open it again.",
+    "contentLoadError": "The archive content could not be loaded."
   },
   "archiveWizard": {
     "selectConnection": "Select connection",
@@ -78,5 +87,31 @@
     "loadError": "The connection details could not be loaded.",
     "saveError": "The connection could not be saved.",
     "backToArchive": "Back to connections"
+  },
+  "tableContainer": {
+    "title": {
+      "schemas": "Schemas",
+      "tables": "Tables",
+      "views": "Views",
+      "columns": "Columns"
+    },
+    "labelNumberOfRows": "Records",
+    "table": {
+      "header": {
+        "columnName": "Column name",
+        "columnType": "Column type"
+      }
+    }
+  },
+  "search": {
+    "table": {
+      "dialog": {
+        "search": "Search",
+        "nodata": "No search hits"
+      }
+    }
+  },
+  "button": {
+    "next": "Next"
   }
 }

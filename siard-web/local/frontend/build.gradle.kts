@@ -32,7 +32,7 @@ val workspaceInstall = ":siard-web:npmInstall"
 // ../openapi.yaml: the committed API description the TypeScript types are generated from; the
 // workspace's lockfile, shared tool configs and the shared package (compiled as source with this
 // app, design R6) are inputs as well
-val sources = listOf("src", "index.html", "package.json", "../../package-lock.json", "tsconfig.json", "tsconfig.app.json", "tsconfig.node.json", "../../tsconfig.base.json", "vite.config.ts", "playwright.config.ts", "e2e", "../openapi.yaml", "../../frontend-shared/src", "../../frontend-shared/package.json")
+val sources = listOf("src", "index.html", "package.json", "../../package-lock.json", "tsconfig.json", "tsconfig.app.json", "tsconfig.node.json", "../../tsconfig.base.json", "vite.config.ts", "playwright.config.ts", "e2e", "../openapi.yaml", "../../backend-core/openapi.yaml", "../../frontend-shared/src", "../../frontend-shared/package.json")
 
 val frontendBuild = tasks.register<NpmTask>("frontendBuild") {
     description = "Builds the frontend into dist/."

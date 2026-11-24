@@ -9,16 +9,10 @@ import java.time.Clock;
 import java.util.Optional;
 
 /**
- * Produces the agent's clock and launch credentials; tests replace the clock.
+ * Produces the agent's launch credentials; the clock comes from the backend core.
  */
 @ApplicationScoped
 public class AgentBeans {
-
-    @Produces
-    @ApplicationScoped
-    Clock clock() {
-        return Clock.systemUTC();
-    }
 
     @Produces
     @ApplicationScoped

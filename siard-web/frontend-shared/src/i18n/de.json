@@ -42,7 +42,16 @@
     "deleteText": "Die Verbindung „{{name}}“ wird gelöscht.",
     "deleteConfirm": "Löschen",
     "deleteCancel": "Abbrechen",
-    "deleteError": "Die Verbindung konnte nicht gelöscht werden."
+    "deleteError": "Die Verbindung konnte nicht gelöscht werden.",
+    "lob": {
+      "download": "Herunterladen",
+      "size": "{{size}} Bytes"
+    },
+    "search": {
+      "matchCase": "Gross-/Kleinschreibung beachten"
+    },
+    "notOpen": "Dieses Archiv ist nicht oder nicht mehr geöffnet. Bitte öffnen Sie es erneut.",
+    "contentLoadError": "Der Inhalt des Archivs konnte nicht geladen werden."
   },
   "archiveWizard": {
     "selectConnection": "Verbindung auswählen",
@@ -78,5 +87,31 @@
     "loadError": "Die Verbindungsdaten konnten nicht geladen werden.",
     "backToArchive": "Zurück zu den Verbindungen",
     "saveError": "Die Verbindung konnte nicht gespeichert werden."
+  },
+  "tableContainer": {
+    "title": {
+      "schemas": "Schemas",
+      "tables": "Tabellen",
+      "views": "Views",
+      "columns": "Spalten"
+    },
+    "labelNumberOfRows": "Datensätze",
+    "table": {
+      "header": {
+        "columnName": "Spaltenname",
+        "columnType": "Spaltentyp"
+      }
+    }
+  },
+  "search": {
+    "table": {
+      "dialog": {
+        "search": "Suche",
+        "nodata": "Keine Suchtreffer"
+      }
+    }
+  },
+  "button": {
+    "next": "Weiter"
   }
 }

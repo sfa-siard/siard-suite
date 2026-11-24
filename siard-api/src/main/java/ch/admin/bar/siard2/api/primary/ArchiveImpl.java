@@ -426,22 +426,43 @@ public class ArchiveImpl
     @Override
     public void open(File file)
             throws IOException {
+        open(file, false);
+    }
+
+    @Override
+    public void openReadOnly(File file) throws IOException {
+        open(file, true);
+    }
+
+    private void open(File file, boolean readOnly)
+            throws IOException {
         if (file.exists()) {
             /* open the ZIP file */
-            _zipFile = new Zip64File(file);
-            loadMetaData();
-            SiardArchive sa = ((MetaDataImpl) getMetaData()).getSiardArchive();
-            SchemasType sts = sa.getSchemas();
-            for (int iSchema = 0; iSchema < sts.getSchema()
-                                               .size(); iSchema++) {
-                SchemaType st = sts.getSchema()
-                                   .get(iSchema);
-                SchemaImpl.newInstance(this, st.getName());
+            _zipFile = new Zip64File(file, readOnly);
+            try {
+                loadMetaData();
+                SiardArchive sa = ((MetaDataImpl) getMetaData()).getSiardArchive();
+                SchemasType sts = sa.getSchemas();
+                for (int iSchema = 0; iSchema < sts.getSchema()
+                                                   .size(); iSchema++) {
+                    SchemaType st = sts.getSchema()
+                                       .get(iSchema);
+                    SchemaImpl.newInstance(this, st.getName());
+                }
+                _bModifyPrimaryData = false;
+                _bMetaDataModified = false;
+                /* compute initial cached validity */
+                validate();
+            } catch (IOException | RuntimeException e) {
+                // an archive that failed to open must not keep its zip file open
+                try {
+                    _zipFile.close();
+                } catch (IOException closeFailure) {
+                    e.addSuppressed(closeFailure);
+                }
+                _zipFile = null;
+                throw e;
             }
-            _bModifyPrimaryData = false;
-            _bMetaDataModified = false;
-            /* compute initial cached validity */
-            validate();
         } else
             throw new IOException("SIARD file " + file.getAbsolutePath() + " does not exist!");
     }
