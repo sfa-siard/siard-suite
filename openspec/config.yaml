@@ -26,7 +26,9 @@ rules:
       Every requirement needs 3 scenario types: happy path, error/edge case, and
       authorization. For tools with no roles/permissions model (CLI, desktop apps),
       use credential/input-security scenarios instead (e.g. no credential leakage
-      in logs or output, rejection of malformed input). Never omit it.
+      in logs or output, rejection of malformed input). For the local web app
+      (no roles, per-launch session), the authorization scenario is the
+      missing or invalid session case. Never omit it.
     - >-
       Every GIVEN/WHEN/THEN must be measurable: write "returns 201", not "the
       system works correctly".

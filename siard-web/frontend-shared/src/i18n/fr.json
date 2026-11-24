@@ -30,5 +30,53 @@
   },
   "about": {
     "loadError": "Les informations n'ont pas pu être chargées."
+  },
+  "archive": {
+    "title": "Archiver",
+    "savedConnections": "Connexions enregistrées",
+    "newConnection": "Nouvelle connexion",
+    "empty": "Aucune connexion enregistrée pour le moment.",
+    "loadError": "Les connexions n'ont pas pu être chargées.",
+    "delete": "Supprimer {{name}}",
+    "deleteTitle": "Supprimer la connexion ?",
+    "deleteText": "La connexion « {{name}} » sera supprimée.",
+    "deleteConfirm": "Supprimer",
+    "deleteCancel": "Annuler",
+    "deleteError": "La connexion n'a pas pu être supprimée."
+  },
+  "archiveWizard": {
+    "selectConnection": "Sélectionner une connexion",
+    "connectionDetails": "Détails de la connexion",
+    "back": "Retour",
+    "cancel": "Annuler",
+    "cancelTitle": "Annuler l'archivage",
+    "cancelText": "Voulez-vous vraiment quitter le processus d'archivage ?",
+    "cancelConfirm": "Quitter l'archivage",
+    "cancelStay": "Rester"
+  },
+  "connections": {
+    "newTitle": "Nouvelle connexion",
+    "editTitle": "Connexion",
+    "name": "Nom de la connexion",
+    "nameHint": "Facultatif. Laisser vide pour utiliser la connexion sans l'enregistrer.",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "fields": {
+      "host": "Hôte",
+      "port": "Port",
+      "dbName": "Base de données",
+      "user": "Utilisateur",
+      "password": "Mot de passe",
+      "options": "Options"
+    },
+    "save": "Enregistrer",
+    "required": "Ce champ est obligatoire.",
+    "invalidPort": "Saisir un port entre 1 et 65535.",
+    "duplicateName": "Une connexion portant ce nom existe déjà.",
+    "nameRequired": "Une connexion enregistrée doit avoir un nom.",
+    "unknown": "La connexion demandée n'existe pas.",
+    "loadError": "Les détails de la connexion n'ont pas pu être chargés.",
+    "backToArchive": "Retour aux connexions",
+    "saveError": "La connexion n'a pas pu être enregistrée."
   }
 }

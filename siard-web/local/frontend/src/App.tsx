@@ -10,8 +10,11 @@ import { useTranslation } from "react-i18next";
 import { useAgentEvents } from "./api/events";
 import { theme } from "@siard-web/shared";
 import AboutView from "./views/AboutView";
+import ArchiveView from "./views/ArchiveView";
+import ConnectionDetailsView from "./views/ConnectionDetailsView";
 import LaunchFailedView from "./views/LaunchFailedView";
 import StartView from "./views/StartView";
+import ArchiveWizardLayout from "./wizard/ArchiveWizardLayout";
 
 function Layout({ navigation }: { navigation: boolean }) {
   const { t } = useTranslation();
@@ -33,7 +36,14 @@ function Layout({ navigation }: { navigation: boolean }) {
           )}
         </Toolbar>
       </AppBar>
-      <Container sx={{ py: 3 }}>
+      <Container
+        sx={{
+          py: 3,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "calc(100dvh - 48px)",
+        }}
+      >
         <Outlet />
       </Container>
     </>
@@ -54,6 +64,10 @@ export default function App() {
         <Route element={<ConnectedLayout />}>
           <Route index element={<StartView />} />
           <Route path="about" element={<AboutView />} />
+          <Route path="archive" element={<ArchiveWizardLayout />}>
+            <Route index element={<ArchiveView />} />
+            <Route path="connection" element={<ConnectionDetailsView />} />
+          </Route>
         </Route>
         {/* no session here, so no event stream and no navigation into the app */}
         <Route element={<Layout navigation={false} />}>

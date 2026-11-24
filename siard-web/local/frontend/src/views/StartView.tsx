@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { visuallyHidden } from "@mui/utils";
 import { Trans, useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 import {
   startPageArchive,
   startPageArchiveRed,
@@ -20,6 +21,7 @@ type Action = "archive" | "open" | "upload" | "export";
 /** Start page; the archive, display and upload entry points follow with their features. */
 export default function StartView() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [hovered, setHovered] = useState<Action | null>(null);
   const [focused, setFocused] = useState<Action | null>(null);
   const active = hovered ?? focused;
@@ -29,6 +31,7 @@ export default function StartView() {
       variant="contained"
       className="workflow-button"
       data-action={name}
+      onClick={name === "archive" ? () => navigate("/archive") : undefined}
       onPointerEnter={() => setHovered(name)}
       onPointerLeave={() => setHovered(null)}
       onFocus={() => setFocused(name)}
