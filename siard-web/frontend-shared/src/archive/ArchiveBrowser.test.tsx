@@ -138,14 +138,14 @@ describe("ArchiveBrowser", () => {
     expect(dataRows()).toHaveLength(100);
   });
 
-  /** The payment table, whose row requests answer `status` once `fail.now` is set. */
-  function failingRows(status: number) {
+  /** The payment table, whose `endpoint` requests answer `status` once `fail.now` is set. */
+  function failingRows(status: number, endpoint = "/rows") {
     const fail = { now: false };
     const base = archiveHandler([
       { name: "payment", rows: 16049, columns: ["payment_id", "amount"] },
     ]);
     const handler: Handler = (path, query) =>
-      fail.now && path.endsWith("/rows")
+      fail.now && path.endsWith(endpoint)
         ? [status, { status }]
         : base(path, query);
     return { fail, handler };
@@ -165,6 +165,25 @@ describe("ArchiveBrowser", () => {
       await screen.findByText(/not or no longer open/),
     ).toBeInTheDocument();
     expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+    expect(screen.queryAllByText(/^r\d+$/)).toHaveLength(0);
+  });
+
+  // spec requirement "Shared browse views", scenario "Archive no longer open", for a search request
+  it("shows that the archive is no longer open when a search fails", async () => {
+    const { fail, handler } = failingRows(404, "/search");
+    mockApi(handler);
+    renderBrowser("/schemas/0/tables/0");
+    await screen.findAllByText("r99");
+
+    fail.now = true;
+    fireEvent.change(screen.getByLabelText("Search"), {
+      target: { value: "r750" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Next" }));
+
+    expect(
+      await screen.findByText(/not or no longer open/),
+    ).toBeInTheDocument();
     expect(screen.queryAllByText(/^r\d+$/)).toHaveLength(0);
   });
 

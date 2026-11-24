@@ -4,9 +4,10 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { coreFetchClient } from "../api/core";
+import { ReportErrorContext } from "./errors";
 
 export interface Match {
   row: number;
@@ -26,6 +27,7 @@ interface TableSearchProps {
  */
 export function TableSearch({ path, match, onMatch }: TableSearchProps) {
   const { t } = useTranslation();
+  const report = useContext(ReportErrorContext);
   const [query, setQuery] = useState("");
   const [matchCase, setMatchCase] = useState(false);
   const [searching, setSearching] = useState(false);
@@ -66,6 +68,11 @@ export function TableSearch({ path, match, onMatch }: TableSearchProps) {
           return;
         }
         afterRow = data.nextRow - 1;
+      }
+    } catch (error) {
+      // a closed archive or a lost session replaces the browser's content, as for any other request
+      if (current === generation.current) {
+        report(error);
       }
     } finally {
       if (current === generation.current) {
