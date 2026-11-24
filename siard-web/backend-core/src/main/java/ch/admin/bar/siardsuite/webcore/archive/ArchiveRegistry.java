@@ -88,11 +88,13 @@ public class ArchiveRegistry {
      */
     public ArchiveId register(ArchiveScope scope, Path file, Runnable onRelease) throws IOException {
         reserve(scope, onRelease);
-        Archive archive;
+        Archive archive = null;
         try {
             archive = ArchiveImpl.newInstance();
             archive.openReadOnly(file.toFile());
         } catch (IOException | RuntimeException e) {
+            // a failed open can leave the zip file open (it is opened before the metadata is read)
+            closeQuietly(archive);
             unreserve(scope);
             onRelease.run();
             throw e instanceof IOException io ? io : new IOException("Archive cannot be opened", e);
@@ -250,6 +252,15 @@ public class ArchiveRegistry {
             LOG.warn("Archive {} could not be closed cleanly", entry.id, e);
         } finally {
             entry.onRelease.run();
+        }
+    }
+
+    private static void closeQuietly(Archive archive) {
+        if (archive == null) return;
+        try {
+            archive.close();
+        } catch (IOException | RuntimeException e) {
+            LOG.debug("Archive that failed to open could not be closed", e);
         }
     }
 

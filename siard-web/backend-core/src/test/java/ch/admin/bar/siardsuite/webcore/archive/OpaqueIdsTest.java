@@ -71,6 +71,25 @@ class OpaqueIdsTest {
                     () -> registry.register(newScope(), file, releases::incrementAndGet), file.toString());
             assertEquals(before, registry.size(), file.toString());
             assertEquals(1, releases.get(), file.toString());
+            assertFalse(isOpen(file), file + " is still open");
+        }
+    }
+
+    /** Whether this process holds a handle on the file; only Linux can tell (/proc), elsewhere false. */
+    private static boolean isOpen(Path file) throws IOException {
+        Path fds = Path.of("/proc/self/fd");
+        if (!Files.isDirectory(fds)) {
+            return false;
+        }
+        Path target = file.toAbsolutePath();
+        try (var links = Files.list(fds)) {
+            return links.anyMatch(fd -> {
+                try {
+                    return Files.readSymbolicLink(fd).equals(target);
+                } catch (IOException e) {
+                    return false; // the descriptor was closed meanwhile
+                }
+            });
         }
     }
 }
