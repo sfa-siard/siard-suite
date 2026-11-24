@@ -4,6 +4,7 @@ import ch.admin.bar.siardsuite.localwebapp.agent.AgentPort;
 import ch.admin.bar.siardsuite.localwebapp.agent.LaunchCredentials;
 import ch.admin.bar.siardsuite.localwebapp.web.RequestFilters;
 import io.quarkus.arc.Arc;
+import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
 
@@ -34,5 +35,10 @@ public final class Sessions {
                 .get("/launch")
                 .then().statusCode(303)
                 .extract().cookie(cookieName());
+    }
+
+    /** A request carrying a fresh session cookie. */
+    public static RequestSpecification authenticated() {
+        return given().cookie(cookieName(), cookieValue());
     }
 }

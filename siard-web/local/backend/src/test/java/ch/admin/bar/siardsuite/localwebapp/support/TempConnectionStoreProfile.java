@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.localwebapp.support;
 
+import ch.admin.bar.siardsuite.localwebapp.connections.ConnectionPaths;
 import io.quarkus.test.junit.QuarkusTestProfile;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class TempConnectionStoreProfile implements QuarkusTestProfile {
     public Map<String, String> getConfigOverrides() {
         try {
             Path directory = Files.createTempDirectory("siard-connections-test");
-            return Map.of("siard.connections.db", directory.resolve("siard-suite.db").toString());
+            return Map.of("siard.connections.db", directory.resolve(ConnectionPaths.DATABASE_FILE).toString());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

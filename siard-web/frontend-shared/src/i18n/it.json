@@ -59,7 +59,6 @@
     "editTitle": "Connessione",
     "name": "Nome della connessione",
     "nameHint": "Facoltativo. Lasciare vuoto per usare la connessione senza salvarla.",
-    "dbms": "Sistema di database",
     "showPassword": "Mostra password",
     "hidePassword": "Nascondi password",
     "fields": {
@@ -71,7 +70,6 @@
       "options": "Opzioni"
     },
     "save": "Salva",
-    "back": "Indietro",
     "required": "Campo obbligatorio.",
     "invalidPort": "Inserire una porta tra 1 e 65535.",
     "duplicateName": "Esiste già una connessione con questo nome.",

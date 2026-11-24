@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -29,14 +30,7 @@ public final class DbmsRegistry {
                     "DB/2",
                     "db2",
                     "ch.admin.bar.siard2.jdbc.Db2Driver",
-                    properties -> String.format(
-                            "jdbc:db2://%s:%s/%s%s",
-                            properties.host(),
-                            properties.port(),
-                            properties.dbName(),
-                            properties.options()
-                                    .map(options -> "?" + options)
-                                    .orElse("")),
+                    encodeHostPortDatabase("jdbc:db2://%s:%s/%s%s", "?"),
                     DbmsRegistry::decodeHostPortDatabaseUrl,
                     "db2.exampleHost.org",
                     "50000",
@@ -46,14 +40,7 @@ public final class DbmsRegistry {
                     "MySQL",
                     "mysql",
                     "ch.admin.bar.siard2.jdbc.MySqlDriver",
-                    properties -> String.format(
-                            "jdbc:mysql://%s:%s/%s%s",
-                            properties.host(),
-                            properties.port(),
-                            properties.dbName(),
-                            properties.options()
-                                    .map(options -> "?" + options)
-                                    .orElse("")),
+                    encodeHostPortDatabase("jdbc:mysql://%s:%s/%s%s", "?"),
                     DbmsRegistry::decodeHostPortDatabaseUrl,
                     "mysql.exampleHost.org",
                     "3306",
@@ -63,14 +50,7 @@ public final class DbmsRegistry {
                     "Oracle",
                     "oracle",
                     "ch.admin.bar.siard2.jdbc.OracleDriver",
-                    properties -> String.format(
-                            "jdbc:oracle:thin:@%s:%s/%s%s",
-                            properties.host(),
-                            properties.port(),
-                            properties.dbName(),
-                            properties.options()
-                                    .map(options -> "?" + options)
-                                    .orElse("")),
+                    encodeHostPortDatabase("jdbc:oracle:thin:@%s:%s/%s%s", "?"),
                     encoded -> {
                         String[] splitEncoded = encoded.split(":");
                         String[] splitPortAndDbNameWithOptions = splitEncoded[4].split("/", 2);
@@ -93,15 +73,8 @@ public final class DbmsRegistry {
                     "PostgreSQL",
                     "postgresql",
                     "ch.admin.bar.siard2.jdbc.PostgresDriver",
-                    properties -> String.format(
-                            // example: "jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true"
-                            "jdbc:postgresql://%s:%s/%s%s",
-                            properties.host(),
-                            properties.port(),
-                            properties.dbName(),
-                            properties.options()
-                                    .map(options -> "?" + options)
-                                    .orElse("")),
+                    // example: "jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true"
+                    encodeHostPortDatabase("jdbc:postgresql://%s:%s/%s%s", "?"),
                     DbmsRegistry::decodeHostPortDatabaseUrl,
                     "postgresql.exampleHost.org",
                     "5432",
@@ -111,14 +84,7 @@ public final class DbmsRegistry {
                     "Microsoft SQL Server",
                     "sqlserver",
                     "ch.admin.bar.siard2.jdbc.MsSqlDriver",
-                    properties -> String.format(
-                            "jdbc:sqlserver://%s:%s;databaseName=%s%s",
-                            properties.host(),
-                            properties.port(),
-                            properties.dbName(),
-                            properties.options()
-                                    .map(options -> ";" + options)
-                                    .orElse("")),
+                    encodeHostPortDatabase("jdbc:sqlserver://%s:%s;databaseName=%s%s", ";"),
                     encoded -> {
                         String[] splitEncoded = encoded.split(":");
                         String[] splitPortAndDbNameWithOptions = splitEncoded[3].split(";");
@@ -149,6 +115,17 @@ public final class DbmsRegistry {
                     "MS-SQL-Database"));
 
     private DbmsRegistry() {
+    }
+
+    /** Encoder for a URL pattern with host, port and database placeholders, options appended after the separator. */
+    private static Function<ServerBasedDbmsConnectionProperties, String> encodeHostPortDatabase(
+            String pattern, String optionsSeparator) {
+        return properties -> String.format(
+                pattern,
+                properties.host(),
+                properties.port(),
+                properties.dbName(),
+                properties.options().map(options -> optionsSeparator + options).orElse(""));
     }
 
     /** Decoder shared by the {@code jdbc:<id>://host:port/db?options} DBMS (DB/2, MySQL, PostgreSQL). */

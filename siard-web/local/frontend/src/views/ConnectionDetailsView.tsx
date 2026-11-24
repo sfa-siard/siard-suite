@@ -13,23 +13,20 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
-import { $api, ApiError, isUnauthorized } from "../api/client";
+import { $api, ApiError } from "../api/client";
 import type { components } from "../api/schema";
 import { usePrimaryAction } from "../wizard/WizardActionsContext";
+import LoadErrorAlert from "./LoadErrorAlert";
 
 type DbmsCatalogEntry = components["schemas"]["DbmsCatalogEntry"];
 type SavedConnection = components["schemas"]["SavedConnection"];
 
-const FIELD_VALUES: Record<
-  string,
-  "host" | "port" | "dbName" | "user" | "options"
-> = {
-  host: "host",
-  port: "port",
-  dbName: "dbName",
-  user: "user",
-  options: "options",
-};
+/** Descriptor keys stored on a saved profile under the same name. */
+const PROFILE_KEYS = ["host", "port", "dbName", "user", "options"] as const;
+
+function isProfileKey(key: string): key is (typeof PROFILE_KEYS)[number] {
+  return (PROFILE_KEYS as readonly string[]).includes(key);
+}
 
 /** A port is a whole number in the TCP range; the backend enforces the same. */
 function isValidPort(value: string): boolean {
@@ -68,9 +65,8 @@ function ConnectionForm({
     const initial: Record<string, string> = {};
     for (const descriptor of entry.fields ?? []) {
       const key = descriptor.key ?? "";
-      const profileKey = FIELD_VALUES[key];
       if (saved) {
-        initial[key] = profileKey ? (saved[profileKey] ?? "") : "";
+        initial[key] = isProfileKey(key) ? (saved[key] ?? "") : "";
       } else if (key === "host") {
         initial[key] = "localhost";
       } else if (key === "port") {
@@ -132,9 +128,10 @@ function ConnectionForm({
       }
     }
     const callbacks = {
-      onSuccess: async () => {
-        // the picker and a later edit must not show the list cached before this save
-        await queryClient.invalidateQueries({
+      onSuccess: () => {
+        // the picker and a later edit must not show the list cached before this save;
+        // the picker refetches on mount, so navigation need not wait for it
+        void queryClient.invalidateQueries({
           queryKey: ["get", "/api/connections"],
         });
         navigate("/archive");
@@ -247,9 +244,7 @@ function ConnectionForm({
       }}
     >
       <Typography component="h1" variant="h5" sx={{ gridColumn: "1 / -1" }}>
-        {saved
-          ? `${t("connections.editTitle")} — ${entry.name}`
-          : `${t("connections.newTitle")} — ${entry.name}`}
+        {`${t(saved ? "connections.editTitle" : "connections.newTitle")} — ${entry.name}`}
       </Typography>
       {saveFailed && (
         <Alert severity="error" sx={{ gridColumn: "1 / -1" }}>
@@ -301,7 +296,10 @@ export default function ConnectionDetailsView() {
   const dbmsParam = params.get("dbms");
   const connectionParam = params.get("connection");
 
-  const dbms = $api.useQuery("get", "/api/dbms");
+  // the catalog is static for the agent's lifetime
+  const dbms = $api.useQuery("get", "/api/dbms", undefined, {
+    staleTime: Infinity,
+  });
   // always refetch on mount: the form copies the profile into its state once, so it must
   // not be seeded from a stale cached list
   const connections = $api.useQuery("get", "/api/connections", undefined, {
@@ -325,28 +323,16 @@ export default function ConnectionDetailsView() {
       !connections.isFetchedAfterMount &&
       !connections.isError);
   const loadError = dbms.error ?? (connectionParam ? connections.error : null);
-  const unknown =
-    !loading &&
-    !loadError &&
-    (dbmsId === null ||
-      entry === undefined ||
-      (connectionParam !== null &&
-        connections.isSuccess &&
-        saved === undefined));
 
   if (loading) {
     return <LinearProgress />;
   }
   if (loadError) {
     return (
-      <Alert severity={isUnauthorized(loadError) ? "warning" : "error"}>
-        {isUnauthorized(loadError)
-          ? t("session.missing")
-          : t("connections.loadError")}
-      </Alert>
+      <LoadErrorAlert error={loadError} messageKey="connections.loadError" />
     );
   }
-  if (unknown || !entry || (connectionParam !== null && !saved)) {
+  if (!entry || (connectionParam !== null && !saved)) {
     return (
       <Box sx={{ display: "grid", gap: 2, justifyItems: "start" }}>
         <Alert severity="error">{t("connections.unknown")}</Alert>

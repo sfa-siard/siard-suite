@@ -59,7 +59,6 @@
     "editTitle": "Connection",
     "name": "Connection name",
     "nameHint": "Optional. Leave empty to use the connection without saving it.",
-    "dbms": "Database system",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "fields": {
@@ -71,7 +70,6 @@
       "options": "Options"
     },
     "save": "Save",
-    "back": "Back",
     "required": "This field is required.",
     "invalidPort": "Enter a port between 1 and 65535.",
     "duplicateName": "A connection with this name already exists.",

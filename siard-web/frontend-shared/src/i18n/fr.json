@@ -59,7 +59,6 @@
     "editTitle": "Connexion",
     "name": "Nom de la connexion",
     "nameHint": "Facultatif. Laisser vide pour utiliser la connexion sans l'enregistrer.",
-    "dbms": "Système de base de données",
     "showPassword": "Afficher le mot de passe",
     "hidePassword": "Masquer le mot de passe",
     "fields": {
@@ -71,7 +70,6 @@
       "options": "Options"
     },
     "save": "Enregistrer",
-    "back": "Retour",
     "required": "Ce champ est obligatoire.",
     "invalidPort": "Saisir un port entre 1 et 65535.",
     "duplicateName": "Une connexion portant ce nom existe déjà.",

@@ -33,7 +33,7 @@ class SqliteConnectionStoreTest {
 
     @BeforeEach
     void setUp() {
-        databaseFile = tempDir.resolve("siard-suite.db");
+        databaseFile = tempDir.resolve(ConnectionPaths.DATABASE_FILE);
         store = new SqliteConnectionStore(databaseFile, Clock.systemUTC());
     }
 

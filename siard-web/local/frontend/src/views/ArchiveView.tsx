@@ -21,8 +21,9 @@ import Typography from "@mui/material/Typography";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import { $api, isUnauthorized } from "../api/client";
+import { $api } from "../api/client";
 import type { components } from "../api/schema";
+import LoadErrorAlert from "./LoadErrorAlert";
 
 type SavedConnection = components["schemas"]["SavedConnection"];
 type DbmsCatalogEntry = components["schemas"]["DbmsCatalogEntry"];
@@ -39,7 +40,10 @@ export default function ArchiveView() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const connections = $api.useQuery("get", "/api/connections");
-  const dbms = $api.useQuery("get", "/api/dbms");
+  // the catalog is static for the agent's lifetime
+  const dbms = $api.useQuery("get", "/api/dbms", undefined, {
+    staleTime: Infinity,
+  });
   const [pendingDelete, setPendingDelete] = useState<SavedConnection | null>(
     null,
   );
@@ -56,13 +60,16 @@ export default function ArchiveView() {
         onSuccess: () => {
           setPendingDelete(null);
           setDeleteFailed(false);
-          queryClient.invalidateQueries();
+          queryClient.invalidateQueries({
+            queryKey: ["get", "/api/connections"],
+          });
         },
         onError: () => setDeleteFailed(true),
       },
     );
   };
 
+  // read before the isPending checks, which narrow the query results
   const connectionError = connections.error;
   const dbmsError = dbms.error;
 
@@ -79,13 +86,10 @@ export default function ArchiveView() {
         {connections.isPending ? (
           <LinearProgress />
         ) : connectionError ? (
-          <Alert
-            severity={isUnauthorized(connectionError) ? "warning" : "error"}
-          >
-            {isUnauthorized(connectionError)
-              ? t("session.missing")
-              : t("archive.loadError")}
-          </Alert>
+          <LoadErrorAlert
+            error={connectionError}
+            messageKey="archive.loadError"
+          />
         ) : connections.data?.length === 0 ? (
           <Typography>{t("archive.empty")}</Typography>
         ) : (
@@ -132,11 +136,7 @@ export default function ArchiveView() {
         {dbms.isPending ? (
           <LinearProgress />
         ) : dbmsError ? (
-          <Alert severity={isUnauthorized(dbmsError) ? "warning" : "error"}>
-            {isUnauthorized(dbmsError)
-              ? t("session.missing")
-              : t("archive.loadError")}
-          </Alert>
+          <LoadErrorAlert error={dbmsError} messageKey="archive.loadError" />
         ) : (
           <Box
             sx={{

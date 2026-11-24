@@ -23,7 +23,7 @@ class DbmsResourceTest {
 
     @Test
     void catalogListsFiveServerBasedDbms() {
-        given().cookie(Sessions.cookieName(), Sessions.cookieValue())
+        Sessions.authenticated()
                 .get("/api/dbms")
                 .then()
                 .statusCode(200)
@@ -37,7 +37,7 @@ class DbmsResourceTest {
 
     @Test
     void exampleHostsArePlaceholders() {
-        given().cookie(Sessions.cookieName(), Sessions.cookieValue())
+        Sessions.authenticated()
                 .get("/api/dbms")
                 .then()
                 .statusCode(200)

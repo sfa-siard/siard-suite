@@ -129,14 +129,7 @@ public class SqliteConnectionStore implements ConnectionStore {
                 + " user_name, options, file, created_at, updated_at)"
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection().prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, connection.name());
-            statement.setString(2, connection.dbmsId());
-            statement.setString(3, connection.host());
-            statement.setString(4, connection.port());
-            statement.setString(5, connection.dbName());
-            statement.setString(6, connection.user());
-            statement.setString(7, connection.options());
-            statement.setString(8, connection.file());
+            bindFields(statement, connection);
             statement.setString(9, now.toString());
             statement.setString(10, now.toString());
             statement.executeUpdate();
@@ -166,14 +159,7 @@ public class SqliteConnectionStore implements ConnectionStore {
         String update = "UPDATE saved_connections SET name = ?, dbms_id = ?, host = ?, port = ?,"
                 + " db_name = ?, user_name = ?, options = ?, file = ?, updated_at = ? WHERE id = ?";
         try (PreparedStatement statement = connection().prepareStatement(update)) {
-            statement.setString(1, connection.name());
-            statement.setString(2, connection.dbmsId());
-            statement.setString(3, connection.host());
-            statement.setString(4, connection.port());
-            statement.setString(5, connection.dbName());
-            statement.setString(6, connection.user());
-            statement.setString(7, connection.options());
-            statement.setString(8, connection.file());
+            bindFields(statement, connection);
             statement.setString(9, clock.instant().toString());
             statement.setLong(10, id);
             if (statement.executeUpdate() == 0) {
@@ -256,6 +242,18 @@ public class SqliteConnectionStore implements ConnectionStore {
                 return rows.next() ? rows.getLong(1) : -1;
             }
         }
+    }
+
+    /** Binds the eight profile columns shared by INSERT and UPDATE as parameters 1-8. */
+    private static void bindFields(PreparedStatement statement, NewConnection connection) throws SQLException {
+        statement.setString(1, connection.name());
+        statement.setString(2, connection.dbmsId());
+        statement.setString(3, connection.host());
+        statement.setString(4, connection.port());
+        statement.setString(5, connection.dbName());
+        statement.setString(6, connection.user());
+        statement.setString(7, connection.options());
+        statement.setString(8, connection.file());
     }
 
     // name is the table's only UNIQUE column

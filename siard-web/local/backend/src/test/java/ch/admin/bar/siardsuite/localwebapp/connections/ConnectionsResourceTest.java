@@ -1,5 +1,6 @@
 package ch.admin.bar.siardsuite.localwebapp.connections;
 
+import static ch.admin.bar.siardsuite.localwebapp.support.Sessions.authenticated;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -13,13 +14,11 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import ch.admin.bar.siardsuite.localwebapp.support.Sessions;
 import ch.admin.bar.siardsuite.localwebapp.support.TempConnectionStoreProfile;
 import io.quarkus.arc.Arc;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 
 /**
  * Spec requirements "List saved connections", "Save a connection", "Update a saved connection", "Delete a saved connection"
@@ -39,10 +38,6 @@ class ConnectionsResourceTest {
                 "dbName", "archive",
                 "user", "archivist",
                 "options", "ssl=true");
-    }
-
-    private static RequestSpecification authenticated() {
-        return given().cookie(Sessions.cookieName(), Sessions.cookieValue());
     }
 
     // the store is shared by all tests of this class; empty it before each one

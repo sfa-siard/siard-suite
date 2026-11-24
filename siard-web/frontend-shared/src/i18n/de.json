@@ -59,7 +59,6 @@
     "editTitle": "Verbindung",
     "name": "Verbindungsname",
     "nameHint": "Optional. Leer lassen, um die Verbindung nicht zu speichern.",
-    "dbms": "Datenbanksystem",
     "showPassword": "Passwort anzeigen",
     "hidePassword": "Passwort verbergen",
     "fields": {
@@ -71,7 +70,6 @@
       "options": "Optionen"
     },
     "save": "Speichern",
-    "back": "Zurück",
     "required": "Dieses Feld ist erforderlich.",
     "invalidPort": "Einen Port zwischen 1 und 65535 eingeben.",
     "duplicateName": "Eine Verbindung mit diesem Namen existiert bereits.",
