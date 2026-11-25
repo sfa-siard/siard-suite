@@ -205,3 +205,16 @@ Additive; no data migration. `openapi.yaml` of the local app is regenerated with
   attributes.
 - `Places` parses the `.reg` export itself (continuation lines, escaped `REG_SZ`, `hex(2)`), so
   the non-ASCII handling is unit-tested on any OS.
+- i18n: the key-parity test that task 3.2 assumed did not exist (only the type check in
+  `i18n/index.ts`, which finds missing but not extra keys); `frontend-shared/src/i18n/keys.test.ts`
+  now checks keys and `{{placeholders}}` of de, fr and it against en. The chooser and inspect
+  texts live in the shared package like all other texts; "no longer open" and the lost session
+  reuse `archive.notOpen` and `session.missing`.
+- `normalisePastedPath` returns Windows paths from `file://` URIs with backslashes
+  (`file:///C:/x` → `C:\x`, `file://server/share` → `\\server\share`) and leaves typed paths
+  as they are; the agent normalises separators anyway.
+- `normalisePastedPath` converts `file://` URIs in the frontend, without knowing the agent's OS:
+  a URI with a host (`file://server/share`) and a drive URI (`file:///C:/x`) become Windows paths.
+  Only Windows produces these shapes; on macOS/Linux the result is not absolute for the agent,
+  which answers 400 and the chooser shows its error. Moving the conversion into the agent
+  (`Path.of(URI)`, OS-aware) was considered and kept out, to leave the API taking plain paths only.

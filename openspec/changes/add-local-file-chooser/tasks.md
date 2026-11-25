@@ -14,8 +14,8 @@
 
 ## 3. Chooser building blocks (frontend)
 
-- [ ] 3.1 Regenerate the local API types (`src/api/schema.d.ts`) and add `normalisePastedPath` (D6); verify `normalisePastedPath.test.ts` covers quoted Windows paths, macOS paths, `file://` URIs with `%20`, `file:///C:/...`, UNC, empty and relative input
-- [ ] 3.2 Add i18n keys for the chooser and the inspect view in de, fr, it, en (`frontend-shared/src/i18n`); verify the existing i18n key-parity test passes (`npm test` in `siard-web`)
+- [x] 3.1 Regenerate the local API types (`src/api/schema.d.ts`) and add `normalisePastedPath` (D6); verify `normalisePastedPath.test.ts` covers quoted Windows paths, macOS paths, `file://` URIs with `%20`, `file:///C:/...`, UNC, empty and relative input
+- [x] 3.2 Add i18n keys for the chooser and the inspect view in de, fr, it, en (`frontend-shared/src/i18n`); verify the existing i18n key-parity test passes (`npm test` in `siard-web`)
 
 ## 4. File chooser dialog
 

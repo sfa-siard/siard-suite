@@ -111,6 +111,57 @@
       }
     }
   },
+  "fileChooser": {
+    "titleOpen": "Open file",
+    "titleSave": "Save file",
+    "titleFolder": "Choose folder",
+    "places": "Places",
+    "place": {
+      "home": "Home",
+      "desktop": "Desktop",
+      "documents": "Documents",
+      "downloads": "Downloads"
+    },
+    "path": "Path",
+    "pathHint": "Type or paste a path and press Enter",
+    "parent": "Parent folder",
+    "showHidden": "Show hidden items",
+    "reveal": "Show in file browser",
+    "name": "File name",
+    "column": {
+      "name": "Name",
+      "size": "Size",
+      "modified": "Modified"
+    },
+    "folder": "Folder",
+    "empty": "This folder is empty.",
+    "open": "Open",
+    "save": "Save",
+    "chooseFolder": "Choose this folder",
+    "cancel": "Cancel",
+    "truncated": "Only the first {{count}} entries are shown. For files not listed, enter their exact path in the path field.",
+    "replaceTitle": "Replace file?",
+    "replaceText": "\"{{name}}\" already exists. Do you want to replace it?",
+    "replaceConfirm": "Replace",
+    "error": {
+      "notAbsolute": "Enter an absolute path.",
+      "notFound": "Nothing exists at this path.",
+      "notReadable": "The folder \"{{path}}\" may not be read.",
+      "unreachable": "This location is not reachable right now, for example a network drive while offline.",
+      "busy": "Some locations are not responding. Please try again in a minute.",
+      "wrongType": "Only {{extensions}} files can be chosen here.",
+      "notWritable": "Files cannot be saved in this folder.",
+      "revealFailed": "The file browser could not be opened.",
+      "loadFailed": "The folder could not be loaded."
+    }
+  },
+  "inspect": {
+    "close": "Close",
+    "cannotOpen": "The file cannot be opened as a SIARD archive.",
+    "tooMany": "Too many archives are open. Close one and try again.",
+    "openFailed": "The archive could not be opened.",
+    "backToStart": "Back to the start page"
+  },
   "button": {
     "next": "Next"
   }
