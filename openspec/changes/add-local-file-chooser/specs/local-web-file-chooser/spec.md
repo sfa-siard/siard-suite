@@ -8,7 +8,7 @@ Lets the user of the local web app choose a file to open, a file to save to, or 
 
 ### Requirement: Places
 
-`GET /api/files/places` SHALL return 200 with the user's starting places, each with `kind` and absolute `path`: the home folder, the Desktop, Documents and Downloads folders that exist, and the file-system roots (drive letters on Windows; `/` and each volume under `/Volumes` on macOS; `/` and mounted media on Linux).
+`GET /api/files/places` SHALL return 200 with the user's starting places, each with `kind` and absolute `path` and no path twice: the home folder, the Desktop, Documents and Downloads folders that exist, and the file-system roots (drive letters on Windows; `/` and each volume under `/Volumes` on macOS; `/` and mounted media on Linux). It SHALL answer within a few seconds even when a folder lies on an unreachable share.
 
 #### Scenario: Places of the current user
 - **GIVEN** a valid local session and a home folder containing a `Documents` folder
@@ -21,6 +21,8 @@ Lets the user of the local web app choose a file to open, a file to save to, or 
 - **GIVEN** a valid local session and no `Downloads` folder for the user
 - **WHEN** the client requests `GET /api/files/places`
 - **THEN** the agent returns 200 and no entry has kind `downloads`
+- **AND** a Documents folder redirected to an unreachable network share (e.g. `\\nas\home\Documents`) is returned without being checked, and the response arrives within 3 seconds
+- **AND** a folder name with non-ASCII characters (e.g. `C:\Users\Zoë\Données`) is returned unchanged
 
 #### Scenario: Places need a session
 - **GIVEN** a request without a valid session cookie
@@ -120,13 +122,13 @@ A listing SHALL contain at most 10000 entries after filtering and SHALL set `tru
 #### Scenario: Reveal a file
 - **GIVEN** a valid local session and an existing file
 - **WHEN** the client posts its path to `/api/files/reveal`
-- **THEN** the agent answers 204 and starts the platform's file manager for that file (Explorer with the file selected on Windows, Finder with the file selected on macOS, the desktop's file manager on Linux)
+- **THEN** the agent answers 204 and starts the platform's file manager for that file (Explorer from the Windows folder with the file selected on Windows, Finder with the file selected on macOS, the desktop's file manager on Linux)
 
 #### Scenario: Reveal fails safely
 - **GIVEN** a valid local session
 - **WHEN** the client posts a path that does not exist, a relative path, or a path like `/tmp/x; rm -rf ~`
 - **THEN** the agent answers 404, 400 or 404 respectively with problem details and starts no process
-- **AND** when no file manager can be started for an existing path, the agent answers 503 with problem details
+- **AND** when no file manager can be started for an existing path, or the opener (`open`, `xdg-open`) exits with a non-zero code within 2 seconds, the agent answers 503 with problem details
 
 #### Scenario: Reveal needs a session
 - **GIVEN** a request without a valid session cookie

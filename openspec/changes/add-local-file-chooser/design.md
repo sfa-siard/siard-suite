@@ -143,11 +143,21 @@ Upload and Export keep their inert assertions unchanged.
   503 at once instead of piling up threads, and blocked daemon threads do not keep the agent from
   exiting. A worker is reusable once its OS call returns. Places do not probe roots. The chooser
   tells the two cases apart by status code (D2).
+- [The 10000-entry cap is applied after reading the whole folder, because sorting needs every
+  entry] → acceptable for now; a huge folder on a slow share can run into the 10 s limit and
+  answer 504 although only 10000 entries would be returned. Revisit (e.g. stop reading after a
+  bound and sort what was read) if this shows up in practice.
 - **Known limitation:** repeated clicks on one dead network drive can block all 8 workers; until
   their OS calls return (Windows SMB timeout, possibly much longer on a hard NFS mount), every
   listing, also of reachable folders, answers 503 and the chooser asks to try again in a minute.
   The pool-full check runs before the timeout, so in that state no listing reaches the 504 path.
   A per-drive/share guard was considered and rejected as too much machinery for a rare case.
+- [macOS privacy (TCC) prompts] → the places endpoint only checks that Desktop, Documents and
+  Downloads exist, which does not read their contents; the first *listing* of one of them, or of
+  a network or removable volume under `/Volumes`, makes macOS ask once whether the agent's process
+  may access that folder. A denied prompt surfaces as 403 in the chooser ("may not be read"); the
+  user can allow it later in System Settings > Privacy & Security > Files and Folders. Checked
+  manually in task 7.2.
 - [Entry lookup, reveal and archive opening also touch the file system and could stall on a dead
   share] → not guarded in this change; they are single user actions, not repeated listing
   clicks. Revisit if it shows up in practice.
@@ -158,3 +168,21 @@ Upload and Export keep their inert assertions unchanged.
 
 Additive; no data migration. `openapi.yaml` of the local app is regenerated with
 `openApiUpdate` and committed.
+
+## Implementation Notes
+
+- `FolderListings` uses a `Semaphore` plus a cached daemon pool instead of a `ThreadPoolExecutor`
+  with a `SynchronousQueue`: the permit is released only when the file-system call returns, which
+  makes "all 8 busy → 503" exact and race-free.
+- Entry lookup and reveal touch the file system on the request thread (no time limit), as
+  accepted in Risks; an entry whose attributes cannot be read is answered 404.
+- `Places` and `FileManagerLauncher` take the OS, environment and process starter as
+  constructor arguments, so every OS branch is unit-tested on any machine; HTTP tests replace
+  them with `QuarkusMock`, so no real file manager starts in CI.
+- `FolderLister` unwraps `DirectoryIteratorException`, so a read error during iteration maps to
+  403/404 like one when opening the folder. On Windows it reads `DosFileAttributes` once per
+  entry (basic attributes plus hidden flag); elsewhere hidden is the name check of
+  `Files.isHidden`. The OS decides, not the `dos` view, which Linux also offers via extended
+  attributes.
+- `Places` parses the `.reg` export itself (continuation lines, escaped `REG_SZ`, `hex(2)`), so
+  the non-ASCII handling is unit-tested on any OS.
