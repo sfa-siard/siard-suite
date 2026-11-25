@@ -14,4 +14,4 @@
 
 ## 3. Cross-platform check (user step)
 
-- [ ] 3.1 User: push the branch and check that the siard-web browser-test CI jobs for Linux, macOS and Windows are green (in particular `archive-wizard.spec.ts`). The agent does not mark this done without the user's report.
+- [x] 3.1 User: push the branch and check that the siard-web browser-test CI jobs for Linux, macOS and Windows are green (in particular `archive-wizard.spec.ts`). The agent does not mark this done without the user's report.
