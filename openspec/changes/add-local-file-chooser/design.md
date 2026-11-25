@@ -65,11 +65,24 @@ folders to the browser).
 
 ### D4 Places per OS (`Places`)
 - home: `user.home`.
-- Desktop/Documents/Downloads: Windows reads `HKCU\...\Explorer\User Shell Folders` via
-  `reg query` (same approach as `BrowserLauncher`; handles OneDrive redirection), expanding
-  `%USERPROFILE%`; Linux reads `$XDG_CONFIG_HOME/user-dirs.dirs` (`XDG_DESKTOP_DIR`, ...);
-  macOS and every fallback use `home/Desktop`, `home/Documents`, `home/Downloads`. Only existing
-  folders are returned.
+- Desktop/Documents/Downloads: Windows exports `HKCU\...\Explorer\User Shell Folders` with
+  `reg export <key> <temp file> /y` (handles OneDrive and folder redirection). `reg export` writes
+  UTF-16 with BOM, so the result does not depend on the console code page as `reg query` output
+  would; `REG_EXPAND_SZ` values arrive as `hex(2)` UTF-16LE bytes and `%VAR%` is expanded
+  case-insensitively. Output goes to the file, not a pipe, so the 5 s limit on the process is real
+  and an overrunning `reg` is destroyed. A successful lookup is cached for the agent's lifetime; a
+  failed one is retried on the next request. Linux reads `$XDG_CONFIG_HOME/user-dirs.dirs`
+  (`XDG_DESKTOP_DIR`, ...); macOS and every fallback use `home/Desktop`, `home/Documents`,
+  `home/Downloads`.
+- Existence check: network paths (`\\server\share\...`) are returned unchecked, so a redirected
+  folder on an unreachable share cannot stall the endpoint; the others are checked in parallel on daemon
+  threads with one shared 2 s deadline and kept when the check does not finish (a later listing
+  answers 504). At most 4 checks run at once (4 permits, each released only when its check
+  returns, so stuck checks cannot pile up threads); a check that would need a fifth worker is not
+  run and the folder counts as present. A folder whose check timed out is not checked again for
+  1 minute, so reopening the chooser with Documents on a dead mapped drive (`H:\Documents`) does
+  not leave another stuck thread each time.
+  Places are de-duplicated by normalised path (ignoring case on Windows), keeping the first kind.
 - roots: Windows `File.listRoots()` (drive letters); macOS `/` plus the folders in `/Volumes`
   except the link to `/`; Linux `/` plus folders in `/media/$USER`, `/run/media/$USER` and
   `/mnt`.
@@ -78,9 +91,15 @@ folders to the browser).
 
 ### D5 Reveal per OS (`FileManagerLauncher`)
 `ProcessBuilder` with separate arguments, never a shell; only existing absolute paths reach it.
-- Windows: `explorer.exe /select,<file>`; folder: `explorer.exe <folder>`. Explorer's exit code
-  is meaningless, so success means "process started".
+- Windows: `<SystemRoot>\explorer.exe /select,<file>`; folder: `<SystemRoot>\explorer.exe <folder>`.
+  Explorer is started by its full path (`SystemRoot`, else `windir`, else `C:\Windows`), never
+  looked up through `PATH` or the working folder. Its exit code is meaningless (often 1 on
+  success), so success means "process started".
 - macOS: `open -R <file>`; folder: `open <folder>`.
+- `open` and `xdg-open` are given 2 s to exit: a non-zero exit code (e.g. `xdg-open` 3 "no tool
+  found", 4 "action failed") counts as failure and leads to 503; an opener still running after
+  2 s counts as started, because `xdg-open` without a recognised desktop can stay in the
+  foreground for as long as the file manager runs.
 - Linux: `gdbus call --session --dest org.freedesktop.FileManager1 --object-path
   /org/freedesktop/FileManager1 --method org.freedesktop.FileManager1.ShowItems "['<file URI>']" ""`
   (selects the file in Nautilus, Dolphin, Nemo, Caja, ...); if `gdbus` is missing or exits

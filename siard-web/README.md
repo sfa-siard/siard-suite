@@ -38,8 +38,9 @@ The core serves an opened archive read-only under `/api/archives/{archiveId}`: i
 (`…/rows?offset=&limit=`, at most 1000 per request), a bounded search (`…/search?q=&matchCase=&afterRow=`),
 the content of a cell (`…/rows/{row}/columns/{c}/content`, always as an attachment) and `DELETE`
 to close it. Indexes are zero-based. `frontend-shared` exports the matching views as
-`ArchiveBrowser`. No app exposes "open archive" yet: the local picker and the remote upload come
-in later changes.
+`ArchiveBrowser`. The local app opens archives in place with `POST /api/archive-files {path}`
+(an absolute path from its file chooser; nothing is uploaded or copied), which answers the
+`archiveId`. The remote app's upload comes in a later change.
 
 ## Archive registry: what an app provides
 

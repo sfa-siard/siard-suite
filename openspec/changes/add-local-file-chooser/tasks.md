@@ -10,7 +10,7 @@
 
 ## 2. Open archive by path
 
-- [ ] 2.1 Add `ArchiveFilesResource` (`POST /api/archive-files`, D2) and update the archive section of `siard-web/README.md` ("No app exposes open archive yet"); verify `ArchiveFilesResourceTest` covers all "Open an archive from a local path" scenarios incl. unchanged file after `DELETE` (checksum), 422, 429 and 401, then regenerate `openapi.yaml` and run `./gradlew :siard-web:local:backend:check`
+- [x] 2.1 Add `ArchiveFilesResource` (`POST /api/archive-files`, D2) and update the archive section of `siard-web/README.md` ("No app exposes open archive yet"); verify `ArchiveFilesResourceTest` covers all "Open an archive from a local path" scenarios incl. unchanged file after `DELETE` (checksum), 422, 429 and 401, then regenerate `openapi.yaml` and run `./gradlew :siard-web:local:backend:check`
 
 ## 3. Chooser building blocks (frontend)
 
