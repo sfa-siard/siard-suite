@@ -38,6 +38,8 @@ The URL text is its own state (`jdbcUrl`) next to `values`, plus a `jdbcUrlError
 - `submit` returns early with the URL error shown while `jdbcUrlError` is set. The URL is never put into the request body (the body is built from `entry.fields`, which do not include it).
 - Initial `jdbcUrl` is encoded from the initial `values`, so new and saved connections show it on load.
 
+- `encodeJdbcUrl` returns `undefined` for a non-server DBMS id, and the form then renders no URL input: file-based DBMS are out of scope, so nothing is shown for them.
+
 ### D4. Placement and texts
 
 The URL `TextField` is rendered after the additional fields and before the divider, `gridColumn: "1 / -1"`, with the encoded catalog examples as placeholder. New i18n keys `connections.fields.jdbcUrl` and `connections.invalidJdbcUrl` in de/fr/it/en of `frontend-shared`.
