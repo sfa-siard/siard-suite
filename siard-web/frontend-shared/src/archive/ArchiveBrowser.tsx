@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation, useParams } from "react-router";
 import { coreApi } from "../api/core";
 import {
   type Failure,
@@ -67,7 +67,21 @@ function FailureMessage({ failure }: { failure: Failure }) {
   }
 }
 
+/**
+ * The browser's mount point as an absolute path ending in "/", e.g. `/archives/a1/`: the current path without
+ * the part below the mount point (the splat). Links relative to the current page would be appended to it.
+ */
+function useMountPath() {
+  const { pathname } = useLocation();
+  const below = useParams()["*"] ?? "";
+  const mount = below
+    ? pathname.slice(0, pathname.length - below.length)
+    : pathname;
+  return mount.endsWith("/") ? mount : `${mount}/`;
+}
+
 function Browser({ archiveId }: { archiveId: string }) {
+  const mountPath = useMountPath();
   const archive = coreApi.useQuery("get", "/api/archives/{archiveId}", {
     params: { path: { archiveId } },
   });
@@ -79,6 +93,7 @@ function Browser({ archiveId }: { archiveId: string }) {
           {archive.data?.dbName}
         </Typography>
         <StructureTree
+          mountPath={mountPath}
           archiveId={archiveId}
           schemas={archive.data?.schemas ?? []}
         />

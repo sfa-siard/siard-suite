@@ -281,4 +281,32 @@ describe("ArchiveBrowser", () => {
       expect(row).toHaveTextContent(column.type);
     }
   });
+
+  // spec requirement "Shared browse views", scenario "Switch between tables and views"
+  it("switches between tables and views from any page", async () => {
+    mockApi(archiveHandler([TSIMPLE, TCOMPLEX]));
+    renderBrowser();
+    const tree = {
+      TSIMPLE: "/archives/a1/schemas/0/tables/0",
+      TCOMPLEX: "/archives/a1/schemas/0/tables/1",
+      VIEW1: "/archives/a1/schemas/0/views/0",
+    };
+
+    for (const name of ["TSIMPLE", "TCOMPLEX", "VIEW1", "TSIMPLE"] as const) {
+      fireEvent.click(await screen.findByRole("link", { name }));
+      expect(
+        await screen.findByRole("heading", {
+          level: 2,
+          name: new RegExp(name),
+        }),
+      ).toBeInTheDocument();
+      // the tree's links stay the same wherever the browser is
+      for (const [link, href] of Object.entries(tree)) {
+        expect(screen.getByRole("link", { name: link })).toHaveAttribute(
+          "href",
+          href,
+        );
+      }
+    }
+  });
 });

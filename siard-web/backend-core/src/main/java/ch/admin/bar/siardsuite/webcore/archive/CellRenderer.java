@@ -26,6 +26,9 @@ final class CellRenderer {
         if (cell.isNull()) {
             return new NullCell();
         }
+        if (pointsOutsideTheArchive(cell)) {
+            return new TextCell("", false);
+        }
         if (isBinary(cell)) {
             return new LobCell(cell.getByteLength());
         }
@@ -37,6 +40,12 @@ final class CellRenderer {
 
     /** The displayed text of a non-binary, non-NULL cell, reading at most {@code maxChars} characters. */
     static String text(Cell cell, int maxChars) throws IOException {
+        if (pointsOutsideTheArchive(cell)) {
+            return "";
+        }
+        if (cell.getMetaValue().getPreType() == Types.DATALINK) {
+            return dataLinkText(cell, maxChars);
+        }
         if (isReaderType(cell)) {
             try (Reader reader = cell.getReader()) {
                 StringBuilder text = new StringBuilder();
@@ -52,8 +61,36 @@ final class CellRenderer {
         return text == null ? "" : text;
     }
 
+    /**
+     * A DATALINK as the desktop app shows it ({@code RowsOverviewForm.extractText}): its text read with
+     * {@code getString()}, or empty when that fails, e.g. for a file that is not text, whose character count
+     * {@code siard-api} rejects. Per cell, so one such file does not fail the page.
+     */
+    private static String dataLinkText(Cell cell, int maxChars) {
+        try {
+            String text = cell.getString();
+            if (text == null) {
+                return "";
+            }
+            return text.length() > maxChars ? text.substring(0, maxChars) : text;
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
     static boolean isBinary(Cell cell) throws IOException {
-        return isBinaryType(cell.getMetaValue().getPreType());
+        return isBinaryType(cell.getMetaValue().getPreType()) && !pointsOutsideTheArchive(cell);
+    }
+
+    /**
+     * Whether the cell points outside the archive by URL ({@code dlurlpathonly}); it is then shown empty and its
+     * content never read. {@code siard-api} opens that URL before a stored file in {@code getInputStream()} and
+     * {@code getReader()} (also behind {@code getString()} and {@code getBytes()}), also when the cell has both,
+     * so rows, download and search check this first. Any type: the schema allows the attribute on binary and
+     * text LOBs. The one deliberate deviation from the desktop app (design.md, follow-up changes).
+     */
+    static boolean pointsOutsideTheArchive(Cell cell) throws IOException {
+        return cell.getDataLinkUrl() != null;
     }
 
     static boolean isBinaryType(int type) {
@@ -63,6 +100,6 @@ final class CellRenderer {
     /** Large text types, read as a prefix instead of as a whole. */
     static boolean isReaderType(Cell cell) throws IOException {
         int type = cell.getMetaValue().getPreType();
-        return type == Types.CLOB || type == Types.NCLOB || type == Types.SQLXML;
+        return (type == Types.CLOB || type == Types.NCLOB || type == Types.SQLXML) && !pointsOutsideTheArchive(cell);
     }
 }

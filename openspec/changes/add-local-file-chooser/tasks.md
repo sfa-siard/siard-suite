@@ -29,10 +29,13 @@
 - [x] 5.2 Wire the start page Open button to the chooser and `POST /api/archive-files`; add tests for the "Open workflow entry point" scenarios (pointer, keyboard, cancel with focus return, 401) in `StartView.test.tsx`; verify `npm test` passes
 - [x] 5.3 Remove "Open" from the inert loop of `StartView.test.tsx` ("query text is ignored and pointer and keyboard activation are inert") as recorded in design.md D8, then verify `npm test` passes with Upload and Export still asserted inert
 
+- [x] 5.4 Show DATALINK cells in `backend-core` as the desktop app does (their text, empty per cell when it cannot be read) and never open content outside the archive (`CellRenderer`, `Value.getDataLinkUrl()` in `siard-api`); verify tests on `sample-datalink-2-2.siard` cover the scenarios "Data link cells show their text", "A data link that cannot be read is shown empty" (a crafted non-UTF-8 file) and "Content outside the archive is not followed" (`CraftedArchive`, a BLOB with a URL, with and without a stored file)
+- [x] 5.5 Fix the structure tree's links in `frontend-shared` (found in the manual run: they were resolved against the current page and piled up in the address); verify `ArchiveBrowser.test.tsx` covers the "Switch between tables and views" scenario
+
 ## 6. Integration
 
-- [ ] 6.1 Run `./gradlew :siard-web:check` and verify it passes (boundary checks, lint, tests of all web modules)
-- [ ] 6.2 Run `just web-dev` locally (Linux), open a `.siard` file through Open, use "Show in file browser" on it and close the archive; verify each step behaves as specified
+- [x] 6.1 Run `./gradlew :siard-web:check` and verify it passes (boundary checks, lint, tests of all web modules)
+- [x] 6.2 Run `just web-dev` locally (Linux), open a `.siard` file through Open, use "Show in file browser" on it and close the archive; verify each step behaves as specified
 
 ## 7. Manual checks on other platforms (user)
 

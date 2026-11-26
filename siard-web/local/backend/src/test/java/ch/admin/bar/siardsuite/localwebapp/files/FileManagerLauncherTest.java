@@ -110,10 +110,21 @@ class FileManagerLauncherTest {
     }
 
     @Test
-    void linuxOpensFolderWithXdgOpen() {
+    void linuxShowsFolderOverDbus() {
         launcher(Os.LINUX, Map.of(), command -> exited(0)).reveal(FOLDER, true);
 
-        assertEquals(List.of(List.of("xdg-open", FOLDER.toString())), started);
+        assertEquals(List.of(dbus("ShowFolders", FOLDER.toUri().toString())), started);
+    }
+
+    @Test
+    void linuxFolderFallsBackToXdgOpen() {
+        Function<List<String>, Process> dbusFails = command -> command.get(0).equals("gdbus") ? exited(1) : exited(0);
+
+        launcher(Os.LINUX, Map.of(), dbusFails).reveal(FOLDER, true);
+
+        assertEquals(List.of(
+                dbus("ShowFolders", FOLDER.toUri().toString()),
+                List.of("xdg-open", FOLDER.toString())), started);
     }
 
     @Test
@@ -150,10 +161,14 @@ class FileManagerLauncherTest {
     }
 
     private static List<String> dbusShowItems(String uri) {
+        return dbus("ShowItems", uri);
+    }
+
+    private static List<String> dbus(String method, String uri) {
         return List.of("gdbus", "call", "--session",
                 "--dest", "org.freedesktop.FileManager1",
                 "--object-path", "/org/freedesktop/FileManager1",
-                "--method", "org.freedesktop.FileManager1.ShowItems",
+                "--method", "org.freedesktop.FileManager1." + method,
                 "['" + uri + "']", "");
     }
 

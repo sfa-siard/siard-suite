@@ -103,7 +103,10 @@ folders to the browser).
 - Linux: `gdbus call --session --dest org.freedesktop.FileManager1 --object-path
   /org/freedesktop/FileManager1 --method org.freedesktop.FileManager1.ShowItems "['<file URI>']" ""`
   (selects the file in Nautilus, Dolphin, Nemo, Caja, ...); if `gdbus` is missing or exits
-  non-zero within 5 s, `xdg-open <parent folder>`; folder: `xdg-open <folder>`.
+  non-zero within 5 s, `xdg-open <parent folder>`; folder: the same call with
+  `org.freedesktop.FileManager1.ShowFolders "['<folder URI>']"`, then `xdg-open <folder>` if that
+  fails. (First `xdg-open <folder>` only: in the manual run on GNOME it exited 0 without showing
+  a window, although Nautilus is the default for folders, while `ShowItems` worked.)
 - No process could be started → 503. The process runner is injected so tests assert the
   exact command lines per OS without starting anything.
 
@@ -244,3 +247,67 @@ Additive; no data migration. `openapi.yaml` of the local app is regenerated with
   Space; jsdom does not, so `StartView.test.tsx` asserts the native button and the click path,
   and the keyboard itself is checked in the manual run (6.2). New tests share a small fetch router
   (`src/test/routes.ts`).
+- DATALINK cells (found in the manual run with `test.siard`, task 5.4): `CellRenderer` read every
+  type other than BINARY, VARBINARY and BLOB with the text path for long text, so `siard-api`
+  decoded `test.siard`'s DATALINK file (`lob25/record0.bin`, a 47189-byte JPEG) as characters,
+  rejected the length (46450 characters) and the whole page of rows answered 500. DATALINK
+  cells are now shown as the desktop app shows them (`RowsOverviewForm.extractText`): the text
+  of `getString()`, or empty when that throws, per cell (`CellRenderer.dataLinkText`). Checked
+  by running that call on both archives: `sample-datalink-2-2.siard` shows its files' text (a
+  `file://localhost/…/circle.jpg` path stored as ASCII), `test.siard` shows every DATALINK cell
+  empty. The download answers the same text and search finds it.
+- Content outside the archive is never opened: a cell with `dlurlpathonly` is shown empty and
+  never read, whatever its type and also when it has a stored file (`CellRenderer
+  .pointsOutsideTheArchive`, asked before every content access). To read the attribute,
+  `siard-api` gets one accessor, `Value.getDataLinkUrl()` (a minimal addition next to
+  `getFilename()`). This is the one deliberate deviation from the desktop app; see Follow-up
+  Changes.
+- The tests use `sample-datalink-2-2.siard` from the shared fixtures of `siard-api` (the same
+  `TSIMPLE` with `COLUMN_DATALINK`), so the core keeps one fixture location and reads nothing of
+  `siard-cmd`. Its DATALINK files are ASCII and readable, so the failure seen with `test.siard`
+  is reproduced by a `CraftedArchive` with non-UTF-8 content. The URL case uses the `CBLOB`
+  column, crafted (new `remove(entry)`) to link to a file in the test's temp folder, once
+  without and once with the stored file; it fails when the URL check is left out. `siard-api`
+  validates rows against the archive's own table schema and its `table.xsd` does not allow
+  `dlurlpathonly`, so archives it writes never hold such a cell; the crafted archive also
+  extends its `table0.xsd`.
+- Structure tree links (found in the manual run, task 5.5): the tree's links were relative
+  (`schemas/0/tables/1`). Under the splat route `archives/:archiveId/*`, react-router resolves a
+  relative link against the whole current address, so each click appended to it and the views
+  matched nothing (no request, no error). `ArchiveBrowser` now derives its mount path once (the
+  address without the splat part) and the tree links absolutely from it; the app still decides
+  where the browser is mounted. The earlier test only clicked from the mount point, where both
+  resolve the same.
+- `StructureTree` renders the schema name with `ListSubheader component="div"`: by default it is
+  an `<li>`, which may not sit inside the schema's own `<li>` (a React warning in the manual run).
+
+## Follow-up Changes
+
+Recorded here, not part of this change.
+
+- **Content outside the archive (deliberate deviation from the desktop app, to be investigated
+  later).** A cell with `dlurlpathonly` (a URL instead of, or next to, a stored file, as
+  `metadata.xsd` defines it) is shown empty and never read. The desktop app reads such cells:
+  `getInputStream()` and `getReader()` of `siard-api` open that URL before a stored file, so
+  the desktop's `getBytes()` (BLOB) and `getString()` (DATALINK, CLOB with a stored file) follow
+  it. The reason for deviating is security: an archive could make the app open
+  `file://server/share/…` (on Windows this can send the user's credentials to that server) or
+  send `http(s)` requests to hosts it chooses. This also narrows D14 of the archive browsing
+  design (external LOBs served as `siard-api` resolves them) for such cells, since D14 relied on
+  "behaves like the desktop app". To investigate: whether such cells should show something (for
+  example the URL as plain text, never as a link and never opened, or a cell kind such as `lob`
+  with `external: true` and a label "stored outside the archive"), how external LOB folders
+  (absolute paths of the producing machine) should be treated alike, and the remote app's
+  confinement policy (D14's open question).
+- **How DATALINK content is shown (to be investigated later).** It is shown as the desktop app
+  shows it, which hides archived content that is not text: `test.siard`'s DATALINK files are
+  JPEGs stored in the archive and appear empty in both apps. Tried during this change and set
+  aside for parity: stored DATALINK content as a downloadable `lob` (archived data read only from
+  inside the archive). To investigate: what DATALINK columns hold in real archives (the files
+  themselves, or a path as text as in `sample-datalink-2-2.siard`), whether to offer a download,
+  and that `getString()` reads a DATALINK file as a whole (the desktop does the same), which
+  costs memory for large files.
+- **One unreadable cell fails its whole page.** Other than DATALINK cells (now empty when they
+  cannot be read), a cell that cannot be read still makes its page of rows answer 500. Showing
+  such a cell as unreadable and the rest of the page normally needs a new cell type or flag in
+  the API and spec.

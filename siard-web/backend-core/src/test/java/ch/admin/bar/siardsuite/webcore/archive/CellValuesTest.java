@@ -13,12 +13,16 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.fixture;
 import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.get;
@@ -35,6 +39,12 @@ class CellValuesTest {
 
     /** The crafted text: {@code alpha42} at the start, {@code omega42} only at position 50000. */
     static final String LARGE_TEXT = "alpha42" + "x".repeat(50000 - 7) + "omega42" + "x".repeat(50000 - 7);
+    /** An empty cell, as the desktop app shows a cell it cannot read. */
+    static final Map<String, Object> EMPTY = Map.of("type", "text", "value", "", "truncated", false);
+    /** {@code TSIMPLE} with a DATALINK column ({@code COLUMN_DATALINK}) whose files are 79 bytes of ASCII. */
+    static final String DATALINK_FIXTURE = "sample-datalink-2-2.siard";
+    static final String DATALINK_FILE = "content/schema0/table0/lob25/record0.bin";
+    static final String TSIMPLE_SCHEMA = "content/schema0/table0/table0.xsd";
     static final String TSIMPLE_CLOB_FILE = "content/schema0/table0/lob2/record0.txt";
 
     @Inject
@@ -128,5 +138,109 @@ class CellValuesTest {
         Response tcomplex = get(scope, archive + "/schemas/0/tables/1/rows");
         tcomplex.then().statusCode(200);
         assertTrue(tcomplex.asByteArray().length < 20000, "TCOMPLEX body: " + tcomplex.asByteArray().length);
+    }
+
+    /**
+     * Spec scenario "Data link cells show their text": as the desktop app, which reads them with
+     * {@code getString()}; the fixture's files hold a {@code file://localhost/...} path as ASCII text.
+     */
+    @Test
+    void dataLinkCellsShowTheirText() throws IOException {
+        ArchiveScope scope = newScope();
+        String table = tsimple(scope, fixture(DATALINK_FIXTURE));
+        int column = column(scope, table, "COLUMN_DATALINK");
+        String text = new String(CraftedArchive.entry(DATALINK_FIXTURE, DATALINK_FILE), StandardCharsets.UTF_8);
+        assertTrue(text.startsWith("file://localhost/"), text);
+
+        Response rows = get(scope, table + "/rows");
+        rows.then().statusCode(200);
+        List<Map<String, Object>> cells = rows.jsonPath().getList("rows.collect { it.cells[" + column + "] }");
+        assertEquals(4, cells.size());
+        for (Map<String, Object> cell : cells) {
+            assertEquals(Map.of("type", "text", "value", text, "truncated", false), cell);
+        }
+        assertArrayEquals(text.getBytes(StandardCharsets.UTF_8), download(scope, table, column));
+        JsonPath search = get(scope, table + "/search?q=file://localhost").jsonPath();
+        assertEquals(true, search.getBoolean("found"));
+        assertEquals(column, search.getInt("column"));
+    }
+
+    /**
+     * Spec scenario "A data link that cannot be read is shown empty": the failure found with {@code test.siard}
+     * (a JPEG as DATALINK file), whose character count {@code siard-api} rejects. The desktop app shows such a cell
+     * empty; before, the whole page answered 500. Per cell: the other rows keep their text.
+     */
+    @Test
+    void dataLinkThatCannotBeReadIsShownEmpty() throws IOException {
+        byte[] jpegLike = new byte[2000];
+        new Random(7).nextBytes(jpegLike);
+        jpegLike[0] = (byte) 0xFF;
+        jpegLike[1] = (byte) 0xD8;
+        Path crafted = CraftedArchive.of(DATALINK_FIXTURE)
+                .replaceLob(DATALINK_FILE, "content/schema0/table0/lob25/crafted0.bin", jpegLike)
+                .writeTo(tmp);
+        ArchiveScope scope = newScope();
+        String table = tsimple(scope, crafted);
+        int column = column(scope, table, "COLUMN_DATALINK");
+
+        Response rows = get(scope, table + "/rows");
+        rows.then().statusCode(200);
+        assertEquals(EMPTY, rows.jsonPath().getMap("rows[0].cells[" + column + "]"));
+        assertTrue(rows.jsonPath().getString("rows[1].cells[" + column + "].value").startsWith("file://localhost/"));
+        assertArrayEquals(new byte[0], download(scope, table, column));
+    }
+
+    /**
+     * Spec scenario "Content outside the archive is not followed": a cell with {@code dlurlpathonly} (a URL
+     * instead of, or next to, a stored file; {@code metadata.xsd}) is shown empty and nothing opens the URL.
+     * {@code siard-api} opens it before a stored file in {@code getInputStream()}, also for a BLOB, so the test
+     * uses the BLOB column, and the case with both is the one a check for "no stored file" would miss.
+     * {@code siard-api} validates rows against the archive's own table schema and never writes the attribute
+     * there, so only a crafted archive whose {@code table0.xsd} allows it holds such a cell.
+     */
+    @ParameterizedTest(name = "stored file kept: {0}")
+    @ValueSource(booleans = {false, true})
+    void contentOutsideTheArchiveIsNotFollowed(boolean keepStoredFile) throws IOException {
+        byte[] linked = new byte[1234];
+        new Random(11).nextBytes(linked);
+        String url = Files.write(tmp.resolve("linked.bin"), linked).toUri().toString();
+        String blobFile = "content/schema0/table0/lob9/record0.bin";
+        String stored = "<c10 digest=\"CBECBDB0FDD5CEC1E242493B6008CC79\" digestType=\"MD5\" file=\""
+                + blobFile + "\" length=\"1000\"/>";
+        CraftedArchive archive = CraftedArchive.of(DATALINK_FIXTURE)
+                // allow the attribute on both LOB types of the table schema, as metadata.xsd does
+                .replaceText(TSIMPLE_SCHEMA, "<xs:attribute name=\"digest\" type=\"xs:string\"/>",
+                        "<xs:attribute name=\"digest\" type=\"xs:string\"/>"
+                                + "<xs:attribute name=\"dlurlpathonly\" type=\"xs:anyURI\"/>")
+                .replaceText(CraftedArchive.TSIMPLE, stored, keepStoredFile
+                        ? stored.replace("/>", " dlurlpathonly=\"" + url + "\"/>")
+                        : "<c10 dlurlpathonly=\"" + url + "\" length=\"" + linked.length + "\"/>");
+        if (!keepStoredFile) {
+            archive.remove(blobFile);
+        }
+        ArchiveScope scope = newScope();
+        String table = tsimple(scope, archive.writeTo(tmp));
+        int column = column(scope, table, "CBLOB");
+
+        Response rows = get(scope, table + "/rows");
+        rows.then().statusCode(200);
+        assertEquals(EMPTY, rows.jsonPath().getMap("rows[0].cells[" + column + "]"));
+        assertArrayEquals(new byte[0], download(scope, table, column));
+        assertEquals(false, get(scope, table + "/search?q=linked.bin").jsonPath().getBoolean("found"));
+    }
+
+    private String tsimple(ArchiveScope scope, Path archive) throws IOException {
+        return "/api/archives/" + registry.register(scope, archive, () -> { }).value() + "/schemas/0/tables/0";
+    }
+
+    private static int column(ArchiveScope scope, String table, String name) {
+        int column = get(scope, table).jsonPath().getList("columns.name").indexOf(name);
+        assertTrue(column >= 0, "TSIMPLE has " + name);
+        return column;
+    }
+
+    private static byte[] download(ArchiveScope scope, String table, int column) {
+        return get(scope, table + "/rows/0/columns/" + column + "/content").then()
+                .statusCode(200).extract().asByteArray();
     }
 }

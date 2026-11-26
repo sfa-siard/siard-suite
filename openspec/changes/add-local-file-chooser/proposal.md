@@ -44,12 +44,20 @@ API and views already exist; only a way to open an archive in the local app is m
 
 - `local-web-start-page`: the Open button is no longer presentation-only; it starts the inspect
   workflow. Upload and Export stay inert.
+- `archive-browsing`: DATALINK cells are shown as in the desktop app, as text or empty per cell
+  when that text cannot be read, instead of one such cell failing the whole page of rows (found
+  while inspecting `test.siard` in the manual run). A cell that points outside the archive by URL
+  (`dlurlpathonly`) is shown empty and never opened, the one deliberate deviation from the
+  desktop app. The structure tree's links no longer pile up in the address when switching
+  between tables and views (also found in the manual run).
 
 ## Impact
 
 - `siard-web/local/backend`: new `files` package (resources, places per OS, file-manager launcher
   per OS), archive-opening resource using `ArchiveRegistry.register`; `openapi.yaml` regenerated.
-  No change to `backend-core` or its `/api/archives/**` description.
+  `backend-core`: DATALINK cells shown as in the desktop app, cells pointing outside the archive
+  shown empty and never read (`CellRenderer`); its `/api/archives/**` description is unchanged. `siard-api`: one accessor,
+  `Value.getDataLinkUrl()`.
 - `siard-web/local/frontend`: chooser component, path-paste normalisation, `/archives/:archiveId`
   route, Open wiring on the start page, generated API types.
 - `siard-web/frontend-shared`: new i18n keys (de, fr, it, en).

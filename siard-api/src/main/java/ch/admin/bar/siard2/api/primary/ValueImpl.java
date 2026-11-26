@@ -1036,6 +1036,14 @@ public abstract class ValueImpl
         return null;
     }
 
+    @Override
+    public String getDataLinkUrl() throws IOException {
+        Element element = getValueElement();
+        return element.hasAttribute(ArchiveImpl._sATTR_DLURLPATHONLY)
+                ? element.getAttribute(ArchiveImpl._sATTR_DLURLPATHONLY)
+                : null;
+    }
+
     /**
      * {@inheritDoc}
      */

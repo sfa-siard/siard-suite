@@ -124,6 +124,11 @@ A listing SHALL contain at most 10000 entries after filtering and SHALL set `tru
 - **WHEN** the client posts its path to `/api/files/reveal`
 - **THEN** the agent answers 204 and starts the platform's file manager for that file (Explorer from the Windows folder with the file selected on Windows, Finder with the file selected on macOS, the desktop's file manager on Linux)
 
+#### Scenario: Reveal a folder
+- **GIVEN** a valid local session and an existing folder
+- **WHEN** the client posts its path to `/api/files/reveal`
+- **THEN** the agent answers 204 and opens that folder in the platform's file manager (Explorer on Windows, Finder on macOS, on Linux the desktop's file manager asked over D-Bus like for a file, with `xdg-open` only when that fails)
+
 #### Scenario: Reveal fails safely
 - **GIVEN** a valid local session
 - **WHEN** the client posts a path that does not exist, a relative path, or a path like `/tmp/x; rm -rf ~`

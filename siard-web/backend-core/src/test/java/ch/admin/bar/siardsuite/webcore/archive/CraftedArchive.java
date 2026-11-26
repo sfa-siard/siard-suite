@@ -7,8 +7,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
@@ -28,6 +30,7 @@ final class CraftedArchive {
     private final Path source;
     private final Map<String, UnaryOperator<byte[]>> changes = new LinkedHashMap<>();
     private final Map<String, String> renames = new LinkedHashMap<>();
+    private final Set<String> removals = new HashSet<>();
 
     private CraftedArchive(Path source) {
         this.source = source;
@@ -35,6 +38,12 @@ final class CraftedArchive {
 
     static CraftedArchive of(String fixture) {
         return new CraftedArchive(TestArchives.fixture(fixture));
+    }
+
+    /** Leaves the entry out of the copy. */
+    CraftedArchive remove(String entry) {
+        removals.add(entry);
+        return this;
     }
 
     CraftedArchive replaceText(String entry, String from, String to) {
@@ -72,6 +81,9 @@ final class CraftedArchive {
              ZipOutputStream zipOut = new ZipOutputStream(out)) {
             for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements(); ) {
                 ZipEntry entry = entries.nextElement();
+                if (removals.contains(entry.getName())) {
+                    continue;
+                }
                 byte[] bytes;
                 try (InputStream in = zip.getInputStream(entry)) {
                     bytes = in.readAllBytes();

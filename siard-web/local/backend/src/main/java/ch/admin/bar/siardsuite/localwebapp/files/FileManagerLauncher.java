@@ -68,9 +68,12 @@ public class FileManagerLauncher {
             case MAC -> startAndCheck(folder
                     ? List.of("open", path.toString())
                     : List.of("open", "-R", path.toString()));
+            // the file manager over D-Bus first, like a file: xdg-open of a folder can report success
+            // without showing a window (seen on GNOME)
             case LINUX -> folder
-                    ? startAndCheck(List.of("xdg-open", path.toString()))
-                    : showItem(path) || startAndCheck(List.of("xdg-open", path.getParent().toString()));
+                    ? fileManager("ShowFolders", path) || startAndCheck(List.of("xdg-open", path.toString()))
+                    : fileManager("ShowItems", path)
+                            || startAndCheck(List.of("xdg-open", path.getParent().toString()));
         };
         if (!started) {
             throw new ProblemException(503, NOT_STARTED);
@@ -95,14 +98,15 @@ public class FileManagerLauncher {
         return null;
     }
 
-    // org.freedesktop.FileManager1.ShowItems selects the file in Nautilus, Dolphin, Nemo, Caja, ...
-    private boolean showItem(Path file) {
+    // org.freedesktop.FileManager1: ShowItems selects a file in its folder, ShowFolders opens a folder,
+    // in Nautilus, Dolphin, Nemo, Caja, ...
+    private boolean fileManager(String method, Path path) {
         // the URI goes into a GVariant string literal; a quote would end it early
-        String uri = file.toUri().toString().replace("'", "%27");
+        String uri = path.toUri().toString().replace("'", "%27");
         List<String> command = List.of("gdbus", "call", "--session",
                 "--dest", "org.freedesktop.FileManager1",
                 "--object-path", "/org/freedesktop/FileManager1",
-                "--method", "org.freedesktop.FileManager1.ShowItems",
+                "--method", "org.freedesktop.FileManager1." + method,
                 "['" + uri + "']", "");
         try {
             Process process = starter.start(command);
