@@ -24,6 +24,11 @@ The Upload and Export workflow controls SHALL be accessible, named buttons with 
 - **THEN** no filesystem paths or database credentials are requested or displayed
 - **AND** no launch token is added to the address bar or request payloads
 
+#### Scenario: Activation without a session stays inert
+- **GIVEN** the start page whose session is no longer valid (every API request would be answered 401)
+- **WHEN** the user activates Upload and Export by pointer and keyboard
+- **THEN** no request is sent, the route remains `/` and no dialog opens
+
 #### Scenario: Existing navigation and lifecycle survive
 - **GIVEN** the start page was opened through the local agent's launch link
 - **WHEN** the user follows Info

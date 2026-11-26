@@ -159,7 +159,7 @@ Upload and Export keep their inert assertions unchanged.
 - [Not the native look; no OS favourites, cloud places or search] → "Show in file browser" and
   the path field bridge to the system file manager (decided with the user).
 - [Windows `ProcessBuilder` quoting of `/select,<path with spaces>`] → unit test of the command
-  line plus a manual check on Windows (task 7).
+  line plus a manual check on Windows (GitHub issue #215).
 - [Linux desktops without `org.freedesktop.FileManager1`] → fallback opens the parent folder
   without selection.
 - [Slow or unavailable drives (network share, empty card reader) block a listing; Java cannot
@@ -185,7 +185,7 @@ Upload and Export keep their inert assertions unchanged.
   a network or removable volume under `/Volumes`, makes macOS ask once whether the agent's process
   may access that folder. A denied prompt surfaces as 403 in the chooser ("may not be read"); the
   user can allow it later in System Settings > Privacy & Security > Files and Folders. Checked
-  manually in task 7.2.
+  manually on macOS (GitHub issue #215).
 - [Entry lookup, reveal and archive opening also touch the file system and could stall on a dead
   share] → not guarded in this change; they are single user actions, not repeated listing
   clicks. Revisit if it shows up in practice.

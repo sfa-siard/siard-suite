@@ -55,11 +55,13 @@ API and views already exist; only a way to open an archive in the local app is m
 
 - `siard-web/local/backend`: new `files` package (resources, places per OS, file-manager launcher
   per OS), archive-opening resource using `ArchiveRegistry.register`; `openapi.yaml` regenerated.
-  `backend-core`: DATALINK cells shown as in the desktop app, cells pointing outside the archive
-  shown empty and never read (`CellRenderer`); its `/api/archives/**` description is unchanged. `siard-api`: one accessor,
-  `Value.getDataLinkUrl()`.
+- `siard-web/backend-core`: DATALINK cells shown as in the desktop app, cells pointing outside
+  the archive shown empty and never read (`CellRenderer`); its `/api/archives/**` description is
+  unchanged.
+- `siard-api`: one accessor, `Value.getDataLinkUrl()`.
 - `siard-web/local/frontend`: chooser component, path-paste normalisation, `/archives/:archiveId`
   route, Open wiring on the start page, generated API types.
-- `siard-web/frontend-shared`: new i18n keys (de, fr, it, en).
+- `siard-web/frontend-shared`: new i18n keys (de, fr, it, en) with a key-parity test; the archive
+  browser's structure tree links from the mount point and no longer nests `<li>` elements.
 - No new dependencies; Windows, macOS and Linux each need their own places and file-manager
   handling.

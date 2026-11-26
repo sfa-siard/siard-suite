@@ -44,6 +44,12 @@ Choosing a `.siard` file in the chooser started from the start page's Open butto
 - **THEN** an error in the current interface language says the file cannot be opened as a SIARD archive (422), that too many archives are open (429), that the archive could not be opened (other errors), or that it is no longer open
 - **AND** a failed open leaves the user on the start page; on the archive page, a link leads back to `/`
 
+#### Scenario: Inspect without a session
+- **GIVEN** the session of the window is no longer valid
+- **WHEN** the user visits `/archives/{archiveId}`
+- **THEN** the archive request is answered 401 and the page shows the warning that the window is no longer connected to SIARD Suite
+- **AND** no archive content and no Close action are shown
+
 #### Scenario: No path in the address bar
 - **GIVEN** a valid local session and a network-request recorder
 - **WHEN** the user inspects an archive

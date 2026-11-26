@@ -44,6 +44,12 @@ Each cell SHALL be an object `{"type":"null"}` for an SQL NULL, `{"type":"text",
 - **THEN** the cell is `{"type":"text","value":"","truncated":false}`, the download is empty and the search finds nothing
 - **AND** the linked file is never opened
 
+#### Scenario: Cell values need a session
+- **GIVEN** an archive registered in a scope and a request without a valid session (no scope)
+- **WHEN** the rows of a table or the content of a cell are requested
+- **THEN** the response status is 401 with problem details
+- **AND** the body contains no cells and no cell content
+
 ### Requirement: Shared browse views
 
 The shared frontend package SHALL provide archive browse views that, given an `archiveId`, show the archive's structure as a tree of schemas, tables and views, a table's columns and its rows in a grid paged on the server (100 rows per page), a search field that jumps to the next match, and a download action for large-object cells. All texts SHALL exist in German, French, Italian and English.

@@ -5,7 +5,7 @@ import de from "@siard-web/shared/i18n/de.json";
 import en from "@siard-web/shared/i18n/en.json";
 import fr from "@siard-web/shared/i18n/fr.json";
 import it from "@siard-web/shared/i18n/it.json";
-import { renderAt } from "../test/render";
+import { renderAt, respondWith } from "../test/render";
 import { chooserRoutes, HOME, stubRoutes } from "../test/routes";
 
 const plain = (value: string) => value.replace(/<\/?strong>/g, "");
@@ -63,6 +63,26 @@ test("query text is ignored and pointer and keyboard activation are inert", asyn
   expect(
     screen.queryByRole("heading", { name: /SIARD Suite 2/ }),
   ).not.toBeInTheDocument();
+});
+
+test("without a session, Upload and Export stay inert and send no request", async () => {
+  await i18n.changeLanguage("en");
+  const fetchMock = respondWith(401, { status: 401 });
+  renderAt("/");
+  const before = fetchMock.mock.calls.length;
+
+  for (const name of [en.startPage.upload, en.startPage.export]) {
+    const button = screen.getByRole("button", { name });
+    fireEvent.click(button);
+    for (const key of ["Enter", " "]) {
+      fireEvent.keyDown(button, { key });
+      fireEvent.keyUp(button, { key });
+    }
+  }
+
+  expect(fetchMock.mock.calls.length).toBe(before);
+  expect(screen.getByRole("region", { name: "SIARD" })).toBeInTheDocument();
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 });
 
 test("archive button navigates to the connection picker", async () => {

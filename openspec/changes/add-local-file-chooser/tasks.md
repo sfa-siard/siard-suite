@@ -37,7 +37,4 @@
 - [x] 6.1 Run `./gradlew :siard-web:check` and verify it passes (boundary checks, lint, tests of all web modules)
 - [x] 6.2 Run `just web-dev` locally (Linux), open a `.siard` file through Open, use "Show in file browser" on it and close the archive; verify each step behaves as specified
 
-## 7. Manual checks on other platforms (user)
 
-- [ ] 7.1 **User step (Windows):** build and start the local app (`just web-dev` or the installer from CI), then: places show Desktop/Documents/Downloads (also with OneDrive redirection) and the drive letters; pasting a path copied with "Copy as path" from Explorer selects the file; "Show in file browser" opens Explorer with a file in a folder with spaces selected; a `.siard` file opens and browses. Report results; not done by the agent without the report.
-- [ ] 7.2 **User step (macOS):** run `just web-dev`, then: places show home folders, `/` and volumes in `/Volumes`; Option+Cmd+C path pastes correctly; "Show in file browser" opens Finder with the file selected; a `.siard` file opens. Report results; not done by the agent without the report.

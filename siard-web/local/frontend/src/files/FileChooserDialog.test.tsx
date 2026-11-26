@@ -36,6 +36,8 @@ interface FakeAgent {
   writable?: Record<string, boolean>;
   truncated?: string[];
   reveal?: number;
+  /** an error status for every entry lookup */
+  entry?: number;
 }
 
 const HOME = "/home/me";
@@ -125,6 +127,9 @@ function stubAgent(agent: FakeAgent) {
           });
         }
         case "/api/files/entry": {
+          if (agent.entry !== undefined) {
+            return jsonResponse(agent.entry, { status: agent.entry });
+          }
           const path = query.get("path") ?? "";
           const found = entry(path);
           if (!found) {
@@ -421,6 +426,21 @@ describe("Path field", () => {
     ).not.toBeInTheDocument();
     fireEvent.click(confirmButton(en.fileChooser.open));
     expect(onClose).toHaveBeenCalledWith(`${HOME}/.secret.siard`);
+  });
+
+  test("without a session a pasted path shows the session warning and selects nothing", async () => {
+    stubAgent({ folders: homeTree, entry: 401 });
+    const onClose = renderChooser({ mode: "open", extensions: [".siard"] });
+    await listing(HOME);
+
+    await pastePath(`${HOME}/a.siard`);
+
+    expect(await screen.findByText(en.session.missing)).toBeInTheDocument();
+    expect(
+      screen.queryByText(i18n.t("fileChooser.selected", { name: "a.siard" })),
+    ).not.toBeInTheDocument();
+    expect(confirmButton(en.fileChooser.open)).toBeDisabled();
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   test("a missing path and a file of the wrong type show errors and return nothing", async () => {

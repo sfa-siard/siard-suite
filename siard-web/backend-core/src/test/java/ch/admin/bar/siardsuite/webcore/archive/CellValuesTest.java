@@ -6,6 +6,7 @@ import ch.admin.bar.siard2.api.Table;
 import ch.admin.bar.siard2.api.TableRecordDispenser;
 import ch.admin.bar.siard2.api.facade.TableRecordFacade;
 import ch.admin.bar.siard2.api.primary.ArchiveImpl;
+import ch.admin.bar.siardsuite.webcore.error.ProblemDetail;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -25,10 +26,13 @@ import java.util.Map;
 import java.util.Random;
 
 import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.fixture;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.startsWith;
 import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.get;
 import static ch.admin.bar.siardsuite.webcore.archive.TestArchives.newScope;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -227,6 +231,18 @@ class CellValuesTest {
         assertEquals(EMPTY, rows.jsonPath().getMap("rows[0].cells[" + column + "]"));
         assertArrayEquals(new byte[0], download(scope, table, column));
         assertEquals(false, get(scope, table + "/search?q=linked.bin").jsonPath().getBoolean("found"));
+    }
+
+    /** Spec scenario "Cell values need a session": no scope, no cells and no cell content. */
+    @Test
+    void cellValuesNeedASession() throws IOException {
+        String table = tsimple(newScope(), fixture("sample.siard"));
+
+        for (String path : List.of(table + "/rows", table + "/rows/0/columns/0/content")) {
+            Response response = given().get(path);
+            response.then().statusCode(401).contentType(startsWith(ProblemDetail.MEDIA_TYPE));
+            assertFalse(response.asString().contains("cells"), path);
+        }
     }
 
     private String tsimple(ArchiveScope scope, Path archive) throws IOException {

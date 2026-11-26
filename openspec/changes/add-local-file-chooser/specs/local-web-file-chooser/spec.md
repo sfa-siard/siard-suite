@@ -237,6 +237,12 @@ The chooser's path field SHALL accept a typed or pasted absolute path, also encl
 - **WHEN** the user enters a path that does not exist, then the path of an existing `notes.txt`
 - **THEN** the chooser shows an error for each and returns no path
 
+#### Scenario: Path field without a session
+- **GIVEN** the chooser in open mode whose session is no longer valid
+- **WHEN** the user enters the absolute path of an existing `.siard` file and presses Enter
+- **THEN** the entry lookup is answered 401 and the chooser shows the warning that the window is no longer connected to SIARD Suite
+- **AND** no file is selected and the chooser returns no path
+
 #### Scenario: Malformed input is not passed on
 - **GIVEN** the chooser and a network-request recorder
 - **WHEN** the user enters a relative path such as `../secret` or an empty string and presses Enter

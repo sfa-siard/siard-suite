@@ -110,6 +110,16 @@ test("an archive that is no longer open shows a message with a link back", async
   ).toBeInTheDocument();
 });
 
+test("without a session the archive page shows the session warning and nothing else", async () => {
+  stubRoutes({ [`GET /api/archives/${ARCHIVE_ID}`]: [401, { status: 401 }] });
+
+  renderAt(`/archives/${ARCHIVE_ID}`);
+
+  expect(await screen.findByText(en.session.missing)).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: en.inspect.close })).toBeNull();
+  expect(screen.queryByRole("heading", { name: "Sample Database" })).toBeNull();
+});
+
 test("the archive's path appears only in the body of the open request", async () => {
   const requests = stubRoutes({
     ...chooserRoutes,
