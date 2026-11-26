@@ -84,6 +84,12 @@ tasks.test {
     systemProperty("siard.openapi.app", appOpenApi.absolutePath)
 }
 
+// every test JVM of the backend writes its temp files (JUnit @TempDir, Quarkus' build steps) below
+// build/, so the tests also run where the system temp folder is not writable (e.g. a sandbox)
+tasks.withType<Test>().configureEach {
+    systemProperty("java.io.tmpdir", temporaryDir.absolutePath)
+}
+
 // src/integrationTest (source set and quarkusIntTest task come from the Quarkus plugin) starts the
 // packaged app as a separate process, for spec scenarios that need LaunchMode.NORMAL
 tasks.named("check") {

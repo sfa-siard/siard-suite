@@ -214,6 +214,8 @@ Additive; no data migration. `openapi.yaml` of the local app is regenerated with
   attributes.
 - `Places` parses the `.reg` export itself (continuation lines, escaped `REG_SZ`, `hex(2)`), so
   the non-ASCII handling is unit-tested on any OS.
+- The backend's test JVMs get `java.io.tmpdir` below `build/tmp/` (`build.gradle.kts`), so the
+  tests also run where the system temp folder is read-only (e.g. the agent sandbox).
 - i18n: the key-parity test that task 3.2 assumed did not exist (only the type check in
   `i18n/index.ts`, which finds missing but not extra keys); `frontend-shared/src/i18n/keys.test.ts`
   now checks keys and `{{placeholders}}` of de, fr and it against en. The chooser and inspect
