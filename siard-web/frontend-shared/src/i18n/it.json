@@ -139,6 +139,7 @@
     "save": "Salva",
     "chooseFolder": "Scegli questa cartella",
     "cancel": "Annulla",
+    "selected": "Selezionato: {{name}}",
     "truncated": "Vengono mostrate solo le prime {{count}} voci. Per i file non elencati, inserirne il percorso esatto nel campo del percorso.",
     "replaceTitle": "Sostituire il file?",
     "replaceText": "\"{{name}}\" esiste già. Sostituire il file?",
@@ -151,6 +152,7 @@
       "busy": "Alcune posizioni non rispondono. Si prega di riprovare tra un minuto.",
       "wrongType": "Qui si possono scegliere solo file {{extensions}}.",
       "notWritable": "In questa cartella non è possibile salvare file.",
+      "folderExists": "Qui esiste già una cartella denominata \"{{name}}\".",
       "revealFailed": "Non è stato possibile aprire il gestore file.",
       "loadFailed": "Non è stato possibile caricare la cartella."
     }

@@ -139,6 +139,7 @@
     "save": "Save",
     "chooseFolder": "Choose this folder",
     "cancel": "Cancel",
+    "selected": "Selected: {{name}}",
     "truncated": "Only the first {{count}} entries are shown. For files not listed, enter their exact path in the path field.",
     "replaceTitle": "Replace file?",
     "replaceText": "\"{{name}}\" already exists. Do you want to replace it?",
@@ -151,6 +152,7 @@
       "busy": "Some locations are not responding. Please try again in a minute.",
       "wrongType": "Only {{extensions}} files can be chosen here.",
       "notWritable": "Files cannot be saved in this folder.",
+      "folderExists": "A folder named \"{{name}}\" already exists here.",
       "revealFailed": "The file browser could not be opened.",
       "loadFailed": "The folder could not be loaded."
     }

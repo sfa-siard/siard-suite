@@ -139,6 +139,7 @@
     "save": "Speichern",
     "chooseFolder": "Diesen Ordner wählen",
     "cancel": "Abbrechen",
+    "selected": "Ausgewählt: {{name}}",
     "truncated": "Nur die ersten {{count}} Einträge werden angezeigt. Für nicht gelistete Dateien geben Sie deren exakten Pfad im Pfadfeld ein.",
     "replaceTitle": "Datei ersetzen?",
     "replaceText": "„{{name}}“ existiert bereits. Möchten Sie die Datei ersetzen?",
@@ -151,6 +152,7 @@
       "busy": "Einige Orte antworten nicht. Bitte versuchen Sie es in einer Minute erneut.",
       "wrongType": "Hier können nur {{extensions}}-Dateien gewählt werden.",
       "notWritable": "In diesem Ordner können keine Dateien gespeichert werden.",
+      "folderExists": "Hier existiert bereits ein Ordner namens „{{name}}“.",
       "revealFailed": "Der Dateimanager konnte nicht geöffnet werden.",
       "loadFailed": "Der Ordner konnte nicht geladen werden."
     }

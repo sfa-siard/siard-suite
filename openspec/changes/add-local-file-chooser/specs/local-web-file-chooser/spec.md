@@ -137,7 +137,7 @@ A listing SHALL contain at most 10000 entries after filtering and SHALL set `tru
 
 ### Requirement: Chooser modes
 
-The local frontend SHALL provide a file chooser in open, save and folder mode that returns one absolute path or nothing when cancelled. Open SHALL accept only an existing file matching the mode's extensions; save SHALL take a folder and a file name and append the extension when missing; folder SHALL return the folder shown.
+The local frontend SHALL provide a file chooser in open, save and folder mode that returns one absolute path or nothing when cancelled. Open SHALL accept only an existing file matching one of the extensions it is given; save SHALL be given exactly one extension (the format the workflow writes), take a folder and a file name, and append that extension unless the name already ends with it in any letter case; folder SHALL return the folder shown.
 
 #### Scenario: Open an archive file
 - **GIVEN** the chooser in open mode with extension `.siard`, showing a folder with `a.siard` and `b.txt`
@@ -150,6 +150,18 @@ The local frontend SHALL provide a file chooser in open, save and folder mode th
 - **WHEN** the user enters `db` and confirms
 - **THEN** the chooser asks whether to replace `db.siard` and returns its path only after the user agrees
 - **AND** in folder mode, confirming returns the absolute path of the folder shown
+
+#### Scenario: Save with the name of an existing folder
+- **GIVEN** the chooser in save mode with extension `.siard`, showing a folder that contains a subfolder `Reports`
+- **WHEN** the user enters `Reports` and confirms
+- **THEN** the chooser shows the folder `Reports` with an empty file name, as native save dialogs do
+- **AND** it returns no path and asks no replace question
+
+#### Scenario: Save where the name with the extension is a folder
+- **GIVEN** the chooser in save mode with extension `.siard`, showing a folder that contains a subfolder `Archives.siard` and nothing named `Archives`
+- **WHEN** the user enters `Archives` and confirms
+- **THEN** the chooser shows an error that a folder named `Archives.siard` already exists here and stays in the current folder
+- **AND** it returns no path and asks no replace question
 
 #### Scenario: Cancel and unusable choices
 - **GIVEN** the chooser in any mode
@@ -208,6 +220,12 @@ The chooser's path field SHALL accept a typed or pasted absolute path, also encl
 - **WHEN** the user pastes `"C:\Users\me\My Data\db.siard"` on Windows, `/Users/me/My Data/db.siard` on macOS, or `file:///home/me/My%20Data/db.siard` on Linux, and presses Enter
 - **THEN** the chooser shows the folder `My Data` with `db.siard` selected and the confirm button enabled, without the user browsing to it
 - **AND** pasting `"C:\Users\me\My Data"` (a quoted folder) shows that folder
+
+#### Scenario: Selected file not visible in the list
+- **GIVEN** the chooser in open mode with extension `.siard`, hidden items not shown
+- **WHEN** the user pastes the path of a file that is far down its folder's listing, hidden, or beyond the 10,000-entry cap
+- **THEN** a listed file's row is scrolled into view
+- **AND** the chooser shows "Selected: <file name>" next to its buttons, whether or not the row is listed, and the confirm button returns that file's path
 
 #### Scenario: Path that does not exist or does not match
 - **GIVEN** the chooser in open mode with extension `.siard`

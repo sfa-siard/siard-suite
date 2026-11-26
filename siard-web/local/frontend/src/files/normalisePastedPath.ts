@@ -44,7 +44,7 @@ function fileUriToPath(uri: string): string | null {
   } catch {
     return null; // malformed percent-encoding
   }
-   // File URIs with a host (file://server/share/…) or a drive (file:///C:/…) are Windows forms:
+  // File URIs with a host (file://server/share/…) or a drive (file:///C:/…) are Windows forms:
   // they become UNC or drive paths. On macOS and Linux they hardly occur; if they do, the
   // agent rejects the result as not absolute (400), so the input fails safely.
   if (host !== "" && host.toLowerCase() !== "localhost") {

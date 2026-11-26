@@ -20,7 +20,7 @@
 - One chooser implementation that behaves the same on Windows, macOS and Linux and is fully
   testable in CI (backend tests, Vitest, no manual dialog interaction).
 - Reusable chooser API in the frontend so later workflows (create archive, export, upload, Access
-  file) only pass a mode and extensions.
+  file) only pass a mode and its extensions (a list to open, one to save).
 
 **Non-Goals:**
 - Native OS dialogs, drag-and-drop from the OS (browsers withhold the path), recent files,
@@ -108,8 +108,13 @@ folders to the browser).
   exact command lines per OS without starting anything.
 
 ### D6 Frontend chooser (`local/frontend/src/files/`)
-- `FileChooserDialog` props: `mode: "open" | "save" | "folder"`, `extensions: string[]`,
-  `initialName?` (save), `onClose(path | null)`. Lives in the local app, not `frontend-shared`
+- `FileChooserDialog` props: one option type per mode, plus `onClose(path | null)`:
+  `{mode: "open", extensions?: string[]}` (files offered; none means any file),
+  `{mode: "save", extension: string, initialName?: string}` (exactly the format the workflow
+  writes) and `{mode: "folder"}`. Save does not take a list: deriving its extension from a list
+  would depend on the list's order and let another listed extension through (`db.zip` with
+  SIARD contents). A workflow that can write several formats would let the user choose the
+  format ("Save as type"), not pass a list. Lives in the local app, not `frontend-shared`
   (the remote app uploads instead; module boundary).
 - Layout: places list on the left, folder listing (MUI `List`, keyboard navigable; Enter or
   double-click opens a folder or confirms a file), toolbar with parent folder, hidden toggle,
@@ -120,7 +125,8 @@ folders to the browser).
   `file://` URI (incl. `file:///C:/...` and `file://server/share/...`) to a path with
   percent-decoding; returns null for empty or relative input (absolute = starts with `/`, a drive
   letter `X:\`/`X:/`, or `\\`). Pure function, unit-tested.
-- Save mode: the name gets the first extension appended when it has none of the extensions;
+- Save mode: the name gets the save extension appended unless it already ends with it (in any
+  letter case; `db.zip` becomes `db.zip.siard`);
   existence and writability come from `GET /api/files/entry` for the target, then for the
   folder; replacing asks a confirmation dialog.
 - `useFileChooser()` hook returns `choose(options): Promise<string | null>` so workflows do not
@@ -218,3 +224,12 @@ Additive; no data migration. `openapi.yaml` of the local app is regenerated with
   Only Windows produces these shapes; on macOS/Linux the result is not absolute for the agent,
   which answers 400 and the chooser shows its error. Moving the conversion into the agent
   (`Path.of(URI)`, OS-aware) was considered and kept out, to leave the API taking plain paths only.
+- The chooser is one `FileChooserDialog` component for all three modes; `useFileChooser` returns
+  `{ choose, chooser }`, so a workflow renders `{chooser}` and awaits `choose(options)` without a
+  context provider. Errors are mapped by status code only (401 session, 403 not readable,
+  404 not found, 503 busy, 504 unreachable). In save mode, a name that matches an existing
+  folder as typed opens that folder with an empty name instead of returning it, as native save
+  dialogs do (spec scenario "Save with the name of an existing folder"). If only the name with the
+  extension appended is a folder (`Archives` → folder `Archives.siard`), the chooser shows an
+  error instead, because the user did not type that folder's name (spec scenario "Save where the
+  name with the extension is a folder").

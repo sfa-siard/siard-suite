@@ -19,9 +19,9 @@
 
 ## 4. File chooser dialog
 
-- [ ] 4.1 Implement `FileChooserDialog` navigation (places, listing, parent, hidden toggle, path field, errors in the dialog) and `useFileChooser`; verify `FileChooserDialog.test.tsx` covers the "Chooser navigation" scenarios incl. the unreachable-location message for 504 and the workers-exhausted message for 503, each asserted with an arbitrary detail text so only the status code decides, and the truncated-listing notice, and the "Path field" scenarios incl. a quoted file path that is selected directly with confirm enabled and a quoted folder path, with a mocked API
-- [ ] 4.2 Implement open, save (extension appending, replace confirmation, non-writable folder) and folder modes; verify `FileChooserDialog.test.tsx` covers the "Chooser modes" scenarios incl. cancel and 401
-- [ ] 4.3 Implement "Show in file browser" and the narrow-viewport layout; verify tests for the "Show in file browser from the chooser" scenarios (selection, current folder, 503, 401) and `npm run lint` in `siard-web/local/frontend`
+- [x] 4.1 Implement `FileChooserDialog` navigation (places, listing, parent, hidden toggle, path field, errors in the dialog) and `useFileChooser`; verify `FileChooserDialog.test.tsx` covers the "Chooser navigation" scenarios incl. the unreachable-location message for 504 and the workers-exhausted message for 503, each asserted with an arbitrary detail text so only the status code decides, and the truncated-listing notice, and the "Path field" scenarios incl. a quoted file path that is selected directly with confirm enabled and a quoted folder path, with a mocked API
+- [x] 4.2 Implement open, save (extension appending, replace confirmation, non-writable folder) and folder modes; verify `FileChooserDialog.test.tsx` covers the "Chooser modes" scenarios incl. cancel and 401
+- [x] 4.3 Implement "Show in file browser" and the narrow-viewport layout; verify tests for the "Show in file browser from the chooser" scenarios (selection, current folder, 503, 401) and `npm run lint` in `siard-web/local/frontend`
 
 ## 5. Inspect workflow and start page
 

@@ -13,8 +13,8 @@ API and views already exist; only a way to open an archive in the local app is m
 - New in-app file chooser in the local frontend, backed by the agent, with three modes:
   - **open**: pick an existing file, offering only files with the expected extensions
     (e.g. `.siard`);
-  - **save**: pick a folder and enter a file name; the extension is added and overwriting an
-    existing file needs confirmation;
+  - **save**: pick a folder and enter a file name; the workflow's one extension (e.g. `.siard`)
+    is added when missing and overwriting an existing file needs confirmation;
   - **folder**: pick a folder.
 - The chooser shows places (home, Desktop, Documents, Downloads, drives / volumes), a folder
   listing (folders first, hidden entries off by default with a toggle) and a path field that

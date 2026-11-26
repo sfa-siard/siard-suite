@@ -139,6 +139,7 @@
     "save": "Enregistrer",
     "chooseFolder": "Choisir ce dossier",
     "cancel": "Annuler",
+    "selected": "Sélection : {{name}}",
     "truncated": "Seules les {{count}} premières entrées sont affichées. Pour les fichiers non listés, saisissez leur chemin exact dans le champ du chemin.",
     "replaceTitle": "Remplacer le fichier ?",
     "replaceText": "« {{name}} » existe déjà. Voulez-vous le remplacer ?",
@@ -151,6 +152,7 @@
       "busy": "Certains emplacements ne répondent pas. Veuillez réessayer dans une minute.",
       "wrongType": "Seuls les fichiers {{extensions}} peuvent être choisis ici.",
       "notWritable": "Impossible d'enregistrer des fichiers dans ce dossier.",
+      "folderExists": "Un dossier nommé « {{name}} » existe déjà ici.",
       "revealFailed": "Le gestionnaire de fichiers n'a pas pu être ouvert.",
       "loadFailed": "Le dossier n'a pas pu être chargé."
     }
