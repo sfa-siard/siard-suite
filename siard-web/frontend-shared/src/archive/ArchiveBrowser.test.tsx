@@ -1,6 +1,7 @@
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import i18n from "../i18n";
+import en from "../i18n/en.json";
 import {
   archiveHandler,
   type Handler,
@@ -115,10 +116,10 @@ describe("ArchiveBrowser", () => {
     renderBrowser("/schemas/0/tables/0");
     await screen.findAllByText("r99");
 
-    fireEvent.change(screen.getByLabelText("Search"), {
+    fireEvent.change(screen.getByLabelText(en.search.table.dialog.search), {
       target: { value: "r750" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Next" }));
+    fireEvent.click(screen.getByRole("button", { name: en.button.next }));
 
     await screen.findAllByText("r750");
     await waitFor(() =>
@@ -176,10 +177,10 @@ describe("ArchiveBrowser", () => {
     await screen.findAllByText("r99");
 
     fail.now = true;
-    fireEvent.change(screen.getByLabelText("Search"), {
+    fireEvent.change(screen.getByLabelText(en.search.table.dialog.search), {
       target: { value: "r750" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Next" }));
+    fireEvent.click(screen.getByRole("button", { name: en.button.next }));
 
     expect(
       await screen.findByText(/not or no longer open/),
@@ -251,7 +252,9 @@ describe("ArchiveBrowser", () => {
     mockApi(handler);
     renderBrowser("/schemas/0/tables/0");
 
-    const link = await screen.findByRole("link", { name: "Download" });
+    const link = await screen.findByRole("link", {
+      name: en.archive.lob.download,
+    });
     expect(link).toHaveTextContent("2048 bytes");
     expect(link).toHaveAttribute(
       "href",
@@ -268,7 +271,9 @@ describe("ArchiveBrowser", () => {
     fireEvent.click(await screen.findByRole("link", { name: "VIEW1" }));
 
     expect(await screen.findByText(VIEW1.query)).toBeInTheDocument();
-    const columns = screen.getByRole("table", { name: "Columns" });
+    const columns = screen.getByRole("table", {
+      name: en.tableContainer.title.columns,
+    });
     for (const column of VIEW1.columns) {
       const row = within(columns).getByRole("row", {
         name: new RegExp(column.name),

@@ -9,6 +9,8 @@ import {
 } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 import { jsonResponse } from "@siard-web/shared/test";
+import { i18n } from "@siard-web/shared";
+import en from "@siard-web/shared/i18n/en.json";
 import FileChooserDialog, {
   type FileChooserOptions,
   join,
@@ -173,7 +175,7 @@ async function severityOf(text: string) {
 }
 
 async function pastePath(text: string) {
-  const field = screen.getByRole("textbox", { name: "Path" });
+  const field = screen.getByRole("textbox", { name: en.fileChooser.path });
   fireEvent.change(field, { target: { value: text } });
   fireEvent.keyDown(field, { key: "Enter" });
 }
@@ -201,11 +203,13 @@ describe("Chooser navigation", () => {
     renderChooser({ mode: "open", extensions: [".siard"] });
 
     expect(await listing(HOME)).toBeInTheDocument();
-    const places = screen.getByRole("list", { name: "Places" });
-    expect(within(places).getByText("Home")).toBeInTheDocument();
+    const places = screen.getByRole("list", { name: en.fileChooser.places });
+    expect(
+      within(places).getByText(en.fileChooser.place.home),
+    ).toBeInTheDocument();
     expect(within(places).getByText("/")).toBeInTheDocument();
 
-    fireEvent.click(within(places).getByText("Documents"));
+    fireEvent.click(within(places).getByText(en.fileChooser.place.documents));
     fireEvent.doubleClick(
       within(await listing(`${HOME}/Documents`)).getByText("2024"),
     );
@@ -213,7 +217,9 @@ describe("Chooser navigation", () => {
       within(await listing(`${HOME}/Documents/2024`)).getByText("old.siard"),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Parent folder" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: en.fileChooser.parent }),
+    );
     expect(await listing(`${HOME}/Documents`)).toBeInTheDocument();
   });
 
@@ -242,14 +248,16 @@ describe("Chooser navigation", () => {
       ),
     ).toBeInTheDocument();
     fireEvent.click(
-      within(screen.getByRole("list", { name: "Places" })).getByText("Home"),
+      within(
+        screen.getByRole("list", { name: en.fileChooser.places }),
+      ).getByText(en.fileChooser.place.home),
     );
     expect(await listing(HOME)).toBeInTheDocument();
   });
 
   test.each([
-    [504, "This location is not reachable right now"],
-    [503, "Some locations are not responding. Please try again in a minute."],
+    [504, en.fileChooser.error.unreachable],
+    [503, en.fileChooser.error.busy],
   ])(
     "status %i decides the message, whatever the detail says",
     async (status, text) => {
@@ -258,8 +266,10 @@ describe("Chooser navigation", () => {
 
       fireEvent.doubleClick(within(await listing(HOME)).getByText("Documents"));
 
-      expect(await screen.findByText(new RegExp(text))).toBeInTheDocument();
-      expect(screen.getByRole("list", { name: "Places" })).toBeInTheDocument();
+      expect(await screen.findByText(text)).toBeInTheDocument();
+      expect(
+        screen.getByRole("list", { name: en.fileChooser.places }),
+      ).toBeInTheDocument();
     },
   );
 
@@ -268,14 +278,12 @@ describe("Chooser navigation", () => {
     renderChooser({ mode: "open", extensions: [".siard"] });
 
     await listing(HOME);
-    expect(screen.queryByText(/Only the first/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 
     fireEvent.doubleClick(within(await listing(HOME)).getByText("Documents"));
 
     expect(
-      await screen.findByText(
-        "Only the first 1 entries are shown. For files not listed, enter their exact path in the path field.",
-      ),
+      await screen.findByText(i18n.t("fileChooser.truncated", { count: 1 })),
     ).toBeInTheDocument();
   });
 
@@ -287,7 +295,7 @@ describe("Chooser navigation", () => {
 
     await listing(HOME);
     expect(screen.queryByText(".cache")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByLabelText("Show hidden items"));
+    fireEvent.click(screen.getByLabelText(en.fileChooser.showHidden));
 
     expect(await screen.findByText(".cache")).toBeInTheDocument();
     expect(
@@ -303,13 +311,9 @@ describe("Chooser navigation", () => {
     stubAgent({ places: 401, folders: homeTree });
     const onClose = renderChooser({ mode: "open", extensions: [".siard"] });
 
-    expect(
-      await severityOf(
-        "This window is no longer connected to SIARD Suite. Please restart SIARD Suite.",
-      ),
-    ).toBe("warning");
+    expect(await severityOf(en.session.missing)).toBe("warning");
     expect(screen.queryByText("a.siard")).not.toBeInTheDocument();
-    expect(confirmButton("Open")).toBeDisabled();
+    expect(confirmButton(en.fileChooser.open)).toBeDisabled();
     expect(onClose).not.toHaveBeenCalled();
   });
 });
@@ -349,8 +353,8 @@ describe("Path field", () => {
           .getByText("db.siard")
           .closest("[role=button], .Mui-selected"),
       ).toHaveClass("Mui-selected");
-      expect(confirmButton("Open")).toBeEnabled();
-      fireEvent.click(confirmButton("Open"));
+      expect(confirmButton(en.fileChooser.open)).toBeEnabled();
+      fireEvent.click(confirmButton(en.fileChooser.open));
       expect(onClose).toHaveBeenCalledWith(file);
     },
   );
@@ -382,7 +386,11 @@ describe("Path field", () => {
 
       await pastePath(`${HOME}/49.siard`);
 
-      expect(await screen.findByText("Selected: 49.siard")).toBeInTheDocument();
+      expect(
+        await screen.findByText(
+          i18n.t("fileChooser.selected", { name: "49.siard" }),
+        ),
+      ).toBeInTheDocument();
       const row = within(await listing(HOME))
         .getByText("49.siard")
         .closest(".Mui-selected");
@@ -404,12 +412,14 @@ describe("Path field", () => {
     await pastePath(`${HOME}/.secret.siard`);
 
     expect(
-      await screen.findByText("Selected: .secret.siard"),
+      await screen.findByText(
+        i18n.t("fileChooser.selected", { name: ".secret.siard" }),
+      ),
     ).toBeInTheDocument();
     expect(
       within(await listing(HOME)).queryByText(".secret.siard"),
     ).not.toBeInTheDocument();
-    fireEvent.click(confirmButton("Open"));
+    fireEvent.click(confirmButton(en.fileChooser.open));
     expect(onClose).toHaveBeenCalledWith(`${HOME}/.secret.siard`);
   });
 
@@ -420,14 +430,16 @@ describe("Path field", () => {
 
     await pastePath(`${HOME}/missing.siard`);
     expect(
-      await screen.findByText("Nothing exists at this path."),
+      await screen.findByText(en.fileChooser.error.notFound),
     ).toBeInTheDocument();
 
     await pastePath(`${HOME}/notes.txt`);
     expect(
-      await screen.findByText("Only .siard files can be chosen here."),
+      await screen.findByText(
+        i18n.t("fileChooser.error.wrongType", { extensions: ".siard" }),
+      ),
     ).toBeInTheDocument();
-    expect(confirmButton("Open")).toBeDisabled();
+    expect(confirmButton(en.fileChooser.open)).toBeDisabled();
     expect(onClose).not.toHaveBeenCalled();
   });
 
@@ -442,7 +454,7 @@ describe("Path field", () => {
       await pastePath(input);
 
       expect(
-        await screen.findByText("Enter an absolute path."),
+        await screen.findByText(en.fileChooser.error.notAbsolute),
       ).toBeInTheDocument();
       expect(requests.length).toBe(before);
       expect(
@@ -459,9 +471,9 @@ describe("Chooser modes", () => {
 
     const shown = await listing(HOME);
     expect(within(shown).queryByText("b.txt")).not.toBeInTheDocument();
-    expect(confirmButton("Open")).toBeDisabled();
+    expect(confirmButton(en.fileChooser.open)).toBeDisabled();
     fireEvent.click(within(shown).getByText("a.siard"));
-    fireEvent.click(confirmButton("Open"));
+    fireEvent.click(confirmButton(en.fileChooser.open));
 
     expect(onClose).toHaveBeenCalledWith(`${HOME}/a.siard`);
     expect(
@@ -485,19 +497,28 @@ describe("Chooser modes", () => {
     const onClose = renderChooser({ mode: "save", extension: ".siard" });
     await listing(HOME);
 
-    fireEvent.change(screen.getByRole("textbox", { name: "File name" }), {
-      target: { value: "db" },
-    });
-    fireEvent.click(confirmButton("Save"));
+    fireEvent.change(
+      screen.getByRole("textbox", { name: en.fileChooser.name }),
+      {
+        target: { value: "db" },
+      },
+    );
+    fireEvent.click(confirmButton(en.fileChooser.save));
 
-    const dialog = await screen.findByRole("dialog", { name: "Replace file?" });
+    const dialog = await screen.findByRole("dialog", {
+      name: en.fileChooser.replaceTitle,
+    });
     expect(
       within(dialog).getByText(
         '"db.siard" already exists. Do you want to replace it?',
       ),
     ).toBeInTheDocument();
     expect(onClose).not.toHaveBeenCalled();
-    fireEvent.click(within(dialog).getByRole("button", { name: "Replace" }));
+    fireEvent.click(
+      within(dialog).getByRole("button", {
+        name: en.fileChooser.replaceConfirm,
+      }),
+    );
     expect(onClose).toHaveBeenCalledWith(`${HOME}/db.siard`);
   });
 
@@ -510,13 +531,13 @@ describe("Chooser modes", () => {
     });
     await listing(HOME);
 
-    fireEvent.click(confirmButton("Save"));
+    fireEvent.click(confirmButton(en.fileChooser.save));
 
     await waitFor(() =>
       expect(onClose).toHaveBeenCalledWith(`${HOME}/archive.siard`),
     );
     expect(
-      screen.queryByRole("dialog", { name: "Replace file?" }),
+      screen.queryByRole("dialog", { name: en.fileChooser.replaceTitle }),
     ).not.toBeInTheDocument();
   });
 
@@ -529,10 +550,10 @@ describe("Chooser modes", () => {
     });
     const onClose = renderChooser({ mode: "save", extension: ".siard" });
     await listing(HOME);
-    const name = screen.getByRole("textbox", { name: "File name" });
+    const name = screen.getByRole("textbox", { name: en.fileChooser.name });
 
     fireEvent.change(name, { target: { value: "Reports" } });
-    fireEvent.click(confirmButton("Save"));
+    fireEvent.click(confirmButton(en.fileChooser.save));
 
     expect(
       within(await listing(`${HOME}/Reports`)).getByText("old.siard"),
@@ -540,7 +561,7 @@ describe("Chooser modes", () => {
     expect(name).toHaveValue("");
     expect(onClose).not.toHaveBeenCalled();
     expect(
-      screen.queryByRole("dialog", { name: "Replace file?" }),
+      screen.queryByRole("dialog", { name: en.fileChooser.replaceTitle }),
     ).not.toBeInTheDocument();
     // decided on the name as typed, before any extension is appended
     expect(
@@ -559,14 +580,14 @@ describe("Chooser modes", () => {
     });
     const onClose = renderChooser({ mode: "save", extension: ".siard" });
     await listing(HOME);
-    const name = screen.getByRole("textbox", { name: "File name" });
+    const name = screen.getByRole("textbox", { name: en.fileChooser.name });
 
     fireEvent.change(name, { target: { value: "Archives" } });
-    fireEvent.click(confirmButton("Save"));
+    fireEvent.click(confirmButton(en.fileChooser.save));
 
     expect(
       await screen.findByText(
-        'A folder named "Archives.siard" already exists here.',
+        i18n.t("fileChooser.error.folderExists", { name: "Archives.siard" }),
       ),
     ).toBeInTheDocument();
     expect(await listing(HOME)).toBeInTheDocument();
@@ -574,7 +595,7 @@ describe("Chooser modes", () => {
     expect(name).toHaveValue("Archives");
     expect(onClose).not.toHaveBeenCalled();
     expect(
-      screen.queryByRole("dialog", { name: "Replace file?" }),
+      screen.queryByRole("dialog", { name: en.fileChooser.replaceTitle }),
     ).not.toBeInTheDocument();
   });
 
@@ -587,10 +608,10 @@ describe("Chooser modes", () => {
     });
     await listing(HOME);
 
-    fireEvent.click(confirmButton("Save"));
+    fireEvent.click(confirmButton(en.fileChooser.save));
 
     expect(
-      await screen.findByText("Files cannot be saved in this folder."),
+      await screen.findByText(en.fileChooser.error.notWritable),
     ).toBeInTheDocument();
     expect(onClose).not.toHaveBeenCalled();
   });
@@ -603,7 +624,7 @@ describe("Chooser modes", () => {
     expect(within(shown).queryByText("a.siard")).not.toBeInTheDocument();
     fireEvent.doubleClick(within(shown).getByText("Documents"));
     await listing(`${HOME}/Documents`);
-    fireEvent.click(confirmButton("Choose this folder"));
+    fireEvent.click(confirmButton(en.fileChooser.chooseFolder));
 
     expect(onClose).toHaveBeenCalledWith(`${HOME}/Documents`);
     expect(
@@ -621,7 +642,9 @@ describe("Chooser modes", () => {
     await listing(HOME);
     const before = requests.length;
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: en.fileChooser.cancel }),
+    );
 
     expect(onClose).toHaveBeenCalledWith(null);
     expect(requests.length).toBe(before);
@@ -639,13 +662,13 @@ describe("Show in file browser from the chooser", () => {
         .map((request) => request.body);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Show in file browser" }),
+      screen.getByRole("button", { name: en.fileChooser.reveal }),
     );
     await waitFor(() => expect(reveals()).toEqual([{ path: HOME }]));
 
     fireEvent.click(within(shown).getByText("a.siard"));
     fireEvent.click(
-      screen.getByRole("button", { name: "Show in file browser" }),
+      screen.getByRole("button", { name: en.fileChooser.reveal }),
     );
     await waitFor(() =>
       expect(reveals()).toEqual([{ path: HOME }, { path: `${HOME}/a.siard` }]),
@@ -653,12 +676,8 @@ describe("Show in file browser from the chooser", () => {
   });
 
   test.each([
-    [503, "The file browser could not be opened.", "error"],
-    [
-      401,
-      "This window is no longer connected to SIARD Suite. Please restart SIARD Suite.",
-      "warning",
-    ],
+    [503, en.fileChooser.error.revealFailed, "error"],
+    [401, en.session.missing, "warning"],
   ])(
     "a %i answer shows a message and the chooser stays open",
     async (status, text, severity) => {
@@ -667,12 +686,12 @@ describe("Show in file browser from the chooser", () => {
       fireEvent.click(within(await listing(HOME)).getByText("a.siard"));
 
       fireEvent.click(
-        screen.getByRole("button", { name: "Show in file browser" }),
+        screen.getByRole("button", { name: en.fileChooser.reveal }),
       );
 
       expect(await severityOf(text)).toBe(severity);
       expect(
-        screen.getByRole("dialog", { name: "Open file" }),
+        screen.getByRole("dialog", { name: en.fileChooser.titleOpen }),
       ).toBeInTheDocument();
       expect(onClose).not.toHaveBeenCalled();
     },
@@ -731,7 +750,9 @@ test("useFileChooser resolves with the chosen path, or null when cancelled", asy
   fireEvent.click(screen.getByText("start"));
   await listing(HOME);
   await act(async () => {
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: en.fileChooser.cancel }),
+    );
   });
   await waitFor(() => expect(results).toEqual([`${HOME}/a.siard`, null]));
 });

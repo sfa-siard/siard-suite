@@ -25,9 +25,9 @@
 
 ## 5. Inspect workflow and start page
 
-- [ ] 5.1 Add `ArchiveInspectView` at `/archives/:archiveId` with Close and the "no longer open" message (D7); verify `ArchiveInspectView.test.tsx` covers the "Inspect workflow" scenarios (open, close → `DELETE` and `/`, 404, 422 message, no path in URLs)
-- [ ] 5.2 Wire the start page Open button to the chooser and `POST /api/archive-files`; add tests for the "Open workflow entry point" scenarios (pointer, keyboard, cancel with focus return, 401) in `StartView.test.tsx`; verify `npm test` passes
-- [ ] 5.3 Remove "Open" from the inert loop of `StartView.test.tsx` ("query text is ignored and pointer and keyboard activation are inert") as recorded in design.md D8, then verify `npm test` passes with Upload and Export still asserted inert
+- [x] 5.1 Add `ArchiveInspectView` at `/archives/:archiveId` with Close and the "no longer open" message (D7); verify `ArchiveInspectView.test.tsx` covers the "Inspect workflow" scenarios (open, close → `DELETE` and `/`, 404, 422 message, no path in URLs)
+- [x] 5.2 Wire the start page Open button to the chooser and `POST /api/archive-files`; add tests for the "Open workflow entry point" scenarios (pointer, keyboard, cancel with focus return, 401) in `StartView.test.tsx`; verify `npm test` passes
+- [x] 5.3 Remove "Open" from the inert loop of `StartView.test.tsx` ("query text is ignored and pointer and keyboard activation are inert") as recorded in design.md D8, then verify `npm test` passes with Upload and Export still asserted inert
 
 ## 6. Integration
 

@@ -1,12 +1,13 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { expect, test } from "vitest";
+import en from "@siard-web/shared/i18n/en.json";
 import { renderAt } from "../test/render";
 
 const mappings = [
-  { name: "Archive", red: ["source-database", "siard"] },
-  { name: "Open", red: ["siard"] },
-  { name: "Upload", red: ["siard", "destination-database"] },
-  { name: "Export", red: ["siard", "destination-table"] },
+  { name: en.startPage.archive, red: ["source-database", "siard"] },
+  { name: en.startPage.open, red: ["siard"] },
+  { name: en.startPage.upload, red: ["siard", "destination-database"] },
+  { name: en.startPage.export, red: ["siard", "destination-table"] },
 ];
 const artwork = [
   "source-database",
@@ -41,8 +42,8 @@ test.each(mappings)(
 
 test("pointer feedback overrides focus and restores it on exit", () => {
   renderAt("/");
-  const open = screen.getByRole("button", { name: "Open" });
-  const archive = screen.getByRole("button", { name: "Archive" });
+  const open = screen.getByRole("button", { name: en.startPage.open });
+  const archive = screen.getByRole("button", { name: en.startPage.archive });
   fireEvent.focus(open);
   fireEvent.pointerEnter(archive);
   expectArtwork(["source-database", "siard"]);

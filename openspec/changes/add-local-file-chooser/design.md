@@ -233,3 +233,14 @@ Additive; no data migration. `openapi.yaml` of the local app is regenerated with
   extension appended is a folder (`Archives` → folder `Archives.siard`), the chooser shows an
   error instead, because the user did not type that folder's name (spec scenario "Save where the
   name with the extension is a folder").
+- `ArchiveInspectView` reads `GET /api/archives/{archiveId}` with the same query key as the shared
+  `ArchiveBrowser`, so it adds no request; a 404 there shows `archive.notOpen` with a link back to
+  `/`, a 401 shows `session.missing`. Close sends `DELETE` and goes to `/` whatever the answer:
+  an archive that is already gone needs no closing.
+- The start page opens the archive itself (`POST /api/archive-files`) and shows a failed open
+  above the overview (422 cannot open, 429 too many, else open failed, 401 session as a warning),
+  so the user stays where they can try again.
+- Keyboard activation of Open: Open is a native `<button>`, which browsers activate with Enter and
+  Space; jsdom does not, so `StartView.test.tsx` asserts the native button and the click path,
+  and the keyboard itself is checked in the manual run (6.2). New tests share a small fetch router
+  (`src/test/routes.ts`).
