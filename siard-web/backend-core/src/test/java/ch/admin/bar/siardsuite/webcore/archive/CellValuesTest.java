@@ -233,12 +233,14 @@ class CellValuesTest {
         assertEquals(false, get(scope, table + "/search?q=linked.bin").jsonPath().getBoolean("found"));
     }
 
-    /** Spec scenario "Cell values need a session": no scope, no cells and no cell content. */
+    /** Spec scenario "Data link cells need a session": no scope, no cells and no cell content. */
     @Test
-    void cellValuesNeedASession() throws IOException {
-        String table = tsimple(newScope(), fixture("sample.siard"));
+    void dataLinkCellsNeedASession() throws IOException {
+        ArchiveScope scope = newScope();
+        String table = tsimple(scope, fixture(DATALINK_FIXTURE));
+        int column = column(scope, table, "COLUMN_DATALINK");
 
-        for (String path : List.of(table + "/rows", table + "/rows/0/columns/0/content")) {
+        for (String path : List.of(table + "/rows", table + "/rows/0/columns/" + column + "/content")) {
             Response response = given().get(path);
             response.then().statusCode(401).contentType(startsWith(ProblemDetail.MEDIA_TYPE));
             assertFalse(response.asString().contains("cells"), path);
