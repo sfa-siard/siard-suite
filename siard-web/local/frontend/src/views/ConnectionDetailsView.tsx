@@ -17,6 +17,7 @@ import { $api, ApiError } from "../api/client";
 import type { components } from "../api/schema";
 import { usePrimaryAction } from "../wizard/WizardActionsContext";
 import LoadErrorAlert from "./LoadErrorAlert";
+import { decodeJdbcUrl, encodeJdbcUrl } from "./jdbcUrl";
 
 type DbmsCatalogEntry = components["schemas"]["DbmsCatalogEntry"];
 type SavedConnection = components["schemas"]["SavedConnection"];
@@ -34,6 +35,9 @@ function isValidPort(value: string): boolean {
     /^\d{1,5}$/.test(value) && Number(value) >= 1 && Number(value) <= 65535
   );
 }
+
+/** Inputs the JDBC URL is built from and decoded into. */
+const URL_KEYS = new Set(["host", "port", "dbName", "options"]);
 
 /** Paired fields of the desktop-inspired grid; every other descriptor key is additional. */
 const PAIRED_KEYS = new Set(["host", "port", "dbName", "user", "password"]);
@@ -81,9 +85,29 @@ function ConnectionForm({
   const [saveFailed, setSaveFailed] = useState(false);
   const [nameError, setNameError] = useState<string | undefined>();
   const [showPassword, setShowPassword] = useState(false);
+  // derived on the page only, never sent or saved (design D3)
+  const [jdbcUrl, setJdbcUrl] = useState(() =>
+    encodeJdbcUrl(entry.id ?? "", values),
+  );
+  const [jdbcUrlError, setJdbcUrlError] = useState(false);
 
-  const setField = (key: string) => (event: { target: { value: string } }) =>
-    setValues((current) => ({ ...current, [key]: event.target.value }));
+  const setField = (key: string) => (event: { target: { value: string } }) => {
+    const next = { ...values, [key]: event.target.value };
+    setValues(next);
+    if (URL_KEYS.has(key)) {
+      setJdbcUrl(encodeJdbcUrl(entry.id ?? "", next));
+      setJdbcUrlError(false);
+    }
+  };
+
+  const changeJdbcUrl = (url: string) => {
+    setJdbcUrl(url);
+    const decoded = decodeJdbcUrl(entry.id ?? "", url);
+    setJdbcUrlError(decoded === undefined);
+    if (decoded) {
+      setValues((current) => ({ ...current, ...decoded }));
+    }
+  };
 
   const submit = () => {
     const found: Record<string, string> = {};
@@ -99,7 +123,7 @@ function ConnectionForm({
     setErrors(found);
     setSaveFailed(false);
     setNameError(undefined);
-    if (Object.keys(found).length > 0) {
+    if (Object.keys(found).length > 0 || jdbcUrlError) {
       return;
     }
     const trimmedName = name.trim();
@@ -268,6 +292,21 @@ function ConnectionForm({
       {renderField("user")}
       {renderField("password")}
       {additionalKeys.map((key) => renderField(key, true))}
+      {jdbcUrl !== undefined && (
+        <TextField
+          label={t("connections.fields.jdbcUrl")}
+          value={jdbcUrl}
+          onChange={(event) => changeJdbcUrl(event.target.value)}
+          placeholder={encodeJdbcUrl(entry.id ?? "", entry.examples ?? {})}
+          error={jdbcUrlError}
+          helperText={
+            jdbcUrlError ? t("connections.invalidJdbcUrl") : undefined
+          }
+          autoComplete="off"
+          fullWidth
+          sx={{ gridColumn: "1 / -1" }}
+        />
+      )}
       <Divider sx={{ gridColumn: "1 / -1", my: 1 }} />
       <TextField
         label={t("connections.name")}

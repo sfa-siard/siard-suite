@@ -76,11 +76,13 @@
       "dbName": "Database",
       "user": "Utente",
       "password": "Password",
-      "options": "Opzioni"
+      "options": "Opzioni",
+      "jdbcUrl": "URL JDBC"
     },
     "save": "Salva",
     "required": "Campo obbligatorio.",
     "invalidPort": "Inserire una porta tra 1 e 65535.",
+    "invalidJdbcUrl": "Inserire un URL JDBC valido per questo sistema di database.",
     "duplicateName": "Esiste già una connessione con questo nome.",
     "nameRequired": "Una connessione salvata deve avere un nome.",
     "unknown": "La connessione richiesta non esiste.",

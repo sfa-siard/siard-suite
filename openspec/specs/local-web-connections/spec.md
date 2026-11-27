@@ -239,13 +239,14 @@ The `/archive/connection` route SHALL show a responsive desktop-inspired form fo
 - **WHEN** the connection details page loads
 - **THEN** server and compact port inputs share the upper-left half and database name occupies the upper-right half
 - **AND** username appears below server and password appears below database name
-- **AND** existing additional fields follow those rows and the optional connection name is the last input, spanning the form width
+- **AND** existing additional fields follow those rows, then the JDBC URL input spanning the form width
+- **AND** the optional connection name is the last input, spanning the form width
 - **AND** the heading identifies the selected DBMS and no DBMS input or save toggle is rendered
 
 #### Scenario: Narrow form stacks without overflow
 - **GIVEN** a valid local session and a 360 by 800 CSS-pixel viewport
 - **WHEN** the connection details page loads
-- **THEN** inputs stack in the order server, port, database name, username, password, existing additional fields, connection name
+- **THEN** inputs stack in the order server, port, database name, username, password, existing additional fields, JDBC URL, connection name
 - **AND** every input is reachable by scrolling and the page scroll width is no greater than the viewport width
 
 #### Scenario: Saved connection prefilled
@@ -330,3 +331,50 @@ The `/archive/connection` route SHALL show a responsive desktop-inspired form fo
 - **WHEN** the user visits `/archive/connection?connection=<id>` or `?dbms=postgresql`
 - **THEN** the localized missing-session message is shown instead of the form
 - **AND** no saved connection values are displayed and no save request is sent
+
+### Requirement: JDBC URL kept in sync with the connection inputs
+
+The connection details page SHALL show the JDBC URL of the selected DBMS built from server, port, database name and options, and update it on every change of those inputs. A URL edited by the user that is valid for the page's DBMS SHALL update those inputs. An invalid URL SHALL show an inline error, leave the inputs unchanged and block saving. The URL SHALL NOT be sent to the agent or persisted.
+
+#### Scenario: URL derived from the inputs for each DBMS
+- **GIVEN** a valid local session and a new connection form with host `db.example.org`, port `15432`, database name `archive` and empty options
+- **WHEN** the form is shown for PostgreSQL, MySQL, Microsoft SQL Server, Oracle or DB/2
+- **THEN** the JDBC URL input value is `jdbc:postgresql://db.example.org:15432/archive`, `jdbc:mysql://db.example.org:15432/archive`, `jdbc:sqlserver://db.example.org:15432;databaseName=archive`, `jdbc:oracle:thin:@db.example.org:15432/archive` or `jdbc:db2://db.example.org:15432/archive` respectively
+
+#### Scenario: Input edits update the URL
+- **GIVEN** a new PostgreSQL connection form with host `localhost`, port `5432` and database name `archive`
+- **WHEN** the user changes the port to `15432` and enters `ssl=true` as options
+- **THEN** the JDBC URL input value is `jdbc:postgresql://localhost:15432/archive?ssl=true` without any further user action
+
+#### Scenario: URL edits update the inputs
+- **GIVEN** a new PostgreSQL connection form
+- **WHEN** the user replaces the JDBC URL with `jdbc:postgresql://db.example.org:15432/archive?ssl=true`
+- **THEN** host is `db.example.org`, port is `15432`, database name is `archive` and options is `ssl=true`
+- **AND** username, password and connection name keep their values
+
+#### Scenario: Saved connection shows its URL
+- **GIVEN** a saved Microsoft SQL Server connection with host `db.example.org`, port `1433`, database name `archive` and options `encrypt=false`
+- **WHEN** the user opens its details page
+- **THEN** the JDBC URL input value is `jdbc:sqlserver://db.example.org:1433;databaseName=archive;encrypt=false`
+
+#### Scenario: Invalid URL is rejected
+- **GIVEN** a PostgreSQL connection form with host `db.example.org` and a network-request recorder
+- **WHEN** the user enters `jdbc:mysql://other:3306/x`, `postgres://db` or `jdbc:postgresql://db.example.org` as JDBC URL
+- **THEN** the JDBC URL input shows a localized error message
+- **AND** host is still `db.example.org`
+- **WHEN** the user then submits the form with a connection name
+- **THEN** no `POST /api/connections` request is sent and the route stays on the page
+- **WHEN** the user then edits any of server, port, database name or options
+- **THEN** the JDBC URL is rebuilt from the inputs and the error disappears
+
+#### Scenario: URL is not saved and carries no credentials
+- **GIVEN** a new PostgreSQL connection form with user `archivist`, password `s3cret` and a network-request recorder
+- **WHEN** the user submits valid fields with the name "Archive C"
+- **THEN** the JDBC URL input value contains neither `archivist` nor `s3cret`
+- **AND** the recorded `POST /api/connections` payload has no JDBC URL property and does not contain `s3cret`
+
+#### Scenario: URL without a session
+- **GIVEN** the agent rejects the API requests with 401 because the session is missing or invalid
+- **WHEN** the user visits `/archive/connection?connection=<id>`
+- **THEN** the localized missing-session message is shown and no JDBC URL input is rendered
+- **AND** no saved host or database name appears on the page

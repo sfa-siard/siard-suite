@@ -606,3 +606,164 @@ test.each(["?connection=7", "?dbms=postgresql"])(
     expect(putCalls(fetchMock)).toHaveLength(0);
   },
 );
+
+// Spec requirement "JDBC URL kept in sync with the connection inputs"
+
+const jdbcUrlInput = () => screen.getByLabelText(/^JDBC URL/);
+
+test.each([
+  ["postgresql", "jdbc:postgresql://db.example.org:15432/archive"],
+  ["mysql", "jdbc:mysql://db.example.org:15432/archive"],
+  ["sqlserver", "jdbc:sqlserver://db.example.org:15432;databaseName=archive"],
+  ["oracle", "jdbc:oracle:thin:@db.example.org:15432/archive"],
+  ["db2", "jdbc:db2://db.example.org:15432/archive"],
+])("%s form derives the JDBC URL from the inputs", async (id, url) => {
+  respondApi(okApi);
+
+  renderAt(`/archive/connection?dbms=${id}`);
+  await screen.findByLabelText(/^Host/);
+  fill(/^Host/, "db.example.org");
+  fill(/^Port/, "15432");
+  fill(/^Database \*/, "archive");
+
+  expect(jdbcUrlInput()).toHaveValue(url);
+});
+
+test("a new form shows the URL of its defaults and follows input edits", async () => {
+  respondApi(okApi);
+
+  renderAt("/archive/connection?dbms=postgresql");
+  await screen.findByLabelText(/^Host/);
+  expect(jdbcUrlInput()).toHaveValue("jdbc:postgresql://localhost:5432/");
+
+  fill(/^Database \*/, "archive");
+  fill(/^Port/, "15432");
+  fill(/^Options/, "ssl=true");
+
+  expect(jdbcUrlInput()).toHaveValue(
+    "jdbc:postgresql://localhost:15432/archive?ssl=true",
+  );
+});
+
+test("editing the JDBC URL updates the connection inputs only", async () => {
+  respondApi(okApi);
+
+  renderAt("/archive/connection?dbms=postgresql");
+  await screen.findByLabelText(/^Host/);
+  fill(/^User/, "archivist");
+  fill(/^Password/, "s3cret");
+  fill(/^Connection name/, "Archive C");
+
+  fill(/^JDBC URL/, "jdbc:postgresql://db.example.org:15432/archive?ssl=true");
+
+  expect(screen.getByLabelText(/^Host/)).toHaveValue("db.example.org");
+  expect(screen.getByLabelText(/^Port/)).toHaveValue("15432");
+  expect(screen.getByLabelText(/^Database \*/)).toHaveValue("archive");
+  expect(screen.getByLabelText(/^Options/)).toHaveValue("ssl=true");
+  expect(screen.getByLabelText(/^User/)).toHaveValue("archivist");
+  expect(screen.getByLabelText(/^Password/)).toHaveValue("s3cret");
+  expect(screen.getByLabelText(/^Connection name/)).toHaveValue("Archive C");
+  expect(screen.queryByText(en.connections.invalidJdbcUrl)).toBeNull();
+});
+
+test("a saved MS SQL connection shows its JDBC URL", async () => {
+  respondApi({
+    ...okApi,
+    "GET /api/connections": {
+      body: [
+        {
+          ...archiveA,
+          dbmsId: "sqlserver",
+          port: "1433",
+          options: "encrypt=false",
+        },
+      ],
+    },
+  });
+
+  renderAt("/archive/connection?connection=7");
+  await screen.findByLabelText(/^Host/);
+
+  expect(jdbcUrlInput()).toHaveValue(
+    "jdbc:sqlserver://db.example.org:1433;databaseName=archive;encrypt=false",
+  );
+});
+
+test.each([
+  "jdbc:mysql://other:3306/x",
+  "postgres://db",
+  "jdbc:postgresql://db.example.org",
+])(
+  "invalid JDBC URL %s shows an error, blocks saving and is rebuilt on a field edit",
+  async (url) => {
+    const fetchMock = respondApi({
+      ...okApi,
+      "POST /api/connections": { status: 201, body: archiveA },
+    });
+
+    renderAt("/archive/connection?dbms=postgresql");
+    await screen.findByLabelText(/^Host/);
+    fill(/^Host/, "db.example.org");
+    fill(/^Database \*/, "archive");
+    fill(/^User/, "archivist");
+    fill(/^Connection name/, "Archive C");
+
+    fill(/^JDBC URL/, url);
+
+    expect(screen.getByText(en.connections.invalidJdbcUrl)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Host/)).toHaveValue("db.example.org");
+
+    clickSave();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(postCalls(fetchMock)).toHaveLength(0);
+    expect(screen.getByLabelText(/^Host/)).toBeInTheDocument();
+
+    fill(/^Port/, "15432");
+    expect(jdbcUrlInput()).toHaveValue(
+      "jdbc:postgresql://db.example.org:15432/archive",
+    );
+    expect(screen.queryByText(en.connections.invalidJdbcUrl)).toBeNull();
+  },
+);
+
+test("the JDBC URL carries no credentials and is not saved", async () => {
+  const fetchMock = respondApi({
+    ...okApi,
+    "POST /api/connections": { status: 201, body: archiveA },
+  });
+
+  renderAt("/archive/connection?dbms=postgresql");
+  await screen.findByLabelText(/^Host/);
+  fill(/^Database \*/, "archive");
+  fill(/^User/, "archivist");
+  fill(/^Password/, "s3cret");
+  fill(/^Connection name/, "Archive C");
+
+  const url = (jdbcUrlInput() as HTMLInputElement).value;
+  expect(url).not.toContain("archivist");
+  expect(url).not.toContain("s3cret");
+
+  clickSave();
+  await waitFor(() => expect(postCalls(fetchMock)).toHaveLength(1));
+  const body = await (postCalls(fetchMock)[0][0] as Request).clone().json();
+  expect(Object.keys(body).some((key) => /jdbc|url/i.test(key))).toBe(false);
+  expect(JSON.stringify(body)).not.toContain("s3cret");
+  expect(JSON.stringify(body)).not.toContain("jdbc:");
+});
+
+test("missing session renders no JDBC URL input", async () => {
+  const unauthorized = { status: 401, body: { title: "Unauthorized" } };
+  respondApi({
+    "GET /api/dbms": unauthorized,
+    "GET /api/connections": unauthorized,
+  });
+
+  renderAt("/archive/connection?connection=7");
+
+  expect(
+    (await screen.findAllByText(en.session.missing)).length,
+  ).toBeGreaterThan(0);
+  expect(screen.queryByLabelText(/^JDBC URL/)).not.toBeInTheDocument();
+  expect(screen.queryByText(/jdbc:/)).not.toBeInTheDocument();
+  expect(screen.queryByDisplayValue(/db\.example\.org|archive/)).toBeNull();
+});

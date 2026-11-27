@@ -61,7 +61,8 @@ test(`archive wizard frame at ${WIDTH}px`, async ({ browser }) => {
 
 // Spec scenario "Desktop field arrangement" of local-web-connections: at 1280 by 800 CSS
 // pixels server and a compact port share the upper-left half, database name is upper right,
-// username and password follow below them, and options and the connection name span the form.
+// username and password follow below them, and options, the JDBC URL and the connection name
+// span the form.
 
 test("connection details field arrangement at 1280px", async ({ browser }) => {
   const agent = await startAgent(10);
@@ -89,6 +90,7 @@ test("connection details field arrangement at 1280px", async ({ browser }) => {
     const user = await box(/^User/);
     const password = await box(/^Password/);
     const options = await box(/^Options/);
+    const jdbcUrl = await box(/^JDBC URL/);
     const name = await box(/^Connection name/);
     const near = (a: number, b: number) => Math.abs(a - b) <= 1;
 
@@ -102,15 +104,67 @@ test("connection details field arrangement at 1280px", async ({ browser }) => {
     expect(near(user.x, host.x)).toBe(true);
     expect(near(password.y, user.y)).toBe(true);
     expect(near(password.x, dbName.x)).toBe(true);
-    // additional fields, then the connection name last, both spanning the form
+    // additional fields, the JDBC URL, then the connection name last, all spanning the form
     expect(options.y).toBeGreaterThan(user.y + user.height);
-    expect(name.y).toBeGreaterThan(options.y + options.height);
-    for (const wide of [options, name]) {
+    expect(jdbcUrl.y).toBeGreaterThan(options.y + options.height);
+    expect(name.y).toBeGreaterThan(jdbcUrl.y + jdbcUrl.height);
+    for (const wide of [options, jdbcUrl, name]) {
       expect(near(wide.x, host.x)).toBe(true);
       expect(near(wide.x + wide.width, dbName.x + dbName.width)).toBe(true);
     }
     await expect(page.getByLabel(/database system/i)).toHaveCount(0);
     await expect(page.getByRole("checkbox")).toHaveCount(0);
+  } finally {
+    await context.close();
+    agent.stop();
+  }
+});
+
+// Spec scenario "Narrow form stacks without overflow" of local-web-connections: at 360 by 800
+// CSS pixels the inputs stack in form order, including the JDBC URL, without horizontal scrolling.
+
+test(`connection details inputs stack at ${WIDTH}px`, async ({ browser }) => {
+  const agent = await startAgent(10);
+  const context = await browser.newContext({
+    locale: "en",
+    viewport: { width: WIDTH, height: 800 },
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto(agent.launchUrl);
+    await expect(page.getByRole("region", { name: "SIARD" })).toBeVisible();
+    await page.goto(
+      `http://127.0.0.1:${agent.port}/archive/connection?dbms=postgresql`,
+    );
+    await expect(page.getByLabel(/^Host/)).toBeVisible();
+
+    let previousBottom = -Infinity;
+    for (const label of [
+      /^Host/,
+      /^Port/,
+      /^Database/,
+      /^User/,
+      /^Password/,
+      /^Options/,
+      /^JDBC URL/,
+      /^Connection name/,
+    ]) {
+      const input = page.getByLabel(label);
+      await input.scrollIntoViewIfNeeded();
+      await expect(input).toBeInViewport();
+      const found = await input.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const view = element.ownerDocument.defaultView!;
+        return { top: rect.top + view.scrollY, height: rect.height };
+      });
+      expect(found.top, `${label} below the previous input`).toBeGreaterThan(
+        previousBottom,
+      );
+      previousBottom = found.top + found.height;
+    }
+    expect(
+      await page.locator("html").evaluate((element) => element.scrollWidth),
+    ).toBeLessThanOrEqual(WIDTH);
   } finally {
     await context.close();
     agent.stop();
