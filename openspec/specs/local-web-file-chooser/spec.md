@@ -117,7 +117,7 @@ A listing SHALL contain at most 10000 entries after filtering and SHALL set `tru
 
 ### Requirement: Show in file browser
 
-`POST /api/files/reveal` with `{"path": <absolute path>}` SHALL open the system file manager on the user's desktop and answer 204: an existing file is shown selected in its folder, an existing folder is opened. Arguments SHALL be passed without a command shell.
+`POST /api/files/reveal` with `{"path": <absolute path>}` SHALL open the system file manager on the user's desktop and answer 204: an existing file is shown selected in its folder, an existing folder is opened (on macOS shown selected in its parent folder, because opening a bundle folder such as an `.app` would run it). Arguments SHALL be passed without a command shell.
 
 #### Scenario: Reveal a file
 - **GIVEN** a valid local session and an existing file
@@ -127,7 +127,7 @@ A listing SHALL contain at most 10000 entries after filtering and SHALL set `tru
 #### Scenario: Reveal a folder
 - **GIVEN** a valid local session and an existing folder
 - **WHEN** the client posts its path to `/api/files/reveal`
-- **THEN** the agent answers 204 and opens that folder in the platform's file manager (Explorer on Windows, Finder on macOS, on Linux the desktop's file manager asked over D-Bus like for a file, with `xdg-open` only when that fails)
+- **THEN** the agent answers 204 and opens that folder in the platform's file manager (Explorer on Windows, Finder with the folder selected in its parent on macOS, on Linux the desktop's file manager asked over D-Bus like for a file, with `xdg-open` only when that fails)
 
 #### Scenario: Reveal fails safely
 - **GIVEN** a valid local session

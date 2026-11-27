@@ -65,9 +65,8 @@ public class FileManagerLauncher {
             case WINDOWS -> start(folder
                     ? List.of(explorer(), path.toString())
                     : List.of(explorer(), "/select," + path));
-            case MAC -> startAndCheck(folder
-                    ? List.of("open", path.toString())
-                    : List.of("open", "-R", path.toString()));
+            // -R also for folders: "open" runs a bundle folder such as Calculator.app instead of showing it
+            case MAC -> startAndCheck(List.of("open", "-R", path.toString()));
             // the file manager over D-Bus first, like a file: xdg-open of a folder can report success
             // without showing a window (seen on GNOME)
             case LINUX -> folder

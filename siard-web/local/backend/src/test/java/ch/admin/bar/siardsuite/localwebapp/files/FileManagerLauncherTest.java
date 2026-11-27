@@ -56,13 +56,13 @@ class FileManagerLauncherTest {
     // --- macOS ---
 
     @Test
-    void macRevealsFileOrOpensFolderInFinder() {
+    void macShowsFileOrFolderSelectedInFinderNeverOpensIt() {
         launcher(Os.MAC, Map.of(), command -> exited(0)).reveal(FILE, false);
         launcher(Os.MAC, Map.of(), command -> exited(0)).reveal(FOLDER, true);
 
         assertEquals(List.of(
                 List.of("open", "-R", FILE.toString()),
-                List.of("open", FOLDER.toString())), started);
+                List.of("open", "-R", FOLDER.toString())), started);
     }
 
     @Test
