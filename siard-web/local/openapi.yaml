@@ -80,6 +80,40 @@ components:
           type: object
           additionalProperties:
             type: string
+    EntryInfo:
+      description: A file or folder looked up by its path
+      type: object
+      required:
+      - path
+      - name
+      - folder
+      - modified
+      - hidden
+      - writable
+      properties:
+        path:
+          type: string
+          description: "Absolute, normalised path"
+        name:
+          type: string
+        parent:
+          type: string
+          description: Parent folder; null at a root
+        folder:
+          type: boolean
+        size:
+          type: integer
+          format: int64
+          description: Size in bytes; null for folders
+        modified:
+          type: string
+          description: "Last modification, ISO-8601 instant"
+        hidden:
+          type: boolean
+        writable:
+          type: boolean
+          description: "Whether the user may write the file, or create files in the\
+            \ folder"
     FieldDescriptor:
       type: object
       properties:
@@ -89,6 +123,53 @@ components:
           type: string
         required:
           type: boolean
+    FileEntry:
+      description: A file or folder in a listing
+      type: object
+      required:
+      - name
+      - path
+      - folder
+      - modified
+      - hidden
+      properties:
+        name:
+          type: string
+        path:
+          type: string
+          description: Absolute path
+        folder:
+          type: boolean
+        size:
+          type: integer
+          format: int64
+          description: Size in bytes; null for folders
+        modified:
+          type: string
+          description: "Last modification, ISO-8601 instant"
+        hidden:
+          type: boolean
+    FolderListing:
+      description: The entries of a folder
+      type: object
+      required:
+      - path
+      - entries
+      - truncated
+      properties:
+        path:
+          type: string
+          description: "Absolute, normalised path of the folder"
+        parent:
+          type: string
+          description: Parent folder; null at a root
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/FileEntry"
+        truncated:
+          type: boolean
+          description: True when entries beyond the limit were left out
     Instant:
       type: string
       format: date-time
@@ -107,6 +188,51 @@ components:
       - 2022-03-10
     NullCell:
       type: object
+    OpenArchiveRequest:
+      description: The archive file to open
+      type: object
+      required:
+      - path
+      properties:
+        path:
+          type: string
+          description: Absolute path
+    OpenedArchive:
+      description: An opened archive
+      type: object
+      required:
+      - archiveId
+      properties:
+        archiveId:
+          type: string
+          description: "Use under /api/archives/{archiveId}"
+    Place:
+      description: A starting place of the file chooser
+      type: object
+      required:
+      - kind
+      - path
+      properties:
+        kind:
+          type: string
+          enum:
+          - home
+          - desktop
+          - documents
+          - downloads
+          - root
+        path:
+          type: string
+          description: Absolute path
+    RevealRequest:
+      description: The entry to show in the system file manager
+      type: object
+      required:
+      - path
+      properties:
+        path:
+          type: string
+          description: Absolute path
     RowDto:
       type: object
       properties:
@@ -290,6 +416,32 @@ components:
         name:
           type: string
 paths:
+  /api/archive-files:
+    post:
+      summary: "Open a local SIARD archive in place; browse it under /api/archives/{archiveId}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenArchiveRequest"
+        required: true
+      responses:
+        "201":
+          description: Opened
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenedArchive"
+        "400":
+          description: "Malformed or relative path, or not a file"
+        "404":
+          description: Nothing exists at the path
+        "422":
+          description: The file is not a readable SIARD archive
+        "429":
+          description: Too many open archives
+      tags:
+      - Archive Files Resource
   /api/archives/{archiveId}:
     parameters:
     - name: archiveId
@@ -630,6 +782,113 @@ paths:
                 $ref: "#/components/schemas/AgentEvent"
       tags:
       - Events Resource
+  /api/files:
+    get:
+      summary: "List a folder: folders first, then files, each by name ignoring case;\
+        \ at most 10000 entries"
+      parameters:
+      - description: "Keep only files ending with one of these, ignoring case, e.g.\
+          \ .siard"
+        name: extension
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+      - description: Leave out all files
+        name: foldersOnly
+        in: query
+        schema:
+          type: boolean
+      - description: Include hidden entries
+        name: hidden
+        in: query
+        schema:
+          type: boolean
+      - description: Absolute folder path
+        required: true
+        name: path
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FolderListing"
+        "400":
+          description: "Malformed or relative path, or not a folder"
+        "403":
+          description: The folder may not be read
+        "404":
+          description: Nothing exists at the path
+        "503":
+          description: All listing workers are busy
+        "504":
+          description: The location did not respond within 10 seconds
+      tags:
+      - Files Resource
+  /api/files/entry:
+    get:
+      summary: Look up one file or folder by its absolute path
+      parameters:
+      - description: Absolute path
+        required: true
+        name: path
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntryInfo"
+        "400":
+          description: Malformed or relative path
+        "404":
+          description: Nothing exists at the path
+      tags:
+      - Files Resource
+  /api/files/places:
+    get:
+      summary: "Starting places: home, Desktop, Documents, Downloads (if they exist)\
+        \ and the roots"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Place"
+      tags:
+      - Files Resource
+  /api/files/reveal:
+    post:
+      summary: "Show a file selected in the system file manager, or open a folder\
+        \ there"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RevealRequest"
+        required: true
+      responses:
+        "204":
+          description: The file manager was started
+        "400":
+          description: Malformed or relative path
+        "404":
+          description: Nothing exists at the path
+        "503":
+          description: No file manager could be started
+      tags:
+      - Files Resource
   /api/system/info:
     get:
       summary: Version and runtime of the agent

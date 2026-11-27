@@ -111,6 +111,60 @@
       }
     }
   },
+  "fileChooser": {
+    "titleOpen": "Ouvrir un fichier",
+    "titleSave": "Enregistrer le fichier",
+    "titleFolder": "Choisir un dossier",
+    "places": "Emplacements",
+    "place": {
+      "home": "Home",
+      "desktop": "Bureau",
+      "documents": "Documents",
+      "downloads": "Téléchargements"
+    },
+    "path": "Chemin",
+    "pathHint": "Saisissez ou collez un chemin et appuyez sur Entrée",
+    "parent": "Dossier parent",
+    "showHidden": "Afficher les éléments masqués",
+    "reveal": "Afficher dans le gestionnaire de fichiers",
+    "name": "Nom du fichier",
+    "column": {
+      "name": "Nom",
+      "size": "Taille",
+      "modified": "Modifié"
+    },
+    "folder": "Dossier",
+    "empty": "Ce dossier est vide.",
+    "open": "Ouvrir",
+    "save": "Enregistrer",
+    "chooseFolder": "Choisir ce dossier",
+    "cancel": "Annuler",
+    "selected": "Sélection : {{name}}",
+    "truncated": "Seules les {{count}} premières entrées sont affichées. Pour les fichiers non listés, saisissez leur chemin exact dans le champ du chemin.",
+    "replaceTitle": "Remplacer le fichier ?",
+    "replaceText": "« {{name}} » existe déjà. Voulez-vous le remplacer ?",
+    "replaceConfirm": "Remplacer",
+    "error": {
+      "notAbsolute": "Saisissez un chemin absolu.",
+      "notFound": "Rien n'existe à ce chemin.",
+      "notReadable": "Le dossier « {{path}} » ne peut pas être lu.",
+      "unreachable": "Cet emplacement n'est pas accessible pour le moment, par exemple un lecteur réseau hors ligne.",
+      "busy": "Certains emplacements ne répondent pas. Veuillez réessayer dans une minute.",
+      "wrongType": "Seuls les fichiers {{extensions}} peuvent être choisis ici.",
+      "notWritable": "Impossible d'enregistrer des fichiers dans ce dossier.",
+      "folderExists": "Un dossier nommé « {{name}} » existe déjà ici.",
+      "separatorInName": "Un nom de fichier ne peut pas contenir / ou \\.",
+      "revealFailed": "Le gestionnaire de fichiers n'a pas pu être ouvert.",
+      "loadFailed": "Le dossier n'a pas pu être chargé."
+    }
+  },
+  "inspect": {
+    "close": "Fermer",
+    "cannotOpen": "Le fichier ne peut pas être ouvert comme archive SIARD.",
+    "tooMany": "Trop d'archives sont ouvertes. Fermez-en une et réessayez.",
+    "openFailed": "L'archive n'a pas pu être ouverte.",
+    "backToStart": "Retour à la page d'accueil"
+  },
   "button": {
     "next": "Weiter"
   }

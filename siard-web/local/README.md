@@ -23,6 +23,14 @@ It is a per-launch local agent plus a React frontend, packaged as a single insta
   every `/api/*` call must carry the cookie.
 - **Presence** — the app shell holds one SSE stream (`GET /api/events`). When the last stream
   closes, the agent exits after a grace period.
+- **Local files** — the browser cannot hand absolute paths to the page, so the agent lets the
+  frontend's file chooser see the local file system under `/api/files` (nothing is uploaded):
+  `GET /places` (home, Desktop, Documents, Downloads, roots), `GET ?path=&extension=&foldersOnly=&hidden=`
+  (folder listing, folders first, at most 10000 entries), `GET /entry?path=` (one entry, incl.
+  `writable`) and `POST /reveal {path}` (show in the system file manager). Paths are absolute;
+  `404` means nothing exists at the path, `400` a malformed path or one of the wrong kind. A
+  listing that takes longer than 10 s answers `504`; at most 8 listings wait on the file system
+  at once (Java cannot cancel a stuck call), further ones answer `503` until one returns.
 - **`openapi.yaml`** — the committed API description. The frontend generates its TypeScript types
   from it; `openApiCheck` (part of `check`) fails when it drifts.
 

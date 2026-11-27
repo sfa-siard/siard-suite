@@ -247,3 +247,37 @@ The shared frontend package SHALL provide archive browse views that, given an `a
 - **GIVEN** the interface language is German
 - **WHEN** the browse views are shown
 - **THEN** their labels are German and none shows a raw translation key
+
+#### Scenario: Switch between tables and views
+- **GIVEN** the browse views show a table, a view or a page of rows below the mount point
+- **WHEN** the user selects another table or view in the structure tree, repeatedly
+- **THEN** each selection shows that table or view
+- **AND** every link of the tree points to the same address below the mount point (e.g. `/archives/{archiveId}/schemas/0/tables/1`), wherever the views are
+
+### Requirement: Data link cells and content outside the archive
+
+A DATALINK cell SHALL be shown as the desktop app shows it: as text holding the content of its file, or empty (`{"type":"text","value":"","truncated":false}`) when that content cannot be read as text, decided per cell. A cell of any type that points outside the archive by URL (`dlurlpathonly`) SHALL be shown empty and its content SHALL NOT be read: its download is empty, search finds nothing in it, and the URL is never opened.
+
+#### Scenario: Data link cells show their text
+- **GIVEN** the table `TSIMPLE` of `sample-datalink-2-2.siard` is open, whose column `COLUMN_DATALINK` holds files of 79 bytes of ASCII text
+- **WHEN** its rows are requested, a `COLUMN_DATALINK` cell's content is downloaded and the table is searched for that text
+- **THEN** the response status is 200 and each `COLUMN_DATALINK` cell is a text cell holding its file's text, as the desktop app shows it
+- **AND** the download answers that text and the search finds it in that column
+
+#### Scenario: A data link that cannot be read is shown empty
+- **GIVEN** a crafted variant of `sample-datalink-2-2.siard` whose first `COLUMN_DATALINK` file holds bytes that are not UTF-8 (like the JPEG in `test.siard`)
+- **WHEN** the rows of `TSIMPLE` are requested
+- **THEN** the response status is 200 and that cell is `{"type":"text","value":"","truncated":false}`, as the desktop app shows it
+- **AND** the other `COLUMN_DATALINK` cells keep their text, and the empty cell's download is empty
+
+#### Scenario: Content outside the archive is not followed
+- **GIVEN** a crafted variant of `sample-datalink-2-2.siard` whose table schema allows `dlurlpathonly` and whose first `CBLOB` cell holds the URL of a local file, once instead of its stored file and once next to it
+- **WHEN** the rows of `TSIMPLE` are requested, the cell's content is downloaded and the table is searched for the file's name
+- **THEN** the cell is `{"type":"text","value":"","truncated":false}`, the download is empty and the search finds nothing
+- **AND** the linked file is never opened
+
+#### Scenario: Data link cells need a session
+- **GIVEN** `sample-datalink-2-2.siard` registered in a scope and a request without a valid session (no scope)
+- **WHEN** the rows of `TSIMPLE` or the content of a `COLUMN_DATALINK` cell are requested
+- **THEN** the response status is 401 with problem details
+- **AND** the body contains no cells and no cell content

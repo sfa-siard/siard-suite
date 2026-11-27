@@ -111,6 +111,60 @@
       }
     }
   },
+  "fileChooser": {
+    "titleOpen": "Datei öffnen",
+    "titleSave": "Datei speichern",
+    "titleFolder": "Ordner wählen",
+    "places": "Orte",
+    "place": {
+      "home": "Home",
+      "desktop": "Desktop",
+      "documents": "Dokumente",
+      "downloads": "Downloads"
+    },
+    "path": "Pfad",
+    "pathHint": "Pfad eingeben oder einfügen und Enter drücken",
+    "parent": "Übergeordneter Ordner",
+    "showHidden": "Versteckte Elemente anzeigen",
+    "reveal": "Im Dateimanager anzeigen",
+    "name": "Dateiname",
+    "column": {
+      "name": "Name",
+      "size": "Grösse",
+      "modified": "Geändert"
+    },
+    "folder": "Ordner",
+    "empty": "Dieser Ordner ist leer.",
+    "open": "Öffnen",
+    "save": "Speichern",
+    "chooseFolder": "Diesen Ordner wählen",
+    "cancel": "Abbrechen",
+    "selected": "Ausgewählt: {{name}}",
+    "truncated": "Nur die ersten {{count}} Einträge werden angezeigt. Für nicht gelistete Dateien geben Sie deren exakten Pfad im Pfadfeld ein.",
+    "replaceTitle": "Datei ersetzen?",
+    "replaceText": "„{{name}}“ existiert bereits. Möchten Sie die Datei ersetzen?",
+    "replaceConfirm": "Ersetzen",
+    "error": {
+      "notAbsolute": "Geben Sie einen absoluten Pfad ein.",
+      "notFound": "Unter diesem Pfad existiert nichts.",
+      "notReadable": "Der Ordner „{{path}}“ darf nicht gelesen werden.",
+      "unreachable": "Dieser Ort ist zurzeit nicht erreichbar, zum Beispiel ein Netzlaufwerk ohne Verbindung.",
+      "busy": "Einige Orte antworten nicht. Bitte versuchen Sie es in einer Minute erneut.",
+      "wrongType": "Hier können nur {{extensions}}-Dateien gewählt werden.",
+      "notWritable": "In diesem Ordner können keine Dateien gespeichert werden.",
+      "folderExists": "Hier existiert bereits ein Ordner namens „{{name}}“.",
+      "separatorInName": "Ein Dateiname darf weder / noch \\ enthalten.",
+      "revealFailed": "Der Dateimanager konnte nicht geöffnet werden.",
+      "loadFailed": "Der Ordner konnte nicht geladen werden."
+    }
+  },
+  "inspect": {
+    "close": "Schliessen",
+    "cannotOpen": "Die Datei kann nicht als SIARD-Archiv geöffnet werden.",
+    "tooMany": "Es sind zu viele Archive geöffnet. Schliessen Sie eines und versuchen Sie es erneut.",
+    "openFailed": "Das Archiv konnte nicht geöffnet werden.",
+    "backToStart": "Zurück zur Startseite"
+  },
   "button": {
     "next": "Weiter"
   }

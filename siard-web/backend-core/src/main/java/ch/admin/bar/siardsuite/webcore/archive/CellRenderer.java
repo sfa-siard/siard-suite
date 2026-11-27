@@ -26,6 +26,9 @@ final class CellRenderer {
         if (cell.isNull()) {
             return new NullCell();
         }
+        if (pointsOutsideTheArchive(cell)) {
+            return new TextCell("", false);
+        }
         if (isBinary(cell)) {
             return new LobCell(cell.getByteLength());
         }
@@ -37,23 +40,61 @@ final class CellRenderer {
 
     /** The displayed text of a non-binary, non-NULL cell, reading at most {@code maxChars} characters. */
     static String text(Cell cell, int maxChars) throws IOException {
+        if (pointsOutsideTheArchive(cell)) {
+            return "";
+        }
+        if (cell.getMetaValue().getPreType() == Types.DATALINK) {
+            return dataLinkText(cell, maxChars);
+        }
         if (isReaderType(cell)) {
-            try (Reader reader = cell.getReader()) {
-                StringBuilder text = new StringBuilder();
-                char[] buffer = new char[Math.min(maxChars, 8192)];
-                for (int n; text.length() < maxChars
-                        && (n = reader.read(buffer, 0, Math.min(buffer.length, maxChars - text.length()))) > 0; ) {
-                    text.append(buffer, 0, n);
-                }
-                return text.toString();
-            }
+            return prefix(cell, maxChars);
         }
         String text = cell.getString();
         return text == null ? "" : text;
     }
 
+    /**
+     * A DATALINK as the desktop app shows it ({@code RowsOverviewForm.extractText}): its text, or empty when it
+     * cannot be read, e.g. for a file that is not text, whose character count {@code siard-api} rejects. Per cell,
+     * so one such file does not fail the page. Read as a prefix: {@code getString()} would read the whole file.
+     */
+    private static String dataLinkText(Cell cell, int maxChars) {
+        try {
+            return prefix(cell, maxChars);
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+    // at most maxChars characters of the cell's reader; empty when the cell has no content
+    private static String prefix(Cell cell, int maxChars) throws IOException {
+        try (Reader reader = cell.getReader()) {
+            if (reader == null) {
+                return "";
+            }
+            StringBuilder text = new StringBuilder();
+            char[] buffer = new char[Math.min(maxChars, 8192)];
+            for (int n; text.length() < maxChars
+                    && (n = reader.read(buffer, 0, Math.min(buffer.length, maxChars - text.length()))) > 0; ) {
+                text.append(buffer, 0, n);
+            }
+            return text.toString();
+        }
+    }
+
     static boolean isBinary(Cell cell) throws IOException {
-        return isBinaryType(cell.getMetaValue().getPreType());
+        return isBinaryType(cell.getMetaValue().getPreType()) && !pointsOutsideTheArchive(cell);
+    }
+
+    /**
+     * Whether the cell points outside the archive by URL ({@code dlurlpathonly}); it is then shown empty and its
+     * content never read. {@code siard-api} opens that URL before a stored file in {@code getInputStream()} and
+     * {@code getReader()} (also behind {@code getString()} and {@code getBytes()}), also when the cell has both,
+     * so rows, download and search check this first. Any type: the schema allows the attribute on binary and
+     * text LOBs. The one deliberate deviation from the desktop app (design.md, follow-up changes).
+     */
+    static boolean pointsOutsideTheArchive(Cell cell) throws IOException {
+        return cell.getDataLinkUrl() != null;
     }
 
     static boolean isBinaryType(int type) {
@@ -63,6 +104,6 @@ final class CellRenderer {
     /** Large text types, read as a prefix instead of as a whole. */
     static boolean isReaderType(Cell cell) throws IOException {
         int type = cell.getMetaValue().getPreType();
-        return type == Types.CLOB || type == Types.NCLOB || type == Types.SQLXML;
+        return (type == Types.CLOB || type == Types.NCLOB || type == Types.SQLXML) && !pointsOutsideTheArchive(cell);
     }
 }

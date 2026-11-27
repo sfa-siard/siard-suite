@@ -10,18 +10,26 @@ import { useReportError } from "./errors";
 
 type SchemaRef = components["schemas"]["SchemaRef"];
 
-/** Schemas with their tables and views; the links are relative to the browser's mount point. */
+/** Schemas with their tables and views; the links start at the browser's mount point. */
 export function StructureTree({
   archiveId,
+  mountPath,
   schemas,
 }: {
   archiveId: string;
+  /** Absolute, ending in "/": a relative link would be resolved against the current page. */
+  mountPath: string;
   schemas: SchemaRef[];
 }) {
   return (
     <List dense>
       {schemas.map((schema) => (
-        <SchemaNode key={schema.index} archiveId={archiveId} schema={schema} />
+        <SchemaNode
+          key={schema.index}
+          archiveId={archiveId}
+          mountPath={mountPath}
+          schema={schema}
+        />
       ))}
     </List>
   );
@@ -29,9 +37,11 @@ export function StructureTree({
 
 function SchemaNode({
   archiveId,
+  mountPath,
   schema,
 }: {
   archiveId: string;
+  mountPath: string;
   schema: SchemaRef;
 }) {
   const { t } = useTranslation();
@@ -46,7 +56,10 @@ function SchemaNode({
   useReportError(detail.error);
   return (
     <li>
-      <ListSubheader disableSticky>{schema.name}</ListSubheader>
+      {/* a div: by default ListSubheader is an <li>, which may not sit in this <li> */}
+      <ListSubheader component="div" disableSticky>
+        {schema.name}
+      </ListSubheader>
       {(["tables", "views"] as const).map((kind) => (
         <List
           key={kind}
@@ -58,7 +71,7 @@ function SchemaNode({
             <ListItemButton
               key={item.index}
               component={NavLink}
-              to={`schemas/${schemaIndex}/${kind}/${item.index}`}
+              to={`${mountPath}schemas/${schemaIndex}/${kind}/${item.index}`}
             >
               <ListItemText primary={item.name} />
             </ListItemButton>

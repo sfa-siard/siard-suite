@@ -111,6 +111,60 @@
       }
     }
   },
+  "fileChooser": {
+    "titleOpen": "Apri file",
+    "titleSave": "Salva file",
+    "titleFolder": "Scegli cartella",
+    "places": "Posizioni",
+    "place": {
+      "home": "Home",
+      "desktop": "Desktop",
+      "documents": "Documenti",
+      "downloads": "Download"
+    },
+    "path": "Percorso",
+    "pathHint": "Digitare o incollare un percorso e premere Invio",
+    "parent": "Cartella superiore",
+    "showHidden": "Mostra elementi nascosti",
+    "reveal": "Mostra nel gestore file",
+    "name": "Nome file",
+    "column": {
+      "name": "Nome",
+      "size": "Dimensione",
+      "modified": "Modificato"
+    },
+    "folder": "Cartella",
+    "empty": "Questa cartella è vuota.",
+    "open": "Apri",
+    "save": "Salva",
+    "chooseFolder": "Scegli questa cartella",
+    "cancel": "Annulla",
+    "selected": "Selezionato: {{name}}",
+    "truncated": "Vengono mostrate solo le prime {{count}} voci. Per i file non elencati, inserirne il percorso esatto nel campo del percorso.",
+    "replaceTitle": "Sostituire il file?",
+    "replaceText": "\"{{name}}\" esiste già. Sostituire il file?",
+    "replaceConfirm": "Sostituisci",
+    "error": {
+      "notAbsolute": "Inserire un percorso assoluto.",
+      "notFound": "In questo percorso non esiste nulla.",
+      "notReadable": "La cartella \"{{path}}\" non può essere letta.",
+      "unreachable": "Questa posizione non è raggiungibile al momento, ad esempio un'unità di rete non connessa.",
+      "busy": "Alcune posizioni non rispondono. Si prega di riprovare tra un minuto.",
+      "wrongType": "Qui si possono scegliere solo file {{extensions}}.",
+      "notWritable": "In questa cartella non è possibile salvare file.",
+      "folderExists": "Qui esiste già una cartella denominata \"{{name}}\".",
+      "separatorInName": "Un nome di file non può contenere / o \\.",
+      "revealFailed": "Non è stato possibile aprire il gestore file.",
+      "loadFailed": "Non è stato possibile caricare la cartella."
+    }
+  },
+  "inspect": {
+    "close": "Chiudi",
+    "cannotOpen": "Il file non può essere aperto come archivio SIARD.",
+    "tooMany": "Ci sono troppi archivi aperti. Chiuderne uno e riprovare.",
+    "openFailed": "Non è stato possibile aprire l'archivio.",
+    "backToStart": "Torna alla pagina iniziale"
+  },
   "button": {
     "next": "Continua"
   }

@@ -373,6 +373,17 @@ public interface Value {
     String getFilename()
             throws IOException;
 
+    /**
+     * The URL of a large object stored outside the archive (attribute {@code dlurlpathonly}), or null.
+     * {@link #getInputStream()} and {@link #getReader()} open this URL before a stored file, so a caller
+     * that must not follow links checks it before reading the content.
+     *
+     * @return the URL as stored in the archive, or null.
+     * @throws IOException if an I/O error occurred.
+     */
+    String getDataLinkUrl()
+            throws IOException;
+
 
     /**
      * return cell input stream (or null for NULL).

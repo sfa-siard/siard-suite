@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useAgentEvents } from "./api/events";
 import { theme } from "@siard-web/shared";
 import AboutView from "./views/AboutView";
+import ArchiveInspectView from "./views/ArchiveInspectView";
 import ArchiveView from "./views/ArchiveView";
 import ConnectionDetailsView from "./views/ConnectionDetailsView";
 import LaunchFailedView from "./views/LaunchFailedView";
@@ -64,6 +65,10 @@ export default function App() {
         <Route element={<ConnectedLayout />}>
           <Route index element={<StartView />} />
           <Route path="about" element={<AboutView />} />
+          <Route
+            path="archives/:archiveId/*"
+            element={<ArchiveInspectView />}
+          />
           <Route path="archive" element={<ArchiveWizardLayout />}>
             <Route index element={<ArchiveView />} />
             <Route path="connection" element={<ConnectionDetailsView />} />
