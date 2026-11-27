@@ -400,7 +400,21 @@ export default function FileChooserDialog(
               ))}
             </List>
           )}
-          <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              minWidth: 0,
+              // a fixed height, so the dialog does not jump between folders; the user may drag it taller
+              ...(!narrow && {
+                height: 400,
+                minHeight: 200,
+                resize: "vertical",
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+              }),
+            }}
+          >
             {(places.isLoading || listing.isFetching) && <LinearProgress />}
             {loadError ? (
               <Alert severity={severityOf(loadError)}>
@@ -424,7 +438,7 @@ export default function FileChooserDialog(
                 <List
                   dense
                   aria-label={listing.data?.path}
-                  sx={{ maxHeight: narrow ? "none" : 360, overflow: "auto" }}
+                  sx={{ flex: 1, minHeight: 0, overflow: "auto" }}
                 >
                   {entries.map((entry) => (
                     <ListItemButton
