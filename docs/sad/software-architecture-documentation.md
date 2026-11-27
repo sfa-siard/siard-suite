@@ -233,6 +233,39 @@ After the dependency cleanup (Oct 2026), the following upgrades were identified 
 
 Note: MSV (`msv-core`, `xsdlib`) is intentionally kept — it is loaded reflectively by the JAXB RI's deprecated `Validator` API at runtime (`ValidatingJAXBContext`); it appears unused to static analysis but removing it breaks schema validation (`NoClassDefFoundError`).
 
+### Code Audit Findings (Nov 2026)
+
+A repository audit (Nov 2026) found the following risks. Each row names the code location as of commit `a1190ba1`. None of them is fixed yet. Rows marked *(not verified)* come from reading the code only and were not reproduced.
+
+**Restore (`siard-cmd` upload path)**
+
+| Risk | Location | Impact | Proposed fix |
+|---|---|---|---|
+| Foreign keys are never created on restore | `PrimaryDataToDb.addForeignKeys` | The `ALTER TABLE … FOREIGN KEY` statement is built but never executed, so every restored database lacks referential integrity | Execute it like `addCandidateKeys` does, quoting columns with `SqlLiterals.formatId` |
+| SQL injection via constraint names | `PrimaryDataToDb` (candidate key and foreign key DDL) | Constraint names from `metadata.xml` are concatenated unquoted; a crafted `.siard` can run extra statements on PostgreSQL / MS SQL Server | Quote names with `SqlLiterals.formatId` |
+| Failed constraints reported as success | `PrimaryDataToDb.enableConstraints` | `SQLException`s are only logged; the run ends with "Upload terminated successfully" and exit code 0 | Count failures and fail the run |
+| Partial table left after a failed restore *(not verified)* | `SiardToDb` | On error the connection is closed without `rollback()`; the Oracle driver commits pending rows on close | `rollback()` before `close()` on failure |
+
+**Download (`siard-cmd` / `jdbc-*`)**
+
+| Risk | Location | Impact | Proposed fix |
+|---|---|---|---|
+| TIME / TIMESTAMP shifted by JVM time zone | `ObjectValueReader`, `PrimaryDataToDb`, `siard-utilities` `DU` | Local wall-clock values are written as UTC (`12:34:56` in Zurich becomes `11:34:56Z`); values in the DST gap are corrupted. Known: assertions disabled with `FIXME timezone shift` in `MySqlDefaultDataTypes` | Use a UTC `Calendar` in `getTimestamp`/`setTimestamp`; requires a decision on compatibility with existing archives |
+| Failed download leaves a valid-looking archive | `SiardFromDb` | The error path still calls `archive.close()`, which writes metadata, so a run that failed mid-way leaves an openable `.siard` with only some tables | Delete the archive file (and external LOB folder) on failure |
+| Oracle `NUMBER` without precision loses digits | `OracleMetaColumns` | Mapped to `FLOAT(38)` and read as `double`; values with more than ~15 significant digits are rounded | Decide: map to `DECIMAL(38, s)` or warn per affected column |
+| MySQL download fetches one row per round trip | `MySqlDriver` (`useCursorFetch=true`, `defaultFetchSize=1`) | Very slow on large tables, especially over VPN | Larger fetch size, at least for tables without LOB columns |
+
+**Archive handling (`siard-api` / `zip64-file`)**
+
+| Risk | Location | Impact | Proposed fix |
+|---|---|---|---|
+| External DTDs loaded from table XML | `XMLStreamFactory.createXMLStreamReader` | DTD support stays on; a crafted `tableN.xml` makes the application fetch remote or local DTDs (confirmed for `file://`) | `SUPPORT_DTD = false` |
+| Path traversal in HTML export | `LobFileHandler.copyInternalLobToFolder` | LOB file names from the archive (`../..`) are written outside the export folder | Reject targets whose canonical path is outside the LOB folder |
+| Unescaped values and unbounded memory in HTML export *(not verified)* | `HtmlExport`, `HtmlTemplate` | Cell values become live HTML/script in the export; the whole table is built as one String, so large tables run out of memory | Escape values and stream rows to the writer |
+| Failing `close()` destroys the archive *(not verified)* | `ArchiveImpl.saveMetaData` / `close`, `Zip64File.close` | Old `metadata.xml` (and with it the central directory) is removed before the new metadata is validated; a validation error leaves an unreadable archive and a leaked file handle | Validate new metadata in memory first; close the ZIP file in `finally`; close open entries before writing the central directory |
+| Temp files left after cancel/failure *(not verified)* | `SortedTableImpl`, `TableRecordRetainerImpl` | Table-sized temp files remain in the temp folder; `deleteOnExit()` does not remove non-empty directories | Delete temp files in `finally` on failure |
+| No enabled test above ZIP64 limits | `Zip64FileTest` (~256 MB), `Zip64Tester` (`@Disabled`) | Sizes > 4 GB and > 65,535 entries are only checked by reading the code | Enable a large-file test in a nightly or manual CI job |
+
 ## 12. Glossary
 
 | Term | Definition |
