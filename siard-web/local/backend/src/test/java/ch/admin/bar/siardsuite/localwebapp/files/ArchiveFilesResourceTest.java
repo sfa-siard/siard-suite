@@ -86,13 +86,26 @@ class ArchiveFilesResourceTest {
     }
 
     @Test
-    void limitReachedIs429AndClosesNothing() {
+    void reopeningAnOpenFileReusesItsArchive() {
+        String first = open(archive.toString()).then().statusCode(201).extract().path("archiveId");
+        String again = open(archive.toString()).then().statusCode(201).extract().path("archiveId");
+        assertEquals(first, again);
+        assertEquals(1, registry.size());
+
+        authenticated().delete("/api/archives/" + first).then().statusCode(204);
+        String reopened = open(archive.toString()).then().statusCode(201).extract().path("archiveId");
+        authenticated().get("/api/archives/" + reopened).then().statusCode(200);
+    }
+
+    @Test
+    void limitReachedIs429AndClosesNothing() throws IOException {
         List<String> opened = new ArrayList<>();
         Response response = open(archive.toString());
-        // the registry allows 5 per scope by default; open until the limit answers
+        // the registry allows 5 per scope by default; open distinct files until the limit answers
         while (response.statusCode() == 201 && opened.size() < 10) {
             opened.add(response.path("archiveId"));
-            response = open(archive.toString());
+            Path copy = Files.copy(archive, dir.resolve("copy" + opened.size() + ".siard"));
+            response = open(copy.toString());
         }
 
         problem(response, 429);

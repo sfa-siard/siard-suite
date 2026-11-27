@@ -3,8 +3,11 @@ package ch.admin.bar.siardsuite.localwebapp.files;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Produces;
@@ -28,6 +31,7 @@ import ch.admin.bar.siardsuite.webcore.error.ProblemException;
  * {@code /api/archives}, whose paths must equal the backend core's, and outside the core, because
  * the remote app obtains archives by upload.
  */
+@Singleton
 @jakarta.ws.rs.Path("/api/archive-files")
 public class ArchiveFilesResource {
 
@@ -36,6 +40,10 @@ public class ArchiveFilesResource {
 
     // the agent does not own the file, so there is nothing to free when the archive is closed
     private static final Runnable NOTHING_TO_RELEASE = () -> { };
+
+    // the archive last opened per file: opening it again (e.g. after the browser's Back) reuses it
+    // instead of filling the scope's limit with archives the UI can no longer close
+    private final Map<Path, ArchiveId> openedFiles = new ConcurrentHashMap<>();
 
     @Inject
     ArchiveRegistry registry;
@@ -63,6 +71,10 @@ public class ArchiveFilesResource {
         if (Files.isDirectory(file)) {
             throw new ProblemException(400, NOT_A_FILE);
         }
+        ArchiveId known = openedFiles.get(file);
+        if (known != null && registry.lastUsed(scopes.scope(), known).isPresent()) {
+            return created(known);
+        }
         ArchiveId id;
         try {
             // a ProblemException(429) for a reached limit propagates as it is
@@ -70,6 +82,11 @@ public class ArchiveFilesResource {
         } catch (IOException e) {
             throw new ProblemException(422, NOT_AN_ARCHIVE);
         }
+        openedFiles.put(file, id);
+        return created(id);
+    }
+
+    private static Response created(ArchiveId id) {
         return Response.status(Response.Status.CREATED)
                 .type(MediaType.APPLICATION_JSON)
                 .entity(new OpenedArchive(id.value()))
