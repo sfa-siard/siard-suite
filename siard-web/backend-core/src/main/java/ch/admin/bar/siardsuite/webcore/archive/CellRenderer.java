@@ -47,34 +47,38 @@ final class CellRenderer {
             return dataLinkText(cell, maxChars);
         }
         if (isReaderType(cell)) {
-            try (Reader reader = cell.getReader()) {
-                StringBuilder text = new StringBuilder();
-                char[] buffer = new char[Math.min(maxChars, 8192)];
-                for (int n; text.length() < maxChars
-                        && (n = reader.read(buffer, 0, Math.min(buffer.length, maxChars - text.length()))) > 0; ) {
-                    text.append(buffer, 0, n);
-                }
-                return text.toString();
-            }
+            return prefix(cell, maxChars);
         }
         String text = cell.getString();
         return text == null ? "" : text;
     }
 
     /**
-     * A DATALINK as the desktop app shows it ({@code RowsOverviewForm.extractText}): its text read with
-     * {@code getString()}, or empty when that fails, e.g. for a file that is not text, whose character count
-     * {@code siard-api} rejects. Per cell, so one such file does not fail the page.
+     * A DATALINK as the desktop app shows it ({@code RowsOverviewForm.extractText}): its text, or empty when it
+     * cannot be read, e.g. for a file that is not text, whose character count {@code siard-api} rejects. Per cell,
+     * so one such file does not fail the page. Read as a prefix: {@code getString()} would read the whole file.
      */
     private static String dataLinkText(Cell cell, int maxChars) {
         try {
-            String text = cell.getString();
-            if (text == null) {
-                return "";
-            }
-            return text.length() > maxChars ? text.substring(0, maxChars) : text;
+            return prefix(cell, maxChars);
         } catch (IOException e) {
             return "";
+        }
+    }
+
+    // at most maxChars characters of the cell's reader; empty when the cell has no content
+    private static String prefix(Cell cell, int maxChars) throws IOException {
+        try (Reader reader = cell.getReader()) {
+            if (reader == null) {
+                return "";
+            }
+            StringBuilder text = new StringBuilder();
+            char[] buffer = new char[Math.min(maxChars, 8192)];
+            for (int n; text.length() < maxChars
+                    && (n = reader.read(buffer, 0, Math.min(buffer.length, maxChars - text.length()))) > 0; ) {
+                text.append(buffer, 0, n);
+            }
+            return text.toString();
         }
     }
 
