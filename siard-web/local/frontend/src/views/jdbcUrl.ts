@@ -11,13 +11,17 @@ export type JdbcUrlParts = {
   options: string;
 };
 
-/** Prefix and options separator of the `host:port/db` formats. */
+/** Prefixes of the `host:port/db?options` formats. */
 const SLASH_FORMATS: Record<string, string> = {
   db2: "jdbc:db2://",
   mysql: "jdbc:mysql://",
   postgresql: "jdbc:postgresql://",
   oracle: "jdbc:oracle:thin:@",
 };
+/**
+ * SQL Server has its own format, `host:port;databaseName=db;options`: the database is a
+ * `;`-separated property, not a `/db` path segment, so it needs its own encode/decode.
+ */
 const SQLSERVER_PREFIX = "jdbc:sqlserver://";
 
 function escapeRegExp(text: string): string {
