@@ -27,14 +27,20 @@ for (const width of [1280, 360]) {
       page.on("filechooser", () => unexpected.push("filechooser"));
       page.on("download", () => unexpected.push("download"));
       page.on("popup", () => unexpected.push("popup"));
-      // Archive opens the archive wizard, whose picker loads these lists
-      const archiveRequests = ["GET /api/connections", "GET /api/dbms"];
-      let onArchive = false;
+      // Archive opens the archive wizard, whose picker loads these lists;
+      // Open opens the file chooser, which loads the places and a listing
+      const allowedRequests = {
+        archive: ["GET /api/connections", "GET /api/dbms"],
+        open: ["GET /api/files/places", "GET /api/files"],
+      };
+      let opened: keyof typeof allowedRequests | null = null;
       page.on("request", (request) => {
         const url = new URL(request.url());
         if (
-          onArchive &&
-          archiveRequests.includes(`${request.method()} ${url.pathname}`)
+          opened !== null &&
+          allowedRequests[opened].includes(
+            `${request.method()} ${url.pathname}`,
+          )
         ) {
           return;
         }
@@ -107,7 +113,7 @@ for (const width of [1280, 360]) {
           () => button.press("Space"),
         ]) {
           if (name === "archive") {
-            onArchive = true;
+            opened = "archive";
             await activate();
             await expect(page).toHaveURL(
               `http://127.0.0.1:${agent.port}/archive`,
@@ -116,7 +122,14 @@ for (const width of [1280, 360]) {
             await expect(
               page.getByRole("region", { name: "SIARD" }),
             ).toBeVisible();
-            onArchive = false;
+            opened = null;
+          } else if (name === "open") {
+            opened = "open";
+            await activate();
+            await expect(page.getByRole("dialog")).toBeVisible();
+            await page.keyboard.press("Escape");
+            await expect(page.getByRole("dialog")).toHaveCount(0);
+            opened = null;
           } else {
             await activate();
           }
