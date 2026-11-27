@@ -153,6 +153,7 @@
       "wrongType": "Seuls les fichiers {{extensions}} peuvent être choisis ici.",
       "notWritable": "Impossible d'enregistrer des fichiers dans ce dossier.",
       "folderExists": "Un dossier nommé « {{name}} » existe déjà ici.",
+      "separatorInName": "Un nom de fichier ne peut pas contenir / ou \\.",
       "revealFailed": "Le gestionnaire de fichiers n'a pas pu être ouvert.",
       "loadFailed": "Le dossier n'a pas pu être chargé."
     }

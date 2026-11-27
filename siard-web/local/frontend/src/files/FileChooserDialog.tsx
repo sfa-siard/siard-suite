@@ -179,6 +179,11 @@ export default function FileChooserDialog(
       onClose(shown);
       return;
     }
+    // a separator would leave the folder whose writability is checked below
+    if (/[\\/]/.test(name)) {
+      fail(t("fileChooser.error.separatorInName"));
+      return;
+    }
     // save: a typed name of an existing folder opens it (as native save dialogs do); otherwise the
     // folder must be writable, the name with the extension must not be a folder, and an existing
     // file needs confirmation

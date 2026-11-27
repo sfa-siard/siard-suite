@@ -168,6 +168,11 @@ The local frontend SHALL provide a file chooser in open, save and folder mode th
 - **THEN** the chooser shows an error that a folder named `Archives.siard` already exists here and stays in the current folder
 - **AND** it returns no path and asks no replace question
 
+#### Scenario: Save with a folder separator in the name
+- **GIVEN** the chooser in save mode with extension `.siard`
+- **WHEN** the user enters a name containing `/` or `\`, such as `../db` or `sub/db`, and confirms
+- **THEN** the chooser shows an error that the name may not contain a folder separator, sends no request and returns no path
+
 #### Scenario: Cancel and unusable choices
 - **GIVEN** the chooser in any mode
 - **WHEN** the user cancels, or confirms in save mode for a folder that is not writable

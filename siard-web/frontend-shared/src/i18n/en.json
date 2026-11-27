@@ -153,6 +153,7 @@
       "wrongType": "Only {{extensions}} files can be chosen here.",
       "notWritable": "Files cannot be saved in this folder.",
       "folderExists": "A folder named \"{{name}}\" already exists here.",
+      "separatorInName": "A file name may not contain / or \\.",
       "revealFailed": "The file browser could not be opened.",
       "loadFailed": "The folder could not be loaded."
     }

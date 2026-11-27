@@ -153,6 +153,7 @@
       "wrongType": "Qui si possono scegliere solo file {{extensions}}.",
       "notWritable": "In questa cartella non è possibile salvare file.",
       "folderExists": "Qui esiste già una cartella denominata \"{{name}}\".",
+      "separatorInName": "Un nome di file non può contenere / o \\.",
       "revealFailed": "Non è stato possibile aprire il gestore file.",
       "loadFailed": "Non è stato possibile caricare la cartella."
     }

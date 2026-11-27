@@ -153,6 +153,7 @@
       "wrongType": "Hier können nur {{extensions}}-Dateien gewählt werden.",
       "notWritable": "In diesem Ordner können keine Dateien gespeichert werden.",
       "folderExists": "Hier existiert bereits ein Ordner namens „{{name}}“.",
+      "separatorInName": "Ein Dateiname darf weder / noch \\ enthalten.",
       "revealFailed": "Der Dateimanager konnte nicht geöffnet werden.",
       "loadFailed": "Der Ordner konnte nicht geladen werden."
     }

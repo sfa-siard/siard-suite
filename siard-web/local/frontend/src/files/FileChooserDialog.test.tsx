@@ -619,6 +619,28 @@ describe("Chooser modes", () => {
     ).not.toBeInTheDocument();
   });
 
+  test.each(["../db", "sub/db", "sub\\db"])(
+    "save with a separator in the name %s shows an error and sends nothing",
+    async (typed) => {
+      const requests = stubAgent({ folders: { [HOME]: [] } });
+      const onClose = renderChooser({ mode: "save", extension: ".siard" });
+      await listing(HOME);
+      const before = requests.length;
+
+      fireEvent.change(
+        screen.getByRole("textbox", { name: en.fileChooser.name }),
+        { target: { value: typed } },
+      );
+      fireEvent.click(confirmButton(en.fileChooser.save));
+
+      expect(
+        await screen.findByText(en.fileChooser.error.separatorInName),
+      ).toBeInTheDocument();
+      expect(requests.length).toBe(before);
+      expect(onClose).not.toHaveBeenCalled();
+    },
+  );
+
   test("save into a folder that is not writable shows an error and returns nothing", async () => {
     stubAgent({ folders: { [HOME]: [] }, writable: { [HOME]: false } });
     const onClose = renderChooser({
